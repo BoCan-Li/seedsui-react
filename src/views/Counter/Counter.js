@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setCount } from '@/store/modules/counter.js'
+import './counter.less'
 // React component
 @connect(state => ({
   value: state.counter.count
