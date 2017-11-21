@@ -1,1 +1,1 @@
-export Page from './Page/Page.jsx'
+export Toast from './Toast/Toast.jsx'
