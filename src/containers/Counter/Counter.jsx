@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setCount } from '@/store/modules/counter.js'
-import './counter.less'
+import { setCount } from '@/redux/modules/counter.js'
 // React component
 @connect(state => ({
   value: state.counter.count
@@ -14,17 +13,14 @@ class Counter extends Component {
     value: PropTypes.number,
     setCount: PropTypes.func
   }
-  constructor(props) {
-    super(props);
-    this.onIncreaseClick = this.onIncreaseClick.bind(this);
-  }
-  onIncreaseClick (e) {
+  onIncreaseClick = (e) => {
     this.props.setCount(6)
   }
   render() {
     const { value } = this.props
     return (
       <div>
+        <h2>Redux</h2>
         <span>{value}</span>
         <button onClick={this.onIncreaseClick}>Increase</button>
       </div>

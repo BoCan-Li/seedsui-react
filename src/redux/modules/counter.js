@@ -1,4 +1,3 @@
-import { createStore } from 'redux'
 // Action Type
 const SET_COUNT = 'cunter/SET_COUNT'
 // Reducer
@@ -11,7 +10,7 @@ function counter(state = initial, action) {
     case SET_COUNT:
       return {
         ...state,
-        count: action.count
+        count: action.count || count
       }
     default:
       return state
