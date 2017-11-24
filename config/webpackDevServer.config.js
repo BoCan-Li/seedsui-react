@@ -4,7 +4,7 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
-
+const httpProxy = require('http-proxy')
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
@@ -87,6 +87,23 @@ module.exports = function(proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
+      // 跨域
+      const targetUrl = 'http://172.31.3.206:7050';
+      const proxy = httpProxy.createProxyServer({
+        target: targetUrl,
+        // 20秒超时
+        proxyTimeout: 20 * 1000,
+        ws: false
+      });
+      app.use('/api', (req, res) => {
+        proxy.web(req, res, {target: targetUrl + '/'});
+      });
+      app.use('/test', (req, res) => {
+        proxy.web(req, res, {target: targetUrl + '/'});
+      });
+      app.use('/login', (req, res) => {
+        proxy.web(req, res, {target: targetUrl + '/login'});
+      });
     },
   };
 };

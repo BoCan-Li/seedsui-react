@@ -1,0 +1,38 @@
+//@import "../base/tool/icon.less";
+/*----------------checkbox.less(start)--------------*/
+.checkbox{
+  height: @22px;
+  width: @22px;
+  line-height: @22px;
+  font-size: @22px;
+  vertical-align: middle;
+  outline: none;
+  border-radius: 0;
+  border: none;
+  background-color: transparent;
+  background-position:0 0;
+  background-repeat:no-repeat;
+  background-size:auto 100%;
+
+  color:@checkbox-color;
+
+  &:checked,&.active{
+    color:@checkbox-color-active;
+  }
+  &[disabled]{
+    color:@checkbox-color-disable;
+  }
+  font-family: @font-family-checkbox;
+}
+/*icon*/
+.checkbox:before{
+  content: @content-checkbox;
+}
+.checkbox:checked:before{
+  content: @content-checkbox-checked;
+}
+/*label*/
+.checkbox+label{
+  margin:0 @4px;
+}
+/*----------------checkbox.less(end)--------------*/
