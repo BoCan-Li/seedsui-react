@@ -2,12 +2,14 @@
 
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
+const path = require('path');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
-const httpProxy = require('http-proxy')
+
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
-
+// 设置代理
+const httpProxy = require('http-proxy')
 module.exports = function(proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
@@ -64,8 +66,15 @@ module.exports = function(proxy, allowedHost) {
     quiet: true,
     // Reportedly, this avoids CPU overload on some systems.
     // https://github.com/facebookincubator/create-react-app/issues/293
+    // src/node_modules is not ignored to support absolute imports
+    // https://github.com/facebookincubator/create-react-app/issues/1065
     watchOptions: {
-      ignored: /node_modules/,
+      ignored: new RegExp(
+        `^(?!${path
+          .normalize(paths.appSrc + '/')
+          .replace(/[\\]+/g, '\\\\')}).+[\\\\/]node_modules[\\\\/]`,
+        'g'
+      ),
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
@@ -78,7 +87,7 @@ module.exports = function(proxy, allowedHost) {
     },
     public: allowedHost,
     proxy,
-    setup(app) {
+    before(app) {
       // This lets us open files from the runtime error overlay.
       app.use(errorOverlayMiddleware());
       // This service worker file is effectively a 'no-op' that will reset any

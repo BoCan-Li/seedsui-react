@@ -88,9 +88,14 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      '@': path.resolve(__dirname, '../src'), //指定快捷路径
+      '@': paths.appSrc,
+      'components': paths.appComponents,
+      'containers': paths.appContainers,
+      'store': paths.appStore,
+      'router': paths.appRouter,
+      'utils': paths.appUtils,
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -114,7 +119,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|mjs)$/,
         enforce: 'pre',
         use: [
           {
@@ -145,11 +150,11 @@ module.exports = {
           },
           // Process JS with Babel.
           {
-            test: /\.(js|jsx)$/,
+            test: /\.(js|jsx|mjs)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              "presets": ["react", "babel-preset-stage-0"],
+              "presets": ["react", "babel-preset-stage-2"],
               "plugins": ["transform-decorators-legacy"],
               compact: true,
             },
@@ -171,7 +176,12 @@ module.exports = {
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
-                  fallback: require.resolve('style-loader'),
+                  fallback: {
+                    loader: require.resolve('style-loader'),
+                    options: {
+                      hmr: false,
+                    },
+                  },
                   use: [
                     {
                       loader: require.resolve('css-loader'),
@@ -201,9 +211,7 @@ module.exports = {
                         ],
                       },
                     },
-                    {
-                      loader: require.resolve('less-loader') // compiles Less to CSS
-                    }
+                    {loader: require.resolve('less-loader')} // 编译less为css
                   ],
                 },
                 extractTextPluginOptions
@@ -271,6 +279,9 @@ module.exports = {
         // https://github.com/mishoo/UglifyJS2/issues/2011
         comparisons: false,
       },
+      mangle: {
+        safari10: true,
+      },        
       output: {
         comments: false,
         // Turned on because emoji and regex is not minified properly using default

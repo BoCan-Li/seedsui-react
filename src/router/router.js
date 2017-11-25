@@ -1,16 +1,14 @@
 import React from 'react'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 
-import Home from '@/containers/Home/Home.jsx'
-import About from '@/containers/About/About.jsx'
-import RouteChildren from '@/containers/RouteChildren/RouteChildren.jsx'
-import Counter from '@/containers/Counter/Counter.jsx'
+import Home from 'containers/Home/Home.jsx'
+import About from 'containers/About/About.jsx'
+import RouteChildren from 'containers/RouteChildren/RouteChildren.jsx'
+import Counter from 'containers/Counter/Counter.jsx'
 
 // redux
-import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import stores from './../redux/index.js'
-const store = createStore(stores)
+import store from 'store/index.js'
 
 const BasicExample = () => (
   <Provider store={store}>
