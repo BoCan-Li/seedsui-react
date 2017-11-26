@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 import 'utils/math.js';
 
 export default class Index extends Component {
@@ -8,10 +8,6 @@ export default class Index extends Component {
     unit: PropTypes.string,
     digits: PropTypes.number,
   };
-
-  constructor(props, context) {
-    super(props, context);
-  }
 
   render() {
     const {text, unit, digits, style} = this.props;

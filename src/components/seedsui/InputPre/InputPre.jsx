@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class InputPre extends Component {
   static propTypes = {
@@ -9,9 +9,6 @@ export default class InputPre extends Component {
   }
   static defaultProps = {
     value: ''
-  }
-  constructor(props) {
-    super(props);
   }
   onInput = (e) => {
     var textarea = e.target;

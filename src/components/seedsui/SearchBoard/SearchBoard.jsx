@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class SearchBoard extends Component {
   static propTypes = {
@@ -9,9 +9,6 @@ export default class SearchBoard extends Component {
     expandTags: PropTypes.array
   };
 
-  constructor(props, context) {
-    super(props, context);
-  }
   onClick = (item) => {
     if (this.props.onClick) this.props.onClick(item);
   }

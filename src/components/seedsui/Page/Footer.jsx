@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Footer extends Component {
   static propTypes = {
@@ -6,10 +6,6 @@ export default class Footer extends Component {
     className: PropTypes.string,
     children: PropTypes.node
   }
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { style, className } = this.props;
     return (

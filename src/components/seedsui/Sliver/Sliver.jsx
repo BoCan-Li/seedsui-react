@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Sliver extends Component {
   static propTypes = {
@@ -12,9 +12,6 @@ export default class Sliver extends Component {
   }
   static defaultProps = {
     tag: 'div'
-  }
-  constructor(props) {
-    super(props);
   }
 
   render() {

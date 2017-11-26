@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 export default class Loading extends Component {
   static propTypes = {
     type: PropTypes.string, // filling | floating
@@ -9,9 +9,6 @@ export default class Loading extends Component {
   }
   static defaultProps = {
     style: {}
-  }
-  constructor(props) {
-    super(props);
   }
   render() {
     const { style, className, type, img, text } = this.props;

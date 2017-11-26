@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import { closeWindow } from 'utils/WqJsBridge';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Page extends Component {
   static propTypes = {
@@ -16,18 +15,11 @@ export default class Page extends Component {
     back: true,
     lBtn: []
   }
-  constructor(props) {
-    super(props);
-  }
   onDefaultBack = () => {
     if (this.props.isFromApp === '1') {
-      try {
-        closeWindow();
-      } catch (error) {
-        console.log(error);
-      }
+      window.history.go(-1);
     } else {
-      history.go(-1);
+      window.history.go(-1);
     }
   }
   render() {

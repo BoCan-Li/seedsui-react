@@ -56,5 +56,6 @@ module.exports = {
   appContainers: resolveApp('src/containers'),
   appStore: resolveApp('src/store'),
   appRouter: resolveApp('src/router'),
-  appUtils: resolveApp('src/utils')
+  appUtils: resolveApp('src/utils'),
+  appHelpers: resolveApp('src/helpers'),
 };

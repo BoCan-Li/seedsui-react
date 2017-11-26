@@ -4,7 +4,7 @@ const SET_COUNT = 'cunter/SET_COUNT'
 const initial = {
   count: 0
 }
-function counter(state = initial, action) {
+export default function counter(state = initial, action) {
   const count = state.count
   switch (action.type) {
     case SET_COUNT:
@@ -16,7 +16,6 @@ function counter(state = initial, action) {
       return state
   }
 }
-export default counter
 
 export function setCount(count) {
   return {

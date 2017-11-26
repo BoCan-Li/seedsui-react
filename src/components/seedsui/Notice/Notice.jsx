@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 export default class Notice extends Component {
   static propTypes = {
     img: PropTypes.string,
@@ -11,9 +11,6 @@ export default class Notice extends Component {
   static defaultProps = {
     text: '',
     style: {}
-  }
-  constructor(props) {
-    super(props);
   }
   onClick = (event) => {
     if (this.props.onClick) this.props.onClick(event, ...this.props.args);

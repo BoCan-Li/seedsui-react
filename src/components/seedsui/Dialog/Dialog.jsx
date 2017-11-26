@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 import Dialog from './dialog.js';
 
 export default class Dragrefresh extends Component {
@@ -18,9 +18,6 @@ export default class Dragrefresh extends Component {
     isClickMaskHide: true,
     animation: 'fade',
     position: ''
-  }
-  constructor(props) {
-    super(props);
   }
   componentDidMount = () => {
     var instance = new Dialog({

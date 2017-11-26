@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class ListItem extends Component {
   static propTypes = {
@@ -28,9 +28,6 @@ export default class ListItem extends Component {
     ricon: PropTypes.node,
   }
   static defaultProps = {
-  }
-  constructor(props) {
-    super(props);
   }
 
   render() {

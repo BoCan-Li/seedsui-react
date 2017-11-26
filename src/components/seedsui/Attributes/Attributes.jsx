@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Row = styled.div`
@@ -22,10 +22,6 @@ export default class Attributes extends Component {
   static defaultProps = {
     col: 2,
     list: []
-  }
-
-  constructor(props, context) {
-    super(props, context);
   }
   render() {
     const {col, list, onClick, className, style, rowClassName, rowStyle} = this.props;

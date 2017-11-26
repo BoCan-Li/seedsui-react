@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Dot extends Component {
   static propTypes = {
@@ -8,9 +8,6 @@ export default class Dot extends Component {
   }
   static defaultProps = {
     style: {}
-  }
-  constructor(props) {
-    super(props);
   }
   render() {
     const { className, style, size } = this.props;

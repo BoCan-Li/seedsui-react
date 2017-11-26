@@ -1,5 +1,14 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducer.js'
-const store = createStore(reducer)
+// 中间件
+import promiseMiddleware from 'redux-promise-middleware';
 
-export default store
+// const store = createStore(reducer)
+// export default store
+
+const composeStoreWithMiddleware = applyMiddleware(
+  promiseMiddleware({
+    promiseTypeSuffixes: ['', 'SUCCESS', 'FAILURE']
+  })
+)(createStore);
+export default composeStoreWithMiddleware(reducer);

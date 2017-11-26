@@ -1,13 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Container extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
     children: PropTypes.node
-  }
-  constructor(props) {
-    super(props);
   }
 
   render() {

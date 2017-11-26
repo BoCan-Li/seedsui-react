@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 
 export default class Toast extends Component {
   static propTypes = {
@@ -16,10 +16,6 @@ export default class Toast extends Component {
     show: false,
     style: {}
   }
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { text, img, mask, show, type, style } = this.props;
     return (

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';import PropTypes from 'prop-types';
 import NoData from './../NoData/NoData.jsx';
 import DragPull from './dragrefresh.pull.js';
 
@@ -17,9 +17,6 @@ export default class Dragrefresh extends Component {
   }
   static defaultProps = {
     noData: false
-  }
-  constructor(props) {
-    super(props);
   }
   componentDidMount = () => {
     var instance = new DragPull({

@@ -12,6 +12,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-connect": "^6.0.0",
+    "redux-promise-middleware": "^5.0.0",
     "superagent": "^3.8.1"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "promise": "8.0.1",
     "raf": "3.4.0",
     "react-dev-utils": "^4.2.1",
+    "redux-async-connect": "^1.0.0-rc4",
     "style-loader": "0.19.0",
     "styled-components": "^2.2.3",
     "sw-precache-webpack-plugin": "0.11.4",
