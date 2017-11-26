@@ -4,7 +4,6 @@ import api from 'helpers/api.js';
 const GET_PAY_SUCCESS = 'pay/GET_PAY_SUCCESS';
 const GET_PAY_FAILURE = 'pay/GET_PAY_FAILURE'; */
 const GET_DATA = 'GET_DATA',
-GET_DATA_PENDING = 'GET_DATA_PENDING',
 GET_DATA_SUCCESS = 'GET_DATA_SUCCESS',
 GET_DATA_FAILURE = 'GET_DATA_FAILURE';
 
@@ -80,20 +79,22 @@ export default function reducer(state = initial, action = {}) {
 
 // Action
 export function getPay(params, onSuccess, onError) {
-  return {
+  /* return {
     type: GET_DATA,
     payload: {
       promise: api.get(`/biz/std_mendian/shoppingCart/client/v1/queryCount.action`)
     },
     onSuccess,
     onError
-  };
-  /* return dispatch => {
+  }; */
+  return dispatch => {
     dispatch({
-      types: GET_DATA,
-      promise: client => api.get(`/biz/std_mendian/shoppingCart/client/v1/queryCount.action`),
+      type: GET_DATA,
+      payload: {
+        promise: api.get(`/biz/std_mendian/shoppingCart/client/v1/queryCount.action`)
+      },
       onSuccess,
       onError
     });
-  }; */
+  };
 }

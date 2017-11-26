@@ -36,7 +36,7 @@ if (env === 'development') {
 /* -------------------
 导出实例化类
 ------------------- */
-export default new class Api {
+class Api {
   buildGetUrl (url, params) {
     var result = Object.params(params)
     if (result) return url + '?' + result
@@ -67,3 +67,4 @@ export default new class Api {
     })
   }
 }
+export default new Api()
