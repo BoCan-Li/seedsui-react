@@ -1,4 +1,6 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import bridge from 'utils/WqJsBridge';
 
 export default class Page extends Component {
   static propTypes = {
@@ -17,7 +19,11 @@ export default class Page extends Component {
   }
   onDefaultBack = () => {
     if (this.props.isFromApp === '1') {
-      window.history.go(-1);
+      try {
+        bridge.closeWindow();
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       window.history.go(-1);
     }

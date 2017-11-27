@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 export default class Notice extends Component {
   static propTypes = {
     img: PropTypes.string,
@@ -20,7 +21,7 @@ export default class Notice extends Component {
     return (
       <div className="notice" style={style}>
         <div className="notice-content" onClick={this.onClick}>
-          <img className="notice-icon" src={img} />
+          <img alt="" className="notice-icon" src={img} />
           <p>{text}</p>
         </div>
       </div>

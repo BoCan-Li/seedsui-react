@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 export default class Loading extends Component {
   static propTypes = {
     type: PropTypes.string, // filling | floating
@@ -13,7 +14,7 @@ export default class Loading extends Component {
   render() {
     const { style, className, type, img, text } = this.props;
     let content = (<div className="loading-wrapper">
-      {img && <img src={img} className="loading-icon"/>}
+      {img && <img alt="" src={img} className="loading-icon"/>}
       {text && <p>{text}</p>}
     </div>);
     if (type === 'filling') { // 填料环

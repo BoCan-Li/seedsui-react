@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Notice from './../Notice/Notice.jsx';
 export default class NoData extends Component {
   static propTypes = {

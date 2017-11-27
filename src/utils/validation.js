@@ -45,9 +45,11 @@ export function length(len) {
 
 export function username(value) {
   // Let's not start a debate on email regex. This is just for an example app!
+  /* eslint-disable */
   if (!isEmpty(value) && !/^[a-zA-Z0-9_\u4e00-\u9fa5@\.]+$/ui.test(value)) {
     return '只能输入中文,字母,数字,下划线,.,@和横线';
   }
+  /* eslint-enable */
 }
 
 export function required(message) {

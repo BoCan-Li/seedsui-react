@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from './dialog.js';
 
 export default class Dragrefresh extends Component {

@@ -1,4 +1,4 @@
-import { loginInfo } from './WqJsBridge';
+import bridge from './WqJsBridge';
 
 export function dateFormat(date, formatStr) {
   let fmt = formatStr;
@@ -30,7 +30,7 @@ export function generateUUID() {
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (value) => {
     const random = (time + Math.random() * 16) % 16 | 0;
     time = Math.floor(time / 16);
-    return (value === 'x' ? random : ( random & 0x7 | 0x8)).toString(16);
+    return (value === 'x' ? random : ( random & 0x7 | 0x8)).toString(16); // eslint-disable-line
   });
   return uuid;
 }
@@ -40,7 +40,7 @@ export function getImageUrl(cb) {
   let imgUrl = '';
   if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
     try {
-      loginInfo((info) => {
+      bridge.loginInfo((info) => {
         imgUrl = info.image_url || '';
         if (cb) cb(imgUrl);
       });
@@ -51,7 +51,7 @@ export function getImageUrl(cb) {
     document.addEventListener(
       'WebViewJavascriptBridgeReady', () => {
         try {
-          loginInfo((info) => {
+          bridge.loginInfo((info) => {
             imgUrl = info.image_url || '';
             console.log(imgUrl);
             if (cb) cb(imgUrl);

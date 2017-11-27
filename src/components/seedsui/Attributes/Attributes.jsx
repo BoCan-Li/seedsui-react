@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Row = styled.div`
@@ -17,6 +18,7 @@ export default class Attributes extends Component {
     style: PropTypes.object,
     rowClassName: PropTypes.string,
     rowStyle: PropTypes.object,
+    children: PropTypes.node
   };
 
   static defaultProps = {
@@ -24,22 +26,32 @@ export default class Attributes extends Component {
     list: []
   }
   render() {
-    const {col, list, onClick, className, style, rowClassName, rowStyle} = this.props;
+    const {col, list, onClick, className, style, rowClassName, rowStyle, children} = this.props;
     const attrsDOM = [];
     for (let i = 0; i < list.length;) {
       if (col === 2) {
-        attrsDOM.push(<Row className={`row-flex ${rowClassName}`} style={rowStyle} onClick={onClick} key={i}>
-          <div className="col-3">{list[i].name}</div>
-          <div className="col-9">{list[i].value}</div>
-        </Row>);
+        attrsDOM.push(
+          <div key={i}>
+            <Row className={`row-flex ${rowClassName}`} style={rowStyle} onClick={onClick}>
+              <div className="col-3">{list[i].name}</div>
+              <div className="col-9">{list[i].value}</div>
+            </Row>
+            {children && children}
+          </div>
+        );
         i++;
       } else if (col === 4) {
-        attrsDOM.push(<Row className={`row-flex ${rowClassName}`} style={rowStyle} onClick={onClick} key={i}>
-          <div className="col-3">{list[i].name}</div>
-          <div className="col-3">{list[i].value}</div>
-          <div className="col-3">{list[i + 1].name ? list[i + 1].name : ''}</div>
-          <div className="col-3">{list[i + 1].name ? list[i + 1].value : ''}</div>
-        </Row>);
+        attrsDOM.push(
+          <div key={i}>
+            <Row className={`row-flex ${rowClassName}`} style={rowStyle} onClick={onClick} key={i}>
+              <div className="col-3">{list[i].name}</div>
+              <div className="col-3">{list[i].value}</div>
+              <div className="col-3">{list[i + 1].name ? list[i + 1].name : ''}</div>
+              <div className="col-3">{list[i + 1].name ? list[i + 1].value : ''}</div>
+            </Row>
+            {children && children}
+          </div>
+        );
         i += 2;
       } else {
         attrsDOM.push(<div>请转入合法的col</div>);

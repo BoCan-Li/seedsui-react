@@ -10,61 +10,41 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 const env = process.env.NODE_ENV
 
 if (env === 'development') {
-  axios.defaults.baseURL = ' http://172.31.3.96:8080'
+  axios.defaults.baseURL = ' http://172.31.3.96:8080/api'
   axios.defaults.withCredentials = true
 }
 // 请求拦截器
-/* axios.interceptors.request.use(config => {
-  return config
+function buildGetUrl (url, params) {
+  var result = Object.params(params)
+  if (result) return url + '?' + result
+  return url
+}
+axios.interceptors.request.use(config => {
+  let conf = config
+  if (config.method === 'get') {
+    conf.url = buildGetUrl(config.url, config.data)
+    conf.data = ''
+  }
+  return conf
 }, error => {
   return Promise.reject(error)
-}) */
+})
 // 响应拦截器
-/* axios.interceptors.response.use(response => {
+axios.interceptors.response.use(response => {
+  if (response.data) return response.data
   return response
 }, error => {
   if (error.response) {
     switch (error.response.status) {
       case 401:
         // 401 跳转到登录页面
-        alert(error.response.data.message)
+        alert('401' + error.response.data.message);
+        break;
+      default:
+        alert(error.response);
     }
   }
   return Promise.reject(error)
-}) */
+})
 
-/* -------------------
-导出实例化类
-------------------- */
-class Api {
-  buildGetUrl (url, params) {
-    var result = Object.params(params)
-    if (result) return url + '?' + result
-    return url
-  }
-  get (url, params) {
-    return new Promise((resolve, reject) => {
-      axios.get(this.buildGetUrl(url, params)).then(response => {
-        resolve(response.data)
-      }, err => {
-        reject(err)
-      })
-      .catch((error) => {
-        reject(error)
-      })
-    })
-  }
-  post (url, params) {
-    return new Promise((resolve, reject) => {
-      axios.post(url, params).then(response => {
-        resolve(response.data)
-      }, err => {
-        reject(err)
-      })
-      .catch((error) => {
-        reject(error)
-      })
-    })
-  }
-}
-export default new Api()
+export default axios

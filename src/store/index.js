@@ -1,15 +1,12 @@
 import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducer.js'
 // 中间件
-import promiseMiddleware from 'redux-promise-middleware';
+import axiosMiddleware from 'redux-axios-middleware';
 import thunk from 'redux-thunk';
-// const store = createStore(reducer)
-// export default store
+import client from 'helpers/api.js';
 
 const composeStoreWithMiddleware = applyMiddleware(
   thunk,
-  promiseMiddleware({
-    promiseTypeSuffixes: ['', 'SUCCESS', 'FAILURE']
-  })
+  axiosMiddleware(client)
 )(createStore);
 export default composeStoreWithMiddleware(reducer);

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import NoData from './../NoData/NoData.jsx';
 import DragPull from './dragrefresh.pull.js';
 
@@ -15,6 +16,12 @@ export default class Dragrefresh extends Component {
     init: PropTypes.func,
     hasMore: PropTypes.number
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      instance: null
+    };
+  }
   static defaultProps = {
     noData: false
   }
@@ -26,9 +33,9 @@ export default class Dragrefresh extends Component {
       onBottomRefresh: this.props.bottomRefresh ? this.props.bottomRefresh : null, // 底部刷新,加载下一页
       onBottomComplete: this.props.bottomComplete ? this.props.bottomComplete : null, // 底部完成
     });
-    this.state = {
+    this.setState({
       instance: instance
-    };
+    });
     // 初始化
     if (this.props.init) this.props.init(instance);
     console.log('didMount触发hasMore:' + this.props.hasMore);
