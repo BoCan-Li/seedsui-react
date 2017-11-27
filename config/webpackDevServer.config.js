@@ -113,6 +113,23 @@ module.exports = function(proxy, allowedHost) {
       app.use('/login', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/login'});
       });
+      /*
+      接口直接登录: /server/login.html
+      */
+      /* app.get('/_react_/login', (req, resp) => {
+      // 发ajax请求
+        const request = superagent.post(targetUrl + '/登录接口);
+        request.type('form');
+        request.send({
+          'identifiers.username': 'xxx',
+          'identifiers.password': 'xxx',
+          'refer': '登录地址',
+        });
+        request.end((err, res = {}) => {
+          resp.append('Set-Cookie', res.header['set-cookie']);
+          resp.json({success: true, cookie: res.header['set-cookie']});
+        });
+      }); */
     },
   };
 };
