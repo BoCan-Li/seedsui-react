@@ -9,16 +9,16 @@ import { push, replace } from './../../react-router-redux/'
   data: state.home.data,
   isLoading: state.home.isLoading
 }), {
-  onPush: push,
-  onReplace: replace,
+  pushState: push,
+  replaceState: replace,
   getData,
   setLoading
 })
 export default class Home extends Component {
   static propTypes = {
     router: PropTypes.object,
-    onPush: PropTypes.func.isRequired,
-    onReplace: PropTypes.func.isRequired,
+    pushState: PropTypes.func.isRequired,
+    replaceState: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
     data: PropTypes.object,
     getData: PropTypes.func,
@@ -38,7 +38,7 @@ export default class Home extends Component {
     })
   }
   onClickJump = () => {
-    this.props.onPush('http://www.baidu.com/')
+    this.props.pushState('/_react_/about')
   }
   render() {
     const {isLoading, data} = this.props;
@@ -48,7 +48,7 @@ export default class Home extends Component {
         <br/>
         数据情况:{JSON.stringify(data)}
         <input type="button" value="设置isLoading" onClick={this.props.setLoading}/>
-        <input type="button" value="跳转到百度" onClick={this.onClickJump}/>
+        <input type="button" value="路由跳转" onClick={this.onClickJump}/>
       </div>
     );
   }
