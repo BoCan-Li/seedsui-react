@@ -2,23 +2,18 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {getData, setLoading} from 'store/modules/home.js'
-import { push, replace } from './../../react-router-redux/'
+import { withRouter } from 'react-router'
 
+@withRouter
 @connect(state => ({
-  router: state.routing,
   data: state.home.data,
   isLoading: state.home.isLoading
 }), {
-  pushState: push,
-  replaceState: replace,
   getData,
   setLoading
 })
 export default class Home extends Component {
   static propTypes = {
-    router: PropTypes.object,
-    pushState: PropTypes.func.isRequired,
-    replaceState: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
     data: PropTypes.object,
     getData: PropTypes.func,
@@ -38,7 +33,9 @@ export default class Home extends Component {
     })
   }
   onClickJump = () => {
-    this.props.pushState('/_react_/about')
+    // const { match, location, history } = this.props
+    const { history } = this.props
+    history.push('/_react_/about')
   }
   render() {
     const {isLoading, data} = this.props;
