@@ -28,7 +28,7 @@ var BridgeWeiXin = {
       }
     })
     .catch(err => {
-      console.log('微信配置错误，请检查是否取得证书')
+      console.log('微信配置错误，请检查是否取得证书' + err)
     })
   },
   /* -------------------

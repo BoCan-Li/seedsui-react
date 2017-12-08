@@ -5,7 +5,7 @@ import 'utils/object.js'
 axios 配置
 ------------------- */
 axios.defaults.timeout = 5000
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
 
 const env = process.env.NODE_ENV
 
@@ -38,10 +38,10 @@ axios.interceptors.response.use(response => {
     switch (error.response.status) {
       case 401:
         // 401 跳转到登录页面
-        alert('401' + error.response.data.message);
-        break;
+        alert('401' + error.response.data.message)
+        break
       default:
-        alert(error.response);
+        alert(error.response)
     }
   }
   return Promise.reject(error)
