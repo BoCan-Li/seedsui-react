@@ -58,4 +58,5 @@ module.exports = {
   appRouter: resolveApp('src/router'),
   appUtils: resolveApp('src/utils'),
   appHelpers: resolveApp('src/helpers'),
+  appBridge: resolveApp('src/bridge')
 };

@@ -94,7 +94,7 @@ module.exports = {
       'components': paths.appComponents,
       'containers': paths.appContainers,
       'store': paths.appStore,
-      'router': paths.appRouter,
+      'bridge': paths.appBridge,
       'utils': paths.appUtils,
       'helpers': paths.appHelpers,
       // Support React Native Web
@@ -155,8 +155,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              "presets": ["react", "babel-preset-stage-2"],
-              "plugins": ["transform-decorators-legacy"],
+              plugins: [require.resolve('babel-plugin-transform-decorators-legacy')],
               compact: true,
             },
           },
