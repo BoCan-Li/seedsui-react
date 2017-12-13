@@ -9,7 +9,8 @@ const paths = require('./paths');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 // 设置代理
-const httpProxy = require('http-proxy')
+const httpProxy = require('http-proxy');
+const superagent = require('superagent');
 module.exports = function(proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
@@ -96,40 +97,39 @@ module.exports = function(proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
-      // 跨域
-      const targetUrl = 'http://172.31.3.206:7050';
+      /*
+      跨域
+      */
+      // 目标接口服务器
+      const targetUrl = 'http://xxx.xx.x.xxx:xxxx';
       const proxy = httpProxy.createProxyServer({
         target: targetUrl,
         // 20秒超时
         proxyTimeout: 20 * 1000,
         ws: false
       });
+      // 接口代理
       app.use('/api', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      app.use('/test', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/'});
-      });
+      // 登录代理
       app.use('/login', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/login'});
+        proxy.web(req, res, {target: targetUrl + '/login.html'});
       });
       /*
-      接口直接登录: /server/login.html
+      使用superagent模拟登录
       */
-      /* app.get('/_react_/login', (req, resp) => {
-      // 发ajax请求
-        const request = superagent.post(targetUrl + '/登录接口);
+      app.get('/test/login', (req, resp) => {
+        const request = superagent.post(targetUrl + '/portal/logon.action');
         request.type('form');
         request.send({
-          'identifiers.username': 'xxx',
-          'identifiers.password': 'xxx',
-          'refer': '登录地址',
+          // params
         });
         request.end((err, res = {}) => {
           resp.append('Set-Cookie', res.header['set-cookie']);
           resp.json({success: true, cookie: res.header['set-cookie']});
         });
-      }); */
+      });
     },
   };
 };
