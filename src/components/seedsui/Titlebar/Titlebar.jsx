@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { closeWindow, goHome } from 'utils/WqJsBridge';
+import bridge from 'bridge/bridge.js';
 
 export default class Page extends Component {
   static propTypes = {
@@ -23,13 +23,13 @@ export default class Page extends Component {
   onDefaultBack = () => {
     if (this.props.isFromApp === '1') {
       try {
-        closeWindow();
+        bridge.closeWindow();
       } catch (error) {
         console.log(error);
       }
     } else if (this.props.isFromApp === '2') {
       try {
-        goHome();
+        bridge.goHome();
       } catch (error) {
         console.log(error);
       }
@@ -38,6 +38,7 @@ export default class Page extends Component {
     }
   }
   render() {
+    console.log(bridge)
     const { title, back, lBtn, rBtn, theme, onClick, children } = this.props;
     let lBtnDOM = null;
     if (lBtn.length > 0) {
