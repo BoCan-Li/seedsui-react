@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Page extends Component {
   static propTypes = {
@@ -7,6 +7,10 @@ export default class Page extends Component {
     className: PropTypes.string,
     children: PropTypes.node
   }
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     const { style, className } = this.props;
     return (

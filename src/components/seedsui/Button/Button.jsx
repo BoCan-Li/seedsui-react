@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Button extends Component {
   static propTypes = {
@@ -19,6 +19,9 @@ export default class Button extends Component {
     tipText: '',
     badgeText: '',
     args: []
+  }
+  constructor(props) {
+    super(props);
   }
   onClick = (event) => {
     if (this.props.onClick) this.props.onClick(event, ...this.props.args);

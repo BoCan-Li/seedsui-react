@@ -1,35 +1,35 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Icon from './../Icon/Icon.jsx';
 
 export default class Sliver extends Component {
   static propTypes = {
-    title: PropTypes.node,
+    caption: PropTypes.node,
+    sndcaption: PropTypes.node,
     licon: PropTypes.node,
     ricon: PropTypes.node,
+    liconSrc: PropTypes.string,
+    liconClassName: PropTypes.string,
+    riconSrc: PropTypes.string,
+    riconClassName: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    tag: PropTypes.string,
     onClick: PropTypes.func
   }
-  static defaultProps = {
-    tag: 'div'
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    const { title, className, style, licon, ricon, onClick } = this.props;
-    /* const { tag, title, className, style } = this.props;
-    let sliverDOM = null;
-    if (tag === 'div') {
-      sliverDOM = (<div className={'sliver' + (className ? ' ' + className : '')} style={style}>{title}</div>);
-    } else if (tag === 'li') {
-      sliverDOM = (<li className={'sliver' + (className ? ' ' + className : '')} style={style}>{title}</li>);
-    }
-    console.log(sliverDOM); */
+    const { caption, sndcaption, className, style, licon, ricon, liconSrc, liconClassName, riconSrc, riconClassName, onClick } = this.props;
     return (
       <div className={'sliver' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
+        {liconSrc && <Icon className={liconClassName} src={liconSrc}/>}
         {licon}
-        <div className="sliver-title">{title}</div>
+        <div className="sliver-caption">{caption}</div>
+        <div className="sliver-sndcaption">{sndcaption}</div>
         {ricon}
+        {riconSrc && <Icon className={'size16' + (riconClassName ? ' ' + riconClassName : '')} src={riconSrc}/>}
       </div>
     );
   }

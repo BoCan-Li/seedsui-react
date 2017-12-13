@@ -1,47 +1,35 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Dialog from './dialog.js';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-export default class Dragrefresh extends Component {
+export default class Dialog extends Component {
   static propTypes = {
     style: PropTypes.object,
+    show: PropTypes.bool,
     position: PropTypes.string,
-    animation: PropTypes.func,
-    children: PropTypes.node,
+    animation: PropTypes.string,
     isClickMaskHide: PropTypes.bool,
     onClick: PropTypes.func,
     onClickMask: PropTypes.func,
     onTransitionEnd: PropTypes.func,
     onShowed: PropTypes.func,
-    onHid: PropTypes.func
+    onHid: PropTypes.func,
+    children: PropTypes.node
   }
   static defaultProps = {
-    isClickMaskHide: true,
+    style: {},
+    isClickMaskHide: false,
     animation: 'fade',
-    position: ''
+    position: 'middle'
   }
-  componentDidMount = () => {
-    var instance = new Dialog({
-      mask: this.mask,
-      isClickMaskHide: this.props.isClickMaskHide,
-      animation: this.props.animation,
-      position: this.props.position,
-      onClick: this.props.onClick,
-      onClickMask: this.props.onClickMask,
-      onTransitionEnd: this.props.onTransitionEnd,
-      onShowed: this.props.onShowed,
-      onHid: this.props.onHid
-    });
-    this.state = {
-      instance: instance
-    };
+  constructor(props) {
+    super(props);
   }
   render() {
-    const { style, position, animation } = this.props;
+    const { children, show, style, position, animation, onClick, onClickMask } = this.props;
     return (
-      <div className="mask" ref={(ref) => this.mask = ref}>
-        <div style={style} className={'dialog' + (position ? ' ' + position : '')} data-animation={animation}>
-          {this.props.children}
+      show && <div onClick={onClickMask} className={'mask active'}>
+        <div onClick={(e) => {e.stopPropagation(); if (onClick) onClick(e);}} style={style} className={'dialog active' + (position ? ' ' + position : '')} data-animation={animation}>
+          {children && children}
         </div>
       </div>
     );

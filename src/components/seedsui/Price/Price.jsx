@@ -1,39 +1,46 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import 'utils/math.js';
 
 export default class Index extends Component {
   static propTypes = {
+    className: PropTypes.string,
     style: PropTypes.object,
-    text: PropTypes.number,
+    price: PropTypes.string,
     unit: PropTypes.string,
+    digitsFixed: PropTypes.bool,
     digits: PropTypes.number,
   };
+  static defaultProps = {
+    className: 'normal',
+    digitsFixed: true
+  }
+  constructor(props, context) {
+    super(props, context);
+  }
 
   render() {
-    const {text, unit, digits, style} = this.props;
-    let newPrice = text;
+    const {price, unit, className, digits, digitsFixed, style} = this.props;
+    let newPrice = price;
     if (digits) {
       try {
-        newPrice = Math.Calc.toFixed(text, digits);
+        if (digitsFixed) newPrice = String(Number(price).toFixed(digits));
+        else newPrice = Math.Calc.toFixed(Number(price), digits);
       } catch (error) {
         console.log(error);
       }
     }
-    // const priceString = String(newPrice).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
     const priceString = Math.Calc.toThousandth(newPrice);
     let priceInt = null;
-    let priceTail = null;
+    let priceDigits = null;
     if (priceString.indexOf('.') !== -1) {
       priceInt = priceString.substring(0, priceString.indexOf('.'));
-      priceTail = '.' + priceString.substring(priceString.indexOf('.') + 1);
+      priceDigits = '.' + priceString.substring(priceString.indexOf('.') + 1);
     } else {
       priceInt = priceString;
     }
     return (
-      <span style={style} className="price">¥<span className="price-integer">{priceInt}</span>{priceTail}
-        {unit && <span className="price-unit">/{unit}</span>}
-      </span>
+      <span style={style} className={`price ${className}`}><span className="price-symbol">¥</span><span className="price-integer">{priceInt}</span>{priceDigits && <span className="price-digits">{priceDigits}</span>}{unit && <span className="price-unit">/{unit}</span>}</span>
     );
   }
 }

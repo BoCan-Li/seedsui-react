@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Checkbox extends Component {
   static propTypes = {
@@ -12,6 +12,9 @@ export default class Checkbox extends Component {
   }
   static defaultProps = {
     value: ''
+  }
+  constructor(props) {
+    super(props);
   }
   render() {
     const { name, style, className, value, checked, onChange } = this.props;

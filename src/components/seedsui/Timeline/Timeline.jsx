@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 export default class Timeline extends Component {
   static propTypes = {
     list: PropTypes.array,
@@ -10,6 +10,9 @@ export default class Timeline extends Component {
   static defaultProps = {
     list: [],
     style: {}
+  }
+  constructor(props) {
+    super(props);
   }
   render() {
     const { list, style, top, bottom } = this.props;

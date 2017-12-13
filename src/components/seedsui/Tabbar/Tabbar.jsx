@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class Page extends Component {
   static propTypes = {
@@ -16,6 +16,9 @@ export default class Page extends Component {
     disabled: false,
     type: 'line',
     activeIndex: 0
+  }
+  constructor(props) {
+    super(props);
   }
   onClick = (item, i, callback) => {
     callback(item, i);

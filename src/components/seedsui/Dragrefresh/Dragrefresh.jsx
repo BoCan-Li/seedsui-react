@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import NoData from './../NoData/NoData.jsx';
 import DragPull from './dragrefresh.pull.js';
 
@@ -16,14 +16,11 @@ export default class Dragrefresh extends Component {
     init: PropTypes.func,
     hasMore: PropTypes.number
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      instance: null
-    };
-  }
   static defaultProps = {
     noData: false
+  }
+  constructor(props) {
+    super(props);
   }
   componentDidMount = () => {
     var instance = new DragPull({
@@ -33,9 +30,9 @@ export default class Dragrefresh extends Component {
       onBottomRefresh: this.props.bottomRefresh ? this.props.bottomRefresh : null, // 底部刷新,加载下一页
       onBottomComplete: this.props.bottomComplete ? this.props.bottomComplete : null, // 底部完成
     });
-    this.setState({
+    this.state = {
       instance: instance
-    });
+    };
     // 初始化
     if (this.props.init) this.props.init(instance);
     console.log('didMount触发hasMore:' + this.props.hasMore);
@@ -83,6 +80,11 @@ export default class Dragrefresh extends Component {
           <div className="df-pull-box">
             <div className="df-pull-icon df-pull-icon-loading"></div>
             <div className="df-pull-caption">正在加载...</div>
+          </div>
+        </div>}
+        {bottomRefresh && <div className="SID-Dragrefresh-NoDataContainer df-pull hide" style={{height: '50px'}}>
+          <div className="df-pull-box">
+            <div className="df-pull-caption">没有更多数据了</div>
           </div>
         </div>}
         {bottomRefresh && <div className="SID-Dragrefresh-ErrorContainer df-pull hide" style={{height: '50px'}}>

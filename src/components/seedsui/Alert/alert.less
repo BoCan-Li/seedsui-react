@@ -1,0 +1,124 @@
+/*----------------alert.less(start)--------------*/
+.alert-mask{
+	z-index:10;
+}
+.alert{
+	position:absolute;
+	border-style:solid;
+	border-width:0;
+
+	top:50%;
+	left:50%;
+  width: @270px;
+	border-radius:@6px;
+	margin: 0 auto;
+
+	visibility:hidden;
+	opacity:0;
+	-webkit-transform:translate(-50%,-50%) scale(0, 0);
+	-webkit-transition-property:-webkit-transform,opacity,visibility;
+	-webkit-transition-duration:300ms;
+
+	background-color:white;
+	border-color:@border;
+	
+	h1{
+		text-align: center;
+		padding:@15px 0 @5px 0;
+		font-weight: 500;
+		font-size: @18px;
+		text-align: center;
+	}
+
+	&.active{
+		visibility:visible;
+		opacity:1;
+		-webkit-transform:translate(-50%,-50%) scale(1, 1);
+	}
+}
+//内容区域
+.alert-content{
+	display: block;
+	padding: @10px @12px @15px @12px;
+	line-height: 1.2em;
+	word-wrap: break-word;
+}
+//底部按钮区
+.alert-handler{
+	position: relative;
+	display:block;
+	text-align:center;
+	white-space:nowrap;
+	font-size:0;
+	a{
+		position: relative;
+		width:50%;
+		border-width:0;
+		display:inline-block;
+		padding:@12px;
+		font-size:@font-size-lg;
+    box-sizing:border-box;
+    color: @alert-button-color;
+	}
+}
+
+.alert-handler:before,.alert-handler a:nth-of-type(2):before{
+	.setContentLine();
+}
+//上横线
+.alert-handler:before{
+	top: 0px;
+	right: auto;
+  bottom: auto;
+  left: 0;
+  height: @1px;
+  width: 100%;
+  -webkit-transform-origin:center top;
+}
+//左竖线
+.alert-handler a:nth-of-type(2):before{
+	top: 0;
+  right: auto;
+  bottom: auto;
+  left: 0;
+  width: @1px;
+  height: 100%;
+  -webkit-transform-origin:left center;
+}
+
+.alert-handler a:only-child{
+	width:100%;
+}
+.alert-handler a:active{
+	background-color:@border;
+}
+
+//横线
+.alert-handler:before {
+  -webkit-transform: scaleY(0.5);
+}
+//竖线
+.alert-handler a:nth-of-type(2):before {
+  -webkit-transform: scaleX(0.5);
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	//横线
+	.alert-handler:before {
+		-webkit-transform: scaleY(0.5);
+	}
+	//竖线
+	.alert-handler a:nth-of-type(2):before {
+		-webkit-transform: scaleX(0.5);
+	}
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 3) {
+	//横线
+	.alert-handler:before {
+		-webkit-transform: scaleY(0.33);
+	}
+	//竖线
+	.alert-handler a:nth-of-type(2):before {
+		-webkit-transform: scaleX(0.33);
+	}
+}
+/*----------------alert.less(end)--------------*/
