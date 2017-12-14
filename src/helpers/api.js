@@ -1,5 +1,5 @@
 import axios from 'axios'
-import 'utils/object.js'
+// import 'utils/object.js'
 
 /* -------------------
 axios 配置

@@ -1,5 +1,4 @@
 // DB 本地数据库
-/* eslint-disable */
 var DB = (function () {
   function checkManifest () {
     window.addEventListener('updateready', function (e) {
@@ -85,7 +84,6 @@ var DB = (function () {
     delCookie: delCookie, // key
     clearCookie: clearCookie
   }
-})()
+})();
 
-export default DB
-/* eslint-enable */
+//export default DB

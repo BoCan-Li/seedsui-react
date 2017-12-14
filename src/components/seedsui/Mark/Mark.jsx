@@ -9,8 +9,7 @@ export default class Mark extends Component {
     onClick: PropTypes.func
   }
   static defaultProps = {
-    type: 'info',
-    show: true
+    type: 'info'
   }
   constructor(props) {
     super(props);

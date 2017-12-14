@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* -------------------
 解决加减乘除精度
 ------------------- */
@@ -133,4 +132,3 @@ Math.Calc = (function () {
     toThousandth: toThousandth
   }
 })();
-/* eslint-enable */

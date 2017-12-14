@@ -32,6 +32,8 @@ export default class List extends Component {
     captionStyle: PropTypes.object,
 
     sndcaption: PropTypes.node,
+    sndcaptionClassName: PropTypes.string,
+    sndcaptionStyle: PropTypes.object,
 
     containerStyle: PropTypes.object,
     containerAfter: PropTypes.node,
@@ -53,10 +55,10 @@ export default class List extends Component {
       thumbnail, thumbnailSrc, thumbnailStyle, thumbnailAfter, onClickThumbnail,
       avatar, avatarSrc, avatarStyle, avatarAfter, onClickAvatar,
       caption, captionClassName, captionStyle,
-      sndcaption,
+      sndcaption, sndcaptionClassName, sndcaptionStyle,
       containerStyle, containerAfter} = this.props;
     return (
-      <div className={'list-li' + (className ? ' ' + className : '')} style={style} onClick={this.onClick}>
+      <div className={`list-li ${className}`} style={style} onClick={this.onClick}>
         {liconSrc && <Icon src={liconSrc}/>}
         {licon}
         {thumbnail && <div className="list-thumbnail" style={thumbnailStyle} onClick={onClickThumbnail}>
@@ -71,10 +73,10 @@ export default class List extends Component {
           {avatarAfter}
         </div>}
         <div className="list-container" style={containerStyle}>
-          {caption && <div className={`list-title ${captionClassName}`} style={captionStyle}>
+          {caption && <div className={'list-title' + (captionClassName ? captionClassName : '')} style={captionStyle}>
             {caption}
           </div>}
-          {sndcaption && <small>{sndcaption}</small>}
+          {sndcaption && <small className={sndcaptionClassName} style={sndcaptionStyle}>{sndcaption}</small>}
           {containerAfter}
           {/* <div className="row-flex box-middle">
             <i className="list-icon icon-person color-primary"></i>

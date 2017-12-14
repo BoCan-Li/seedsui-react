@@ -1,9 +1,8 @@
-/* eslint-disable */
 /* -------------------
 判断是否是空对象
 ------------------- */
 Object.isEmptyObject = function (obj) {
-  var name;
+  var name
   for (name in obj) {
     return false
   }
@@ -215,8 +214,7 @@ Object.extend = function () {
 
   for (; i < length; i++) {
     // 只处理非空/未定义的值
-    options = arguments[i]
-    if (options != null) {
+    if ((options = arguments[i]) != null) {
       // 扩展基础对象
       for (name in options) {
         src = target[name]
@@ -229,8 +227,7 @@ Object.extend = function () {
 
         // 如果我们合并了普通的对象或数组，就会重新出现
         if (deep && copy && (Object.isPlainObject(copy) ||
-        Array.isArray(copy))) {
-          copyIsArray = Array.isArray(copy)
+          (copyIsArray = Array.isArray(copy)))) {
           if (copyIsArray) {
             copyIsArray = false
             clone = src && Array.isArray(src) ? src : []
@@ -251,5 +248,4 @@ Object.extend = function () {
 
   // 返回修改后的对象
   return target
-};
-/* eslint-enable */
+}

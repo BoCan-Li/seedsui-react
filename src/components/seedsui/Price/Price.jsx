@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import 'utils/math.js';
+// import 'utils/math.js'
 
 export default class Index extends Component {
   static propTypes = {

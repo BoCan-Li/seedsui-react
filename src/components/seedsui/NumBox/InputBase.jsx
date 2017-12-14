@@ -1,5 +1,6 @@
-import { Component, PropTypes } from 'react';
-import 'utils/math.js';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+// import 'utils/math.js';
 export default class NumBase extends Component {
   static propTypes = {
     // global
