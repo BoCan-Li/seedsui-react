@@ -38,7 +38,6 @@ export default class Page extends Component {
     }
   }
   render() {
-    console.log(bridge)
     const { title, back, lBtn, rBtn, theme, onClick, children } = this.props;
     let lBtnDOM = null;
     if (lBtn.length > 0) {
