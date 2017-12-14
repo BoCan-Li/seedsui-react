@@ -7,6 +7,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 export default class Attributes extends Component {
   static propTypes = {
     col: PropTypes.string,
+    layout: PropTypes.string,
     list: PropTypes.array,
     className: PropTypes.string,
     rowClassName: PropTypes.string,
@@ -44,7 +45,7 @@ export default class Attributes extends Component {
     let dom = null;
     if (item.name) {
       if (item.price) {
-        dom = <Price price={item.value}/>;
+        dom = <Price className={typeof item.price === 'string' ? item.price : 'normal'} price={item.value}/>;
       }
       dom = item.value;
     }
@@ -61,6 +62,19 @@ export default class Attributes extends Component {
       </a>);
     }
   }
+  getCol2NameClassName = () => {
+    const {layout, nameClassName} = this.props;
+    let baseClass = 'col-3';
+    if (layout === 'flex') baseClass = '';
+    if (layout === 'between') baseClass = 'col-flex';
+    return baseClass + (nameClassName ? ' ' + nameClassName : '');
+  }
+  getCol2ValueClassName = () => {
+    const {layout, valueClassName} = this.props;
+    let baseClass = 'col-flex';
+    if (layout === 'between') baseClass = '';
+    return baseClass + (valueClassName ? ' ' + valueClassName : '');
+  }
   render() {
     const {col, list, onClick, className, style, rowClassName, nameClassName, valueClassName, rowStyle, colStyle, nameStyle, valueStyle, children} = this.props;
     const attrsDOM = [];
@@ -74,12 +88,14 @@ export default class Attributes extends Component {
               {/* 右 */}
               <div className={'col-3' + (valueClassName ? ' ' + valueClassName : '')} style={Object.assign({}, colStyle, valueStyle)}>
                 {this.getCol4Value(list[i])}
+                {list[i].ricon && <span>{list[i].ricon}</span>}
               </div>
               {/* 左 */}
               <div className={'col-3' + (nameClassName ? ' ' + nameClassName : '')} style={Object.assign({}, colStyle, nameStyle)}>{list[i + 1].name ? list[i + 1].name : ''}</div>
               {/* 右 */}
               <div className={'col-3' + (valueClassName ? ' ' + valueClassName : '')} style={Object.assign({}, colStyle, valueStyle)}>
                 {this.getCol4Value(list[i + 1])}
+                {list[i + 1].ricon && <span>{list[i + 1].ricon}</span>}
               </div>
             </div>
             {children && children}
@@ -91,10 +107,11 @@ export default class Attributes extends Component {
           <div key={i} style={rowStyle}>
             <div className={'row-flex attribute box-middle' + (rowClassName ? ' ' + rowClassName : '')}>
               {/* 左 */}
-              <div className={(col === 'flex' ? '' : 'col-3') + (nameClassName ? ' ' + nameClassName : '')} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
+              <div className={this.getCol2NameClassName()} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
               {/* 右 */}
-              <div className={'col-flex' + (valueClassName ? ' ' + valueClassName : '')} style={Object.assign({paddingLeft: '8px'}, colStyle, valueStyle)}>
-                {list[i].price ? <Price className={list[i].price} price={list[i].value}/> : list[i].value}
+              <div className={this.getCol2ValueClassName()} style={Object.assign({paddingLeft: '8px'}, colStyle, valueStyle)}>
+                {list[i].price ? <Price className={typeof list[i].price === 'string' ? list[i].price : 'normal'} price={list[i].value}/> : list[i].value}
+                {list[i].ricon && <span>{list[i].ricon}</span>}
               </div>
               {/* 操作 */}
               {list[i].copy &&
