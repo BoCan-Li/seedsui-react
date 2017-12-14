@@ -7,10 +7,10 @@ export default class Dragrefresh extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
-    topRefresh: PropTypes.func,
-    topComplete: PropTypes.func,
-    bottomRefresh: PropTypes.func,
-    bottomComplete: PropTypes.func,
+    onTopRefresh: PropTypes.func,
+    onTopComplete: PropTypes.func,
+    onBottomRefresh: PropTypes.func,
+    onBottomComplete: PropTypes.func,
     noData: PropTypes.bool,
     children: PropTypes.node,
     init: PropTypes.func,
@@ -21,18 +21,21 @@ export default class Dragrefresh extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {
+      instance: null
+    };
   }
   componentDidMount = () => {
     var instance = new DragPull({
       overflowContainer: this.refs.refDragPull,
-      onTopRefresh: this.props.topRefresh ? this.props.topRefresh : null, // 头部刷新,加载第一页
-      onTopComplete: this.props.topComplete ? this.props.topComplete : null, // 头部完成
-      onBottomRefresh: this.props.bottomRefresh ? this.props.bottomRefresh : null, // 底部刷新,加载下一页
-      onBottomComplete: this.props.bottomComplete ? this.props.bottomComplete : null, // 底部完成
+      onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
+      onTopComplete: this.props.onTopComplete ? this.props.onTopComplete : null, // 头部完成
+      onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
+      onBottomComplete: this.props.onBottomComplete ? this.props.onBottomComplete : null, // 底部完成
     });
-    this.state = {
-      instance: instance
-    };
+    this.setState({
+      instance
+    });
     // 初始化
     if (this.props.init) this.props.init(instance);
     console.log('didMount触发hasMore:' + this.props.hasMore);
@@ -66,28 +69,28 @@ export default class Dragrefresh extends Component {
     }
   }
   render() {
-    const { style, className, topRefresh, bottomRefresh, noData } = this.props;
+    const { style, className, onTopRefresh, onBottomRefresh, noData } = this.props;
     return (
       <div ref="refDragPull" className={className} style={style}>
-        {topRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
+        {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
             <div className="df-pull-caption">下拉可以刷新</div>
           </div>
         </div>}
         {this.props.children}
-        {bottomRefresh && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
+        {onBottomRefresh && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon df-pull-icon-loading"></div>
             <div className="df-pull-caption">正在加载...</div>
           </div>
         </div>}
-        {bottomRefresh && <div className="SID-Dragrefresh-NoDataContainer df-pull hide" style={{height: '50px'}}>
+        {onBottomRefresh && <div className="SID-Dragrefresh-NoDataContainer df-pull hide" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-caption">没有更多数据了</div>
           </div>
         </div>}
-        {bottomRefresh && <div className="SID-Dragrefresh-ErrorContainer df-pull hide" style={{height: '50px'}}>
+        {onBottomRefresh && <div className="SID-Dragrefresh-ErrorContainer df-pull hide" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>

@@ -12,6 +12,7 @@ export default class Page extends Component {
     disabled: PropTypes.bool
   }
   static defaultProps = {
+    style: {},
     linewidth: 60,
     disabled: false,
     type: 'line',
@@ -19,9 +20,6 @@ export default class Page extends Component {
   }
   constructor(props) {
     super(props);
-  }
-  onClick = (item, i, callback) => {
-    callback(item, i);
   }
   render() {
     const { list, activeIndex, type, theme, linewidth, disabled } = this.props;
@@ -44,7 +42,7 @@ export default class Page extends Component {
     style = Object.assign(this.props.style, style);
     // 循环DOM
     const liDOM = list.map((item, index) => {
-      return (<li className={'tab' + (activeIndex === index ? ' active' : '')} key={index} onClick={this.onClick(item, index, item.onClick)}>
+      return (<li className={'tab' + (activeIndex === index ? ' active' : '')} key={index} onClick={(e) => {item.onClick && item.onClick(e, item, index)}}>
         {(item.icon && type !== 'dropdown') && <i className="'icon '+item.icon"></i>}
         <label className="tab-label">{item.text}</label>
         {(item.icon && type === 'dropdown') && <i className="'icon size12 '+item.icon"></i>}
