@@ -1,55 +1,60 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Icon from './../Icon/Icon.jsx'
 
 export default class Page extends Component {
   static propTypes = {
     style: PropTypes.object,
-    list: PropTypes.array,
-    activeIndex: PropTypes.number,
-    type: PropTypes.string, // line | rect | lump | dropdown | footer
-    theme: PropTypes.string, // reverse
+    className: PropTypes.string, // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
+    list: PropTypes.array, // [{liconClassName: 'xx', riconClassName: 'xx', text: 'xx'}]
     linewidth: PropTypes.number,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func
   }
   static defaultProps = {
     style: {},
     linewidth: 60,
     disabled: false,
-    type: 'line',
-    activeIndex: 0
+    className: 'tabbar-line'
   }
   constructor(props) {
     super(props);
   }
+  onClick = (e) => {
+    const target = e.target;
+    const index = target.getAttribute('data-index');
+    this.props.onClick(e, this.props.list[index], index)
+  }
   render() {
-    const { list, activeIndex, type, theme, linewidth, disabled } = this.props;
-    var style = {};
-    if (this.type === 'rect') {
-      switch (this.list.length) {
+    const { list, className, style, linewidth, disabled } = this.props;
+    var tabbarStyle = {};
+    if (className.hasClass('tabbar-rect')) {
+      switch (list.length) {
         case 1 :
-          style = {width: '30%'};
+          tabbarStyle = {width: '30%'};
           break;
         case 2 :
-          style = {width: '50%'};
+          tabbarStyle = {width: '50%'};
           break;
         case 3 :
-          style = {width: '50%'};
+          tabbarStyle = {width: '50%'};
           break;
         default :
-          style = {};
+          tabbarStyle = {};
       }
     }
-    style = Object.assign(this.props.style, style);
+    tabbarStyle = Object.assign(this.props.style, style);
     // 循环DOM
     const liDOM = list.map((item, index) => {
-      return (<li className={'tab' + (activeIndex === index ? ' active' : '')} key={index} onClick={(e) => {item.onClick && item.onClick(e, item, index)}}>
-        {(item.icon && type !== 'dropdown') && <i className="'icon '+item.icon"></i>}
+      return (<li data-index={index} className={'tab' + (item.active ? ' active' : '')} key={index}>
+        {item.liconClassName && <Icon className={item.liconClassName}/>}
         <label className="tab-label">{item.text}</label>
-        {(item.icon && type === 'dropdown') && <i className="'icon size12 '+item.icon"></i>}
+        {item.riconClassName && <Icon className={item.riconClassName}/>}
       </li>);
     });
+    const tabbarClassName = 'tabbar animated' + (className ? ' ' + className : '') + (className.hasClass('tabbar-line') ? ' tabbar-line-width' + linewidth : '') + (disabled ? ' disabled' : '');
     return (
-      <ul className={'tabbar tabbar-' + type + ' animated' + (theme ? ' ' + theme : '') + (type === 'line' ? ' tabbar-line-width' + linewidth : '')+(disabled ? ' disabled' : '')} data-col={list.length} style={style}>
+      <ul className={tabbarClassName} data-col={list.length} style={tabbarStyle} onClick={this.onClick}>
         {liDOM}
       </ul>
     );

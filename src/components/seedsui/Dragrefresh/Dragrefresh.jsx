@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import NoData from './../NoData/NoData.jsx';
-import DragPull from './dragrefresh.pull.js';
+import Instance from './dragrefresh.pull.js';
 
 export default class Dragrefresh extends Component {
   static propTypes = {
@@ -26,8 +26,8 @@ export default class Dragrefresh extends Component {
     };
   }
   componentDidMount = () => {
-    var instance = new DragPull({
-      overflowContainer: this.refs.refDragPull,
+    var instance = new Instance({
+      overflowContainer: this.$el,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
       onTopComplete: this.props.onTopComplete ? this.props.onTopComplete : null, // 头部完成
       onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
@@ -71,7 +71,7 @@ export default class Dragrefresh extends Component {
   render() {
     const { style, className, onTopRefresh, onBottomRefresh, noData } = this.props;
     return (
-      <div ref="refDragPull" className={className} style={style}>
+      <div ref={(container) => {this.$el = container}} className={className} style={style}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>

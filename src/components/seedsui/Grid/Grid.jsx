@@ -70,7 +70,8 @@ export default class Page extends Component {
     }
   }
   render() {
-    const { className, style, bordered, col, type, showAdd, list, children } = this.props;
+    const { className, style, bordered, col, type, showAdd, list } = this.props;
+    const children = React.Children.toArray(this.props.children);
     let dom = null;
     if (type === 'layout') {
       dom = (<ul className={'grid' + (bordered ? ' grid-bordered' : '') + (className ? ' ' + className : '')} data-col={col} style={Object.assign(this.getSpaceStyle().ulStyle, style)}>
