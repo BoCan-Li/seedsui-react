@@ -46,7 +46,7 @@ export default class List extends Component {
   }
   onClick = (e) => {
     const {args, onClick} = this.props;
-    onClick(e, ...args);
+    if (onClick) onClick(e, ...args);
   }
   render() {
     const { style, className,
