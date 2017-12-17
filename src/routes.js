@@ -11,10 +11,10 @@ import About from 'containers/About'; // 登录后默认首页
 
 const Routes = () => (
   <Provider store={store}>
-    <Router>
+    <Router basename="/_react_">
       <div>
-        <Route exact path="/_react_" component={Home}/>
-        <Route exact path="/_react_/about" component={About}/>
+        <Route exact path="/home" component={Home}/>
+        <Route exact path="/about" component={About}/>
       </div>
     </Router>
   </Provider>

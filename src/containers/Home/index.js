@@ -21,7 +21,6 @@ export default class Home extends Component {
   }
   constructor (props) {
     super(props);
-    console.log(props.router)
   }
   componentDidMount = () => {
     this.props.getData().then((result) => {
@@ -35,7 +34,7 @@ export default class Home extends Component {
   onClickJump = () => {
     // const { match, location, history } = this.props
     const { history } = this.props
-    history.push('/_react_/about')
+    history.push('/about')
   }
   render() {
     const {isLoading, data} = this.props;
