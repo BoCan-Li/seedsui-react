@@ -32,7 +32,6 @@ window.String.prototype.isQueryId = function () {
 // 判断是否包含class名称
 window.String.prototype.hasClass = function (name) {
   var names = this.split(' ')
-  console.log(names);
   for (var i = 0; i < names.length; i++) {
     if (names[i] === name) return true
   }
