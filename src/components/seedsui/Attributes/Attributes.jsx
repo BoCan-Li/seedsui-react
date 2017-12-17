@@ -6,6 +6,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export default class Attributes extends Component {
   static propTypes = {
+    showValidValue: PropTypes.bool,
+    showValidName: PropTypes.bool,
     col: PropTypes.string,
     layout: PropTypes.string,
     list: PropTypes.array,
@@ -76,7 +78,7 @@ export default class Attributes extends Component {
     return baseClass + (valueClassName ? ' ' + valueClassName : '');
   }
   render() {
-    const {col, list, onClick, className, style, rowClassName, nameClassName, valueClassName, rowStyle, colStyle, nameStyle, valueStyle, children} = this.props;
+    const {showValidValue, showValidName, col, list, onClick, className, style, rowClassName, nameClassName, valueClassName, rowStyle, colStyle, nameStyle, valueStyle, children} = this.props;
     const attrsDOM = [];
     for (let i = 0; i < list.length;) {
       if (col === '4') {
@@ -103,29 +105,34 @@ export default class Attributes extends Component {
         );
         i += 2;
       } else {
-        attrsDOM.push(
-          <div key={i} style={rowStyle}>
-            <div className={'row-flex attribute box-middle' + (rowClassName ? ' ' + rowClassName : '')}>
-              {/* 左 */}
-              <div className={this.getCol2NameClassName()} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
-              {/* 右 */}
-              <div className={this.getCol2ValueClassName()} style={Object.assign({paddingLeft: '8px'}, colStyle, valueStyle)}>
-                {list[i].price ? <Price className={typeof list[i].price === 'string' ? list[i].price : 'normal'} price={list[i].value}/> : list[i].value}
-                {list[i].ricon && <span>{list[i].ricon}</span>}
+        let isShow = true;
+        if (showValidValue && !list[i].value) isShow = false;
+        if (showValidName && !list[i].name) isShow = false;
+        if (isShow) {
+          attrsDOM.push(
+            <div key={i} style={rowStyle}>
+              <div className={'row-flex attribute box-middle' + (rowClassName ? ' ' + rowClassName : '')}>
+                {/* 左 */}
+                <div className={this.getCol2NameClassName()} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
+                {/* 右 */}
+                <div className={this.getCol2ValueClassName()} style={Object.assign({paddingLeft: '8px'}, colStyle, valueStyle)}>
+                  {list[i].price ? <Price className={typeof list[i].price === 'string' ? list[i].price : 'normal'} price={list[i].value}/> : list[i].value}
+                  {list[i].ricon && <span>{list[i].ricon}</span>}
+                </div>
+                {/* 操作 */}
+                {list[i].copy &&
+                <CopyToClipboard text={list[i].value} onCopy={this.onCopyToClipboard}>
+                  <Button text="复制" className="button-small"/>
+                </CopyToClipboard>}
+                {list[i].tel &&
+                <a href={`tel:${list[i].value}`}>
+                  <i className="icon icon-tel"/>
+                </a>}
               </div>
-              {/* 操作 */}
-              {list[i].copy &&
-              <CopyToClipboard text={list[i].value} onCopy={this.onCopyToClipboard}>
-                <Button text="复制" className="button-small"/>
-              </CopyToClipboard>}
-              {list[i].tel &&
-              <a href={`tel:${list[i].value}`}>
-                <i className="icon icon-tel"/>
-              </a>}
+              {children && children}
             </div>
-            {children && children}
-          </div>
-        );
+          );
+        }
         i++;
       }
     }

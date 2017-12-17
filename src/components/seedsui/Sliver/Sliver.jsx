@@ -9,9 +9,11 @@ export default class Sliver extends Component {
     licon: PropTypes.node,
     ricon: PropTypes.node,
     liconSrc: PropTypes.string,
+    liconStyle: PropTypes.object,
     liconClassName: PropTypes.string,
     riconSrc: PropTypes.string,
     riconClassName: PropTypes.string,
+    riconStyle: PropTypes.object,
     className: PropTypes.string,
     style: PropTypes.object,
     onClick: PropTypes.func
@@ -21,15 +23,15 @@ export default class Sliver extends Component {
   }
 
   render() {
-    const { caption, sndcaption, className, style, licon, ricon, liconSrc, liconClassName, riconSrc, riconClassName, onClick } = this.props;
+    const { caption, sndcaption, className, style, licon, ricon, liconSrc, liconStyle, liconClassName, riconSrc, riconClassName, riconStyle, onClick } = this.props;
     return (
       <div className={'sliver' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
-        {liconSrc && <Icon className={liconClassName} src={liconSrc}/>}
+        {liconSrc && <Icon className={liconClassName} src={liconSrc} style={Object.assign({marginRight: '4px', display: 'block'}, liconStyle)}/>}
         {licon}
         <div className="sliver-caption">{caption}</div>
         <div className="sliver-sndcaption">{sndcaption}</div>
         {ricon}
-        {riconSrc && <Icon className={'size16' + (riconClassName ? ' ' + riconClassName : '')} src={riconSrc}/>}
+        {riconSrc && <Icon className={'size16' + (riconClassName ? ' ' + riconClassName : '')} src={riconSrc} style={Object.assign({marginLeft: '4px', display: 'block'}, riconStyle)}/>}
       </div>
     );
   }
