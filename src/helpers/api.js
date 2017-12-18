@@ -31,8 +31,16 @@ axios.interceptors.request.use(config => {
 })
 // 响应拦截器
 axios.interceptors.response.use(response => {
-  if (response.data) return response.data
-  return response
+  let result = response.data || response
+  if (typeof result === 'string') {
+    try {
+      return JSON.parse(result)
+    } catch (error) {
+      console.log('result转换JSON失败' + error)
+      return result
+    }
+  }
+  return result
 }, error => {
   if (error.response) {
     switch (error.response.status) {
