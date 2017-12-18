@@ -12,7 +12,6 @@ export default class Dragrefresh extends Component {
     onBottomRefresh: PropTypes.func,
     onBottomComplete: PropTypes.func,
     children: PropTypes.node,
-    init: PropTypes.func,
     hasMore: PropTypes.number
   }
   constructor(props) {
@@ -23,6 +22,11 @@ export default class Dragrefresh extends Component {
     };
   }
   componentDidMount = () => {
+    this.init();
+    console.log('dragrefresh:DidMount, hasMore:' + this.props.hasMore);
+    this.setPagination();
+  }
+  init = () => {
     var instance = new Instance({
       overflowContainer: this.$el,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
@@ -33,39 +37,36 @@ export default class Dragrefresh extends Component {
     this.setState({
       instance
     });
-    // 初始化
-    if (this.props.init) this.props.init(instance);
-    console.log('didMount触发hasMore:' + this.props.hasMore);
-    this.setPagination();
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = (prevProps) => {
     // 数据是否为0条
     if (this.props.hasMore === 404) {
-      console.log('解除touch事件，暂无数据');
+      console.log('dragrefresh:解除touch事件，暂无数据');
       this.state.instance.detach();
     } else if (prevProps.hasMore === 404 && this.props.hasMore === 1) {
-      console.log('绑定touch事件，有数据');
+      console.log('dragrefresh:绑定touch事件，有数据');
       this.state.instance.attach();
     }
-    console.log('didUpdate触发hasMore:' + this.props.hasMore);
+    console.log('dragrefresh:DidUpdate, hasMore:' + this.props.hasMore);
     this.setPagination();
   }
   setPagination = () => {
+    if(!this.state.instance) return;
     if (this.props.hasMore === 1) { // 头部完成
-      console.log('df:头部完成');
+      console.log('dragrefresh:头部完成');
       this.state.instance.setPagination(false, false);
     } else if (this.props.hasMore === 2) { // 底部完成
-      console.log('df:底部完成');
+      console.log('dragrefresh:底部完成');
       this.state.instance.setPagination(true, false);
     } else if (this.props.hasMore === 0) { // 没有更多数据
-      console.log('df:没有更多数据');
+      console.log('dragrefresh:没有更多数据');
       this.state.instance.setPagination(true, true);
     } else if (this.props.hasMore === -1) {
-      console.log('df:网络错误');
+      console.log('dragrefresh:网络错误');
       this.state.instance.setPagination(true, true, true);
     } else if (this.props.hasMore === 404) {
       if (this.state.noData === true) return;
-      console.log('df:没有一条数据');
+      console.log('dragrefresh:没有一条数据');
       this.state.instance.setPagination(true, true);
       this.setState({
         noData: true
