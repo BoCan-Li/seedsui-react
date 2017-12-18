@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import bridge from './../bridge'
+import bridge from './../utils/bridge'
 
 export default class Page extends Component {
   static propTypes = {
