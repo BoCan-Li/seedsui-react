@@ -108,18 +108,27 @@ module.exports = function(proxy, allowedHost) {
         proxyTimeout: 20 * 1000,
         ws: false
       });
-      // 接口代理
+      /*
+      接口代理
+      */
       app.use('/api', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      // 登录代理
+      /*
+      token获得方法1: 登录代理
+      */
+      // 重定向登录页面
+      app.use('/test', (req, res) => {
+        proxy.web(req, res, {target: targetUrl + '/'});
+      });
+      // 代理登录请求接口
       app.use('/login', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/login.html'});
+        proxy.web(req, res, {target: targetUrl + '/login'});
       });
       /*
-      使用superagent模拟登录
+      token获得方法2: 使用superagent模拟登录
       */
-      app.get('/test/login', (req, resp) => {
+      app.get('/auto/login', (req, resp) => {
         const request = superagent.post(targetUrl + '/portal/logon.action');
         request.type('form');
         request.send({
