@@ -19,7 +19,7 @@ export default class Loading extends Component {
   render() {
     const { style, className, type, img, text, loadingStyle, maskBefore } = this.props;
     let content = (<div className="loading-wrapper" style={loadingStyle}>
-      {img && <img src={img} className="loading-icon"/>}
+      {img && <img alt="" src={img} className="loading-icon"/>}
       {text && <p>{text}</p>}
     </div>);
     if (type === 'filling') { // 填料环
