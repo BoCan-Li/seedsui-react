@@ -116,6 +116,7 @@ Math.Calc = (function () {
   }
   // 转换为千分位字符
   function toThousandth (num) {
+    if (!num) return '0'
     var sExpr = /^(\d+)((\.\d+)?)$/
     var n1 = num.toString().replace(sExpr, function (s, s1, s2) {
       var reExpr = /\d{1,3}(?=(\d{3})+$)/g
