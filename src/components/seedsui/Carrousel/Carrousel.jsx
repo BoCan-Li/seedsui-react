@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Instance from './carrousel.js'
-import defaultSrc from './images/default.jpg'
+import defaultSrc from './images/default.png'
 
 export default class Carrousel extends Component {
   static propTypes = {
@@ -13,7 +13,8 @@ export default class Carrousel extends Component {
     pagination: PropTypes.bool,
     autoplay: PropTypes.number,
     slidesPerView: PropTypes.number,
-    list: PropTypes.array,
+    defaultSrc: PropTypes.string,
+    list: PropTypes.array, // [{img: 'xx', iconClassName: 'xx', text: 'xx'}]
     onChange: PropTypes.func
   }
   static defaultProps = {
@@ -23,7 +24,8 @@ export default class Carrousel extends Component {
     pagination: false,
     autoplay: 0,
     slidesPerView: 1,
-    list: []
+    list: [],
+    defaultSrc: defaultSrc
   }
   constructor(props) {
     super(props);
@@ -52,7 +54,7 @@ export default class Carrousel extends Component {
     }, 100)
   }
   render() {
-    const {list, pagination, className, style} = this.props;
+    const {defaultSrc, list, pagination, className, style} = this.props;
     const children = React.Children.toArray(this.props.children);
     return (
       <div ref = {(container) => {this.$el = container}} className={'carrousel-container' + (className && ' ' + className)} style={style}>
@@ -62,7 +64,7 @@ export default class Carrousel extends Component {
         return <div className="carrousel-slide" key={index} onClick={item.onClick}>
           {item.img && <img className="slide-banner" alt="" src={defaultSrc} data-load-src={item.img}/>}
           {item.text && <div className="slide-title">
-            {item.icon && <i className={'icon slide-title-icon' + (item.icon ? ' ' + item.icon : '')}></i>}
+            {item.icon && <i className={'icon slide-title-icon' + (item.iconClassName ? ' ' + item.iconClassName : '')}></i>}
             <span className="nowrap slide-title-font" style={{marginRight: '20px'}}>
               {item.text}
             </span>
