@@ -57,7 +57,7 @@ export default class Carrousel extends Component {
     const {defaultSrc, list, pagination, className, style} = this.props;
     const children = React.Children.toArray(this.props.children);
     return (
-      <div ref = {(container) => {this.$el = container}} className={'carrousel-container' + (className && ' ' + className)} style={style}>
+      <div ref={(el) => {this.$el = el}} className={'carrousel-container' + (className && ' ' + className)} style={style}>
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
