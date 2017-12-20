@@ -1,30 +1,57 @@
-import React from 'react';
-import InputBase from './../NumBox/InputBase.jsx';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Alert from './../Alert/Alert.jsx';
+import NumBox from './../NumBox/NumBox.jsx';
 import {createPortal} from 'react-dom';
-export default class NumBoxPop extends InputBase {
+export default class NumBoxPop extends Component {
+  static propTypes = {
+    onClickCancel: PropTypes.func,
+    onClickSubmit: PropTypes.func,
+    title: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    digits: PropTypes.number,
+    value: PropTypes.string,
+    args: PropTypes.array
+  }
   static defaultProps = {
+    title: '修改购买数量',
     min: 0,
+    max: 99999,
+    digits: 0,
     value: '0',
     args: []
   }
   constructor(props) {
     super(props);
+    this.state = {
+      value: props.value || '1'
+    }
   }
-  componentDidMount() {
-    this.disableNum(this.props.value);
+  onChange = (value) => {
+    this.setState({
+      value: value
+    });
+  }
+  onClickSubmit = () => {
+    const {onClickSubmit, args} = this.props;
+    if (onClickSubmit) onClickSubmit(this.state.value, ...args);
+  }
+  onShowed = () => {
+    setTimeout(() => {
+      this.$numbox.$number.focus();
+      this.$numbox.$number.select();
+    }, 400);
+  }
+  onHid = () => {
+    // console.log('隐藏');
   }
   // Render
   render() {
-    // const { onError, onChange, digits, max, min, value, style, args } = this.props;
-    const { style, show, title, onClickSubmit, onClickCancel } = this.props;
+    const {show, title, onClickCancel, min, max, digits} = this.props;
     return createPortal(
-      <Alert title={title} show={show} onClickSubmit={onClickSubmit} onClickCancel={onClickCancel}>
-        <div style={Object.assign({display: '-webkit-box', margin: '0 auto'}, style)} className={`numbox xl bordered ${this.state.disabled ? 'disabled' : ''}`}>
-          <input type="button" className="numbox-button" disabled={this.state.minusDisabled} value="-" onClick={this.onClickMinus} />
-          <input type="number" className="numbox-input" value={this.props.value} onBlur={this.onBlur} onClick={this.onClick} onChange={this.onInput} />
-          <input type="button" className="numbox-button" disabled={this.state.plusDisabled} value="+" onClick={this.onClickPlus} />
-        </div>
+      <Alert title={title} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={onClickCancel} onShowed={this.onShowed} onHid={this.onHid}>
+        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} autoFocus={true} value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
       </Alert>,
       document.body
     );

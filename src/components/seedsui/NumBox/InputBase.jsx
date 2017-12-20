@@ -1,16 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 // import 'utils/math.js';
-export default class NumBase extends Component {
+export default class NumBase extends React.Component {
   static propTypes = {
     // global
-    style: PropTypes.string,
+    style: PropTypes.object,
     className: PropTypes.string,
     value: PropTypes.string,
     placeholder: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.string,
     // events
+    onClick: PropTypes.func,
     onError: PropTypes.func,
     onChange: PropTypes.func,
     // number
@@ -19,14 +20,18 @@ export default class NumBase extends Component {
     max: PropTypes.number,
     min: PropTypes.number,
     args: PropTypes.array,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    // attributes
+    readOnly: PropTypes.bool
   }
   static defaultProps = {
     // global
     type: 'text',
     // number
     min: 0,
-    args: []
+    args: [],
+    // attributes
+    readOnly: false
   }
   constructor(props) {
     super(props);
@@ -88,7 +93,7 @@ export default class NumBase extends Component {
       this.setState({minusDisabled: false});
       this.setState({plusDisabled: false});
     }
-    if (this.props.onChange && stateNum !== num) this.props.onChange(stateNum.toString(), ...this.props.args);
+    if (this.props.onChange && this.props.value !== stateNum.toString()) this.props.onChange(stateNum.toString(), ...this.props.args);
   };
   correctNum = (numstr) => {
     if (numstr === '') return '';

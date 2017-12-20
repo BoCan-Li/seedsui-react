@@ -4,6 +4,10 @@ import Icon from './../Icon/Icon.jsx';
 const IconStyle = {display: 'block', margin: '10px auto 12px auto'};
 export default class Button extends Component {
   static propTypes = {
+    onClickSubmit: PropTypes.func,
+    onClickCancel: PropTypes.func,
+    onShowed: PropTypes.func,
+    onHid: PropTypes.func,
     className: PropTypes.string,
     show: PropTypes.bool,
     iconSrc: PropTypes.string,
@@ -13,8 +17,6 @@ export default class Button extends Component {
     args: PropTypes.array,
     submitText: PropTypes.node,
     cancelText: PropTypes.node,
-    onClickSubmit: PropTypes.func,
-    onClickCancel: PropTypes.func,
     children: PropTypes.node
   }
   static defaultProps = {
@@ -34,6 +36,12 @@ export default class Button extends Component {
   onClickSubmit = (e) => {
     const {args, onClickSubmit} = this.props;
     if (onClickSubmit) onClickSubmit(e, ...args);
+  }
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.show !== this.props.show) {
+      if (this.props.show) this.props.onShowed && this.props.onShowed();
+      else this.props.onHid && this.props.onHid();
+    }
   }
   componentDidMount = () => {
   }
