@@ -88,7 +88,7 @@ export default class NumBase extends Component {
       this.setState({minusDisabled: false});
       this.setState({plusDisabled: false});
     }
-    if (this.props.onChange) this.props.onChange(stateNum.toString(), ...this.props.args);
+    if (this.props.onChange && stateNum !== num) this.props.onChange(stateNum.toString(), ...this.props.args);
   };
   correctNum = (numstr) => {
     if (numstr === '') return '';
