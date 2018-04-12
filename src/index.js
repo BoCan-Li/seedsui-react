@@ -12,6 +12,8 @@ import FastClick from 'fastclick';
 FastClick.attach(document.body);
 // 适配iPhoneX
 Device.adapterIphoneX();
+// 动态加载微信
+// Device.dynamicLoadWx();
 
 ReactDOM.render(
   <Routes />,

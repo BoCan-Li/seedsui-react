@@ -76,7 +76,7 @@ export default class Attributes extends Component {
       if (typeof item.price === 'string') {
         priceValue = item.price;
       }
-      return <Price key={'price' + index} style={item.priceStyle} className={item.priceClassName ? item.priceClassName : 'capitalize'} price={priceValue} unit={item.priceUnit || ''}/>;
+      return <Price digits={item.priceDigits} key={'price' + index} style={item.priceStyle} className={item.priceClassName ? item.priceClassName : 'capitalize'} price={priceValue} unit={item.priceUnit || ''}/>;
     // 按钮
     } else if (item.button) {
       let buttonValue = item.value || '';

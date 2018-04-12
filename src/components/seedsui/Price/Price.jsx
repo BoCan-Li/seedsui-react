@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-// import '../utils/math.js'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default class Index extends Component {
+export default class Price extends Component {
   static propTypes = {
     showSymbol: PropTypes.bool, // 是否显示货币符号
     showThousandth: PropTypes.bool, // 是否显示千分位
@@ -11,13 +10,12 @@ export default class Index extends Component {
     price: PropTypes.string,
     unit: PropTypes.string,
     digitsFixed: PropTypes.bool, // 固定小数, 例如100仍然显示100.00
-    digits: PropTypes.number,
+    digits: PropTypes.number, // 如果设置了小数位控制,则控制小数位,如不控制,则原样显示
   };
   static defaultProps = {
     showSymbol: true,
     showThousandth: true,
     className: 'capitalize',
-    digits: 2,
     digitsFixed: true
   }
   constructor(props, context) {
@@ -35,14 +33,9 @@ export default class Index extends Component {
     } else {
       let newPrice = price;
       if (digits) {
-        try {
-          if (digitsFixed) newPrice = String(Number(price).toFixed(digits));
-          else newPrice = Math.Calc.toFixed(Number(price), digits);
-        } catch (error) {
-          console.log(error);
-        }
+        newPrice = digitsFixed ? String(Number(price).toFixed(digits)) : Math.Calc.toFixed(Number(price), digits);
       } else {
-        newPrice = Math.abs(price);
+        newPrice = price;
       }
       priceString = showThousandth ? Math.Calc.toThousandth(newPrice) : '' + newPrice;
     }
