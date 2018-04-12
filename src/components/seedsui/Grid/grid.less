@@ -1,32 +1,8 @@
 /*----------------grid.less(start)--------------*/
-/*图标区域*/
-.grid-icon{
-	display:-webkit-box;
-	-webkit-box-align:center;
-	-webkit-box-pack:center;
-	position:relative;
-	box-sizing:border-box;
-	margin:0px auto;
-	background-size:cover;
-	background-position:center;
-}
-/*文字区域*/
-.grid-label{
-	display:block;
-  margin-top:@8px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  box-sizing:border-box;
-  
-  height: @16px;
-  line-height: @16px;
-
-  color:@sub-color;
-}
-.grid-icon>img{
-	max-width:100%;
-	max-height: 100%;
+.grid-title{
+  position: relative;
+  margin: 10px 12px 0 12px;
+  color: @grid-title-color;
 }
 
 .grid{
@@ -37,26 +13,21 @@
 		clear: both;
 		zoom:1;
 	}
-	li{
-		position: relative;
-		width:33%;
-		float:left;
-		text-align:center;
-		padding:@2px;
-		box-sizing:border-box;
-		
-	}
 	
-	//列数
-	&[data-col="2"] li{
+  //列数
+  &[data-col="1"] .grid-cell{
+		width:100%;
+	}
+	&[data-col="2"] .grid-cell{
 		width:50%;
 		&:nth-of-type(2n){
+      // 2倍数右侧线清除
 			&:before{
 				height: 0;
 			}
 		}
 	}
-	&[data-col="3"] li{
+	&[data-col="3"] .grid-cell{
 		width:33.33%;
 		&:nth-of-type(3n){
 			&:before{
@@ -64,7 +35,7 @@
 			}
 		}
 	}
-	&[data-col="4"] li{
+	&[data-col="4"] .grid-cell{
 		width:25%;
 		&:nth-of-type(4n){
 			&:before{
@@ -72,17 +43,83 @@
 			}
 		}
 	}
-	&[data-col="5"] li{
+	&[data-col="5"] .grid-cell{
 		width:20%;
 		&:nth-of-type(5n){
 			&:before{
 				height: 0;
 			}
 		}
+  }
+  &[data-col="6"] .grid-cell{
+    width:16.66%;
+    &:nth-of-type(6n){
+			&:before{
+				height: 0;
+			}
+		}
+  }
+  &[data-col="7"] .grid-cell{
+    width:14.28%;
+    &:nth-of-type(7n){
+			&:before{
+				height: 0;
+			}
+		}
+  }
+  &[data-col="8"] .grid-cell{
+    width:12.5%;
+    &:nth-of-type(8n){
+			&:before{
+				height: 0;
+			}
+		}
+	}
+  &[data-col="9"] .grid-cell{
+    width:11.11%;
+    &:nth-of-type(9n){
+			&:before{
+				height: 0;
+			}
+		}
 	}
 }
+.grid-cell{
+	position: relative;
+	width:33%;
+	float:left;
+	text-align:center;
+	box-sizing:border-box;
+}
+/*图标区域*/
+.grid-content{
+	display:-webkit-box;
+	-webkit-box-align:center;
+	-webkit-box-pack:center;
+	position:relative;
+	box-sizing:border-box;
+	margin:0px auto;
+	background-size:cover;
+	background-position:center;
+}
+/*文字区域*/
+.grid-caption, .grid-sndcaption{
+	display:block;
+  margin: @8px auto 0 auto;
+}
+.grid-caption{
+  color:@grid-caption-color;
+}
+.grid-sndcaption{
+  color:@grid-sndcaption-color;
+}
+.grid-content>img{
+	max-width:100%;
+	max-height: 100%;
+}
+
 /*边框*/
-.grid.grid-bordered{
+.grid-bordered{
 	li{
 		&:before,&:after{
 			.setContentLine();
@@ -129,68 +166,74 @@
 		}
 	}
 }
+
+/*图标*/
+.grid-icon {
+  .icon-img{
+    pointer-events: none;
+  }
+}
+/*提示*/
+.grid-tip,.grid-badge{
+	position:absolute;
+	top:-4px;
+	right:-4px;
+}
+.grid-close{
+	position: absolute;
+	top:-10px;
+	left:-10px;
+  background-color: white;
+  border-radius: 100%;
+  .icon {
+    pointer-events: none;
+  }
+}
+
 /*单元格行间距*/
-.grid li {
+.grid-cell {
+	padding:@2px;
   padding-top: @8px;
 }
-.grid li:last-child{
+.grid-cell:last-child{
 	padding-bottom:@8px;
 }
-.grid.grid-bordered li{
+.grid.grid-bordered .grid-cell{
 	padding-top:@8px;
 	padding-bottom:@8px;
 }
-/*提示*/
-.grid .tip,.grid .badge{
-	position:absolute;top:-4px;right:-4px;
-}
-.grid .close{
-	position: absolute;
-	top:-6px;
-	left:-6px;
-	background-color: #FF6A54
-}
 /*----------------类型----------------*/
-/*方块类型*/
-.grid-square .grid-icon{
-	width: 50px;
-	height: 50px;
-}
-.grid-square .icon{
-	width: 26px;
-	height: 26px;
-	font-size: 26px;
-}
-/*裸图标类型*/
-.grid-pure .grid-icon{
-	width: 32px;
-	height: 32px;
-}
-.grid-pure .icon{
-	width: 32px;
-	height: 32px;
-	font-size: 32px;
-}
 /*相册类型*/
-.grid-album li{
-  padding: 6px;
+.grid-album{
+	padding: 6px;
+	.grid-cell{
+		padding: 6px;
+	}
 }
-.grid-album .grid-icon{
-  height: 90px;
+.grid-album .grid-content{
+  height: @grid-album-cell-height;
   width: 100%;
   border:1px solid #e5e5e5;
   background-color: white;
   background-size: cover;
-  color: #e5e5e5;
 }
-.grid-album .grid-icon-add{
+.grid-album .grid-content-add{
 	border:1px dashed @border;
 }
-.grid-album .icon{
-	width: 50px;
-	height: 50px;
-	font-size: 50px;
-  pointer-events:none;
+.grid-album .grid-icon{
+  display: block;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
 }
-
+.grid-album .grid-icon-add{
+  width: 50px;
+  height: 50px;
+  font-size: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #e5e5e5;
+  .setGridIconAdd();
+}
 /*----------------grid.less(end)----------------*/

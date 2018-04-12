@@ -1,26 +1,30 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Alert from './../Alert/Alert.jsx';
 import NumBox from './../NumBox/NumBox.jsx';
-import {createPortal} from 'react-dom';
 export default class NumBoxPop extends Component {
   static propTypes = {
+    valueBindProp: PropTypes.bool, // 值是否绑定属性
+    // 文本框
+    value: PropTypes.string,
+    // events
     onClickCancel: PropTypes.func,
     onClickSubmit: PropTypes.func,
-    title: PropTypes.string,
+    show: PropTypes.bool,
+    caption: PropTypes.string,
+    // rule设置
     min: PropTypes.number,
     max: PropTypes.number,
     digits: PropTypes.number,
-    value: PropTypes.string,
-    args: PropTypes.array
   }
   static defaultProps = {
-    title: '修改购买数量',
+    show: false,
+    caption: '修改购买数量',
     min: 0,
     max: 99999,
     digits: 0,
     value: '0',
-    args: []
+    args: null
   }
   constructor(props) {
     super(props);
@@ -28,32 +32,56 @@ export default class NumBoxPop extends Component {
       value: props.value || '1'
     }
   }
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.show !== this.props.show) {
+      this.setState({
+        show: this.props.show
+      });
+      // 当此组件显示时,重新注入值
+      if (this.props.show === true) {
+        this.setState({
+          value: this.props.value
+        });
+      }
+    }
+  }
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event')) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
   onChange = (value) => {
     this.setState({
       value: value
     });
   }
-  onClickSubmit = () => {
-    const {onClickSubmit, args} = this.props;
-    if (onClickSubmit) onClickSubmit(this.state.value, ...args);
+  onClickSubmit = (e) => {
+    e.hide();
+    const {onClickSubmit} = this.props;
+    if (onClickSubmit) onClickSubmit(this.state.value, this.getArgs(e));
   }
   onShowed = () => {
-    setTimeout(() => {
-      this.$numbox.$number.focus();
-      this.$numbox.$number.select();
-    }, 400);
+    this.$numbox.$input.focus();
+    this.$numbox.$input.select();
   }
-  onHid = () => {
-    // console.log('隐藏');
+  onClickCancel = () => {
+    this.$numbox.$input.value = this.props.value;
+    if (this.props.onClickCancel) this.props.onClickCancel();
   }
-  // Render
   render() {
-    const {show, title, onClickCancel, min, max, digits} = this.props;
-    return createPortal(
-      <Alert title={title} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={onClickCancel} onShowed={this.onShowed} onHid={this.onHid}>
-        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} autoFocus={true} value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
-      </Alert>,
-      document.body
+    const {valueBindProp, show, caption, min, max, digits} = this.props;
+    return (
+      <Alert duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onShowed={this.onShowed}>
+        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} valueBindProp={valueBindProp} digits={digits} autoFocus={true} value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
+      </Alert>
     );
   }
 }

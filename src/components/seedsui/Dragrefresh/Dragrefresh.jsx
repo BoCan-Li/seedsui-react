@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import NoData from './../NoData/NoData.jsx';
+import Notice from './../Notice/Notice.jsx';
 import Instance from './dragrefresh.pull.js';
+import ImgLazy from './../ImgLazy/imglazy';
 
 export default class Dragrefresh extends Component {
   static propTypes = {
@@ -12,13 +13,25 @@ export default class Dragrefresh extends Component {
     onBottomRefresh: PropTypes.func,
     onBottomComplete: PropTypes.func,
     children: PropTypes.node,
-    hasMore: PropTypes.number
+    hasMore: PropTypes.number, // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
+
+    showNoData: PropTypes.bool, // 是否允许暂无数据
+    noDataClassName: PropTypes.string,
+    noDataStyle: PropTypes.object,
+    noDataCaption: PropTypes.string,
+    noDataIconSrc: PropTypes.string,
+    noDataIconClassName: PropTypes.string,
+
+    lazyLoad: PropTypes.bool
+  }
+  static defaultProps = {
+    showNoData: true
   }
   constructor(props) {
     super(props);
     this.state = {
       instance: null,
-      noData: false
+      // noData: false
     };
   }
   componentDidMount = () => {
@@ -28,7 +41,7 @@ export default class Dragrefresh extends Component {
   }
   init = () => {
     var instance = new Instance({
-      overflowContainer: this.$el,
+      container: this.$el,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
       onTopComplete: this.props.onTopComplete ? this.props.onTopComplete : null, // 头部完成
       onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
@@ -37,13 +50,23 @@ export default class Dragrefresh extends Component {
     this.setState({
       instance
     });
+    // 懒人加载
+    let imgLazy = null;
+    if (this.props.lazyLoad && !imgLazy) {
+      imgLazy = new ImgLazy({
+        overflowContainer: this.$el
+      });
+    }
   }
   componentDidUpdate = (prevProps) => {
-    // 数据是否为0条
+    if (prevProps.hasMore === this.props.hasMore) return;
     if (this.props.hasMore === 404) {
       console.log('dragrefresh:解除touch事件，暂无数据');
       this.state.instance.detach();
-    } else if (prevProps.hasMore === 404 && this.props.hasMore === 1) {
+    } else if (prevProps.hasMore === 404 && this.props.hasMore !== 404) {
+      /* this.setState({
+        noData: false
+      }); */
       console.log('dragrefresh:绑定touch事件，有数据');
       this.state.instance.attach();
     }
@@ -51,7 +74,13 @@ export default class Dragrefresh extends Component {
     this.setPagination();
   }
   setPagination = () => {
-    if(!this.state.instance) return;
+    // 如果还没有初始化完成,则会再轮询调用一下
+    if(!this.state.instance) {
+      setTimeout(() => {
+        this.setPagination();
+      }, 100);
+      return;
+    }
     if (this.props.hasMore === 1) { // 头部完成
       console.log('dragrefresh:头部完成');
       this.state.instance.setPagination(false, false);
@@ -65,16 +94,16 @@ export default class Dragrefresh extends Component {
       console.log('dragrefresh:网络错误');
       this.state.instance.setPagination(true, true, true);
     } else if (this.props.hasMore === 404) {
-      if (this.state.noData === true) return;
+      // if (this.state.noData === true) return;
       console.log('dragrefresh:没有一条数据');
       this.state.instance.setPagination(true, true);
-      this.setState({
+      /* this.setState({
         noData: true
-      });
+      }); */
     }
   }
   render() {
-    const { style, className, onTopRefresh, onBottomRefresh } = this.props;
+    const { style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName } = this.props;
     return (
       <div ref={(container) => {this.$el = container}} className={className} style={style}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
@@ -85,10 +114,10 @@ export default class Dragrefresh extends Component {
         </div>}
         {this.props.children}
         {onBottomRefresh && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
-          <div className="df-pull-box">
+          {this.props.hasMore !== -3 && <div className="df-pull-box">
             <div className="df-pull-icon df-pull-icon-loading"></div>
             <div className="df-pull-caption">正在加载...</div>
-          </div>
+          </div>}
         </div>}
         {onBottomRefresh && <div className="SID-Dragrefresh-NoDataContainer df-pull hide" style={{height: '50px'}}>
           <div className="df-pull-box">
@@ -100,7 +129,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.state.noData && <NoData/>}
+        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={`notice-icon-nodata${noDataIconClassName ? ' ' + noDataIconClassName : ''}`}/>}
       </div>
     );
   }

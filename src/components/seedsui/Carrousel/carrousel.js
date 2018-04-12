@@ -20,14 +20,16 @@ var Carrousel = function (container, params) {
     slidesPerView: 1,
     threshold: '50',
     duration: '300',
-    height: 0,
-    imglazy: '[data-load-src]', // 图片懒加载
+    height: null, // 固定高度
+    imglazyQuery: '.carrousel-lazy', // 图片懒加载
+    imgLoadAttr: 'data-load-src',
 
     // loop
     loop: false,
     slideDuplicateClass: 'carrousel-slide-duplicate',
 
     // dom class
+    pageClass: 'carrousel-page', // 轮播页模式,则不需要算高度
     wrapperClass: 'carrousel-wrapper',
     slideClass: 'carrousel-slide',
     slideActiveClass: 'active',
@@ -37,6 +39,7 @@ var Carrousel = function (container, params) {
     /*
     callbacks
     onInit:function(Carrousel)
+    onClick:function(Carrousel)
     onSlideChange:function(Carrousel)
     onSlideChangeEnd:function(Carrousel)
     */
@@ -143,17 +146,17 @@ var Carrousel = function (container, params) {
   /* --------------------
   Update
   -------------------- */
-  s.slideIndex = s.activeIndex // 去除duplicate，滑动页索引
+  s.truthActiveIndex = s.activeIndex // 去除duplicate，滑动页索引
   // 根据index更新选中class
   s.updateClasses = function () {
-    s.slideIndex = s.activeIndex
+    s.truthActiveIndex = s.activeIndex
     if (s.params.loop) {
-      s.slideIndex = s.activeIndex - s.params.slidesPerView
+      s.truthActiveIndex = s.activeIndex - s.params.slidesPerView
       if (s.max - s.params.slidesPerView === s.activeIndex) { // 正向滑动
-        s.slideIndex = 0
+        s.truthActiveIndex = 0
       }
-      if (s.slideIndex < 0) { // 反向滑动
-        s.slideIndex = s.slides.length + s.slideIndex
+      if (s.truthActiveIndex < 0) { // 反向滑动
+        s.truthActiveIndex = s.slides.length + s.truthActiveIndex
       }
     }
     var i
@@ -161,14 +164,14 @@ var Carrousel = function (container, params) {
     for (i = 0; i < s.slides.length; i++) {
       s.slides[i].classList.remove(s.params.slideActiveClass)
     }
-    s.slides[s.slideIndex].classList.add(s.params.slideActiveClass)
+    s.slides[s.truthActiveIndex].classList.add(s.params.slideActiveClass)
 
     //  Pagination
     if (!s.pagination) return
     for (i = 0; i < s.bullets.length; i++) {
       s.bullets[i].classList.remove(s.params.bulletActiveClass)
     }
-    s.bullets[s.slideIndex].classList.add(s.params.bulletActiveClass)
+    s.bullets[s.truthActiveIndex].classList.add(s.params.bulletActiveClass)
   }
 
   // 更新容器尺寸
@@ -192,50 +195,37 @@ var Carrousel = function (container, params) {
     s.dupSlides.forEach(function (n, i, a) {
       n.style.width = s.width + 'px'
     })
-
-    // Slide height
-    if (s.params.height) {
-      s.height = s.params.height
-    } else if (s.container.style.height) {
-      s.height = s.container.style.height
-    } else {
-      s.height = (s.container.clientHeight ? s.container.clientHeight : s.wrapper.clientHeight) + 'px'
+    // 如果不是page模式,则需要算高度
+    if (!s.container.classList.contains(s.params.pageClass)) {
+      // Slide height
+      if (s.params.height) {
+        s.height = s.params.height
+      } else if (s.container.style.height) {
+        s.height = s.container.style.height
+      } else {
+        s.height = (s.container.clientHeight ? s.container.clientHeight : s.wrapper.clientHeight) + 'px'
+      }
+      // 设置wrapper高度
+      s.wrapper.style.height = s.height
+      // 设置单个slide高度
+      s.slides.forEach(function (n, i, a) {
+        n.style.height = s.height
+      })
+      // 设置dupSlide高度
+      s.dupSlides.forEach(function (n, i, a) {
+        n.style.height = s.height
+      })
     }
-    // 设置wrapper高度
-    s.wrapper.style.height = s.height
-    // 设置单个slide高度
-    s.slides.forEach(function (n, i, a) {
-      n.style.height = s.height
-    })
-    // 设置dupSlide高度
-    s.dupSlides.forEach(function (n, i, a) {
-      n.style.height = s.height
-    })
 
     // 更新active index
     s.updateClasses()
 
     // 如果有循环的话
     if (s.params.loop) {
-      s.params.duration = 0
-      moveToIndex()
-      s.params.duration = defaults.duration
+      moveToIndex(0)
     }
   }
-
-  // 更新
-  s.update = function () {
-    s.updateSlides()
-    s.updateBullets()
-    s.createLoop()
-    s.updateContainerSize()
-  }
-  s.update()
-  if (s.slides.length <= 0) {
-    return
-  }
-
-  // 图片懒加载，针对图片类型
+  // 图片懒加载
   var imgs = []
   var cacheImgs = []
   function imgLoad (e) {
@@ -247,17 +237,29 @@ var Carrousel = function (container, params) {
       imgTarget.style.backgroundImage = 'url(' + target.src + ')'
     }
   }
-  s.imgsLazyLoad = function () {
-    imgs = this.container.querySelectorAll(s.params.imglazy)
+  s.updateLazyImg = function () {
+    imgs = this.container.querySelectorAll(s.params.imglazyQuery)
     for (var i = 0; i < imgs.length; i++) {
-      var src = imgs[i].getAttribute('data-load-src')
+      var src = imgs[i].getAttribute(s.params.imgLoadAttr)
       cacheImgs[i] = new Image()
       cacheImgs[i].index = i
       cacheImgs[i].src = src
       cacheImgs[i].addEventListener('load', imgLoad, false)
     }
   }
-  if (s.params.imglazy) s.imgsLazyLoad()
+
+  // 更新
+  s.update = function () {
+    s.updateSlides()
+    s.updateBullets()
+    s.createLoop()
+    s.updateContainerSize()
+    if (s.params.imglazyQuery) s.updateLazyImg()
+  }
+  s.update()
+  if (s.slides.length <= 0) {
+    return
+  }
   /* --------------------
   Touch Events
   -------------------- */
@@ -343,6 +345,12 @@ var Carrousel = function (container, params) {
     s.touches.direction = 0
     s.touches.vertical = 0
     s.touches.horizontal = 0
+    // 单击事件
+    s.touches.endX = e.changedTouches[0].clientX
+    s.touches.endY = e.changedTouches[0].clientY
+    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
+      if (s.params.onClick) s.params.onClick(s)
+    }
     // 开启自动播放
     s.startAutoplay()
   }
@@ -369,12 +377,13 @@ var Carrousel = function (container, params) {
   /* --------------------
   Method
   -------------------- */
-  function moveToIndex () {
-    s.wrapper.style.webkitTransitionDuration = s.params.duration + 'ms'
+  function moveToIndex (speed) {
+    s.wrapper.style.webkitTransitionDuration = speed + 'ms'
     s.touches.posX = -s.activeIndex * s.width
     s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
   }
-  s.slideTo = function (slideIndex) {
+  s.slideTo = function (slideIndex, speed, runCallbacks) {
+    var duration = isNaN(speed) ? s.params.duration : speed
     if (slideIndex >= 0) {
       s.activeIndex = slideIndex
     }
@@ -394,32 +403,29 @@ var Carrousel = function (container, params) {
     // 更新class
     s.updateClasses()
     // 移动至index
-    moveToIndex()
+    moveToIndex(duration)
+    // 移动位置并触发回调onSlideChangeEnd
     setTimeout(function () {
       s.wrapper.style.webkitTransitionDuration = '0ms'
-      // runCallBack
+      // callback onSlideChangeEnd
       s.target = s.slides[s.activeIndex]
-      if (s.params.onSlideChangeEnd) s.params.onSlideChangeEnd(s)
+      if (s.params.onSlideChangeEnd && runCallbacks !== false) s.params.onSlideChangeEnd(s)
       // 循环的情况
       if (s.params.loop) {
         if (s.touches.posX === 0) {
           s.activeIndex = s.max - s.params.slidesPerView * 2
           // console.log('最左侧，应跳转到：'+s.activeIndex)
-          s.params.duration = 0
-          moveToIndex()
-          s.params.duration = defaults.duration
+          moveToIndex(0)
           return
         }
         if (-s.touches.posX + s.container.width >= s.wrapper.width) {
           s.activeIndex = s.params.slidesPerView
           // console.log('最右侧，应跳转到：'+s.activeIndex)
-          s.params.duration = 0
-          moveToIndex()
-          s.params.duration = defaults.duration
+          moveToIndex(0)
           return
         }
       }
-    }, s.params.duration)
+    }, duration)
   }
 
   // 主函数

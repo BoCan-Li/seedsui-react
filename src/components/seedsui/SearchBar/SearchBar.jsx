@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 
 export default class SearchBar extends Component {
   static propTypes = {
+    className: PropTypes.string,
+    style: PropTypes.object,
     placeholder: PropTypes.string,
     value: PropTypes.string,
     onClear: PropTypes.func,
     onChange: PropTypes.func,
     onSubmit: PropTypes.func,
-    onCancel: PropTypes.func
+    onClickCancel: PropTypes.func
   };
 
   constructor(props, context) {
@@ -20,6 +22,11 @@ export default class SearchBar extends Component {
   }
   componentDidMount() {
     this.searchInput.focus();
+    if (this.searchInput.value) {
+      this.setState({
+        showClear: true
+      });
+    }
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.value !== this.props.value) {
@@ -54,23 +61,16 @@ export default class SearchBar extends Component {
     this.props.onSubmit(this.state.value);
     this.searchInput.blur();
   }
-  onCancel = () => {
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    } else {
-      history.go(-1);
-    }
-  }
   render() {
-    const { placeholder } = this.props;
+    const {className, style, placeholder, onClickCancel} = this.props;
     return (
-      <div className="searchbar">
+      <div className={`searchbar${className ? ' ' + className : ''}`} style={style}>
         <form className="searchbar-form" onSubmit={this.onSubmit}>
           <i className="searchbar-icon-search"></i>
           <input type="search" ref={input => this.searchInput = input} className="searchbar-input" placeholder={placeholder} onChange={this.onChange} value={this.state.value}/>
           {this.state.showClear && <i className="searchbar-icon-clear" onClick={this.onClear}></i>}
         </form>
-        <div className="searchbar-button" onClick={this.onCancel}>取消</div>
+        {onClickCancel && <div className="searchbar-button" onClick={onClickCancel}>取消</div>}
       </div>
     );
   }

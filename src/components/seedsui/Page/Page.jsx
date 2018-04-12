@@ -14,7 +14,7 @@ export default class Page extends Component {
   render() {
     const { style, className } = this.props;
     return (
-      <section className={'page' + (className ? ' ' + className : '')} style={style}>
+      <section ref={(el) => {this.$el = el}} className={'page' + (className ? ' ' + className : '')} style={style}>
         { this.props.children }
       </section>
     );

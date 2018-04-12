@@ -7,15 +7,8 @@
   overflow:hidden;
   text-align:center;
   vertical-align: middle;
-  background-color:@input-bg;
+  background-color:white;
   border-radius: 4px;
-}
-.numbox.lg{
-  width: @numbox-width-lg;
-  height: @numbox-height-lg;
-  .numbox-button{
-    width:@numbox-height-lg;
-  }
 }
 .numbox.xl{
   width: @numbox-width-xl;
@@ -24,6 +17,24 @@
     width:@numbox-height-xl;
   }
 }
+.numbox.lg{
+  width: @numbox-width-lg;
+  height: @numbox-height-lg;
+  .numbox-button{
+    width:@numbox-height-lg;
+  }
+}
+.numbox.sm{
+  width: @numbox-width-sm;
+  height: @numbox-height-sm;
+  .numbox-button{
+    width:@numbox-height-sm;
+  }
+  .numbox-input{
+    font-size: 12px;
+  }
+}
+
 .numbox-input,.numbox-button{
   height:100%;
 }
@@ -55,15 +66,10 @@
       right:0;
   }
 }
-.numbox.disabled{
+.numbox[disabled]{
   pointer-events: none;
   .numbox-button,.numbox-input{
     color: @numbox-button-disabled-color;
-  }
-}
-.numbox.readonly{
-  .numbox-button,.numbox-input{
-    pointer-events: none;
   }
 }
 /*----------------numbox.less(end)--------------*/

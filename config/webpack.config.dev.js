@@ -107,6 +107,16 @@ module.exports = {
   module: {
     strictExportPresence: true,
     rules: [
+      // 禁用ejs,使用html-loader编译html文件
+      {
+        test: /\.html$/,
+        use: [ {
+          loader: 'html-loader',
+          options: {
+            minimize: true
+          }
+        }],
+      },
       // TODO: Disable require.ensure as it's not a standard language feature.
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },

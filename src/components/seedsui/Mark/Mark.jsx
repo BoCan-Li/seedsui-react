@@ -3,22 +3,22 @@ import PropTypes from 'prop-types'
 
 export default class Mark extends Component {
   static propTypes = {
-    type: PropTypes.string, // info/success/cancel/warn/disable/primary
+    className: PropTypes.string, // info/success/cancel/warn/disable/primary
     style: PropTypes.object,
-    text: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    children: PropTypes.node,
   }
   static defaultProps = {
-    type: 'info'
+    className: 'info'
   }
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { type, style, text, onClick } = this.props;
+    const { className, style, children, onClick } = this.props;
     return (
-      <span className={'mark-' + type} style={style} onClick={onClick}>{text}</span>
+      children ? <span className={`mark ${className}`} style={style} onClick={onClick}>{children}</span> : null
     );
   }
 }

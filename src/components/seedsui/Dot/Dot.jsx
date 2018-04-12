@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export default class Dot extends Component {
   static propTypes = {
-    className: PropTypes.bool,
+    className: PropTypes.string,
     style: PropTypes.object,
     size: PropTypes.string
   }

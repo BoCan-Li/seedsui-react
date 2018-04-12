@@ -1,40 +1,46 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Button extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
+    // args: PropTypes.array,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    text: PropTypes.string,
-    tipText: PropTypes.string,
-    badgeText: PropTypes.string,
-    args: PropTypes.array,
-    disabled: PropTypes.bool
+
+    children: PropTypes.node,
   }
   static defaultProps = {
-    style: {},
-    onClick: function() {},
-    text: '',
-    tipText: '',
-    badgeText: '',
-    args: []
+    args: null
   }
   constructor(props) {
     super(props);
   }
-  onClick = (event) => {
-    if (this.props.onClick) this.props.onClick(event, ...this.props.args);
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event')) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
+  onClick = (e) => {
+    if (this.props.onClick) this.props.onClick(this.getArgs(e));
   }
   render() {
-    const { style, className, text, tipText, badgeText, disabled } = this.props;
-    let textDOM = text;
-    if (tipText || badgeText) textDOM = <span>{text}</span>;
+    const {
+      className, style, disabled,
+      children
+    } = this.props;
     return (
       <a className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick}>
-        {textDOM}
-        {tipText && <span className="tip">{tipText}</span>}
-        {badgeText && <span className="badge">{badgeText}</span>}
+        {children}
       </a>
     );
   }

@@ -4,18 +4,26 @@ import Icon from './../Icon/Icon.jsx';
 
 export default class List extends Component {
   static propTypes = {
+    // args: PropTypes.array,
     style: PropTypes.object,
     className: PropTypes.string,
-    args: PropTypes.array,
     onClick: PropTypes.func,
 
+    onClickContainer: PropTypes.func,
+
     licon: PropTypes.node,
-    ricon: PropTypes.node,
-
     liconSrc: PropTypes.string,
-    riconSrc: PropTypes.string,
+    liconClassName: PropTypes.string,
+    liconStyle: PropTypes.object,
+    onClickLicon: PropTypes.func,
 
-    thumbnail: PropTypes.bool,
+    ricon: PropTypes.node,
+    riconSrc: PropTypes.string,
+    riconClassName: PropTypes.string,
+    riconStyle: PropTypes.object,
+    onClickRicon: PropTypes.func,
+
+    showThumbnail: PropTypes.bool,
     thumbnailStyle: PropTypes.object,
     thumbnailSrc: PropTypes.string,
     thumbnailAfter: PropTypes.node,
@@ -31,6 +39,10 @@ export default class List extends Component {
     captionClassName: PropTypes.string,
     captionStyle: PropTypes.object,
 
+    rcaption: PropTypes.node,
+    rcaptionClassName: PropTypes.string,
+    rcaptionStyle: PropTypes.object,
+
     sndcaption: PropTypes.node,
     sndcaptionClassName: PropTypes.string,
     sndcaptionStyle: PropTypes.object,
@@ -39,44 +51,73 @@ export default class List extends Component {
     containerAfter: PropTypes.node,
   }
   static defaultProps = {
-    args: []
+    args: null
   }
   constructor(props) {
     super(props);
   }
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event')) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
   onClick = (e) => {
-    const {args, onClick} = this.props;
-    if (onClick) onClick(e, ...args);
+    const {onClick, onClickLicon, onClickRicon} = this.props;
+    if (e.target.classList.contains('licon') && onClickLicon) {
+      onClickLicon(this.getArgs(e));
+    } else if (e.target.classList.contains('ricon') && onClickRicon) {
+      onClickRicon(this.getArgs(e));
+    } else {
+      if (onClick) onClick(this.getArgs(e));
+    }
+  }
+  onClickThumbnail = (e) => {
+    if (this.props.onClickThumbnail) {
+      this.props.onClickThumbnail(this.getArgs(e));
+    }
+  }
+  onClickAvatar = (e) => {
+    if (this.props.onClickAvatar) {
+      this.props.onClickAvatar(this.getArgs(e));
+    }
   }
   render() {
-    const { style, className,
-      licon, ricon,
-      liconSrc, riconSrc,
-      thumbnail, thumbnailSrc, thumbnailStyle, thumbnailAfter, onClickThumbnail,
-      avatar, avatarSrc, avatarStyle, avatarAfter, onClickAvatar,
+    const { style, className, onClickContainer,
+      licon, liconSrc, liconClassName, liconStyle,
+      ricon, riconSrc, riconClassName, riconStyle,
+      showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter,
+      showAvatar, avatarSrc, avatarStyle, avatarAfter,
       caption, captionClassName, captionStyle,
+      rcaption, rcaptionClassName, rcaptionStyle,
       sndcaption, sndcaptionClassName, sndcaptionStyle,
       containerStyle, containerAfter} = this.props;
     return (
-      <div className={`list-li ${className}`} style={style} onClick={this.onClick}>
-        {liconSrc && <Icon src={liconSrc}/>}
-        {licon}
-        {thumbnail && <div className="list-thumbnail" style={thumbnailStyle} onClick={onClickThumbnail}>
+      <div className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+        {(liconSrc || liconClassName) && <Icon className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
+        {licon && licon}
+        {showThumbnail && <div className={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
           {thumbnailSrc && <span className="list-thumbnail-img" style={{backgroundImage: `url(${thumbnailSrc})`}}></span>}
           {thumbnailAfter}
           {/* <div className="sticker sticker-icon top left">
             <span className="size12 icon-fav-fill"></span>
           </div> */}
         </div>}
-        {avatar && <div className="list-avatar" style={avatarStyle} onClick={onClickAvatar}>
+        {showAvatar && <div className="list-avatar" style={avatarStyle} onClick={this.onClickAvatar}>
           {avatarSrc && <span className="list-avatar-img" style={{backgroundImage: `url(${avatarSrc})`}}></span>}
           {avatarAfter}
         </div>}
-        <div className="list-container" style={containerStyle}>
-          {caption && <div className={'list-title' + (captionClassName ? captionClassName : '')} style={captionStyle}>
-            {caption}
-          </div>}
-          {sndcaption && <small className={sndcaptionClassName} style={sndcaptionStyle}>{sndcaption}</small>}
+        <div className="list-container" style={containerStyle} onClick={() => {onClickContainer && onClickContainer()}}>
+          {caption && <div className={`list-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</div>}
+          {rcaption && <div className={`list-rcaption${rcaptionClassName ? ' ' + rcaptionClassName : ''}`} style={rcaptionStyle}>{rcaption}</div>}
+          {sndcaption && <div className={`list-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{sndcaption}</div>}
           {containerAfter}
           {/* <div className="row-flex box-middle">
             <i className="list-icon icon-person color-primary"></i>
@@ -89,8 +130,8 @@ export default class List extends Component {
             <p className="list-font">音箱，大屏，投影仪，WIFI，麦克风</p>
           </div> */}
         </div>
-        {ricon}
-        {riconSrc && <Icon className="size16" src={riconSrc}/>}
+        {(riconSrc || riconClassName) && <Icon className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
+        {ricon && ricon}
       </div>
     );
   }

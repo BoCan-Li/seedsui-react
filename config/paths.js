@@ -34,12 +34,16 @@ const getPublicUrl = appPackageJson =>
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
   const servedUrl =
-    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/h5/react/');
+    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/h5_fw/');
   return ensureSlash(servedUrl, true);
 }
 
 // config after eject: we're in ./config/
 module.exports = {
+  // 本地服务器端口号
+  uriPort: 4040,
+  // 目标接口服务器
+  serverTarget: 'http://172.31.3.206:7050', // http://172.31.1.179:8080/,http://172.31.3.232:7050,http://172.31.3.206:7050
   dotenv: resolveApp('.env'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),

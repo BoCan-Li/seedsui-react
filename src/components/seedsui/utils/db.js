@@ -13,37 +13,44 @@ var DB = (function () {
       }
     }, false)
   }
-
-  function setCookie (key, value, days) {
-    var expiresDay = days
-    var cookieStr = key + '=' + escape(value)
-    if (expiresDay) {
-      var exp = new Date()
-      exp.setTime(exp.getTime() + Number(expiresDay) * 24 * 60 * 60 * 1000)
-      cookieStr += ';expires=' + exp.toGMTString()
+  function stringifyData (val) {
+    if (typeof val === 'number') {
+      return '_number:' + val.toString()
     }
-    document.cookie = cookieStr
-  }
-  function getCookie (key) {
-    var valExpr = new RegExp('(^| )' + key + '=([^]*)(|$)')
-    var match = valExpr.exec(document.cookie)
-    if (match && match[2]) {
-      return unescape(match[2])
+    if (typeof val === 'boolean') {
+      return '_boolean:' + val.toString()
     }
-    return null
-  }
-  function delCookie (key) {
-    var exp = new Date()
-    exp.setTime(exp.getTime() - 1)
-    var val = getCookie(key)
-    if (val != null) {
-      document.cookie = key + '=' + val + 'expires=' + exp.toGMTString()
+    if (!val) {
+      return ''
+    }
+    if (typeof val === 'string') {
+      return val
+    }
+    if (val instanceof Function) {
+      return '_function:' + val.toString()
+    }
+    if (val instanceof Object) {
+      return '_json:' + JSON.stringify(val)
     }
   }
-  function clearCookie () {
-    alert('抱歉，cookie不可以全部清空!')
+  function parseData (val) {
+    if (!val) {
+      return null
+    }
+    if (val.indexOf('_number:') === 0) {
+      return Number(val.replace(/^_number:/, ''))
+    }
+    if (val.indexOf('_boolean:') === 0) {
+      return Boolean(val.replace(/^_boolean:/, ''))
+    }
+    if (val.indexOf('_function:') === 0) {
+      return val.replace(/^_function:/, '')
+    }
+    if (val.indexOf('_json:') === 0) {
+      return JSON.parse(val.replace(/^_json:/, ''))
+    }
+    return val
   }
-
   var store = window.localStorage
   var session = window.sessionStorage
   return {
@@ -51,39 +58,71 @@ var DB = (function () {
     checkManifest: checkManifest,
 
     setStore: function (key, val) {
-      store.setItem(key, val)
+      store.setItem(key.toString(), stringifyData(val))
     },
     getStore: function (key) {
-      return store.getItem(key)
+      if (typeof key === 'number') {
+        return parseData(store.key(key))
+      }
+      return parseData(store.getItem(key))
     },
-    delStore: function (key) {
+    getAllStore: function () {
+      return store.valueOf()
+    },
+    removeStore: function (key) {
       store.removeItem(key)
     },
     clearStore: function () {
-      return store.clear()
+      store.clear()
     },
 
     setSession: function (key, value) {
-      session.setItem(key, value)
+      session.setItem(key.toString(), stringifyData(value))
     },
     getSession: function (key) {
       if (typeof key === 'number') {
-        return session.key(key)
+        return parseData(session.key(key))
       }
-      return session.getItem(key)
+      return parseData(session.getItem(key))
     },
-    delSession: function (key) {
+    getAllSession: function () {
+      return session.valueOf()
+    },
+    removeSession: function (key) {
       session.removeItem(key)
     },
     clearSession: function () {
       session.clear()
     },
-
-    setCookie: setCookie, // key,value
-    getCookie: getCookie, // key
-    delCookie: delCookie, // key
-    clearCookie: clearCookie
+    setCookie: function (key, value, second) {
+      var cookieStr = key + '=' + escape(value)
+      if (second) {
+        var expires = new Date()
+        expires.setTime(expires.getTime() + (second * 1000))
+        cookieStr += ';expires=' + expires.toGMTString()
+      }
+      document.cookie = cookieStr
+    },
+    getCookie: function (key) {
+      var valExpr = new RegExp('(^| )' + key + '=([^]*)(|$)')
+      var match = valExpr.exec(document.cookie)
+      if (match && match[2]) {
+        return unescape(match[2])
+      }
+      return null
+    },
+    removeCookie: function (key) {
+      var expires = new Date()
+      expires.setTime(expires.getTime() - 1)
+      var val = this.getCookie(key)
+      if (val != null) {
+        document.cookie = key + '=' + val + 'expires=' + expires.toGMTString()
+      }
+    },
+    clearCookie: function clearCookie () {
+      alert('抱歉，cookie不可以全部清空!')
+    }
   }
-})();
+})()
 
-//export default DB
+export default DB

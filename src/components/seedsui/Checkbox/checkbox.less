@@ -1,5 +1,8 @@
-//@import "../base/tool/icon.less";
 /*----------------checkbox.less(start)--------------*/
+.checkbox-box{
+  display: -webkit-inline-box;
+  -webkit-box-align: center;
+}
 .checkbox{
   height: @22px;
   width: @22px;
@@ -22,17 +25,14 @@
   &[disabled]{
     color:@checkbox-color-disable;
   }
-  font-family: @font-family-checkbox;
+  .setCheckboxIcon();
 }
-/*icon*/
-.checkbox:before{
-  content: @content-checkbox;
+/* icon */
+.checkbox:checked{
+  .setCheckboxActiveIcon();
 }
-.checkbox:checked:before{
-  content: @content-checkbox-checked;
-}
-/*label*/
-.checkbox+label{
-  margin:0 @4px;
+/* caption */
+.checkbox+.checkbox-caption{
+  margin-left:@4px;
 }
 /*----------------checkbox.less(end)--------------*/

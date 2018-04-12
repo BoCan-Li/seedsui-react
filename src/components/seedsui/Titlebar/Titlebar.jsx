@@ -1,81 +1,96 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router';
+import Device from './../utils/device.js';
 import bridge from './../utils/bridge'
+import Icon from './../Icon/Icon.jsx';
 
-export default class Page extends Component {
+@withRouter
+export default class Titlebar extends Component {
   static propTypes = {
-    theme: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-    lBtn: PropTypes.array,
-    rBtn: PropTypes.array,
-    back: PropTypes.bool,
-    children: PropTypes.node,
-    isFromApp: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+
+    caption: PropTypes.string,
+    captionClassName: PropTypes.string,
+    captionStyle: PropTypes.object,
+
+    onClickBack: PropTypes.func,
+    onClickCaption: PropTypes.func,
+    lButtons: PropTypes.array, // [{iconClassName: 'xx', caption: 'xx'}]
+    rButtons: PropTypes.array,
+    children: PropTypes.node
   }
   static defaultProps = {
-    back: true,
-    lBtn: []
+    className: 'border-b'
   }
   constructor(props) {
     super(props);
   }
-  onDefaultBack = () => {
-    if (this.props.isFromApp === '1') {
+  onClickBack = () => {
+    const {history, onClickBack} = this.props;
+    // 如果有onClickBack的props,则优先执行props的方法
+    if (onClickBack) {
+      onClickBack();
+      return;
+    }
+    // 否则走默认的返回
+    const isFromApp = Device.getUrlParameter('isFromApp') || '';
+    if (isFromApp === '1') {
       try {
         bridge.closeWindow();
       } catch (error) {
         console.log(error);
       }
-    } else if (this.props.isFromApp === '2') {
+    } else if (isFromApp === '2') {
       try {
         bridge.goHome();
       } catch (error) {
         console.log(error);
       }
     } else {
-      history.go(-1);
+      history.goBack();
     }
   }
-  render() {
-    const { title, back, lBtn, rBtn, theme, onClick, children } = this.props;
-    let lBtnDOM = null;
-    if (lBtn.length > 0) {
-      lBtnDOM = lBtn.map((item, index) => {
-        return (
-          <a key={index} onClick={item.onClick} className={`titlebar-button ${item.className}`} style={item.style}>
-            {item.icon && <i className={`icon ${item.icon}`}></i>}
-            {item.text && <span >{item.text}</span>}
-          </a>
-        );
-      });
-    } else if (back) {
-      lBtnDOM = (
-        <a onClick={this.onDefaultBack} className="titlebar-button">
-          <i className="shape-arrow-left"></i>
+  getButtonsDOM = (arr) => {
+    return arr.map((item, index) => {
+      return (
+        <a key={index} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button${item.className ? ' ' + item.className : ''}`} style={item.style}>
+          {(item.iconSrc || item.iconClassName) && <Icon className={`${item.iconClassName ? ' ' + item.iconClassName : ''}`} src={item.iconSrc ? item.iconSrc : ''} style={item.iconStyle}/>}
+          {item.icon && item.icon}
+          {item.caption && <span>{item.caption}</span>}
         </a>
       );
+    });
+  }
+  render() {
+    const {
+      className, style,
+      caption, captionClassName, captionStyle, children, onClickCaption,
+      lButtons, rButtons
+    } = this.props;
+    let lButtonsDOM = null;
+    if (lButtons) {
+      lButtonsDOM = this.getButtonsDOM(lButtons);
+    } else {
+      lButtonsDOM = this.getButtonsDOM([{
+        iconClassName: 'shape-arrow-left',
+        onClick: this.onClickBack
+      }]);
     }
-    let rBtnDOM = null;
-    if (rBtn) {
-      rBtnDOM = rBtn.map((item, index) => {
-        return (
-          <a key={index} onClick={item.onClick} className={'titlebar-button' + (item.className ? ' ' + item.className : '')} style={item.style}>
-            {item.icon && item.icon}
-            {item.text && <span >{item.text}</span>}
-          </a>
-        );
-      });
+    let rButtonsDOM = null;
+    if (rButtons && rButtons.length > 0) {
+      rButtonsDOM = this.getButtonsDOM(rButtons);
     }
-    const titleDOM = children ? children : (<h1 className="titlebar-title nowrap text-center" onClick={onClick}>{title}</h1>);
+    const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>);
     return (
-      <div className={'titlebar' + (theme === 'reverse' ? ' reverse' : '')}>
+      <div className={`titlebar${className ? ' ' + className : ''}`} style={style}>
         <div className="titlebar-left">
-          {lBtnDOM}
+          {lButtonsDOM}
         </div>
-        {titleDOM}
+        {captionDOM}
         <div className="titlebar-right">
-          {rBtnDOM}
+          {rButtonsDOM}
         </div>
       </div>
     );

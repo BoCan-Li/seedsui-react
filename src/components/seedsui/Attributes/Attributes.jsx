@@ -1,40 +1,62 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Button from 'components/seedsui/Button/Button.jsx';
 import Price from 'components/seedsui/Price/Price.jsx';
+import Mark from 'components/seedsui/Mark/Mark.jsx';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export default class Attributes extends Component {
   static propTypes = {
-    showValidValue: PropTypes.bool,
-    showValidName: PropTypes.bool,
-    col: PropTypes.string,
-    layout: PropTypes.string,
+    showValidValue: PropTypes.bool, // 值合法时显示
+    showValidName: PropTypes.bool, // name合法时显示
+
+    col: PropTypes.string, // 列数, 默认1
     list: PropTypes.array,
-    className: PropTypes.string,
-    rowClassName: PropTypes.string,
-    nameClassName: PropTypes.string,
-    valueClassName: PropTypes.string,
+    // [
+    //   {
+    //     name: string,
+    //     value: string,
+    //     copy: bool | string,
+    //     tel: bool | string,
+    //     price: bool | string,
+    //     priceClassName: string,
+    //     priceStyle: object,
+    //     button: bool | string,
+    //     buttonClassName: string,
+    //     buttonStyle: object,
+    //     buttonClick: func,
+    //     buttonArgs: array,
+    //     show: bool,
+    //     mark: string,
+    //     markClassName: string,
+    //     markStyle: object
+    //   }
+    // ]
+    className: PropTypes.string, // align(左右对齐布局) | start(左端对齐) | between(两端对齐)
     style: PropTypes.object,
+
+    rowClassName: PropTypes.string, // 行className
     rowStyle: PropTypes.object,
+
+    colClassName: PropTypes.string, // 2列的情况,列className
     colStyle: PropTypes.object,
+
+    cellClassName: PropTypes.string, // 列className
+    cellStyle: PropTypes.object,
+
+    nameClassName: PropTypes.string, // name的className
     nameStyle: PropTypes.object,
+    valueClassName: PropTypes.string, // value的className
     valueStyle: PropTypes.object,
+
+    rowAfter: PropTypes.node,
     children: PropTypes.node,
-    copy: PropTypes.bool,
-    tel: PropTypes.bool,
     onCopy: PropTypes.func,
-    onClick: PropTypes.func
+    onClick: PropTypes.func // 点击行
   };
 
   static defaultProps = {
-    col: '2',
-    list: [],
-    style: {},
-    rowStyle: {},
-    colStyle: {},
-    nameStyle: {},
-    valueStyle: {},
+    list: []
   }
 
   constructor(props, context) {
@@ -43,102 +65,135 @@ export default class Attributes extends Component {
   onCopyToClipboard = (text, result) => {
     if (this.props.onCopy) this.props.onCopy(text, result);
   }
-  getCol4Value = (item) => {
-    let dom = null;
-    if (item.name) {
-      if (item.price) {
-        dom = <Price className={typeof item.price === 'string' ? item.price : 'normal'} price={item.value}/>;
+  onClick = (item, index, item2, index2) => { // eslint-disable-line
+    if (this.props.onClick) this.props.onClick(arguments);
+  }
+  // 获得值DOM
+  getValueDOM = (item, index) => {
+    // 价格
+    if (item.price) {
+      let priceValue = item.value || '';
+      if (typeof item.price === 'string') {
+        priceValue = item.price;
       }
-      dom = item.value;
+      return <Price key={'price' + index} style={item.priceStyle} className={item.priceClassName ? item.priceClassName : 'capitalize'} price={priceValue} unit={item.priceUnit || ''}/>;
+    // 按钮
+    } else if (item.button) {
+      let buttonValue = item.value || '';
+      if (typeof item.button === 'string') {
+        buttonValue = item.button;
+      }
+      return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item.buttonArgs || '');}}>{buttonValue}</Button>;
     }
-    /* 操作 */
-    if (dom && item.copy) {
-      dom.push(<CopyToClipboard text={item.value}
-        onCopy={this.onCopyToClipboard}>
-        <Button text="复制" className="button-small"/>
-      </CopyToClipboard>);
+    return item.value;
+  }
+  // 获得操作DOM
+  getOpDOM = (item, index) => {
+    // 复制
+    if (item.copy) {
+      let copyValue = item.value || '';
+      if (typeof item.copy === 'string') {
+        copyValue = item.copy;
+      }
+      return <CopyToClipboard key={index} text={copyValue} onCopy={this.onCopyToClipboard}>
+        <Button className="ricon small" style={{borderRadius: '3px'}}>复制</Button>
+      </CopyToClipboard>
     }
-    if (dom && item.tel) {
-      dom.push(<a href={`tel:${item.value}`}>
-        <i className="icon icon-tel"/>
-      </a>);
+    // 电话
+    if (item.tel) {
+      let telValue = item.value || '';
+      if (typeof item.tel === 'string') {
+        telValue = item.tel;
+      }
+      return <a key={index} className="ricon" href={`tel:${telValue}`}>
+        <i className="icon bg-tel"/>
+      </a>;
+    }
+    // 标签
+    if (item.mark) {
+      return <Mark className={item.markClassName} style={item.markStyle}>{item.mark}</Mark>
     }
   }
-  getCol2NameClassName = () => {
-    const {layout, nameClassName} = this.props;
-    let baseClass = 'col-3';
-    if (layout === 'flex') baseClass = '';
-    if (layout === 'between') baseClass = 'col-flex';
-    return baseClass + (nameClassName ? ' ' + nameClassName : '');
+  // 获得2列的value的DOM
+  getCol2ValueDOM = (item, index) => {
+    let dom = [];
+    dom.push(this.getValueDOM(item, index));
+    const opDOM = this.getOpDOM(item, index);
+    if (opDOM) dom.push(opDOM);
+    return dom;
   }
-  getCol2ValueClassName = () => {
-    const {layout, valueClassName} = this.props;
-    let baseClass = 'col-flex';
-    if (layout === 'between') baseClass = '';
-    return baseClass + (valueClassName ? ' ' + valueClassName : '');
+  // 获得一行的className
+  getRowClassName = () => {
+    const {rowClassName} = this.props;
+    return `attribute${rowClassName ? ' ' + rowClassName : ' attribute-margin'}`;
   }
   render() {
-    const {showValidValue, showValidName, col, list, onClick, className, style, rowClassName, nameClassName, valueClassName, rowStyle, colStyle, nameStyle, valueStyle, children} = this.props;
+    const {
+      showValidValue, showValidName,
+      col, list,
+      className, style,
+      rowStyle,
+      colClassName, colStyle,
+      cellClassName, cellStyle,
+      nameClassName, nameStyle, valueClassName, valueStyle,
+      rowAfter, children
+    } = this.props;
     const attrsDOM = [];
     for (let i = 0; i < list.length;) {
-      if (col === '4') {
+      if (col === '2') {
         attrsDOM.push(
-          <div key={i} style={rowStyle}>
-            <div className={'row-flex attribute' + (rowClassName ? ' ' + rowClassName : '')} onClick={onClick} key={i}>
+          <div key={i} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i, list[i + 1], i + 1);}}>
+            <div className={`attribute-half${colClassName ? ' ' + colClassName : ''}`} style={colStyle}>
               {/* 左 */}
-              <div className={'col-3' + (nameClassName ? ' ' + nameClassName : '')} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
+              <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''}${nameClassName ? ' ' + nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>{list[i].name}</div>
               {/* 右 */}
-              <div className={'col-3' + (valueClassName ? ' ' + valueClassName : '')} style={Object.assign({}, colStyle, valueStyle)}>
-                {this.getCol4Value(list[i])}
+              <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}${valueClassName ? ' ' + valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
+                {this.getCol2ValueDOM(list[i], i)}
                 {list[i].ricon && <span>{list[i].ricon}</span>}
               </div>
+            </div>
+            {list[i + 1] && <div className={`attribute-half${colClassName ? ' ' + colClassName : ''}`} style={colStyle}>
               {/* 左 */}
-              <div className={'col-3' + (nameClassName ? ' ' + nameClassName : '')} style={Object.assign({}, colStyle, nameStyle)}>{list[i + 1].name ? list[i + 1].name : ''}</div>
+              <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''} ${nameClassName ? nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>{list[i + 1].name ? list[i + 1].name : ''}</div>
               {/* 右 */}
-              <div className={'col-3' + (valueClassName ? ' ' + valueClassName : '')} style={Object.assign({}, colStyle, valueStyle)}>
-                {this.getCol4Value(list[i + 1])}
+              <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}  ${valueClassName ? valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
+                {this.getCol2ValueDOM(list[i + 1], i + 1)}
                 {list[i + 1].ricon && <span>{list[i + 1].ricon}</span>}
               </div>
-            </div>
-            {children && children}
-          </div>
+            </div>}
+          </div>,
+          rowAfter && rowAfter
         );
         i += 2;
       } else {
         let isShow = true;
         if (showValidValue && !list[i].value) isShow = false;
         if (showValidName && !list[i].name) isShow = false;
+        if (list[i].show === false) isShow = false;
+        if (list[i].show) isShow = true;
         if (isShow) {
           attrsDOM.push(
-            <div key={i} style={rowStyle}>
-              <div className={'row-flex attribute box-middle' + (rowClassName ? ' ' + rowClassName : '')}>
-                {/* 左 */}
-                <div className={this.getCol2NameClassName()} style={Object.assign({}, colStyle, nameStyle)}>{list[i].name}</div>
-                {/* 右 */}
-                <div className={this.getCol2ValueClassName()} style={Object.assign({paddingLeft: '8px'}, colStyle, valueStyle)}>
-                  {list[i].price ? <Price className={typeof list[i].price === 'string' ? list[i].price : 'normal'} price={list[i].value}/> : list[i].value}
-                  {list[i].ricon && <span>{list[i].ricon}</span>}
-                </div>
-                {/* 操作 */}
-                {list[i].copy &&
-                <CopyToClipboard text={list[i].value} onCopy={this.onCopyToClipboard}>
-                  <Button text="复制" className="button-small"/>
-                </CopyToClipboard>}
-                {list[i].tel &&
-                <a href={`tel:${list[i].value}`}>
-                  <i className="icon icon-tel"/>
-                </a>}
+            <div key={i} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i);}}>
+              {/* 左 */}
+              <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''}${nameClassName ? ' ' + nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>{list[i].name}</div>
+              {/* 右 */}
+              <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}${valueClassName ? ' ' + valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
+                {this.getValueDOM(list[i], i)}
+                {list[i].ricon && <span>{list[i].ricon}</span>}
               </div>
-              {children && children}
-            </div>
+              {/* 操作 */}
+              {this.getOpDOM(list[i], i)}
+            </div>,
+            rowAfter && rowAfter
           );
         }
         i++;
       }
     }
     return (
-      <div style={style} className={className} onClick={onClick}>
+      <div className={`attributes${className ? ' ' + className : ''}`} style={style}>
         {attrsDOM}
+        {children}
       </div>
     );
   }

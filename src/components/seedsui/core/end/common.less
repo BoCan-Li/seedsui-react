@@ -66,8 +66,9 @@
 	white-space:nowrap;
 }
 .nowrap2,.nowrap3{
-	display:-webkit-box;
-	-webkit-box-orient:vertical;
+  display:-webkit-box;
+  /* autoprefixer: off */
+  -webkit-box-orient:vertical;
 }
 .nowrap2{
 	-webkit-line-clamp:2;
@@ -196,5 +197,21 @@
 .keyword{
 	color: @primary-bg;
 	vertical-align: baseline;
+}
+
+// 必填项
+.required{
+  color: @tip-bg;
+	font-size: @font-size-lg;
+	line-height: @font-size-lg;
+  width: @8px;
+	height: @8px;
+	text-align: center;
+}
+.required-left {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
 }
 /*----------------common.scss(end)----------------*/

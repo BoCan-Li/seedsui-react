@@ -17,7 +17,13 @@
 
 	color:@button-color;
 	background-color:@button-bg;
-	border-color: @button-border;
+  border-color: @button-border;
+  /*小按钮*/
+  &.small{
+    padding: 0 6px;
+    height: 26px;
+    font-size: 12px;
+  }
 
 	&:active,&.active{
     color:@button-checked-color;
@@ -122,7 +128,10 @@
 		}
 	}
 }
-
+.button-footer{
+  height: 50px;
+  border: 0;
+}
 .button.outline{
 	/*线框-主色按钮*/
 	&.primary{
@@ -219,11 +228,5 @@
 		box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
 		margin:@2px 0 -@2px 0;
 	}
-}
-/*小按钮*/
-.button-small{
-  padding: 0 6px;
-  height: 26px;
-  font-size: 12px;
 }
 /*----------------button.less(end)----------------*/

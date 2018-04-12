@@ -20,14 +20,17 @@
   position: relative;
   float:left;
   overflow: auto;
-  background-size:cover;
+  background-size:contain;
+  background-position: center;
+  background-repeat: no-repeat;
   box-sizing: border-box;
 }
-.slide-banner{
-  width:100%;
+.carrousel-slide-img{
+  margin: 0 auto;
+  display: block;
   max-width: @750px;
 }
-.slide-title{
+.carrousel-summary{
   position: absolute;
   display: -webkit-box;
   bottom: 0;
@@ -39,27 +42,27 @@
   color:white;
   text-align: left;
 }
-.slide-title-icon{
+.carrousel-summary-icon{
   display: block;
   font-size: @20px;
   width: @20px;
   height: @20px;
 }
-.slide-title-font{
+.carrousel-summary-font{
   display: block;
   -webkit-box-flex: 1;
 }
-.slide-title-icon+.slide-title-font{
+.carrousel-summary-icon+.carrousel-summary-font{
   margin-left: @4px;
 }
 .carrousel-pagination{
   position: absolute;
-  text-align: right;
   left:0;
   bottom:@10px;
   width: 100%;
   line-height: 0;
   font-size: 0;
+  .setCarrouselPagination();
 }
 .carrousel-pagination .bullet{
   display: inline-block;
@@ -71,9 +74,22 @@
   line-height: @8px;
   font-size: @12px;
   bottom: @10px;
-  background-color: rgba(255,255,255,0.5);
+  .setCarrouselBullet();
 }
 .carrousel-pagination .bullet.active{
-  background-color:white;
+  .setCarrouselBulletActive();
+}
+
+// page模式
+.carrousel-page{
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  .carrousel-wrapper, .carrousel-slide{
+    height: 100%;
+  }
 }
 /*----------------------------carrousel.less(end)----------------------------*/

@@ -1,109 +1,187 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Icon from './../Icon/Icon.jsx';
+import Close from './../Close/Close.jsx';
 
 export default class Page extends Component {
   static propTypes = {
+    // args: PropTypes.array,
+    lazyLoad: PropTypes.bool, // 图标是否懒人加载
     style: PropTypes.object,
-    className: PropTypes.string,
-    space: PropTypes.number,
-    wing: PropTypes.number,
-    type: PropTypes.string,
-    bordered: PropTypes.bool,
-    showAdd: PropTypes.bool,
-    col: PropTypes.string,
-    colors: PropTypes.array,
-    list: PropTypes.array,
-    children: PropTypes.node
+    className: PropTypes.string, // grid-album | grid-bordered
+    space: PropTypes.number, // 上下间距
+    wing: PropTypes.number, // 左右间距
+    col: PropTypes.string, // 一行列数
+    showUpload: PropTypes.bool,
+    list: PropTypes.array, // 单元格，见下方示例
+    children: PropTypes.node, // 也可以直接放子元素，grid将自动排列
+
+    cellClassName: PropTypes.string, // 单元格Class
+    cellStyle: PropTypes.object, // 单元格Style
+
+    caption: PropTypes.node,
+    captionClassName: PropTypes.string,
+    captionStyle: PropTypes.object,
+
+    sndcaption: PropTypes.node,
+    sndcaptionClassName: PropTypes.string,
+    sndcaptionStyle: PropTypes.object,
+
+    contentClassName: PropTypes.string, // 单元格内容Class
+    contentStyle: PropTypes.object, // 单元格内容Style
+
+    iconClassName: PropTypes.string,
+    iconStyle: PropTypes.object,
+
+    badgeClassName: PropTypes.string,
+
+    onClick: PropTypes.func,
+    onClickCell: PropTypes.func,
+    onClickIcon: PropTypes.func,
+    onClickDelete: PropTypes.func,
+    onClickAdd: PropTypes.func
   }
+  /* list: [{
+    iconClassName: '',
+    iconStyle: {},
+    iconSrc: '',
+    thumb: '',
+    caption: '',
+    onClick: function() {},
+    iconBadgeCaption: '',
+    showClose: false
+  }] */
   static defaultProps = {
+    list: [],
+    args: null,
+    iconStyle: {},
     space: 0,
     wing: 0,
-    type: 'square', // square | pure | album | layout
-    bordered: false,
-    showAdd: true,
-    col: '3',
-    colors: ['#4485fb', '#eda200', '#38ba35', '#41ce29', '#e55f5f', '#eecf3d'],
-    list: [{
-      icon: '',
-      text: '',
-      onClick: function() {},
-      tip: '',
-      badge: '',
-      close: false,
-      onClickClose: function() {}
-    }],
+    col: '3'
   }
   constructor(props) {
     super(props);
   }
   getSpaceStyle = () => {
-    if (this.props.bordered) {
+    const {className, space, wing} = this.props;
+    if (!space && !wing) return {
+      ulStyle: {},
+      cellStyle: {}
+    };
+    // 有边框的单元格
+    if (className && className.hasClass('grid-bordered')) {
       return {
         ulStyle: {
           padding: '0'
         },
-        liStyle: {
-          padding: `${this.props.space}px ${this.props.wing}px`
+        cellStyle: {
+          padding: `${space}px ${wing}px`
         }
       };
     }
-    return {
+    // 无边框的单元格
+    if (className.hasClass('between')) { // between对齐模式
+      return {
+        ulStyle: {
+          padding: `${space / 2}px 0px`
+        },
+        cellStyle: {
+          padding: `${space / 2}px ${wing}px ${space / 2}px 0`
+        }
+      };
+    }
+    return { // around对齐模式
       ulStyle: {
-        padding: `${this.props.space / 2}px ${this.props.wing / 2}px`
+        padding: `${space / 2}px ${wing / 2}px`
       },
-      liStyle: {
-        padding: `${this.props.space / 2}px ${this.props.wing / 2}px`
+      cellStyle: {
+        padding: `${space / 2}px ${wing / 2}px`
       }
     };
   }
-  getIconStyle = (index) => {
-    if (this.props.type === 'square') {
-      return {
-        backgroundColor: ' + (this.colors[index] ? this.colors[index] : this.colors[0]) + ',
-        color: 'white'
-      };
-    } else if (this.props.type === 'pure') {
-      return {
-        color: (this.props.colors[index] ? this.props.colors[index] : this.props.colors[0])
-      };
+  getLiStyle = () => {
+    return this.getSpaceStyle().cellStyle;
+  }
+  getUlStyle = () => {
+    return this.getSpaceStyle().ulStyle;
+  }
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event')) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
+  onClickIcon = (e, item, index) => {
+    if (this.props.onClickIcon) {
+      this.props.onClickIcon(item, index, this.getArgs(e));
+      e.stopPropagation();
+    }
+  }
+  onClickCell = (e, item, index) => {
+    if (this.props.onClickCell) {
+      this.props.onClickCell(item, index, this.getArgs(e));
+      e.stopPropagation();
+    }
+  }
+  onClickDelete = (e, item, index) => {
+    if (this.props.onClickDelete) {
+      this.props.onClickDelete(item, index, this.getArgs(e));
+      e.stopPropagation();
+    }
+  }
+  onClickAdd = (e) => {
+    if (this.props.onClickAdd) {
+      this.props.onClickAdd(this.getArgs(e));
+      e.stopPropagation();
     }
   }
   render() {
-    const { className, style, bordered, col, type, showAdd, list } = this.props;
+    const {
+      className, style, col, list,
+      cellClassName, cellStyle,
+      contentClassName, contentStyle, onClickCell,
+      iconClassName, iconStyle, lazyLoad, onClickIcon,
+      iconBadgeClassName,
+      closeClassName, onClickDelete,
+      captionClassName, captionStyle,
+      sndcaptionClassName, sndcaptionStyle,
+      showUpload
+    } = this.props;
     const children = React.Children.toArray(this.props.children);
     let dom = null;
-    if (type === 'layout') {
-      dom = (<ul className={'grid' + (bordered ? ' grid-bordered' : '') + (className ? ' ' + className : '')} data-col={col} style={Object.assign(this.getSpaceStyle().ulStyle, style)}>
-      {children.map((item, index) =>{
-        return (<li key={index} style={this.getSpaceStyle().liStyle}>
+    dom = (<ul className={`grid${className ? ' ' + className : ''}`} data-col={col} style={Object.assign(this.getUlStyle(), style)}>
+      {list.length > 0 && list.map((item, index) =>{
+        if (!item) return null;
+        return (<li key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
+          <a onClick={(e) => {this.onClickCell(e, item, index);}} className={`grid-content${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
+            {(item.iconSrc || item.iconClassName) && <Icon badgeClassName={iconBadgeClassName} badgeCaption={item.iconBadgeCaption} onClick={(e) => {this.onClickIcon(e, item, index);}} lazyLoad={lazyLoad} className={`grid-icon${(onClickCell && !onClickIcon) ? ' events-none' : ''}${iconClassName ? ' ' + iconClassName : ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})} src={item.iconSrc ? item.iconSrc : ''}/>}
+            {item.thumb && <img alt="" src={item.thumb} onClick={(e) => {this.onClickIcon(e, item, index);}}/>}
+            {onClickDelete && <Close onClick={(e) => {this.onClickDelete(e, item, index);}} className={`grid-close${closeClassName ? ' ' + closeClassName : ''}`} iconClassName="close-icon-clear color-primary"/>}
+          </a>
+          {item.caption && <label className={`grid-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</label>}
+          {item.sndcaption && <label className={`grid-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{item.sndcaption}</label>}
+        </li>);
+      })}
+      {showUpload === true && <li className={`grid-cell`} style={this.getLiStyle()}>
+        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-content grid-content-add${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
+          <Icon className="grid-icon-add"/>
+        </a>
+      </li>}
+      {/* 如果有子节点，则为自定义节点 */}
+      {children.length > 0 && children.map((item, index) => {
+        if (!item) return null;
+        return (<li key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
           {item}
         </li>);
       })}
-      </ul>);
-    } else {
-      dom = (<ul className={'grid ' + className + (bordered ? ' grid-bordered' : '')} data-col={col} style={Object.assign(this.getSpaceStyle().ulStyle, style)}>
-        {list.map((item, index) =>{
-          return (<li key={index} onClick={item.onClick} style={this.getSpaceStyle().liStyle}>
-            <a className="grid-icon" style={this.getIconStyle(index)}>
-              {type === 'album' && item.img && <img src={item.img} />}
-              {(type === 'square' || type === 'pure') && item.icon && <Icon classsName="item.icon"/>}
-              {item.tip && <span className="tip">{item.tip}</span>}
-              {item.badge && <span className="badge">{item.badge}</span>}
-              {item.close && (<span className="close" onClick={item.onClickClose}>
-                <i className="icon icon-close"></i>
-              </span>)}
-            </a>
-            {item.text && <label className="grid-label">{item.text}</label>}
-          </li>);
-        })}
-        {type === 'album' && showAdd === true && <li style={this.getSpaceStyle().liStyle}>
-          <a className="grid-icon grid-icon-add">
-            <Icon classsName="icon-plus size50"/>
-          </a>
-        </li>}
-      </ul>);
-    }
+    </ul>);
     return dom;
   }
 }

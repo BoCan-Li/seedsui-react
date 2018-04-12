@@ -133,7 +133,7 @@ function shopHandler(e){
   console.log('初始化购物车')
 }
 function orderHandler(e){
-  console.log('初始化订单')
+  console.log('初始化单据')
 }
 // 发布
 btnLogin.addEventListener('click',function(e){

@@ -14,17 +14,23 @@
   height:120px;
   font-size:120px;
 }
-.notice img{
-  width:120px;
+.notice-icon-nodata{
+  .setNoticeNoDataIcon();
 }
-.notice p{
-  margin-top: 20px;
+.notice-icon-nonetwork{
+  .setNoticeNoNetworkIcon();
+}
+.notice-caption{
+  margin-top: 10px;
+}
+.notice-sndcaption{
+  margin-top: 10px;
 }
 .notice .notice-content{
   position: absolute;
+  width: 100%;
   top:40%;
-  left: 50%;
-  -webkit-transform: translate3d(-50%,-50%,0);
+  -webkit-transform: translateY(-50%);
   text-align: center;
 }
 /*----------------notice.less(end)----------------*/

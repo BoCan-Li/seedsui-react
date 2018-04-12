@@ -1,5 +1,5 @@
 /*---------------icon.less(start)---------------*/
-/*图标*/
+// 图标
 .icon{
   position:relative;
   font-style:normal;
@@ -10,7 +10,7 @@
   -webkit-box-pack:center;
   -webkit-box-align:center;
 }
-/*控件默认图标尺寸*/
+// 控件默认图标尺寸
 .icon{
   font-size:@24px;
   width:@24px;
@@ -20,12 +20,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
-}
-.badge .icon,.tip .icon,.close .icon{
-  font-size:@12px;
-  width:@12px;
-  height:@12px;
+  -webkit-transform: translate(-50%,-50%);
 }
 .icon-font {
   speak: none;
@@ -36,5 +31,10 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+// 图标内图片
+.icon-img{
+  background-size: cover;
+  background-position: center;
 }
 /*---------------icon.less(end)---------------*/

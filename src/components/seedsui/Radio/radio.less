@@ -1,6 +1,8 @@
-//@import "../base/tool/icon.less";
-
 /*----------------radio.less(start)--------------*/
+.radio-box{
+  display: -webkit-inline-box;
+  -webkit-box-align: center;
+}
 .radio{
   height: @22px;
   width: @22px;
@@ -23,17 +25,14 @@
   &[disabled]{
     color:@radio-color-disable;
   }
-  font-family: @font-family-radio;
+  .setRadioIcon();
 }
-/*icon*/
-.radio:before{
-  content: @content-radio;
+/* icon */
+.radio:checked{
+  .setRadioActiveIcon();
 }
-.radio:checked:before{
-  content: @content-radio-checked;
-}
-/*label*/
-label .radio+span{
-  margin:0 @4px;
+/* caption */
+.radio+.radio-caption{
+  margin-left:@4px;
 }
 /*----------------radio.less(end)--------------*/
