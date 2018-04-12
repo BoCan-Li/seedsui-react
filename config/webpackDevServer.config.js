@@ -98,7 +98,7 @@ module.exports = function(proxy, allowedHost) {
       /**
        * 使用服务器代理解决访问接口跨域问题
        */
-      // 设置目标接口服务器
+      // 设置接口服务器
       const targetUrl = paths.serverTarget;
       const httpProxy = require('http-proxy');
       const proxy = httpProxy.createProxyServer({
@@ -107,49 +107,44 @@ module.exports = function(proxy, allowedHost) {
         proxyTimeout: 20 * 1000,
         ws: false
       });
-      // api过滤器,使用代理去发真实的请求
+      // api代理过滤器,使用代理去发真实的请求
       app.use('/api', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      // test过滤器
+      // test代理过滤器
       app.use('/test', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      // login过滤器
+      // login代理过滤器
       app.use('/login', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/login'});
       });
       /**
        * 使用axios模拟登录过程,在当前域名下注入cookie
        */
-      var axios = require('axios')
-      var querystring = require('querystring')
-      app.get('/auto/login', (req, resp) => {
-        const request = axios.post(
-          'http://172.31.3.206:6020/portal/logon.action',
-          querystring.stringify({
-            'identifiers.src': 'waiqin365',
-            'identifiers.password': 'a111111',
-            'refer': 'https%3A%2F%2Fcloud.waiqin365.com',
-            'identifiers.type': 1,
-            'identifiers.tenantname': 'test_flow',
-            'identifiers.code':'flow_03'
-          })
-        )
-        request.then((result) => {
-          resp.append('Set-Cookie', result.headers['set-cookie'])
-          resp.json({success: true, cookie: result.headers['set-cookie']})
-        })
-      })
+      // var axios = require('axios')
+      // var querystring = require('querystring')
+      // app.get('/auto/login', (req, resp) => {
+      //   const request = axios.post(
+      //     '登录接口logon.action',
+      //     querystring.stringify({
+      //       // 登录时所需params
+      //     })
+      //   )
+      //   request.then((result) => {
+      //     resp.append('Set-Cookie', result.headers['set-cookie'])
+      //     resp.json({success: true, cookie: result.headers['set-cookie']})
+      //   })
+      // })
       /**
        * 使用superagent模拟登录过程,在当前域名下注入cookie
        */
       // const superagent = require('superagent');
       // app.get('/auto/login', (req, resp) => {
-      //   const request = superagent.post(targetUrl + '/portal/logon.action');
+      //   const request = superagent.post('登录接口logon.action');
       //   request.type('form');
       //   request.send({
-      //     // params
+      //     // 登录时所需params
       //   });
       //   request.end((err, result = {}) => {
       //     resp.append('Set-Cookie', result.header['set-cookie']);

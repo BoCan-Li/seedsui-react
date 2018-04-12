@@ -1,0 +1,20 @@
+{
+  "message": "",
+  "code": "1",
+  "data": [
+    {
+      "iconBadgeCaption": "",
+      "iconSrc": "/static/images/more.png",
+      "caption": "布局",
+      "sndcaption": "Layout",
+      "url": ""
+    },
+    {
+      "iconBadgeCaption": "",
+      "iconSrc": "/static/images/grid.png",
+      "caption": "间距",
+      "sndcaption": "Layout",
+      "url": ""
+    }
+  ]
+}

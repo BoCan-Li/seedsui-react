@@ -33,6 +33,7 @@ const getPublicUrl = appPackageJson =>
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
+  // 打包后放置的服务器目录
   const servedUrl =
     envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/h5_fw/');
   return ensureSlash(servedUrl, true);
@@ -42,8 +43,8 @@ function getServedPath(appPackageJson) {
 module.exports = {
   // 本地服务器端口号
   uriPort: 4040,
-  // 目标接口服务器
-  serverTarget: 'http://172.31.3.206:7050', // http://172.31.1.179:8080/,http://172.31.3.232:7050,http://172.31.3.206:7050
+  // 接口服务器(可用于跨域)
+  serverTarget: 'http://localhost:4040',
   dotenv: resolveApp('.env'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),

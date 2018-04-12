@@ -6,7 +6,8 @@ const env = process.env.NODE_ENV
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path
   if (env === 'development') {
-    return 'http://172.31.3.96:3000/api' + adjustedPath
+    // 如果需要做跨域处理,则加上/api:http://localhost:4040/api,使其被proxy代理过滤器匹配到/api,从而做代理跨域
+    return 'http://localhost:4040' + adjustedPath
   }
   return adjustedPath;
 }

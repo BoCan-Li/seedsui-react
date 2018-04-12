@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import Notice from 'components/seedsui/Notice/Notice.jsx';
 
 export default class NotFound extends Component {

@@ -1,32 +1,32 @@
 // Model
-const GET_DETAIL = 'amountApply/GET_DETAIL';
-const GET_DETAIL_SUCCESS = 'amountApply/GET_DETAIL_SUCCESS';
-const GET_DETAIL_FAILURE = 'amountApply/GET_DETAIL_FAILURE';
+const GET_MENUS = 'home/GET_MENUS';
+const GET_MENUS_SUCCESS = 'home/GET_MENUS_SUCCESS';
+const GET_MENUS_FAILURE = 'home/GET_MENUS_FAILURE';
 
 const initial = {
   isLoading: false,
-  detail: {}
+  menus: []
 };
 // Reducer
 export default function reducer(state = initial, action = {}) {
   switch (action.type) {
-    case GET_DETAIL:
+    case GET_MENUS:
       return {
         ...state,
         isLoading: true
       };
-    case GET_DETAIL_SUCCESS:
+    case GET_MENUS_SUCCESS:
       const result = action && action.result;
       if (result.code === '1') {
-        state.detail = result.data;
+        state.menus = result.data;
       } else {
-        state.detail = {};
+        state.menus = [];
       }
       return {
         ...state,
         isLoading: false
       };
-    case GET_DETAIL_FAILURE:
+    case GET_MENUS_FAILURE:
       return {
         ...state,
         isLoading: false
@@ -37,10 +37,10 @@ export default function reducer(state = initial, action = {}) {
 }
 
 // Action
-export function getDetail(params) {
+export function getMenus(params) {
   return {
-    types: [GET_DETAIL, GET_DETAIL_SUCCESS, GET_DETAIL_FAILURE],
-    promise: client => client.get(`/app/dms/client/salesordermanager/getPurchaseById.action`, params),
+    types: [GET_MENUS, GET_MENUS_SUCCESS, GET_MENUS_FAILURE],
+    promise: client => client.get(`/static/homeMenus.json`, params),
     params
   };
 }
