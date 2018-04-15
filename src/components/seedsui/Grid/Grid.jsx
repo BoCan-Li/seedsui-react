@@ -37,6 +37,7 @@ export default class Page extends Component {
 
     onClick: PropTypes.func,
     onClickCell: PropTypes.func,
+    onClickContent: PropTypes.func,
     onClickIcon: PropTypes.func,
     onClickDelete: PropTypes.func,
     onClickAdd: PropTypes.func
@@ -124,6 +125,12 @@ export default class Page extends Component {
       e.stopPropagation();
     }
   }
+  onClickContent = (e, item, index) => {
+    if (this.props.onClickContent) {
+      this.props.onClickContent(item, index, this.getArgs(e));
+      e.stopPropagation();
+    }
+  }
   onClickCell = (e, item, index) => {
     if (this.props.onClickCell) {
       this.props.onClickCell(item, index, this.getArgs(e));
@@ -146,8 +153,8 @@ export default class Page extends Component {
     const {
       className, style, col, list,
       cellClassName, cellStyle,
-      contentClassName, contentStyle, onClickCell,
-      iconClassName, iconStyle, lazyLoad, onClickIcon,
+      contentClassName, contentStyle,
+      iconClassName, iconStyle, lazyLoad,
       iconBadgeClassName,
       closeClassName, onClickDelete,
       captionClassName, captionStyle,
@@ -160,8 +167,8 @@ export default class Page extends Component {
       {list.length > 0 && list.map((item, index) =>{
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
-          <a className={`grid-content${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
-            {(item.iconSrc || item.iconClassName) && <Icon badgeClassName={iconBadgeClassName} badgeCaption={item.iconBadgeCaption} onClick={(e) => {this.onClickIcon(e, item, index);}} lazyLoad={lazyLoad} className={`grid-icon${(onClickCell && !onClickIcon) ? ' events-none' : ''}${iconClassName ? ' ' + iconClassName : ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})} src={item.iconSrc ? item.iconSrc : ''}/>}
+          <a onClick={(e) => {this.onClickContent(e, item, index);}} className={`grid-content${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
+            {(item.iconSrc || item.iconClassName) && <Icon badgeClassName={iconBadgeClassName} badgeCaption={item.iconBadgeCaption} onClick={(e) => {this.onClickIcon(e, item, index);}} lazyLoad={lazyLoad} className={`grid-icon${iconClassName ? ' ' + iconClassName : ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})} src={item.iconSrc ? item.iconSrc : ''}/>}
             {item.thumb && <img alt="" src={item.thumb} onClick={(e) => {this.onClickIcon(e, item, index);}}/>}
             {onClickDelete && <Close onClick={(e) => {this.onClickDelete(e, item, index);}} className={`grid-close${closeClassName ? ' ' + closeClassName : ''}`} iconClassName="close-icon-clear color-primary"/>}
           </a>
