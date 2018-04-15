@@ -9,7 +9,6 @@ import Toast from 'components/seedsui/Toast/Toast.jsx';
 import Loading from 'components/seedsui/Loading/Loading.jsx';
 import Grid from 'components/seedsui/Grid/Grid.jsx';
 import Group from 'components/seedsui/Group/Group.jsx';
-import bridge from 'components/seedsui/utils/bridge';
 
 @withRouter
 @connect(state => ({
@@ -36,12 +35,12 @@ export default class Home extends Component {
   componentDidMount = () => {
     // 初始化
     this.loadData();
-    // 注册给客户端调用的返回事件
-    bridge.addBackPress();
   }
   componentWillUnmount() {
-    // 移除给客户端调用的返回事件
-    bridge.removeBackPress();
+  }
+  onClickMenu = (item) => {
+    const {history} = this.props;
+    if (item.url) history.push(item.url);
   }
   loadData = () => {
     // 获得数据
@@ -75,10 +74,10 @@ export default class Home extends Component {
             <p className="color-sub text-center">全世界最好最全的react移动端开发UI框架</p>
           </div>
           <Group>
-            <Grid list={menus} iconClassName="size45" className="grid-bordered"/>
+            <Grid list={menus} onClickCell={this.onClickMenu} iconClassName="size45" className="grid-bordered"/>
           </Group>
         </Container>
-        {isLoading && <Loading style={{top: '44px', backgroundColor: 'white'}}/>}
+        {isLoading && <Loading/>}
         <Toast caption={this.state.toastMsg} show={this.state.toastShow} position="middle" style={{borderRadius: '4px'}}/>
       </Page>
     )

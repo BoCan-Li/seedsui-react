@@ -7,7 +7,9 @@ import NoNetwork from 'components/seedsui/NoNetwork/NoNetwork.jsx';
 import NotFound from 'components/seedsui/NotFound/NotFound.jsx';
 // Containers
 import {
-  Home
+  Home,
+  Box,
+  CarrouselPage
 } from 'containers';
 const Routes = () => (
   <Provider store={store}>
@@ -16,6 +18,10 @@ const Routes = () => (
       <Switch>
         {/* 首页 */}
         <Route exact path="/_react_/home" component={Home}/>
+        {/* 盒子模型 */}
+        <Route exact path="/_react_/box" component={Box}/>
+        {/* 轮播页 */}
+        <Route exact path="/_react_/carrouselPage" component={CarrouselPage}/>
 
         {/* 重定向 */}
         <Route exact path="/" render={() => (
