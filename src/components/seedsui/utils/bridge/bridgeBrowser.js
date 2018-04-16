@@ -1,4 +1,4 @@
-import createHistory from 'history/createBrowserHistory'
+// import createHistory from 'history/createBrowserHistory'
 import DB from './../db';
 import EventUtil from './../eventutil';
 import coordtransform from 'coordtransform';
@@ -130,19 +130,11 @@ var Bridge = {
   },
   /* 退出到登陆页面 */
   logOut: function (message) {
-    const history = createHistory()
-    let login_url = '/h5fw/#/_react_/login'
-    if (DB.getStore('app_openId') && DB.getStore('app_appId')) {
-      login_url += `/${DB.getStore('app_openId')}/${DB.getStore('app_appId')}`
-    }
-    login_url += '?msg=' + (message || '')
-    // 红包页面跳回
-    if (window.location.href.indexOf('/redpacket') >= 0) {
-      login_url += '&page=redpacket'
-    }
-    // DB.setStore('login_prev_url', window.location.href.split('#')[1]);
-    history.replace(login_url)
-    window.location.reload()
+    console.log('身份认证未通过,需要重新登录')
+    // const history = createHistory()
+    // let login_url = '/h5fw/#/_react_/login'
+    // history.replace(login_url)
+    // window.location.reload()
   },
   // 获取上传图片路径,与后端约定好的固定格式, tenantId/项目名/自定义路径/月份
   getUploadDir: function (params) {
