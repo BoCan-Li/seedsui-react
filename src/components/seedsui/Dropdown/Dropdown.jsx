@@ -30,6 +30,9 @@ export default class Dropdown extends Component {
     // 如果数据长度不一样,或者上次没有data,此次有data,则刷新
     if ((prevProps.list.length !== this.props.list.length) || (prevProps.list[0] && !prevProps.list[0].data && this.props.list[0].data)) {
       this.refresh();
+    // 如果选中项有变化也要刷新
+    } else if (this.props.list.some((item, i) => {return item.id !== prevProps.list[i].id;})) {
+      this.refresh();
     }
   }
   componentDidMount = () => {
