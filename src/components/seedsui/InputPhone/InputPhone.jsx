@@ -56,6 +56,8 @@ export default class InputPhone extends Component {
     var target = e.target;
     var value = this.correct(target.value);
     let msg = '';
+    // 赋值
+    if (!this.props.valueBindProp) target.value = value;
     if (!this.validator(value)) msg = '请输入正确的手机号码';
     if (this.props.onChange) {
       this.props.onChange(value, msg, this.getArgs(e));
@@ -74,14 +76,14 @@ export default class InputPhone extends Component {
     if (this.props.onChange) this.props.onChange('', this.getArgs(e));
   }
   validator = (value) => {
-    return /^([1][34578][0-9]{9})$/.test(value);
+    return /^([0-9]{11})$/.test(value);
   }
   correct = (value) => {
     let val = value;
     // 如果输入的不是一个正整数，则转为正整数
-    if (!/^[1-9]{1,}[0-9]*$/.test(value)) {
-      const result = value.match(/[1-9]{1,}[0-9]*/);
-      val = result ? result[0] : this.props.min;
+    if (isNaN(value)) {
+      const result = value.match(/[0-9]{1,}/);
+      if (result) val = result[0];
       // callback onError
       if (this.props.onError) this.props.onError('必须要输入数字哦');
     }

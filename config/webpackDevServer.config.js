@@ -99,7 +99,7 @@ module.exports = function(proxy, allowedHost) {
        * 使用服务器代理解决访问接口跨域问题
        */
       // 设置接口服务器
-      const targetUrl = paths.serverTarget;
+      const targetUrl = '服务器接口地址,例:http://172.31.3.333:8888';
       const httpProxy = require('http-proxy');
       const proxy = httpProxy.createProxyServer({
         target: targetUrl,
@@ -107,15 +107,15 @@ module.exports = function(proxy, allowedHost) {
         proxyTimeout: 20 * 1000,
         ws: false
       });
-      // api代理过滤器,使用代理去发真实的请求
+      // '/api'代理过滤器,将请求地址http:localhost:4040/api变为http://172.31.3.333:8888/,使用代理去发请求,并返回结果响应信息
       app.use('/api', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      // test代理过滤器
+      // '/test'代理过滤器
       app.use('/test', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
-      // login代理过滤器
+      // '/login'代理过滤器
       app.use('/login', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/login'});
       });

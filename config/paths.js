@@ -43,8 +43,6 @@ function getServedPath(appPackageJson) {
 module.exports = {
   // 本地服务器端口号
   uriPort: 4040,
-  // 接口服务器(可用于跨域)
-  serverTarget: 'http://localhost:4040',
   dotenv: resolveApp('.env'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),

@@ -8,8 +8,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
 const env = process.env.NODE_ENV
 
 if (env === 'development') {
-  // 如果需要做跨域处理,则加上/api:http://localhost:4040/api,使其被proxy代理过滤器匹配到/api,从而做代理跨域
-  axios.defaults.baseURL = `http://localhost:4040`
+  axios.defaults.baseURL = `http://localhost:4040/api` // 加上/api,为了匹配代理过滤器,使用代理做跨域
   axios.defaults.withCredentials = true
 }
 // 构建get请求参数

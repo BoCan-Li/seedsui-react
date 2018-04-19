@@ -35,7 +35,7 @@ export default class Titlebar extends Component {
       return;
     }
     // 否则走默认的返回
-    const isFromApp = Device.getUrlParameter('isFromApp') || '';
+    const isFromApp = Device.getUrlParameter('isFromApp', this.props.location.search) || '';
     if (isFromApp === '1') {
       try {
         bridge.closeWindow();
