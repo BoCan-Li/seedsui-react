@@ -1,11 +1,11 @@
-/*----------------button.less(start)----------------*/
+//----------------button.less(start)----------------
 .button{
 	display:-webkit-inline-box;
   -webkit-box-align:center;
   -webkit-box-pack:center;
 
 	height:@40px;
-	/* line-height:normal; */
+	// line-height:normal;
 	line-height:0;
 	border-width:0;
 	vertical-align:middle;
@@ -18,7 +18,7 @@
 	color:@button-color;
 	background-color:@button-bg;
   border-color: @button-border;
-  /*小按钮*/
+  // 小按钮
   &.small{
     padding: 0 6px;
     height: 26px;
@@ -34,7 +34,7 @@
 	&.block{
 		display:-webkit-box;
 	}
-	/*主色按钮*/
+	// 主色按钮
 	&.primary{
 		color: white;
 		background-color:@primary-bg;
@@ -44,7 +44,7 @@
 			border-color:@primary-bg-active;
 		}
 	}
-	/*取消按钮*/
+	// 取消按钮
 	&.cancel{
 		color: white;
 		background-color:@cancel-bg;
@@ -54,7 +54,7 @@
 			border-color:@cancel-bg-active;
 		}
 	}
-	/*提交按钮*/
+	// 提交按钮
 	&.submit{
 		color: white;
 		background-color:@submit-bg;
@@ -64,7 +64,7 @@
 			border-color:@submit-bg-active;
 		}
 	}
-	/*信息按钮*/
+	// 信息按钮
 	&.info{
 		color: white;
 		background-color:@info-bg;
@@ -74,7 +74,7 @@
 			border-color:@info-bg-active;
 		}
 	}
-	/*警告按钮*/
+	// 警告按钮
 	&.warn{
 		color: white;
 		background-color:@warn-bg;
@@ -84,7 +84,7 @@
 			border-color:@warn-bg-active;
 		}
 	}
-	/*完成按钮*/
+	// 完成按钮
 	&.success{
 		color: white;
 		background-color:@success-bg;
@@ -97,7 +97,7 @@
   &[disabled]{
     pointer-events: none;
   }
-	/*禁用按钮*/
+	// 禁用按钮
 	&.disabled,&[disabled]{
 		color:@button-disabled-color;
 		background-color:@button-disabled-bg;
@@ -111,7 +111,7 @@
 			background-color: @disable-bg;
 		}
 	}
-	/*白色按钮*/
+	// 白色按钮
 	&.white{
 		color:@body-color;
 		background-color:white;
@@ -121,7 +121,7 @@
 			border-color:transparent;
 		}
 	}
-	/*小汽泡*/
+	// 小汽泡
 	&.primary,&.cancel,&.submit,&.info,&.warn,&.success{
 		.tip,.badge{
 			background-color: @button-tip-bg;
@@ -133,7 +133,7 @@
   border: 0;
 }
 .button.outline{
-	/*线框-主色按钮*/
+	// 线框-主色按钮
 	&.primary{
 		color: @primary-bg;
 		background-color:transparent;
@@ -143,7 +143,7 @@
 			border-color:@primary-bg-active;
 		}
 	}
-	/*线框-取消按钮*/
+	// 线框-取消按钮
 	&.cancel{
 		color:@cancel-bg;
 		background-color:transparent;
@@ -153,7 +153,7 @@
 			border-color:@cancel-bg-active;
 		}
 	}
-	/*线框-提交按钮*/
+	// 线框-提交按钮
 	&.submit{
 		color:@submit-bg;
 		background-color:transparent;
@@ -163,7 +163,7 @@
 			border-color:@submit-bg-active;
 		}
 	}
-	/*线框-信息按钮*/
+	// 线框-信息按钮
 	&.info{
 		color:@info-bg;
 		background-color:transparent;
@@ -173,7 +173,7 @@
 			border-color:@info-bg-active;
 		}
 	}
-	/*线框-警告按钮*/
+	// 线框-警告按钮
 	&.warn{
 		color:@warn-bg;
 		background-color:transparent;
@@ -183,7 +183,7 @@
 			border-color:@warn-bg-active;
 		}
 	}
-	/*线框-完成按钮*/
+	// 线框-完成按钮
 	&.success{
 		color:@success-bg;
 		background-color:transparent;
@@ -194,7 +194,7 @@
 		}
 	}
 
-	/*线框-禁用按钮*/
+	// 线框-禁用按钮
 	&.disabled,&[disabled]{
 		background-color:transparent;
 		&:active,&.active{
@@ -202,7 +202,7 @@
 		}
 	}
 
-	/*线框-白色按钮*/
+	// 线框-白色按钮
 	&.white{
 		color:white;
 		background-color:transparent;
@@ -212,16 +212,17 @@
 			border-color:transparentize(white,.5);
 		}
 	}
-	/*小汽泡*/
+	// 小汽泡
 	&.primary,&.cancel,&.submit,&.info,&.warn,&.success{
 		.tip,.badge{
 			background-color: @tip-bg;
 		}
 	}
 }
-/*投影按钮*/
+// 投影按钮
 .button.shadow{
-	box-shadow:0 @2px @3px 0 rgba(0, 0, 0, 0.2);/*分别指投影的：右、下、模糊、扩展、颜色*/
+	// 分别指投影的：右、下、模糊、扩展、颜色
+	box-shadow:0 @2px @3px 0 rgba(0, 0, 0, 0.2);
 	&:active,&.active{
 		-webkit-box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
 		-moz-box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
@@ -229,4 +230,4 @@
 		margin:@2px 0 -@2px 0;
 	}
 }
-/*----------------button.less(end)----------------*/
+//----------------button.less(end)----------------

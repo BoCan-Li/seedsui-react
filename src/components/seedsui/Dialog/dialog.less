@@ -1,4 +1,4 @@
-/*----------------dialog.less(start)--------------*/
+//----------------dialog.less(start)--------------*/
 .dialog-mask{
 	z-index:2;	
 }
@@ -20,7 +20,7 @@
 		visibility:visible;
 	}
 
-	/*======动画======*/
+	// 全局动画
 	&[data-animation="slideLeft"]{
 		//left:0;
 		-webkit-transform:translate3d(100%,0,0);
@@ -68,7 +68,7 @@
 		}
 	}
 
-	/*======middle======*/
+	// 中间弹出
 	&.middle{
 		top:50%;
 		left:50%;
@@ -83,7 +83,7 @@
 		}
 	}
 
-	/*======top======*/
+	// 顶部弹出
 	&.top,&.top-center,&.top-right{
 		top:0;
 	}
@@ -114,7 +114,7 @@
 		-webkit-transform-origin:right top;
 	}
 
-	/*======bottom======*/
+	// 底部弹出
 	&.bottom,&.bottom-center,&.bottom-right{
 		bottom:0;
 	}
@@ -145,7 +145,7 @@
 		-webkit-transform-origin:right bottom;
 	}
 
-	/*======left======*/
+	// 左侧弹出
 	&.left,&.left-middle,&.left-bottom{
 		left:0;
 	}
@@ -176,7 +176,7 @@
 		-webkit-transform-origin:left bottom;
 	}
 	
-	/*======right======*/
+	// 右侧弹出
 	&.right,&.right-middle,&.right-bottom{
 		right:0;
 	}
@@ -207,4 +207,4 @@
 		-webkit-transform-origin:right bottom;
 	}
 }
-/*--------------------dialog.less(end)----------------------*/
+//--------------------dialog.less(end)----------------------*/

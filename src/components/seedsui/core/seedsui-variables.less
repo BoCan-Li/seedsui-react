@@ -1,4 +1,4 @@
-/* 尺寸 */
+// 尺寸
 @px-scale:1;
 @1px:1px * @px-scale;
 @2px:2px * @px-scale;
@@ -114,17 +114,17 @@
 @1122px:1122px * @px-scale;
 @1136px:1136px * @px-scale;
 
-/* 文字尺寸 */
+// 文字尺寸
 @font-size-lg:@16px;
 @font-size-md:@14px;
 @font-size-sm:@12px;
 
-/* ios11安全区域 */
+// ios11安全区域
 // @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // 向刘海再移动49px
 @safe-bottom: constant(safe-area-inset-bottom); // 刘海留白,内容只显示在安全区域
 @animatioin-duration: 300ms;
 
-/* 基础 */
+// 基础
 @font-family:Arial,"Microsoft Yahei";
 @body-bg:#f5f5f9;
 @body-color:#333;
@@ -143,7 +143,7 @@
 @border:#E5E5E5;
 @dpborder:#e5e5e5;
 
-/* 常用颜色 */
+// 常用颜色
 @disable-bg:#d1d1d1;
 @submit-bg:#68c75f;
 @cancel-bg:#F86868;
@@ -173,7 +173,7 @@
 @random9-bg:#ff618f;
 @random10-bg:#21d9a1;
 
-/* Bg背景 */
+// Bg背景
 .setBgNoImg(){
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAACqCAMAAAAKqCSwAAAATlBMVEXw8PDZ2dnr6+u2trb////d3d3n5+fh4eHq6url5eXW1tbR0dHGxsbv7+/CwsLj4+Pu7u7IyMi+vr7Ly8u7u7vY2NjOzs7f39+4uLj19fVfdL0JAAADP0lEQVR42u3ZYW+jMAyAYceuQ0IoJIEB+/9/9BZYOtox7XS3ckHnR2rVj2+R3UQqCCGEEEIIIYQQQgghhBBCPLCs/hJbOIRVP+CYVlY/gOEI6kfADkmVVEmVVEn9TR16M50hVV8Wr1PxqXDJusJT8fJhKjqVLxuvRaeayxaXnPp62bLnSdXnSS36qeJ5ZnU6zy+Agk1qVXbqZlpN4aeVUte8U8XfAZRiA69gz3CzOtV9VVL/99RO80lSLaLhU6RqTKbyU9ngqio9dTKY2bJTJ9ywJad2eEdzsakWHxguNFXjJ2YqMZUN7qnKS2X8Qlda6oRf0v8i1fI3q7/P8OGpGnH6dvX3W+EID2vTqR0Gv2HgCI8npt1b/W/BEdSqwkx/Li0qtds7gvJ3KCrVYrLX2mFZqXr3CEosFpXKZvcISjQWlbq/NnZdqKJSK9ynU2lZqfgVg3iWVJTUP+fxB3jYU2KrByGEEEIIIf530wQfEP6EZwNPp60dgn2D4C2Pw4Cpt7oDb7B+gJBwe4U3hhieLtI7VkRD6+wSQHdSjabYbkTSkLzQcaloh94kXg0G3nmd9FGvYEmt0nvQsKiOTk3C4LsZAUANcG+MkOXUhuoE/0mqpdg31Pe9rqlJeshC+5jqqB/HsZ23qZhYUoh4hae6Oud6Gp0z4+Bc+/aCrGnuU31DsUHgud4OwIaCp6sIAaEZAcZ27V/E/vpuTeXY+TA4crBN5Q8Gnor70EQaiCxxTg30oF8HwAO+zDQof79WR+F+dCOxNePgc2qlkpqcol4l3ZJa1c0ca+3mOXBOrQkO1UVMfQDgGripZw9Ub2Z1bF1VTwCoQsipbuYM4ek6t8Fw0/Zwn7os4RBf/GZWe7qx8HQ1NTdDgMwQP6Ymvo7btWoDrviYVA9Ze0v17ew/pYaeEa6bp+pJwao6+qnOt9SRFORU5d5TuR+odd1HKpM5NrV+yWLIBwM5uKWO7ccAdHVL8ZbaRDg2Fa9ZG9aeSD0ka3DsUyqbd/btE5Ne+tTBqRtLqqOBYdHMTQiROKXeS6k4NHBwatVlMayz6WGlXQhhnCClKruhltRg7lLPQv4MEEIIIYQQQgghhBBCCCGEECf1C/gmN8hELxs9AAAAAElFTkSuQmCC');
 }
@@ -193,7 +193,7 @@
   .setBgTel();
 }
 
-/* Card卡片 */
+// Card卡片
 .setCard(){
   background-color:white;
   border: 1px solid @border;
@@ -201,21 +201,22 @@
   border-radius: 4px;
 }
 
-/* Aside侧边栏控件 */
+// Aside侧边栏控件
 @aside-bg:@body-bg;
 
-/* Input文本框控件 */
+// Input文本框控件
 @input-text-padding: @10px 0;
 @input-text-height: @22px;
 
-/* Sliver标题长条 */
+// Sliver标题长条
 @sliver-bg:transparent;
 @sliver-color:#333;
 @sliver-raption-color:@sub-color;
 
-/* List列表 */
+// List列表
 @list-bg: transparent;
 @list-bg-active: #f0f0f0;
+@list-rcaption-color: @sub-color;
 @list-sndcaption-color: @sub-color;
 .setListAvatar(){
   &:extend(.bg-no-avatar);
@@ -224,7 +225,7 @@
   &:extend(.bg-no-img);
 }
 
-/* Grid */
+// Grid
 @grid-title-color: @sub-color;
 @grid-caption-color: @body-color;
 @grid-sndcaption-color: @sub-color;
@@ -234,7 +235,7 @@
   &:extend(.icon-plus all);
 }
 
-/* Titlebar */
+// Titlebar
 @titlebar-bg:#fff;
 @titlebar-bg-active:#fff;
 @titlebar-border:@border;
@@ -254,7 +255,7 @@
 @titlebar-reverse-color:white;
 @titlebar-reverse-color-active:white;
 
-/* Tabbar-line */
+// Tabbar-line
 @tabbar-line-color:#666;
 @tabbar-line-bg:#fff;
 @tabbar-line-border:@border;
@@ -269,7 +270,7 @@
 @tabbar-line-reverse-bg-active:@primary-bg;
 @tabbar-line-reverse-border-active:white;
 
-/* Tabbar-rect */
+// Tabbar-rect
 @tabbar-rect-color:#666;
 @tabbar-rect-bg:white;
 @tabbar-rect-border:@border;
@@ -282,7 +283,7 @@
 @tabbar-rect-reverse-color-active:@primary-bg;
 @tabbar-rect-reverse-bg-active:white;
 
-/* Tabbar-lump */
+// Tabbar-lump
 @tabbar-lump-radius: @28px;
 
 @tabbar-lump-color:#333;
@@ -299,7 +300,7 @@
 @tabbar-lump-reverse-bg-active:white;
 @tabbar-lump-reverse-border-active:@primary-bg;
 
-/* Tabbar-dropdown */
+// Tabbar-dropdown
 @tabbar-dropdown-color:#666;
 @tabbar-dropdown-bg:white;
 @tabbar-dropdown-border:@border;
@@ -312,7 +313,7 @@
 @tabbar-dropdown-reverse-color-active:white;
 @tabbar-dropdown-reverse-bg-active:transparent;
 
-/* Tabbar-footer */
+// Tabbar-footer
 @tabbar-footer-color:#666;
 @tabbar-footer-bg:white;
 @tabbar-footer-color-active:@primary-bg;
@@ -323,22 +324,22 @@
 @tabbar-footer-reverse-color-active:white;
 @tabbar-footer-reverse-bg-active:transparent;
 
-/* Button按钮 */
+// Button按钮
 @button-bg:white;
 @button-color:@body-color;
 @button-border:@dpborder;
-/* 按钮-点击与选中 */
+// 按钮-点击与选中
 @button-checked-bg:white;
 @button-checked-color:@primary-bg;
 @button-checked-border:@primary-bg;
-/* 按钮-禁用 */
+// 按钮-禁用
 @button-disabled-bg:#e1e1e1;
 @button-disabled-color:#adadad;
 @button-disabled-border:@dpborder;
 
 @button-tip-bg:rgba(0, 0, 0, .15);
 
-/* Toast */
+// Toast
 @toast-top-color:white;
 @toast-top-bg:rgba(0,0,0,.6);
 
@@ -348,12 +349,12 @@
 @toast-bottom-color:white;
 @toast-bottom-bg:rgba(0,0,0,.6);
 
-/* alert框 */
+// Alert框
 @alert-title-size: @font-size-md;
 @alert-handler-size: @font-size-md;
 @alert-button-color: #333;
 
-/* Notice提示页 */
+// Notice提示页
 @notice-color: @sub-color;
 @notice-bg: @body-bg;
 .setNoticeNoDataIcon(){
@@ -365,18 +366,18 @@
   &:extend(.icon-no-network all);
 }
 
-/* Avatar头像 */
+// Avatar头像
 @avatar-background-size: cover;
 @avatar-color:@placeholder;
 @avatar-bg:#ddd;
 @avatar-border:0;
 
-/* Thumbnail缩略图 */
+// Thumbnail缩略图
 @thumbnail-background-size: contain;
 @thumbnail-bg: white;
 @thumbnail-border: 1px solid #e5e5e5;
 
-/* Turn开关 */
+// Turn开关
 @turn-border:@border;
 @turn-bg:white;
 @turn-color:#666;
@@ -384,7 +385,7 @@
 @turn-bg-active:#55acee;
 @turn-color-active:white;
 
-/* Calendar日历 */
+// Calendar日历
 @calendar-week-color:@sub-color;
 @calendar-arrow-color:@placeholder;
 @calendar-current-color:@body-color;
@@ -396,7 +397,7 @@
 @calendar-checked-border:@primary-bg;
 @calendar-checked-bg:@primary-bg;
 
-/* Progress进度条 */
+// Progress进度条
 .setProgress(){
   height:@16px;
   border-radius:@6px;
@@ -412,26 +413,7 @@
   font-size: 12px;
   text-align: right;
 
-  /* &.theme-1{
-    background-color:#32d2ea;
-    border-color: #36b0cf;
-  }
-  &.theme-2{
-    background-color:#6fb1ff;
-    border-color: #439fd9;
-  }
-  &.theme-3{
-    background-color:#ff9a5c;
-    border-color: #e57430;
-  }
-  &.theme-4{
-    background-color:#b79fff;
-    border-color: #8c6bf4;
-  }
-  &.theme-5{
-    background-color:#61e264;
-    border-color: #43c847;
-  }
+  /*
   //3D样式
   &.threed {
     border-width: 0;
@@ -480,7 +462,7 @@
   background-color:#F3F3F9;
 }
 
-/* Numbox数字框 */
+// Numbox数字框
 @numbox-button-color:#666;
 @numbox-button-disabled-color:#ccc;
 @numbox-width: @100px;
@@ -492,14 +474,14 @@
 @numbox-width-sm: @80px;
 @numbox-height-sm: @22px;
 
-/* Picker选择器 */
+// Picker选择器
 @picker-bg:#f5f5f9;
 @picker-button-color: @primary-bg;
 @picker-button-disabled-color: #d1d1d1;
 @picker-header-bg:#fff;
 @picker-selected-bg:#F5F5F9;
 
-/* SelectPicker选择器 */
+// SelectPicker选择器
 @selectpicker-color-active: @primary-bg;
 .setPickerOptionIcon(){
   font-family: 'iconfont';
@@ -509,19 +491,19 @@
   height: 16px;
 }
 
-/* Dot小点点 */
+// Dot小点点
 @dot-bg:@placeholder;
 @dot-bg-active:#51BD89;
 
-/* Timeline时间轴 */
+// Timeline时间轴
 @timeline-case:#999;
 @timeline-case-active:#51BD89;
 
-/* Price价格 */
+// Price价格
 @price: #EB464A;
 @priceunit: #aaa;
 
-/* Checkbox控件 */
+// Checkbox控件
 @checkbox-color: @placeholder;
 @checkbox-color-active: @primary-bg;
 @checkbox-color-disable: @disable-bg;
@@ -534,7 +516,7 @@
   &:extend(.icon-rdo-checked all);
 }
 
-/* Radio控件 */
+// Radio控件
 @radio-color: @placeholder;
 @radio-color-active: @primary-bg;
 @radio-color-disable: @disable-bg;
@@ -547,10 +529,10 @@
   &:extend(.icon-rdo-checked all);
 }
 
-/* Switch控件 */
+// Switch控件
 @switch-bg-active: @primary-bg;
 
-/* Star星星控件 */
+// Star星星控件
 @star-color: @placeholder;
 @star-color-active: @warn-bg;
 .setStarIcon(){
@@ -562,14 +544,14 @@
   &:extend(.icon-star-fill all);
 };
 
-/* Attribute属性控件 */
+// Attribute属性控件
 
-/* Dragrefresh下拉刷新控件 */
+// Dragrefresh下拉刷新控件
 .setDragrefreshCircleIcon(){
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http://www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20viewBox%3D%220%200%201000.6%201000.6%22%3E%0D%0A%3Cpath%20fill%3D%22%2320aeff%22%20d%3D%22M867.4%2C456.1c-24.1%2C0-43.8%2C19.7-43.8%2C43.8c0%2C1.5%2C0.1%2C3.1%2C0.3%2C4.6c-2.2%2C176.4-147.1%2C319.6-323.7%2C319.6%0D%0A%09c-178.5%2C0-323.8-145.3-323.8-323.8s145.3-323.8%2C323.8-323.8c62.8%2C0%2C122.8%2C17.7%2C174.4%2C50.8l-29%2C52.2c0%2C0%2C138.4%2C2.2%2C149.2%2C2.4%0D%0A%09c10.8%2C0.2%2C14.6-5.6%2C14.6-5.6s5.1-5.8%2C2.4-15.5c-2.6-9.7-43.2-162.2-43.2-162.2l-38.5%2C61.1c-67.3-45.7-146.7-70.1-229.8-70.1%0D%0A%09c-226.6%2C0-411%2C184.4-411%2C411s184.4%2C411%2C411%2C411c225.8%2C0%2C410.1-183.7%2C410.9-407.3l0.2-4.2C911.2%2C475.7%2C891.6%2C456.1%2C867.4%2C456.1z%22/%3E%0D%0A%3C/svg%3E");
 };
 
-/* Searchbar搜索栏控件 */
+// Searchbar搜索栏控件
 @searchbar-icon-color: #b6b6b6;
 .setSearchbarIconSearch(){
   font-family: 'iconfont';
@@ -580,22 +562,22 @@
   &:extend(.icon-clear all);
 }
 
-/* SearchBoard搜索面板控件 */
+// SearchBoard搜索面板控件
 .setSearchBoardTrash(){
   font-family: 'iconfont';
   &:extend(.icon-trash all);
 }
 
-/* Close */
+// Close
 .setCloseIconClear(){
   font-family: 'iconfont';
   &:extend(.icon-clear all);
 }
 
-/* Tree */
+// Tree
 @tree-bar-bg: @titlebar-bg;
 
-/* MenuTree侧边菜单 */
+// MenuTree侧边菜单
 @menutree-bg: #fff;
 @menutree-tag-color: #666;
 @menutree-tag-bg: transparent;
@@ -609,7 +591,7 @@
   margin-right: 1px;
 }
 .setMenuTreeTag(){
-  /* 画个底线 */
+  // 画个底线
   &:after{
     content: '';
     position: absolute;
@@ -620,7 +602,7 @@
     background-color: #e5e5e5;
     // border-bottom: @1px dotted #bfbfbf;
   }
-  /* 二级选中 */
+  // 二级选中
   +ul .menutree-tag.active{
     color: @primary-bg;
     &:before{
@@ -629,7 +611,7 @@
   }
 }
 .setMenuTreeTagActive(){
-  /* 左侧选中块 */
+  // 左侧选中块
   &:before{
     position: absolute;
     content: '';
@@ -648,7 +630,7 @@
   -webkit-transform: rotate(180deg);
 }
 
-/* menutiled弹出菜单 */
+// menutiled弹出菜单
 @menutiled-bg: #fff;
 @menutiled-slot-max-height: 300px;
 @menutiled-slot-sub-bg: #f5f5f9;
@@ -696,7 +678,7 @@
 .setMenuTiledSelectActive(){
   visibility: visible;
 }
-/* Carrousel轮播 */
+// Carrousel轮播
 .setCarrouselPagination(){
   text-align: center;
 }
@@ -709,7 +691,7 @@
   background-color:@primary-bg;
 }
 
-/* Layout间距 */
+// Layout间距
 @wingblank-xl: @24px;
 @wingblank-lg: @20px;
 @wingblank-md: @12px;
@@ -722,13 +704,13 @@
 @whitespace-sm: @6px;
 @whitespace-xs: @2px;
 
-/* 一个像素的线 */
+// 一个像素的线
 .setContentLine(@b:@border){
   content: '';
   display: block;
   position: absolute;
   background-color: @b;
-  //兼容UC线条不显示的BUG
+  // 兼容UC线条不显示的BUG
   z-index:1;
   overflow: hidden;
   -webkit-backface-visibility:hidden;

@@ -1,5 +1,5 @@
-/*----------------switch.less(start)--------------*/
-/*关闭状态*/
+//----------------switch.less(start)--------------*/
+// 关闭状态
 .switch {
 	position: relative;
 	display: inline-block;
@@ -13,7 +13,7 @@
 	border-style:solid;
 	
 	border-color:@dpborder;
-	/*关闭状态文字off*/
+	// 关闭状态文字off
 	&:after{
 		position: absolute;
 		right: @11px;
@@ -23,7 +23,7 @@
 		
 		color: @placeholder;
 	}
-	/*关闭状态圆点*/
+	// 关闭状态圆点
 	.switch-handle{
 		pointer-events:none;
 		position: absolute;
@@ -38,10 +38,10 @@
 		
 		background-color:@dpborder;
 	}
-	/*打开状态*/
+	// 打开状态
 	&.active {
 		background-color:transparent;
-		/*打开状态文字on*/
+		// 打开状态文字on
 		&:after{
 			right: auto;
 			left: @11px;
@@ -49,7 +49,7 @@
 
 			color: @placeholder;
 		}
-		/*打开状态小圆点*/
+		// 打开状态小圆点
 		.switch-handle{
 			left:0;
 			top:50%;
@@ -58,7 +58,7 @@
 			background-color: @switch-bg-active;
 		}
 	}
-	/*开关控件toggle-反转*/
+	// 开关控件toggle-反转
 	&.reverse{
 		border:none;
 		background-color:white;
@@ -89,7 +89,7 @@
 		}
 	}
 }
-/*开关控件toggle-无文字*/
+// 开关控件toggle-无文字
 .notext.switch{
 	width: @50px;
 	&.active{
@@ -104,4 +104,4 @@
 		-webkit-transform: translate(@22px,-50%);
 	}
 }
-/*----------------switch.less(end)--------------*/
+//----------------switch.less(end)--------------*/
