@@ -47,6 +47,7 @@ export default class List extends Component {
     sndcaptionClassName: PropTypes.string,
     sndcaptionStyle: PropTypes.object,
 
+    containerClassName: PropTypes.string,
     containerStyle: PropTypes.object,
     containerAfter: PropTypes.node,
   }
@@ -98,7 +99,7 @@ export default class List extends Component {
       caption, captionClassName, captionStyle,
       rcaption, rcaptionClassName, rcaptionStyle,
       sndcaption, sndcaptionClassName, sndcaptionStyle,
-      containerStyle, containerAfter} = this.props;
+      containerClassName, containerStyle, containerAfter} = this.props;
     return (
       <div className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {(liconSrc || liconClassName) && <Icon className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
@@ -114,9 +115,8 @@ export default class List extends Component {
           {avatarSrc && <span className="list-avatar-img" style={{backgroundImage: `url(${avatarSrc})`}}></span>}
           {avatarAfter}
         </div>}
-        <div className="list-container" style={containerStyle} onClick={() => {onClickContainer && onClickContainer()}}>
+        <div className={`list-container${containerClassName ? ' ' + containerClassName : ''}`} style={containerStyle} onClick={() => {onClickContainer && onClickContainer()}}>
           {caption && <div className={`list-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</div>}
-          {rcaption && <div className={`list-rcaption${rcaptionClassName ? ' ' + rcaptionClassName : ''}`} style={rcaptionStyle}>{rcaption}</div>}
           {sndcaption && <div className={`list-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{sndcaption}</div>}
           {containerAfter}
           {/* <div className="row-flex box-middle">
@@ -130,6 +130,7 @@ export default class List extends Component {
             <p className="list-font">音箱，大屏，投影仪，WIFI，麦克风</p>
           </div> */}
         </div>
+        {rcaption && <div className={`list-rcaption${rcaptionClassName ? ' ' + rcaptionClassName : ''}`} style={rcaptionStyle}>{rcaption}</div>}
         {(riconSrc || riconClassName) && <Icon className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
         {ricon && ricon}
       </div>

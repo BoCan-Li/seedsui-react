@@ -79,11 +79,10 @@
 .list-rcaption{
   display: block;
   position: absolute;
-  top: 0;
   right: 0;
 }
 .list-sndcaption{
-  margin-top: @4px;
+  margin-top: @6px;
   display: block;
   color: @list-sndcaption-color;
 }
@@ -108,15 +107,8 @@
 }
 .list-li.oneline{
   &:extend(.box-middle);
-  .list-container{
-    &:extend(.box);
-    &:extend(.box-middle);
-    &>*{
-      display: block;
-    }
-  }
-  .list-sndcaption{
-    margin-top: 0;
+  .list-rcaption{
+    position: relative;
   }
 }
 /*---------------list.less(end)---------------*/
