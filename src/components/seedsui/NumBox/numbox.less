@@ -2,13 +2,17 @@
 .numbox{
   display:-webkit-inline-box;
   position:relative;
-  width:@numbox-width;
-  height:@numbox-height;
+  width:@numbox-width-md;
+  height:@numbox-height-md;
   overflow:hidden;
   text-align:center;
   vertical-align: middle;
   background-color:white;
   border-radius: 4px;
+}
+.numbox.md{
+  width:@numbox-width-md;
+  height:@numbox-height-md;
 }
 .numbox.xl{
   width: @numbox-width-xl;
@@ -50,7 +54,7 @@
 }
 .numbox-button{
   display: block;
-  width:@numbox-height;
+  width:@numbox-height-md;
   font-size:@20px;
   border-width: 0;
 

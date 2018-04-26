@@ -10,8 +10,11 @@ const UnitStyle = {
 export default class NumBoxPopPointer extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool, // 值是否绑定属性
-    // 文本框
+    className: PropTypes.string,
     style: PropTypes.object,
+    // numbox
+    numboxClassName: PropTypes.string,
+    numboxStyle: PropTypes.object,
     value: PropTypes.string,
     disabled: PropTypes.bool,
     unit: PropTypes.string,
@@ -26,7 +29,8 @@ export default class NumBoxPopPointer extends Component {
   static defaultProps = {
     args: null,
     min: 0,
-    max: 99999
+    max: 99999,
+    numboxClassName: 'sm'
   };
 
   constructor(props) {
@@ -94,11 +98,11 @@ export default class NumBoxPopPointer extends Component {
     return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} readOnly placeholder={placeholder} onClick={this.onClickNumBox} className={`numbox-input`} disabled={min >= max}/>;
   }
   render() {
-    const {style, min, max, digits, unit, value, disabled, args} = this.props;
+    const {className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
     const {show} = this.state;
     return (
-      <div style={Object.assign({position: 'relative'}, style)}>
-        <div disabled={disabled} className={`numbox sm bordered`}>
+      <div style={Object.assign({position: 'relative'}, style)} className={className}>
+        <div disabled={disabled} className={`numbox bordered${numboxClassName ? ' ' + numboxClassName : ''}`} style={numboxStyle}>
           <input type="button" className="numbox-button" disabled={this.$input ? this.$input.value <= min : value <= min} value="-" onClick={this.onClickMinus}/>
           {this.getInputDOM()}
           <input type="button" className="numbox-button" disabled={this.$input ? this.$input.value >= max : value >= max} value="+" onClick={this.onClickPlus}/>
