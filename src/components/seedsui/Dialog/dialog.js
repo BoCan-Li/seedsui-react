@@ -91,10 +91,6 @@ var Dialog = function (params) {
     } else {
       s.create()
     }
-    if (!s.wrapper) {
-      console.log('SeedsUI Error：未找到Dialog的DOM对象，请检查传入参数是否正确')
-      return
-    }
     var style
     // Dialog Css
     for (style in s.params.css) {
