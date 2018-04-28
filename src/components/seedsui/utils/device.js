@@ -41,6 +41,8 @@ var Device = (function () {
     platform = 'uc'
   } else if (ua.indexOf('dinghuoappversion') > -1) {
     platform = 'dinghuo'
+  } else if (ua.indexOf('wqappversion') > -1) {
+    platform = 'waiqin'
   }
   // 获得苹果机型
   function appleModel () { // 获取设备型号

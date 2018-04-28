@@ -10,7 +10,7 @@ import Routes from './routes.js'
 // 换click事件为tap
 import FastClick from 'fastclick';
 // 在订货客户端ios里使用FastClick,文本框将无法获取焦点
-if (Device.platform !== 'dinghuo' || Device.os !== 'ios') {
+if (Device.platform !== 'waiqin' || Device.platform !== 'dinghuo' || Device.os !== 'ios') {
   FastClick.attach(document.body);
 }
 // 适配iPhoneX
