@@ -42,7 +42,7 @@ function getServedPath(appPackageJson) {
 // config after eject: we're in ./config/
 module.exports = {
   // 本地服务器端口号
-  uriPort: 4040,
+  uriPort: 4444,
   dotenv: resolveApp('.env'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),

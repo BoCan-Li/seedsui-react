@@ -211,7 +211,7 @@ var Bridge = {
         console.log(error);
       }
     } else {
-      history.go(-1);
+      window.history.go(-1);
     }
   },
   /**

@@ -31,15 +31,15 @@ var Bridge = {
   * params: {url:''}
   * */
   openWindow: function (params) {
-    location.href = params.url
+    window.location.href = params.url
   },
   /* 关闭窗口 */
   closeWindow: function () {
-    history.go(-1)
+    window.history.go(-1)
   },
   /* 回到主页 */
   goHome: function () {
-    history.go(-2)
+    window.history.go(-2)
   },
   /* 判断是否是主页 */
   isHomePage: function (callback, rule) {
@@ -133,7 +133,7 @@ var Bridge = {
     console.log('身份认证未通过,需要重新登录')
     // const history = createHistory()
     // let login_url = '/h5fw/#/_react_/login'
-    // history.replace(login_url)
+    // window.history.replace(login_url)
     // window.location.reload()
   },
   // 获取上传图片路径,与后端约定好的固定格式, tenantId/项目名/自定义路径/月份

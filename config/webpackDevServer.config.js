@@ -107,7 +107,7 @@ module.exports = function(proxy, allowedHost) {
         proxyTimeout: 20 * 1000,
         ws: false
       });
-      // '/api'代理过滤器,将请求地址http:localhost:4040/api变为http://172.31.3.333:8888/,使用代理去发请求,并返回结果响应信息
+      // '/api'代理过滤器,将请求地址http:localhost:4444/api变为http://172.31.3.333:8888/,使用代理去发请求,并返回结果响应信息
       app.use('/api', (req, res) => {
         proxy.web(req, res, {target: targetUrl + '/'});
       });
