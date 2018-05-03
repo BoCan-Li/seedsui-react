@@ -81,7 +81,7 @@ export default class Page extends Component {
       };
     }
     // 无边框的单元格
-    if (className.hasClass('between')) { // between对齐模式
+    if (className && className.hasClass('between')) { // between对齐模式
       return {
         ulStyle: {
           padding: `${space / 2}px 0px`
