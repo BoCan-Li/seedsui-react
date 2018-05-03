@@ -9,7 +9,8 @@ import NotFound from 'components/seedsui/NotFound/NotFound.jsx';
 import {
   Home,
   Box,
-  CarrouselPage
+  CarrouselPage,
+  Form
 } from 'containers';
 const Routes = () => (
   <Provider store={store}>
@@ -22,6 +23,8 @@ const Routes = () => (
         <Route exact path="/_react_/box" component={Box}/>
         {/* 轮播页 */}
         <Route exact path="/_react_/carrouselPage" component={CarrouselPage}/>
+        {/* 表单 */}
+        <Route exact path="/_react_/form" component={Form}/>
 
         {/* 重定向 */}
         <Route exact path="/" render={() => (

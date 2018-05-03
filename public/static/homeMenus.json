@@ -63,7 +63,7 @@
       "iconSrc": "/static/images/grid.png",
       "caption": "表单",
       "sndcaption": "Form",
-      "url": ""
+      "url": "/_react_/form"
     },
     {
       "iconBadgeCaption": "",
