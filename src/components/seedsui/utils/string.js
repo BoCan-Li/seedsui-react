@@ -37,6 +37,14 @@ window.String.prototype.toUTF8 = function () {
   }
   return value
 }
+// 转为URI编码
+window.String.prototype.toURI = function () {
+  return encodeURI(this)
+}
+// 转为URI全编码
+window.String.prototype.toURIComponent = function () {
+  return encodeURIComponent(this)
+}
 // ASCII,unicode,UTF8解码
 window.String.prototype.decode = function () {
   var str = this
@@ -49,23 +57,7 @@ window.String.prototype.decode = function () {
   str = str.replace(/(&#)(\d{1,6});/gi, function ($0) {
     return String.fromCharCode(parseInt(escape($0).replace(/(%26%23)(\d{1,6})(%3B)/g, "$2"), 10))
   })
-  return str
-}
-// 转为URI编码
-window.String.prototype.encodeURI = function () {
-  return encodeURI(this)
-}
-// 转为URI全编码
-window.String.prototype.encodeURIComponent = function () {
-  return encodeURIComponent(this)
-}
-// URI解码
-window.String.prototype.encodeURI = function () {
-  return decodeURI(this)
-}
-// URI全解码
-window.String.prototype.decodeURIComponent = function () {
-  return decodeURIComponent(this)
+  return decodeURIComponent(str)
 }
 
 // 去除字符串左右两端的空格
