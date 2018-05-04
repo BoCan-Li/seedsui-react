@@ -34,8 +34,7 @@ const getPublicUrl = appPackageJson =>
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
   // 打包后放置的服务器目录
-  const servedUrl =
-    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/h5_fw/');
+  const servedUrl = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : './'); // 如果入口是jsp,pathname需要换成绝对路径
   return ensureSlash(servedUrl, true);
 }
 
