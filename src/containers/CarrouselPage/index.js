@@ -24,8 +24,25 @@ export default class CarrouselPage extends Component {
 
   constructor(props, context) {
     super(props, context);
+    this.state = {
+      speed: 300, // 轮播页的动画速度
+    };
   }
   componentDidMount = () => {
+    // 如果是返回,则不刷新数据
+    if (this.props.history.action === 'POP') {
+      if (this.props.tabActiveIndex !== 0) {
+        this.setState({
+          speed: 0
+        });
+        setTimeout(() => {
+          this.setState({
+            speed: 300
+          });
+        }, 300);
+      }
+      return;
+    }
   }
   componentWillUnmount() {
   }
@@ -43,7 +60,7 @@ export default class CarrouselPage extends Component {
           <Titlebar caption="轮播页"/>
           <Tabbar list={tabs} activeIndex={tabsActiveIndex} onClick={this.onClickTab}/>
         </Header>
-        <Carrousel className="carrousel-page" style={{top: '84px'}} onChange={this.onSlideEnd} activeIndex={tabsActiveIndex}>
+        <Carrousel speed={this.state.speed} className="carrousel-page" style={{top: '84px'}} onChange={this.onSlideEnd} activeIndex={tabsActiveIndex}>
           {/* 第一页 */}
           <div>
             <Notice caption="第一页" iconClassName="notice-icon-nodata"/>
