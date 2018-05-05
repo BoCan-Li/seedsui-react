@@ -171,7 +171,7 @@ var Device = (function () {
     ua: ua,
     orientation: window.orientation || '请在真机上测试', // 设备方向0:竖屏,90:左横屏,-90:右横屏
     adapterIphoneX: adapterIphoneX, // 适配iPhoneX
-    dynamicLoadWx: dynamicLoadWx, // 动态加载微信
+    dynamicLoadBridge: dynamicLoadBridge, // 动态加载桥接库
     getUrlParameter: getUrlParameter
   }
 })()
