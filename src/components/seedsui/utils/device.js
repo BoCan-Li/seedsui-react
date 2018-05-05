@@ -116,12 +116,15 @@ var Device = (function () {
     adjustIphoneX();
     window.addEventListener('orientationchange', adjustIphoneX, false);
   }
-  // 动态加载微信
-  function dynamicLoadWx () {
+  // 动态加载桥接库
+  function dynamicLoadBridge () {
+    var bridgeScript = document.createElement('script')
     if (platform === 'weixin') {
-      var wxScript = document.createElement('script')
-      wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.0.js'
-      document.body.appendChild(wxScript);
+      bridgeScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.0.js'
+      document.body.appendChild(bridgeScript);
+    } else if (platform === 'waiqin') {
+      bridgeScript.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
+      document.body.appendChild(bridgeScript);
     }
   }
   // 获取地址栏参数

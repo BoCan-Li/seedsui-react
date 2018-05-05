@@ -24,7 +24,7 @@ var Bridge = {
   * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
   * */
   openWindow: function (params) {
-    wq.wqload.wqOpenUrl(null, null, params) // eslint-disable-line
+    wq.wqload.wqOpenUrl(null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
   },
   // 关闭当前窗
   closeWindow: function () {
@@ -211,7 +211,7 @@ var Bridge = {
         console.log(error);
       }
     } else {
-      window.history.go(-1);
+      history.go(-1);
     }
   },
   /**

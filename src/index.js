@@ -15,8 +15,8 @@ if (Device.platform !== 'waiqin' || Device.platform !== 'dinghuo' || Device.os !
 }
 // 适配iPhoneX
 Device.adapterIphoneX();
-// 动态加载微信
-// Device.dynamicLoadWx();
+// 动态加载桥接库
+// Device.dynamicLoadBridge();
 
 ReactDOM.render(
   <Routes />,
