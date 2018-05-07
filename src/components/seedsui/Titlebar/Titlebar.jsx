@@ -22,6 +22,7 @@ export default class Titlebar extends Component {
     children: PropTypes.node
   }
   static defaultProps = {
+    lButtons: ['$back'],
     className: 'border-b'
   }
   constructor(props) {
@@ -54,6 +55,12 @@ export default class Titlebar extends Component {
   }
   getButtonsDOM = (arr) => {
     return arr.map((item, index) => {
+      if (item === '$back') {
+        item = {
+          iconClassName: 'shape-arrow-left',
+          onClick: this.onClickBack
+        };
+      }
       return (
         <a key={index} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button${item.className ? ' ' + item.className : ''}`} style={item.style}>
           {(item.iconSrc || item.iconClassName) && <Icon className={`${item.iconClassName ? ' ' + item.iconClassName : ''}`} src={item.iconSrc ? item.iconSrc : ''} style={item.iconStyle}/>}
@@ -70,16 +77,11 @@ export default class Titlebar extends Component {
       lButtons, rButtons
     } = this.props;
     let lButtonsDOM = null;
-    if (lButtons) {
+    if (Array.isArray(lButtons)) {
       lButtonsDOM = this.getButtonsDOM(lButtons);
-    } else {
-      lButtonsDOM = this.getButtonsDOM([{
-        iconClassName: 'shape-arrow-left',
-        onClick: this.onClickBack
-      }]);
     }
     let rButtonsDOM = null;
-    if (rButtons && rButtons.length > 0) {
+    if (Array.isArray(rButtons)) {
       rButtonsDOM = this.getButtonsDOM(rButtons);
     }
     const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>);
