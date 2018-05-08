@@ -1,44 +1,44 @@
 // DateUtil
-window.Date.prototype.minuteMilliSecond = 60 * 1000
-window.Date.prototype.hourMilliSecond = 60 * 60 * 1000
-window.Date.prototype.dayMilliSecond = 24 * 60 * 60 * 1000
-window.Date.prototype.weekMilliSecond = 7 * 24 * 60 * 60 * 1000
+Date.prototype.minuteMilliSecond = 60 * 1000
+Date.prototype.hourMilliSecond = 60 * 60 * 1000
+Date.prototype.dayMilliSecond = 24 * 60 * 60 * 1000
+Date.prototype.weekMilliSecond = 7 * 24 * 60 * 60 * 1000
 
 /*
   * 年操作
   * */
 // 年
-window.Date.prototype.year = function (year) {
+Date.prototype.year = function (year) {
   if (year) this.setYear(year)
   return this.getFullYear().toString()
 }
 // 上一年
-window.Date.prototype.prevYear = function (count) {
+Date.prototype.prevYear = function (count) {
   this.setYear(this.getFullYear() - (count || 1))
   return this.getFullYear().toString()
 }
 // 下一年
-window.Date.prototype.nextYear = function (count) {
+Date.prototype.nextYear = function (count) {
   this.setYear(this.getFullYear() + (count || 1))
   return this.getFullYear().toString()
 }
 // 是否是闰年
-window.Date.prototype.isLeap = function () {
+Date.prototype.isLeap = function () {
   var year = this.getFullYear()
   return (year % 4 === 0) && (year % 100 !== 0 || year % 400 === 0)
 }
 // 当年第一天
-window.Date.prototype.firstYearDate = function () {
+Date.prototype.firstYearDate = function () {
   this.setMonth(0, 1)
   return this
 }
 // 当年最后一天
-window.Date.prototype.lastYearDate = function () {
+Date.prototype.lastYearDate = function () {
   this.setMonth(11, 31)
   return this
 }
 // 返回当月共多少天
-window.Date.prototype.getYearDate = function () {
+Date.prototype.getYearDate = function () {
   return this.isLeap() ? 366 : 365
 }
 
@@ -46,50 +46,50 @@ window.Date.prototype.getYearDate = function () {
   * 季操作
   * */
 // 季, 返回:0.季度,1.季度第一天,2.季度最后一天
-window.Date.prototype.season = function (argCount) {
+Date.prototype.season = function (argCount) {
   var count = argCount || Math.ceil((this.getMonth() + 1) / 3)
   // 修改月
   this.setMonth(count * 3 - 3, 1)
   return count
 }
 // 上一季
-window.Date.prototype.prevSeason = function (count) {
+Date.prototype.prevSeason = function (count) {
   // 获得当前季的第一个月
   this.setMonth(this.getMonth() - (3 * (count || 1)), 1)
   return Math.ceil((this.getMonth() + 1) / 3)
 }
 // 下一季
-window.Date.prototype.nextSeason = function (count) {
+Date.prototype.nextSeason = function (count) {
   // 获得当前季的第一个月
   this.setMonth(this.getMonth() + (3 * (count || 1)), 1)
   return Math.ceil((this.getMonth() + 1) / 3)
 }
 // 第一季
-window.Date.prototype.firstSeason = function () {
+Date.prototype.firstSeason = function () {
   this.season(1)
   return 1
 }
 // 第四季
-window.Date.prototype.lastSeason = function () {
+Date.prototype.lastSeason = function () {
   this.season(4)
   return 4
 }
 // 当季第一天
-window.Date.prototype.firstSeasonDate = function () {
+Date.prototype.firstSeasonDate = function () {
   var count = Math.ceil((this.getMonth() + 1) / 3)
   this.setYear(this.getFullYear())
   this.setMonth(count * 3 - 3, 1)
   return this
 }
 // 当季最后一天
-window.Date.prototype.lastSeasonDate = function () {
+Date.prototype.lastSeasonDate = function () {
   var count = Math.ceil((this.getMonth() + 1) / 3)
   this.setYear(this.getFullYear())
   this.setMonth(count * 3, 0)
   return this
 }
 // 返回当季共多少天
-window.Date.prototype.getSeasonDate = function () {
+Date.prototype.getSeasonDate = function () {
   // 季度
   var count = Math.ceil((this.getMonth() + 1) / 3)
   // 平闰年2月的差别
@@ -101,7 +101,7 @@ window.Date.prototype.getSeasonDate = function () {
   * 月操作
   * */
 // 月, 参数:1-12或者字符串'yyyy-MM', 如果当前日期大于目标月最大日期,则取目标月最大日期
-window.Date.prototype.month = function (month) {
+Date.prototype.month = function (month) {
   var targetYear = null // 目标年份
   var targetMonth = null // 目标月份
   var targetMaxDate = null
@@ -133,7 +133,7 @@ window.Date.prototype.month = function (month) {
   return num < 10 ? '0' + num : num
 }
 // 上一月
-window.Date.prototype.prevMonth = function (count) {
+Date.prototype.prevMonth = function (count) {
   var targetMonth = this.getMonth() - (count || 1)
   var targetMaxDate = new Date(this.getFullYear(), targetMonth + 1, 0).getDate()
   if (this.getMonthDate() > targetMaxDate) {
@@ -144,7 +144,7 @@ window.Date.prototype.prevMonth = function (count) {
   return targetMonth < 10 ? '0' + targetMonth : targetMonth
 }
 // 下一月
-window.Date.prototype.nextMonth = function (count) {
+Date.prototype.nextMonth = function (count) {
   var targetMonth = this.getMonth() + (count || 1)
   var targetMaxDate = new Date(this.getFullYear(), targetMonth + 1, 0).getDate()
   if (this.getMonthDate() > targetMaxDate) {
@@ -155,27 +155,27 @@ window.Date.prototype.nextMonth = function (count) {
   return targetMonth < 10 ? '0' + targetMonth : targetMonth
 }
 // 一月
-window.Date.prototype.firstMonth = function () {
+Date.prototype.firstMonth = function () {
   this.setMonth(0)
   return '01'
 }
 // 十二月
-window.Date.prototype.lastMonth = function () {
+Date.prototype.lastMonth = function () {
   this.setMonth(11)
   return '12'
 }
 // 当月第一天
-window.Date.prototype.firstMonthDate = function () {
+Date.prototype.firstMonthDate = function () {
   this.setDate(1)
   return this
 }
 // 当月最后一天
-window.Date.prototype.lastMonthDate = function () {
+Date.prototype.lastMonthDate = function () {
   this.setMonth(this.getMonth() + 1, 0)
   return this
 }
 // 返回当月共多少天
-window.Date.prototype.getMonthDate = function () {
+Date.prototype.getMonthDate = function () {
   return new Date(this.getFullYear(), this.getMonth() + 1, 0).getDate()
 }
 
@@ -183,7 +183,7 @@ window.Date.prototype.getMonthDate = function () {
   * 周操作
   * */
 // 周几,参数:zh_cn
-window.Date.prototype.day = function (language) {
+Date.prototype.day = function (language) {
   var chDay = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
   if (language === 'zh_cn') {
     return chDay[this.getDay()]
@@ -191,7 +191,7 @@ window.Date.prototype.day = function (language) {
   return this.getDay()
 }
 // 周数
-window.Date.prototype.week = function (count) {
+Date.prototype.week = function (count) {
   // 当年的1月1日
   var january1 = new Date(this.getFullYear(), 0, 1)
   var january1Day = january1.getDay()
@@ -206,23 +206,23 @@ window.Date.prototype.week = function (count) {
   return num
 }
 // 上一周
-window.Date.prototype.prevWeek = function (count) {
+Date.prototype.prevWeek = function (count) {
   this.setTime(this.getTime() - (this.weekMilliSecond * (count || 1)))
   return this
 }
 // 下一周
-window.Date.prototype.nextWeek = function (count) {
+Date.prototype.nextWeek = function (count) {
   this.setTime(this.getTime() + (this.weekMilliSecond * (count || 1)))
   return this
 }
 // 周日,日历都是从周日开始的
-window.Date.prototype.sunday = function () {
+Date.prototype.sunday = function () {
   var day = this.getDay()
   this.setTime(this.getTime() - this.dayMilliSecond * day)
   return this
 }
 // 获得一周的日期
-window.Date.prototype.getWeeks = function () {
+Date.prototype.getWeeks = function () {
   var weeks = []
   var sunday = this.sunday()
   for (var i = 0; i < 7; i++) {
@@ -235,18 +235,18 @@ window.Date.prototype.getWeeks = function () {
   * 日操作
   * */
 // 日
-window.Date.prototype.date = function (date) {
+Date.prototype.date = function (date) {
   if (date) this.setDate(date)
   var num = this.getDate()
   return num < 10 ? '0' + num : num
 }
 // 上一天
-window.Date.prototype.prevDate = function (count) {
+Date.prototype.prevDate = function (count) {
   this.setTime(this.getTime() - (this.dayMilliSecond * (count || 1)))
   return this.date()
 }
 // 下一天
-window.Date.prototype.nextDate = function (count) {
+Date.prototype.nextDate = function (count) {
   this.setTime(this.getTime() + (this.dayMilliSecond * (count || 1)))
   return this.date()
 }
@@ -255,18 +255,18 @@ window.Date.prototype.nextDate = function (count) {
   * 时操作
   * */
 // 时
-window.Date.prototype.hour = function (hour) {
+Date.prototype.hour = function (hour) {
   if (hour) this.setHours(hour)
   var num = this.getHours()
   return num < 10 ? '0' + num : num
 }
 // 上一小时
-window.Date.prototype.prevHour = function (count) {
+Date.prototype.prevHour = function (count) {
   this.setTime(this.getTime() - (this.hourMilliSecond * (count || 1)))
   return this.hour()
 }
 // 下一小时
-window.Date.prototype.nextHour = function (count) {
+Date.prototype.nextHour = function (count) {
   this.setTime(this.getTime() + (this.hourMilliSecond * (count || 1)))
   return this.hour()
 }
@@ -274,23 +274,23 @@ window.Date.prototype.nextHour = function (count) {
   * 分操作
   * */
 // 分
-window.Date.prototype.minute = function (minute) {
+Date.prototype.minute = function (minute) {
   if (minute) this.setMinutes(minute)
   var num = this.getMinutes()
   return num < 10 ? '0' + num : num
 }
 // 上一分钟
-window.Date.prototype.prevMinute = function (count) {
+Date.prototype.prevMinute = function (count) {
   this.setTime(this.getTime() - (this.minuteMilliSecond * (count || 1)))
   return this.minute()
 }
 // 下一分钟
-window.Date.prototype.nextMinute = function (count) {
+Date.prototype.nextMinute = function (count) {
   this.setTime(this.getTime() + (this.minuteMilliSecond * (count || 1)))
   return this.minute()
 }
 // 返回当前分钟的下档位时间
-window.Date.prototype.nextMinuteSpace = function (argSpace) {
+Date.prototype.nextMinuteSpace = function (argSpace) {
   var space = argSpace ? argSpace : 5 // 间隔
   var minute = this.getMinutes() // 分钟
   var hasRemainder = minute % space === 0 // 是否有余数
@@ -303,7 +303,7 @@ window.Date.prototype.nextMinuteSpace = function (argSpace) {
   return this.minute()
 }
 // 返回当前分钟的上档位时间
-window.Date.prototype.prevMinuteSpace = function (argSpace) {
+Date.prototype.prevMinuteSpace = function (argSpace) {
   var space = argSpace ? argSpace : 5 // 间隔
   var minute = this.getMinutes() // 分钟
   var hasRemainder = minute % space === 0 // 是否有余数
@@ -319,7 +319,7 @@ window.Date.prototype.prevMinuteSpace = function (argSpace) {
   * 比较操作
   * */
 // 比较Date对象,返回相差天时分秒等信息
-window.Date.prototype.diff = function (date) {
+Date.prototype.diff = function (date) {
   var dateStart = this // 开始时间
   var dateEnd = date // 结束时间
 
@@ -360,7 +360,7 @@ window.Date.prototype.diff = function (date) {
   }
 }
 // 比较年月日时分秒，大于返回1,等于返回0,小于返回-1
-window.Date.prototype.compareDateTime = function (date) {
+Date.prototype.compareDateTime = function (date) {
   var date1 = new Date(this)
   var date2 = new Date(date)
   date1.setSeconds(0, 0)
@@ -372,7 +372,7 @@ window.Date.prototype.compareDateTime = function (date) {
   return t1 > t2 ? 1 : -1
 }
 // 比较年月日,大于返回1,等于返回0,小于返回-1
-window.Date.prototype.compareDate = function (date) {
+Date.prototype.compareDate = function (date) {
   var date1 = new Date(this)
   var date2 = new Date(date)
   date1.setHours(0, 0, 0, 0)
@@ -384,7 +384,7 @@ window.Date.prototype.compareDate = function (date) {
   return t1 > t2 ? 1 : -1
 }
 // 比较年月,大于返回1,等于返回0,小于返回-1
-window.Date.prototype.compareMonth = function (date) {
+Date.prototype.compareMonth = function (date) {
   var date1 = new Date(this)
   var date2 = new Date(date)
   date1.setDate(0)
@@ -398,7 +398,7 @@ window.Date.prototype.compareMonth = function (date) {
   return t1 > t2 ? 1 : -1
 }
 // 比较时分,格式:hh:mm,大于返回1,等于返回0,小于返回-1
-window.Date.prototype.compareTime = function (date) {
+Date.prototype.compareTime = function (date) {
   var date1 = new Date(this)
   date1.setYear(0)
   date1.setMonth(0, 0)
@@ -424,7 +424,7 @@ window.Date.prototype.compareTime = function (date) {
   * 参数: Date | String(小时数 | 'today')
   * 返回: Date (增加时效后的日期)
   * */
-window.Date.prototype.expires = function (expires) {
+Date.prototype.expires = function (expires) {
    // 如果没传参数, 默认返回2小时后的时效
   if (!expires) {
     this.nextHour(2)
@@ -455,7 +455,7 @@ window.Date.prototype.expires = function (expires) {
   * 格式化
   * */
 // 格式化日期,参数:yyyy-MM-dd hh:mm:ss WW EE
-window.Date.prototype.format = function (fmtModel) {
+Date.prototype.format = function (fmtModel) {
   var fmt = typeof fmtModel === 'string' ? fmtModel : 'yyyy-MM-dd hh:mm:ss'
   var year = this.getFullYear()
   var month = this.getMonth() + 1

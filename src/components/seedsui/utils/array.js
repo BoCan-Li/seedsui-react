@@ -1,5 +1,5 @@
 // 幂集 如:[1,2],返回[[1],[2],[1,2]]
-window.Array.prototype.powerset = function () {
+Array.prototype.powerset = function () {
   var ps = [[]]
   for (var i = 0; i < this.length; i++) {
     for (var j = 0, len = ps.length; j < len; j++) {
@@ -10,13 +10,13 @@ window.Array.prototype.powerset = function () {
 }
 
 // 二维数组转为一维数组
-window.Array.prototype.toOneColumn = function () {
+Array.prototype.toOneColumn = function () {
   var reg = /[\d\.]+\,([\d\.]+)/g // eslint-disable-line
   return this.join(',').replace(reg, '$1').split(',')
 }
 
 // 包含，支持传数组包含数组
-window.Array.prototype.contains = function (arg) {
+Array.prototype.contains = function (arg) {
   if (toString.call(arg) !== '[object Array]') {
     return this.indexOf(arg) > -1
   }
@@ -29,7 +29,7 @@ window.Array.prototype.contains = function (arg) {
 if (Array.prototype.equals) {
   console.warn('覆盖现有的Array.prototype.equals。 可能的原因：新的API定义了方法，存在框架冲突，或者在代码中包含了双重包含。')
 }
-window.Array.prototype.equals = function (array) {
+Array.prototype.equals = function (array) {
   if (!array)
     return false
 
@@ -58,4 +58,4 @@ window.Array.prototype.equals = function (array) {
   return true
 }
 // 从for-in循环隐藏方法
-Object.defineProperty(window.Array.prototype, "equals", { enumerable: false })
+Object.defineProperty(Array.prototype, "equals", { enumerable: false })
