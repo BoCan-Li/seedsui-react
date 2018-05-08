@@ -6,7 +6,20 @@
 .inline-box{
 	display:-webkit-inline-box;
 }
-
+.box-0{
+	-webkit-box-flex:	0.0;
+}
+.box-1{
+	-webkit-box-flex:1.0;
+}
+// box方向
+.box-vertical{
+  -webkit-box-orient:vertical;
+}
+.box-horizontal{
+	-webkit-box-orient:horizontal;
+}
+// box内部水平对齐
 .box-left{
 	-webkit-box-pack:start;
 }
@@ -16,6 +29,7 @@
 .box-right{
 	-webkit-box-pack:end;
 }
+// box内部垂直对齐
 .box-top{
 	-webkit-box-align:start;
 }
@@ -25,28 +39,21 @@
 .box-bottom{
 	-webkit-box-align:end;
 }
+// box对齐方式
 .box-middlecenter{
 	-webkit-box-pack:center;
 	-webkit-box-align:center;
 }
-.box-vertical{
-    -webkit-box-orient:vertical;
-}
-.box-horizontal{
-	-webkit-box-orient:horizontal;
-}
-.box-flex-1{
-	-webkit-box-flex:1.0;
-}
-.box-flex-none{
-	-webkit-box-flex:	0.0;
-}
+
 // flex
 .flex{
 	display:-webkit-flex;
 }
 .inline-flex{
 	display:-webkit-inline-flex;
+}
+.flex-0{
+	-webkit-flex:0;
 }
 .flex-1{
 	-webkit-flex:1;
