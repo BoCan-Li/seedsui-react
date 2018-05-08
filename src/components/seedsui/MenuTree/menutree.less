@@ -1,12 +1,11 @@
-//----------------menutree.less(start)----------------*/
+// menutree.less(start)
 .menutree{
   background-color: @menutree-bg;
   overflow: auto;
 }
 .menutree-tag{
-  display: -webkit-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.box);
+	&:extend(.box-middlecenter);
   width: 100%;
   min-height: @60px;
   font-size: @14px;
@@ -78,4 +77,4 @@
   box-sizing: border-box;
   background-color: white;
 }
-//----------------menutree.less(end)----------------*/
+// menutree.less(end)

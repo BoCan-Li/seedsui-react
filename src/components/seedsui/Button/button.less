@@ -1,8 +1,7 @@
-//----------------button.less(start)----------------
+// button.less(start)
 .button{
-	display:-webkit-inline-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+	&:extend(.inline-box);
+	&:extend(.box-middlecenter);
 
 	height:@40px;
 	// line-height:normal;
@@ -224,10 +223,8 @@
 	// 分别指投影的：右、下、模糊、扩展、颜色
 	box-shadow:0 @2px @3px 0 rgba(0, 0, 0, 0.2);
 	&:active,&.active{
-		-webkit-box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
-		-moz-box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
 		box-shadow:0 0 0 0 rgba(0, 0, 0, 0.2);
 		margin:@2px 0 -@2px 0;
 	}
 }
-//----------------button.less(end)----------------
+// button.less(end)

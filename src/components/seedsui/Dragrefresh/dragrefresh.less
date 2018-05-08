@@ -1,4 +1,4 @@
-//----------------dragrefresh.less(start)--------------*/
+// dragrefresh.less(start)
 @-webkit-keyframes dfAnimate-spinner {
   0% { -webkit-transform: rotate(0deg); }
   50% { -webkit-transform: rotate(180deg); }
@@ -13,9 +13,8 @@
   height: 0;
 }
 .df-pull-box {
-  display: -webkit-box;
-  -webkit-box-pack:center;
-  -webkit-box-align:center;
+  &:extend(.box);
+	&:extend(.box-middlecenter);
   height: @50px;
   color: #777;
 }
@@ -56,9 +55,8 @@
 //circle类型
 .df-circle{
   position:absolute;
-  display: -webkit-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.box);
+	&:extend(.box-middlecenter);
   top:-@50px;
   left:50%;
   margin-left:-@20px;
@@ -99,4 +97,4 @@
 .df-circle-icon-none{
   display: none;
 }
-//----------------dragrefresh.less(end)--------------*/
+// dragrefresh.less(end)

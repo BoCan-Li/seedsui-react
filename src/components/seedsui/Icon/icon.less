@@ -1,4 +1,4 @@
-//---------------icon.less(start)---------------*/
+// icon.less(start)
 // 图标
 .icon{
   position:relative;
@@ -6,9 +6,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position:center;
-  display:-webkit-inline-box;
-  -webkit-box-pack:center;
-  -webkit-box-align:center;
+  &:extend(.inline-box);
+	&:extend(.box-middlecenter);
 }
 // 控件默认图标尺寸
 .icon{
@@ -37,4 +36,4 @@
   background-size: cover;
   background-position: center;
 }
-//---------------icon.less(end)---------------*/
+// icon.less(end)

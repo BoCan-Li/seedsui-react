@@ -1,4 +1,4 @@
-//----------------menutiled.less(start)----------------*/
+// menutiled.less(start)
 .menutiled{
   background-color: @menutiled-bg;
   &:extend(.box);
@@ -16,9 +16,8 @@
   background-color: @menutiled-slot-sub-bg;
 }
 .menutiled-tag{
-  display: -webkit-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.box);
+	&:extend(.box-middlecenter);
   min-height: @menutiled-tag-height;
   text-align: left;
   position: relative;
@@ -65,4 +64,4 @@
 .menutiled-select{
   .setMenuTiledSelect();
 }
-//----------------menutiled.less(end)----------------*/
+// menutiled.less(end)

@@ -1,8 +1,7 @@
-//----------------star.less(start)----------------*/
+// star.less(start)
 .star{
-	display:-webkit-inline-box;
-	-webkit-box-align:center;
-	-webkit-box-pack:center;
+	&:extend(.inline-box);
+	&:extend(.box-middlecenter);
 	color: @star-color;
 	.setStarIcon();
 	&:extend(.icon);
@@ -20,4 +19,4 @@
 		-webkit-text-fill-color:transparent;
 	}
 }
-//----------------star.less(end)----------------*/
+// star.less(end)

@@ -1,9 +1,8 @@
-//--------------------close.less(start)----------------------*/
+// ----close.less(start)
 .close{
   position:relative;
-  display:-webkit-inline-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.inline-box);
+	&:extend(.box-middlecenter);
   vertical-align: middle;
   text-align: center;
   overflow: hidden;
@@ -15,9 +14,8 @@
 .close{
   width:@24px;
   height:@24px;
-  display:-webkit-inline-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.inline-box);
+	&:extend(.box-middlecenter);
 }
 .close-icon{
   display:block;
@@ -30,4 +28,4 @@
 .close-icon-clear{
   .setCloseIconClear();
 }
-//--------------------close.less(end)----------------------*/
+// ----close.less(end)

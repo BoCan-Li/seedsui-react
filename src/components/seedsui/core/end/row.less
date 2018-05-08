@@ -1,4 +1,4 @@
-//----------------row.less(start)----------------*/
+// row.less(start)
 .row {
   position: relative;
 }
@@ -19,15 +19,15 @@
   clear: both;
 }
 .row-flex:extend(.row all){
-  display: -webkit-box;
+  &:extend(.box);
   &.row-middle{
-    -webkit-box-align:center;
+    &:extend(.box-middle);
   }
   &.row-top{
-    -webkit-box-align:start;
+    &:extend(.box-top);
   }
   &.row-bottom{
-    -webkit-box-align:end;
+    &:extend(.box-bottom);
   }
 }
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
@@ -72,4 +72,4 @@
 .col-1 {
   width: 8.33333333%;
 }
-//----------------row.less(end)----------------*/
+// row.less(end)

@@ -1,4 +1,4 @@
-//---------------list.less(start)---------------*/
+// list.less(start)
 .list{
   background-color: white;
 }
@@ -53,9 +53,9 @@
   border-radius: 100%;
 }
 .list-thumbnail{
-  display: -webkit-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.box);
+	&:extend(.box-middlecenter);
+  
   position:relative;
   width: @62px;
   height:@62px;
@@ -112,4 +112,4 @@
     position: relative;
   }
 }
-//---------------list.less(end)---------------*/
+// list.less(end)

@@ -1,9 +1,8 @@
-//--------------------dot.less(start)----------------------*/
+// ----dot.less(start)
 .dot{
   position:relative;
-  display:-webkit-inline-box;
-  -webkit-box-align:center;
-  -webkit-box-pack:center;
+  &:extend(.inline-box);
+	&:extend(.box-middlecenter);
   vertical-align: middle;
   text-align: center;
   overflow: hidden;
@@ -22,4 +21,4 @@
 .dot.active{
   background-color:@dot-bg-active;
 }
-//--------------------dot.less(end)----------------------*/
+// ----dot.less(end)
