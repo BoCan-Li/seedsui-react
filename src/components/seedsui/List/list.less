@@ -71,10 +71,10 @@
 .list-container{
   position: relative;
   display: block;
-  -webkit-box-flex: 1.0;
+  &:extend(.box-1);
 }
 .list-caption{
-  -webkit-box-flex: 1.0;
+  &:extend(.box-1);
 }
 .list-rcaption{
   display: block;
@@ -96,7 +96,7 @@
 }
 .list-font{
   display: block;
-  -webkit-box-flex:1;
+  &:extend(.box-1);
   height: @20px;
   line-height: @22px;
   white-space: nowrap;
