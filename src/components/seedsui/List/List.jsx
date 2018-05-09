@@ -29,6 +29,7 @@ export default class List extends Component {
     thumbnailAfter: PropTypes.node,
     onClickThumbnail: PropTypes.func,
 
+    showAvatar: PropTypes.bool,
     avatar: PropTypes.bool,
     avatarStyle: PropTypes.object,
     avatarSrc: PropTypes.string,
