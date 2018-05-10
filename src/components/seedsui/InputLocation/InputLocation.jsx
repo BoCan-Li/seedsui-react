@@ -79,7 +79,7 @@ export default class InputLocation extends Component {
             if (onChange) onChange(addrs.address, this.getArgs(e))
           },
           onError: (res) => {
-            if (res.code === '408') {
+            if (res.code === 'timeout') {
               this.setState({
                 loading: '定位超时,请点击重试'
               });

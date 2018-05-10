@@ -1,6 +1,6 @@
 import BridgeBrowser from './bridgeBrowser.js';
 import Device from './../device.js';
-import DB from './../db.js'
+import DB from './../db.js';
 
 var Bridge = {
   platform: 'dinghuo',
@@ -304,10 +304,10 @@ var Bridge = {
         console.log(error);
       }
     } else {
-      window.history.go(-1);
+      history.go(-1);
     }
   },
-  /* 客户端添加返回绑定 */
+  // 客户端添加返回绑定
   addBackPress: function () {
     try {
       this.setBackEnable(true);
@@ -315,8 +315,20 @@ var Bridge = {
     } catch (error) {
       console.log(error);
     }
+    // 使用桥接初始化系统参数
+    this.loginInfo((loginData) => {
+      this.systemParameter((sysData) => {
+        const data = {};
+        data.image_url = loginData.image_url;
+        data.uid = loginData.uid;
+        data.mobile = loginData.mobile;
+        data.selectedSupplier = loginData.selectedSupplier;
+        data.sysParms = sysData;
+        BridgeBrowser.setSystemParameter(data);
+      });
+    });
   },
-  /* 客户端移除返回绑定 */
+  // 客户端移除返回绑定
   removeBackPress: function () {
     try {
       this.setBackEnable(false);
@@ -428,7 +440,7 @@ var Bridge = {
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
-          s.params.onError({code: '000521', msg: msg})
+          s.params.onError({code: 'limit', msg: msg})
         } else {
           alert(msg)
         }
@@ -446,7 +458,7 @@ var Bridge = {
             if(s.imgMap[localId]){
               msg = '照片已存在，请勿重复上传！'
               if (s.params.onError) {
-                s.params.onError({code: '10060', msg: msg})
+                s.params.onError({code: 'chooseRepeat', msg: msg})
               } else {
                 alert(msg)
               }

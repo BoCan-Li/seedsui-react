@@ -30,7 +30,7 @@ var Bridge = {
           jsApiList: ['getLocation', 'chooseImage', 'uploadImage', 'previewImage', 'onHistoryBack', 'closeWindow', 'hideOptionMenu', 'hideMenuItems', 'scanQRCode']
         }
         if (!wx) { // eslint-disable-line
-          if (opts.onError) opts.onError({code: '206', msg: '微信组件下载失败,如需使用本地能力,请返回重试'})
+          if (opts.onError) opts.onError({code: 'bridgeInitFail', msg: '微信组件下载失败,如需使用本地能力,请返回重试'})
           return
         }
         // 记录日志
@@ -51,25 +51,25 @@ var Bridge = {
           DB.setSession('bridge_isready', '-1')
           // Callback
           if (opts.onError) {
-            opts.onError({code: '401', msg: '微信鉴权失败,请退出重试'})
+            opts.onError({code: 'oauthFail', msg: '微信鉴权失败,请退出重试'})
           } else {
-            alert('code: 401, 微信鉴权失败,请退出重试' + JSON.stringify(res))
+            alert('微信鉴权失败,请退出重试' + JSON.stringify(res))
           }
         })
       } else {
         var msg = response.message
         if (opts.onError) {
-          opts.onError({code: '401', msg: msg})
+          opts.onError({code: 'oauthInterfaceFail', msg: msg})
         } else {
-          alert('code: 401, ' + msg)
+          alert(msg)
         }
       }
     })
     .catch(err => {
       if (opts.onError) {
-        opts.onError({code: '500', msg: 'getJsApiTicket微信鉴权失败,请稍后重试'})
+        opts.onError({code: 'oauthInterfaceFail', msg: 'getJsApiTicket微信鉴权失败,请稍后重试'})
       } else {
-        alert('code: 500, getJsApiTicket微信鉴权失败,请稍后重试')
+        alert('getJsApiTicket微信鉴权失败,请稍后重试')
       }
     })
   },
@@ -80,7 +80,7 @@ var Bridge = {
    * */
   getLocation: function (params) {
     var timeout = setTimeout(() => {
-      if (params.onError) params.onError({code: '408', msg: '定位超时,请稍后重试'})
+      if (params.onError) params.onError({code: 'timeout', msg: '定位超时,请稍后重试'})
     }, 5000)
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
@@ -101,14 +101,14 @@ var Bridge = {
       type: 'gcj02',
       success: function (res) {
         window.clearTimeout(timeout)
-        // 将位置信息存储到cookie中5秒
+        // 将位置信息存储到cookie中10秒
         DB.setCookie('app_location', res.longitude + ',' + res.latitude , 10)
         if (params.onSuccess) params.onSuccess(res)
       },
-      fail: function (res) {
+      fail: function () {
         window.clearTimeout(timeout)
-        if (params.onError) params.onError({code: '1200', msg: '获取经纬度失败,请稍后重试' + res})
-        else alert('code: 1200, 获取经纬度失败,请稍后重试')
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查微信定位权限是否开启'})
+        else alert('定位失败,请检查微信定位权限是否开启')
       },
       cancel: function (res) {
         window.clearTimeout(timeout)
@@ -130,10 +130,49 @@ var Bridge = {
       scanType: params.scanType || ['qrCode', 'barCode'],
       desc: 'scanQRCode desc',
       success: function (res) {
-        if (params.onSuccess) params.onSuccess(res)
+        if (!params.onSuccess) return;
+        var wxRes = res
+        // 如果没有设置needResult,则清除前缀
+        if (isNaN(params.needResult)) {
+          if (res.resultStr.indexOf('QR,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('QR,'.length)
+          } else if (res.resultStr.indexOf('EAN_13,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('EAN_13,'.length)
+          } else if (res.resultStr.indexOf('EAN_8,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('EAN_8,'.length)
+          } else if (res.resultStr.indexOf('AZTEC,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('AZTEC,'.length)
+          } else if (res.resultStr.indexOf('DATAMATRIX,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('DATAMATRIX,'.length)
+          } else if (res.resultStr.indexOf('UPCA,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('UPCA,'.length)
+          } else if (res.resultStr.indexOf('UPCE,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('UPCE,'.length)
+          } else if (res.resultStr.indexOf('CODABAR,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('CODABAR,'.length)
+          } else if (res.resultStr.indexOf('CODE_39,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('CODE_39,'.length)
+          } else if (res.resultStr.indexOf('CODE_93,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('CODE_93,'.length)
+          } else if (res.resultStr.indexOf('CODE_128,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('CODE_128,'.length)
+          } else if (res.resultStr.indexOf('ITF,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('ITF,'.length)
+          } else if (res.resultStr.indexOf('MAXICODE,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('MAXICODE,'.length)
+          } else if (res.resultStr.indexOf('PDF_417,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('PDF_417,'.length)
+          } else if (res.resultStr.indexOf('RSS_14,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('RSS_14,'.length)
+          } else if (res.resultStr.indexOf('RSSEXPANDED,') >= 0) {
+            wxRes.resultStr = res.resultStr.substring('RSSEXPANDED,'.length)
+          }
+        }
+        // 回调
+        params.onSuccess(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: '424', msg: '扫码失败请稍后重试' + res})
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败请稍后重试' + res})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)
@@ -295,7 +334,7 @@ var Bridge = {
       if (s.isClicked) {
         msg = '客户端正在检测环境，请稍等...'
         if (s.params.onError) {
-          s.params.onError({code: '691', msg: msg})
+          s.params.onError({code: 'chooseClicked', msg: msg})
         } else {
           alert(msg)
         }
@@ -306,7 +345,7 @@ var Bridge = {
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
-          s.params.onError({code: '000521', msg: msg})
+          s.params.onError({code: 'limit', msg: msg})
         } else {
           alert(msg)
         }
@@ -323,7 +362,7 @@ var Bridge = {
             if(s.imgMap[localId]){
               msg = '照片已存在，请勿重复上传！'
               if (s.params.onError) {
-                s.params.onError({code: '10060', msg: msg})
+                s.params.onError({code: 'chooseRepeat', msg: msg})
               } else {
                 alert(msg)
               }
@@ -402,9 +441,9 @@ var Bridge = {
           fail: function (res) {
             var msg = '您选择的第' + index + '张图片上传失败，稍后请重试'
             if (s.params.onError) {
-              s.params.onError({code: '600', msg: msg})
+              s.params.onError({code: 'uploadImageFail', msg: msg})
             } else {
-              alert('code: 600, ' + msg)
+              alert(msg)
             }
             s.deleteImg(img)
             if (s.params.onUploadFail) s.params.onUploadFail(s.imgs, s.imgMap, res)

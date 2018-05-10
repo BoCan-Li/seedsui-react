@@ -31,15 +31,15 @@ var Bridge = {
   * params: {url:''}
   * */
   openWindow: function (params) {
-    window.location.href = params.url
+    location.href = params.url
   },
   /* 关闭窗口 */
   closeWindow: function () {
-    window.history.go(-1)
+    history.go(-1)
   },
   /* 回到主页 */
   goHome: function () {
-    window.history.go(-2)
+    history.go(-2)
   },
   /* 判断是否是主页 */
   isHomePage: function (callback, rule) {
@@ -88,8 +88,8 @@ var Bridge = {
     Geocoder.getLocation(map.getCenter(), (rs) => {
       if (params.onSuccess) params.onSuccess(rs)
     }, (res) => {
-      if (params.onError) params.onError({code: '112', msg: '获取位置名称失败,请稍后重试' + res})
-      else alert('code: 112, 获取位置名称失败,请稍后重试')
+      if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + res})
+      else alert('获取位置名称失败,请稍后重试')
     })
   },
   /*
@@ -132,7 +132,7 @@ var Bridge = {
   logOut: function (message) {
     console.log('身份认证未通过,需要重新登录')
     // const history = createHistory()
-    // let login_url = '/h5fw/#/_react_/login'
+    // let login_url = '/login'
     // window.history.replace(login_url)
     // window.location.reload()
   },
@@ -183,7 +183,7 @@ var Bridge = {
       DB.setStore('app_imgDomain', decodeURIComponent(imgDomain));
     } else {
       console.log('图片域名未定义');
-      return {code: 'undefinedDomain', msg: '图片域名未定义'};
+      return {code: 'imgDomainFail', msg: '图片域名未定义'};
     }
     // 设置uid
     DB.setStore('app_uid', data.uid || '');
@@ -197,7 +197,7 @@ var Bridge = {
       DB.setStore('app_selectedSupplier', data.selectedSupplier);
     } else {
       console.log('没有供货商');
-      return {code: 'undefinedSelectedSupplier', msg: '请选择供货商'};
+      return {code: 'selectedSupplierFail', msg: '请选择供货商'};
     }
     // 记录日志
     DB.setSession('app_logger', '获得的系统参数:' + JSON.stringify(data));
