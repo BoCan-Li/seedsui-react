@@ -358,6 +358,7 @@ var Bridge = {
         sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
+          s.isClicked = false
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
             if(s.imgMap[localId]){
               msg = '照片已存在，请勿重复上传！'
@@ -375,7 +376,6 @@ var Bridge = {
             }
           }
           s.imgs = Object.keys(s.imgMap)
-          s.isClicked = false
           if (s.params.onHideLoad) s.params.onHideLoad()
           if(s.params.onChooseSuccess) s.params.onChooseSuccess(s.imgs, s.imgMap, res)
           s.upload()
