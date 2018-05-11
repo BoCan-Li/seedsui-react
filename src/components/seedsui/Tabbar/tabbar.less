@@ -43,11 +43,11 @@
 }
 // 平铺等分
 .tabbar-tiled{
-	&:extend(.box);
+	&:extend(.flex);
 	.tab{
-		&:extend(.box);
-		&:extend(.box-1);
-		&:extend(.box-middlecenter);
+		&:extend(.flex);
+		&:extend(.flex-1);
+		&:extend(.flex-middlecenter);
 	}
 }
 // .tabbar[data-col="2"] .tab{
@@ -279,7 +279,7 @@
 	color:@tabbar-footer-color;
 	background-color: @tabbar-footer-bg;
 	.tab{
-		&:extend(.box-vertical);
+		&:extend(.flex-vertical);
 		height: auto;
     padding: @6px 0;
 	}

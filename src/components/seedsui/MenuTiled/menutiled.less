@@ -1,11 +1,11 @@
 // menutiled.less(start)
 .menutiled{
   background-color: @menutiled-bg;
-  &:extend(.box);
+  &:extend(.flex);
 }
 .menutiled-slot{
   width:1%;
-  &:extend(.box-1);
+  &:extend(.flex-1);
   overflow-x: hidden;
   overflow-y: auto;
   max-height: @menutiled-slot-max-height;
@@ -16,8 +16,8 @@
   background-color: @menutiled-slot-sub-bg;
 }
 .menutiled-tag{
-  &:extend(.box);
-	&:extend(.box-middlecenter);
+  &:extend(.flex);
+	&:extend(.flex-middlecenter);
   min-height: @menutiled-tag-height;
   text-align: left;
   position: relative;
@@ -40,7 +40,7 @@
 }
 // 文字
 .menutiled-tag-font{
-  &:extend(.box-1);
+  &:extend(.flex-1);
   padding:0 2px;
   &:extend(.nowrap2);
 }

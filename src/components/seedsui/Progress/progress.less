@@ -1,10 +1,10 @@
 // progress.less(start)
 .progress-box {
-  display: -webkit-box;
-  -webkit-box-align: center;
+  &:extend(.flex);
+  &:extend(.flex-middle);
 }
 .progress-box .progress {
-  &:extend(.box-1);
+  &:extend(.flex-1);
 }
 //进度条容器
 .progress {

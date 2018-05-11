@@ -32,7 +32,7 @@
 }
 .carrousel-summary{
   position: absolute;
-  display: -webkit-box;
+  &:extend(.flex);
   bottom: 0;
   width: 100%;
   padding:@8px @10px;
@@ -50,7 +50,7 @@
 }
 .carrousel-summary-font{
   display: block;
-  &:extend(.box-1);
+  &:extend(.flex-1);
 }
 .carrousel-summary-icon+.carrousel-summary-font{
   margin-left: @4px;

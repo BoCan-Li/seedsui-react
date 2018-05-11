@@ -1,8 +1,8 @@
 // attribute.less(start)
 .attribute{
-  &:extend(.box);
-  &:extend(.box-middle);
-  &:extend(.box-1);
+  &:extend(.flex);
+  &:extend(.flex-middle);
+  &:extend(.flex-1);
   .ricon{
     margin-left: 4px;
   }
@@ -18,8 +18,8 @@
 // 用于2列时左右两部分分割
 .attribute-half{
   width: 50%;
-  &:extend(.box);
-  &:extend(.box-middle);
+  &:extend(.flex);
+  &:extend(.flex-middle);
 }
 .attribute-left, .attribute-right {
   display: block;
@@ -29,7 +29,7 @@
   color: #aaa;
 }
 .attribute-right {
-  &:extend(.box-1);
+  &:extend(.flex-1);
 }
 // 对齐布局
 .attributes.align, .attribute.align {
@@ -41,8 +41,8 @@
 // 两端对齐
 .attributes.between, .attribute.between {
   .attribute-right {
-    &:extend(.box);
-    &:extend(.box-right);
+    &:extend(.flex);
+    &:extend(.flex-right);
   }
 }
 
@@ -60,7 +60,7 @@
 .attribute{
   .input-text,.input-textarea,.input-pre-space{
     display: block;
-    &:extend(.box-1);
+    &:extend(.flex-1);
   }
 }
 // attribute.less(end)

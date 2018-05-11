@@ -4,7 +4,7 @@
 }
 .list-li{
   position:relative;
-  &:extend(.box);
+  &:extend(.flex);
   padding: @10px @12px;
   color:@body-color;
   background-color: @list-bg;
@@ -53,8 +53,8 @@
   border-radius: 100%;
 }
 .list-thumbnail{
-  &:extend(.box);
-	&:extend(.box-middlecenter);
+  &:extend(.flex);
+	&:extend(.flex-middlecenter);
   
   position:relative;
   width: @62px;
@@ -71,10 +71,10 @@
 .list-container{
   position: relative;
   display: block;
-  &:extend(.box-1);
+  &:extend(.flex-1);
 }
 .list-caption{
-  &:extend(.box-1);
+  &:extend(.flex-1);
 }
 .list-rcaption{
   display: block;
@@ -96,7 +96,7 @@
 }
 .list-font{
   display: block;
-  &:extend(.box-1);
+  &:extend(.flex-1);
   height: @20px;
   line-height: @22px;
   white-space: nowrap;
@@ -107,7 +107,7 @@
   margin-left: @8px;
 }
 .list-li.oneline{
-  &:extend(.box-middle);
+  &:extend(.flex-middle);
   .list-rcaption{
     position: relative;
   }

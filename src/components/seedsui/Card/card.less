@@ -1,7 +1,7 @@
 // card.less(start)
 .card{
 	display: block;
-	&:extend(.box-1);
+	&:extend(.flex-1);
   position:relative;
   box-sizing:border-box;
 
@@ -12,8 +12,8 @@
 }
 //按钮操作区
 .card-handler{
-	&:extend(.box);
-	&:extend(.box-center);
+	&:extend(.flex);
+	&:extend(.flex-center);
 
 	border-style:solid;
 	border-width:@1px 0 0 0;
@@ -23,9 +23,9 @@
 	border-color:@dpborder;
 
 	>a{
-		&:extend(.box);
-		&:extend(.box-middlecenter);
-		&:extend(.box-1);
+		&:extend(.flex);
+		&:extend(.flex-middlecenter);
+		&:extend(.flex-1);
 
 		height:@24px;
 		box-sizing:border-box;
