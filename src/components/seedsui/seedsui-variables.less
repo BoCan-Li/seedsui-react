@@ -218,6 +218,9 @@
 @list-bg-active: #f0f0f0;
 @list-rcaption-color: @sub-color;
 @list-sndcaption-color: @sub-color;
+@list-caption-font-size: @font-size-lg;
+@list-sndcaption-font-size: @font-size-md;
+@list-rcaption-font-size: @font-size-md;
 .setListAvatar(){
   &:extend(.bg-no-avatar);
 }
@@ -234,6 +237,10 @@
   font-family: 'iconfont';
   &:extend(.icon-plus all);
 }
+
+// Title
+@title-through-color: @sub-color;
+@title-through-bg: @body-bg;
 
 // Titlebar
 @titlebar-bg:#fff;
@@ -502,6 +509,9 @@
 // Price价格
 @price: #EB464A;
 @priceunit: #aaa;
+@price-symbol-font-size-lg: @13px;
+@price-integer-font-size-lg: @27px;
+@price-digits-font-size-lg: @13px;
 
 // Checkbox控件
 @checkbox-color: @placeholder;
