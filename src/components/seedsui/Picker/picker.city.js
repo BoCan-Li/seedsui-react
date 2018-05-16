@@ -80,20 +80,19 @@ var PickerCity = function (params) {
   -------------------- */
   // 根据省市区名获得keys,返回:['320000','320100','320105'],参数:['江苏省','南京市','建邺区']
   function getKesByValues (values) {
-    if (!values) return null
     var keys = []
     for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
-      // 获得省
-      if (province.value === values[0]) {
+      // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
+      if (values[0] && (province.value.indexOf(values[0]) > -1 || values[0].indexOf(province.value) > -1)) {
         keys.push(province.key)
         for (var j = 0, city; city = province.children[j++];) { // eslint-disable-line
           // 获得市
-          if (city.value === values[1]) {
+          if (values[1] && (city.value.indexOf(values[1]) > -1 || values[1].indexOf(city.value) > -1)) {
             keys.push(city.key)
             if (values[2]) {
               for (var k = 0, area; area = city.children[k++];) { // eslint-disable-line
                 // 获得区
-                if (area.value === values[2]) {
+                if (values[2] && (area.value.indexOf(values[2]) > -1 || values[2].indexOf(area.value) > -1)) {
                   keys.push(area.key)
                   return keys
                 }
@@ -105,18 +104,12 @@ var PickerCity = function (params) {
         }
       }
     }
-    // 如果省市区不对,则返回null
-    return null
+    // 如果省市区不对,则返回第一个省第一个市
+    return [s.params.data[0].key, s.params.data[0].children[0].key]
   }
   // 设置选中的省市区,不传参数则读取默认省市区
   s.setDefaults = function (argActiveValues) {
-    var activeValues = argActiveValues || []
-    // 如果没有传值,则读取默认值
-    if (!activeValues || activeValues.length === 0) {
-      if (s.params.defaultProvince) activeValues.push(s.params.defaultProvince)
-      if (s.params.defaultCity) activeValues.push(s.params.defaultCity)
-      if (s.params.defaultArea) activeValues.push(s.params.defaultArea)
-    }
+    var activeValues = argActiveValues || ''
     // 设置选中的key
     var keys = getKesByValues(activeValues)
     if (keys && keys[0]) s.setActiveProvinceKey(keys[0])
@@ -233,7 +226,6 @@ var PickerCity = function (params) {
   }
   
   function initSlots () {
-    if (!s.activeProvinceKey) return
     // 渲染
     addProvince()
     addCity()
@@ -244,7 +236,7 @@ var PickerCity = function (params) {
     initSlots()
   }
   // 设置默认选中项
-  s.setDefaults()
+  s.setDefaults([s.params.defaultProvince, s.params.defaultCity, s.params.defaultArea])
   // 添加省市区
   initSlots()
   return s

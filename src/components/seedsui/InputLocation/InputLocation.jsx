@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Toast from 'components/seedsui/Toast/toast.js';
 import bridge from './../utils/bridge';
 import Icon from './../Icon/Icon.jsx';
 import Close from './../Close/Close.jsx';
@@ -63,6 +64,19 @@ export default class InputLocation extends Component {
           // 赋值
           if (!this.props.valueBindProp) this.$input.value = data.address;
           if (onChange) onChange(data.address, this.getArgs(e))
+        },
+        onError: (err) => {
+          var toast = new Toast({
+            maskClass: 'mask toast-mask middle',
+            html: err.msg,
+            delay: 2000,
+            onHid: (e) => {
+              console.log('remove')
+              e.destroy();
+              toast = null;
+            }
+          });
+          toast.show();
         }
       });
       return;

@@ -94,31 +94,31 @@ var Bridge = {
   },
   /*
    * 百度地图:获得两个点之间的距离
-   * params：{type: 'gcj02', point1: [longitude, latitude], point2: [longitude, latitude], onSuccess: ()}
+   * params：{type: 'gcj02', point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onSuccess: ()}
    * 返回：distance米
    * */
   getDistance: function (params) {
-    if (params.point1.length !== 2 || params.point2.length !== 2) {
-      if (params.onError) params.onError('传入的坐标不正确')
+    if (!params.point1.longitude || !params.point1.latitude || !params.point2.longitude || !params.point2.latitude) {
+      if (params.onError) params.onError({code: 'distanceFail', msg: '传入的坐标不正确'})
       return
     }
     // 定位到容器<div id="baidu_container"></div>
     var map = new BMap.Map("baidu_container") // eslint-disable-line
     var point1 = params.point1
     var point2 = params.point2
-    // 国测局gcj02转百度坐标
-    if (params.type === 'gcj02') {
-      point1 = coordtransform.gcj02tobd09(point1[0], point1[1])
-      point2 = coordtransform.gcj02tobd09(point2[0], point2[1])
-    }
     // 国际坐标wgs84转百度坐标
     if (params.type === 'wgs84') {
-      point1 = coordtransform.wgs84tobd09(point1[0], point1[1])
-      point2 = coordtransform.wgs84tobd09(point2[0], point2[1])
+      point1 = coordtransform.wgs84tobd09(point1.longitude, point1.latitude)
+      point2 = coordtransform.wgs84tobd09(point2.longitude, point2.latitude)
+    // 国测局gcj02转百度坐标 params.type === 'gcj02'
+    } else {
+      point1 = coordtransform.gcj02tobd09(point1.longitude, point1.latitude)
+      point2 = coordtransform.gcj02tobd09(point2.longitude, point2.latitude)
     }
     var startPoint = new BMap.Point(point1[0], point1[1]) // eslint-disable-line
     var endPoint = new BMap.Point(point2[0], point2[1]) // eslint-disable-line
     var pointDistance = map.getDistance(startPoint, endPoint).toFixed(2)
+    if (!pointDistance) return ''
     return pointDistance
   },
   /*

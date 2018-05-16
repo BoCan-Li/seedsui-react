@@ -64,8 +64,8 @@ export default class PickerCity extends Component {
       mask: this.$el,
       viewType: this.props.type,
       data: citys,
-      defaultProvince: defaultValues[0] || '北京市',
-      defaultCity: defaultValues[1] || '东城区',
+      defaultProvince: defaultValues[0] || '',
+      defaultCity: defaultValues[1] || '',
       defaultArea: defaultValues[2] || '',
       onClickMask: (e) => {
         if (this.props.onClickMask) this.props.onClickMask(e)

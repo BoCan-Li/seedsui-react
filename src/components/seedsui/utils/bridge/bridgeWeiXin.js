@@ -79,15 +79,11 @@ var Bridge = {
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
   getLocation: function (params) {
-    var timeout = setTimeout(() => {
-      if (params.onError) params.onError({code: 'timeout', msg: '定位超时,请稍后重试'})
-    }, 5000)
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
       appLocation = appLocation.split(',')
       if (appLocation.length === 2) {
-        window.clearTimeout(timeout)
         if (params.onSuccess) params.onSuccess({
           longitude: appLocation[0],
           latitude: appLocation[1]
@@ -100,22 +96,18 @@ var Bridge = {
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: 'gcj02',
       success: function (res) {
-        window.clearTimeout(timeout)
         // 将位置信息存储到cookie中10秒
         DB.setCookie('app_location', res.longitude + ',' + res.latitude , 10)
         if (params.onSuccess) params.onSuccess(res)
       },
       fail: function () {
-        window.clearTimeout(timeout)
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查微信定位权限是否开启'})
         else alert('定位失败,请检查微信定位权限是否开启')
       },
       cancel: function (res) {
-        window.clearTimeout(timeout)
         if (params.onCancel) params.onCancel(res)
       },
       complete: function (res) {
-        window.clearTimeout(timeout)
         if (params.onComplete) params.onComplete(res)
       }
     })
@@ -332,7 +324,7 @@ var Bridge = {
         watermark.time = new Date().format(s.params.watermark.time)
       }
       if (s.isClicked) {
-        msg = '客户端正在检测环境，请稍等...'
+        msg = '拍照相册正在启动,请不要重复点击'
         if (s.params.onError) {
           s.params.onError({code: 'chooseClicked', msg: msg})
         } else {
