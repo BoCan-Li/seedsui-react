@@ -61,8 +61,9 @@ var Bridge = {
   getLocation: function (params) {
     console.log('只能模拟getLocation定位')
     setTimeout(function () {
-      // 模拟微信国测局定位地址
+      // 模拟国测局定位地址
       if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
+      // if (params.onError) params.onError({code:'locationFail', msg: '定位失败,请检查手机定位权限是否开启'})
     }, 1000)
   },
   /*
