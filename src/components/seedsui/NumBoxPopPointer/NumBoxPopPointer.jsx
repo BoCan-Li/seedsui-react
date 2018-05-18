@@ -98,14 +98,28 @@ export default class NumBoxPopPointer extends Component {
     return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} readOnly placeholder={placeholder} onClick={this.onClickNumBox} className={`numbox-input`} disabled={min >= max}/>;
   }
   render() {
-    const {className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
+    const {valueBindProp, className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
     const {show} = this.state;
+    // 减按钮禁用
+    let minusDisabled = false;
+    if (valueBindProp) {
+      minusDisabled = value <= min;
+    } else {
+      minusDisabled = this.$input ? this.$input.value <= min : value <= min;
+    }
+    // 加按钮禁用
+    let plusDisabled = false;
+    if (valueBindProp) {
+      plusDisabled = value >= max;
+    } else {
+      plusDisabled = this.$input ? this.$input.value >= max : value >= max;
+    }
     return (
       <div style={Object.assign({position: 'relative'}, style)} className={className}>
         <div disabled={disabled} className={`numbox bordered${numboxClassName ? ' ' + numboxClassName : ''}`} style={numboxStyle}>
-          <input type="button" className="numbox-button" disabled={this.$input ? this.$input.value <= min : value <= min} value="-" onClick={this.onClickMinus}/>
+          <input type="button" className="numbox-button" disabled={minusDisabled} value="-" onClick={this.onClickMinus}/>
           {this.getInputDOM()}
-          <input type="button" className="numbox-button" disabled={this.$input ? this.$input.value >= max : value >= max} value="+" onClick={this.onClickPlus}/>
+          <input type="button" className="numbox-button" disabled={plusDisabled} value="+" onClick={this.onClickPlus}/>
         </div>
         <span style={UnitStyle}>{unit || ''}</span>
         <NumBoxPop valueBindProp show={show} args={args} value={this.$input ? this.$input.value : value.toString()} digits={digits} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}/>

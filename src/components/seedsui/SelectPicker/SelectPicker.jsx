@@ -38,20 +38,28 @@ export default class SelectPicker extends Component {
   componentDidUpdate = (prevProps) => {
     if (this.state.instance) {
       if (this.props.show) {
-        if (this.props.value) {
-          const options = this.props.value.split(',').map((item) => {
-            return {
-              key: item,
-              value: item
-            }
-          });
-          this.state.instance.setActiveOptions(options);
-        } else {
-          this.state.instance.setActiveOptions([]);
-        }
+        this.setDefaults();
         this.state.instance.show();
       }
       else this.state.instance.hide()
+    }
+  }
+  setDefaults = () => {
+    if (this.props.value) {
+      const options = this.props.value.split(',').map((value) => {
+        for (var i = 0, li; li = this.props.list[i++];) { // eslint-disable-line
+          if (li.value === value) {
+            return li;
+          }
+        }
+        return {
+          key: value,
+          value: value
+        };
+      });
+      this.state.instance.setActiveOptions(options);
+    } else {
+      this.state.instance.setActiveOptions([]);
     }
   }
   initInstance = () => {
@@ -77,20 +85,13 @@ export default class SelectPicker extends Component {
       onHid: (e) => {
       }
     });
-    if (this.props.value) {
-      const options = this.props.value.split(',').map((item) => {
-        return {
-          key: item,
-          value: item
-        }
-      });
-      instance.setActiveOptions(options);
-    }
-    if (this.props.show && instance) {
-      instance.show()
-    }
     this.setState({
       instance
+    }, () => {
+      this.setDefaults();
+      if (this.props.show && instance) {
+        instance.show()
+      }
     });
   }
   render() {
