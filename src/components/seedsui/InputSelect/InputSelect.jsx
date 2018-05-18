@@ -130,6 +130,6 @@ export default class InputPicker extends Component {
         {riconClassName && <Icon className={`color-placeholder ${riconClassName}`}/>}
       </div>);
     }
-    return [DOM, <SelectPicker multiple={multiple} key="picker" show={this.state.show} onChange={this.onChange} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask} list={list} value={value}/>];
+    return [DOM, <SelectPicker multiple={multiple} key="picker" show={this.state.show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask} list={list} value={value}/>];
   }
 }
