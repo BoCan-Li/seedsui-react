@@ -52,35 +52,11 @@ export default class InputLocation extends Component {
     return args;
   }
   onClick = (e) => {
-    const {onChange, onClick} = this.props;
+    const {onChange, onClick, value} = this.props;
     if (onClick) onClick(this.getArgs(e));
     if (this.state.value === this.state.loading) return;
-    // 赋值
-    if (!this.props.valueBindProp) this.$input.value = this.state.loading;
-    // 订货客户端获取地址
-    if (bridge.platform === 'dinghuo') {
-      bridge.getLocation({
-        onSuccess: (data) => {
-          // 赋值
-          if (!this.props.valueBindProp) this.$input.value = data.address;
-          if (onChange) onChange(data.address, this.getArgs(e))
-        },
-        onError: (err) => {
-          var toast = new Toast({
-            maskClass: 'mask toast-mask middle',
-            html: err.msg,
-            delay: 2000,
-            onHid: (e) => {
-              console.log('remove')
-              e.destroy();
-              toast = null;
-            }
-          });
-          toast.show();
-        }
-      });
-      return;
-    }
+    // 定位中...
+    this.$input.value = this.state.loading;
     bridge.getLocation({
       onSuccess: (data) => {
         bridge.getAddress({
@@ -90,16 +66,43 @@ export default class InputLocation extends Component {
           onSuccess: (addrs) => {
             // 赋值
             if (!this.props.valueBindProp) this.$input.value = addrs.address;
+            else this.$input.value = value;
+            // Callback
             if (onChange) onChange(addrs.address, this.getArgs(e))
           },
-          onError: (res) => {
-            if (res.code === 'timeout') {
-              this.setState({
-                loading: '定位超时,请点击重试'
-              });
-            }
+          onError: (err) => {
+            // 获取地址失败
+            this.$input.value = '';
+            // 提示获取地址失败
+            var toast = new Toast({
+              maskClass: 'mask toast-mask middle',
+              html: err.msg,
+              delay: 2000,
+              onHid: (e) => {
+                console.log('remove')
+                e.destroy();
+                toast = null;
+              }
+            });
+            toast.show();
           }
         });
+      },
+      onError: (err) => {
+        // 定位失败
+        this.$input.value = '';
+        // 提示定位失败
+        var toast = new Toast({
+          maskClass: 'mask toast-mask middle',
+          html: err.msg,
+          delay: 2000,
+          onHid: (e) => {
+            console.log('remove')
+            e.destroy();
+            toast = null;
+          }
+        });
+        toast.show();
       }
     });
   }

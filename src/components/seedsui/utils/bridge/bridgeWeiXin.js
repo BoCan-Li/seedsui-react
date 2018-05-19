@@ -82,14 +82,8 @@ var Bridge = {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
-      appLocation = appLocation.split(',')
-      if (appLocation.length === 2) {
-        if (params.onSuccess) params.onSuccess({
-          longitude: appLocation[0],
-          latitude: appLocation[1]
-        })
-        return
-      }
+      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      return
     }
     // 定位
     wx.getLocation({ // eslint-disable-line
@@ -97,7 +91,7 @@ var Bridge = {
       type: 'gcj02',
       success: function (res) {
         // 将位置信息存储到cookie中10秒
-        DB.setCookie('app_location', res.longitude + ',' + res.latitude , 10)
+        DB.setCookie('app_location', JSON.stringify(res) , 10)
         if (params.onSuccess) params.onSuccess(res)
       },
       fail: function () {

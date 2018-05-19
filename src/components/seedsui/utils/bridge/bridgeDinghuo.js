@@ -198,10 +198,36 @@ var Bridge = {
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
    * */
   getLocation: function (params) {
-    const self = this;
-    setTimeout(function () {
-      self.invoke('getLocation', 'gcj02', params.onSuccess)
-    }, 1000);
+    // 先从cookie中读取位置信息
+    var appLocation = DB.getCookie('app_location') || ''
+    if (appLocation) {
+      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      return
+    }
+    this.invoke('getLocation', 'gcj02', function (res) {
+      if (res && res.latitude) {
+        // 将位置信息存储到cookie中10秒
+        DB.setCookie('app_location', JSON.stringify(res) , 10)
+        if (params.onSuccess) params.onSuccess(res)
+      } else {
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+      }
+    })
+  },
+  /*
+   * 百度地图:获取当前位置名称
+   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: ()}
+   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
+   * */
+  getAddress: function (params) {
+    // 先从cookie中读取位置信息
+    var appLocation = DB.getCookie('app_location') || ''
+    if (appLocation) {
+      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      return
+    }
+    if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
+    else alert('获取位置名称失败,请稍后重试')
   },
   /*
   * 获取当前网络状态

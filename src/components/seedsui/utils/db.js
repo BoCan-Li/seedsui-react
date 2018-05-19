@@ -104,10 +104,14 @@ var DB = (function () {
       document.cookie = cookieStr
     },
     getCookie: function (key) {
-      var valExpr = new RegExp('(^| )' + key + '=([^]*)(|$)')
-      var match = valExpr.exec(document.cookie)
-      if (match && match[2]) {
-        return unescape(match[2])
+      var arrCookie = document.cookie.split('; ')
+      //遍历cookie数组, 处理每个cookie对
+      for (var i = 0, item; item = arrCookie[i++];) { // eslint-disable-line
+        var arrItem = item.split("=");
+        //找到名称为userId的cookie，并返回它的值 
+        if (String(key) === arrItem[0]) {
+          return unescape(arrItem[1])
+        }
       }
       return null
     },

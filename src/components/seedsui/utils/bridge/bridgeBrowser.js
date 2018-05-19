@@ -1,4 +1,3 @@
-// import createHistory from 'history/createBrowserHistory'
 import DB from './../db';
 import EventUtil from './../eventutil';
 import coordtransform from 'coordtransform';
@@ -59,12 +58,21 @@ var Bridge = {
   },
   /* 获取当前地理位置 */
   getLocation: function (params) {
+    // 先从cookie中读取位置信息
+    var appLocation = DB.getCookie('app_location') || ''
+    if (appLocation) {
+      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      return
+    }
     console.log('只能模拟getLocation定位')
     setTimeout(function () {
+      var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
+      // 将位置信息存储到cookie中10秒
+      DB.setCookie('app_location', JSON.stringify(res) , 10)
       // 模拟国测局定位地址
-      if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
+      if (params.onSuccess) params.onSuccess(res)
       // if (params.onError) params.onError({code:'locationFail', msg: '定位失败,请检查手机定位权限是否开启'})
-    }, 1000)
+    }, 500)
   },
   /*
    * 百度地图:获取当前位置名称
@@ -75,21 +83,21 @@ var Bridge = {
     // 定位到容器<div id="baidu_container"></div>
     var map = new BMap.Map("baidu_container") // eslint-disable-line
     var bd09 = [params.longitude, params.latitude]
-    // 国测局gcj02转百度坐标
-    if (params.type === 'gcj02') {
-      bd09 = coordtransform.gcj02tobd09(params.longitude, params.latitude)
-    }
+    
     // 国际坐标wgs84转百度坐标
     if (params.type === 'wgs84') {
       bd09 = coordtransform.wgs84tobd09(params.longitude, params.latitude)
+    // 国测局gcj02转百度坐标 params.type === 'gcj02'
+    } else {
+      bd09 = coordtransform.gcj02tobd09(params.longitude, params.latitude)
     }
     var startPoint = new BMap.Point(bd09[0], bd09[1]) // eslint-disable-line
     map.centerAndZoom(startPoint, 15)
     let Geocoder = new BMap.Geocoder() // eslint-disable-line
     Geocoder.getLocation(map.getCenter(), (rs) => {
       if (params.onSuccess) params.onSuccess(rs)
-    }, (res) => {
-      if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + res})
+    }, (err) => {
+      if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + err})
       else alert('获取位置名称失败,请稍后重试')
     })
   },
@@ -132,10 +140,6 @@ var Bridge = {
   /* 退出到登陆页面 */
   logOut: function (message) {
     console.log('身份认证未通过,需要重新登录')
-    // const history = createHistory()
-    // let login_url = '/login'
-    // window.history.replace(login_url)
-    // window.location.reload()
   },
   // 获取上传图片路径,与后端约定好的固定格式, tenantId/项目名/自定义路径/月份
   getUploadDir: function (params) {
