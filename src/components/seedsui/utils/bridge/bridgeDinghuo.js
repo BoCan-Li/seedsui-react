@@ -394,7 +394,7 @@ var Bridge = {
   // 离线上传, 不需要带企业id
   offlineUpload: function (params) {
     const uploadDir = this.getUploadDir(params);
-    const uploadParams = {uploadDir, localIds: params.imgIds};
+    const uploadParams = {uploadDir, noTenantId: params.noTenantId || '0', localIds: params.imgIds};
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件
