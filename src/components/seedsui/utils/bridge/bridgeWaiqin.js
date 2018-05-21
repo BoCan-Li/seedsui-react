@@ -44,7 +44,7 @@ var Bridge = {
   isExistsFile: function (params, callback) {
     wq.wqio.verifyFileHasExist((result) => { // eslint-disable-line
       if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    }, params)
   },
   /* 附件下载
   downloadFile({
@@ -58,7 +58,7 @@ var Bridge = {
   downloadFile: function (params, callback) {
     wq.wqio.downloadFile((result) => { // eslint-disable-line
       if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    }, params)
   },
   /* 附件打开
   openFile（{
@@ -69,7 +69,7 @@ var Bridge = {
   openFile: function (params, callback) {
     wq.wqio.openFile((result) => { // eslint-disable-line
       if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    }, params)
   },
   /*
    * 扫描二维码并返回结果
@@ -82,7 +82,7 @@ var Bridge = {
   },
   /*
    * 获取当前地理位置
-   * 外勤365默认使用国测局'gcj02'定位,没有参数控制
+   * type：坐标类型，订货365默认使用国测局'gcj02'
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
    * */
   getLocation: function (params) {
@@ -103,7 +103,7 @@ var Bridge = {
         }
         params.onSuccess(location)
       }
-    }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
+    }, params)
   },
   /*
   * 拍照、本地选图
@@ -343,7 +343,7 @@ var Bridge = {
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
-          s.params.onError({code: 'limit', msg: msg})
+          s.params.onError({code: '000521', msg: msg})
         } else {
           alert(msg)
         }
@@ -361,7 +361,7 @@ var Bridge = {
             if(s.imgMap[localId]){
               msg = '照片已存在，请勿重复上传！'
               if (s.params.onError) {
-                s.params.onError({code: 'chooseRepeat', msg: msg})
+                s.params.onError({code: '10060', msg: msg})
               } else {
                 alert(msg)
               }
