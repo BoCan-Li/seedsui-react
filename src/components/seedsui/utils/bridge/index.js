@@ -2,17 +2,17 @@ import BridgeWeiXin from './bridgeWeiXin'
 import BridgeBrowser from './bridgeBrowser'
 import BridgeDinghuo from './bridgeDinghuo'
 import BridgeWaiqin from './bridgeWaiqin'
+import Device from './../device'
 
 var bridge
 var ua = navigator.userAgent.toLowerCase()
-if (ua.indexOf('micromessenger') > -1) {
+if (Device.platform === 'weixin') {
   bridge = BridgeWeiXin
-} else if (ua.indexOf('dinghuoappversion') > -1) {
+} else if (Device.platform === 'dinghuo') {
   bridge = BridgeDinghuo
-  bridge.init()
-} else if (ua.indexOf('wqappversion') > -1) {
+  bridge.config()
+} else if (Device.platform === 'waiqin') {
   bridge = BridgeWaiqin
-  bridge.init()
 } else {
   bridge = BridgeBrowser
 }

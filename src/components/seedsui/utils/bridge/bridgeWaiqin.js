@@ -4,12 +4,11 @@ import DB from './../db.js';
 
 var Bridge = {
   platform: 'waiqin',
-  init: function () {
-    var wqScript = document.createElement('script')
-    wqScript.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
-    document.body.appendChild(wqScript)
+  config: function () {
+    var self = this
     document.addEventListener('deviceready', function () {
       DB.setSession('bridge_isready', '1')
+      self.back()
     })
   },
   // 获得版本信息
@@ -76,8 +75,14 @@ var Bridge = {
    * 返回：{resultStr:''}
    * */
   scanQRCode: function (params) {
-    wq.wqhardware.getQrCode((result) => { // eslint-disable-line
-      if (params && params.onSuccess) params.onSuccess(result)
+    wq.wqhardware.getQrCode((res) => { // eslint-disable-line
+      if (res && res.qrCode) {
+        var wqRes = res
+        wqRes.resultStr = res.qrCode
+        if (params && params.onSuccess) params.onSuccess(wqRes)
+      } else {
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败请稍后重试'})
+      }
     })
   },
   /*
@@ -116,8 +121,8 @@ var Bridge = {
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
   /*
-   * 百度地图:获取当前位置名称
-   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: ()}
+   * 获取当前位置名称
+   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
   getAddress: function (params) {
@@ -228,16 +233,20 @@ var Bridge = {
   },
   // 返回按键处理
   back: function () {
-    var isFromApp = Device.getUrlParameter('isFromApp') || '';
-    if (isFromApp === '1') {
-      try {
-        Bridge.closeWindow();
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      history.go(-1);
-    }
+    document.addEventListener('deviceready', function () {
+      wq.wqtitlebar.setTitleBar(function (args) { // eslint-disable-line
+        var isFromApp = Device.getUrlParameter('isFromApp') || ''
+        if (isFromApp === '1' || !history.state) {
+          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle', button_color: '#ff790a' }] })
+          if(confirm(jsonStr)){
+            Bridge.closeWindow()
+          }
+        } else {
+          history.go(-1)
+        }
+        Bridge.back()
+      }, null, JSON.stringify({backCustom: true}))
+    });
   },
   /**
    * 获取客户信息
@@ -250,20 +259,9 @@ var Bridge = {
   },
   // 客户端添加返回绑定
   addBackPress: function () {
-    try {
-      // success, fail, params
-      wq.wqtitlebar.setTitleBar(this.back, null, {backCustom: true}) // eslint-disable-line
-    } catch (error) {
-      console.log(error);
-    }
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    try {
-      wq.wqtitlebar.setTitleBar(null, null, {backCustom: false}) // eslint-disable-line
-    } catch (error) {
-      console.log(error);
-    }
   },
   /**
    * 获取带前缀的图片
@@ -296,7 +294,7 @@ var Bridge = {
   // 离线上传, 不需要带企业id
   offlineUpload: function (params) {
     const uploadDir = this.getUploadDir(params);
-    const uploadParams = {uploadDir, localIds: params.imgIds};
+    const uploadParams = {tenantId: params.tenantId || '', uploadDir, localIds: params.imgIds};
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件

@@ -4,7 +4,7 @@ import DB from './../db.js';
 
 var Bridge = {
   platform: 'dinghuo',
-  init: function () {
+  config: function () {
     DB.setSession('bridge_isready', '1')
     this.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp']);
   },
@@ -215,8 +215,8 @@ var Bridge = {
     })
   },
   /*
-   * 百度地图:获取当前位置名称
-   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: ()}
+   * 获取当前位置名称
+   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
   getAddress: function (params) {
