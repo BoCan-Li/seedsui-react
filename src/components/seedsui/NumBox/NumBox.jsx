@@ -22,7 +22,6 @@ export default class NumBox extends Component {
     onChange: PropTypes.func,
     onError: PropTypes.func,
     // rule设置
-    integer: PropTypes.number,
     digits: PropTypes.number,
     max: PropTypes.number,
     min: PropTypes.number,
@@ -78,6 +77,7 @@ export default class NumBox extends Component {
   onClickMinus = (e) => {
     let value = Math.Calc.subtract(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
+    if (value > this.props.max) value = this.props.max;
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = value;
     // Callback
@@ -88,6 +88,7 @@ export default class NumBox extends Component {
   onClickPlus = (e) => {
     let value = Math.Calc.add(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
+    if (value > this.props.max) value = this.props.max;
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = value;
     // Callback
@@ -95,69 +96,30 @@ export default class NumBox extends Component {
       this.props.onChange('' + value, this.getArgs(e));
     }
   };
-  correctNum = (numstr) => {
-    if (numstr === '') return '';
-    var value = '';
+  correctNum = (argNumstr) => {
+    var num = Number(argNumstr);
+    if (!num) return '';
     // 判断是否超出限制
     const {max, min} = this.props;
-    if (max && numstr > max) {
+    if (max && num > max) {
       // callback onError
       if (this.props.onError) this.props.onError('最大不能超过' + max);
       return '' + max;
     }
-    if (min && numstr < min) {
+    if (min && num < min) {
       // callback onError
       if (this.props.onError) this.props.onError('最小不能小于' + min);
       return '' + min;
     }
-    // 判断整数位数
-    if (this.props.integer) {
-      var integerVal = '';
-      var decimalVal = '';
-      if (numstr.indexOf('.') > 0) {
-        integerVal = numstr.split('.')[0];
-        decimalVal = '.' + numstr.split('.')[1];
-      } else {
-        integerVal = numstr;
-      }
-      if (integerVal.length > this.integer) {
-        // callback onError
-        if (this.props.onError) this.props.onError('整数位不能超过' + this.integer + '位');
-        return (integerVal.substring(0, this.integer) + decimalVal);
-      }
-    }
+    var value = '';
+    // 截取小数位数
     if (this.props.digits) {
-      // 如果输入的内容不是一个数字，则转为数字
-      if (!/^(0|([1-9][0-9]*))(\.[0-9]*)?$/.test(numstr)) {
-        console.log('不是一个正数');
-        value = numstr.match(/(0|([1-9][0-9]*))(\.[0-9]+)?/)[0];
-        // callback onError
-        if (this.props.onError) this.props.onError('必须要输入一个正数');
-      } else {
-        value = numstr;
-      }
-      // 如果小数位超过限制，则截掉多余位数
-      if (this.props.digits) {
-        const match = value.match(/\.[0-9]*/);
-        if (match && match[0] && match[0].length - 1 > this.props.digits) {
-          var digitsMatch = new RegExp('[0-9]+\\.[0-9]{1,' + this.props.digits + '}');
-          value = value.match(digitsMatch)[0];
-          // callback onError
-          if (this.props.onError) this.props.onError('小数位最多不能超过' + this.props.digits + '位');
-        }
-      }
+      value = Math.Calc.toDigits(num, this.props.digits);
+    // 整数
     } else {
-      // 如果输入的不是一个正整数，则转为正整数
-      if (!/^[1-9]{1,}[0-9]*$/.test(numstr)) {
-        const result = numstr.match(/[1-9]{1,}[0-9]*/);
-        value = result ? result[0] : this.props.min;
-        // callback onError
-        if (this.props.onError) this.props.onError('必须要输入正整数');
-      } else {
-        value = numstr;
-      }
+      value = Math.floor(num);
     }
-    return value;
+    return '' + value;
   };
   // render
   getInputDOM = () => {
