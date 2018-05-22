@@ -144,7 +144,7 @@ var Bridge = {
   * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
   * */
   openWindow: function (params, callback) {
-    this.invoke('openWindow', params, callback)
+    this.invoke('openWindow', Object.assign(params, {url: '/h5fw/#' + params.url}), callback)
   },
   /* 关闭当前窗 */
   closeWindow: function (callback) {
@@ -394,7 +394,7 @@ var Bridge = {
   // 离线上传, 不需要带企业id
   offlineUpload: function (params) {
     const uploadDir = this.getUploadDir(params);
-    const uploadParams = {uploadDir, noTenantId: params.noTenantId || '0', localIds: params.imgIds};
+    const uploadParams = {tenantId: params.tenantId || '', uploadDir, localIds: params.imgIds};
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件
@@ -455,10 +455,6 @@ var Bridge = {
       })
     }
     s.updateImgs()
-    // 根据watermark.location判断拍照前是否先定位, 再选照片
-    s.locationChoose = function () {
-      s.choose()
-    }
     // 选择照片
     s.choose = function () {
       var msg = ''

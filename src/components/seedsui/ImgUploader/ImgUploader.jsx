@@ -30,7 +30,7 @@ export default class ImgUploader extends Component {
     readOnly: PropTypes.bool,
 
     showCount: PropTypes.bool,
-    watermark: PropTypes.object, // 增加水印,参数:{time:'yyyy-MM-dd hh:mm:ss', location: [longitude, latitude]}
+    watermark: PropTypes.object, // 增加水印,参数:{time:'yyyy-MM-dd hh:mm:ss'}
    
     onShowLoad: PropTypes.func, // 显示遮罩
     onHideLoad: PropTypes.func, // 隐藏遮罩
@@ -52,8 +52,7 @@ export default class ImgUploader extends Component {
     preview: true,
     readOnly: false,
     watermark: {
-      time: null, // 时间水印信息,格式'yyyy-MM-dd hh:mm:ss'
-      location: null, // 先定位再拍照,参数为[longitude, latitude]坐标时,则水印会带偏差;如果参数为[],水印则只有地名
+      time: null // 时间水印信息,格式'yyyy-MM-dd hh:mm:ss'
     }
   }
   constructor(props) {
@@ -145,7 +144,7 @@ export default class ImgUploader extends Component {
   chooseImg = () => {
     if (this.props.readOnly) return;
     // 根据watermark.location判断拍照前是否先定位, 再选照片
-    this.state.instance.locationChoose();
+    this.state.instance.choose();
     /* const list = this.state.list;
     list.push({
       id: 'http://image-test.waiqin365.com/9999999999999999999/stdmendian/info/201801/demo_advert.png',

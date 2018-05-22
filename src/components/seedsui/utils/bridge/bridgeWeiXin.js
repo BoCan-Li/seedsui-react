@@ -256,60 +256,6 @@ var Bridge = {
       })
     }
     s.updateImgs()
-    // 获取照片位置
-    s.photoLocation = function (point) {
-      if (s.params.onShowLoad) s.params.onShowLoad('定位中...')
-      Bridge.getLocation({
-        onSuccess: (data) => {
-          BridgeBrowser.getAddress({
-            latitude: data.latitude,
-            longitude: data.longitude,
-            type: 'gcj02',
-            onSuccess: (addrs) => {
-              // 绘制location的水印信息,address地址、location坐标、distance偏差
-              var watermark = {
-                address: addrs.address,
-                location: data.longitude + ',' + data.latitude
-              }
-              if (point) {
-                var point1 = point
-                var point2 = [data.longitude, data.latitude]
-                var distance = BridgeBrowser.getDistance({point1, point2, onError: s.params.onError})
-                if (distance) watermark.distance = '偏差' + distance + '米'
-              }
-              s.choose(watermark)
-            },
-            onError: (res) => {
-              if (s.params.onError) {
-                s.params.onError(res)
-              }
-              if (s.params.onHideLoad) s.params.onHideLoad()
-            }
-          })
-        },
-        onError: (res) => {
-          if (s.params.onError) {
-            s.params.onError(res)
-          }
-          if (s.params.onHideLoad) s.params.onHideLoad()
-        }
-      })
-    }
-    // 根据watermark.location判断拍照前是否先定位, 再选照片
-    s.locationChoose = function () {
-      var location = s.params.watermark.location
-      // 如果设置了拍照前先定位
-      if (location) {
-        if (location instanceof Object && location.length === 2) {
-          s.photoLocation(location)
-        } else {
-          s.photoLocation()
-        }
-        return
-      }
-      // 直接选照片
-      s.choose();
-    }
     // 选择照片
     s.choose = function (argWatermark) {
       // 绘制time的水印信息,time时间
