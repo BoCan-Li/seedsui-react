@@ -228,16 +228,16 @@ var Bridge = {
     return 'LocalResource://imageid'
   },
   // 退出到登陆页面
-  logOut: function (msg) {
-    wq.wqload.wqBackToLogin({message: msg || ''}) // eslint-disable-line
-  },
-  // 返回按键处理
+  // logOut: function (msg) {
+  //   wq.wqload.wqBackToLogin({message: msg || ''}) // eslint-disable-line
+  // },
+  // 返回按键处理,外勤的特性限制只能在history为底层时才生效
   back: function () {
     document.addEventListener('deviceready', function () {
       wq.wqtitlebar.setTitleBar(function (args) { // eslint-disable-line
         var isFromApp = Device.getUrlParameter('isFromApp') || ''
         if (isFromApp === '1' || !history.state) {
-          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle', button_color: '#ff790a' }] })
+          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle', button_color: '#EB464A' }] })
           if(confirm(jsonStr)){
             Bridge.closeWindow()
           }
