@@ -144,7 +144,7 @@ var Bridge = {
   * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
   * */
   openWindow: function (params, callback) {
-    this.invoke('openWindow', Object.assign(params, {url: '/h5fw/#' + params.url}), callback)
+    this.invoke('openWindow', params, callback)
   },
   /* 关闭当前窗 */
   closeWindow: function (callback) {
