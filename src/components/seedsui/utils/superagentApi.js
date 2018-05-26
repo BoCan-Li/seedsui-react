@@ -6,8 +6,8 @@ const env = process.env.NODE_ENV
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path
   if (env === 'development') {
-    // 如果需要做跨域处理,则加上/api:http://localhost:4444/api,使其被proxy代理过滤器匹配到/api,从而做代理跨域
-    return 'http://localhost:4444' + adjustedPath
+    // 如果需要做跨域处理,则加上/api:http://localhost:8080/api,使其被proxy代理过滤器匹配到/api,从而做代理跨域
+    return 'http://localhost:8080' + adjustedPath
   }
   return adjustedPath;
 }
