@@ -5,7 +5,6 @@ import BridgeWaiqin from './bridgeWaiqin'
 import Device from './../device'
 
 var bridge
-var ua = navigator.userAgent.toLowerCase()
 if (Device.platform === 'weixin') {
   bridge = BridgeWeiXin
 } else if (Device.platform === 'dinghuo') {
@@ -13,6 +12,7 @@ if (Device.platform === 'weixin') {
   bridge.config()
 } else if (Device.platform === 'waiqin') {
   bridge = BridgeWaiqin
+  bridge.config()
 } else {
   bridge = BridgeBrowser
 }

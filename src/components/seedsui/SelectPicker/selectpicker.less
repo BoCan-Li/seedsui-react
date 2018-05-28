@@ -15,7 +15,7 @@
 }
 // 列表选项
 .selectpicker-option{
-  &:extend(.sliver, .border-b);
+  &:extend(.flex, .border-b);
   padding: 10px 12px;
 }
 .selectpicker-option.active{
@@ -25,7 +25,9 @@
   }
 }
 .selectpicker-option-caption{
-  &:extend(.sliver-caption);
+  position: relative;
+  display: block;
+  &:extend(.flex-1);
   pointer-events: none;
 }
 .selectpicker-option-icon{
