@@ -43,6 +43,8 @@ var Device = (function () {
     platform = 'dinghuo'
   } else if (ua.indexOf('wqappversion') > -1) {
     platform = 'waiqin'
+  } else {
+    platform = 'browser'
   }
   // 获得苹果机型
   function appleModel () { // 获取设备型号
@@ -118,11 +120,22 @@ var Device = (function () {
   }
   // 动态加载桥接库
   function dynamicLoadBridge () {
-    if (platform === 'weixin') {
+    if (platform === 'browser') {
+      // 百度地图
+      var browserScript = document.createElement('script')
+      browserScript.src = '//api.map.baidu.com/getscript?v=2.0&ak=IlfRglMOvFxapn5eGrmAj65H&s=1'
+      document.body.appendChild(browserScript);
+    } else if (platform === 'weixin') {
+      // 百度地图
+      browserScript = document.createElement('script')
+      browserScript.src = '//api.map.baidu.com/getscript?v=2.0&ak=IlfRglMOvFxapn5eGrmAj65H&s=1'
+      document.body.appendChild(browserScript);
+      // 微信
       var wxScript = document.createElement('script')
       wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.0.js'
       document.body.appendChild(wxScript);
     } else if (platform === 'waiqin') {
+      // 外勤
       var wqScript = document.createElement('script')
       wqScript.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       document.body.appendChild(wqScript);

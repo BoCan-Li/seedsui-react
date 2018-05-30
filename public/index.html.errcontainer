@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#000000">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -22,46 +23,14 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <style>
-      #error_container{
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        color: #999;
-        background-color: #f8f8f8;
-        z-index: 999;
-        display: none;
-      }
-      .error_container_icon{
-        width: 150px;
-      }
-      .error_container_font{
-        margin-top: 10px;
-      }
-      .error_container_content{
-        position: absolute;
-        width: 100%;
-        top:40%;
-        -webkit-transform: translateY(-50%);
-        text-align: center;
-      }
-    </style>
-    <title>SeedsUI React</title>
+    <title>在线订货</title>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root" class="pages"></div>
-    <!-- <div id="baidu_container"></div> -->
-    <div id="error_container">
-      <div class="error_container_content">
-        <img class="error_container_icon" src="data:image/png;base64,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" alt=""/>
-        <p class="error_container_font">错误信息面板</p>
-      </div>
-    </div>
+    <div id="baidu_container"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -73,8 +42,7 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <!-- 第三方库 -->
-    <!-- <script src="//api.map.baidu.com/api?v=2.0&ak=8830f84901336e9afd2c6d7033d2ebe5&s=1"></script> -->
-    <script src="https://cdn.bootcss.com/babel-polyfill/6.23.0/polyfill.min.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/babel-polyfill/6.23.0/polyfill.min.js"></script> -->
     <script type=text/javascript>
       // jsp重定向url
       var url = "${url}";
@@ -83,9 +51,7 @@
         // 用于后端告诉前端刚进应用时重定向的页面,例如刚进来有可能是login或者home亦或者me
         window.redirectUrl = url.split("#")[1];
       } else if (errMsg) {
-        var errContainer = document.getElementById("error_container");
-        errContainer.style.display = "block";
-        errContainer.querySelector("error_container_font").innerHTML = errMsg;
+        window.redirectUrl = '/_react_/exception/' + errMsg;
       }
     </script>
   </body>

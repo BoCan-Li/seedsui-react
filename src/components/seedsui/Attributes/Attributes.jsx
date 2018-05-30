@@ -84,6 +84,13 @@ export default class Attributes extends Component {
         buttonValue = item.button;
       }
       return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item.buttonArgs || '');}}>{buttonValue}</Button>;
+    // html
+    } else if (item.html) {
+      let htmlValue = item.value || '';
+      if (typeof item.html === 'string') {
+        htmlValue = item.html;
+      }
+      return <div dangerouslySetInnerHTML={{__html: htmlValue}}/>;
     }
     return item.value;
   }

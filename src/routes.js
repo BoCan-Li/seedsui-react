@@ -7,6 +7,7 @@ import NoNetwork from 'components/seedsui/NoNetwork/NoNetwork.jsx';
 import NotFound from 'components/seedsui/NotFound/NotFound.jsx';
 // Containers
 import {
+  Exception,
   Home,
   Box,
   CarrouselPage,
@@ -26,9 +27,12 @@ const Routes = () => (
         {/* 表单 */}
         <Route exact path="/_react_/form" component={Form}/>
 
+        {/* 错误页面 */}
+        <Route exact path="/_react_/exception/:msg?" component={Exception}/>
+
         {/* 重定向 */}
         <Route exact path="/" render={() => (
-          (window.redirectUrl && window.location.href.indexOf('/wxapi/main.action?type=') >= 0) ? (
+          (window.redirectUrl && window.location.href.indexOf('main.action') >= 0) ? (
             <Redirect to={window.redirectUrl}/>
           ) : (
             <NotFound/>
