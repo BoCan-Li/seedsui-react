@@ -1,7 +1,7 @@
 // attribute.less(start)
 .attribute{
   &:extend(.flex);
-  &:extend(.flex-middle);
+  .flex-middle;
   &:extend(.flex-1);
   .ricon{
     margin-left: 4px;
@@ -19,7 +19,7 @@
 .attribute-half{
   width: 50%;
   &:extend(.flex);
-  &:extend(.flex-middle);
+  .flex-middle;
 }
 .attribute-left, .attribute-right {
   &:extend(.box);
@@ -45,7 +45,7 @@
   }
   .attribute-right {
     &:extend(.flex);
-    &:extend(.flex-right);
+    .flex-right;
   }
 }
 
