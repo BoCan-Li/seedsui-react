@@ -374,27 +374,13 @@ var Bridge = {
   getPreviewImage: function (imgId) {
     return 'LocalResource://imageid' + imgId
   },
-  // 获取上传图片路径
-  getUploadDir: function (params) {
-    if (params.customPath) return params.path
-    let path = params.path || 'test/test01'
-    const month = new Date().format('yyyyMM')
-    if (params.monthPath !== false) {
-      path += '/' + month
-    }
-    return `${path}/`;
-  },
-  // 获取图片全路径, 一般用于表单提交
-  getFormImgsStr: function (params) {
-    const imgs = params.imgIds.map((imgId) => {
-      return this.getUploadDir(params) + imgId;
-    });
-    return imgs.join(',');
-  },
-  // 离线上传, 不需要带企业id
-  offlineUpload: function (params) {
-    const uploadDir = this.getUploadDir(params);
-    const uploadParams = {tenantId: params.tenantId || '', uploadDir, localIds: params.imgIds};
+  /*
+    * 离线上传, 可不带企业id
+    * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
+    */
+  // 
+  offlineUpload: function (dir, imgIds, tenantId) {
+    const uploadParams = {uploadDir: dir, localIds: imgIds, tenantId: tenantId || '' };
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件
@@ -476,7 +462,7 @@ var Bridge = {
         sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          for(var i=0, localId; localId=res.localIds[i++];){ // eslint-disable-line
+          for(var i=0, localId; localId = res.localIds[i++];){ // eslint-disable-line
             if(s.imgMap[localId]){
               msg = '照片已存在，请勿重复上传！'
               if (s.params.onError) {
@@ -487,8 +473,8 @@ var Bridge = {
               continue
             }
             s.imgMap[localId]={
-              serverId:'',
-              sourceType:res.sourceType
+              serverId: '',
+              sourceType: JSON.stringify(s.params.sourceType) === JSON.stringify(['camera']) ? 'camera' : 'album'
             }
           }
           s.imgs = Object.keys(s.imgMap)

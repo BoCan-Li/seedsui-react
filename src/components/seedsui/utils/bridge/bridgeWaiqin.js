@@ -141,7 +141,6 @@ var Bridge = {
   * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
   */
   chooseImage: function (argParams) {
-    console.log(argParams)
     var params = {}
     // 格式化sourceType
     var operation = '2'
@@ -179,8 +178,6 @@ var Bridge = {
     if (argParams && argParams.customerName) {
       params.customerName = argParams.customerName;
     }
-    console.log('choose params:');
-    console.log(params);
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
@@ -234,20 +231,17 @@ var Bridge = {
     var photos = []
     if (argParams && argParams.urls && argParams.urls.length) {
       photos = argParams.urls.map((item) => {
-        return {path: item}
+        return {
+          path: item
+        }
       })
     }
     var params = {
       position: position,
       photos: photos
     }
-    wq.wqphoto.photoPreview(params) // eslint-disable-line
-  },
-  /*
-  * 获取图片前缀
-  * */
-  getImagePrefix: function () {
-    return 'LocalResource://imageid'
+    console.log(params)
+    wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
   },
   // 退出到登陆页面
   // logOut: function (msg) {
@@ -285,22 +279,10 @@ var Bridge = {
   // 客户端移除返回绑定
   removeBackPress: function () {
   },
-  /**
-   * 获取带前缀的图片
-   */
-  getPreviewImages: function (imgIds) {
-    return imgIds.map((imgId) => {
-      return 'LocalResource://imageid' + imgId
-    })
-  },
-  getPreviewImage: function (imgId) {
-    return 'LocalResource://imageid' + imgId
-  },
   /*
     * 离线上传, 可不带企业id
     * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
     */
-  // 
   offlineUpload: function (dir, imgIds, tenantId) {
     const uploadParams = {uploadDir: dir, localIds: imgIds, tenantId: tenantId || '' };
     this.uploadImage(uploadParams);
@@ -412,11 +394,7 @@ var Bridge = {
     s.preview = function (index) {
       var imgs = []
       for (var img in s.imgMap) {
-        if (s.imgMap[img].sourceType !== 'web') {
-          imgs.push(Bridge.getPreviewImage(img))
-        } else {
-          imgs.push(img)
-        }
+        imgs.push(s.imgMap[img].src)
       }
       Bridge.previewImage({
         urls: imgs,
