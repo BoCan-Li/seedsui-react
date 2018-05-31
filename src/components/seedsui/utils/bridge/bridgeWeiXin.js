@@ -75,7 +75,7 @@ var Bridge = {
   },
   /*
    * 获取当前地理位置
-   * type：坐标类型，微信默认使用国际坐标'wgs84'
+   * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
   getLocation: function (params) {
@@ -170,8 +170,8 @@ var Bridge = {
   },
   /*
   * 拍照、本地选图
-  * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
-  * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
+  * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数', success:fn, fail:fn, cancel: fn, complete: fn}
+  * 返回选定照片的本地ID列表{localIds:[]'}
   */
   chooseImage: function (params) {
     wx.chooseImage(params) // eslint-disable-line

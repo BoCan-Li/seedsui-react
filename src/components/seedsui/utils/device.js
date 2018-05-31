@@ -120,16 +120,7 @@ var Device = (function () {
   }
   // 动态加载桥接库
   function dynamicLoadBridge () {
-    if (platform === 'browser') {
-      // 百度地图
-      var browserScript = document.createElement('script')
-      browserScript.src = '//api.map.baidu.com/getscript?v=2.0&ak=IlfRglMOvFxapn5eGrmAj65H&s=1'
-      document.body.appendChild(browserScript);
-    } else if (platform === 'weixin') {
-      // 百度地图
-      browserScript = document.createElement('script')
-      browserScript.src = '//api.map.baidu.com/getscript?v=2.0&ak=IlfRglMOvFxapn5eGrmAj65H&s=1'
-      document.body.appendChild(browserScript);
+    if (platform === 'weixin') {
       // 微信
       var wxScript = document.createElement('script')
       wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.0.js'

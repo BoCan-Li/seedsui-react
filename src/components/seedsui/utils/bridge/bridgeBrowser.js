@@ -1,6 +1,6 @@
 import DB from './../db';
 import EventUtil from './../eventutil';
-import coordtransform from 'coordtransform';
+import jsonp from 'jsonp';
 
 var Bridge = {
   platform: 'browser',
@@ -76,59 +76,47 @@ var Bridge = {
   },
   /*
    * 百度地图:获取当前位置名称
-   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: ()}
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
+   * params：{type: 'gcj02', longitude: '', latitude: '', onSuccess: fn, onFail: fn}
+   * 返回：{address:'地址全称'}
    * */
   getAddress: function (params) {
-    // 定位到容器<div id="baidu_container"></div>
-    var map = new BMap.Map("baidu_container") // eslint-disable-line
-    var bd09 = [params.longitude, params.latitude]
-    
-    // 国际坐标wgs84转百度坐标
-    if (params.type === 'wgs84') {
-      bd09 = coordtransform.wgs84tobd09(params.longitude, params.latitude)
-    // 国测局gcj02转百度坐标 params.type === 'gcj02'
-    } else {
-      bd09 = coordtransform.gcj02tobd09(params.longitude, params.latitude)
-    }
-    var startPoint = new BMap.Point(bd09[0], bd09[1]) // eslint-disable-line
-    map.centerAndZoom(startPoint, 15)
-    let Geocoder = new BMap.Geocoder() // eslint-disable-line
-    Geocoder.getLocation(map.getCenter(), (rs) => {
-      if (params.onSuccess) params.onSuccess(rs)
-    }, (err) => {
-      if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + err})
-      else alert('获取位置名称失败,请稍后重试')
-    })
+    var url = 'https://api.map.baidu.com/geocoder/v2/?ak=IlfRglMOvFxapn5eGrmAj65H&coordtype=gcj02ll&callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + err})
+      } else {
+        var addrs = {}
+        if (data.result && data.result.formatted_address) {
+          addrs.address = data.result.formatted_address
+          if (params.onSuccess) params.onSuccess(addrs)
+        } else {
+          if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
+        }
+      }
+    });
   },
   /*
    * 百度地图:获得两个点之间的距离
-   * params：{type: 'gcj02', point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onSuccess: ()}
-   * 返回：distance米
+   * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn)
+   * 返回km
    * */
-  getDistance: function (params) {
-    if (!params.point1.longitude || !params.point1.latitude || !params.point2.longitude || !params.point2.latitude) {
+  getDistance: function(params) {
+    if (!params.point1 || !params.point1.latitude || !params.point1.longitude || !params.point2 || !params.point2.latitude || !params.point2.longitude) {
       if (params.onError) params.onError({code: 'distanceFail', msg: '传入的坐标不正确'})
       return
     }
-    // 定位到容器<div id="baidu_container"></div>
-    var map = new BMap.Map("baidu_container") // eslint-disable-line
-    var point1 = params.point1
-    var point2 = params.point2
-    // 国际坐标wgs84转百度坐标
-    if (params.type === 'wgs84') {
-      point1 = coordtransform.wgs84tobd09(point1.longitude, point1.latitude)
-      point2 = coordtransform.wgs84tobd09(point2.longitude, point2.latitude)
-    // 国测局gcj02转百度坐标 params.type === 'gcj02'
-    } else {
-      point1 = coordtransform.gcj02tobd09(point1.longitude, point1.latitude)
-      point2 = coordtransform.gcj02tobd09(point2.longitude, point2.latitude)
-    }
-    var startPoint = new BMap.Point(point1[0], point1[1]) // eslint-disable-line
-    var endPoint = new BMap.Point(point2[0], point2[1]) // eslint-disable-line
-    var pointDistance = map.getDistance(startPoint, endPoint).toFixed(2)
-    if (!pointDistance) return ''
-    return pointDistance
+    var lat1 = params.point1.latitude
+    var lng1 = params.point1.longitude
+    var lat2 = params.point2.latitude
+    var lng2 = params.point2.longitude
+    var radLat1 = lat1 * Math.PI / 180.0
+    var radLat2 = lat2 * Math.PI / 180.0
+    var a = radLat1 - radLat2
+    var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)))
+    s = s * 6378.137 // EARTH_RADIUS;
+    s = Math.round(s * 10000) / 10000
+    return s
   },
   /*
    * 扫描二维码并返回结果
@@ -150,15 +138,28 @@ var Bridge = {
     }
     window.location.replace(login_url)
   },
-  // 获取上传图片路径,与后端约定好的固定格式, tenantId/项目名/自定义路径/月份
-  getUploadDir: function (params) {
-    if (params.customPath) return params.path
-    let path = params.path || 'test/test01'
-    const month = new Date().format('yyyyMM')
-    if (params.monthPath !== false) {
-      path += '/' + month
+  /*
+    * 获取上传图片路径,与后端约定好的固定格式
+    * dir: '目录', params：{customPath: true | false 自定义目录}
+    * 返回路径/月份
+    */
+  getUploadDir: function (dir, params) {
+    var path = dir || 'test/test01' // 定义的目录
+    var month = new Date().format('yyyyMM') // 增加月份目录
+    if (params) {
+      if (params.customPath) return dir
     }
-    return `${path}/`;
+    return `${path + '/' + month}/`;
+  },
+  /*
+    * 获取图片全路径, 用于提交表单
+    * dir: '目录', imgIds: '图片名称集合'
+    */
+  getUploadImgsPath: function (dir, imgIds) {
+    const imgs = imgIds.map((imgId) => {
+      return dir + imgId;
+    });
+    return imgs.join(',');
   },
   Image: function (params) {
     var s = this

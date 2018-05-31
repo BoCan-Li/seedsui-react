@@ -137,55 +137,74 @@ var Bridge = {
   },
   /*
   * 拍照、本地选图
-  * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
+  * params：{sourceType:['album', 'camera'],sizeType:['original', 'compressed'],count:'最大张数', success:fn, fail:fn, photoType:'', customerName: ''}
   * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
   */
   chooseImage: function (argParams) {
+    console.log(argParams)
+    var params = {}
     // 格式化sourceType
-    var operation = 2
+    var operation = '2'
     if (argParams && argParams.sourceType) {
       if (argParams.sourceType.indexOf('album') >= 0 && argParams.sourceType.indexOf('camera') >= 0) {
-        operation = 2
+        operation = '2'
       } else if (argParams.sourceType.indexOf('album') >= 0) {
-        operation = 1
+        operation = '1'
       } else {
-        operation = 0
+        operation = '0'
       }
+      params.operation = operation
     }
     // 格式化sizeType
     var pwidth = null
     if (argParams && argParams.sizeType) {
       if (argParams.sizeType === 'compressed') {
-        pwidth = 750
+        pwidth = '750'
+        params.operation = pwidth
       }
     }
     // 格式化count
     var max = 5
     if (argParams && argParams.count) {
       max = argParams.count
+      params.max = '' + max
     }
-    var params = {
-      operation: operation, // 0.拍照；1.相册 2.拍照/相册
-      pwidth: pwidth, // 照片宽度
-      max: max // 拍照最大张数
+    // viewId
+    params.viewId = '' + parseInt(Math.random() * 1000, 10)
+    // photoType
+    if (argParams && argParams.photoType) {
+      params.photoType = argParams.photoType;
     }
+    // customerName
+    if (argParams && argParams.customerName) {
+      params.customerName = argParams.customerName;
+    }
+    console.log('choose params:');
+    console.log(params);
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
-        // 格式化返回结果
-        var localIds = result.map((item) => {
-          return item.src
-        })
-        argParams.success({localIds: localIds})
+        // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
+        var imgMap = {}
+        for (var i = 0, item; item = result[i++];) { // eslint-disable-line
+          imgMap[item.name] = {
+            serverId: '',
+            name: item.name,
+            sourceType: operation === '0' ? 'camera' : 'album',
+            base64: item.path,
+            src: item.src
+          }
+        }
+        argParams.success(imgMap)
       }
-    }, params)
+    }, null, JSON.stringify(params))
   },
   /*
   * 上传图片
-  * params：{uploadDir:'',localIds:['1', '2']}
+  * params：{uploadDir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
   */
   uploadImage: function (argParams) {
     // 格式化localIds
-    var filePathList = []
+    var filePathList = argParams.localIds
     if (argParams && argParams.localIds && argParams.localIds.length) {
       filePathList = argParams.localIds.map((item) => {
         return {path: item}
@@ -195,9 +214,12 @@ var Bridge = {
     var url = argParams && argParams.uploadDir ? argParams.uploadDir : ''
     var params = {
       filePathList: filePathList,
-      url: url
+      url: url,
+      tenantId: argParams.tenantId || ''
     }
-    wq.wqphoto.startUpload(params) // eslint-disable-line
+    console.log('上传图片:');
+    console.log(params);
+    wq.wqphoto.startUpload(JSON.stringify(params)) // eslint-disable-line
   },
   /*
   * 图片预览
@@ -237,7 +259,7 @@ var Bridge = {
       wq.wqtitlebar.setTitleBar(function (args) { // eslint-disable-line
         var isFromApp = Device.getUrlParameter('isFromApp') || ''
         if (isFromApp === '1' || !history.state) {
-          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle', button_color: '#EB464A' }] })
+          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle' }] })
           if(confirm(jsonStr)){
             Bridge.closeWindow()
           }
@@ -274,27 +296,13 @@ var Bridge = {
   getPreviewImage: function (imgId) {
     return 'LocalResource://imageid' + imgId
   },
-  // 获取上传图片路径
-  getUploadDir: function (params) {
-    if (params.customPath) return params.path
-    let path = params.path || 'test/test01'
-    const month = new Date().format('yyyyMM')
-    if (params.monthPath !== false) {
-      path += '/' + month
-    }
-    return `${path}/`;
-  },
-  // 获取图片全路径, 一般用于表单提交
-  getFormImgsStr: function (params) {
-    const imgs = params.imgIds.map((imgId) => {
-      return this.getUploadDir(params) + imgId;
-    });
-    return imgs.join(',');
-  },
-  // 离线上传, 不需要带企业id
-  offlineUpload: function (params) {
-    const uploadDir = this.getUploadDir(params);
-    const uploadParams = {tenantId: params.tenantId || '', uploadDir, localIds: params.imgIds};
+  /*
+    * 离线上传, 可不带企业id
+    * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
+    */
+  // 
+  offlineUpload: function (dir, imgIds, tenantId) {
+    const uploadParams = {uploadDir: dir, localIds: imgIds, tenantId: tenantId || '' };
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件
@@ -316,11 +324,8 @@ var Bridge = {
       sourceType: ['album', 'camera'],
       sizeType: ['original', 'compressed'],
       watermark: {
-        // orderNo: 'xx', // 编号
-        // submitName: 'xx', // 提交人
-        // customerName: 'xx', // 客户
-        // cmLocation: '118.730515, 31.982473', // 位置算偏差
-        // isWaterMark: '1', // 是否启用水印
+        // photoType: 'xx', // 水印名称
+        // customerName: 'xx', // 客户名
       }
       /*
       Callbacks:
@@ -342,7 +347,7 @@ var Bridge = {
     var s = this
     s.params = params
     s.imgs = []
-    s.imgMap = {} // 格式{'localIdxxx':{serverId:'xxx',sourceType:'camera'}}
+    s.imgMap = {} // 格式{'localIdxxx':{serverId:'', sourceType:'camera'}}
     // 更新图片, 用于初始化时显示后台返回的图片
     s.updateImgs = function (imgs) {
       if (imgs && imgs.length > 0) {
@@ -376,20 +381,8 @@ var Bridge = {
         sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          for(var i=0, localId; localId=res.localIds[i++];){ // eslint-disable-line
-            if(s.imgMap[localId]){
-              msg = '照片已存在，请勿重复上传！'
-              if (s.params.onError) {
-                s.params.onError({code: 'chooseRepeat', msg: msg})
-              } else {
-                alert(msg)
-              }
-              continue
-            }
-            s.imgMap[localId]={
-              serverId:'',
-              sourceType:res.sourceType
-            }
+          for (var img in res) {
+            s.imgMap[img] = res[img]
           }
           s.imgs = Object.keys(s.imgMap)
           if(s.params.onChooseSuccess) s.params.onChooseSuccess(s.imgs, s.imgMap, res)
