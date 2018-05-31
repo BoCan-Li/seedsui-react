@@ -1,3 +1,4 @@
+// 已被订货365定制,不能跟seedsui版本走
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,13 +11,17 @@ export default class Price extends Component {
     price: PropTypes.string,
     unit: PropTypes.string,
     digitsFixed: PropTypes.bool, // 固定小数, 例如100仍然显示100.00
-    digits: PropTypes.number, // 如果设置了小数位控制,则控制小数位,如不控制,则原样显示
+    digits: PropTypes.oneOfType([ // 如果设置了小数位控制,则控制小数位,如不控制,则原样显示
+      PropTypes.bool,
+      PropTypes.number
+    ])
   };
   static defaultProps = {
     showSymbol: true,
     showThousandth: true,
     className: 'capitalize',
-    digitsFixed: true
+    digitsFixed: true,
+    digits: false
   }
   constructor(props, context) {
     super(props, context);
@@ -29,17 +34,17 @@ export default class Price extends Component {
     // 如果价格不是数字,则直接显示
     if (isNaN(price)) {
       priceString = price;
-    // 如果价格是数字,则将整数和小数分别放在两个子元素里显示
+    // 如果价格是数字,则加入千分位和小数位
     } else {
       let newPrice = price;
-      if (digits) {
+      // 加小数位
+      if (typeof digits === 'number') {
         newPrice = digitsFixed ? String(Number(price).toFixed(digits)) : Math.Calc.toFixed(Number(price), digits);
-      } else {
-        newPrice = price;
       }
+      // 加千分位
       priceString = showThousandth ? Math.Calc.toThousandth(newPrice) : '' + newPrice;
     }
-    // 整数与小数分开显示
+    // 应用格式:整数与小数分开显示
     let priceInteger = null;
     let priceDecimal = null;
     if (priceString && priceString.indexOf('.') !== -1) {
