@@ -5,18 +5,18 @@
 .price.capitalize{
   color: @price;
   .price-symbol{
-    font-size: @12px;
+    font-size: @price-symbol-font-size-md;
     margin-bottom: -2px;
   }
   .price-integer{
-    font-size: @16px;
+    font-size: @price-integer-font-size-md;
   }
   .price-digits{
-    font-size: @12px;
+    font-size: @price-digits-font-size-md;
     margin-bottom: -4px;
   }
   .price-unit{
-    font-size: @12px;
+    font-size: @price-unit-font-size-md;
     color: @priceunit;
     margin-left:0;
     margin-bottom: -4px;
@@ -31,6 +31,9 @@
   }
   .price-digits{
     font-size: @price-digits-font-size-lg;
+  }
+  .price-unit{
+    font-size: @price-unit-font-size-lg;
   }
 }
 // price.less(end)
