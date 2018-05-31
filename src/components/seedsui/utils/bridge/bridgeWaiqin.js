@@ -30,6 +30,13 @@ var Bridge = {
     wq.wqload.wqClosePage() // eslint-disable-line
   },
   /*
+  * 商联支付
+  * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
+  * */
+  slopenpay: function (params, callback) {
+    wq.wqpay.slopenpay(params, callback) // eslint-disable-line
+  },
+  /*
   * 文件操作
   * */
   /* 文件是否存在
@@ -240,7 +247,6 @@ var Bridge = {
       position: position,
       photos: photos
     }
-    console.log(params)
     wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
   },
   // 退出到登陆页面
