@@ -10,18 +10,24 @@ import {
   Exception,
   Home,
   Box,
+  Layout,
   CarrouselPage,
   Form
 } from 'containers';
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 const Routes = () => (
   <Provider store={store}>
     <Router>
-      <div className="pages">
+      <div>
+      <TransitionGroup>
+      <CSSTransition key={window.location} classNames="fade" timeout={300}>
       <Switch>
         {/* 首页 */}
-        <Route exact path="/_react_/home" component={Home}/>
+        <Route cache exact path="/_react_/home" component={Home}/>
         {/* 盒子模型 */}
         <Route exact path="/_react_/box" component={Box}/>
+        {/* 布局 */}
+        <Route exact path="/_react_/layout" component={Layout}/>
         {/* 轮播页 */}
         <Route exact path="/_react_/carrouselPage" component={CarrouselPage}/>
         {/* 表单 */}
@@ -45,6 +51,8 @@ const Routes = () => (
         {/* 404页面 */}
         <Route component={NotFound}/>
       </Switch>
+      </CSSTransition>
+      </TransitionGroup>
       <NoNetwork/>
       </div>
     </Router>
