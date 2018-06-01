@@ -56,50 +56,48 @@ export default class PickerDate extends Component {
     var defaultHour = ''
     var defaultMinute = ''
     // 默认值
-    if (defaultValue) {
-      if (type === 'date') {
-        // 如果不是合法的日期格式
-        if (!defaultValue.isDate()) {
-          if (onError) onError('请传入合法的日期');
-          defaultValue = new Date().format('yyyy-MM-dd');
-        }
-        let dateValues = defaultValue.split('-')
-        defaultYear = dateValues[0]
-        defaultMonth = dateValues[1]
-        defaultDay = dateValues[2] || '01'
-      } else if (type === 'month') {
-        // 如果不是合法的日期格式
-        if (!defaultValue.isMonth()) {
-          if (onError) onError('请传入合法的年月日期');
-          defaultValue = new Date().format('yyyy-MM');
-        }
-        let monthValues = defaultValue.split('-')
-        defaultYear = monthValues[0]
-        defaultMonth = monthValues[1]
-      } else if (type === 'datetime') {
-        // 如果不是合法的日期格式
-        if (!defaultValue.isMonth()) {
-          if (onError) onError('请传入合法的日期时间');
-          defaultValue = new Date().format('yyyy-MM-dd hh:mm');
-        }
-        let values = defaultValue.split(' ')
-        let dateValues = values[0].split('-')
-        let timeValues = values[1].split(':')
-        defaultYear = dateValues[0]
-        defaultMonth = dateValues[1]
-        defaultDay = dateValues[2]
-        defaultHour = timeValues[0]
-        defaultMinute = timeValues[1]
-      } else if (type === 'time') {
-        // 如果不是合法的日期格式
-        if (!defaultValue.isTime()) {
-          if (onError) onError('请传入合法的时间');
-          defaultValue = new Date().format('hh:mm');
-        }
-        let timeValues = defaultValue.split(':')
-        defaultHour = timeValues[0]
-        defaultMinute = timeValues[1]
+    if (type === 'date') {
+      // 如果不是合法的日期格式
+      if (!defaultValue.isDate()) {
+        if (onError) onError('请传入合法的日期');
+        defaultValue = new Date().format('yyyy-MM-dd');
       }
+      let dateValues = defaultValue.split('-')
+      defaultYear = dateValues[0]
+      defaultMonth = dateValues[1]
+      defaultDay = dateValues[2] || '01'
+    } else if (type === 'month') {
+      // 如果不是合法的日期格式
+      if (!defaultValue.isMonth()) {
+        if (onError) onError('请传入合法的年月日期');
+        defaultValue = new Date().format('yyyy-MM');
+      }
+      let monthValues = defaultValue.split('-')
+      defaultYear = monthValues[0]
+      defaultMonth = monthValues[1]
+    } else if (type === 'datetime') {
+      // 如果不是合法的日期格式
+      if (!defaultValue.isMonth()) {
+        if (onError) onError('请传入合法的日期时间');
+        defaultValue = new Date().format('yyyy-MM-dd hh:mm');
+      }
+      let values = defaultValue.split(' ')
+      let dateValues = values[0].split('-')
+      let timeValues = values[1].split(':')
+      defaultYear = dateValues[0]
+      defaultMonth = dateValues[1]
+      defaultDay = dateValues[2]
+      defaultHour = timeValues[0]
+      defaultMinute = timeValues[1]
+    } else if (type === 'time') {
+      // 如果不是合法的日期格式
+      if (!defaultValue.isTime()) {
+        if (onError) onError('请传入合法的时间');
+        defaultValue = new Date().format('hh:mm');
+      }
+      let timeValues = defaultValue.split(':')
+      defaultHour = timeValues[0]
+      defaultMinute = timeValues[1]
     }
     return {
       year: defaultYear,
