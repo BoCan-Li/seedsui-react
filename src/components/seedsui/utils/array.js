@@ -1,3 +1,12 @@
+// 兼容ES7的includes
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function (searchElement) {
+    return this.some(function (el) {
+      return el === searchElement
+    })
+  }
+}
+
 // 幂集 如:[1,2],返回[[1],[2],[1,2]]
 Array.prototype.powerset = function () {
   var ps = [[]]

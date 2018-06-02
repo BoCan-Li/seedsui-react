@@ -62,11 +62,8 @@ export default class InputValicode extends Component {
   onChange = (e) => {
     var target = e.target;
     var value = this.correct(target.value);
-    if (this.props.maxLength && value && value.length > this.props.maxLength) {
-      value = value.slice(0, this.props.maxLength);
-      // 赋值
-      if (!this.props.valueBindProp) target.value = value;
-    }
+    // 赋值
+    if (!this.props.valueBindProp) target.value = value;
     if (this.props.onChange) {
       this.props.onChange(value, this.getArgs(e));
     }
@@ -97,6 +94,11 @@ export default class InputValicode extends Component {
       // callback onError
       if (this.props.onError) this.props.onError('必须要输入数字哦');
     }
+    if (this.props.maxLength && val && val.length > this.props.maxLength) {
+      val = val.slice(0, this.props.maxLength);
+      // callback onError
+      if (this.props.onError) this.props.onError('不能大于' + this.props.maxLength + '位');
+    }
     return val;
   }
   getInputDOM = () => {
@@ -106,9 +108,9 @@ export default class InputValicode extends Component {
     } = this.props;
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="number" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+      return <input ref={(el) => {this.$input = el;}} type="number" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
     const {

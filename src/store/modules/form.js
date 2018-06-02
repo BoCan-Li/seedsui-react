@@ -7,6 +7,7 @@ const DEFAULT_CHANGE = 'form/DEFAULT_CHANGE';
 const PHONE_CHANGE = 'form/PHONE_CHANGE';
 const TEL_CHANGE = 'form/TEL_CHANGE';
 const NAME_CHANGE = 'form/NAME_CHANGE';
+const AGE_CHANGE = 'form/AGE_CHANGE';
 
 const initial = {
   isLoading: false,
@@ -21,7 +22,8 @@ const initial = {
   receive_addr: '', // 收货详细地址
   receive_name: '', // 收货人
   receive_phone: '13311111111', // 收货手机号
-  receive_tel: '' // 收货电话
+  receive_tel: '', // 收货电话
+  age: '', // 年龄
 };
 // Reducer
 export default function reducer(state = initial, action = {}) {
@@ -75,12 +77,22 @@ export default function reducer(state = initial, action = {}) {
       return {
         ...state
       };
+    case AGE_CHANGE:
+      state.age = action.value;
+      return {
+        ...state
+      };
     default:
       return state;
   }
 }
 
 // Action
+export function init() {
+  return {
+    type: INIT
+  };
+}
 export function cityChange(text, options) {
   return {
     type: CITY_CHANGE,
@@ -117,8 +129,9 @@ export function nameChange(value) {
     value
   };
 }
-export function init() {
+export function ageChange(value) {
   return {
-    type: INIT
+    type: AGE_CHANGE,
+    value
   };
 }

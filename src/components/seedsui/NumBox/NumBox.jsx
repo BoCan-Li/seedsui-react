@@ -22,7 +22,10 @@ export default class NumBox extends Component {
     onChange: PropTypes.func,
     onError: PropTypes.func,
     // rule设置
-    digits: PropTypes.number,
+    digits: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ]),
     max: PropTypes.number,
     min: PropTypes.number,
   }
@@ -65,8 +68,8 @@ export default class NumBox extends Component {
   };
   onChange = (e) => {
     var target = e.target;
+    // target.validity.badInput
     var value = this.correctNum(target.value.toString());
-    if (this.props.maxLength && value && value.length > this.props.maxLength) value = value.slice(0, this.props.maxLength);
     // 赋值
     if (!this.props.valueBindProp) target.value = value;
     // Callback
@@ -98,7 +101,7 @@ export default class NumBox extends Component {
   };
   correctNum = (argNumstr) => {
     var num = Number(argNumstr);
-    if (!num) return '';
+    if (isNaN(num)) return '';
     // 判断是否超出限制
     const {max, min} = this.props;
     if (max && num > max) {
@@ -111,13 +114,17 @@ export default class NumBox extends Component {
       if (this.props.onError) this.props.onError('最小不能小于' + min);
       return '' + min;
     }
-    var value = '';
+    var value = argNumstr;
     // 截取小数位数
     if (this.props.digits) {
-      value = Math.Calc.toDigits(num, this.props.digits);
+      if (String(num).indexOf('.') >= 0) value = Math.Calc.toDigits(num, this.props.digits);
     // 整数
     } else {
       value = Math.floor(num);
+    }
+    // 最大长度限制
+    if (this.props.maxLength && value && value.length > this.props.maxLength) {
+      value = value.slice(0, this.props.maxLength);
     }
     return '' + value;
   };
@@ -129,9 +136,9 @@ export default class NumBox extends Component {
     } = this.props;
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+      return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
     const {min, max, value, style, className, disabled, onClick} = this.props;

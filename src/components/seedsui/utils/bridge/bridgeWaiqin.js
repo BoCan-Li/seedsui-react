@@ -185,6 +185,16 @@ var Bridge = {
     if (argParams && argParams.customerName) {
       params.customerName = argParams.customerName;
     }
+    // submitName
+    if (argParams && argParams.submitName) {
+      params.submitName = argParams.submitName;
+    }
+    // cmLocation
+    if (argParams && argParams.cmLocation) {
+      params.cmLocation = argParams.cmLocation;
+    }
+    console.log('选择照片');
+    console.log(params);
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }

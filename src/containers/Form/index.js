@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
-import {cityChange, addrChange, defaultChange, phoneChange, telChange, nameChange, init} from 'store/modules/form';
+import {cityChange, addrChange, defaultChange, phoneChange, telChange, nameChange, ageChange, init} from 'store/modules/form';
 import bridge from 'components/seedsui/utils/bridge';
 import Page from 'components/seedsui/Page/Page.jsx';
 import Container from 'components/seedsui/Container/Container.jsx';
@@ -18,6 +18,7 @@ import List from 'components/seedsui/List/List.jsx';
 import Switch from 'components/seedsui/Switch/Switch.jsx';
 import Toast from 'components/seedsui/Toast/Toast.jsx';
 import Attribute from 'components/seedsui/Attribute/Attribute.jsx';
+import NumBox from 'components/seedsui/NumBox/NumBox.jsx';
 
 @withRouter
 @connect(state => ({
@@ -32,7 +33,8 @@ import Attribute from 'components/seedsui/Attribute/Attribute.jsx';
   receive_addr: state.form.receive_addr, // 收货详细地址
   receive_name: state.form.receive_name, // 收货人
   receive_phone: state.form.receive_phone, // 收货手机号
-  receive_tel: state.form.receive_tel // 收货电话
+  receive_tel: state.form.receive_tel, // 收货电话
+  age: state.form.age, // 年龄
 }), {
   cityChange,
   addrChange,
@@ -40,6 +42,7 @@ import Attribute from 'components/seedsui/Attribute/Attribute.jsx';
   phoneChange,
   telChange,
   nameChange,
+  ageChange,
   init
 })
 export default class form extends Component {
@@ -50,6 +53,7 @@ export default class form extends Component {
     phoneChange: PropTypes.func,
     telChange: PropTypes.func,
     nameChange: PropTypes.func,
+    ageChange: PropTypes.func,
     init: PropTypes.func,
     area: PropTypes.string, // 地区名称
     city: PropTypes.string, // 城市名称
@@ -62,7 +66,8 @@ export default class form extends Component {
     receive_addr: PropTypes.string, // 收货详细地址
     receive_name: PropTypes.string, // 收货人
     receive_phone: PropTypes.string, // 收货手机号
-    receive_tel: PropTypes.string // 收货电话
+    receive_tel: PropTypes.string, // 收货电话
+    age: PropTypes.string, // 年龄
   };
   constructor (props) {
     super(props);
@@ -123,7 +128,8 @@ export default class form extends Component {
       receive_addr, // 收货详细地址
       receive_name, // 收货人
       receive_phone, // 收货手机号
-      receive_tel // 收货电话
+      receive_tel, // 收货电话
+      age, // 年龄
     } = this.props;
     const params = {
       area,
@@ -137,7 +143,8 @@ export default class form extends Component {
       receive_addr,
       receive_name,
       receive_phone,
-      receive_tel
+      receive_tel,
+      age
     };
     console.log(params);
   }
@@ -155,7 +162,7 @@ export default class form extends Component {
   }
   render() {
     const {
-      cityChange, addrChange, defaultChange, phoneChange, telChange, nameChange,
+      cityChange, addrChange, defaultChange, phoneChange, telChange, nameChange, ageChange,
       area, // 地区名称
       city, // 城市名称
       // id, // 收货地址id
@@ -167,7 +174,8 @@ export default class form extends Component {
       receive_addr, // 收货详细地址
       receive_name, // 收货人
       receive_phone, // 收货手机号
-      receive_tel // 收货电话
+      receive_tel, // 收货电话
+      age, //年龄
     } = this.props;
     const {id} = this.props.match.params;
     return (
@@ -191,6 +199,9 @@ export default class form extends Component {
             </Attribute>
             <Attribute name="详细地址:" required="*" className="attribute-padding align border-b" requiredStyle={{left: '-18px'}} nameStyle={{color: '#333'}} style={{padding: '0 12px 0 30px'}}>
               <InputPre placeholder="点击输入" valueBindProp value={receive_addr} onChange={addrChange}/>
+            </Attribute>
+            <Attribute name="年龄:" className="attribute-padding align border-b" requiredStyle={{left: '-18px'}} nameStyle={{color: '#333'}} style={{padding: '0 12px 0 30px'}}>
+              <NumBox digits={2} placeholder="点击输入" valueBindProp value={age} onChange={ageChange}/>
             </Attribute>
           </Group>
           <Group>
