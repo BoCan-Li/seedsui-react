@@ -43,6 +43,7 @@ export default class List extends Component {
     rcaption: PropTypes.node,
     rcaptionClassName: PropTypes.string,
     rcaptionStyle: PropTypes.object,
+    onClickRcaption: PropTypes.func,
 
     sndcaption: PropTypes.node,
     sndcaptionClassName: PropTypes.string,
@@ -72,11 +73,14 @@ export default class List extends Component {
     return args;
   }
   onClick = (e) => {
-    const {onClick, onClickLicon, onClickRicon} = this.props;
-    if (e.target.classList.contains('licon') && onClickLicon) {
+    const {onClick, onClickLicon, onClickRicon, onClickRcaption} = this.props;
+    const classList = e.target.classList;
+    if (classList.contains('licon') && onClickLicon) {
       onClickLicon(this.getArgs(e));
-    } else if (e.target.classList.contains('ricon') && onClickRicon) {
+    } else if (classList.contains('ricon') && onClickRicon) {
       onClickRicon(this.getArgs(e));
+    } else if (classList.contains('list-rcaption') && onClickRcaption) {
+      onClickRcaption(this.getArgs(e));
     } else {
       if (onClick) onClick(this.getArgs(e));
     }
@@ -84,11 +88,13 @@ export default class List extends Component {
   onClickThumbnail = (e) => {
     if (this.props.onClickThumbnail) {
       this.props.onClickThumbnail(this.getArgs(e));
+      e.stopPropagation();
     }
   }
   onClickAvatar = (e) => {
     if (this.props.onClickAvatar) {
       this.props.onClickAvatar(this.getArgs(e));
+      e.stopPropagation();
     }
   }
   render() {

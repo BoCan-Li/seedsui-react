@@ -50,13 +50,15 @@ export default class Attributes extends Component {
     valueStyle: PropTypes.object,
 
     rowAfter: PropTypes.node,
+    rowAfterExclude: PropTypes.number,
     children: PropTypes.node,
     onCopy: PropTypes.func,
     onClick: PropTypes.func // 点击行
   };
 
   static defaultProps = {
-    list: []
+    list: [],
+    rowAfterExclude: -1
   }
 
   constructor(props, context) {
@@ -143,13 +145,13 @@ export default class Attributes extends Component {
       colClassName, colStyle,
       cellClassName, cellStyle,
       nameClassName, nameStyle, valueClassName, valueStyle,
-      rowAfter, children
+      rowAfter, rowAfterExclude, children
     } = this.props;
     const attrsDOM = [];
     for (let i = 0; i < list.length;) {
       if (col === '2') {
         attrsDOM.push(
-          <div key={i} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i, list[i + 1], i + 1);}}>
+          <div key={`row${i}`} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i, list[i + 1], i + 1);}}>
             <div className={`attribute-half${colClassName ? ' ' + colClassName : ''}`} style={colStyle}>
               {/* 左 */}
               <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''}${nameClassName ? ' ' + nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>{list[i].name}</div>
@@ -169,7 +171,7 @@ export default class Attributes extends Component {
               </div>
             </div>}
           </div>,
-          rowAfter && rowAfter
+          (rowAfter && rowAfterExclude !== i) ? <div key={`rowafter${i}`}>{rowAfter}</div> : null
         );
         i += 2;
       } else {
@@ -180,7 +182,7 @@ export default class Attributes extends Component {
         if (list[i].show) isShow = true;
         if (isShow) {
           attrsDOM.push(
-            <div key={i} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i);}}>
+            <div key={`row${i}`} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i);}}>
               {/* 左 */}
               <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''}${nameClassName ? ' ' + nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>{list[i].name}</div>
               {/* 右 */}
@@ -191,7 +193,7 @@ export default class Attributes extends Component {
               {/* 操作 */}
               {this.getOpDOM(list[i], i)}
             </div>,
-            rowAfter && rowAfter
+            (rowAfter && rowAfterExclude !== i) ? <div key={`rowafter${i}`}>{rowAfter}</div> : null
           );
         }
         i++;

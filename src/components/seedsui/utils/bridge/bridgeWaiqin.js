@@ -34,7 +34,9 @@ var Bridge = {
   * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
   * */
   slopenpay: function (params, callback) {
-    wq.wqpay.slopenpay(JSON.stringify(params), callback) // eslint-disable-line
+    wq.wqpay.slopenpay((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, params ? JSON.stringify(params) : null)
   },
   /*
   * 文件操作

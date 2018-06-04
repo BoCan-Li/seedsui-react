@@ -40,7 +40,7 @@ export default class NumBox extends Component {
   constructor(props) {
     super(props);
   }
-  updateFlag = 0 // 在!valueBindProp时值变化的标识监听,例如修改、加、减操作时
+  updateFlag = 0 // 在!valueBindProp时值变化的标识,例如修改、加、减操作时
   componentDidUpdate = () => {
     // 在!valueBindProp时,需要更新value时,便更新value
     if (this.updateFlag) {
@@ -171,7 +171,7 @@ export default class NumBox extends Component {
     } = this.props;
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+      return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
     return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
