@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Icon from './../Icon/Icon.jsx';
 import Close from './../Close/Close.jsx';
 
-export default class InputNumber extends Component {
+export default class InputText extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     // 容器
@@ -28,15 +28,31 @@ export default class InputNumber extends Component {
     clearClassName: PropTypes.string,
     clearIconClassName: PropTypes.string,
     onClear: PropTypes.func,
+    // rule设置
+    max: PropTypes.number,
+    min: PropTypes.number,
+    digits: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ]),
   }
   static defaultProps = {
     args: null,
     value: '',
     readOnly: false,
-    disabled: false
+    disabled: false,
+    digits: false
   }
   constructor(props) {
     super(props);
+  }
+  updateFlag = 0 // 在!valueBindProp时值变化的标识,例如修改、加、减操作时
+  componentDidUpdate = () => {
+    // 在!valueBindProp时,需要更新value时,便更新value
+    if (this.updateFlag) {
+      this.updateFlag = 0;
+      if (this.$input) this.$input.value = this.props.value;
+    }
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -51,30 +67,65 @@ export default class InputNumber extends Component {
     }
     return args;
   }
-  onChange = (e) => {
-    var target = e.target;
-    var value = target.value;
-    // 小数点矫正
-    var dotExpr = ('1234.').match(/\./g);
-    if (dotExpr && dotExpr.length > 1) {
-      value = value.slice(0, value.length - 1);
-      // 赋值
-      if (!this.props.valueBindProp) target.value = value;
+  // 矫正数字
+  correctNum = (argNumstr) => {
+    var num = Number(argNumstr);
+    if (isNaN(num)) return '';
+    // 判断是否超出限制
+    const {max, min} = this.props;
+    if (!isNaN(max) && num > max) {
+      // callback onError
+      if (this.props.onError) this.props.onError('最大不能超过' + max);
+      return '' + max;
     }
-    // 长度矫正
+    if (!isNaN(min) && num < min) {
+      // callback onError
+      if (this.props.onError) this.props.onError('最小不能小于' + min);
+      return '' + min;
+    }
+    var value = argNumstr;
+    // 截取小数位数
+    if (this.props.digits !== false) {
+      if (String(num).indexOf('.') >= 0) value = Math.Calc.toDigits(num, this.props.digits);
+    }
+    // 最大长度限制
     if (this.props.maxLength && value && value.length > this.props.maxLength) {
       value = value.slice(0, this.props.maxLength);
-      // 赋值
-      if (!this.props.valueBindProp) target.value = value;
     }
+    return '' + value;
+  };
+  // valueBindProp
+  onChange = (e) => {
+    var target = e.target;
+    // target.validity.badInput
+    var value = this.correctNum(target.value.toString());
+    // 赋值
+    if (!this.props.valueBindProp) target.value = value;
+    // Callback
     if (this.props.onChange) {
       this.props.onChange(value, this.getArgs(e));
     }
   }
+  // !valueBindProp
+  onInput = (e) => {
+    var target = e.target;
+    var value = this.correctNum(target.value.toString());
+    target.value = value;
+  };
   onBlur = (e) => {
     var target = e.target;
-    var value = target.value;
-    if (this.props.onBlur) this.props.onBlur(value);
+    var value = e.target.value;
+    target.value = value;
+    // Callback
+    if (this.props.onChange) {
+      this.props.onChange(value, this.getArgs(e));
+      this.updatePropValue();
+    }
+    if (this.props.onBlur) this.props.onBlur(value, this.getArgs(e));
+  };
+  updatePropValue = () => {
+    if (this.props.valueBindProp) return;
+    this.updateFlag = 1;
   }
   onClear = (e) => {
     this.$input.focus();
@@ -94,9 +145,9 @@ export default class InputNumber extends Component {
     } = this.props;
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="number" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+      return <input ref={(el) => {this.$input = el;}} type="number" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
     const {

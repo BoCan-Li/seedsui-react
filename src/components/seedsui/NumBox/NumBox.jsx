@@ -139,12 +139,12 @@ export default class NumBox extends Component {
     if (isNaN(num)) return '';
     // 判断是否超出限制
     const {max, min} = this.props;
-    if (max && num > max) {
+    if (!isNaN(max) && num > max) {
       // callback onError
       if (this.props.onError) this.props.onError('最大不能超过' + max);
       return '' + max;
     }
-    if (min && num < min) {
+    if (!isNaN(min) && num < min) {
       // callback onError
       if (this.props.onError) this.props.onError('最小不能小于' + min);
       return '' + min;

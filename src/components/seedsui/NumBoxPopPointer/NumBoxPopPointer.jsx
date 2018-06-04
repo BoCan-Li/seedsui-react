@@ -23,7 +23,10 @@ export default class NumBoxPopPointer extends Component {
     // rule设置
     min: PropTypes.number,
     max: PropTypes.number,
-    digits: PropTypes.number,
+    digits: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ])
   };
 
   static defaultProps = {

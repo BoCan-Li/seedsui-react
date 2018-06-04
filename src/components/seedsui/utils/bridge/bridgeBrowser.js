@@ -131,9 +131,9 @@ var Bridge = {
   /* 退出到登陆页面 */
   logOut: function (message) {
     let login_url = '/h5fw/#/_react_/login'
-    if (DB.getStore('app_openId') && DB.getStore('app_appId')) {
-      login_url += `/${DB.getStore('app_openId')}/${DB.getStore('app_appId')}`
-    }
+    // openId & appId
+    login_url += `/${DB.getStore('app_openId') || 'false'}/${DB.getStore('app_appId') || 'false'}`
+    // message
     login_url += '?msg=' + (message || '')
     // 红包页面跳回
     if (window.location.href.indexOf('/redpacket') >= 0) {
