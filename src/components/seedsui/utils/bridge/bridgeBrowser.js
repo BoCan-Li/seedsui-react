@@ -1,6 +1,9 @@
 import DB from './../db';
 import EventUtil from './../eventutil';
 import jsonp from 'jsonp';
+// 系统参数
+import client from './../axiosApi';
+import Toast from './../../Toast/toast.js';
 
 var Bridge = {
   platform: 'browser',
@@ -226,6 +229,35 @@ var Bridge = {
       }
     }
     return ''
+  },
+  loadSystemParameter: function (callback) {
+    // 判断localstorge是否有值
+    if (DB.getStore('app_uid')) {
+      callback();
+      return;
+    }
+    client.get(`/login/getSystemParameter.action`).then(result => {
+      if (result.code === '1') {
+        this.setSystemParameter(result.data);
+        // 加载数据
+        callback();
+      } else {
+        // 提示获取地址失败
+        var toast = new Toast({
+          maskClass: 'mask toast-mask middle',
+          html: result.message,
+          delay: 2000,
+          onHid: (e) => {
+            e.destroy();
+            toast = null;
+          }
+        });
+        toast.show();
+      }
+    }).catch(() => {
+      this.logOut('请求系统参数异常，请重新登录');
+      // this.showMsg('请求系统参数异常，请稍后重试');
+    });
   },
   /*
    * 打印日志

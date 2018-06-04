@@ -79,7 +79,6 @@ export default class InputLocation extends Component {
               html: err.msg,
               delay: 2000,
               onHid: (e) => {
-                console.log('remove')
                 e.destroy();
                 toast = null;
               }
@@ -97,7 +96,6 @@ export default class InputLocation extends Component {
           html: err.msg,
           delay: 2000,
           onHid: (e) => {
-            console.log('remove')
             e.destroy();
             toast = null;
           }

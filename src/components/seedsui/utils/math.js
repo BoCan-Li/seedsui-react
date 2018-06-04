@@ -108,12 +108,12 @@ Math.Calc = (function () {
     return result
   }
   // toDigits 精度
-  function toDigits (num, digits) {
-    if (!digits) return Math.floor(num)
+  function toDigits (argNum, digits) {
+    if (!digits) return argNum
     var digitsMatch = new RegExp('[0-9]+(\\.[0-9]{1,' + digits + '})?')
-    num = ('' + num).match(digitsMatch)
+    var num = ('' + argNum).match(digitsMatch)
     if (num && num[0]) return Number(num[0])
-    return null
+    return argNum
   }
   // 转换为千分位字符
   function toThousandth (num) {

@@ -40,6 +40,14 @@ export default class NumBox extends Component {
   constructor(props) {
     super(props);
   }
+  updateFlag = 0 // 在!valueBindProp时值变化的标识监听,例如修改、加、减操作时
+  componentDidUpdate = () => {
+    // 在!valueBindProp时,需要更新value时,便更新value
+    if (this.updateFlag) {
+      this.updateFlag = 0;
+      if (this.$input) this.$input.value = this.props.value;
+    }
+  }
   getArgs = (e) => {
     var args = this.props.args;
     if (args) {
@@ -66,6 +74,7 @@ export default class NumBox extends Component {
       }
     }
   };
+  // valueBindProp
   onChange = (e) => {
     var target = e.target;
     // target.validity.badInput
@@ -77,6 +86,28 @@ export default class NumBox extends Component {
       this.props.onChange(value, this.getArgs(e));
     }
   };
+  // !valueBindProp
+  onInput = (e) => {
+    var target = e.target;
+    var value = this.correctNum(target.value.toString());
+    target.value = value;
+  };
+  onBlur = (e) => {
+    var target = e.target;
+    var value = e.target.value;
+    if (!value) value = '0';
+    target.value = value;
+    // Callback
+    if (this.props.onChange) {
+      this.props.onChange(value, this.getArgs(e));
+      this.updatePropValue();
+    }
+  };
+  updatePropValue = () => {
+    if (this.props.valueBindProp) return;
+    this.updateFlag = 1;
+  }
+  // 点击减
   onClickMinus = (e) => {
     let value = Math.Calc.subtract(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
@@ -86,8 +117,10 @@ export default class NumBox extends Component {
     // Callback
     if (this.props.onChange) {
       this.props.onChange('' + value, this.getArgs(e));
+      this.updatePropValue();
     }
   };
+  // 点击加
   onClickPlus = (e) => {
     let value = Math.Calc.add(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
@@ -97,8 +130,10 @@ export default class NumBox extends Component {
     // Callback
     if (this.props.onChange) {
       this.props.onChange('' + value, this.getArgs(e));
+      this.updatePropValue();
     }
   };
+  // 矫正数字
   correctNum = (argNumstr) => {
     var num = Number(argNumstr);
     if (isNaN(num)) return '';
@@ -138,7 +173,7 @@ export default class NumBox extends Component {
     if (valueBindProp) {
       return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} onClick={this.onClick} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
     const {min, max, value, style, className, disabled, onClick} = this.props;
