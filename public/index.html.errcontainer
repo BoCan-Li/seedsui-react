@@ -75,8 +75,8 @@
           window.redirectUrl = '/_react_/exception/' + errMsg;
         } else {
           // 存储appId和openId
-          window.localStorage.setItem('app_openId', openId || '');
-          window.localStorage.setItem('app_appId', appId || '');
+          if (openId !== '${openId}') window.localStorage.setItem('app_openId', openId || '');
+          if (appId !== '${appId}') window.localStorage.setItem('app_appId', appId || '');
           // 用于后端告诉前端刚进应用时重定向的页面,例如刚进来有可能是login或者home亦或者me
           window.redirectUrl = url.split("#")[1];
         }
