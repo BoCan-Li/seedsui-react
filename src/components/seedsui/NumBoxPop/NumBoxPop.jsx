@@ -4,7 +4,7 @@ import Alert from './../Alert/Alert.jsx';
 import NumBox from './../NumBox/NumBox.jsx';
 export default class NumBoxPop extends Component {
   static propTypes = {
-    valueBindProp: PropTypes.bool, // 值是否绑定属性
+    args: PropTypes.any,
     // 文本框
     value: PropTypes.string,
     // events
@@ -41,6 +41,8 @@ export default class NumBoxPop extends Component {
       if (this.props.show === true) {
         this.setState({
           value: this.props.value
+        }, () => {
+          this.focusValue();
         });
       }
     }
@@ -68,7 +70,7 @@ export default class NumBoxPop extends Component {
     const {onClickSubmit} = this.props;
     if (onClickSubmit) onClickSubmit(this.state.value, this.getArgs(e));
   }
-  onShowed = () => {
+  focusValue = () => {
     this.$numbox.$input.focus();
     this.$numbox.$input.select();
   }
@@ -77,10 +79,10 @@ export default class NumBoxPop extends Component {
     if (this.props.onClickCancel) this.props.onClickCancel();
   }
   render() {
-    const {valueBindProp, show, caption, min, max, digits} = this.props;
+    const {show, caption, min, max, digits} = this.props;
     return (
-      <Alert duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onShowed={this.onShowed}>
-        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} valueBindProp={valueBindProp} digits={digits} autoFocus={true} value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
+      <Alert duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
+        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} autoFocus={true} value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
       </Alert>
     );
   }

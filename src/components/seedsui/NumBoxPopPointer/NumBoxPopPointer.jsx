@@ -9,7 +9,6 @@ const UnitStyle = {
 
 export default class NumBoxPopPointer extends Component {
   static propTypes = {
-    valueBindProp: PropTypes.bool, // 值是否绑定属性
     className: PropTypes.string,
     style: PropTypes.object,
     // numbox
@@ -59,8 +58,9 @@ export default class NumBoxPopPointer extends Component {
     this.setState({show: false});
   }
   onClickSubmit = (value, args) => {
+    if (!value) return;
     // 赋值
-    if (!this.props.valueBindProp) this.$input.value = value;
+    this.$input.value = value;
     // Callback
     if (this.props.onChange) this.props.onChange(value, args);
     // 隐藏
@@ -79,44 +79,32 @@ export default class NumBoxPopPointer extends Component {
   onClickMinus = (e) => {
     const value = Math.Calc.subtract(this.$input.value, 1);
     // 赋值
-    if (!this.props.valueBindProp) this.$input.value = value;
+    this.$input.value = value;
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
   };
   onClickPlus = (e) => {
     const value = Math.Calc.add(this.$input.value, 1);
     // 赋值
-    if (!this.props.valueBindProp) this.$input.value = value;
+    this.$input.value = value;
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
   };
   getInputDOM = () => {
     const {
-      valueBindProp, value, placeholder, min, max
+      value, placeholder, min, max
     } = this.props;
-    // 如果值绑定属性,则只有通过父组件的prop来改变值
-    if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="number" value={value} min={min} max={max} readOnly placeholder={placeholder} onClick={this.onClickNumBox} className={`numbox-input`} disabled={min >= max}/>;
-    }
     return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} readOnly placeholder={placeholder} onClick={this.onClickNumBox} className={`numbox-input`} disabled={min >= max}/>;
   }
   render() {
-    const {valueBindProp, className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
+    const {className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
     const {show} = this.state;
     // 减按钮禁用
     let minusDisabled = false;
-    if (valueBindProp) {
-      minusDisabled = value <= min;
-    } else {
-      minusDisabled = this.$input ? this.$input.value <= min : value <= min;
-    }
+    minusDisabled = this.$input ? this.$input.value <= min : value <= min;
     // 加按钮禁用
     let plusDisabled = false;
-    if (valueBindProp) {
-      plusDisabled = value >= max;
-    } else {
-      plusDisabled = this.$input ? this.$input.value >= max : value >= max;
-    }
+    plusDisabled = this.$input ? this.$input.value >= max : value >= max;
     return (
       <div style={Object.assign({position: 'relative'}, style)} className={className}>
         <div disabled={disabled} className={`numbox bordered${numboxClassName ? ' ' + numboxClassName : ''}`} style={numboxStyle}>
@@ -125,7 +113,7 @@ export default class NumBoxPopPointer extends Component {
           <input type="button" className="numbox-button" disabled={plusDisabled} value="+" onClick={this.onClickPlus}/>
         </div>
         <span style={UnitStyle}>{unit || ''}</span>
-        <NumBoxPop valueBindProp show={show} args={args} value={this.$input ? this.$input.value : value.toString()} digits={digits} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}/>
+        <NumBoxPop show={show} args={args} value={this.$input ? this.$input.value : value.toString()} digits={digits} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}/>
       </div>
     );
   }
