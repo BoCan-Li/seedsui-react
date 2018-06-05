@@ -36,7 +36,7 @@ var Bridge = {
   slopenpay: function (params, callback) {
     wq.wqpay.slopenpay((result) => { // eslint-disable-line
       if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    }, null, params ? JSON.stringify(params) : null)
   },
   /*
   * 文件操作
