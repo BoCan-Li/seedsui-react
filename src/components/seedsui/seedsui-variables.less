@@ -119,6 +119,32 @@
 @font-size-md:@14px;
 @font-size-sm:@12px;
 
+// Layout间距
+@wingblank-xl: @24px;
+@wingblank-lg: @20px;
+@wingblank-md: @12px;
+@wingblank-sm: @8px;
+@wingblank-xs: @4px;
+
+@whitespace-xl: @20px;
+@whitespace-lg: @16px;
+@whitespace-md: @10px;
+@whitespace-sm: @6px;
+@whitespace-xs: @2px;
+
+// 一个像素的线
+.setContentLine(@b:@border){
+  content: '';
+  display: block;
+  position: absolute;
+  background-color: @b;
+  // 兼容UC线条不显示的BUG
+  z-index:1;
+  overflow: hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+
 // ios11安全区域
 // @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // 向刘海再移动49px
 @safe-bottom: constant(safe-area-inset-bottom); // 刘海留白,内容只显示在安全区域
@@ -693,6 +719,7 @@
 .setMenuTiledSelectActive(){
   visibility: visible;
 }
+
 // Carrousel轮播
 .setCarrouselPagination(){
   text-align: center;
@@ -706,27 +733,11 @@
   background-color:@primary-bg;
 }
 
-// Layout间距
-@wingblank-xl: @24px;
-@wingblank-lg: @20px;
-@wingblank-md: @12px;
-@wingblank-sm: @8px;
-@wingblank-xs: @4px;
+// ticket票券
+@ticket-sawtooth-bg: #E86366;
+@ticket-legend-color: white;
+@ticket-legend-bg-image: linear-gradient(90deg, #E86366 1%, #FD905C 100%);
 
-@whitespace-xl: @20px;
-@whitespace-lg: @16px;
-@whitespace-md: @10px;
-@whitespace-sm: @6px;
-@whitespace-xs: @2px;
-
-// 一个像素的线
-.setContentLine(@b:@border){
-  content: '';
-  display: block;
-  position: absolute;
-  background-color: @b;
-  // 兼容UC线条不显示的BUG
-  z-index:1;
-  overflow: hidden;
-  -webkit-backface-visibility:hidden;
-}
+@ticket-disabled-sawtooth-bg: #B9BEC5;
+@ticket-disabled-legend-color: white;
+@ticket-disabled-legend-bg-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tabbar from 'components/seedsui/Tabbar/Tabbar.jsx';
+import Tabbar from 'components/seedsui/Tabbar';
 import Dialog from 'components/seedsui/Dialog/Dialog.jsx';
 import MenuTiled from 'components/seedsui/MenuTiled/MenuTiled.jsx';
 

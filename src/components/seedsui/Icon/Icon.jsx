@@ -39,7 +39,7 @@ export default class Icon extends Component {
     }
     
     return (
-      <i onClick={onClick} className={`icon${nodataIconClassName ? ' ' + nodataIconClassName : ''}${className ? ' ' + className : ''}`} style={newStyle}>
+      <i ref={(el) => {this.$el = el}} onClick={onClick} className={`icon${nodataIconClassName ? ' ' + nodataIconClassName : ''}${className ? ' ' + className : ''}`} style={newStyle}>
       {lazyLoad && src && <span className="icon-img" style={{backgroundImage: 'url(' + src + ')'}}></span>}
       {children}
       {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}

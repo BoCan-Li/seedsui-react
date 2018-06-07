@@ -46,7 +46,7 @@ export default class ImgUploader extends Component {
     max: 5,
     sourceType: ['album', 'camera'],
     sizeType: ['compressed'], // ['original', 'compressed']
-    list: [], // 格式[{src: xxx, thumb: xxx}]
+    list: [], // 格式[{id: '', src: '', thumb: ''}]
     showUpload: false,
     showDelete: false,
     preview: true,
@@ -90,17 +90,38 @@ export default class ImgUploader extends Component {
       })
     });
   }
-  convertList = (arr) => {
-    return arr.map((item) => {
+  convertList = (imgs, imgMap) => {
+    if (bridge.platform === 'waiqin') {
+      console.log(1)
+      var arrImgs = [];
+      for (let img in imgMap) {
+        arrImgs.push({
+          id: img,
+          src: imgMap[img].src,
+          thumb: imgMap[img].base64
+        });
+      }
+      return arrImgs;
+    }
+    console.log(2)
+    return imgs.map((item) => {
+      if (bridge.platform === 'dinghuo') {
+        return {
+          id: item,
+          src: 'LocalResource://imageid' + item,
+          thumb: 'LocalResource://imageid' + item
+        }
+      }
       return {
         id: item,
-        src: bridge.platform === 'dinghuo' ? 'LocalResource://imageid' + item : item,
-        thumb: bridge.platform === 'dinghuo' ? 'LocalResource://imageid' + item : item
+        src: item,
+        thumb: item
       }
     });
   }
   onChange = (argImgs, argImgMap) => {
-    var list = this.convertList(argImgs);
+    var list = this.convertList(argImgs, argImgMap);
+    console.log(list)
     this.setState({
       list
     });
@@ -145,16 +166,6 @@ export default class ImgUploader extends Component {
     if (this.props.readOnly) return;
     // 根据watermark.location判断拍照前是否先定位, 再选照片
     this.state.instance.choose();
-    /* const list = this.state.list;
-    list.push({
-      id: 'http://image-test.waiqin365.com/9999999999999999999/stdmendian/info/201801/demo_advert.png',
-      src: 'http://image-test.waiqin365.com/9999999999999999999/stdmendian/info/201801/demo_advert.png',
-      thumb: 'http://image-test.waiqin365.com/9999999999999999999/stdmendian/info/201801/demo_advert.png'
-    });
-    this.setState({
-      list: list
-    });
-    */
   }
   deleteImg = (item) => {
     this.state.instance.deleteImg(item.id);

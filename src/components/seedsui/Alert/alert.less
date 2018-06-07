@@ -1,9 +1,8 @@
 // alert.less(start)
 .alert-mask{
   z-index:10;
-  display: -webkit-box;
-  -webkit-box-align: center;
-  -webkit-box-pack: center;
+  &:extend(.flex);
+  .flex-middlecenter;
 }
 .alert{
 	border-style:solid;

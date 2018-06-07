@@ -109,6 +109,7 @@ Math.Calc = (function () {
   }
   // toDigits 精度
   function toDigits (argNum, digits) {
+    if (Number(digits) === 0) return Math.floor(argNum)
     if (!digits) return argNum
     var digitsMatch = new RegExp('[0-9]+(\\.[0-9]{1,' + digits + '})?')
     var num = ('' + argNum).match(digitsMatch)
