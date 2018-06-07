@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Notice from 'components/seedsui/Notice/Notice.jsx';
+import Notice from './../Notice';
 
 export default class Error extends Component {
   static propTypes = {

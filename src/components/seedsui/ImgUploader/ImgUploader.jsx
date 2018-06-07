@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bridge from './../utils/bridge';
-import Grid from './../Grid/Grid.jsx';
+import Grid from './../Grid';
 
 const Count = {
   fontSize: '12px',

@@ -71,7 +71,7 @@ export default class Home extends Component {
         <Container>
           <div style={{padding: '30px 0 24px 0'}}>
             <p style={{textAlign: 'center', fontSize: '60px', padding: ''}}>SEEDSUI</p>
-            <p className="color-sub text-center">全世界最好最全的react移动端开发UI框架</p>
+            <p className="color-sub text-center">全世界最好最全的react移动开发框架</p>
           </div>
           <Group>
             <Grid list={menus} onClickCell={this.onClickMenu} iconClassName="size45" className="grid-bordered"/>

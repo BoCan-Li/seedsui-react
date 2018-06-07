@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
 import Device from './../utils/device.js';
 import bridge from './../utils/bridge'
-import Icon from './../Icon/Icon.jsx';
+import Icon from './../Icon';
 
 @withRouter
 export default class Titlebar extends Component {

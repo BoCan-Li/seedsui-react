@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from 'components/seedsui/Button/Button.jsx';
-import Price from 'components/seedsui/Price/Price.jsx';
-import Mark from 'components/seedsui/Mark/Mark.jsx';
+import Button from './../Button';
+import Price from './../Price';
+import Mark from './../Mark';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export default class Attributes extends Component {

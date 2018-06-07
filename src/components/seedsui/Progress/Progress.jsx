@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Counter from './../Counter/Counter.jsx';
+import Counter from './../Counter';
 
 export default class Progress extends Component {
   static propTypes = {

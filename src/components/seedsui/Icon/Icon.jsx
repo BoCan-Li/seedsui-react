@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Badge from './../Badge/Badge.jsx';
+import Badge from './../Badge';
 
 export default class Icon extends Component {
   static propTypes = {

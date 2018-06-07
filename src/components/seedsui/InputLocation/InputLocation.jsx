@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Toast from 'components/seedsui/Toast/toast.js';
+import Toast from './../Toast/toast.js';
 import bridge from './../utils/bridge';
-import Icon from './../Icon/Icon.jsx';
-import Close from './../Close/Close.jsx';
+import Icon from './../Icon';
+import Close from './../Close';
 
 export default class InputLocation extends Component {
   static propTypes = {

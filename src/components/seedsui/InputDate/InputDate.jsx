@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PickerDate from './../Picker/PickerDate.jsx';
-import Icon from './../Icon/Icon.jsx';
-import Close from './../Close/Close.jsx';
+import PickerDate from './../Picker';
+import Icon from './../Icon';
+import Close from './../Close';
 
 export default class InputDate extends Component {
   static propTypes = {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Picker from './../Picker/Picker.jsx';
-import Icon from './../Icon/Icon.jsx';
-import Close from './../Close/Close.jsx';
+import Picker from './../Picker';
+import Icon from './../Icon';
+import Close from './../Close';
 
 export default class InputPicker extends Component {
   static propTypes = {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Notice from './../Notice/Notice.jsx';
+import Notice from './../Notice';
 import Instance from './dragrefresh.pull.js';
 import ImgLazy from './../ImgLazy/imglazy';
 

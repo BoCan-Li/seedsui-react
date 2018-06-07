@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import styled from 'styled-components';
-import {changeTab} from 'store/modules/box.js';
-import Page from 'components/seedsui/Page/Page.jsx';
-import Header from 'components/seedsui/Header/Header.jsx';
-import Titlebar from 'components/seedsui/Titlebar/Titlebar.jsx';
-import Tabbar from 'components/seedsui/Tabbar/Tabbar.jsx';
-import Attribute from 'components/seedsui/Attribute/Attribute.jsx';
-import Button from 'components/seedsui/Button/Button.jsx';
-import Carrousel from 'components/seedsui/Carrousel/Carrousel.jsx';
+import Page from 'components/seedsui/Page';
+import Header from 'components/seedsui/Header';
+import Titlebar from 'components/seedsui/Titlebar';
+import Attribute from 'components/seedsui/Attribute';
+import Button from 'components/seedsui/Button';
+import Container from 'components/seedsui/Container';
 
 const BlockBox = styled.div`
   height: 150px;
@@ -26,19 +22,7 @@ const Block = styled.div`
   box-sizing: border-box;
 `;
 
-@connect(state => ({
-  tabs: state.box.tabs,
-  tabsActiveIndex: state.box.tabsActiveIndex,
-}), {
-  changeTab
-})
 export default class Box extends Component {
-  static propTypes = {
-    tabs: PropTypes.array,
-    tabsActiveIndex: PropTypes.number,
-    changeTab: PropTypes.func,
-  };
-
   constructor(props, context) {
     super(props, context);
   }
@@ -53,80 +37,20 @@ export default class Box extends Component {
     this.props.changeTab(e.activeIndex);
   }
   onClickShrink = (e) => {
-    this.shrinkWrapper.style.WebkitTransform = `translateX(-${window.innerWidth}px)`;
+    this.$shrinkWrapper.style.WebkitTransform = `translateX(-${window.innerWidth}px)`;
   }
   render() {
-    const {tabs, tabsActiveIndex} = this.props;
     return (
       <Page>
         <Header>
           <Titlebar caption="盒子模型"/>
-          <Tabbar list={tabs} activeIndex={tabsActiveIndex} onClick={this.onClickTab}/>
         </Header>
-        <Carrousel className="carrousel-page" style={{top: '84px'}} onChange={this.onSlideEnd} activeIndex={tabsActiveIndex}>
-          {/* 第一页 */}
-          <div>
-            <Attribute name="box-left"/>
-            <BlockBox className="box box-left">
-              <Block/>
-            </BlockBox>
-            <Attribute name="box-center"/>
-            <BlockBox className="box box-center">
-              <Block/>
-            </BlockBox>
-            
-            <Attribute name="box-right"/>
-            <BlockBox className="box box-right">
-              <Block/>
-            </BlockBox>
-            
-            <Attribute name="box-top"/>
-            <BlockBox className="box box-top">
-              <Block/>
-            </BlockBox>
-
-            <Attribute name="box-middle"/>
-            <BlockBox className="box box-middle">
-              <Block/>
-            </BlockBox>
-            
-            <Attribute name="box-bottom"/>
-            <BlockBox className="box box-bottom">
-              <Block/>
-            </BlockBox>
-            
-            <Attribute name="box-middlecenter"/>
-            <BlockBox className="box box-middlecenter">
-              <Block/>
-            </BlockBox>
-            
-            <Attribute name="box-vertical"/>
-            <BlockBox className="box box-vertical">
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-            </BlockBox>
-
-            <Attribute name="box-horizontal"/>
-            <BlockBox className="box box-horizontal">
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-              <Block/>
-            </BlockBox>
-          </div>
-          {/* 第二页 */}
-          <div>
+        <Container>
             <Attribute name="flex-shrink" value={<Button className="small" style={{marginLeft: '8px'}} onClick={this.onClickShrink}>translateX</Button>} />
             <BlockBox style={{border: '0'}}>
-              <div className="flex flex-shrink" ref={(el) => {this.shrinkWrapper = el;}}>
-                <div style={{backgroundColor: '#7DB9DE', height: '70px'}}></div>
-                <div style={{backgroundColor: '#51A8DD'}}></div>
+              <div className="flex flex-shrink" style={{WebkitTransition: 'all 500ms'}} ref={(el) => {this.$shrinkWrapper = el;}}>
+                <div style={{backgroundColor: '#f2f2f2', height: '70px'}}></div>
+                <div style={{backgroundColor: '#aaa'}}></div>
               </div>
             </BlockBox>
 
@@ -222,8 +146,7 @@ export default class Box extends Component {
               <Block style={{height: 'auto'}}/>
               <Block style={{height: 'auto'}}/>
             </BlockBox>
-          </div>
-        </Carrousel>
+        </Container>
       </Page>
     )
   }

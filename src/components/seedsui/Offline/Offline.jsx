@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Notice from './../Notice/Notice.jsx';
-import Device from 'components/seedsui/utils/device';
+import Notice from './../Notice';
+import Device from './../utils/device';
 export default class NoNetwork extends Component {
   static propTypes = {
     className: PropTypes.string,

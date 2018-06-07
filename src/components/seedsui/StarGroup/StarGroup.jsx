@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Star from 'components/seedsui/Star/Star.jsx';
+import Star from './../Star';
 
 export default class StarGroup extends Component {
   static propTypes = {

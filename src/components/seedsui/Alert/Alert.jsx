@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Icon from './../Icon/Icon.jsx';
+import Icon from './../Icon';
 import Instance from './alert.js';
 
 export default class Alert extends Component {

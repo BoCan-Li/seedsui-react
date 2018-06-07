@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PickerCity from './../Picker/PickerCity.jsx';
-import Icon from './../Icon/Icon.jsx';
-import Close from './../Close/Close.jsx';
+import PickerCity from './../Picker';
+import Icon from './../Icon';
+import Close from './../Close';
 
 export default class InputCity extends Component {
   static propTypes = {

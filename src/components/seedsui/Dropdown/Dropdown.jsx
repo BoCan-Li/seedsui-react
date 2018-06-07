@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tabbar from 'components/seedsui/Tabbar';
-import Dialog from 'components/seedsui/Dialog/Dialog.jsx';
-import MenuTiled from 'components/seedsui/MenuTiled/MenuTiled.jsx';
+import Tabbar from './../Tabbar';
+import Dialog from './../Dialog';
+import MenuTiled from './../MenuTiled';
 
 export default class Dropdown extends Component {
   static propTypes = {

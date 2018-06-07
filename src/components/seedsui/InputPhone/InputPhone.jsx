@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Icon from './../Icon/Icon.jsx';
-import Close from './../Close/Close.jsx';
+import Icon from './../Icon';
+import Close from './../Close';
 
 export default class InputPhone extends Component {
   static propTypes = {

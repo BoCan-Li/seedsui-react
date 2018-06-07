@@ -1,5 +1,5 @@
 import axios from 'axios'
-import bridge from 'components/seedsui/utils/bridge'
+import bridge from './bridge'
 // axios 默认配置
 // axios.defaults.timeout = 5000
 // 设置头

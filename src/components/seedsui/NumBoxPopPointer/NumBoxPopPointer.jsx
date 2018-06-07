@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import NumBoxPop from './../NumBoxPop/NumBoxPop.jsx';
+import NumBoxPop from './../NumBoxPop';
 
 const UnitStyle = {
   fontSize: '13px',

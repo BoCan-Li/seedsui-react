@@ -1,3 +1,3 @@
-import Close from './Container';
+import Close from './Close';
 
 export default Close;

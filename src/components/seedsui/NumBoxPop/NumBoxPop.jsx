@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Alert from './../Alert/Alert.jsx';
-import NumBox from './../NumBox/NumBox.jsx';
+import Alert from './../Alert';
+import NumBox from './../NumBox';
 export default class NumBoxPop extends Component {
   static propTypes = {
     args: PropTypes.any,
