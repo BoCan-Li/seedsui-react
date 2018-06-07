@@ -105,7 +105,7 @@ export default class Dragrefresh extends Component {
   render() {
     const { style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName } = this.props;
     return (
-      <div ref={(container) => {this.$el = container}} className={className} style={style}>
+      <div ref={(el) => {this.$el = el;}} className={className} style={style}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>

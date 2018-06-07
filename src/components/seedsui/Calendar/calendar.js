@@ -1,22 +1,19 @@
-// Calendar 日历 (require calendarutil.js | dateutil.js)
-//import './../utils/dateutil.js'
-//import CalendarUtil from './calendarutil.js'
+// Calendar 日历 (require dateutil.js)
 var Calendar = function (container, params) {
   /* --------------------
   Model
   -------------------- */
   var defaults = {
     viewType: 'month', // 值为month|week
-    titleFormat: 'yyyy年MM月dd日,第W周,周E', // 年月日
-    defaultActiveDate: new Date(), // 默认选中的日期
-    disableBeforeDate: null, // 禁用此前
-    disableAfterDate: null, // 禁用此后
-    activeDate: null, // 选中日期
-    threshold: '50', // 滑动间距触发
-    duration: '300', // 动画时长
-    dayHeight: '40', // 一日高度
+    disableBeforeDate: null,
+    disableAfterDate: null,
+    activeDate: null,
+    threshold: '50',
+    duration: '300',
+    dayHeight: '40',
     isYTouch: true, // 是否允许上下滑动
-    schedule: [], // 日程
+    showTitleWeeks: false, // 是否显示周数
+    showTitleWeek: false, // 是否显示周几
     // DOM
     calendarClass: 'calendar',
     disableClass: 'calendar-disable',
@@ -39,7 +36,6 @@ var Calendar = function (container, params) {
     dayClass: 'calendar-day',
     dayNumClass: 'calendar-daynum',
 
-    scheduleClass: 'calendar-schedule',
     // 状态
     currentClass: 'calendar-current',
     notcurrentClass: 'calendar-notcurrent',
@@ -66,7 +62,7 @@ var Calendar = function (container, params) {
   s.params = params
   s.params.wrapperHeight = s.params.dayHeight * 6
   // 禁止修改默认值
-  Object.defineProperty(s.params, 'defaultActiveDate', {
+  Object.defineProperty(s.params, 'activeDate', {
     enumerable: true,
     configurable: true,
     writable: false
@@ -75,12 +71,11 @@ var Calendar = function (container, params) {
   // 今天和选中天
   s.today = new Date()
   s.activeDate = null
-  // 日历工具箱
-  if (s.params.activeDate) { // 如果有选中天，则初始化为选中天
+  // 如果有选中天，则初始化为选中天
+  if (s.params.activeDate) {
     s.activeDate = s.params.activeDate
-    s.calendarUtil = new CalendarUtil(s.activeDate)
   } else { // 否则，则初始化为默认天
-    s.calendarUtil = new CalendarUtil(s.params.defaultActiveDate)
+    s.activeDate = new Date()
   }
   // Container
   s.container = typeof container === 'string' ? document.querySelector(container) : container
@@ -310,23 +305,22 @@ var Calendar = function (container, params) {
     // 刷新数据
     if (index === 0) { // 上一页
       if (s.params.viewType === 'month') {
-        s.calendarUtil.activePrevMonth()
+        s.activeDate.prevMonth()
       } else if (s.params.viewType === 'week') {
         s.wrapperY.style.webkitTransitionDuration = '0ms'
-        s.calendarUtil.activePrevWeek()
+        s.activeDate.prevWeek()
       }
     } else if (index === 2) { // 下一页
       if (s.params.viewType === 'month') {
-        s.calendarUtil.activeNextMonth()
+        s.activeDate.nextMonth()
       } else if (s.params.viewType === 'week') {
         s.wrapperY.style.webkitTransitionDuration = '0ms'
-        s.calendarUtil.activeNextWeek()
+        s.activeDate.nextWeek()
       }
     }
     /*
     // 滑动到禁用
-    if((s.params.disableBeforeDate && s.calendarUtil.activeDate < s.params.disableBeforeDate)||(s.params.disableAfterDate && s.calendarUtil.activeDate > s.params.disableAfterDate)){
-      s.calendarUtil.activeDate = s.activeDate
+    if((s.params.disableBeforeDate && s.activeDate < s.params.disableBeforeDate)||(s.params.disableAfterDate && s.activeDate > s.params.disableAfterDate)){
       return
     }
     */
@@ -362,39 +356,51 @@ var Calendar = function (container, params) {
   }
   s.data = []
   s.updateData = function () {
-    s.data = s.calendarUtil.getCalendarData()
-    s.data.activeIndex = s.calendarUtil.activeIndex
-    var activeRowIndex = s.calendarUtil.activeRowIndex
+    s.data = s.activeDate.getCalendarData()
+    var activeRowIndex = s.data.activeRowIndex
     if (s.params.viewType === 'week') {
       s.touches.maxPosY = activeRowIndex * s.params.dayHeight
       s.touches.posY = s.touches.maxPosY
-      var prevWeek = s.calendarUtil.getPrevWeek()
-      var nextWeek = s.calendarUtil.getNextWeek()
+      var prevWeek = s.activeDate.getPrevWeekData()
+      var nextWeek = s.activeDate.getNextWeekData()
       var start1 = activeRowIndex * 7
       var start2 = start1 + 84
-      // 上周
+      // 修改同行上周
       for (var i = 0, datIndex1 = start1; i < 7; i++) {
         s.data[datIndex1] = prevWeek[i]
         datIndex1++
       }
-      // 下周
+      // 修改同行下周
       for (var j = 0, datIndex2 = start2; j < 7; j++) {
         s.data[datIndex2] = nextWeek[j]
         datIndex2++
       }
     }
   }
-  s.drawHeader = function (argActiveDate) {
-    var activeDate = argActiveDate || s.calendarUtil.activeDate
-    s.title.innerHTML = activeDate.format(s.params.titleFormat)
+  var chinaWeek = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
+  s.drawHeader = function () {
+    var activeDate = s.activeDate
+    var activeDay = ''
+    if (s.params.showTitleWeek) {
+      activeDay = '&nbsp&nbsp周' + chinaWeek[activeDate.getDay()]
+    }
+    var activeWeek = ''
+    if (s.params.showTitleWeeks) {
+      activeWeek = '&nbsp&nbsp第' + activeDate.week() + '周'
+    }
+    // 注入头部数据
+    var year = activeDate.getFullYear()
+    var month = (activeDate.getMonth() + 1)
+    month = month < 10 ? '0' + month : month
+    var date = activeDate.getDate()
+    date = date < 10 ? '0' + date : date
+    s.title.innerHTML = year + '-' + month + '-' + date + activeDay + activeWeek
   }
   s.draw = function (vertical) { // vertical:上下拖动(-1上 | 1下 | 其它为非上下拖动)
     // 更新选中日期
     s.updateData()
-    if (s.activeDate) s.activeDate = s.calendarUtil.activeDate
     // 注入身体
     var activeIndex = s.data.activeIndex
-    // var activeRowIndex = s.data.activeRowIndex
     for (var i = 0; i < s.days.length; i++) {
       s.days[i].innerHTML = s.data[i].getDate()
       // index
@@ -415,21 +421,15 @@ var Calendar = function (container, params) {
       if (s.params.disableAfterDate && s.data[i].setHours(0, 0, 0, 0) > s.params.disableAfterDate.setHours(0, 0, 0, 0)) {
         s.days[i].classList.add(s.params.disableClass)
       }
-      // 增加日程
-      s.params.schedule.forEach(function (schDate, schIndex) {
-        if (s.data[i].setHours(0, 0, 0, 0) === schDate.setHours(0, 0, 0, 0)) {
-          s.days[i].classList.add(s.params.scheduleClass)
-        }
-      })
     }
     s.updateContainerHeight()
     // 滑动到禁用
-    if ((s.params.disableBeforeDate && s.calendarUtil.activeDate < s.params.disableBeforeDate) || (s.params.disableAfterDate && s.calendarUtil.activeDate > s.params.disableAfterDate)) {
+    if ((s.params.disableBeforeDate && s.activeDate < s.params.disableBeforeDate) || (s.params.disableAfterDate && s.activeDate > s.params.disableAfterDate)) {
       console.log('SeedsUI Warn：滑动到禁用日期')
       return
     }
     // 注入头部
-    s.drawHeader(s.activeDate)
+    s.drawHeader()
     if (vertical) {
       s.vertical = vertical
       // Callback onHeightChange
@@ -444,9 +444,9 @@ var Calendar = function (container, params) {
     for (var i = 0; i < s.days.length; i++) {
       s.days[i].classList.remove(s.params.activeClass)
     }
-    // 选中日期
+    // 选中日期,issue
     s.activeDate = s.data[target.index]
-    s.calendarUtil.setActiveDate(s.activeDate)
+    // s.activeDate.setTime(s.data[target.index].getTime())
     // 重新绘制
     s.draw()
   }
@@ -457,13 +457,13 @@ var Calendar = function (container, params) {
     s.slideYTo(-1)
   }
   s.showToday = function () {
-    s.calendarUtil.setActiveDate(s.today)
+    s.activeDate.setTime(s.today.getTime())
     s.draw()
   }
   s.reset = function () {
+    console.log(s.params.activeDate.toLocaleString())
     // 选中日期
-    s.activeDate = s.params.activeDate
-    s.calendarUtil.setActiveDate(s.params.defaultActiveDate)
+    s.activeDate.setTime(s.params.activeDate.getTime())
     // 重新绘制
     s.draw()
   }
@@ -591,4 +591,4 @@ var Calendar = function (container, params) {
   s.init()
 }
 
-;//export default Calendar
+export default Calendar

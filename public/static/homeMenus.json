@@ -203,7 +203,7 @@
       "iconSrc": "/static/images/grid.png",
       "caption": "日历",
       "sndcaption": "Calendar",
-      "url": ""
+      "url": "/_react_/calendarDemo"
     },
     {
       "iconBadgeCaption": "",

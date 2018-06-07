@@ -136,7 +136,7 @@ Date.prototype.month = function (month) {
 Date.prototype.prevMonth = function (count) {
   var targetMonth = this.getMonth() - (count || 1)
   var targetMaxDate = new Date(this.getFullYear(), targetMonth + 1, 0).getDate()
-  if (this.getMonthDate() > targetMaxDate) {
+  if (this.getDate() > targetMaxDate) {
     this.setMonth(targetMonth, targetMaxDate)
   } else {
     this.setMonth(targetMonth)
@@ -147,7 +147,7 @@ Date.prototype.prevMonth = function (count) {
 Date.prototype.nextMonth = function (count) {
   var targetMonth = this.getMonth() + (count || 1)
   var targetMaxDate = new Date(this.getFullYear(), targetMonth + 1, 0).getDate()
-  if (this.getMonthDate() > targetMaxDate) {
+  if (this.getDate() > targetMaxDate) {
     this.setMonth(targetMonth, targetMaxDate)
   } else {
     this.setMonth(targetMonth)
@@ -176,7 +176,7 @@ Date.prototype.lastMonthDate = function () {
 }
 // 返回当月共多少天
 Date.prototype.getMonthDate = function () {
-  return new Date(this.getFullYear(), this.getMonth() + 1, 0).getDate()
+  return new Date(this.getFullYear(), this.getMonth() + 1, '0').getDate()
 }
 
 /*
@@ -220,15 +220,6 @@ Date.prototype.sunday = function () {
   var day = this.getDay()
   this.setTime(this.getTime() - this.dayMilliSecond * day)
   return this
-}
-// 获得一周的日期
-Date.prototype.getWeeks = function () {
-  var weeks = []
-  var sunday = this.sunday()
-  for (var i = 0; i < 7; i++) {
-    weeks.push(new Date(sunday.getTime() + this.dayMilliSecond * i))
-  }
-  return weeks
 }
 
 /*
@@ -485,4 +476,124 @@ Date.prototype.format = function (fmtModel) {
     }
   }
   return fmt
+}
+
+/*
+  * 日历操作
+  * */
+// 月数据
+Date.prototype.getMonthData = function () { // 获得本月日历, 返回42天
+  // 月头的位置
+  var firstDay = new Date(this).firstMonthDate()
+  var firstDayIndex = firstDay.getDay()
+  // 根据起始毫秒数，逐天增加天数
+  var startDayMs = firstDay.getTime() - this.dayMilliSecond * firstDayIndex
+
+  var data = []
+  // 生成月
+  for (var i = 0; i < 42; i++) {
+    data.push(new Date())
+    if (i === 0) data[0].setTime(startDayMs)
+    else data[i].setTime(data[i - 1].getTime() + this.dayMilliSecond)
+
+    // 设置当年标识isCurrent
+    data[i].isCurrent = false
+    if (data[i].month() === this.month()) data[i].isCurrent = true
+  }
+  return data
+}
+Date.prototype.getPrevMonthData = function (count) { // 获得上月日历
+  if (count) {
+    var months = []
+    var prevDate = new Date(this)
+    for (var i = 0; i < count; i++) {
+      months.push(prevDate.getMonthData())
+      prevDate.prevMonth()
+    }
+    return months
+  }
+  var date = new Date(this)
+  date.prevMonth()
+  return date.getMonthData()
+}
+Date.prototype.getNextMonthData = function () { // 获得下月日历
+  var date =  new Date(this)
+  date.nextMonth()
+  return date.getMonthData()
+}
+Date.prototype.getCalendarData = function () { // 获取三个月的日历数据
+  var data = this.getPrevMonthData().concat(this.getMonthData()).concat(this.getNextMonthData())
+  // 设置选中项与选中行
+  // 当前日期+当月第一天的周几=选中位置(由于索引是从0开始的,所以在后面要再减掉1)
+  var activeIndex =  this.getDate() + new Date(this).firstMonthDate().getDay()
+  // 用Math.floor(位置/7)获取行数
+  data.activeRowIndex = Math.floor(activeIndex/7)
+  // 上个月日历42天+当月位置=当前位置
+  data.activeIndex = activeIndex + 41
+  return data
+}
+
+Date.prototype.getPrevMonth = function (count) { // 获得前几个月日期
+  if (count) {
+    var months = []
+    var prevDate = new Date(this)
+    for (var i = 0; i < count; i++) {
+      months.push(prevDate)
+      prevDate.prevMonth()
+    }
+    return months
+  }
+  var date = new Date(this)
+  date.prevMonth()
+  return date
+}
+
+// 周数据
+Date.prototype.getWeekData = function () { // 获得本周日历, 返回7天
+  var date = new Date(this)
+  var sunday = date.sunday()
+  var data = []
+  for (var i = 0; i < 7; i++) {
+    data.push(new Date(sunday.getTime() + this.dayMilliSecond * i))
+  }
+  return data
+}
+Date.prototype.getPrevWeekData = function (count) { // 获得上周日历
+  if (count) {
+    var weeks = []
+    var prevDate = new Date(this)
+    for (var i = 0; i < count; i++) {
+      weeks.push(prevDate.getWeekData())
+      prevDate.prevWeek()
+    }
+    return weeks
+  }
+  var date = new Date(this)
+  date.prevWeek()
+  return date.getWeekData()
+}
+Date.prototype.getNextWeekData = function () { // 获得下周日历
+  var date = new Date(this)
+  date.nextWeek()
+  return date.getWeekData()
+}
+
+// 天数据
+Date.prototype.getPrevDate = function (argCount) {
+  var count = argCount
+  if (count) {
+    var days = []
+    var pvDate = new Date(this)
+    function buildDays () {
+      pvDate.prevDate()
+      days.push(pvDate)
+      count--
+      if (count !== 0) buildDays()
+    }
+    buildDays()
+    return days
+  }
+  var date = new Date(this)
+  date.prevDate()
+  return date
 }

@@ -186,4 +186,4 @@ var CalendarUtil = function (activeDate) {
   }
 }
 
-;//export default CalendarUtil
+export default CalendarUtil
