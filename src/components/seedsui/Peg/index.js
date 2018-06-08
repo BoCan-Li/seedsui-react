@@ -1,3 +1,3 @@
-import Peg from './Peg';
+import Peg from './Peg.jsx';
 
 export default Peg;

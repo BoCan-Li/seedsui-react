@@ -1,3 +1,3 @@
-import NumBox from './NumBox';
+import NumBox from './NumBox.jsx';
 
 export default NumBox;

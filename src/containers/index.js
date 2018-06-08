@@ -1,4 +1,5 @@
 export {default as Exception} from './Exception';
+export {default as NotFound} from './NotFound';
 
 export {default as Home} from './Home'; // 首页
 

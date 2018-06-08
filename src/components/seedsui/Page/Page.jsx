@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Page extends Component {
   static propTypes = {
@@ -12,10 +12,10 @@ export default class Page extends Component {
   }
 
   render() {
-    const { style, className } = this.props;
+    const { style, className, children } = this.props;
     return (
       <section ref={(el) => {this.$el = el}} className={'page' + (className ? ' ' + className : '')} style={style}>
-        { this.props.children }
+        { children }
       </section>
     );
   }

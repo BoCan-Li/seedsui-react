@@ -1,3 +1,3 @@
-import Mark from './Mark';
+import Mark from './Mark.jsx';
 
 export default Mark;

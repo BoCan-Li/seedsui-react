@@ -1,3 +1,3 @@
-import InputNumber from './InputNumber';
+import InputNumber from './InputNumber.jsx';
 
 export default InputNumber;

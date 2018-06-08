@@ -12,7 +12,7 @@ export default class Notice extends Component {
     icon: PropTypes.node,
     iconSrc: PropTypes.string,
     iconStyle: PropTypes.object,
-    iconClassName: PropTypes.string,
+    iconClassName: PropTypes.string, // notice-icon-nodata | notice-icon-error
     caption: PropTypes.string,
     sndcaption: PropTypes.string,
     children: PropTypes.node

@@ -1,3 +1,3 @@
-import Notice from './Notice';
+import Notice from './Notice.jsx';
 
 export default Notice;

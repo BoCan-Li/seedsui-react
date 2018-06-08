@@ -1,3 +1,3 @@
-import Offline from './Offline';
+import Offline from './Offline.jsx';
 
 export default Offline;

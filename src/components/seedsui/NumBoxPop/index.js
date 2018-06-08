@@ -1,3 +1,3 @@
-import NumBoxPop from './NumBoxPop';
+import NumBoxPop from './NumBoxPop.jsx';
 
 export default NumBoxPop;
