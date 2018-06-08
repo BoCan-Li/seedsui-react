@@ -217,7 +217,7 @@
       "iconSrc": "/static/images/grid.png",
       "caption": "手写签名",
       "sndcaption": "HandSign",
-      "url": ""
+      "url": "/_react_/handsignDemo"
     },
     {
       "iconBadgeCaption": "",

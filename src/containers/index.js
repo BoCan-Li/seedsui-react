@@ -8,3 +8,4 @@ export {default as Layout} from './Layout'; // 布局
 export {default as CarrouselPage} from './CarrouselPage'; // 轮播页
 export {default as Form} from './Form'; // 表单
 export {default as CalendarDemo} from './CalendarDemo'; // 日历
+export {default as HandsignDemo} from './HandsignDemo'; // 手写签名

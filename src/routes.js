@@ -14,7 +14,8 @@ import {
   Layout,
   CarrouselPage,
   Form,
-  CalendarDemo
+  CalendarDemo,
+  HandsignDemo
 } from 'containers';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 const Routes = () => (
@@ -36,6 +37,8 @@ const Routes = () => (
         <Route exact path="/_react_/form" component={Form}/>
         {/* 日历 */}
         <Route exact path="/_react_/calendarDemo" component={CalendarDemo}/>
+        {/* 手写签名 */}
+        <Route exact path="/_react_/handsignDemo" component={HandsignDemo}/>
 
         {/* 错误页面 */}
         <Route exact path="/_react_/exception/:msg?" component={Exception}/>
