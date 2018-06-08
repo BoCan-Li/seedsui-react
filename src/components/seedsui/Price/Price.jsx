@@ -1,4 +1,3 @@
-// 已被订货365定制,不能跟seedsui版本走
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
