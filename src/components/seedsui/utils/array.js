@@ -1,6 +1,6 @@
 // 兼容ES7的includes
-if (!Array.prototype.includes) {
-  Array.prototype.includes = function (searchElement) {
+if (!window.Array.prototype.includes) {
+  window.Array.prototype.includes = function (searchElement) {
     return this.some(function (el) {
       return el === searchElement
     })
@@ -8,7 +8,7 @@ if (!Array.prototype.includes) {
 }
 
 // 幂集 如:[1,2],返回[[1],[2],[1,2]]
-Array.prototype.powerset = function () {
+window.Array.prototype.powerset = function () {
   var ps = [[]]
   for (var i = 0; i < this.length; i++) {
     for (var j = 0, len = ps.length; j < len; j++) {
@@ -19,13 +19,13 @@ Array.prototype.powerset = function () {
 }
 
 // 二维数组转为一维数组
-Array.prototype.toOneColumn = function () {
+window.Array.prototype.toOneColumn = function () {
   var reg = /[\d\.]+\,([\d\.]+)/g // eslint-disable-line
   return this.join(',').replace(reg, '$1').split(',')
 }
 
 // 包含，支持传数组包含数组
-Array.prototype.contains = function (arg) {
+window.Array.prototype.contains = function (arg) {
   if (toString.call(arg) !== '[object Array]') {
     return this.indexOf(arg) > -1
   }
@@ -35,10 +35,10 @@ Array.prototype.contains = function (arg) {
 }
 
 // 比较两个数组是否相同, 比较不了包含{x: 20}的数组
-if (Array.prototype.equals) {
-  console.warn('覆盖现有的Array.prototype.equals。 可能的原因：新的API定义了方法，存在框架冲突，或者在代码中包含了双重包含。')
+if (window.Array.prototype.equals) {
+  console.warn('覆盖现有的window.Array.prototype.equals。 可能的原因：新的API定义了方法，存在框架冲突，或者在代码中包含了双重包含。')
 }
-Array.prototype.equals = function (array) {
+window.Array.prototype.equals = function (array) {
   if (!array)
     return false
 
@@ -67,4 +67,4 @@ Array.prototype.equals = function (array) {
   return true
 }
 // 从for-in循环隐藏方法
-Object.defineProperty(Array.prototype, "equals", { enumerable: false })
+Object.defineProperty(window.Array.prototype, "equals", { enumerable: false })

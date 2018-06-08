@@ -27,6 +27,7 @@ export default class Titlebar extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   onClickBack = () => {
     const {history, onClickBack} = this.props;

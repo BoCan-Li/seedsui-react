@@ -330,7 +330,7 @@ var Bridge = {
         console.log(error);
       }
     } else {
-      history.go(-1);
+      window.history.go(-1);
     }
   },
   // 客户端添加返回绑定

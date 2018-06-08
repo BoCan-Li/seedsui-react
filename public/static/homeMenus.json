@@ -222,13 +222,6 @@
     {
       "iconBadgeCaption": "",
       "iconSrc": "/static/images/grid.png",
-      "caption": "水印",
-      "sndcaption": "Watermark",
-      "url": ""
-    },
-    {
-      "iconBadgeCaption": "",
-      "iconSrc": "/static/images/grid.png",
       "caption": "下拉刷新",
       "sndcaption": "Dragrefresh",
       "url": ""

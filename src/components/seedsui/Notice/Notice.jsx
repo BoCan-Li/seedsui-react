@@ -26,6 +26,7 @@ export default class Notice extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   getArgs = (e) => {
     var args = this.props.args;

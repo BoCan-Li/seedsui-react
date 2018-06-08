@@ -14,6 +14,7 @@ export default class Close extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   render() {
     const {className, style, iconClassName, iconStyle, onClick} = this.props;

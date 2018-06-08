@@ -25,6 +25,7 @@ const Block = styled.div`
 export default class Box extends Component {
   constructor(props, context) {
     super(props, context);
+    this.state = {}
   }
   componentDidMount = () => {
   }

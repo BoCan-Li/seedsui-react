@@ -17,6 +17,7 @@ export default class Switch extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   onClick = () => {
     const {readOnly, checked, onClick} = this.props;

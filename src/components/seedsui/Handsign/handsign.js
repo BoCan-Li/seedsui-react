@@ -42,6 +42,7 @@ var Handsign = function (container, params) {
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
     s.container[action]('touchstart', s.onTouchStart, false)
+    s.container[action]('touchmove', s.onTouchMove, false)
     s.container[action]('touchend', s.onTouchEnd, false)
     s.container[action]('touchcancel', s.onTouchEnd, false)
   }
@@ -53,12 +54,30 @@ var Handsign = function (container, params) {
     s.events(true)
   }
   s.onTouchStart = function (e) {
-    document.addEventListener('touchstart', s.preventDefault, false)
-    s.drawBegin(e)
+    s.container.addEventListener('touchmove', s.preventDefault, false)
+    window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
+    s.ctx.strokeStyle = s.params.color
+    s.ctx.lineWidth = s.params.lineWidth
+    s.ctx.beginPath()
+    s.ctx.moveTo(
+      e.changedTouches[0].clientX - s.stage_info.left,
+      e.changedTouches[0].clientY - s.stage_info.top
+    )
+    s.path.beginX = e.changedTouches[0].clientX - s.stage_info.left
+    s.path.beginY = e.changedTouches[0].clientY - s.stage_info.top
+  }
+  s.onTouchMove = function (e) {
+    s.ctx.lineTo(
+      e.changedTouches[0].clientX - s.stage_info.left,
+      e.changedTouches[0].clientY - s.stage_info.top
+    )
+    s.path.endX = e.changedTouches[0].clientX - s.stage_info.left
+    s.path.endY = e.changedTouches[0].clientY - s.stage_info.top
+    s.ctx.stroke()
   }
   s.onTouchEnd = function (e) {
-    document.addEventListener('touchend', s.preventDefault, false)
-    s.drawEnd()
+    s.isDrew = true
+    s.container.removeEventListener('touchmove', s.preventDefault, false)
   }
   /* ----------------------
   Method
@@ -75,37 +94,6 @@ var Handsign = function (container, params) {
     return (window.devicePixelRatio || 1) / backingStore
   }
   // 签名
-  s.drawBegin = function (e) {
-    window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
-    s.ctx.strokeStyle = s.params.color
-    s.ctx.lineWidth = s.params.lineWidth
-    s.ctx.beginPath()
-    s.ctx.moveTo(
-      e.changedTouches[0].clientX - s.stage_info.left,
-      e.changedTouches[0].clientY - s.stage_info.top
-    )
-    s.path.beginX = e.changedTouches[0].clientX - s.stage_info.left
-    s.path.beginY = e.changedTouches[0].clientY - s.stage_info.top
-    s.container.addEventListener('touchmove', function () {
-      s.drawIng(event)
-    })
-  }
-  s.drawIng = function (e) {
-    s.ctx.lineTo(
-      e.changedTouches[0].clientX - s.stage_info.left,
-      e.changedTouches[0].clientY - s.stage_info.top
-    )
-    s.path.endX = e.changedTouches[0].clientX - s.stage_info.left
-    s.path.endY = e.changedTouches[0].clientY - s.stage_info.top
-    s.ctx.stroke()
-  }
-  s.drawEnd = function () {
-    s.isDrew = true
-    document.removeEventListener('touchstart', s.preventDefault, false)
-    document.removeEventListener('touchend', s.preventDefault, false)
-    document.removeEventListener('touchmove', s.preventDefault, false)
-    // canvas.ontouchmove = canvas.ontouchend = null
-  }
   s.clear = function () {
     s.isDrew = false
     s.ctx.clearRect(0, 0, s.width, s.height)

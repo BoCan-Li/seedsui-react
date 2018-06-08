@@ -270,13 +270,13 @@ var Bridge = {
     document.addEventListener('deviceready', function () {
       wq.wqtitlebar.setTitleBar(function (args) { // eslint-disable-line
         var isFromApp = Device.getUrlParameter('isFromApp') || ''
-        if (isFromApp === '1' || !history.state) {
+        if (isFromApp === '1' || !window.history.state) {
           var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle' }] })
-          if(confirm(jsonStr)){
+          if(window.confirm(jsonStr)){
             Bridge.closeWindow()
           }
         } else {
-          history.go(-1)
+          window.history.go(-1)
         }
         Bridge.back()
       }, null, JSON.stringify({backCustom: true}))

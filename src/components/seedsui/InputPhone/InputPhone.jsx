@@ -38,6 +38,7 @@ export default class InputPhone extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   getArgs = (e) => {
     var args = this.props.args;

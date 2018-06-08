@@ -58,7 +58,7 @@ var Device = (function () {
     return ''
   }
   function getAppleDevice () { // 获取弱设备
-    if (/iphone/gi.test(navigator.userAgent) && (screen.height === 812 && screen.width === 375)) return 'iPhoneX'
+    if (/iphone/gi.test(navigator.userAgent) && (window.screen.height === 812 && window.screen.width === 375)) return 'iPhoneX'
     var model = appleModel()
     switch (model) {
       case '15b150':

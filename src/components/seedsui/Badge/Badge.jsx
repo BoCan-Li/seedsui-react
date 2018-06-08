@@ -16,6 +16,7 @@ export default class Badge extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   render() {
     const {className, style, children, limit, ellipsis} = this.props;

@@ -62,6 +62,7 @@ export default class Page extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   getSpaceStyle = () => {
     const {className, space, wing} = this.props;

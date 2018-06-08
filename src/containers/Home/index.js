@@ -9,6 +9,7 @@ import Toast from 'components/seedsui/Toast/Toast.jsx';
 import Loading from 'components/seedsui/Loading/Loading.jsx';
 import Grid from 'components/seedsui/Grid/Grid.jsx';
 import Group from 'components/seedsui/Group/Group.jsx';
+import bridge from 'components/seedsui/utils/bridge';
 
 @withRouter
 @connect(state => ({
@@ -33,6 +34,7 @@ export default class Home extends Component {
     };
   }
   componentDidMount = () => {
+    console.log(bridge.platform)
     // 初始化
     this.loadData();
   }

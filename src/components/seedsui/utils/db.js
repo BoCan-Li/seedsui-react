@@ -5,7 +5,7 @@ var DB = (function () {
       console.log('离线缓存状态：' + window.applicationCache.status)
       if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
         window.applicationCache.swapCache()
-        if (confirm('发现此manifest文件有更新，是否更新？')) {
+        if (window.confirm('发现此manifest文件有更新，是否更新？')) {
           window.location.reload()
         }
       } else {

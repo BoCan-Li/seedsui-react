@@ -28,6 +28,7 @@ export default class Tabbar extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   onClick = (e) => {
     const target = e.target;

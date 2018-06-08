@@ -17,13 +17,10 @@ import {
   CalendarDemo,
   HandsignDemo
 } from 'containers';
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 const Routes = () => (
   <Provider store={store}>
     <Router>
       <div>
-      <TransitionGroup>
-      <CSSTransition key={window.location} classNames="fade" timeout={300}>
       <Switch>
         {/* 首页 */}
         <Route cache exact path="/_react_/home" component={Home}/>
@@ -58,8 +55,6 @@ const Routes = () => (
         {/* 404页面 */}
         <Route component={NotFound}/>
       </Switch>
-      </CSSTransition>
-      </TransitionGroup>
       <NoNetwork/>
       </div>
     </Router>

@@ -33,15 +33,15 @@ var Bridge = {
   * params: {url:''}
   * */
   openWindow: function (params) {
-    location.href = params.url
+    window.location.href = params.url
   },
   /* 关闭窗口 */
   closeWindow: function () {
-    history.go(-1)
+    window.history.go(-1)
   },
   /* 回到主页 */
   goHome: function () {
-    history.go(-2)
+    window.history.go(-2)
   },
   /* 判断是否是主页 */
   isHomePage: function (callback, rule) {

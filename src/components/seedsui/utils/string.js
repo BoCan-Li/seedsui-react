@@ -1,5 +1,5 @@
 // 转为json，目的是字符串去重
-String.prototype.toJson = function (split) {
+window.String.prototype.toJson = function (split) {
   var array = this.split(split)
   var json = {}
   for (var i in array) {
@@ -15,7 +15,7 @@ function left_zero_4(str) {
   return str
 }
 // 转为ASCII编码
-String.prototype.toASCII = function () {
+window.String.prototype.toASCII = function () {
   var value = ''
   for (var i = 0; i < this.length; i++) {
     value += '\\u' + left_zero_4(parseInt(this.charCodeAt(i), 10).toString(16))
@@ -23,14 +23,14 @@ String.prototype.toASCII = function () {
   return value
 }
 // 转为unicode编码
-String.prototype.toUnicode = function () {
+window.String.prototype.toUnicode = function () {
   var value = '';
   for (var i = 0; i < this.length; i++)
     value += '&#' + this.charCodeAt(i) + ';';
   return value;
 }
 // 转为UTF8编码
-String.prototype.toUTF8 = function () {
+window.String.prototype.toUTF8 = function () {
   var value = ''
   for (var i = 0; i < this.length; i++) {
     value += '&#x' + left_zero_4(parseInt(this.charCodeAt(i), 10).toString(16)) + ';'
@@ -38,15 +38,15 @@ String.prototype.toUTF8 = function () {
   return value
 }
 // 转为URI编码
-String.prototype.toURI = function () {
+window.String.prototype.toURI = function () {
   return encodeURI(this)
 }
 // 转为URI全编码
-String.prototype.toURIComponent = function () {
+window.String.prototype.toURIComponent = function () {
   return encodeURIComponent(this)
 }
 // ASCII,unicode,UTF8解码
-String.prototype.decode = function () {
+window.String.prototype.decode = function () {
   var str = this
   str = str.replace(/(\\u)(\w{1,4})/gi, function ($0) {
     return (String.fromCharCode(parseInt((escape($0).replace(/(%5Cu)(\w{1,4})/g, "$2")), 16)))
@@ -61,7 +61,7 @@ String.prototype.decode = function () {
 }
 
 // 去除字符串左右两端的空格
-String.prototype.trim = function (trimPos) {
+window.String.prototype.trim = function (trimPos) {
   if (trimPos === 'left') {
     return this.replace(/(^\s*)/g, '')
   } else if (trimPos === 'right') {
@@ -71,7 +71,7 @@ String.prototype.trim = function (trimPos) {
 }
 
 // 判断是否是#的形式
-String.prototype.isQueryId = function () {
+window.String.prototype.isQueryId = function () {
   var idExpr = /^#([\w-]*)$/ // 匹配id(#id)
   var match = idExpr.exec(this)
   if(!match || !match[1]){
@@ -80,19 +80,19 @@ String.prototype.isQueryId = function () {
   return true
 }
 // 判断是否是合法的日期
-String.prototype.isDate = function () {
+window.String.prototype.isDate = function () {
   var patt = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' // yyyy-MM-dd
   if (new RegExp(patt).test(this)) return true
   return false
 }
 // 判断是否是合法的月份
-String.prototype.isMonth = function () {
+window.String.prototype.isMonth = function () {
   var patt = '^[0-9]{4}-[0-9]{2}$' // yyyy-MM
   if (new RegExp(patt).test(this)) return true
   return false
 }
 // 判断是否是日期格式
-String.prototype.isDateTime = function () {
+window.String.prototype.isDateTime = function () {
   var patts = [
     '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$', // yyyy-MM-dd HH:mm
     '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$' // yyyy-MM-dd HH:mm:ss
@@ -103,7 +103,7 @@ String.prototype.isDateTime = function () {
   return false
 }
 // 判断是否是时间格式
-String.prototype.isTime = function () {
+window.String.prototype.isTime = function () {
   var patts = [
     '^[0-9]{2}:[0-9]{2}$', // HH:mm
     '^[0-9]{2}:[0-9]{2}:[0-9]{2}$' // HH:mm:ss
@@ -114,7 +114,7 @@ String.prototype.isTime = function () {
   return false
 }
 // 判断是否包含class名称
-String.prototype.hasClass = function (name) {
+window.String.prototype.hasClass = function (name) {
   var names = this.split(' ')
   for (var i = 0; i < names.length; i++) {
     if (names[i] === name) return true
@@ -123,17 +123,17 @@ String.prototype.hasClass = function (name) {
 }
 
 // 清除img字符串的"https:"和"http:", 例如‘<img src="http:’转换后‘<img src="’
-String.prototype.clearImgProtocol = function () {
+window.String.prototype.clearImgProtocol = function () {
   return this.replace(/<img\s+src="https:/gim, '<img src="').replace(/<img\s+src="http:/gim, '<img src="')
 }
 
 // 清除字符串的"https:"和"http:"
-String.prototype.clearProtocol = function () {
+window.String.prototype.clearProtocol = function () {
   return this.replace(/https:/gim, '').replace(/http:/gim, '')
 }
 
 // 判断是否是queryId
-String.prototype.isQueryId = function () {
+window.String.prototype.isQueryId = function () {
   var idExpr = /^#([\w-]*)$/
   var match = idExpr.exec(this)
   if (match && match.length > 0) {
@@ -142,7 +142,7 @@ String.prototype.isQueryId = function () {
   return false
 }
 // 判断是否是queryClass
-String.prototype.isQueryClass = function () {
+window.String.prototype.isQueryClass = function () {
   var classExpr = /^\.([\w-]*)$/
   var match = classExpr.exec(this)
   if (match && match.length > 0) {
@@ -151,7 +151,7 @@ String.prototype.isQueryClass = function () {
   return false
 }
 // 判断是否是query标签
-String.prototype.isTag = function () {
+window.String.prototype.isTag = function () {
   var tagExpr = /^<(\w+)\s*.*\/\w*>$/im
   var match = tagExpr.exec(this)
   if (match && match.length > 0) {
@@ -160,7 +160,7 @@ String.prototype.isTag = function () {
   return false
 }
 // 获取指定后缀的数值(允许是小数和整数),例如:'44px'.getUnitValue() / '44em'.getUnitValue('em')
-String.prototype.getUnitValue = function (argSuffix) {
+window.String.prototype.getUnitValue = function (argSuffix) {
   // 默认后缀为px
   var suffix = argSuffix || 'px'
   var patt=new RegExp('^[+-]?(0|([1-9][0-9]*))(.[0-9]?)' + suffix + '$');

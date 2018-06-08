@@ -35,6 +35,7 @@ export default class Attributes extends Component {
 
   constructor(props, context) {
     super(props, context);
+    this.state = {}
   }
   getArgs = (e) => {
     var args = this.props.args;

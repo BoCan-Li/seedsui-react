@@ -20,6 +20,7 @@ export default class Loading extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   render() {
     const { style, className, type, iconSrc, caption, loadingStyle, maskBefore } = this.props;

@@ -38,6 +38,7 @@ export default class NumBox extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   componentDidMount () {
     this.updateDisabled();

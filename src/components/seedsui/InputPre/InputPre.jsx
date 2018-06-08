@@ -35,6 +35,7 @@ export default class InputPre extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {}
   }
   componentDidMount = () => {
     // this.$pre.style.width = this.$input.clientWidth + 'px';

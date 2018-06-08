@@ -53,6 +53,9 @@ export default class HandsignDemo extends Component {
       saveSrc: data
     })
   }
+  clear = () => {
+    this.$handsign.state.instance.clear();
+  }
   render() {
     return (
       <Page>
@@ -64,6 +67,7 @@ export default class HandsignDemo extends Component {
           <Button className="block primary spacemargin-lg wingmargin-lg" onClick={this.addImg}>添加图片水印</Button>
           <Button className="block primary spacemargin-lg wingmargin-lg" onClick={this.addText}>添加文字水印</Button>
           <Button className="block primary spacemargin-lg wingmargin-lg" onClick={this.save}>保存</Button>
+          <Button className="block primary spacemargin-lg wingmargin-lg" onClick={this.clear}>清除</Button>
           {this.state.saveSrc && <img alt="" src={this.state.saveSrc}/>}
         </Container>
         <Toast caption={this.state.toastMsg} show={this.state.toastShow} position="middle"/>
