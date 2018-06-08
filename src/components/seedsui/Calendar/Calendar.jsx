@@ -5,20 +5,25 @@ import Instance from './calendar.js';
 export default class Calendar extends Component {
   static propTypes = {
     type: PropTypes.string, // week|month
-    showTitleWeek: PropTypes.bool, // 是否显示周几
-    showTitleWeeks: PropTypes.bool, // 是否显示周数
-    disableBeforeDate: PropTypes.object,
-    disableAfterDate: PropTypes.object,
-    isYTouch: PropTypes.bool, // 是否允许竖向滑动
-    activeDate: PropTypes.object,
+    showTitleDay: PropTypes.bool, // 是否显示周几
+    showTitleWeek: PropTypes.bool, // 是否显示周数
+    disableBeforeDate: PropTypes.object, // 禁用之前日期
+    disableAfterDate: PropTypes.object, // 禁用之后日期
+    verticalDrag: PropTypes.bool, // 是否允许垂直拖动
+    defaultDate: PropTypes.object, // 默认日期
+    prevHTML: PropTypes.string, // 左箭头
+    nextHTML: PropTypes.string, // 右箭头
     onChange: PropTypes.func,
+    onError: PropTypes.func
   }
   static defaultProps = {
     type: 'month',
-    showTitleWeek: true,
-    showTitleWeeks: false,
-    isYTouch: true,
-    activeDate: new Date()
+    showTitleDay: true,
+    showTitleWeek: false,
+    verticalDrag: true,
+    defaultDate: new Date(),
+    prevHTML: '&lt',
+    nextHTML: '&gt',
   }
   constructor(props) {
     super(props);
@@ -28,20 +33,19 @@ export default class Calendar extends Component {
   }
   componentDidMount () {
     if (this.state.instance) return
-    const {type, showTitleWeek, showTitleWeeks, disableBeforeDate, disableAfterDate, isYTouch, activeDate, onChange} = this.props;
+    const {type, showTitleDay, showTitleWeek, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onError} = this.props;
     var instance = new Instance(this.$el, {
       viewType: type,
+      showTitleDay: showTitleDay,
       showTitleWeek: showTitleWeek,
-      showTitleWeeks: showTitleWeeks,
       disableBeforeDate: disableBeforeDate,
       disableAfterDate: disableAfterDate,
-      isYTouch: isYTouch,
-      activeDate: activeDate,
-      prevHTML: '<i class="icon-arrowleft"></i>',
-      nextHTML: '<i class="icon-arrowright"></i>',
-      onChange: (e) => {
-        if (onChange) onChange(e.activeDate)
-      }
+      verticalDrag: verticalDrag,
+      defaultDate: defaultDate,
+      prevHTML: prevHTML,
+      nextHTML: nextHTML,
+      onChange: onChange,
+      onError: onError
     });
     this.setState({
       instance

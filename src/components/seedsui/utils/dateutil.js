@@ -502,16 +502,7 @@ Date.prototype.getMonthData = function () { // 获得本月日历, 返回42天
   }
   return data
 }
-Date.prototype.getPrevMonthData = function (count) { // 获得上月日历
-  if (count) {
-    var months = []
-    var prevDate = new Date(this)
-    for (var i = 0; i < count; i++) {
-      months.push(prevDate.getMonthData())
-      prevDate.prevMonth()
-    }
-    return months
-  }
+Date.prototype.getPrevMonthData = function () { // 获得上月日历
   var date = new Date(this)
   date.prevMonth()
   return date.getMonthData()
@@ -536,10 +527,11 @@ Date.prototype.getCalendarData = function () { // 获取三个月的日历数据
 Date.prototype.getPrevMonth = function (count) { // 获得前几个月日期
   if (count) {
     var months = []
-    var prevDate = new Date(this)
+    var tempDate = new Date(this)
     for (var i = 0; i < count; i++) {
-      months.push(prevDate)
-      prevDate.prevMonth()
+      tempDate.prevMonth()
+      var prevMonth = new Date(tempDate)
+      months.push(prevMonth)
     }
     return months
   }
@@ -558,16 +550,7 @@ Date.prototype.getWeekData = function () { // 获得本周日历, 返回7天
   }
   return data
 }
-Date.prototype.getPrevWeekData = function (count) { // 获得上周日历
-  if (count) {
-    var weeks = []
-    var prevDate = new Date(this)
-    for (var i = 0; i < count; i++) {
-      weeks.push(prevDate.getWeekData())
-      prevDate.prevWeek()
-    }
-    return weeks
-  }
+Date.prototype.getPrevWeekData = function () { // 获得上周日历
   var date = new Date(this)
   date.prevWeek()
   return date.getWeekData()
@@ -578,20 +561,33 @@ Date.prototype.getNextWeekData = function () { // 获得下周日历
   return date.getWeekData()
 }
 
-// 天数据
-Date.prototype.getPrevDate = function (argCount) {
-  var count = argCount
+Date.prototype.getPrevWeek = function (count) { // 获得前几个周日期
   if (count) {
     var days = []
-    var pvDate = new Date(this)
-    function buildDays () {
-      pvDate.prevDate()
-      days.push(pvDate)
-      count--
-      if (count !== 0) buildDays()
+    var tempDate = new Date(this)
+    for (var i = 0; i < count; i++) {
+      tempDate.prevWeek()
+      var prevWeek = new Date(tempDate)
+      days.push(prevWeek)
     }
-    buildDays()
     return days
+  }
+  var date = new Date(this)
+  date.prevDate()
+  return date
+}
+
+// 天数据
+Date.prototype.getPrevDate = function (count) { // 获得前几个天日期
+  if (count) {
+    var dates = []
+    var tempDate = new Date(this)
+    for (var i = 0; i < count; i++) {
+      tempDate.prevDate()
+      var prevDate = new Date(tempDate)
+      dates.push(prevDate)
+    }
+    return dates
   }
   var date = new Date(this)
   date.prevDate()
