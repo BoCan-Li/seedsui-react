@@ -92,7 +92,7 @@ var Device = (function () {
   var isX = getAppleDevice() === 'iPhoneX'
   var root = document.getElementById('root')
   function adjustIphoneX () {
-    if (isX) {
+    if (isX && root) {
       switch (window.orientation) {
         case 0: // 竖屏
           root.style.left = '0'
@@ -114,9 +114,14 @@ var Device = (function () {
       }
     }
   }
-  function adapterIphoneX () {
+  function adapterMobile () {
+    // iPhoneX布局自适应
     adjustIphoneX();
     window.addEventListener('orientationchange', adjustIphoneX, false);
+    // 安卓5.0以下去掉最小高度,为解决在app中webview收缩输入法上面空白的问题
+    if (os === 'andriod' && osVersion < '5.0') {
+      if (root) root.style.minHeight = 'auto'
+    }
   }
   // 动态加载桥接库
   function dynamicLoadBridge () {
@@ -175,7 +180,7 @@ var Device = (function () {
     isOnLine: window.navigator.onLine || true,
     ua: ua,
     orientation: window.orientation || '请在真机上测试', // 设备方向0:竖屏,90:左横屏,-90:右横屏
-    adapterIphoneX: adapterIphoneX, // 适配iPhoneX
+    adapterMobile: adapterMobile, // 适配iPhoneX
     dynamicLoadBridge: dynamicLoadBridge, // 动态加载桥接库
     getUrlParameter: getUrlParameter
   }

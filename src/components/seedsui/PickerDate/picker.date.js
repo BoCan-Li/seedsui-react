@@ -1,4 +1,4 @@
-import Picker from './picker.js'
+import Picker from './../Picker/picker.js'
 // 扩展Picker日期控件 (require pikcer.js)
 var PickerDate = function (params) {
   // 参数改写

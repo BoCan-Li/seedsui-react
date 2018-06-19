@@ -239,7 +239,7 @@ var Bridge = {
   /*
   * 拍照、本地选图
   * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
-  * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
+  * 返回选定照片的本地ID列表{localIds:[id,id,id]'}, src需要增加前缀'LocalResource://imageid'+id才能显示
   */
   chooseImage: function (params) {
     this.invoke('chooseImage', params, params.success);
@@ -251,13 +251,34 @@ var Bridge = {
   uploadImage: function (params) {
     this.invoke('uploadImage', params);
   },
+  /**
+   * 获取带前缀的图片
+   */
+  getPreviewImages: function (imgIds) {
+    return imgIds.map((imgId) => {
+      return 'LocalResource://imageid' + imgId
+    })
+  },
+  getPreviewImage: function (imgId) {
+    return 'LocalResource://imageid' + imgId
+  },
   /*
   * 图片预览
   * params：{urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
   * 备注：图片url后面带localId为标识为本地，客户端优先从本地查找，本地没有再从网络加载
   */
-  previewImage: function (params) {
-    this.invoke('previewImage', params);
+  previewImage: function (argParams) {
+    if (!argParams.urls || !argParams.urls.length) return
+    var self = this
+    // 如果是网络图片直接显示,如果是本地图片,则加上前缀再显示
+    var params = argParams
+    params.urls = argParams.urls.map(function (url) {
+      if (url.indexOf('//') === -1 && url.indexOf('http://') === -1 && url.indexOf('https://') !== -1) {
+        return self.getPreviewImage(url)
+      }
+      return url
+    })
+    this.invoke('previewImage', params)
   },
   /*
     * 监听/取消监听物理返回事件(仅android)
@@ -362,17 +383,6 @@ var Bridge = {
     } catch (error) {
       console.log(error);
     }
-  },
-  /**
-   * 获取带前缀的图片
-   */
-  getPreviewImages: function (imgIds) {
-    return imgIds.map((imgId) => {
-      return 'LocalResource://imageid' + imgId
-    })
-  },
-  getPreviewImage: function (imgId) {
-    return 'LocalResource://imageid' + imgId
   },
   /*
     * 离线上传, 可不带企业id
@@ -503,17 +513,9 @@ var Bridge = {
     }
     // 图片预览
     s.preview = function (index) {
-      var imgs = []
-      for (var img in s.imgMap) {
-        if (s.imgMap[img].sourceType !== 'web') {
-          imgs.push(Bridge.getPreviewImage(img))
-        } else {
-          imgs.push(img)
-        }
-      }
       Bridge.previewImage({
-        urls: imgs,
-        current: imgs[index] || imgs[0],
+        urls: s.imgs,
+        current: s.imgs[index] || s.imgs[0],
         index: index || 0
       })
     }

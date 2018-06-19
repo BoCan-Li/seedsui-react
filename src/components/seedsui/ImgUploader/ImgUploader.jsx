@@ -92,7 +92,6 @@ export default class ImgUploader extends Component {
   }
   convertList = (imgs, imgMap) => {
     if (bridge.platform === 'waiqin') {
-      console.log(1)
       var arrImgs = [];
       for (let img in imgMap) {
         arrImgs.push({
@@ -103,7 +102,6 @@ export default class ImgUploader extends Component {
       }
       return arrImgs;
     }
-    console.log(2)
     return imgs.map((item) => {
       if (bridge.platform === 'dinghuo') {
         return {
@@ -121,7 +119,6 @@ export default class ImgUploader extends Component {
   }
   onChange = (argImgs, argImgMap) => {
     var list = this.convertList(argImgs, argImgMap);
-    console.log(list)
     this.setState({
       list
     });
@@ -170,9 +167,6 @@ export default class ImgUploader extends Component {
   deleteImg = (item) => {
     this.state.instance.deleteImg(item.id);
   }
-  preview = (item, index) => {
-    if (this.props.preview) this.state.instance.preview(index);
-  }
   render() {
     const {
       valueBindProp,
@@ -185,7 +179,7 @@ export default class ImgUploader extends Component {
     else list = this.state.list;
     return ([
     caption && <div key="iuCaption" className={`grid-title${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}{showCount ? <span style={Count}>({this.state.count}/{max})</span> : null}</div>,
-      <Grid onClickDelete={this.props.showDelete ? this.deleteImg : null} onClickAdd={this.chooseImg} onClickCell={this.preview} list={list} showUpload={this.state.showUpload} showDelete={showDelete} key="iuGrid" className={`grid-album${className ? ' ' + className : ''}`} wing={12} space={12} style={style}/>
+      <Grid onClickDelete={this.props.showDelete ? this.deleteImg : null} onClickAdd={this.chooseImg} list={list} showUpload={this.state.showUpload} showDelete={showDelete} key="iuGrid" className={`grid-album${className ? ' ' + className : ''}`} wing={12} space={12} style={style}/>
     ]);
   }
 }

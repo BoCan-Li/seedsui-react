@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PickerDate from './../Picker';
+import PickerDate from './../PickerDate';
 import Icon from './../Icon';
 import Close from './../Close';
 

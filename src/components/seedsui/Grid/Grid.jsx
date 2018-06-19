@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Close from './../Close';
+import bridge from './../utils/bridge';
 
-export default class Page extends Component {
+export default class Grid extends Component {
   static propTypes = {
     // args: PropTypes.array,
     lazyLoad: PropTypes.bool, // 图标是否懒人加载
@@ -46,7 +47,9 @@ export default class Page extends Component {
     iconClassName: '',
     iconStyle: {},
     iconSrc: '',
+    preview: true | false, // 是否支持预览,默认true
     thumb: '',
+    src: '',
     caption: '',
     onClick: function() {},
     iconBadgeCaption: '',
@@ -133,6 +136,18 @@ export default class Page extends Component {
     }
   }
   onClickCell = (e, item, index) => {
+    // 如果有src,说明需要预览
+    if (item.src && item.preview !== false && this.props.list) {
+      var imgs = this.props.list.map(n => {
+        return n.src;
+      });
+      if (!imgs) return;
+      bridge.previewImage({
+        urls: imgs,
+        current: imgs[index] || imgs[0],
+        index: index || 0
+      })
+    }
     if (this.props.onClickCell) {
       this.props.onClickCell(item, index, this.getArgs(e));
       e.stopPropagation();

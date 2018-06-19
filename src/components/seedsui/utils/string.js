@@ -72,6 +72,7 @@ window.String.prototype.trim = function (trimPos) {
 
 // 判断是否是#的形式
 window.String.prototype.isQueryId = function () {
+  if (!this.length) return false
   var idExpr = /^#([\w-]*)$/ // 匹配id(#id)
   var match = idExpr.exec(this)
   if(!match || !match[1]){
@@ -81,18 +82,21 @@ window.String.prototype.isQueryId = function () {
 }
 // 判断是否是合法的日期
 window.String.prototype.isDate = function () {
+  if (!this.length) return false
   var patt = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' // yyyy-MM-dd
   if (new RegExp(patt).test(this)) return true
   return false
 }
 // 判断是否是合法的月份
 window.String.prototype.isMonth = function () {
+  if (!this.length) return false
   var patt = '^[0-9]{4}-[0-9]{2}$' // yyyy-MM
   if (new RegExp(patt).test(this)) return true
   return false
 }
 // 判断是否是日期格式
 window.String.prototype.isDateTime = function () {
+  if (!this.length) return false
   var patts = [
     '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$', // yyyy-MM-dd HH:mm
     '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$' // yyyy-MM-dd HH:mm:ss
@@ -104,6 +108,7 @@ window.String.prototype.isDateTime = function () {
 }
 // 判断是否是时间格式
 window.String.prototype.isTime = function () {
+  if (!this.length) return false
   var patts = [
     '^[0-9]{2}:[0-9]{2}$', // HH:mm
     '^[0-9]{2}:[0-9]{2}:[0-9]{2}$' // HH:mm:ss
@@ -134,6 +139,7 @@ window.String.prototype.clearProtocol = function () {
 
 // 判断是否是queryId
 window.String.prototype.isQueryId = function () {
+  if (!this.length) return false
   var idExpr = /^#([\w-]*)$/
   var match = idExpr.exec(this)
   if (match && match.length > 0) {
@@ -143,6 +149,7 @@ window.String.prototype.isQueryId = function () {
 }
 // 判断是否是queryClass
 window.String.prototype.isQueryClass = function () {
+  if (!this.length) return false
   var classExpr = /^\.([\w-]*)$/
   var match = classExpr.exec(this)
   if (match && match.length > 0) {
@@ -152,6 +159,7 @@ window.String.prototype.isQueryClass = function () {
 }
 // 判断是否是query标签
 window.String.prototype.isTag = function () {
+  if (!this.length) return false
   var tagExpr = /^<(\w+)\s*.*\/\w*>$/im
   var match = tagExpr.exec(this)
   if (match && match.length > 0) {

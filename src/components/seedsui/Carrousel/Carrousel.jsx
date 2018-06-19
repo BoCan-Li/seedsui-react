@@ -77,6 +77,7 @@ export default class Carrousel extends Component {
     const imgs = this.$el.querySelectorAll('.carrousel-lazy');
     for (var i = 0; i < imgs.length; i++) {
       var imgTarget = imgs[i];
+      if (!imgTarget) continue;
       if (imgTarget.tagName === 'IMG') {
         imgTarget.src = this.props.defaultSrc;
       } else {
@@ -84,7 +85,7 @@ export default class Carrousel extends Component {
       }
     }
     // 更新Carrousel
-    this.state.instance.update();
+    if (this.state.instance) this.state.instance.update();
   }
   render() {
     const {

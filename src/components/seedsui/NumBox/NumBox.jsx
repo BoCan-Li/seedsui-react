@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 export default class NumBox extends Component {
   static propTypes = {
     args: PropTypes.any,
+    changeFocus: PropTypes.bool, // 点击加减时激活
     // 容器
     style: PropTypes.object,
     className: PropTypes.string,
@@ -18,6 +19,9 @@ export default class NumBox extends Component {
     readOnly: PropTypes.bool,
     // events
     onClick: PropTypes.func,
+    onClickMinus: PropTypes.func,
+    onClickPlus: PropTypes.func,
+    onClickInput: PropTypes.func,
     onChange: PropTypes.func,
     onError: PropTypes.func,
     // rule设置
@@ -53,7 +57,6 @@ export default class NumBox extends Component {
     // 如果prop的value和文本框里的值不一致
     if (this.$input) {
       if (this.$input.value !== this.props.value) {
-        console.log('值变了')
         this.$input.value = this.props.value;
         // 更新disabled
         this.updateDisabled();
@@ -133,7 +136,7 @@ export default class NumBox extends Component {
     }
     // 更新disabled
     this.updateDisabled();
-    this.$input.focus();
+    if (this.props.changeFocus) this.$input.focus();
   };
   // 点击加
   onClickPlus = (e) => {
@@ -148,7 +151,7 @@ export default class NumBox extends Component {
     }
     // 更新disabled
     this.updateDisabled();
-    this.$input.focus();
+    if (this.props.changeFocus) this.$input.focus();
   };
   // 矫正数字
   correctNum = (argNumstr) => {
@@ -185,14 +188,14 @@ export default class NumBox extends Component {
   // render
   getInputDOM = () => {
     const {
-      inputClassName, inputStyle, value, max, min, maxLength, placeholder, name, readOnly,
+      inputClassName, inputStyle, value, max, min, maxLength, placeholder, name, readOnly, onClickInput,
     } = this.props;
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} onFocus={this.onFocus} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} onFocus={this.onFocus} onClick={onClickInput} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
-    const {min, max, value, style, className, disabled, onClick} = this.props;
+    const {min, max, style, className, disabled, onClick} = this.props;
     return (
-      <div disabled={(min >= max && value) || disabled} style={style} className={`numbox bordered ${className ? className : ''}`} onClick={onClick}>
+      <div disabled={(min >= max) || disabled} style={style} className={`numbox bordered ${className ? className : ''}`} onClick={onClick}>
         <input ref={(el) => {this.$minus = el;}} type="button" className="numbox-button" value="-" onClick={this.onClickMinus} />
         {this.getInputDOM()}
         <input ref={(el) => {this.$plus = el;}} type="button" className="numbox-button" value="+" onClick={this.onClickPlus} />

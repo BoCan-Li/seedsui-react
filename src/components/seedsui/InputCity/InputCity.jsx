@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PickerCity from './../Picker';
+import PickerCity from './../PickerCity';
 import Icon from './../Icon';
 import Close from './../Close';
 

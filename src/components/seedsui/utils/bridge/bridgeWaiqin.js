@@ -355,8 +355,9 @@ var Bridge = {
       } else if (s.params.imgs && s.params.imgs.length > 0) {
         s.imgs = s.params.imgs
       }
+      s.imgMap = {}
       if (s.imgs.length > 0) s.imgs.forEach(function (item) {
-        s.imgMap[item] = {serverId: '', sourceType: 'web'}
+        s.imgMap[item] = {serverId: '', sourceType: 'web', src: item}
       })
     }
     s.updateImgs()
@@ -410,13 +411,9 @@ var Bridge = {
     }
     // 图片预览
     s.preview = function (index) {
-      var imgs = []
-      for (var img in s.imgMap) {
-        imgs.push(s.imgMap[img].src)
-      }
       Bridge.previewImage({
-        urls: imgs,
-        current: imgs[index] || imgs[0],
+        urls: s.imgs,
+        current: s.imgs[index] || s.imgs[0],
         index: index || 0
       })
     }

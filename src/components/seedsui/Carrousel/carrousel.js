@@ -231,6 +231,7 @@ var Carrousel = function (container, params) {
   function imgLoad (e) {
     var target = e.target
     var imgTarget = imgs[target.index]
+    if (!imgTarget) return
     if (imgTarget.tagName === 'IMG') {
       imgTarget.src = target.src
     } else {

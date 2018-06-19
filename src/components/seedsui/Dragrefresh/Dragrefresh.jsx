@@ -22,9 +22,12 @@ export default class Dragrefresh extends Component {
     noDataIconSrc: PropTypes.string,
     noDataIconClassName: PropTypes.string,
 
-    lazyLoad: PropTypes.bool
+    lazyLoad: PropTypes.bool,
+
+    onScroll: PropTypes.func, // 滚动事件
   }
   static defaultProps = {
+    noDataIconClassName: 'notice-icon-nodata',
     showNoData: true
   }
   constructor(props) {
@@ -103,9 +106,9 @@ export default class Dragrefresh extends Component {
     }
   }
   render() {
-    const { style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName } = this.props;
+    const { style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName, onScroll} = this.props;
     return (
-      <div ref={(el) => {this.$el = el;}} className={className} style={style}>
+      <div ref={(el) => {this.$el = el;}} className={className} style={style} onScroll={onScroll}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
@@ -129,7 +132,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={`notice-icon-nodata${noDataIconClassName ? ' ' + noDataIconClassName : ''}`}/>}
+        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={noDataIconClassName}/>}
       </div>
     );
   }

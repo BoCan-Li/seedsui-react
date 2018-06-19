@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import NumBox from './../NumBox';
 import NumBoxPop from './../NumBoxPop';
 
 const UnitStyle = {
@@ -9,6 +10,7 @@ const UnitStyle = {
 
 export default class NumBoxPopPointer extends Component {
   static propTypes = {
+    args: PropTypes.any,
     className: PropTypes.string,
     style: PropTypes.object,
     // numbox
@@ -41,26 +43,11 @@ export default class NumBoxPopPointer extends Component {
       show: false
     };
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event')) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onClickCancel = () => {
     this.setState({show: false});
   }
   onClickSubmit = (value, args) => {
     if (!value) return;
-    // 赋值
-    this.$input.value = value;
     // Callback
     if (this.props.onChange) this.props.onChange(value, args);
     // 隐藏
@@ -68,50 +55,17 @@ export default class NumBoxPopPointer extends Component {
       show: false
     });
   }
-  onChange = (value) => {
-    this.setState({value: value});
-  }
   onClickNumBox = () => {
     this.setState({
       show: true
     });
   }
-  onClickMinus = (e) => {
-    const value = Math.Calc.subtract(this.$input.value, 1);
-    // 赋值
-    this.$input.value = value;
-    // Callback
-    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-  };
-  onClickPlus = (e) => {
-    const value = Math.Calc.add(this.$input.value, 1);
-    // 赋值
-    this.$input.value = value;
-    // Callback
-    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-  };
-  getInputDOM = () => {
-    const {
-      value, placeholder, min, max
-    } = this.props;
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} readOnly placeholder={placeholder} onClick={this.onClickNumBox} className={`numbox-input`} disabled={min >= max}/>;
-  }
   render() {
-    const {className, style, numboxClassName, numboxStyle, min, max, digits, unit, value, disabled, args} = this.props;
+    const {className, style, numboxClassName, numboxStyle, value, min, max, digits, unit, disabled, args, onChange} = this.props;
     const {show} = this.state;
-    // 减按钮禁用
-    let minusDisabled = false;
-    minusDisabled = this.$input ? this.$input.value <= min : value <= min;
-    // 加按钮禁用
-    let plusDisabled = false;
-    plusDisabled = this.$input ? this.$input.value >= max : value >= max;
     return (
       <div style={Object.assign({position: 'relative'}, style)} className={className}>
-        <div disabled={disabled} className={`numbox bordered${numboxClassName ? ' ' + numboxClassName : ''}`} style={numboxStyle}>
-          <input type="button" className="numbox-button" disabled={minusDisabled} value="-" onClick={this.onClickMinus}/>
-          {this.getInputDOM()}
-          <input type="button" className="numbox-button" disabled={plusDisabled} value="+" onClick={this.onClickPlus}/>
-        </div>
+        <NumBox className={numboxClassName} args={args} style={numboxStyle} value={value} disabled={disabled} readOnly min={min} max={max} onChange={onChange} onClickInput={this.onClickNumBox}/>
         <span style={UnitStyle}>{unit || ''}</span>
         <NumBoxPop show={show} args={args} value={this.$input ? this.$input.value : value.toString()} digits={digits} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}/>
       </div>

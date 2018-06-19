@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 export default class Button extends Component {
   static propTypes = {
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
-    // args: PropTypes.array,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
 
@@ -37,11 +37,10 @@ export default class Button extends Component {
   render() {
     const {
       className, style, disabled,
-      children,
-      ...others
+      children
     } = this.props;
     return (
-      <a className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick} {...others}>
+      <a className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick}>
         {children}
       </a>
     );

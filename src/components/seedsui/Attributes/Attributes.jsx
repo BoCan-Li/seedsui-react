@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './../Button';
 import Price from './../Price';
 import Mark from './../Mark';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Clipboard from './../utils/clipboard';
 
 export default class Attributes extends Component {
   static propTypes = {
@@ -64,8 +64,16 @@ export default class Attributes extends Component {
   constructor(props, context) {
     super(props, context);
   }
-  onCopyToClipboard = (text, result) => {
-    if (this.props.onCopy) this.props.onCopy(text, result);
+  onCopyToClipboard = (text) => {
+    const {onCopy} = this.props;
+    Clipboard.copy(text, {
+      onSuccess: (msg) => {
+        if (onCopy) onCopy(text, msg);
+      },
+      onError: (msg) => {
+        if (onCopy) onCopy(text, msg);
+      }
+    })
   }
   onClick = (item, index, item2, index2) => { // eslint-disable-line
     if (this.props.onClick) this.props.onClick(arguments);
@@ -104,9 +112,7 @@ export default class Attributes extends Component {
       if (typeof item.copy === 'string') {
         copyValue = item.copy;
       }
-      return <CopyToClipboard key={index} text={copyValue} onCopy={this.onCopyToClipboard}>
-        <Button className="ricon small" style={{borderRadius: '3px'}}>复制</Button>
-      </CopyToClipboard>
+      return <Button key={index} className="ricon small" style={{borderRadius: '3px'}} args={copyValue} onClick={this.onCopyToClipboard}>复制</Button>
     }
     // 电话
     if (item.tel) {
