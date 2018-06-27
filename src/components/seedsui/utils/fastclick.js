@@ -1,3 +1,4 @@
+// 新增: 转为ES6模式
 var FastClick = null
 /* eslint-disable */
 ;(function () {
@@ -22,6 +23,7 @@ var FastClick = null
 	 * @param {Element} layer The layer to listen on
 	 * @param {Object} [options={}] The options to override the defaults
 	 */
+	// 新增: 转为ES6模式
 	FastClick = function (layer, options) {
 		var oldOnClick;
 
@@ -328,11 +330,20 @@ var FastClick = null
 		var length;
 
 		// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
-		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
+		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month' && targetElement.type !== 'email') {
 			length = targetElement.value.length;
-			targetElement.setSelectionRange(length, length);
-      /* 新增: 修复bug ios 11.3不弹出键盘，这里加上聚焦代码，让其强制聚焦弹出键盘 */
-      targetElement.focus();
+			// 新增: 修复number框无法执行'setSelectionRange'的bug
+			// targetElement.setSelectionRange(length, length);
+			if (deviceIsIOS) {
+				try {
+					length = targetElement.value.length;
+					targetElement.setSelectionRange(length, length);
+				} catch (error) {
+					console.log(error)
+				}
+				// 修复bug ios 11.3不弹出键盘，这里加上聚焦代码，让其强制聚焦弹出键盘
+				targetElement.focus();
+			}
 		} else {
 			targetElement.focus();
 		}
@@ -843,5 +854,7 @@ var FastClick = null
 		window.FastClick = FastClick;
 	}
 }());
+
+// 新增: 转为ES6模式
 /* eslint-enable */
 export default FastClick
