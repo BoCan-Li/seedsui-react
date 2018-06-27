@@ -15,7 +15,7 @@ export default class Card extends Component {
   render() {
     const {children, style, className, onClick} = this.props;
     return (
-      <div className={'card' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} className={'card' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
         {children}
       </div>
     );

@@ -40,7 +40,7 @@ export default class Button extends Component {
       children
     } = this.props;
     return (
-      <a className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick}>
+      <a ref={el => {this.$el = el;}} className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick}>
         {children}
       </a>
     );

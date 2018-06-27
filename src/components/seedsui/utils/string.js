@@ -120,11 +120,40 @@ window.String.prototype.isTime = function () {
 }
 // 判断是否包含class名称
 window.String.prototype.hasClass = function (name) {
-  var names = this.split(' ')
+  var classStr = this
+  if (this.indexOf('class=') > -1) {
+    var res = classStr.match(/class=["'](.*)["']/)
+    if (res[1]) {
+      classStr = res[1]
+    } else {
+      classStr = ''
+    }
+  }
+  var names = classStr.split(' ')
   for (var i = 0; i < names.length; i++) {
     if (names[i] === name) return true
   }
   return false
+}
+// 添加class名称
+window.String.prototype.addClass = function (name) {
+  var str = String(this)
+  var className = 'class="' + name + '"'
+  if (this.indexOf('class=') > -1) { // 如果有class,并且class名称不存在,则增加class
+    var res = this.match(/class=["'](.*)["']/)
+    if (res[1] && !res[1].hasClass(name)) { // 新增class不存在,则新增
+      className = 'class="' + res[1] + ' ' + name + '"'
+      str = str.replace(/class=["'](.*)["']/, className)
+      return str
+    }
+    return str
+  } else { // 如果没有class,则创建一个class
+    res = str.match(/<\w+/)
+    if (res[0]) {
+      return str.replace(/<\w+/, res[0] + ' ' + className)
+    }
+    return str
+  }
 }
 
 // 清除img字符串的"https:"和"http:", 例如‘<img src="http:’转换后‘<img src="’

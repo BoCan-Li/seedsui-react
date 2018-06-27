@@ -15,12 +15,12 @@ window.Date.prototype.year = function (year) {
 // 上一年
 window.Date.prototype.prevYear = function (count) {
   this.setYear(this.getFullYear() - (count || 1))
-  return this.getFullYear().toString()
+  return this
 }
 // 下一年
 window.Date.prototype.nextYear = function (count) {
   this.setYear(this.getFullYear() + (count || 1))
-  return this.getFullYear().toString()
+  return this
 }
 // 是否是闰年
 window.Date.prototype.isLeap = function () {
@@ -221,7 +221,42 @@ window.Date.prototype.sunday = function () {
   this.setTime(this.getTime() - this.dayMilliSecond * day)
   return this
 }
-
+// 周一
+window.Date.prototype.monday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (1 - day))
+  return this
+}
+// 周二
+window.Date.prototype.tuesday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (2 - day))
+  return this
+}
+// 周三
+window.Date.prototype.wednesday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (3 - day))
+  return this
+}
+// 周四
+window.Date.prototype.thursday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (4 - day))
+  return this
+}
+// 周五
+window.Date.prototype.friday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (5 - day))
+  return this
+}
+// 周六
+window.Date.prototype.saturday = function () {
+  var day = this.getDay()
+  this.setTime(this.getTime() + this.dayMilliSecond * (6 - day))
+  return this
+}
 /*
   * 日操作
   * */
@@ -234,12 +269,12 @@ window.Date.prototype.date = function (date) {
 // 上一天
 window.Date.prototype.prevDate = function (count) {
   this.setTime(this.getTime() - (this.dayMilliSecond * (count || 1)))
-  return this.date()
+  return this
 }
 // 下一天
 window.Date.prototype.nextDate = function (count) {
   this.setTime(this.getTime() + (this.dayMilliSecond * (count || 1)))
-  return this.date()
+  return this
 }
 
 /*
@@ -254,12 +289,12 @@ window.Date.prototype.hour = function (hour) {
 // 上一小时
 window.Date.prototype.prevHour = function (count) {
   this.setTime(this.getTime() - (this.hourMilliSecond * (count || 1)))
-  return this.hour()
+  return this
 }
 // 下一小时
 window.Date.prototype.nextHour = function (count) {
   this.setTime(this.getTime() + (this.hourMilliSecond * (count || 1)))
-  return this.hour()
+  return this
 }
 /*
   * 分操作
@@ -273,12 +308,12 @@ window.Date.prototype.minute = function (minute) {
 // 上一分钟
 window.Date.prototype.prevMinute = function (count) {
   this.setTime(this.getTime() - (this.minuteMilliSecond * (count || 1)))
-  return this.minute()
+  return this
 }
 // 下一分钟
 window.Date.prototype.nextMinute = function (count) {
   this.setTime(this.getTime() + (this.minuteMilliSecond * (count || 1)))
-  return this.minute()
+  return this
 }
 // 返回当前分钟的下档位时间
 window.Date.prototype.nextMinuteSpace = function (argSpace) {

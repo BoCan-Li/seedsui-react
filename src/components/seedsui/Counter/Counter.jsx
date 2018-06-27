@@ -33,6 +33,6 @@ export default class Counter extends Component {
       style, className,
       duration, from, to, suffix
     } = this.props;
-    return <span ref={(el) => {this.$el = el;}} className={`counter${className ? ' ' + className: ''}`} style={style} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
+    return <span ref={el => {this.$el = el;}} className={`counter${className ? ' ' + className: ''}`} style={style} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
   }
 }

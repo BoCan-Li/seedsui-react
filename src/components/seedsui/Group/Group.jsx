@@ -16,7 +16,7 @@ export default class Group extends Component {
   render() {
     const {children, style, className, onClick} = this.props;
     return (
-      <div className={'group' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} className={'group' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
         {children}
       </div>
     );

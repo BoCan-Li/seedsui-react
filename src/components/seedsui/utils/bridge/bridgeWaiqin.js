@@ -20,7 +20,7 @@ var Bridge = {
   },
   /*
   * 打开新的窗口
-  * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
+  * params: {url:'', title: ''}默认为打开一个webview页面
   * */
   openWindow: function (params) {
     wq.wqload.wqOpenUrl(null, null, params ? JSON.stringify(params) : null) // eslint-disable-line

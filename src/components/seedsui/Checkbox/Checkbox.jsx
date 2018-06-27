@@ -46,7 +46,7 @@ export default class Checkbox extends Component {
     const {style, className,
       name, value, checked,
       caption, captionClassName, captionStyle} = this.props;
-    return (<div className={`checkbox-box${className ? ' ' + className : ''}`} onClick={this.onClick} style={style}>
+    return (<div ref={el => {this.$el = el;}} className={`checkbox-box${className ? ' ' + className : ''}`} onClick={this.onClick} style={style}>
       <input readOnly={true} checked={checked} type="checkbox" className="checkbox events-none" name={name} value={value} ref={(el) => {this.$input = el}}/>
       {caption && <span className={`checkbox-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</span>}
     </div>);

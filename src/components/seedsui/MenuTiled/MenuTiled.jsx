@@ -53,7 +53,7 @@ export default class MenuTiled extends Component {
   render() {
     const {className, style} = this.props;
     return (
-      <div ref={(el) => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} style={style}>
+      <div ref={el => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} style={style}>
       </div>
     );
   }

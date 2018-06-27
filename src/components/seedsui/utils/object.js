@@ -281,13 +281,13 @@ Object.equals = function (object1, object2) { // 用window.Object.prototype.equa
     /** 需要Array.equals **/
     if (object1[propName] instanceof Array && object2[propName] instanceof Array) {
       // 递归到嵌套数组中
-      if (!object1[propName].equals(object2[propName]))
+      if (!Object.equals(object1[propName], object2[propName]))
         return false
     }
     else if (object1[propName] instanceof Object && object2[propName] instanceof Object) {
       // 递归到另一个对象中
       // console.log('递归比较 ', object1[propName],'和',object2[propName], ' 都命名 \''+propName+'\'')
-      if (!object1[propName].equals(object2[propName]))
+      if (!Object.equals(object1[propName], object2[propName]))
         return false
     }
     // 字符串和数字的正常值比较

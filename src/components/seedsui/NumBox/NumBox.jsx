@@ -195,7 +195,7 @@ export default class NumBox extends Component {
   render() {
     const {min, max, style, className, disabled, onClick} = this.props;
     return (
-      <div disabled={(min >= max) || disabled} style={style} className={`numbox bordered ${className ? className : ''}`} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} disabled={(min >= max) || disabled} style={style} className={`numbox bordered ${className ? className : ''}`} onClick={onClick}>
         <input ref={(el) => {this.$minus = el;}} type="button" className="numbox-button" value="-" onClick={this.onClickMinus} />
         {this.getInputDOM()}
         <input ref={(el) => {this.$plus = el;}} type="button" className="numbox-button" value="+" onClick={this.onClickPlus} />

@@ -67,7 +67,7 @@ export default class Attributes extends Component {
     if (showValidValue && !children) isShow = false;
     if (showValidName && !name) isShow = false;
     return (
-      isShow && <div className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+      isShow && <div ref={el => {this.$el = el;}} className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {/* 左 */}
         {name && <div className={`attribute-left${cellClassName ? ' ' + cellClassName : ''} ${nameClassName ? nameClassName : ''}`} style={Object.assign({}, cellStyle, nameStyle)}>
           {required && <span className={`required required-left${requiredClassName ? ' ' + requiredClassName : ''}`} style={requiredStyle}>{required}</span>}

@@ -56,7 +56,7 @@ export default class Notice extends Component {
       children
     } = this.props;
     return (
-      show ? <div className={`notice${className ? ' ' + className : ''}`} style={style}>
+      show ? <div ref={el => {this.$el = el;}} className={`notice${className ? ' ' + className : ''}`} style={style}>
         <div className="notice-content" onClick={this.onClick}>
           {(iconSrc || iconClassName) && <Icon className={`notice-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
           {icon}

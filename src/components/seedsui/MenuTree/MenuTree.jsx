@@ -53,7 +53,7 @@ export default class MenuTree extends Component {
   render() {
     const {className, style} = this.props;
     return (
-      <ul ref={(el) => {this.$el = el;}} className={`menutree${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => {this.$el = el;}} className={`menutree${className ? ' ' + className : ''}`} style={style}>
       </ul>
     );
   }

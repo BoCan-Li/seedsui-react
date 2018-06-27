@@ -627,6 +627,36 @@
 
 // Tree
 @tree-bar-bg: @titlebar-bg;
+@tree-color: #333;
+@tree-color-active: #333;
+.setTreeIconCollapse(){
+  &:extend(.shape-triangle-right);
+  -webkit-transition: -webkit-transform 100ms;
+}
+.setTreeIconExtand(){
+  -webkit-transform: rotate(90deg);
+}
+.setTreeButtonAdd(){
+  color: #d1d1d1;
+  font-family: 'iconfont';
+  &:extend(.icon-rdo all);
+  &:extend(.border-b);
+  font-size: @20px;
+}
+.setTreeButtonDel(){
+  color: #ffae02;
+  font-family: 'iconfont';
+  &:extend(.icon-rdo-checked all);
+  &:extend(.border-b);
+  font-size: @20px;
+}
+.setTreeBarButtonDel(){
+  color: @tip-bg;
+  font-family: 'iconfont';
+  &:extend(.icon-clear all);
+  font-size: @20px;
+  margin-left:@4px;
+}
 
 // MenuTree侧边菜单
 @menutree-bg: #fff;

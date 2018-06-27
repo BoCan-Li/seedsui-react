@@ -15,7 +15,7 @@ export default class Header extends Component {
   render() {
     const { style, className } = this.props;
     return (
-      <header className={'header' + (className ? ' ' + className : '')} style={style}>
+      <header ref={el => {this.$el = el;}} className={'header' + (className ? ' ' + className : '')} style={style}>
         { this.props.children }
       </header>
     );

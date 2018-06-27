@@ -65,7 +65,7 @@ export default class Alert extends Component {
   }
   componentDidMount = () => {
     if (this.state.instance) return;
-    const {args, duration, onClickSubmit, onClickCancel, onClickMask, onShowed, onHid} = this.props;
+    const {show, args, duration, onClickSubmit, onClickCancel, onClickMask, onShowed, onHid} = this.props;
     const instance = new Instance({
       mask: this.$el,
       args: args,
@@ -76,6 +76,7 @@ export default class Alert extends Component {
       onShowed: onShowed || null,
       onHid: onHid || null
     });
+    if (show) instance.show();
     this.setState({
       instance
     });

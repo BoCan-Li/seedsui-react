@@ -16,7 +16,7 @@ export default class Mask extends Component {
   render() {
     const { classsName, show, style, onClick, children } = this.props;
     return (
-      <div className={'mask' + (classsName ? ' ' + classsName : '') + (show ? ' active' : '')} style={style} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} className={'mask' + (classsName ? ' ' + classsName : '') + (show ? ' active' : '')} style={style} onClick={onClick}>
         {children && children}
       </div>
     );

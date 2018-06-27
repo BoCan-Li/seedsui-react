@@ -63,7 +63,7 @@ export default class Loading extends Component {
       )
     }
     return (
-      <div className={'loading-mask mask active' + (className ? ' ' + className : '')} style={style}>
+      <div ref={el => {this.$el = el;}} className={'loading-mask mask active' + (className ? ' ' + className : '')} style={style}>
         {maskBefore}
         {content}
       </div>

@@ -8,14 +8,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Routes from './routes.js'
 // 换click事件为tap
-import FastClick from 'fastclick';
-// 在订货客户端ios里使用FastClick,文本框将无法获取焦点
-if (Device.platform !== 'dinghuo' || Device.os !== 'ios') {
-  FastClick.attach(document.body);
-}
-// 适配iPhoneX
-Device.adapterIphoneX();
-// 动态加载桥接库 
+import FastClick from 'components/seedsui/utils/fastclick.js';
+FastClick.attach(document.body);
+// 适配iPhoneX和andriod5.0以下的手机
+Device.adapterMobile();
+// 动态加载桥接库
 Device.dynamicLoadBridge();
 window.addEventListener('load', function() {
   ReactDOM.render(

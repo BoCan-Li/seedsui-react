@@ -53,7 +53,7 @@ export default class Calendar extends Component {
   }
   render() {
     return (
-      <div className="calendar" ref={(el) => {this.$el = el;}}></div>
+      <div ref={el => {this.$el = el;}} className="calendar"></div>
     );
   }
 }

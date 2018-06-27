@@ -21,6 +21,7 @@ export default class Dragrefresh extends Component {
     noDataCaption: PropTypes.string,
     noDataIconSrc: PropTypes.string,
     noDataIconClassName: PropTypes.string,
+    noDataOnClick: PropTypes.func, // 点击暂无数据
 
     lazyLoad: PropTypes.bool,
 
@@ -43,8 +44,10 @@ export default class Dragrefresh extends Component {
     this.setPagination();
   }
   init = () => {
+    const {onScroll} = this.props;
     var instance = new Instance({
       container: this.$el,
+      onScroll,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
       onTopComplete: this.props.onTopComplete ? this.props.onTopComplete : null, // 头部完成
       onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
@@ -106,9 +109,9 @@ export default class Dragrefresh extends Component {
     }
   }
   render() {
-    const { style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName, onScroll} = this.props;
+    const {style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName, noDataOnClick} = this.props;
     return (
-      <div ref={(el) => {this.$el = el;}} className={className} style={style} onScroll={onScroll}>
+      <div ref={(el) => {this.$el = el;}} className={`container${className ? ' ' + className : ''}`} style={style}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
@@ -132,7 +135,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={noDataIconClassName}/>}
+        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={noDataIconClassName} onClick={noDataOnClick}/>}
       </div>
     );
   }

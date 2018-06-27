@@ -32,7 +32,7 @@ export default class Handsign extends Component {
   render() {
     const {style, className, ...others} = this.props;
     return (
-      <canvas ref={(el) => {this.$el = el;}} className={className} style={style} {...others}>Canvas画板</canvas>
+      <canvas ref={el => {this.$el = el;}} className={className} style={style} {...others}>Canvas画板</canvas>
     );
   }
 }

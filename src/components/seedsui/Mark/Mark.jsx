@@ -18,7 +18,7 @@ export default class Mark extends Component {
   render() {
     const { className, style, children, onClick } = this.props;
     return (
-      children ? <span className={`mark ${className}`} style={style} onClick={onClick}>{children}</span> : null
+      children ? <span ref={el => {this.$el = el;}} className={`mark ${className}`} style={style} onClick={onClick}>{children}</span> : null
     );
   }
 }

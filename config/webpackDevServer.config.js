@@ -99,7 +99,7 @@ module.exports = function(proxy, allowedHost) {
        * 使用服务器代理解决访问接口跨域问题
        */
       // 设置接口服务器
-      const targetUrl = '服务器接口地址,例:http://172.31.3.333:8888';
+      const targetUrl = 'http://172.31.3.82:8080';
       const httpProxy = require('http-proxy');
       const proxy = httpProxy.createProxyServer({
         target: targetUrl,
@@ -122,29 +122,34 @@ module.exports = function(proxy, allowedHost) {
       /**
        * 使用axios模拟登录过程,在当前域名下注入cookie
        */
-      // var axios = require('axios')
-      // var querystring = require('querystring')
-      // app.get('/auto/login', (req, resp) => {
-      //   const request = axios.post(
-      //     '登录接口logon.action',
-      //     querystring.stringify({
-      //       // 登录时所需params
-      //     })
-      //   )
-      //   request.then((result) => {
-      //     resp.append('Set-Cookie', result.headers['set-cookie'])
-      //     resp.json({success: true, cookie: result.headers['set-cookie']})
-      //   })
-      // })
+      var axios = require('axios')
+      var querystring = require('querystring')
+      app.get('/auto/login', (req, resp) => {
+        const request = axios.post(
+          'http://172.31.3.82:8080/portal/logon.action',
+          querystring.stringify({
+            'identifiers.src': 'waiqin365',
+            'identifiers.password': 'a11111',
+            'refer': 'https%3A%2F%2Fcloud.waiqin365.com',
+            'identifiers.type': '1',
+            'identifiers.tenantname': 'test1',
+            'identifiers.code': 'xiaoli'
+          })
+        )
+        request.then((result) => {
+          resp.append('Set-Cookie', result.headers['set-cookie'])
+          resp.json({success: true, cookie: result.headers['set-cookie']})
+        })
+      })
       /**
        * 使用superagent模拟登录过程,在当前域名下注入cookie
        */
       // const superagent = require('superagent');
       // app.get('/auto/login', (req, resp) => {
-      //   const request = superagent.post('登录接口logon.action');
+      //   const request = superagent.post(targetUrl + '/portal/logon.action');
       //   request.type('form');
       //   request.send({
-      //     // 登录时所需params
+      //     // params
       //   });
       //   request.end((err, result = {}) => {
       //     resp.append('Set-Cookie', result.header['set-cookie']);

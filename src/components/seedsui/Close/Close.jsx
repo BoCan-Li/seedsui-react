@@ -19,7 +19,7 @@ export default class Close extends Component {
   render() {
     const {className, style, iconClassName, iconStyle, onClick} = this.props;
     return (
-      <span className={`close${className ? ' ' + className : ''}`} style={style} onClick={(e) => {onClick && onClick(e)}}>
+      <span ref={el => {this.$el = el;}} className={`close${className ? ' ' + className : ''}`} style={style} onClick={(e) => {onClick && onClick(e)}}>
         <Icon className={iconClassName} style={iconStyle}/>
       </span>
     );

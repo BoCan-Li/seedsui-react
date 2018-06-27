@@ -33,7 +33,7 @@ export default class Badge extends Component {
       autoWidthClass = children.length >= 2 ? 'badge-max-width' : '';
     }
     return (
-      <span className={`badge${autoWidthClass ? ' ' + autoWidthClass : ''}${className ? ' ' + className : ''}`} style={style}>{caption}</span>
+      <span ref={el => {this.$el = el;}} className={`badge${autoWidthClass ? ' ' + autoWidthClass : ''}${className ? ' ' + className : ''}`} style={style}>{caption}</span>
     );
   }
 }

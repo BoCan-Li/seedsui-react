@@ -49,12 +49,18 @@
   }
 }
 // 三角形图标
-.shape-triangle-up, .shape-triangle-down {
+.shape-triangle-up, .shape-triangle-down, .shape-triangle-left, .shape-triangle-right {
   position: relative;
   width:0 !important;
   height:0 !important;
+}
+.shape-triangle-up, .shape-triangle-down {
   border-left:4px solid transparent;
   border-right:4px solid transparent;
+}
+.shape-triangle-left, .shape-triangle-right {
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
 }
 .shape-triangle-up {
   border-bottom-width:5px;
@@ -65,6 +71,16 @@
   border-top-width:5px;
   border-top-style: solid;
   border-top-color: @placeholder;
+}
+.shape-triangle-left {
+  border-right-width:5px;
+  border-right-style: solid;
+  border-right-color: @placeholder;
+}
+.shape-triangle-right {
+  border-left-width:5px;
+  border-left-style: solid;
+  border-left-color: @placeholder;
 }
 // tabbar-dropdown的三角形图标
 .tabbar-dropdown{

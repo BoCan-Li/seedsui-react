@@ -179,7 +179,7 @@ export default class Grid extends Component {
     } = this.props;
     const children = React.Children.toArray(this.props.children);
     let dom = null;
-    dom = (<ul className={`grid${className ? ' ' + className : ''}`} data-col={col} style={Object.assign(this.getUlStyle(), style)}>
+    dom = (<ul ref={el => {this.$el = el;}} className={`grid${className ? ' ' + className : ''}`} data-col={col} style={Object.assign(this.getUlStyle(), style)}>
       {list.length > 0 && list.map((item, index) =>{
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>

@@ -206,7 +206,7 @@ export default class Attributes extends Component {
       }
     }
     return (
-      <div className={`attributes${className ? ' ' + className : ''}`} style={style}>
+      <div ref={el => {this.$el = el;}} className={`attributes${className ? ' ' + className : ''}`} style={style}>
         {attrsDOM}
         {children}
       </div>

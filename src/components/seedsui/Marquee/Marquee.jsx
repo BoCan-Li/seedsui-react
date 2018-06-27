@@ -72,7 +72,7 @@ export default class Marquee extends Component {
       step
     } = this.props;
     return (
-      <ul ref={(el) => {this.$el = el}} className={`marquee${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => {this.$el = el;}} className={`marquee${className ? ' ' + className : ''}`} style={style}>
         {list && list.map((item, index) => {
           return <li className={`marquee-li${contentClassName ? ' ' + contentClassName : ''}`} style={Object.assign({height: step + 'px'}, contentStyle)} key={index} onClick={() => {this.onClick(item, index)}}>{item.value}</li>
         })}

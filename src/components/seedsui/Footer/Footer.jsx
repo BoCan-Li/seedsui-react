@@ -14,7 +14,7 @@ export default class Footer extends Component {
   render() {
     const { style, className } = this.props;
     return (
-      <footer className={'footer' + (className ? ' ' + className : '')} style={style}>
+      <footer ref={el => {this.$el = el;}} className={'footer' + (className ? ' ' + className : '')} style={style}>
         { this.props.children }
       </footer>
     );

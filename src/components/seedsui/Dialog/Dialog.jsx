@@ -100,7 +100,7 @@ export default class Dialog extends Component {
       }
     }
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle}>
+      <div ref={el => {this.$el = el;}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle}>
         <div style={style} className={`dialog${position ? ' ' + position : ''}${className ? ' ' + className : ''}`} data-animation={animation}>
           {children && children}
         </div>

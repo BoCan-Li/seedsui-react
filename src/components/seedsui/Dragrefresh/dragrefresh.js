@@ -16,6 +16,8 @@ var Dragrefresh = function (params) {
     errorContainerClass: 'SID-Dragrefresh-ErrorContainer', // 错误容器的class
 
     /* callbacks
+    onScroll: function(e) // 滚动
+    
     onPull:function(s)// 头部拖动中
     onShowTop:function(s)// 开始显示头部
     onHideTop:function(s)// 开始隐藏头部
@@ -335,6 +337,7 @@ var Dragrefresh = function (params) {
     return scrollTop
   }
   s.onScroll = function (e) {
+    if (s.params.onScroll) s.params.onScroll(e)
     var clientHeight = s.container.clientHeight // || window.innerHeight
     var scrollHeight = s.container.scrollHeight
     var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop

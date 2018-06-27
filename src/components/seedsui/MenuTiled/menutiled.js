@@ -79,8 +79,11 @@ var MenuTiled = function (container, params) {
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
     // 树结构
-    s.container[action]('touchstart', s.onTouchStart, false)
-    s.container[action]('touchend', s.onTouchEnd, false)
+    s.container[action]('click', s.onTap, false)
+    // 部分手机touch事件在特殊情况下无效
+    // s.container[action]('touchstart', s.onTouchStart, false)
+    // s.container[action]('touchend', s.onTouchEnd, false)
+    // s.container[action]('touchcancel', s.onTouchEnd, false)
   }
   // attach、dettach事件
   s.attach = function (event) {
@@ -112,11 +115,11 @@ var MenuTiled = function (container, params) {
     s.touches.diffY = s.touches.startY - s.touches.endY
     // 单击事件
     if (Math.abs(s.touches.diffX) < 6 && Math.abs(s.touches.diffY) < 6) {
-      s.onClick(e)
+      s.onTap(e)
     }
   }
   // 点击树
-  s.onClick = function (e) {
+  s.onTap = function (e) {
     var target = e.target
     if (!target.classList.contains(s.params.tagClass)) return
     var isActived = target.classList.contains(s.params.activeClass)
@@ -151,7 +154,7 @@ var MenuTiled = function (container, params) {
     }
     // 返回item
     var json = item ? JSON.parse(item) : null
-    if (this.params.onClick) this.params.onClick(json, isActived, !isExtand)
+    if (s.params.onClick) s.params.onClick(json, isActived, !isExtand)
   }
   // 主函数
   s.init = function () {

@@ -109,7 +109,7 @@ export default class List extends Component {
       sndcaption, sndcaptionClassName, sndcaptionStyle,
       containerClassName, containerStyle, containerAfter} = this.props;
     return (
-      <div className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+      <div ref={el => {this.$el = el;}} className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {(liconSrc || liconClassName) && <Icon className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
         {showThumbnail && <div className={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
