@@ -1,4 +1,5 @@
 import DB from './../db';
+import Device from './../device';
 import EventUtil from './../eventutil';
 import jsonp from 'jsonp';
 // 系统参数
@@ -53,6 +54,11 @@ var Bridge = {
   },
   /* 客户端添加返回绑定 */
   addBackPress: function () {
+    // 微信设置appId
+    const appId = Device.getUrlParameter('appId');
+    if (appId && appId !== 'false') {
+      DB.setStore('app_appId', appId);
+    }
     console.log('addBackPress方法在浏览器上无法运行')
   },
   /* 客户端移除返回绑定 */

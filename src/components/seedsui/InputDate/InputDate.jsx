@@ -31,6 +31,7 @@ export default class InputDate extends Component {
     min: PropTypes.string,
     max: PropTypes.string,
     onChange: PropTypes.func,
+    error: PropTypes.object, // {currentName: '', compareName: ''}
     onError: PropTypes.func // 超出限制，产生错误时触发
   }
   static defaultProps = {
@@ -38,7 +39,11 @@ export default class InputDate extends Component {
     args: null,
     value: '',
     readOnly: false,
-    disabled: false
+    disabled: false,
+    error: {
+      currentName: '',
+      compareName: ''
+    }
   }
   constructor(props) {
     super(props);
@@ -67,61 +72,64 @@ export default class InputDate extends Component {
   onClickSubmit = (e) => {
     let text = e.activeText;
     const {type, min, max, onError} = this.props;
+    const selectDate = new Date(text);
+    const current = this.$input.value;
+    const error = this.props.error;
     if (min && (min.isDate() || min.isTime())) {
-      if (type === 'date' && new Date(text).compareDate(min) === -1) {
+      if (type === 'date' && selectDate.compareDate(min) === -1) {
         if (onError) {
-          onError('日期不能小于' + min);
+          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return;
         }
         text = min;
       }
-      if (type === 'month' && new Date(text).compareMonth(min) === -1) {
+      if (type === 'month' && selectDate.compareMonth(min) === -1) {
         if (onError) {
-          onError('日期不能小于' + min);
+          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return;
         }
         text = min;
       }
-      if (type === 'time' && new Date(text).compareTime(min) === -1) {
+      if (type === 'time' && selectDate.compareTime(min) === -1) {
         if (onError) {
-          onError('日期不能小于' + min);
+          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return;
         }
         text = min;
       }
-      if (type === 'datetime' && new Date(text).compareDateTime(min) === -1) {
+      if (type === 'datetime' && selectDate.compareDateTime(min) === -1) {
         if (onError) {
-          onError('日期不能小于' + min);
+          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return;
         }
         text = min;
       }
     }
     if (max && (max.isDate() || max.isTime())) {
-      if (type === 'date' && new Date(text).compareDate(max) === 1) {
+      if (type === 'date' && selectDate.compareDate(max) === 1) {
         if (onError) {
-          onError('日期不能大于' + max);
+          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return;
         }
         text = max;
       }
-      if (type === 'month' && new Date(text).compareMonth(max) === 1) {
+      if (type === 'month' && selectDate.compareMonth(max) === 1) {
         if (onError) {
-          onError('日期不能大于' + max);
+          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return;
         }
         text = max;
       }
-      if (type === 'time' && new Date(text).compareTime(max) === 1) {
+      if (type === 'time' && selectDate.compareTime(max) === 1) {
         if (onError) {
-          onError('日期不能大于' + max);
+          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return;
         }
         text = max;
       }
-      if (type === 'datetime' && new Date(text).compareDateTime(max) === 1) {
+      if (type === 'datetime' && selectDate.compareDateTime(max) === 1) {
         if (onError) {
-          onError('日期不能大于' + max);
+          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return;
         }
         text = max;
