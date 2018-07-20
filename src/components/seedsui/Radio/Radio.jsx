@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default class Radio extends Component {
   static propTypes = {
-    // args: PropTypes.array,
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     onClick: PropTypes.func,

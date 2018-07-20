@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import bridge from './../utils/bridge';
+import Toast from './../Toast/toast.js';
 import Grid from './../Grid';
 
 const Count = {
@@ -82,7 +83,23 @@ export default class ImgUploader extends Component {
         sizeType: this.props.sizeType,
         onShowLoad: this.props.onShowLoad, // 显示遮罩
         onHideLoad: this.props.onHideLoad, // 隐藏遮罩
-        onError: this.props.onError, // 错误回调
+        onError: (err) => { // 错误回调
+          if (this.props.onError) {
+            this.props.onError(err)
+          } else {
+            // 提示错误
+            var toast = new Toast({
+              maskClass: 'mask toast-mask middle',
+              html: err.msg,
+              delay: 2000,
+              onHid: (e) => {
+                e.destroy();
+                toast = null;
+              }
+            });
+            toast.show();
+          }
+        },
         onChooseSuccess: this.onChooseSuccess,
         onChooseFail: this.onChooseFail,
         onUploadsSuccess: this.onUploadsSuccess,

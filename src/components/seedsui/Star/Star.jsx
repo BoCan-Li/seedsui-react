@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 export default class Star extends Component {
   static propTypes = {
+    args: PropTypes.any,
     active: PropTypes.bool,
     className: PropTypes.string,
     style: PropTypes.object,
-    // args: PropTypes.array,
     onClick: PropTypes.func
   };
   static defaultProps = {

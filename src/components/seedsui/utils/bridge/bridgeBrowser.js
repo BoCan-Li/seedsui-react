@@ -5,6 +5,7 @@ import jsonp from 'jsonp';
 // 系统参数
 import client from './../axiosApi';
 import Toast from './../../Toast/toast.js';
+import Loading from './../../Loading/loading.js';
 
 var Bridge = {
   platform: 'browser',
@@ -55,10 +56,10 @@ var Bridge = {
   /* 客户端添加返回绑定 */
   addBackPress: function () {
     // 微信设置appId
-    const appId = Device.getUrlParameter('appId');
-    if (appId && appId !== 'false') {
-      DB.setStore('app_appId', appId);
-    }
+    // const appId = Device.getUrlParameter('appId');
+    // if (appId && appId !== 'false') {
+    //   DB.setStore('app_appId', appId);
+    // }
     console.log('addBackPress方法在浏览器上无法运行')
   },
   /* 客户端移除返回绑定 */
@@ -67,21 +68,12 @@ var Bridge = {
   },
   /* 获取当前地理位置 */
   getLocation: function (params) {
-    // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
-    if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
-      return
-    }
-    console.log('只能模拟getLocation定位')
-    setTimeout(function () {
-      var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
-      // 将位置信息存储到cookie中10秒
-      DB.setCookie('app_location', JSON.stringify(res) , 10)
-      // 模拟国测局定位地址
-      if (params.onSuccess) params.onSuccess(res)
-      // if (params.onError) params.onError({code:'locationFail', msg: '定位失败,请检查手机定位权限是否开启'})
-    }, 500)
+    if (params.onError) params.onError({code:'locationFail', msg: '此功能仅可在微信或APP中使用'})
+    // 模拟getLocation定位
+    // setTimeout(function () {
+    //   var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
+    //   if (params.onSuccess) params.onSuccess(res)
+    // }, 500)
   },
   /*
    * 百度地图:获取当前位置名称
@@ -89,7 +81,7 @@ var Bridge = {
    * 返回：{address:'地址全称'}
    * */
   getAddress: function (params) {
-    var url = 'https://api.map.baidu.com/geocoder/v2/?ak=IlfRglMOvFxapn5eGrmAj65H&coordtype=gcj02ll&callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1'
+    var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
         if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试' + err})
@@ -132,11 +124,24 @@ var Bridge = {
    * 返回：{resultStr:''}
    * */
   scanQRCode (params) {
-    console.log('scanQRCode方法在浏览器上无法运行')
+    if (params.onError) params.onError({code: 'qrcodeFail', msg: '此功能仅可在微信或APP中使用'})
   },
   /* 退出到登陆页面 */
   logOut: function (message) {
-    let login_url = '/h5fw/#/_react_/login'
+    // 如果有errMsg,则停止
+    var errMsg = Device.getUrlParameter('errMsg')
+    // 如果地址栏有errMsg,则优先显示地址栏
+    if (errMsg) {
+      try {
+        errMsg = decodeURIComponent(errMsg)
+      } catch (e) {
+        errMsg = '未知错误'
+      }
+      window.location.replace('/h5fw/#/_react_/exception/' + errMsg)
+      return
+    }
+    // 否则跳转到登录页面
+    var login_url = '/h5fw/#/_react_/login'
     // openId & appId
     login_url += `/${DB.getStore('app_openId') || 'false'}/${DB.getStore('app_appId') || 'false'}`
     // message
@@ -174,9 +179,8 @@ var Bridge = {
     var s = this
     s.imgs = ''
     s.imgMap = {}
-    s.mixinChoose = function () {
-    }
     s.choose = function (watermark) {
+      if (params.onError) params.onError({code: 'chooseFail', msg: '此功能仅可在微信或APP中使用'})
     }
     s.deleteImg = function (key) {
     }
@@ -249,19 +253,10 @@ var Bridge = {
         callback();
       } else {
         // 提示获取地址失败
-        var toast = new Toast({
-          maskClass: 'mask toast-mask middle',
-          html: result.message,
-          delay: 2000,
-          onHid: (e) => {
-            e.destroy();
-            toast = null;
-          }
-        });
-        toast.show();
+        this.showToast(result.message)
       }
     }).catch(() => {
-      this.logOut('请求系统参数异常，请重新登录');
+      this.logOut('请求系统参数异常，请重新登录')
       // this.showMsg('请求系统参数异常，请稍后重试');
     });
   },
@@ -292,11 +287,54 @@ var Bridge = {
       e.stopPropagation()
     }
     if (subscribeEl.getAttribute('data-multipleclick')) return;
-    EventUtil.addHandler(subscribeEl, 'multipleClick', function() {
+    EventUtil.addHandler(subscribeEl, 'multipleclick', function() {
       logContent.innerHTML = DB.getSession('app_logger') || '无日志'
       document.body.appendChild(logBox)
     })
     subscribeEl.setAttribute('data-multipleclick', '1')
+  },
+  // 拨打电话
+  tel: function (number) {
+    if (Device.device === 'pc') {
+      // 提示获取地址失败
+      this.showToast('此功能仅可在微信或APP中使用')
+      return
+    }
+    if (isNaN(number)) return
+    window.location.href = 'tel:' + number
+  },
+  // 弹出toast
+  toast: null,
+  showToast: function (msg, params = {}) {
+    if (!msg) return
+    if (!this.toast) {
+      // 提示错误
+      this.toast = new Toast({
+        parent: document.body,
+        maskClass: 'mask toast-mask ' + (params.position ? params.position : 'middle') + (params.mask === false ? ' toast-propagation' : ''),
+        html: msg,
+        delay: params.delay || 2000
+      });
+    } else {
+      this.toast.setHTML(msg)
+      this.toast.setMaskClassName('mask toast-mask ' + (params.position ? params.position : 'middle') + (params.mask === false ? ' toast-propagation' : ''))
+    }
+    this.toast.show()
+  },
+  // 弹出loading
+  loading: null,
+  showLoading: function (params = {}) {
+    if (!this.loading) {
+      this.loading = new Loading({
+        type: params.type,
+        maskCss: params.css || null
+      });
+    } else {
+      if (params.type) this.loading.setType(params.type)
+      if (params.css) this.loading.setMaskCss(params.css)
+      this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
+    }
+    this.loading.show()
   }
 }
 export default Bridge

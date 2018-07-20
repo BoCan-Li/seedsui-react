@@ -80,11 +80,16 @@ var MenuTree = function (container, params) {
     Events
     ------------------ */
   // 绑定事件
+  s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
-    // 树结构
-    s.container[action]('touchstart', s.onTouchStart, false)
-    s.container[action]('touchend', s.onTouchEnd, false)
+    // touch兼容pc事件
+    if (s.isSupportTouch) {
+      s.container[action]('touchstart', s.onTouchStart, false)
+      s.container[action]('touchend', s.onTouchEnd, false)
+    } else {
+      s.container[action]('click', s.onClick, false)
+    }
   }
   // attach、dettach事件
   s.attach = function (event) {
@@ -154,7 +159,7 @@ var MenuTree = function (container, params) {
     var item = target.getAttribute('data-item') ? JSON.parse(target.getAttribute('data-item')) : null
     // 是否有子节点
     var hasChildren = item.children && item.children.length
-    if (this.params.onClick) this.params.onClick(item, isActived, !isExtand, hasChildren)
+    if (s.params.onClick) s.params.onClick(item, isActived, !isExtand, hasChildren)
   }
   // 主函数
   s.init = function () {

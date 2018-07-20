@@ -22,8 +22,8 @@ var Dialog = function (params) {
     dialogClass: 'dialog',
     dialogActiveClass: 'active',
 
-    css: {},
-    maskCss: {},
+    dialogCss: '',
+    maskCss: '',
     isClickMaskHide: true,
     args: null
     /* callbacks
@@ -59,12 +59,15 @@ var Dialog = function (params) {
   s.createMask = function () {
     s.mask = document.createElement('div')
     s.mask.setAttribute('class', s.params.maskClass)
+    s.mask.setAttribute('style', s.params.maskCss)
   }
 
   // Dialog
   s.createDialog = function () {
     s.dialog = document.createElement('div')
     s.dialog.classList.add(s.params.dialogClass, s.params.position)
+    s.dialog.setAttribute('style', s.params.dialogCss)
+    s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
     s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
   }
   s.create = function () {
@@ -91,15 +94,6 @@ var Dialog = function (params) {
     } else {
       s.create()
     }
-    var style
-    // Dialog Css
-    for (style in s.params.css) {
-      s.dialog.style[style] = s.params.css[style]
-    }
-    // Mask Css
-    for (style in s.params.maskCss) {
-      s.mask.style[style] = s.params.maskCss[style]
-    }
     // 动画时长
     s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
     s.dialog.style.webkitTransitionDuration = s.params.duration + 'ms'
@@ -108,6 +102,24 @@ var Dialog = function (params) {
   /* -------------------------
   Method
   ------------------------- */
+  s.setMaskCss = function (css) {
+    if (css) s.params.maskCss = css
+    s.mask.setAttribute('style', s.params.maskCss)
+    s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
+  }
+  s.setMaskClassName = function (className) {
+    if (className) s.params.maskClass = className
+    s.mask.setAttribute('class', s.params.maskClass)
+  }
+  s.setDialogCss = function (css) {
+    if (css) s.params.dialogCss = css
+    s.dialog.setAttribute('style', s.params.dialogCss)
+    s.dialog.style.webkitTransitionDuration = s.params.duration + 'ms'
+  }
+  s.setDialogClassName = function (className) {
+    if (className) s.params.dialogClass = className
+    s.dialog.setAttribute('class', s.params.dialogClass)
+  }
   s.showMask = function () {
     s.mask.classList.add(s.params.maskActiveClass)
   }

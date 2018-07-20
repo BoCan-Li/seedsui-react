@@ -12,8 +12,8 @@
   overflow: auto;
 
 	visibility:hidden;
-	-webkit-transition-duration:@animatioin-duration;
-	-webkit-transition-property:-webkit-transform,opacity,visibility;
+	.transitionDuration-atanimatioin-duration();
+	.transitionProperty-transform-opacity-visibility();
 
 	border-color:@border;
 	&.active{
@@ -23,36 +23,36 @@
 	// 全局动画
 	&[data-animation="slideLeft"]{
 		//left:0;
-		-webkit-transform:translate3d(100%,0,0);
+		.transform-translate3d-full-0-0();
 		&.active{
-			-webkit-transform:none;
+			.transform-none();
 		}
 	}
 	&[data-animation="slideRight"]{
 		//left:0;
-		-webkit-transform:translate3d(-100%,0,0);
+		.transform-translate3d-negfull-0-0();
 		&.active{
-			-webkit-transform:none;
+			.transform-none();
 		}
 	}
 	&[data-animation="slideUp"]{
 		//top:0;
-		-webkit-transform:translate3d(0,100%,0);
+		.transform-translate3d-0-full-0();
 		&.active{
-			-webkit-transform:none;
+			.transform-none();
 		}
 	}
 	&[data-animation="slideDown"]{
 		//top:0;
-		-webkit-transform:translate3d(0,-100%,0);
+		.transform-translate3d-0-negfull-0();
 		&.active{
-			-webkit-transform:none;
+			.transform-none();
 		}
 	}
 	&[data-animation="zoom"]{
-		-webkit-transform:scale(0,0);
+		.transform-scale-0-0();
 		&.active{
-			-webkit-transform:none;
+			.transform-none();
 		}
 	}
 	&[data-animation="fade"]{
@@ -72,13 +72,13 @@
 	&.middle{
 		top:50%;
 		left:50%;
-		-webkit-transform-origin:center center;
-		-webkit-transform:translate3d(-50%,-50%,0);
+		.transformOrigin-center-center();
+		.transform-translate3d-neghalf-neghalf-0();
 
 		&[data-animation="zoom"]{
-			-webkit-transform:translate3d(-50%,-50%,0) scale(0,0);
+			.transform-translate3d-neghalf-neghalf-0-scale-0-0();
 			&.active{
-				-webkit-transform:translate3d(-50%,-50%,0) scale(1,1);
+				.transform-translate3d-neghalf-negfull-0-scale-1-1();
 			}
 		}
 	}
@@ -89,29 +89,29 @@
 	}
 	&.top{
 		left:0;
-		-webkit-transform-origin:left top;
+		.transformOrigin-left-top();
 	}
 	&.top-center{
 		left:50%;
-		-webkit-transform-origin:center top;
-		-webkit-transform:translate3d(-50%,0,0);
+		.transformOrigin-center-top();
+		.transform-translate3d-neghalf-0-0();
 
 		&[data-animation="slideDown"]{
-			-webkit-transform:translate3d(-50%,-100%,0);
+			.transform-translate3d-neghalf-negfull-0();
 			&.active{
-				-webkit-transform:translate3d(-50%,0,0);
+				.transform-translate3d-neghalf-0-0();
 			}
 		}
 		&[data-animation="zoom"]{
-			-webkit-transform:translate3d(-50%,0,0) scale(0,0);
+			.transform-translate3d-neghalf-0-0-scale-0-0();
 			&.active{
-				-webkit-transform:translate3d(-50%,0,0) scale(1,1);
+				.transform-translate3d-neghalf-0-0-scale-1-1();
 			}
 		}
 	}
 	&.top-right{
 		right:0;
-		-webkit-transform-origin:right top;
+		.transformOrigin-right-top();
 	}
 
 	// 底部弹出
@@ -120,29 +120,29 @@
 	}
 	&.bottom{
 		left:0;
-		-webkit-transform-origin:left bottom;
+		.transformOrigin-left-bottom();
 	}
 	&.bottom-center{
 		left:50%;
-		-webkit-transform-origin:center bottom;
-		-webkit-transform:translate3d(-50%,0,0);
+		.transformOrigin-center-bottom();
+		.transform-translate3d-neghalf-0-0();
 
 		&[data-animation="slideUp"]{
-			-webkit-transform:translate3d(-50%,100%,0);
+			.transform-translate3d-neghalf-full-0();
 			&.active{
-				-webkit-transform:translate3d(-50%,0,0);
+				.transform-translate3d-neghalf-0-0();
 			}
 		}
 		&[data-animation="zoom"]{
-			-webkit-transform:translate3d(-50%,100%,0) scale(0,0);
+			.transform-translate3d-neghalf-full-0-scale-0-0();
 			&.active{
-				-webkit-transform:translate3d(-50%,0,0) scale(1,1);
+				.transform-translate3d-neghalf-0-0-scale-1-1();
 			}
 		}
 	}
 	&.bottom-right{
 		right:0;
-		-webkit-transform-origin:right bottom;
+		.transformOrigin-right-bottom();
 	}
 
 	// 左侧弹出
@@ -151,29 +151,29 @@
 	}
 	&.left{
 		top:0;
-		-webkit-transform-origin:left top;
+		.transformOrigin-left-top();
 	}
 	&.left-middle{
 		top:50%;
-		-webkit-transform-origin:left center;
-		-webkit-transform:translate3d(0,-50%,0);
+		.transformOrigin-left-center();
+		.transform-translate3d-0-negfull-0();
 
 		&[data-animation="slideRight"]{
-			-webkit-transform:translate3d(-100%,-50%,0);
+			.transform-translate3d-negfull-negfull-0();
 			&.active{
-				-webkit-transform:translate3d(0,-50%,0);
+				.transform-translate3d-0-negfull-0();
 			}
 		}
 		&[data-animation="zoom"]{
-			-webkit-transform:translate3d(0,-50%,0) scale(0,0);
+			.transform-translate3d-0-negfull-0-scale-0-0();
 			&.active{
-				-webkit-transform:translate3d(0,-50%,0) scale(1,1);
+				.transform-translate3d-0-negfull-0-scale-1-1();
 			}
 		}
 	}
 	&.left-bottom{
 		bottom:0;
-		-webkit-transform-origin:left bottom;
+		.transformOrigin-left-bottom();
 	}
 	
 	// 右侧弹出
@@ -182,29 +182,29 @@
 	}
 	&.right{
 		top:0;
-		-webkit-transform-origin:right top;
+		.transformOrigin-right-top();
 	}
 	&.right-middle{
 		top:50%;
-		-webkit-transform-origin:right center;
-		-webkit-transform:translate3d(0,-50%,0);
+		.transformOrigin-right-center();
+		.transform-translate3d-0-negfull-0();
 
 		&[data-animation="slideLeft"]{
-			-webkit-transform:translate3d(100%,-50%,0);
+			.transform-translate3d-full-neghalf-0();
 			&.active{
-				-webkit-transform:translate3d(0,-50%,0);
+				.transform-translate3d-0-negfull-0();
 			}
 		}
 		&[data-animation="zoom"]{
-			-webkit-transform:translate3d(0,-50%,0) scale(0,0);
+			.transform-translate3d-0-negfull-0-scale-0-0();
 			&.active{
-				-webkit-transform:translate3d(0,-50%,0) scale(1,1);
+				.transform-translate3d-0-negfull-0-scale-1-1();
 			}
 		}
 	}
 	&.right-bottom{
 		bottom:0;
-		-webkit-transform-origin:right bottom;
+		.transformOrigin-right-bottom();
 	}
 }
 // dialog.less(end)

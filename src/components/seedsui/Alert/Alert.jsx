@@ -7,6 +7,7 @@ import Instance from './alert.js';
 export default class Alert extends Component {
   static propTypes = {
     portal: PropTypes.object,
+    args: PropTypes.any,
     show: PropTypes.bool,
 
     duration: PropTypes.number,
@@ -15,7 +16,6 @@ export default class Alert extends Component {
     onClickMask: PropTypes.func,
     onShowed: PropTypes.func,
     onHid: PropTypes.func,
-    // args: PropTypes.array,
 
     className: PropTypes.string,
     style: PropTypes.object,

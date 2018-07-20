@@ -110,21 +110,21 @@ hr:extend(.border-b all){
   }
   &:before{
     left:0;
-    -webkit-transform-origin:left center;
+    .transformOrigin-left-center();
   }
   &:after{
     right:0;
-    -webkit-transform-origin:right center;
+    .transformOrigin-right-center();
   }
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
   .basketline:before,.basketline:after{
-    -webkit-transform: scaleX(0.5);
+    .transform-scaleX-05();
   }
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 3) {
   .basketline:before,.basketline:after{
-    -webkit-transform: scaleX(0.33);
+    .transform-scaleX-033();
   }
 }
 

@@ -12,7 +12,7 @@ export default class Toast extends Component {
     position: PropTypes.string, // top | middle | bottom
     duration: PropTypes.number,
     delay: PropTypes.number,
-    propagation: PropTypes.bool, // 弹出后是否允许点击,false不能点击,true可以点击
+    mask: PropTypes.bool, // 弹出后是否允许点击,false可以点击,true不可以点击
     onShowed: PropTypes.func,
     onHid: PropTypes.func,
 
@@ -28,7 +28,7 @@ export default class Toast extends Component {
     position: 'bottom',
     duration: 300,
     delay: 0,
-    propagation: true,
+    mask: true,
 
     caption: '',
     show: false
@@ -59,7 +59,6 @@ export default class Toast extends Component {
       mask: this.$el,
       duration: duration,
       delay: delay,
-      propagationClass: '',
       onShowed: onShowed || null,
       onHid: onHid || null
     });
@@ -70,13 +69,13 @@ export default class Toast extends Component {
   }
   render() {
     const {
-      position, propagation,
+      position, mask,
       className, style,
       icon, iconSrc, iconStyle, iconClassName,
       caption
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`mask toast-mask${position ? ' ' + position : ''}${propagation ? ' toast-propagation' : ''}`}>
+      <div ref={(el) => {this.$el = el}} className={`mask toast-mask${position ? ' ' + position : ''}${mask === false ? ' toast-propagation' : ''}`}>
         <div className={`toast${className ? ' ' + className : ''}`} style={style}>
           <div className="toast-wrapper">
             {(iconSrc || iconClassName) && <Icon className={`toast-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}

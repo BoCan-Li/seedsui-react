@@ -35,6 +35,9 @@ var Device = (function () {
   var platform = ''
   if (ua.indexOf('micromessenger') > -1) {
     platform = 'weixin'
+    if (device === 'pc') {
+      platform = 'browser'
+    }
   } else if (ua.indexOf('mqqbrowser') > -1) {
     platform = 'qq'
   } else if (ua.indexOf('ucbrowser') > -1) {

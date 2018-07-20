@@ -7,14 +7,12 @@ var Toast = function (params) {
     mask: null,
     parent: document.body, // 创建于哪个元素下
 
-    maskClass: 'mask toast-mask bottom',
+    maskClass: 'mask toast-mask bottom', // 加toast-propagation允许点击
     maskActiveClass: 'active',
 
     toastClass: 'toast',
     toastActiveClass: 'active',
     wrapperClass: 'toast-wrapper',
-
-    propagationClass: 'toast-propagation', // 允许点击样式
     
     duration: 300,
     delay: 0,
@@ -69,7 +67,6 @@ var Toast = function (params) {
     } else {
       s.create()
     }
-    if (s.params.propagationClass) s.mask.classList.add(s.params.propagationClass)
     s.toast.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
   s.update()
@@ -77,6 +74,10 @@ var Toast = function (params) {
   /* --------------------
   Method
   -------------------- */
+  s.setMaskClassName = function (className) {
+    s.params.maskClass = className
+    s.mask.setAttribute('class', s.params.maskClass)
+  }
   s.setToastClassName = function (className) {
     s.params.toastClass = className
     s.toast.setAttribute('class', s.params.toastClass)

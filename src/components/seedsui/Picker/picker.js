@@ -322,22 +322,32 @@ var Picker = function (params) {
     s.activeOptions[slot.index] = activeOption
   }
   /* ------------------------
-  Control
+  Events
   ------------------------ */
+  s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
-    // 滑动事件
     s.slotbox[action]('touchstart', s.onTouchStart, false)
     s.slotbox[action]('touchmove', s.onTouchMove, false)
     s.slotbox[action]('touchend', s.onTouchEnd, false)
     s.slotbox[action]('touchcancel', s.onTouchEnd, false)
+    // touch兼容pc事件
+    if (s.isSupportTouch) {
+      s.slotbox[action]('touchstart', s.onTouchStart, false)
+      s.slotbox[action]('touchmove', s.onTouchMove, false)
+      s.slotbox[action]('touchend', s.onTouchEnd, false)
+      s.slotbox[action]('touchcancel', s.onTouchEnd, false)
+    } else {
+      s.slotbox[action]('mousedown', s.onTouchStart, false)
+      s.slotbox[action]('mousemove', s.onTouchMove, false)
+      s.slotbox[action]('mouseup', s.onTouchEnd, false)
+    }
     // 选择器事件
     s.picker[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     // 遮罩
-    // s.mask[action]('touchmove', s.preventDefault, false)
     s.mask[action]('click', s.onClickMask, false)
     // 按钮
-    // s.header[action]('touchmove', s.preventDefault, false)
+    s.header[action]('touchmove', s.preventDefault, false)
     s.headerSubmit[action]('click', s.onClickSubmit, false)
     s.headerCancel[action]('click', s.onClickCancel, false)
   }
@@ -385,11 +395,12 @@ var Picker = function (params) {
     currentPosY: 0,
     direction: null
   }
-
+  s.startMouseMove = false
   // 触摸事件
   s.onTouchStart = function (e) {
-    s.touches.startX = e.touches[0].clientX
-    s.touches.startY = e.touches[0].clientY
+    s.startMouseMove = true
+    s.touches.startX = e.clientX || e.touches[0].clientX
+    s.touches.startY = e.clientY || e.touches[0].clientY
     // 寻找当前点击的槽
     s.activeSlot = e.target
 
@@ -408,11 +419,12 @@ var Picker = function (params) {
     if (s.params.onScrollStart) s.params.onScrollStart(s)
   }
   s.onTouchMove = function (e) {
+    if (!s.startMouseMove) return
     e.preventDefault()
     // 锁定的槽将不工作
     if (s.activeSlot.isLock) return
 
-    s.touches.currentY = e.touches[0].clientY
+    s.touches.currentY = e.clientY || e.touches[0].clientY
     s.touches.diffY = s.touches.startY - s.touches.currentY
     s.touches.currentPosY = s.touches.posY - s.touches.diffY
     if (s.touches.currentPosY > s.activeSlot.minBouncePosY) {
@@ -426,11 +438,12 @@ var Picker = function (params) {
     if (s.params.onScroll) s.params.onScroll(s)
   }
   s.onTouchEnd = function (e) {
+    s.startMouseMove = false
     // 锁定的槽将不工作
     if (s.activeSlot.isLock) return
 
-    s.touches.endX = e.changedTouches[0].clientX
-    s.touches.endY = e.changedTouches[0].clientY
+    s.touches.endX = e.clientX || e.changedTouches[0].clientX
+    s.touches.endY = e.clientY || e.changedTouches[0].clientY
     s.touches.diffX = s.touches.startX - s.touches.endX
     s.touches.diffY = s.touches.startY - s.touches.endY
     // 判断是否是tap

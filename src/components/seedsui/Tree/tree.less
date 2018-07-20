@@ -15,9 +15,8 @@
 }
 // tree-icon
 .tree-icon,.tree-button-add,.tree-button-del{
-	display: -webkit-box;
-	-webkit-box-pack:center;
-	-webkit-box-align:center;
+  .flex;
+  .flex-middlecenter;
   color:@placeholder;
   width: 32px;
 }
@@ -42,7 +41,7 @@
 
 // tree-line
 .tree-line{
-	display: -webkit-box;
+  .flex;
 	position:relative;
 	min-width: @200px;
 }
@@ -60,14 +59,13 @@
   	display:none;
   }
   .tree-button-del{
-    display:-webkit-box;
+    .flex;
   }
 }
 // tree-avatar
 .tree-avatar{
-	display: -webkit-box;
-	-webkit-box-pack:center;
-	-webkit-box-align:center;
+  .flex;
+  .flex-middlecenter;
   width:@42px;
   height:@42px;
   border-radius:100%;
@@ -79,9 +77,9 @@
 }
 // tree-avatar
 .tree-title{
-	display: -webkit-box;
-	-webkit-box-align:center;
-	-webkit-box-flex:1;
+  .flex;
+  .flex-middle;
+  .flex-1;
   height: @50px;
   &:extend(.border-b);
 }

@@ -22,11 +22,11 @@
   .flex-middle;
 }
 .attribute-left, .attribute-right {
-  &:extend(.box);
+  .flex;
   position: relative;
 }
 .attribute-left {
-  color: #aaa;
+  color: @attribute-left-color;
 }
 .attribute-right {
   &:extend(.flex-1);

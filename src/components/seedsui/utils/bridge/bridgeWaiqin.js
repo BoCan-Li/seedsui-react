@@ -284,12 +284,21 @@ var Bridge = {
   },
   /**
    * 获取客户信息
-   * params: {aclType: '0', onSuccess: fn(name, id)}
+   * params: {onSuccess: fn}
    */
   getContact: function (params) {
     wq.wqcontact.getContact((args) => { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args);
+      if (params.onSuccess) params.onSuccess(args)
     }, { aclType: params.aclType || '0' });
+  },
+  /**
+   * 获取门店信息
+   * params: {selectedIds: '',onSuccess: fn}
+   */
+  getCustomerMore: function (params) {
+    wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args);
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '","hiddenAdd":true}');
   },
   // 客户端添加返回绑定
   addBackPress: function () {

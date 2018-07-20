@@ -38,7 +38,7 @@ var Bridge = {
         wx.config(params) // eslint-disable-line
         wx.ready(function () { // eslint-disable-line
           // 隐藏右上角按钮
-          wx.hideOptionMenu() // eslint-disable-line
+          // wx.hideOptionMenu() // eslint-disable-line
           // 桥接成功
           DB.setSession('bridge_isready', '1')
           // Callback
@@ -158,7 +158,7 @@ var Bridge = {
         params.onSuccess(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败请稍后重试' + res})
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '正在鉴权,请稍后再试' + res})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)

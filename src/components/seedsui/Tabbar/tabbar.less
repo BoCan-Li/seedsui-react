@@ -90,15 +90,15 @@
 	    width: 100%;
 
 	    background-color:@tabbar-line-border-active;
-	    -webkit-transform-origin:center center;
-	    -webkit-transform:translate(-50%,0) scale(0,1);
+	    .transformOrigin-center-center();
+	    .transform-translate-neghalf-0-scale-0-1();
 		}
 	}
 	.tab.active{
 		color:@tabbar-line-color-active;
 		background-color: @tabbar-line-bg-active;
 		&:after {
-			-webkit-transform:translate(-50%,0) scale(1,1);
+			.transform-translate-neghalf-0-scale-1-1();
 		}
 	}
 	&.tabbar-line-width50{
@@ -135,15 +135,17 @@
 }
 .tabbar-line.animated{
 	.tab{
-		-webkit-transition: color 0.3s;
+		.transitionProperty-color();
+		.transitionDuration-300ms();
 		&:after{
-			-webkit-transition:-webkit-transform 0.1s;
+			.transitionProperty-transform();
+			.transitionDuration-100ms();
 		}
 	}
 	.tab.active{
 		&:after {
-			-webkit-transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);
-			-webkit-transition-duration:0.3s;
+			.transitionTimingFunction-cubicBezier-0dot4-0-0dot2-1();
+			.transitionDuration-atanimatioin-duration()
 		}
 	}
 }
@@ -214,8 +216,8 @@
 .tabbar-lump.animated{
 	.tab{
 		.tab-label{
-			-webkit-transition-property:background-color,color;
-			-webkit-transition-duration:300ms;
+			.transitionProperty-backgroundColor-color();
+			.transitionDuration-atanimatioin-duration();
 		}
 	}
 }
@@ -234,23 +236,23 @@
     height: 20px;
 		top: 50%;
     left: 0;
-    -webkit-transform: translate(0,-50%) scaleX(0.5);
+    .transform-translate-0-neghalf-scaleX-05();
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .tab:after {
-			-webkit-transform: translate(0,-50%) scaleX(0.5);
+			.transform-translate-0-neghalf-scaleX-05();
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
     .tab:after {
-			-webkit-transform: translate(0,-50%) scaleX(0.33);
+			.transform-translate-0-neghalf-scaleX-033();
 		}
 	}
 	.tab.active{
 		color: @tabbar-dropdown-color-active;
 		background-color: @tabbar-dropdown-bg-active;
 		.icon{
-			-webkit-transform:rotate(180deg)
+			.transform-rotate-180deg();
     }
 	}
 }
@@ -267,9 +269,11 @@
 }
 .tabbar-dropdown.animated{
 	.tab{
-		-webkit-transition: color 0.2s;
+		.transitionProperty-color();
+		.transitionDuration-200ms();
 		.icon{
-			-webkit-transition:-webkit-transform 0.2s;
+			.transitionProperty-transform();
+			.transitionDuration-200ms();
 		}
 	}
 }

@@ -4,7 +4,7 @@ import Icon from './../Icon';
 
 export default class List extends Component {
   static propTypes = {
-    // args: PropTypes.array,
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     onClick: PropTypes.func,

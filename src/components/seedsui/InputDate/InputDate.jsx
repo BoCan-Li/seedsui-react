@@ -8,7 +8,7 @@ export default class InputDate extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     // 容器
-    // args: PropTypes.array,
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     // 文本框

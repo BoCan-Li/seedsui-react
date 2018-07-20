@@ -13,12 +13,12 @@
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
   .timeline-line{
-    -webkit-transform: scaleX(0.5);
+    .transform-scaleX-05();
   }
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 3) {
   .timeline-line{
-    -webkit-transform: scaleX(0.33);
+    .transform-scaleX-033();
   }
 }
 .timeline-case{
@@ -29,10 +29,6 @@
   color: @timeline-case-active;
 }
 .timeline-badge{
-  position:absolute;
-  top:@12px;
-  left:-@18px;
-  -webkit-transform: translateX(-50%);
-  z-index: 1;
+  .setTimelineBadge();
 }
 // timeline.less(end)

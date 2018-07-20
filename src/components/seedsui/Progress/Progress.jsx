@@ -4,7 +4,7 @@ import Counter from './../Counter';
 
 export default class Progress extends Component {
   static propTypes = {
-    // args: PropTypes.array,
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     barStyle: PropTypes.object,

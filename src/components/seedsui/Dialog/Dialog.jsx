@@ -6,6 +6,7 @@ import Instance from './dialog.js';
 export default class Dialog extends Component {
   static propTypes = {
     portal: PropTypes.object,
+    args: PropTypes.any,
     show: PropTypes.bool,
 
     position: PropTypes.string,
@@ -15,7 +16,6 @@ export default class Dialog extends Component {
     onClickMask: PropTypes.func,
     onShowed: PropTypes.func,
     onHid: PropTypes.func,
-    // args: PropTypes.array,
 
     maskClassName: PropTypes.string,
     maskStyle: PropTypes.object,

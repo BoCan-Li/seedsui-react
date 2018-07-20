@@ -8,9 +8,6 @@
   padding: @10px @12px;
   color:@body-color;
   background-color: @list-bg;
-  &:not(.noclick):active{
-    background-color:@list-bg-active;
-  }
   .licon{
     margin-right: @4px;
   }
@@ -18,7 +15,14 @@
     margin-left: @4px;
   }
 }
-
+.list-hasclick{
+  .list-li:active {
+    background-color:@list-bg-active;
+  }
+}
+.list-li-hasclick:active{
+  background-color:@list-bg-active;
+}
 .list-avatar,.list-avatar-img, .list-thumbnail,.list-thumbnail-img{
   background-repeat: no-repeat;
   background-position: center;

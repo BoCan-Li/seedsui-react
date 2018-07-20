@@ -92,7 +92,7 @@
 	box-sizing:border-box;
 }
 // 图标区域
-.grid-content{
+.grid-iconbox{
 	.flex;
 	.flex-middlecenter;
 	position:relative;
@@ -100,6 +100,7 @@
 	margin:0px auto;
 	background-size:cover;
 	background-position:center;
+	.setGridIconBox();
 }
 // 文字区域
 .grid-caption, .grid-sndcaption{
@@ -107,12 +108,14 @@
   margin: @8px auto 0 auto;
 }
 .grid-caption{
-  color:@grid-caption-color;
+	color:@grid-caption-color;
+	.setGridCaption();
 }
 .grid-sndcaption{
-  color:@grid-sndcaption-color;
+	color:@grid-sndcaption-color;
+	.setGridSndCaption();
 }
-.grid-content>img{
+.grid-iconbox>img{
 	max-width:100%;
 	max-height: 100%;
 }
@@ -131,7 +134,7 @@
       right: 0;
       width: @1px;
       height: 100%;
-      -webkit-transform-origin:right center;
+      .transformOrigin-right-center();
 		}
 		//下横线
 		&:after{
@@ -141,27 +144,27 @@
 	    left: 0;
 	    height: @1px;
 	    width: 100%;
-	    -webkit-transform-origin:center bottom;
+	    .transformOrigin-center-bottom();
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
 		//下横线
 		li:after {
-			-webkit-transform: scaleY(0.5);
+			.transform-scaleY-05();
 		}
 		//右竖线
 		li:before {
-			-webkit-transform: scaleX(0.5);
+			.transform-scaleX-05();
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
 		//下横线
 		li:after {
-			-webkit-transform: scaleY(0.33);
+			.transform-scaleY-033();
 		}
 		//右竖线
 		li:before {
-			-webkit-transform: scaleX(0.33);
+			.transform-scaleX-033();
 		}
 	}
 }
@@ -209,14 +212,14 @@
 		padding: 6px;
 	}
 }
-.grid-album .grid-content{
+.grid-album .grid-iconbox{
   height: @grid-album-cell-height;
   width: 100%;
   border:1px solid #e5e5e5;
   background-color: white;
   background-size: cover;
 }
-.grid-album .grid-content-add{
+.grid-album .grid-iconbox-add{
 	border:1px dashed @border;
 }
 .grid-album .grid-icon{

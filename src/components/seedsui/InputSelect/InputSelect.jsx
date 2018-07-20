@@ -9,7 +9,7 @@ export default class InputPicker extends Component {
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     multiple: PropTypes.bool, // 是否允许多选
     // 容器
-    // args: PropTypes.array,
+    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     // 文本框

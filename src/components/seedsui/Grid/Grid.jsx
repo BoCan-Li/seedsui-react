@@ -6,7 +6,7 @@ import bridge from './../utils/bridge';
 
 export default class Grid extends Component {
   static propTypes = {
-    // args: PropTypes.array,
+    args: PropTypes.any,
     lazyLoad: PropTypes.bool, // 图标是否懒人加载
     style: PropTypes.object,
     className: PropTypes.string, // grid-album | grid-bordered
@@ -48,8 +48,8 @@ export default class Grid extends Component {
     iconStyle: {},
     iconSrc: '',
     preview: true | false, // 是否支持预览,默认true
-    thumb: '',
-    src: '',
+    thumb: '', // 缩略图
+    src: '', // 预览地址
     caption: '',
     onClick: function() {},
     iconBadgeCaption: '',
@@ -183,7 +183,7 @@ export default class Grid extends Component {
       {list.length > 0 && list.map((item, index) =>{
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
-          <a onClick={(e) => {this.onClickContent(e, item, index);}} className={`grid-content${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
+          <a onClick={(e) => {this.onClickContent(e, item, index);}} className={`grid-iconbox${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
             {(item.iconSrc || item.iconClassName) && <Icon badgeClassName={iconBadgeClassName} badgeCaption={item.iconBadgeCaption} onClick={(e) => {this.onClickIcon(e, item, index);}} lazyLoad={lazyLoad} className={`grid-icon${iconClassName ? ' ' + iconClassName : ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})} src={item.iconSrc ? item.iconSrc : ''}/>}
             {item.thumb && <img alt="" src={item.thumb} onClick={(e) => {this.onClickIcon(e, item, index);}}/>}
             {onClickDelete && <Close onClick={(e) => {this.onClickDelete(e, item, index);}} className={`grid-close${closeClassName ? ' ' + closeClassName : ''}`} iconClassName="close-icon-clear color-primary"/>}
@@ -193,7 +193,7 @@ export default class Grid extends Component {
         </li>);
       })}
       {showUpload === true && <li className={`grid-cell`} style={this.getLiStyle()}>
-        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-content grid-content-add${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
+        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
           <Icon className="grid-icon-add"/>
         </a>
       </li>}

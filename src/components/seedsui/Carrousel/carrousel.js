@@ -15,7 +15,9 @@ var Carrousel = function (container, params) {
   Model
   -------------------- */
   var defaults = {
-    pagination: null,
+    pagination: null, // 小点点
+    controlPrev: null, // 左箭头
+    controlNext: null, // 右箭头
     autoplay: 0, // 设置毫秒数，0为不自动播放
     slidesPerView: 1,
     threshold: '50',
@@ -34,7 +36,9 @@ var Carrousel = function (container, params) {
     slideClass: 'carrousel-slide',
     slideActiveClass: 'active',
     bulletClass: 'bullet',
-    bulletActiveClass: 'active'
+    bulletActiveClass: 'active',
+    controlPrevClass: 'carrousel-prev',
+    controlNextClass: 'carrousel-next'
 
     /*
     callbacks
@@ -79,12 +83,16 @@ var Carrousel = function (container, params) {
     for (var i = 0; i < s.slides.length; i++) {
       var bullet = document.createElement('span')
       bullet.setAttribute('class', s.params.bulletClass)
+      bullet.setAttribute('data-index', i)
       s.pagination.appendChild(bullet)
       s.bullets.push(bullet)
     }
   }
+  // Control左右切换
+  s.controlPrev = getElementByParent(s.container, s.params.controlPrev)
+  s.controlNext = getElementByParent(s.container, s.params.controlNext)
   // 索引
-  s.activeIndex = 0
+  s.activeIndexTruth = 0
   s.max = 0
   // Slides
   s.updateSlides = function () {
@@ -116,7 +124,7 @@ var Carrousel = function (container, params) {
       dup.classList.add(s.params.slideDuplicateClass)
       dup.classList.remove(s.params.slideClass)
     }
-    s.activeIndex = s.params.slidesPerView
+    s.activeIndexTruth = s.params.slidesPerView
     s.dupSlides = beforeDupSlides.concat(afterDupSlides)
   }
   s.destroyLoop = function () {
@@ -146,17 +154,17 @@ var Carrousel = function (container, params) {
   /* --------------------
   Update
   -------------------- */
-  s.truthActiveIndex = s.activeIndex // 去除duplicate，滑动页索引
+  s.activeIndex = s.activeIndexTruth // 去除duplicate，滑动页索引
   // 根据index更新选中class
   s.updateClasses = function () {
-    s.truthActiveIndex = s.activeIndex
+    s.activeIndex = s.activeIndexTruth
     if (s.params.loop) {
-      s.truthActiveIndex = s.activeIndex - s.params.slidesPerView
-      if (s.max - s.params.slidesPerView === s.activeIndex) { // 正向滑动
-        s.truthActiveIndex = 0
+      s.activeIndex = s.activeIndexTruth - s.params.slidesPerView
+      if (s.max - s.params.slidesPerView === s.activeIndexTruth) { // 正向滑动
+        s.activeIndex = 0
       }
-      if (s.truthActiveIndex < 0) { // 反向滑动
-        s.truthActiveIndex = s.slides.length + s.truthActiveIndex
+      if (s.activeIndex < 0) { // 反向滑动
+        s.activeIndex = s.slides.length + s.activeIndex
       }
     }
     var i
@@ -164,14 +172,14 @@ var Carrousel = function (container, params) {
     for (i = 0; i < s.slides.length; i++) {
       s.slides[i].classList.remove(s.params.slideActiveClass)
     }
-    s.slides[s.truthActiveIndex].classList.add(s.params.slideActiveClass)
+    s.slides[s.activeIndex].classList.add(s.params.slideActiveClass)
 
     //  Pagination
     if (!s.pagination) return
     for (i = 0; i < s.bullets.length; i++) {
       s.bullets[i].classList.remove(s.params.bulletActiveClass)
     }
-    s.bullets[s.truthActiveIndex].classList.add(s.params.bulletActiveClass)
+    s.bullets[s.activeIndex].classList.add(s.params.bulletActiveClass)
   }
 
   // 更新容器尺寸
@@ -265,13 +273,22 @@ var Carrousel = function (container, params) {
   Touch Events
   -------------------- */
   // 绑定事件
+  s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var touchTarget = s.container
     var action = detach ? 'removeEventListener' : 'addEventListener'
-    touchTarget[action]('touchstart', s.onTouchStart, false)
-    touchTarget[action]('touchmove', s.onTouchMove, false)
-    touchTarget[action]('touchend', s.onTouchEnd, false)
-    touchTarget[action]('touchcancel', s.onTouchEnd, false)
+    // touch兼容pc事件
+    if (s.isSupportTouch) {
+      touchTarget[action]('touchstart', s.onTouchStart, false)
+      touchTarget[action]('touchmove', s.onTouchMove, false)
+      touchTarget[action]('touchend', s.onTouchEnd, false)
+      touchTarget[action]('touchcancel', s.onTouchEnd, false)
+    } else {
+      // pc端禁用拖动功能,不然会与下拉刷新冲突
+      touchTarget[action]('mousedown', s.onTouchStart, false)
+      // touchTarget[action]('mousemove', s.onTouchMove, false)
+      touchTarget[action]('mouseup', s.onTouchEnd, false)
+    }
   }
   // attach、dettach事件
   s.attach = function (event) {
@@ -286,16 +303,19 @@ var Carrousel = function (container, params) {
   function preventDefault (e) {
     e.preventDefault()
   }
+  s.startMouseMove = false
   s.onTouchStart = function (e) {
-    s.container.addEventListener('touchmove', preventDefault, false)
-    s.touches.startX = e.touches[0].clientX
-    s.touches.startY = e.touches[0].clientY
+    s.startMouseMove = true
+    s.container.addEventListener(s.startMouseMove ? 'touchmove' : 'mousemove', preventDefault, false)
+    s.touches.startX = e.clientX || e.touches[0].clientX
+    s.touches.startY = e.clientY || e.touches[0].clientY
     // 关闭自动播放
     s.stopAutoplay()
   }
   s.onTouchMove = function (e) {
-    s.touches.currentX = e.touches[0].clientX
-    s.touches.currentY = e.touches[0].clientY
+    if (!s.startMouseMove) return
+    s.touches.currentX = e.clientX || e.touches[0].clientX
+    s.touches.currentY = e.clientY || e.touches[0].clientY
     s.touches.diffX = s.touches.startX - s.touches.currentX
     s.touches.diffY = s.touches.startY - s.touches.currentY
     // runCallBack
@@ -314,7 +334,7 @@ var Carrousel = function (container, params) {
 
     // 如果是上下滑动则不工作
     if (s.touches.vertical !== 0) {
-      s.container.removeEventListener('touchmove', preventDefault, false)
+      s.container.removeEventListener(s.startMouseMove ? 'touchmove' : 'mousemove', preventDefault, false)
       return
     }
 
@@ -330,30 +350,54 @@ var Carrousel = function (container, params) {
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
   }
   s.onTouchEnd = function (e) {
-    // s.container.removeEventListener('touchmove',preventDefault,false)
+    s.startMouseMove = false
+    // s.container.removeEventListener(s.startMouseMove ? 'touchmove' : 'mousemove',preventDefault,false)
     // 左右拉动
     if (s.touches.direction === 1) {
       if (s.touches.diffX > s.params.threshold) {
         // 下一页
-        s.activeIndex++
+        s.activeIndexTruth++
       } else if (s.touches.diffX < -s.params.threshold) {
         // 上一页
-        s.activeIndex--
+        s.activeIndexTruth--
       }
-      s.slideTo(s.activeIndex)
+      s.slideTo(s.activeIndexTruth)
     }
     // 清空滑动方向
     s.touches.direction = 0
     s.touches.vertical = 0
     s.touches.horizontal = 0
     // 单击事件
-    s.touches.endX = e.changedTouches[0].clientX
-    s.touches.endY = e.changedTouches[0].clientY
+    s.touches.endX = e.clientX || e.changedTouches[0].clientX
+    s.touches.endY = e.clientY || e.changedTouches[0].clientY
     if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
-      if (s.params.onClick) s.params.onClick(s)
+      // PC单击页码需要翻页
+      if (!s.isSupportTouch && e.target.classList.contains(s.params.bulletClass)) {
+        s.onClickBullet(e)
+      } else if (e.target.classList.contains(s.params.controlPrevClass)) {
+        s.onClickPrev(e)
+      } else if (e.target.classList.contains(s.params.controlNextClass)) {
+        s.onClickNext(e)
+      } else {
+        if (s.params.onClick) s.params.onClick(s)
+      }
     }
     // 开启自动播放
     s.startAutoplay()
+  }
+  s.onClickBullet = function (e) {
+    var index = Number(e.target.getAttribute('data-index')) || 0
+    // 如果是循环,需要计算真实的索引
+    if (s.params.loop) {
+      index += s.params.slidesPerView
+    }
+    s.slideTo(index)
+  }
+  s.onClickPrev = function (e) {
+    s.slideTo(s.activeIndexTruth - 1)
+  }
+  s.onClickNext = function (e) {
+    s.slideTo(s.activeIndexTruth + 1)
   }
   /* --------------------
   Autoplay
@@ -361,11 +405,11 @@ var Carrousel = function (container, params) {
   s.startAutoplay = function () {
     if (!s.params.autoplay) return
     s.autoplayer = window.setInterval(function () {
-      s.activeIndex++
-      if (s.activeIndex >= s.max) {
-        s.activeIndex = 0
+      s.activeIndexTruth++
+      if (s.activeIndexTruth >= s.max) {
+        s.activeIndexTruth = 0
       }
-      s.slideTo(s.activeIndex)
+      s.slideTo(s.activeIndexTruth)
     }, s.params.autoplay)
   }
 
@@ -380,25 +424,25 @@ var Carrousel = function (container, params) {
   -------------------- */
   function moveToIndex (speed) {
     s.wrapper.style.webkitTransitionDuration = speed + 'ms'
-    s.touches.posX = -s.activeIndex * s.width
+    s.touches.posX = -s.activeIndexTruth * s.width
     s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
   }
   s.slideTo = function (slideIndex, speed, runCallbacks) {
     var duration = isNaN(speed) ? s.params.duration : speed
     if (slideIndex >= 0) {
-      s.activeIndex = slideIndex
+      s.activeIndexTruth = slideIndex
     }
     // 索引不能小于0
-    if (s.activeIndex < 0) {
-      s.activeIndex = 0
+    if (s.activeIndexTruth < 0) {
+      s.activeIndexTruth = 0
     }
     // 索引不能大于slide总数
-    if (s.activeIndex > s.max - 1) {
-      s.activeIndex = s.max - 1
+    if (s.activeIndexTruth > s.max - 1) {
+      s.activeIndexTruth = s.max - 1
     }
     // 一页多屏，索引不能露出空白区域
-    if (s.params.slidesPerView > 1 && s.activeIndex > s.max - params.slidesPerView) {
-      s.activeIndex = s.max - s.params.slidesPerView
+    if (s.params.slidesPerView > 1 && s.activeIndexTruth > s.max - params.slidesPerView) {
+      s.activeIndexTruth = s.max - s.params.slidesPerView
     }
 
     // 更新class
@@ -409,19 +453,19 @@ var Carrousel = function (container, params) {
     setTimeout(function () {
       s.wrapper.style.webkitTransitionDuration = '0ms'
       // callback onSlideChangeEnd
-      s.target = s.slides[s.activeIndex]
+      s.target = s.slides[s.activeIndexTruth]
       if (s.params.onSlideChangeEnd && runCallbacks !== false) s.params.onSlideChangeEnd(s)
       // 循环的情况
       if (s.params.loop) {
         if (s.touches.posX === 0) {
-          s.activeIndex = s.max - s.params.slidesPerView * 2
-          // console.log('最左侧，应跳转到：'+s.activeIndex)
+          s.activeIndexTruth = s.max - s.params.slidesPerView * 2
+          // console.log('最左侧，应跳转到：'+s.activeIndexTruth)
           moveToIndex(0)
           return
         }
         if (-s.touches.posX + s.container.width >= s.wrapper.width) {
-          s.activeIndex = s.params.slidesPerView
-          // console.log('最右侧，应跳转到：'+s.activeIndex)
+          s.activeIndexTruth = s.params.slidesPerView
+          // console.log('最右侧，应跳转到：'+s.activeIndexTruth)
           moveToIndex(0)
           return
         }
@@ -435,7 +479,7 @@ var Carrousel = function (container, params) {
     s.attach()
     if (s.params.autoplay) s.startAutoplay()
     // runCallBack
-    s.target = s.slides[s.activeIndex]
+    s.target = s.slides[s.activeIndexTruth]
     if (s.params.onInit) s.params.onInit(s)
   }
   // 执行主函数

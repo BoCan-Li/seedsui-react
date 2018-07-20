@@ -4,6 +4,7 @@ import Button from './../Button';
 import Price from './../Price';
 import Mark from './../Mark';
 import Clipboard from './../utils/clipboard';
+import bridge from './../utils/bridge';
 
 export default class Attributes extends Component {
   static propTypes = {
@@ -112,7 +113,7 @@ export default class Attributes extends Component {
       if (typeof item.copy === 'string') {
         copyValue = item.copy;
       }
-      return <Button key={index} className="ricon small" style={{borderRadius: '3px'}} args={copyValue} onClick={this.onCopyToClipboard}>复制</Button>
+      return <Button key={index} className="ricon sm" style={{borderRadius: '3px'}} args={copyValue} onClick={this.onCopyToClipboard}>复制</Button>
     }
     // 电话
     if (item.tel) {
@@ -120,7 +121,7 @@ export default class Attributes extends Component {
       if (typeof item.tel === 'string') {
         telValue = item.tel;
       }
-      return <a key={index} className="ricon" href={`tel:${telValue}`}>
+      return <a key={index} className="ricon"  onClick={() => {bridge.tel(telValue)}}>
         <i className="icon bg-tel"/>
       </a>;
     }

@@ -197,15 +197,23 @@ var Dragrefresh = function (params) {
   /* ----------------------
   Events
   ---------------------- */
+  s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
     var touchTarget = s.container
     // 头部下拉
     if (s.topContainer) {
-      s.container[action]('touchstart', s.onTouchStart, false)
-      s.container[action]('touchmove', s.onTouchMove, false)
-      s.container[action]('touchend', s.onTouchEnd, false)
-      s.container[action]('touchcancel', s.onTouchEnd, false)
+      // touch兼容pc事件
+      if (s.isSupportTouch) {
+        s.container[action]('touchstart', s.onTouchStart, false)
+        s.container[action]('touchmove', s.onTouchMove, false)
+        s.container[action]('touchend', s.onTouchEnd, false)
+        s.container[action]('touchcancel', s.onTouchEnd, false)
+      } else {
+        s.container[action]('mousedown', s.onTouchStart, false)
+        s.container[action]('mousemove', s.onTouchMove, false)
+        s.container[action]('mouseup', s.onTouchEnd, false)
+      }
       // 头部动画监听
       s.topContainer[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     }
@@ -248,10 +256,12 @@ var Dragrefresh = function (params) {
   s.preventDefault = function (e) {
     e.preventDefault()
   }
+  s.startMouseMove = false
   // touchmove的preventDefault事件监听，防止与滚动条冲突
   s.preventMove = false
   s.onTouchStart = function (e) {
-    s.container.addEventListener('touchmove', s.preventDefault, false)
+    s.startMouseMove = true
+    // s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
     s.preventMove = true
     // 如果不在顶部，则不触发
     if (s.getScrollTop() <= s.params.isTopPosition) s.touches.isTop = true
@@ -259,14 +269,15 @@ var Dragrefresh = function (params) {
 
     s.topContainer.style.webkitTransitionDuration = '0ms'
 
-    s.touches.startX = e.touches[0].clientX
-    s.touches.startY = e.touches[0].clientY
+    s.touches.startX = e.clientX || e.touches[0].clientX
+    s.touches.startY = e.clientY || e.touches[0].clientY
   }
   // 标识头部正在拖动
   s.isOnPull = false
   s.onTouchMove = function (e) {
-    s.touches.currentX = e.touches[0].clientX
-    s.touches.currentY = e.touches[0].clientY
+    if (!s.startMouseMove) return
+    s.touches.currentX = e.clientX || e.touches[0].clientX
+    s.touches.currentY = e.clientY || e.touches[0].clientY
     s.touches.diffY = s.touches.currentY - s.touches.startY
     s.touches.diffX = s.touches.startX - s.touches.currentX
 
@@ -282,7 +293,7 @@ var Dragrefresh = function (params) {
     if (s.touches.isTop && s.touches.vertical === -1) {
       if (!s.isRefreshed) return
       if (s.preventMove === false) {
-        s.container.addEventListener('touchmove', s.preventDefault, false)
+        // s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = true
       }
       s.touches.currentPosY = s.touches.posY + s.touches.diffY
@@ -295,12 +306,13 @@ var Dragrefresh = function (params) {
       s.isOnPull = true
     } else {
       if (s.preventMove === true) {
-        s.container.removeEventListener('touchmove', s.preventDefault, false)
+        // s.container.removeEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = false
       }
     }
   }
   s.onTouchEnd = function (e) {
+    s.startMouseMove = false
     // 清除move时记录的方向
     s.touches.direction = 0
     s.touches.vertical = 0

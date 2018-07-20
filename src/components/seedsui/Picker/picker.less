@@ -7,14 +7,14 @@
   bottom:0;
   width:100%;
   z-index:10;
-  -webkit-transition-property:-webkit-transform,opacity,visibility;
-  -webkit-transition-duration:300ms;
-  -webkit-transform:translate3d(0px,100%,0px);
+  .transitionProperty-transform-opacity-visibility();
+  .transitionDuration-atanimatioin-duration();
+  .transform-translate3d-0-full-0();
 
   background-color: @picker-bg;
 }
 .picker.active{
-  -webkit-transform:translate3d(0px,0px,0px);
+  .transform-translate3d-0-0-0();
 }
 .picker-header:extend(.border-b all){
   position:relative;
@@ -65,7 +65,7 @@
 .picker-slot{
   padding-top:@86px;
   padding-bottom:@86px;
-  -webkit-transition-timing-function:cubic-bezier(0,0,0.2,1);
+  .transitionTimingFunction-cubicBezier-0-0-0dot2-1();
   li{
     height:@44px;
     line-height:@44px;
@@ -114,6 +114,6 @@
   height:@46px;
   width:100%;
   pointer-events:none;
-  -webkit-transform:translateY(-50%);
+  .transform-translateY-neghalf();
 }
 // picker.less(end)

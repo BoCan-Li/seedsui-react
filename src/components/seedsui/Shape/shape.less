@@ -3,7 +3,7 @@
 .shape-arrow-left, .shape-arrow-right, .shape-arrow-up, .shape-arrow-down{
   position: relative;
   border-color: @placeholder;
-  &.small{
+  &.sm{
     &:after, &:after{
       width: 8px;
       height: 8px;
@@ -21,19 +21,19 @@
   border-color: inherit;
   border-width: 1px 0 0 1px;
   left:50%;
-  -webkit-transform-origin: center;
+  .transformOrigin-center();
 }
 .shape-arrow-left:after{
-  -webkit-transform: translate(-30%, -50%) rotate(315deg);
+  .transform-translate-neg30percent-neg50percent-rotate-315deg();
 }
 .shape-arrow-right:after{
-  -webkit-transform: translate(-80%, -50%) rotate(134deg);
+  .transform-translate-neg80percent-neg50percent-rotate-134deg();
 }
 .shape-arrow-up:after{
-  -webkit-transform: translate(-50%, -14%) rotate(45deg);
+  .transform-translate-neg50percent-neg14percent-rotate-45deg();
 }
 .shape-arrow-down:after{
-  -webkit-transform: translate(-50%, -66%) rotate(227deg);
+  .transform-translate-neg50percent-neg66percent-rotate-227deg();
 }
 // titlebar上的button图标
 .titlebar-button{

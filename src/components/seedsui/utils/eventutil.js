@@ -2,14 +2,14 @@ import DB from './db'
 
 //  EventUtil 事件函数
 var EventUtil = (function () {
-  // 多次点击事件, multipleClick
+  // 多次点击事件, multipleclick
   var _listenMultipleClickEvent = function (element, type, handler, isDetach) {
     function attach () {
-      element.addEventListener('click', multipleClickHandler, false)
+      element.addEventListener('click', multipleclickHandler, false)
     }
     function detach () {
       console.log('移除click')
-      element.removeEventListener('click', multipleClickHandler, false);
+      element.removeEventListener('click', multipleclickHandler, false);
     }
     // 添加或移除事件
     if (isDetach) {
@@ -19,7 +19,7 @@ var EventUtil = (function () {
     }
     var allcount = 10 // 点击多少次触发
     var space = 5000 // 点击间隔秒数
-    function multipleClickHandler (e) {
+    function multipleclickHandler (e) {
       // 次数
       var counter = DB.getSession('onMultipleClick_counter') || 0
       if (counter === 0) {
@@ -195,20 +195,30 @@ var EventUtil = (function () {
   }
   return {
     addHandler: function (element, type, handler) {
-      // 多次点击事件
-      if (type === 'multipleClick') {
+      // 自定义事件 multipleclick
+      if (type === 'multipleclick') {
         _listenMultipleClickEvent(element, type, handler)
         return
       }
-      // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
-      if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
-        _listenTouchEvent(element, type, handler)
-        return
-      }
-      // 摇动事件
-      if (type === 'shake') {
-        _listenShakeEvent(element, type, handler)
-        return
+      // touch兼容PC事件
+      var isSupportTouch = 'ontouchstart' in window
+      if (!isSupportTouch) {
+        if (type === 'touchstart') type = 'mousedown'
+        if (type === 'touchmove') type = 'mousemove'
+        if (type === 'touchend') type = 'mouseup'
+        if (type === 'touchcancel') type = 'mouseup'
+        if (type === 'tap') type = 'click'
+      } else {
+        // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
+        if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
+          _listenTouchEvent(element, type, handler)
+          return
+        }
+        // 自定义事件 shake
+        if (type === 'shake') {
+          _listenShakeEvent(element, type, handler)
+          return
+        }
       }
       // 系统事件
       if (element.addEventListener) {
@@ -220,25 +230,30 @@ var EventUtil = (function () {
       }
     },
     removeHandler: function (element, type, handler) {
-      // 多次点击事件
-      if (type === 'multipleClick') {
+      // 自定义事件 multipleclick
+      if (type === 'multipleclick') {
         _listenMultipleClickEvent(element, type, handler, true)
         return
       }
-      // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
-      if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
-        _listenTouchEvent(element, type, handler, true)
-        return
-      }
-      // 自定义事件 shake
-      if (type === 'shake') {
-        _listenShakeEvent(element, type, handler, true)
-        return
-      }
-      // 自定义事件 shake
-      if (type === 'shake') {
-        _listenShakeEvent(element, type, handler, true)
-        return
+      // touch兼容PC事件
+      var isSupportTouch = 'ontouchstart' in window
+      if (!isSupportTouch) {
+        if (type === 'touchstart') type = 'mousedown'
+        if (type === 'touchmove') type = 'mousemove'
+        if (type === 'touchend') type = 'mouseup'
+        if (type === 'touchcancel') type = 'mouseup'
+        if (type === 'tap') type = 'click'
+      } else {
+        // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
+        if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
+          _listenTouchEvent(element, type, handler, true)
+          return
+        }
+        // 自定义事件 shake
+        if (type === 'shake') {
+          _listenShakeEvent(element, type, handler, true)
+          return
+        }
       }
       // 系统事件
       if (element.removeEventListener) {

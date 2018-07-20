@@ -16,7 +16,7 @@ export default class Carrousel extends Component {
     autoplay: PropTypes.number, // 是否自动播放
     slidesPerView: PropTypes.number, // 一屏显示几块,默认1块
     defaultSrc: PropTypes.string, // 默认图片
-    list: PropTypes.array, // [{img: 'xx', iconClassName: 'xx', caption: 'xx'}]
+    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
     enableOnChange: PropTypes.bool, // 启用改变事件回调
     speed: PropTypes.number, // 动画过渡的速度
     onClick: PropTypes.func,
@@ -52,7 +52,7 @@ export default class Carrousel extends Component {
     if (this.state.instance || (this.props.list.length === 0 && !this.props.children)) return;
     setTimeout(() => {
       const instance = new Instance(this.$el, {
-        height: this.props.style.height || null,
+        height: this.props.style && this.props.style.height ? this.props.style.height : null,
         pagination: '.carrousel-pagination',
         autoplay: this.props.autoplay,
         slidesPerView: this.props.slidesPerView,
@@ -66,8 +66,17 @@ export default class Carrousel extends Component {
     }, 300);
   }
   onClick = (e) => {
-    const index = e.truthActiveIndex;
+    const index = e.activeIndex;
     if (this.props.onClick) this.props.onClick(this.props.list[index], index);
+  }
+  getCarrouselClassName = () => {
+    const {className, list} = this.props;
+    if (className) {
+      if (className.hasClass('carrousel-container') || className.hasClass('carrousel-page')) {
+        return className;
+      }
+    }
+    return (list.length > 0 ? 'carrousel-container' : 'carrousel-page') + (className ? ' ' + className : '');
   }
   getSlideStyle = () => {
     return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, this.props.slideStyle);
@@ -89,13 +98,13 @@ export default class Carrousel extends Component {
   }
   render() {
     const {
-      className, style,
+      style,
       slideClassName,
       defaultSrc, list, pagination
     } = this.props;
     const children = React.Children.toArray(this.props.children);
     return (
-      <div ref={el => {this.$el = el}} className={`carrousel-container${className ? ' ' + className : ''}`} style={style}>
+      <div ref={el => {this.$el = el}} className={this.getCarrouselClassName()} style={style}>
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
@@ -114,7 +123,9 @@ export default class Carrousel extends Component {
           return <div className="carrousel-slide" key={index}>{item}</div>
         })}
       </div>
-      {pagination && <div className="carrousel-pagination"></div>}
+      {list.length > 1 && pagination && <div className="carrousel-pagination"></div>}
+      {list.length > 1 && <div className="carrousel-prev"></div>}
+      {list.length > 1 && <div className="carrousel-next"></div>}
       </div>
     );
   }

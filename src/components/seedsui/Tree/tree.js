@@ -362,12 +362,18 @@ var Tree = function (container, params) {
     Events
     ------------------ */
   // 绑定事件
+  s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
-    // 树结构
-    s.container[action]('touchstart', s.onTouchStart, false)
-    s.container[action]('touchend', s.onTouchEnd, false)
-    // 选中容器
+    // 点击树,touch兼容pc事件
+    if (s.isSupportTouch) {
+      s.container[action]('touchstart', s.onTouchStart, false)
+      s.container[action]('touchend', s.onTouchEnd, false)
+    } else {
+      s.container[action]('click', s.onClickTree, false)
+    }
+    
+    // 点击选中容器
     if (s.bar) {
       s.bar[action]('click', s.onClickBar, false)
     }
