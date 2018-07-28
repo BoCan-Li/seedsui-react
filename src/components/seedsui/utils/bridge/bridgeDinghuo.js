@@ -398,36 +398,16 @@ var Bridge = {
     max: 5,
     sourceType: ['album', 'camera'],
     sizeType: ['original', 'compressed']
-    onChooseSuccess: function (imgs, imgMap) {},
-    onChooseFail: function (imgs, imgMap) {},
-    onUploadsSuccess: function (imgs, imgMap) {},
-    onDeleteSuccess: function (imgs, imgMap) {}
+    onChooseSuccess: function (imgMap) {},
+    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
   })
   */
   Image: function (params) {
     var defaults = {
-      imgs: [],
       max: 5,
       safeUpload: false, // 安全上传,第次只能传一张
       sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed'],
-      watermark: {
-        // orderNo: 'xx', // 编号
-        // submitName: 'xx', // 提交人
-        // customerName: 'xx', // 客户
-        // cmLocation: '118.730515, 31.982473', // 位置算偏差
-        // isWaterMark: '1', // 是否启用水印
-      }
-      /*
-      Callbacks:
-      onChooseSuccess:function(imgs,imgMap,res) // 选择成功
-      onChooseFail:function(imgs,imgMap,res) // 选择失败
-      onChooseCancel:function() // 取消选择
-      onUploadSuccess:function(imgs,imgMap,res) // 单张上传成功
-      onUploadFail:function(imgs,imgMap,res) // 单张上传失败
-      onUploadsSuccess:function(imgs,imgMap) // 全部上传成功
-      onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
-      */
+      sizeType: ['original', 'compressed']
     }
     params = params || {}
     for (var def in defaults) {
@@ -437,24 +417,18 @@ var Bridge = {
     }
     var s = this
     s.params = params
-    s.imgs = []
     s.imgMap = {} // 格式{'localIdxxx':{serverId:'xxx',sourceType:'camera'}}
-    // 更新图片, 用于初始化时显示后台返回的图片
-    s.updateImgs = function (imgs) {
-      if (imgs && imgs.length > 0) {
-        s.imgs = imgs
-      } else if (s.params.imgs && s.params.imgs.length > 0) {
-        s.imgs = s.params.imgs
-      }
-      if (s.imgs.length > 0) s.imgs.forEach(function (item) {
-        s.imgMap[item] = {serverId: '', sourceType: 'web'}
-      })
-    }
-    s.updateImgs()
     // 选择照片
-    s.choose = function () {
+    // watermark: {
+      // orderNo: 'xx', // 编号
+      // submitName: 'xx', // 提交人
+      // customerName: 'xx', // 客户
+      // cmLocation: '118.730515, 31.982473', // 位置算偏差
+      // isWaterMark: '1', // 是否启用水印
+    // }
+    s.choose = function (currentCount, watermark) {
       var msg = ''
-      var count = s.params.max - s.imgs.length
+      var count = s.params.max - currentCount
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
@@ -472,52 +446,16 @@ var Bridge = {
         sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          for(var i=0, localId; localId = res.localIds[i++];){ // eslint-disable-line
-            if(s.imgMap[localId]){
-              msg = '照片已存在，请勿重复上传！'
-              if (s.params.onError) {
-                s.params.onError({code: 'chooseRepeat', msg: msg})
-              } else {
-                alert(msg)
-              }
-              continue
-            }
-            s.imgMap[localId]={
+          var imgMap = {}
+          for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
+            imgMap[localId] = {
               serverId: '',
               sourceType: JSON.stringify(s.params.sourceType) === JSON.stringify(['camera']) ? 'camera' : 'album'
             }
           }
-          s.imgs = Object.keys(s.imgMap)
-          if(s.params.onChooseSuccess) s.params.onChooseSuccess(s.imgs, s.imgMap, res)
+          if (s.params.onChooseSuccess) s.params.onChooseSuccess(imgMap, res)
         }
-      }, s.params.watermark))
-    }
-    s.deleteImg = function (key) {
-      delete s.imgMap[key]
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap, key)
-    }
-    s.deleteAfter = function (index) {
-      for (var i = index, img; s.imgs[i++];) {
-        delete s.imgMap[img]
-      }
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
-    s.destory = function () {
-      s.imgMap = {}
-      s.imgs = []
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
-    s.upload = function () {
-    }
-    // 图片预览
-    s.preview = function (index) {
-      Bridge.previewImage({
-        urls: s.imgs,
-        current: s.imgs[index] || s.imgs[0],
-        index: index || 0
-      })
+      }, watermark))
     }
   }
 }

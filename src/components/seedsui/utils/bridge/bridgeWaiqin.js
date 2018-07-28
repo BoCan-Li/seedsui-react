@@ -22,8 +22,8 @@ var Bridge = {
   * 打开新的窗口
   * params: {url:'', title: ''}默认为打开一个webview页面
   * */
-  openWindow: function (params) {
-    wq.wqload.wqOpenUrl(null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
+  openWindow: function (params, callback) {
+    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
   },
   // 关闭当前窗
   closeWindow: function () {
@@ -195,8 +195,6 @@ var Bridge = {
     if (argParams && argParams.cmLocation) {
       params.cmLocation = argParams.cmLocation;
     }
-    console.log('选择照片');
-    console.log(params);
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
@@ -328,8 +326,8 @@ var Bridge = {
     * 离线上传, 可不带企业id
     * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
     */
-  offlineUpload: function (dir, imgIds, tenantId) {
-    const uploadParams = {uploadDir: dir, localIds: imgIds, tenantId: tenantId || '' };
+  offlineUpload: function (params) {
+    const uploadParams = {uploadDir: params.dir, localIds: params.localIds, tenantId: params.tenantId || '' };
     this.uploadImage(uploadParams);
   },
   /* 封装图片控件,使用示例见ImgUploader组件
@@ -337,33 +335,16 @@ var Bridge = {
     max: 5,
     sourceType: ['album', 'camera'],
     sizeType: ['original', 'compressed']
-    onChooseSuccess: function (imgs, imgMap) {},
-    onChooseFail: function (imgs, imgMap) {},
-    onUploadsSuccess: function (imgs, imgMap) {},
-    onDeleteSuccess: function (imgs, imgMap) {}
+    onChooseSuccess: function (imgMap) {},
+    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
   })
   */
   Image: function (params) {
     var defaults = {
-      imgs: [],
       max: 5,
       safeUpload: false, // 安全上传,第次只能传一张
       sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed'],
-      watermark: {
-        // photoType: 'xx', // 水印名称
-        // customerName: 'xx', // 客户名
-      }
-      /*
-      Callbacks:
-      onChooseSuccess:function(imgs,imgMap,res) // 选择成功
-      onChooseFail:function(imgs,imgMap,res) // 选择失败
-      onChooseCancel:function() // 取消选择
-      onUploadSuccess:function(imgs,imgMap,res) // 单张上传成功
-      onUploadFail:function(imgs,imgMap,res) // 单张上传失败
-      onUploadsSuccess:function(imgs,imgMap) // 全部上传成功
-      onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
-      */
+      sizeType: ['original', 'compressed']
     }
     params = params || {}
     for (var def in defaults) {
@@ -373,25 +354,10 @@ var Bridge = {
     }
     var s = this
     s.params = params
-    s.imgs = []
-    s.imgMap = {} // 格式{'localIdxxx':{serverId:'', sourceType:'camera'}}
-    // 更新图片, 用于初始化时显示后台返回的图片
-    s.updateImgs = function (imgs) {
-      if (imgs && imgs.length > 0) {
-        s.imgs = imgs
-      } else if (s.params.imgs && s.params.imgs.length > 0) {
-        s.imgs = s.params.imgs
-      }
-      s.imgMap = {}
-      if (s.imgs.length > 0) s.imgs.forEach(function (item) {
-        s.imgMap[item] = {serverId: '', sourceType: 'web', src: item}
-      })
-    }
-    s.updateImgs()
     // 选择照片
-    s.choose = function () {
+    s.choose = function (currentCount, watermark) {
       var msg = ''
-      var count = s.params.max - s.imgs.length
+      var count = s.params.max - currentCount
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
@@ -409,40 +375,9 @@ var Bridge = {
         sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          for (var img in res) {
-            s.imgMap[img] = res[img]
-          }
-          s.imgs = Object.keys(s.imgMap)
-          if(s.params.onChooseSuccess) s.params.onChooseSuccess(s.imgs, s.imgMap, res)
+          if(s.params.onChooseSuccess) s.params.onChooseSuccess(res)
         }
-      }, s.params.watermark))
-    }
-    s.deleteImg = function (key) {
-      delete s.imgMap[key]
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap, key)
-    }
-    s.deleteAfter = function (index) {
-      for (var i = index, img; s.imgs[i++];) {
-        delete s.imgMap[img]
-      }
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
-    s.destory = function () {
-      s.imgMap = {}
-      s.imgs = []
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
-    s.upload = function () {
-    }
-    // 图片预览
-    s.preview = function (index) {
-      Bridge.previewImage({
-        urls: s.imgs,
-        current: s.imgs[index] || s.imgs[0],
-        index: index || 0
-      })
+      }, watermark || ''))
     }
   }
 }

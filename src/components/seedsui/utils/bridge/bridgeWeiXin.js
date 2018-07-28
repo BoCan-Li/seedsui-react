@@ -201,35 +201,21 @@ var Bridge = {
     max: 5,
     sourceType: ['album', 'camera'],
     sizeType: ['original', 'compressed']
-    onChooseSuccess: function (imgs, imgMap) {},
-    onChooseFail: function (imgs, imgMap) {},
-    onUploadsSuccess: function (imgs, imgMap) {},
-    onDeleteSuccess: function (imgs, imgMap) {}
+    onChooseSuccess: function (imgMap) {},
+    onChooseCancel:function() // 取消选择
+    onChooseFail: function (imgMap) {},
+    onUploadSuccess:function(imgs,imgMap,res) // 单张上传成功
+    onUploadFail:function(imgs,imgMap,res) // 单张上传失败
+    onUploadsSuccess:function(imgs,imgMap) // 全部上传成功
+    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
   })
   */
   Image: function (params) {
     var defaults = {
-      imgs: [],
       max: 5,
       safeUpload: true, // 安全上传,第次只能传一张
       sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed'],
-      watermark: {
-        time: null, // 时间水印信息,格式'yyyy-MM-dd hh:mm:ss'
-        location: null, // 位置水印,先定位再拍照,参数为[longitude, latitude]坐标时,则水印会带偏差;如果参数为[],水印则只有地名
-      }
-      /*
-      Callbacks:
-      onShowLoad:function() // 显示loading
-      onHideLoad:function() // 隐藏loading
-      onChooseSuccess:function(imgs,imgMap,res) // 选择成功
-      onChooseFail:function(imgs,imgMap,res) // 选择失败
-      onChooseCancel:function() // 取消选择
-      onUploadSuccess:function(imgs,imgMap,res) // 单张上传成功
-      onUploadFail:function(imgs,imgMap,res) // 单张上传失败
-      onUploadsSuccess:function(imgs,imgMap) // 全部上传成功
-      onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
-      */
+      sizeType: ['original', 'compressed']
     }
     params = params || {}
     for (var def in defaults) {
@@ -242,27 +228,8 @@ var Bridge = {
     // 防双击
     s.isClicked = false
     var msg = ''
-    s.imgs = []
-    s.imgMap = {} // 格式{'localIdxxx': {serverId: 'xxx', sourceType: 'camera'}}
-    // 更新图片, 用于初始化时显示后台返回的图片
-    s.updateImgs = function (imgs) {
-      if (imgs && imgs.length > 0) {
-        s.imgs = imgs
-      } else if (s.params.imgs && s.params.imgs.length > 0) {
-        s.imgs = s.params.imgs
-      }
-      if (s.imgs.length > 0) s.imgs.forEach(function (item) {
-        s.imgMap[item] = {serverId: '', sourceType: 'web'}
-      })
-    }
-    s.updateImgs()
     // 选择照片
-    s.choose = function (argWatermark) {
-      // 绘制time的水印信息,time时间
-      var watermark = argWatermark || {}
-      if (s.params.watermark.time) {
-        watermark.time = new Date().format(s.params.watermark.time)
-      }
+    s.choose = function (currentCount, watermark) {
       if (s.isClicked) {
         msg = '拍照相册正在启动,请不要重复点击'
         if (s.params.onError) {
@@ -273,7 +240,7 @@ var Bridge = {
         return
       }
       s.isClicked = true
-      var count = s.params.max - s.imgs.length
+      var count = s.params.max - currentCount
       if (count <= 0) {
         msg = '最多只能传' + s.params.max + '张照片'
         if (s.params.onError) {
@@ -291,72 +258,39 @@ var Bridge = {
         sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
           s.isClicked = false
+          var imgMap = {}
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
-            if(s.imgMap[localId]){
-              msg = '照片已存在，请勿重复上传！'
-              if (s.params.onError) {
-                s.params.onError({code: 'chooseRepeat', msg: msg})
-              } else {
-                alert(msg)
-              }
-              continue
-            }
-            s.imgMap[localId]={
+            imgMap[localId] = {
               serverId: '',
               sourceType: res.sourceType,
               watermark: watermark || ''
             }
           }
-          s.imgs = Object.keys(s.imgMap)
-          if (s.params.onHideLoad) s.params.onHideLoad()
-          if(s.params.onChooseSuccess) s.params.onChooseSuccess(s.imgs, s.imgMap, res)
-          s.upload()
+          if(s.params.onChooseSuccess) s.params.onChooseSuccess(imgMap, res)
+          s.upload(imgMap)
         },
         fail: function (res) {
           s.isClicked = false
-          if (s.params.onHideLoad) s.params.onHideLoad()
-          if(s.params.onChooseFail)s.params.onChooseFail(s.imgs, s.imgMap, res)
+          if(s.params.onChooseFail)s.params.onChooseFail(res)
         },
         cancel: function () {
           s.isClicked = false
-          if (s.params.onHideLoad) s.params.onHideLoad()
           if(s.params.onChooseCancel)s.params.onChooseCancel()
         },
         complete: function () {
           s.isClicked = false
-          if (s.params.onHideLoad) s.params.onHideLoad()
         }
       })
     }
-    // 根据图片本地路径删除图片
-    s.deleteImg = function (key) {
-      delete s.imgMap[key]
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap, key)
-    }
-    // 删除index后的照片
-    s.deleteAfter = function (index) {
-      for (var i = index, img; s.imgs[i++];) {
-        delete s.imgMap[img]
-      }
-      s.imgs = Object.keys(s.imgMap)
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
-    // 清空照片
-    s.destory = function () {
-      s.imgMap = {}
-      s.imgs = []
-      if (s.params.onDeleteSuccess) s.params.onDeleteSuccess(s.imgs, s.imgMap)
-    }
     // 上传照片
-    s.upload = function () {
-      let imgs = s.imgs
+    s.upload = function (imgMap) {
+      let imgs = Object.keys(imgMap)
       let loop = function (index) {
         if (index >= imgs.length) {
           return
         }
         let img = imgs[index]
-        if (s.imgMap[img].serverId) {
+        if (imgMap[img].serverId) {
           loop(++index)
           return
         }
@@ -365,9 +299,9 @@ var Bridge = {
           isShowProgressTips: 1, // 默认为1，显示进度提示
           success: function (res) {
             let serverId = res.serverId; // 返回图片的服务器端ID
-            s.imgMap[img].serverId = serverId
-            if (s.params.onUploadSuccess) s.params.onUploadSuccess(s.imgs, s.imgMap, res)
-            if (index >= imgs.length-1 && s.params.onUploadsSuccess) s.params.onUploadsSuccess(s.imgs, s.imgMap)
+            imgMap[img].serverId = serverId
+            if (s.params.onUploadSuccess) s.params.onUploadSuccess(imgMap, res)
+            if (index >= imgs.length-1 && s.params.onUploadsSuccess) s.params.onUploadsSuccess(imgMap)
             loop(++index)
           },
           fail: function (res) {
@@ -378,20 +312,12 @@ var Bridge = {
               alert(msg)
             }
             s.deleteImg(img)
-            if (s.params.onUploadFail) s.params.onUploadFail(s.imgs, s.imgMap, res)
+            if (s.params.onUploadFail) s.params.onUploadFail(imgMap, res)
             loop(++index)
           }
         })
       }
       loop(0)
-    }
-    // 图片预览
-    s.preview = function (index) {
-      Bridge.previewImage({
-        urls: s.imgs,
-        current: s.imgs[index] || s.imgs[0],
-        index: index || 0
-      })
     }
   }
 }
