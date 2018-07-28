@@ -118,7 +118,7 @@ var PubSub = (function () {
 //export default PubSub
 /* *******************订阅发布******************* */
 /*
-<a class="button block" id="ID-BtnLogin">登录</a>
+<a class="button lg" id="ID-BtnLogin">登录</a>
 // 按钮
 var btnLogin=document.getElementById('ID-BtnLogin');
 // 订阅

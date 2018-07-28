@@ -1,6 +1,5 @@
 //Aside 侧边栏
-(function(window,document,undefined){
-    window.Aside=function(container,params){
+var Aside=function(container,params){
         /*=========================
           Model
           ===========================*/
@@ -358,4 +357,4 @@
         }
         init();
     }
-})(window,document,undefined);
+    export default Aside

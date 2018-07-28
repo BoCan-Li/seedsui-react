@@ -283,7 +283,7 @@ var Bridge = {
     });
   },
   /**
-   * 获取客户信息
+   * 获取客户(单选)
    * params: {onSuccess: fn}
    */
   getContact: function (params) {
@@ -292,13 +292,31 @@ var Bridge = {
     }, { aclType: params.aclType || '0' });
   },
   /**
-   * 获取门店信息
+   * 选择人员(多选)
+   * params: {selectedIds: '',onSuccess: fn}
+   */
+  getContactMore: function (params) {
+    wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    },'{"selectedIds":"' + (params.selectedIds || '') + '","aclType":"0"}')
+  },
+  /**
+   * 获取门店信息(多选)
    * params: {selectedIds: '',onSuccess: fn}
    */
   getCustomerMore: function (params) {
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args);
+      if (params.onSuccess) params.onSuccess(args)
     }, '{"selectedIds":"' + (params.selectedIds || '') + '","hiddenAdd":true}');
+  },
+  /**
+   * 选择销售区域(单选)
+   * params: {selectedIds: '',onSuccess: fn}
+   */
+  getCustomerArea: function (params) {
+    wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
   },
   // 客户端添加返回绑定
   addBackPress: function () {

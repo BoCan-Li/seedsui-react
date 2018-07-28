@@ -28,7 +28,7 @@
 	height:@40px;
 	vertical-align: middle;
 }
-.tab-label{
+.tab-content{
 	display:inline-block;
 	font-size: @font-size-md;
 	overflow:hidden;
@@ -50,27 +50,6 @@
 		.flex-middlecenter;
 	}
 }
-// .tabbar[data-col="2"] .tab{
-// 	width:50%;
-// }
-// .tabbar[data-col="3"] .tab{
-// 	width:33%;
-// }
-// .tabbar[data-col="3"] .tab:nth-of-type(even){
-// 	width:34%;
-// }
-// .tabbar[data-col="4"] .tab{
-// 	width:25%;
-// }
-// .tabbar[data-col="5"] .tab{
-// 	width:20%;
-// }
-// .tabbar[data-col="6"] .tab{
-// 	width:17%;
-// }
-// .tabbar[data-col="6"] .tab:nth-of-type(even){
-// 	width:16%;
-// }
 
 //单线形tabbar-line
 .tabbar-line{
@@ -185,7 +164,7 @@
 .tabbar-lump{
 	color: @tabbar-lump-color;
 	background-color: @tabbar-lump-bg;
-	.tab .tab-label{
+	.tab .tab-content{
 		padding:0 @12px;
 		border-radius:@tabbar-lump-radius;
 		height:@28px;
@@ -194,7 +173,7 @@
 		color:@tabbar-lump-color;
 		border: @1px solid @tabbar-lump-border;
 	}
-	.tab.active .tab-label{
+	.tab.active .tab-content{
 		color:@tabbar-lump-color-active;
 		background-color:@tabbar-lump-bg-active;
 		border: @1px solid @tabbar-lump-border-active;
@@ -203,11 +182,11 @@
 .tabbar-lump.reverse{
 	color: @tabbar-lump-reverse-color;
 	background-color: @tabbar-lump-reverse-bg;
-	.tab .tab-label{
+	.tab .tab-content{
 		color:@tabbar-lump-reverse-color;
 		border-color:@tabbar-lump-reverse-border;
 	}
-	.tab.active .tab-label{
+	.tab.active .tab-content{
 		color:@tabbar-lump-reverse-border-active;
 		background-color:@tabbar-lump-reverse-bg-active;
 		border-color:@tabbar-lump-reverse-border-active;
@@ -215,7 +194,7 @@
 }
 .tabbar-lump.animated{
 	.tab{
-		.tab-label{
+		.tab-content{
 			.transitionProperty-backgroundColor-color();
 			.transitionDuration-atanimatioin-duration();
 		}
@@ -225,7 +204,7 @@
 .tabbar-dropdown{
 	color: @tabbar-dropdown-color;
 	background-color: @tabbar-dropdown-bg;
-	.tab-label{
+	.tab-content{
 		max-width: 80px;
 	}
 	.tab:not(:first-child):after{
@@ -291,13 +270,13 @@
 		color:@tabbar-footer-color-active;
 		background-color: @tabbar-footer-bg-active;
 	}
-	.tab-label{
+	.tab-content{
 		display:block;
 		font-size:@13px;
 		height:@13px;
 		line-height:@13px;
 	}
-	.tab-icon + .tab-label {
+	.tab-icon + .tab-content {
 		margin:@5px auto 0 auto;
 	}
 }

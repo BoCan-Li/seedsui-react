@@ -65,7 +65,7 @@ export default class List extends Component {
     if (args) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event')) {
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
         args[args.indexOf('$event')] = e;
       }
     } else {

@@ -6,11 +6,11 @@ export default class Tabbar extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string, // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
-    iconBadgesCaption: PropTypes.array,
+    iconBadgeStyle: PropTypes.object,
     iconBadgeClassName: PropTypes.string,
-    riconBadgesCaption: PropTypes.array,
+    riconBadgeStyle: PropTypes.object,
     riconBadgeClassName: PropTypes.string,
-    list: PropTypes.array, // [{iconClassName: string, riconClassName: string, caption: string, active: bool, id: string}]
+    list: PropTypes.array,
     tiled: PropTypes.bool, // 宽度等分, 默认宽度弹性伸缩
     disabled: PropTypes.bool,
     exceptOnClickActive: PropTypes.bool, // 排除点击选中的菜单
@@ -18,11 +18,34 @@ export default class Tabbar extends Component {
     activeIndex: PropTypes.number
   }
   static defaultProps = {
-    iconBadgesCaption: [],
-    riconBadgesCaption: [],
+    list: [],
+    // [
+    //   {
+    //     iconStyle: object,
+    //     iconClassName: string,
+    //     iconActiveStyle: object,
+    //     iconActiveClassName: string,
+
+    //     iconBadgeClassName: string,
+    //     iconBadgeStyle: object,
+    //     iconBadgeCaption: string,
+
+    //     riconStyle: object,
+    //     riconClassName: string,
+    //     riconActiveStyle: object,
+    //     riconActiveClassName: string,
+
+    //     riconBadgeClassName: string,
+    //     riconBadgeStyle: object,
+    //     riconBadgeCaption: string,
+
+    //     caption: string,
+    //     sndcaption: string,
+    //     active: bool,
+    //     id: string
+    //   }
+    // ]
     exceptOnClickActive: true,
-    style: {},
-    disabled: false,
     className: 'tabbar-line tabbar-line-width70 border-b',
     activeIndex: 0
   }
@@ -36,48 +59,86 @@ export default class Tabbar extends Component {
     const index = target.getAttribute('data-index');
     if (this.props.onClick) this.props.onClick(this.props.list[index], Number(index));
   }
-  getIconDOM = (item, index, badgeCaption, iconClassName, iconActiveClassName, iconStyle, iconActiveStyle) => {
-    const activeIndex = this.props.activeIndex;
-    let newIconClassName = 'tab-icon';
-    let newIconStyle = {};
-    // 选中状态,读取图标的active样式
-    if (item.active || activeIndex === index) {
-      if (iconActiveClassName) newIconClassName += ` ${iconActiveClassName}`;
-      else {if (iconClassName) newIconClassName += ` ${iconClassName}`;}
-      if (iconActiveStyle) newIconStyle = iconActiveStyle;
-      else {if (iconStyle) newIconStyle = iconStyle;}
-    // 非选中状态,读取图标的普通样式
+  getLIconDOM = (item, isActive) => {
+    // iconStyle | iconClassName
+    let iconStyle = {};
+    let iconClassName = '';
+    if (isActive && (item.iconActiveClassName || item.iconActiveStyle)) {
+      if (item.iconActiveClassName) iconClassName = `tab-icon ${item.iconActiveClassName}`;
+      if (item.iconActiveStyle) iconStyle = item.iconActiveStyle;
     } else {
-      if (iconClassName) newIconClassName += ` ${iconClassName}`;
-      if (iconStyle) newIconStyle = iconStyle;
+      if (item.iconClassName) iconClassName = `tab-icon ${item.iconClassName}`;
+      if (item.iconStyle) iconStyle = item.iconStyle;
     }
-    // badgeCaption
-    if (badgeCaption) return <Icon className={`tab-icon ${newIconClassName}`} style={newIconStyle} badgeCaption={badgeCaption} badgeClassName={this.props.iconBadgeClassName}/>
-    return <Icon className={`tab-icon ${newIconClassName}`} style={newIconStyle}/>
+    // iconBadgeStyle | iconBadgeClassName | iconBadgeCaption
+    let iconBadgeStyle = this.props.iconBadgeStyle;
+    if (item.iconBadgeStyle) {
+      iconBadgeStyle = item.iconBadgeStyle;
+    }
+    let iconBadgeClassName =  this.props.iconBadgeClassName;
+    if (item.iconBadgeClassName) {
+      iconBadgeClassName = item.iconBadgeClassName;
+    }
+    let iconBadgeCaption = '';
+    if (item.iconBadgeCaption) {
+      iconBadgeCaption = item.iconBadgeCaption;
+    }
+    // DOM
+    return <Icon className={iconClassName} style={iconStyle} badgeCaption={iconBadgeCaption} badgeClassName={iconBadgeClassName} badgeStyle={iconBadgeStyle}/>
+  }
+  getRIconDOM = (item, isActive) => {
+    // riconStyle | riconClassName
+    let riconStyle = {};
+    let riconClassName = '';
+    if (isActive && (item.iconActiveClassName || item.iconActiveStyle)) {
+      if (item.iconActiveClassName) riconClassName = `tab-icon ${item.iconActiveClassName}`;
+      if (item.iconActiveStyle) riconStyle = item.iconActiveStyle;
+    } else {
+      if (item.riconClassName) riconClassName = `tab-icon ${item.riconClassName}`;
+      if (item.riconStyle) riconStyle = item.riconStyle;
+    }
+    // riconBadgeStyle | riconBadgeClassName | riconBadgeCaption
+    let riconBadgeStyle = this.props.riconBadgeStyle;
+    if (item.riconBadgeStyle) {
+      riconBadgeStyle = item.riconBadgeStyle;
+    }
+    let riconBadgeClassName =  this.props.riconBadgeClassName;
+    if (item.riconBadgeClassName) {
+      riconBadgeClassName = item.riconBadgeClassName;
+    }
+    let riconBadgeCaption = '';
+    if (item.riconBadgeCaption) {
+      riconBadgeCaption = item.riconBadgeCaption;
+    }
+    // DOM
+    return <Icon className={riconClassName} style={riconStyle} badgeCaption={riconBadgeCaption} badgeClassName={riconBadgeClassName} badgeStyle={riconBadgeStyle}/>
   }
   getTabsDOM = () => {
-    const {list, className, style, activeIndex, iconBadgesCaption, riconBadgesCaption} = this.props;
-    var tabHeight = style.height || null;
+    const {list, style, activeIndex} = this.props;
+    // tabStyle高度
     var tabStyle = {};
-    // 非footer类型的高度设置
-    if (tabHeight && !className.hasClass('tabbar-footer')) {
+    if (style && style.height) {
       tabStyle = {
-        height: tabHeight
+        height: style.height
       }
     }
     // 遍历
     return list.map((item, index) => {
+      let isActive = (item.active || activeIndex === index);
       let liconDOM = null;
       if (item.iconClassName) {
-        liconDOM = this.getIconDOM(item, index, iconBadgesCaption[index], item.iconClassName, item.iconActiveClassName, item.iconStyle, item.iconActiveStyle);
+        liconDOM = this.getLIconDOM(item, isActive);
       }
       let riconDOM = null;
       if (item.riconClassName) {
-        riconDOM = this.getIconDOM(item, index, riconBadgesCaption[index], item.riconClassName, item.riconActiveClassName, item.riconStyle, item.riconActiveStyle);
+        riconDOM = this.getRIconDOM(item, isActive);
       }
-      return (<li id={item.id} data-index={index} className={`tab${(item.active || activeIndex === index) ? ' active' : ''}`} style={Object.assign(tabStyle, item.style || {})} key={index}>
+      return (<li id={item.id} data-index={index} className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, item.style || {})} key={index}>
         {liconDOM && liconDOM}
-        <label className="tab-label">{item.caption}</label>
+        <div className="tab-content">
+          <div className="tab-caption">{item.caption}</div>
+          {item.sndcaption && <div className="tab-sndcaption">{item.sndcaption}</div>}
+        </div>
         {riconDOM && riconDOM}
       </li>);
     });
@@ -103,11 +164,6 @@ export default class Tabbar extends Component {
     }
     return Object.assign({}, tabbarStyle, style);
   }
-  getCol = () => {
-    const {list, tiled} = this.props;
-    if (tiled) return list.length;
-    return null;
-  }
   getTabbarClassName = () => {
     const {className, tiled} = this.props;
     return 'tabbar animated' + (className ? ' ' + className : ' tabbar-line-width60') + (tiled ? ' tabbar-tiled' : '');
@@ -120,10 +176,8 @@ export default class Tabbar extends Component {
     const tabsDOM = this.getTabsDOM();
     // 获取tabbar的ClassName
     const tabbarClassName = this.getTabbarClassName();
-    // 是否固定宽度
-    const col = this.getCol();
     return (
-      <ul ref={(el) => {this.$el = el}} className={tabbarClassName} data-col={col} disabled={disabled} style={tabbarStyle} onClick={this.onClick}>
+      <ul ref={(el) => {this.$el = el}} className={tabbarClassName} disabled={disabled} style={tabbarStyle} onClick={this.onClick}>
         {tabsDOM}
       </ul>
     );

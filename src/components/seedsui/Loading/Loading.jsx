@@ -14,7 +14,6 @@ export default class Loading extends Component {
     loadingStyle: PropTypes.object
   }
   static defaultProps = {
-    portal: document.body,
     caption: '正在加载...',
     type: 'floating',
     style: {}

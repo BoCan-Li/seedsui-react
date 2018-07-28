@@ -261,7 +261,7 @@ var Dragrefresh = function (params) {
   s.preventMove = false
   s.onTouchStart = function (e) {
     s.startMouseMove = true
-    // s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+    s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
     s.preventMove = true
     // 如果不在顶部，则不触发
     if (s.getScrollTop() <= s.params.isTopPosition) s.touches.isTop = true
@@ -293,7 +293,7 @@ var Dragrefresh = function (params) {
     if (s.touches.isTop && s.touches.vertical === -1) {
       if (!s.isRefreshed) return
       if (s.preventMove === false) {
-        // s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+        s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = true
       }
       s.touches.currentPosY = s.touches.posY + s.touches.diffY
@@ -306,7 +306,7 @@ var Dragrefresh = function (params) {
       s.isOnPull = true
     } else {
       if (s.preventMove === true) {
-        // s.container.removeEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+        s.container.removeEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = false
       }
     }

@@ -22,16 +22,15 @@
     padding: 0 6px;
     height: 26px;
     font-size: 12px;
-  }
-
+	}
+	// 大按钮
+	&.lg{
+		.flex;
+	}
 	&:active,&.active{
     color:@button-checked-color;
     background-color:@button-checked-bg;
     border-color: @button-checked-border;
-	}
-
-	&.block{
-		.flex;
 	}
 	// 主色按钮
 	&.primary{
@@ -71,6 +70,16 @@
 		&:active,&.active{
 			background-color:@info-bg-active;
 			border-color:@info-bg-active;
+		}
+	}
+	// 链接按钮
+	&.link{
+		color: white;
+		background-color:@link-bg;
+		border-color: @link-bg;
+		&:active,&.active{
+			background-color:@link-bg-active;
+			border-color:@link-bg-active;
 		}
 	}
 	// 警告按钮
@@ -170,6 +179,16 @@
 		&:active,&.active{
 			color:@info-bg-active;
 			border-color:@info-bg-active;
+		}
+	}
+	// 线框-链接按钮
+	&.link{
+		color:@link-bg;
+		background-color:transparent;
+		border-color:@link-bg;
+		&:active,&.active{
+			color:@link-bg-active;
+			border-color:@link-bg-active;
 		}
 	}
 	// 线框-警告按钮

@@ -5,6 +5,7 @@ import jsonp from 'jsonp';
 // 系统参数
 import client from './../axiosApi';
 import Toast from './../../Toast/toast.js';
+import Alert from './../../Alert/alert.js';
 import Loading from './../../Loading/loading.js';
 
 var Bridge = {
@@ -335,6 +336,46 @@ var Bridge = {
       this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
     }
     this.loading.show()
+  },
+  // 弹出Alert
+  alert: null,
+  showAlert: function (msg, params = {}) {
+    if (!this.alert) {
+      this.alert = new Alert({
+        caption: params.caption || '提示',
+        html: msg,
+        onClickSubmit: function (e) {
+					if (params.onSuccess) params.onSuccess(e)
+        }
+      });
+    } else {
+      if (params.caption) this.alert.setCaption(params.caption)
+      this.alert.setHTML(msg)
+    }
+    this.alert.show()
+  },
+  // 弹出Confirm
+  confirm: null,
+  showConfirm: function (msg, params = {}) {
+    if (!this.confirm) {
+      this.confirm = new Alert({
+        caption: params.caption || '',
+        html: msg,
+        onClickSubmit: function (e) {
+					if (params.onSuccess) params.onSuccess(e)
+        },
+        onClickCancel: function(e) {
+          if (params.onError) params.onError(e)
+          else e.hide()
+				},
+      })
+    } else {
+      if (params.caption) this.confirm.setCaption(params.caption)
+      if (params.onSuccess) this.confirm.setOnClickSubmit(params.onSuccess)
+      if (params.onError) this.confirm.setOnClickCancel(params.onError)
+      this.confirm.setHTML(msg)
+    }
+    this.confirm.show()
   }
 }
 export default Bridge

@@ -52,7 +52,7 @@ export default class NumBoxPop extends Component {
     if (args) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event')) {
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
         args[args.indexOf('$event')] = e;
       }
     } else {
@@ -72,7 +72,10 @@ export default class NumBoxPop extends Component {
   }
   focusValue = () => {
     this.$numbox.$input.focus();
-    this.$numbox.$input.select();
+    setTimeout(() => {
+      this.$numbox.onFocus();
+      this.$numbox.$input.select();
+    }, 100);
   }
   onClickCancel = () => {
     this.$numbox.$input.value = this.props.value;

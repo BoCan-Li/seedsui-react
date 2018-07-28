@@ -22,7 +22,7 @@ var Alert = function (params) {
     buttonSubmitClass: 'alert-submit',
     buttonCancelClass: 'alert-cancel',
 
-    title: '',
+    caption: '',
     html: '',
     buttonSubmitHTML: '确定',
     buttonCancelHTML: '取消',
@@ -88,10 +88,10 @@ var Alert = function (params) {
 
     s.buttonBox.appendChild(s.buttonSubmit)
 
-    if (s.params.title && s.params.title !== '') {
-      s.alert.caption = document.createElement('h1')
-      s.alert.caption.innerHTML = s.params.title
-      s.alert.appendChild(s.alert.caption)
+    if (s.params.caption && s.params.caption !== '') {
+      s.caption = document.createElement('h1')
+      s.caption.innerHTML = s.params.caption
+      s.alert.appendChild(s.caption)
     }
 
     s.alert.appendChild(s.html)
@@ -164,6 +164,9 @@ var Alert = function (params) {
   s.setHTML = function (html) {
     s.html.innerHTML = html
   }
+  s.setCaption = function (caption) {
+    s.caption.innerHTML = caption
+  }
   s.setOnClick = function (fn) {
     s.params.onClick = fn
   }
@@ -201,7 +204,7 @@ var Alert = function (params) {
     if (args) {
       if (typeof args === 'string' && args === '$event') {
         args = e
-      } else if (Array.isArray(args) && args.indexOf('$event')) {
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
         args[args.indexOf('$event')] = e
       }
     } else {

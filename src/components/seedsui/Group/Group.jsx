@@ -12,11 +12,26 @@ export default class Group extends Component {
     super(props);
     this.state = {}
   }
-
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
+  onClick = (e) => {
+    if (this.props.onClick) this.props.onClick(this.getArgs(e));
+  }
   render() {
-    const {children, style, className, onClick} = this.props;
+    const {children, style, className} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={'group' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} className={'group' + (className ? ' ' + className : '')} style={style} onClick={this.onClick}>
         {children}
       </div>
     );

@@ -1,3 +1,3 @@
-import Container from './Container';
+import Aside from './Aside';
 
-export default Container;
+export default Aside;

@@ -30,7 +30,7 @@ export default class ImgUploader extends Component {
     preview: PropTypes.bool,
     readOnly: PropTypes.bool,
 
-    showCount: PropTypes.bool,
+    showCount: PropTypes.bool, // 标题显示图片张字
     watermark: PropTypes.object, // 增加水印,参数:{time:'yyyy-MM-dd hh:mm:ss'}
    
     onShowLoad: PropTypes.func, // 显示遮罩

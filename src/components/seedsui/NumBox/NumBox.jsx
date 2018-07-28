@@ -47,12 +47,12 @@ export default class NumBox extends Component {
   componentDidMount () {
     this.updateDisabled();
   }
-  shouldComponentUpdate (nextProps) {
-    if(nextProps.value === this.props.value){
-      return false
-    }
-    return true;
-  }
+  // shouldComponentUpdate (nextProps) {
+  //   if(nextProps.value === this.props.value){
+  //     return false
+  //   }
+  //   return true;
+  // }
   componentDidUpdate = () => {
     // 如果prop的value和文本框里的值不一致
     if (this.$input) {
@@ -83,7 +83,7 @@ export default class NumBox extends Component {
     if (args) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event')) {
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
         args[args.indexOf('$event')] = e;
       }
     } else {
@@ -93,7 +93,7 @@ export default class NumBox extends Component {
   }
   // Methods
   onFocus = (e) => {
-    var target = e.target;
+    var target = this.$input || e.target;
     var value = target.value;
     if (!value || value === '0') {
       // 赋值
@@ -117,8 +117,8 @@ export default class NumBox extends Component {
     if (!value) value = this.correctNum(value);
     target.value = value;
     // Callback
-    if (this.props.onChange) {
-      this.props.onChange(value, this.getArgs(e));
+    if (this.props.value !== value) {
+      if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
     }
     // 更新disabled
     this.updateDisabled();
