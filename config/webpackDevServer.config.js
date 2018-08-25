@@ -9,6 +9,9 @@ const paths = require('./paths');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
+// 自动登录设置
+const autologinSetting = require(paths.appPackageJson).autoLogin;
+
 module.exports = function(proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
@@ -96,45 +99,14 @@ module.exports = function(proxy, allowedHost) {
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
       /**
-       * 使用服务器代理解决访问接口跨域问题
-       */
-      // 设置接口服务器
-      const targetUrl = 'http://172.31.3.82:8080';
-      const httpProxy = require('http-proxy');
-      const proxy = httpProxy.createProxyServer({
-        target: targetUrl,
-        // 20秒超时
-        proxyTimeout: 20 * 1000,
-        ws: false
-      });
-      // '/api'代理过滤器,将请求地址http:localhost:8080/api变为http://172.31.3.333:8888/,使用代理去发请求,并返回结果响应信息
-      app.use('/api', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/'});
-      });
-      // '/test'代理过滤器
-      app.use('/test', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/'});
-      });
-      // '/login'代理过滤器
-      app.use('/login', (req, res) => {
-        proxy.web(req, res, {target: targetUrl + '/login'});
-      });
-      /**
        * 使用axios模拟登录过程,在当前域名下注入cookie
        */
       var axios = require('axios')
       var querystring = require('querystring')
-      app.get('/auto/login', (req, resp) => {
+      app.get(autologinSetting.filter, (req, resp) => {
         const request = axios.post(
-          'http://172.31.3.82:8080/portal/logon.action',
-          querystring.stringify({
-            'identifiers.src': 'waiqin365',
-            'identifiers.password': 'a11111',
-            'refer': 'https%3A%2F%2Fcloud.waiqin365.com',
-            'identifiers.type': '1',
-            'identifiers.tenantname': 'test1',
-            'identifiers.code': 'xiaoli'
-          })
+          autologinSetting.url,
+          querystring.stringify(autologinSetting.data)
         )
         request.then((result) => {
           resp.append('Set-Cookie', result.headers['set-cookie'])
