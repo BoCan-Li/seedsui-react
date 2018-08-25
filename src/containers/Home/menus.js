@@ -7,14 +7,14 @@ export default [
     "iconSrc": more,
     "caption": "盒子模型",
     "sndcaption": "Box",
-    "url": "/_react_/box"
+    "url": "/box"
   },
   {
     "iconBadgeCaption": "",
     "iconSrc": grid,
     "caption": "间距",
     "sndcaption": "Layout",
-    "url": "/_react_/layout"
+    "url": "/layout"
   },
   {
     "iconBadgeCaption": "",
@@ -63,7 +63,7 @@ export default [
     "iconSrc": grid,
     "caption": "表单",
     "sndcaption": "Form",
-    "url": "/_react_/form"
+    "url": "/form"
   },
   {
     "iconBadgeCaption": "",
@@ -105,7 +105,7 @@ export default [
     "iconSrc": grid,
     "caption": "轮播页",
     "sndcaption": "Carrousel",
-    "url": "/_react_/carrouselPage"
+    "url": "/carrouselPage"
   },
   {
     "iconBadgeCaption": "",
@@ -203,7 +203,7 @@ export default [
     "iconSrc": grid,
     "caption": "日历",
     "sndcaption": "Calendar",
-    "url": "/_react_/calendarDemo"
+    "url": "/calendarDemo"
   },
   {
     "iconBadgeCaption": "",
@@ -217,7 +217,7 @@ export default [
     "iconSrc": grid,
     "caption": "手写签名",
     "sndcaption": "HandSign",
-    "url": "/_react_/handsignDemo"
+    "url": "/handsignDemo"
   },
   {
     "iconBadgeCaption": "",

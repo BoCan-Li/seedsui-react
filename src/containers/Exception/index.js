@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router';
-import Notice from 'components/seedsui/Notice/Notice.jsx';
+import Notice from 'components/seedsui/Notice';
 
 @withRouter
 export default class Exception extends Component {
