@@ -4,17 +4,21 @@ import Instance from './handsign.js';
 
 export default class Handsign extends Component {
   static propTypes = {
-    width: PropTypes.string, // 宽度
-    height: PropTypes.string, // 高度
+    strokeStyle: PropTypes.string,
+    lineWidth: PropTypes.number,
+    quality: PropTypes.number,
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
+    width: PropTypes.number, // 宽度
+    height: PropTypes.number, // 高度
     style: PropTypes.object,
-    className: PropTypes.string,
-    img: PropTypes.object,
-    text: PropTypes.object
+    className: PropTypes.string
   }
   static defaultProps = {
-    width: '300',
-    height: '300'
+    strokeStyle: '#000',
+    lineWidth: 3,
+    quality: 0.92,
+    width: 300,
+    height: 300
   }
   constructor(props) {
     super(props);
@@ -23,16 +27,20 @@ export default class Handsign extends Component {
     };
   }
   componentDidMount () {
-    if (this.state.instance) return
-    var instance = new Instance(this.$el);
+    if (this.state.instance) return;
+    var instance = new Instance(this.$el, {
+      strokeStyle: this.props.strokeStyle,
+      lineWidth: this.props.lineWidth,
+      quality: this.props.quality
+    });
     this.setState({
       instance
     });
   }
   render() {
-    const {style, className, ...others} = this.props;
+    const {width, height, style, className} = this.props;
     return (
-      <canvas ref={el => {this.$el = el;}} className={className} style={style} {...others}>Canvas画板</canvas>
+      <canvas ref={el => {this.$el = el;}} className={className} style={style} width={width} height={height}>Canvas画板</canvas>
     );
   }
 }

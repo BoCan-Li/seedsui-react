@@ -23,7 +23,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>微信开发专用</title>
+    <title>在线订货</title>
   </head>
   <body>
     <noscript>
@@ -99,7 +99,7 @@
         }
       }
       // 本地测试时使用
-      // errMsg = '';
+      errMsg = '';
       var url = "${url}";
       // 如果不支持当前浏览器,则跳转不支持页面
       if (!isSupport) {

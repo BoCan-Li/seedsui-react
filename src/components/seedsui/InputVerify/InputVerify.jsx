@@ -7,6 +7,7 @@ export default class InputValicode extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     // 容器
+    autofocus: PropTypes.bool, // 自动获取焦点
     args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
@@ -46,9 +47,14 @@ export default class InputValicode extends Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount () {
+    if (this.props.autofocus) {
+      this.$input.focus();
+    }
+  }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
@@ -83,6 +89,7 @@ export default class InputValicode extends Component {
     if (this.props.onChange) this.props.onChange('', this.getArgs(e));
   }
   onClickSent = () => {
+    this.$input.focus();
     if (this.props.onClickSent) this.props.onClickSent();
   }
   correct = (value) => {

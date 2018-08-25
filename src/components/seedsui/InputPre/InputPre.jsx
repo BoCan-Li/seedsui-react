@@ -42,7 +42,7 @@ export default class InputPre extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {

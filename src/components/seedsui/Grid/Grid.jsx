@@ -112,7 +112,7 @@ export default class Grid extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
@@ -147,6 +147,7 @@ export default class Grid extends Component {
         current: imgs[index] || imgs[0],
         index: index || 0
       })
+      e.stopPropagation();
     }
     if (this.props.onClickCell) {
       this.props.onClickCell(item, index, this.getArgs(e));
@@ -186,7 +187,7 @@ export default class Grid extends Component {
           <a onClick={(e) => {this.onClickContent(e, item, index);}} className={`grid-iconbox${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
             {(item.iconSrc || item.iconClassName) && <Icon badgeClassName={iconBadgeClassName} badgeCaption={item.iconBadgeCaption} onClick={(e) => {this.onClickIcon(e, item, index);}} lazyLoad={lazyLoad} className={`grid-icon${iconClassName ? ' ' + iconClassName : ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})} src={item.iconSrc ? item.iconSrc : ''}/>}
             {item.thumb && <img alt="" src={item.thumb} onClick={(e) => {this.onClickIcon(e, item, index);}}/>}
-            {onClickDelete && <Close onClick={(e) => {this.onClickDelete(e, item, index);}} className={`grid-close${closeClassName ? ' ' + closeClassName : ''}`} iconClassName="close-icon-clear color-primary"/>}
+            {onClickDelete && <Close onClick={(e) => {this.onClickDelete(e, item, index);}} className={`grid-close${closeClassName ? ' ' + closeClassName : ''}`} iconClassName="close-icon-clear color-cancel"/>}
           </a>
           {item.caption && <label className={`grid-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</label>}
           {item.sndcaption && <label className={`grid-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{item.sndcaption}</label>}

@@ -8,7 +8,7 @@
 	border-style:solid;
 	border-width:0;
 
-  width: @270px;
+  width: @alert-width;
 	border-radius:@6px;
 	margin: 0 auto;
 
@@ -19,7 +19,7 @@
 	
 	h1{
 		text-align: center;
-		padding:@15px @12px @5px @12px;
+		padding: @alert-caption-padding;
 		font-weight: 500;
 		font-size: @alert-title-size;
 		text-align: center;
@@ -83,7 +83,7 @@
 //内容区域
 .alert-content{
 	display: block;
-	padding: @10px @12px @15px @12px;
+	padding: @alert-content-padding;
   line-height: 1.2em;
 	word-wrap: break-word;
 }
@@ -105,7 +105,7 @@
 		width:50%;
 		border-width:0;
 		display:inline-block;
-		padding:@12px;
+		padding:@alert-handler-button-padding;
 		font-size:@alert-handler-size;
     box-sizing:border-box;
     color: @alert-button-color;
@@ -169,6 +169,29 @@
 	//竖线
 	.alert-handler a:nth-of-type(2):before {
 		.transform-scaleX-033();
+	}
+}
+.alert-submit{
+	// 主色按钮
+	&.primary{
+		color: white;
+		background-color:@primary-bg;
+		&:active,&.active{
+			background-color:@primary-bg-active;
+			border-color:@primary-bg-active;
+		}
+	}
+	// 禁用按钮
+	&[disabled]{
+    pointer-events: none;
+  }
+	&.disabled,&[disabled]{
+		color:@button-disabled-color;
+		background-color:@button-disabled-bg;
+		&:active,&.active{
+			color:@button-disabled-color;
+      background-color:@button-disabled-bg;
+		}
 	}
 }
 // alert.less(end)

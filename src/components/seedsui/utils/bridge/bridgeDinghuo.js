@@ -246,10 +246,24 @@ var Bridge = {
   },
   /*
   * 上传图片
-  * params：{uploadDir:'',localIds:['1', '2']}
+  * params：{dir:'',localIds:['localId', 'localId'], tenantId: ''}
   */
-  uploadImage: function (params) {
-    this.invoke('uploadImage', params);
+  uploadImage: function (params = {}) {
+    if (!params.dir) {
+      BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
+      return;
+    }
+    if (!params.localIds || Object.isEmptyObject(params.localIds)) {
+      BridgeBrowser.showToast('请传入上传图片列表后再上传图片')
+      return;
+    }
+    // 格式化params
+    var uploadParams = {
+      localIds: params.localIds,
+      uploadDir: params.dir
+    }
+    if (uploadParams.tenantId) params.tenantId = params.tenantId
+    this.invoke('uploadImage', uploadParams);
   },
   /**
    * 获取带前缀的图片
@@ -337,19 +351,33 @@ var Bridge = {
   },
   /* 返回按键处理 */
   back: function () {
-    var isFromApp = Device.getUrlParameter('isFromApp') || '';
+    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
     if (isFromApp === '1') {
       try {
         Bridge.closeWindow();
       } catch (error) {
         console.log(error);
       }
-    } else if (isFromApp === '2') {
+    } else if (isFromApp === 'home') {
       try {
         Bridge.goHome();
       } catch (error) {
         console.log(error);
       }
+    } else if (isFromApp === 'confirm') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide();
+          window.history.go(-1);
+        }
+      });
+    } else if (isFromApp === 'confirm-close') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide();
+          Bridge.closeWindow();
+        }
+      });
     } else {
       window.history.go(-1);
     }
@@ -384,78 +412,54 @@ var Bridge = {
       console.log(error);
     }
   },
-  /*
-    * 离线上传, 可不带企业id
-    * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
-    */
-  // 
-  offlineUpload: function (dir, imgIds, tenantId) {
-    const uploadParams = {uploadDir: dir, localIds: imgIds, tenantId: tenantId || '' };
-    this.uploadImage(uploadParams);
-  },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
-    max: 5,
-    sourceType: ['album', 'camera'],
-    sizeType: ['original', 'compressed']
     onChooseSuccess: function (imgMap) {},
-    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
   })
   */
   Image: function (params) {
-    var defaults = {
-      max: 5,
-      safeUpload: false, // 安全上传,第次只能传一张
-      sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed']
-    }
-    params = params || {}
-    for (var def in defaults) {
-      if (!params[def]) {
-        params[def] = defaults[def]
-      }
-    }
     var s = this
-    s.params = params
-    s.imgMap = {} // 格式{'localIdxxx':{serverId:'xxx',sourceType:'camera'}}
+    var msg = ''
     // 选择照片
-    // watermark: {
-      // orderNo: 'xx', // 编号
-      // submitName: 'xx', // 提交人
-      // customerName: 'xx', // 客户
-      // cmLocation: '118.730515, 31.982473', // 位置算偏差
-      // isWaterMark: '1', // 是否启用水印
-    // }
-    s.choose = function (currentCount, watermark) {
-      var msg = ''
-      var count = s.params.max - currentCount
+    s.choose = function (args = {}) {
+      var option = {
+        enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
+        max: args.max || 5,
+        currentCount: args.currentCount || 1,
+        sourceType: args.sourceType || ['album', 'camera'],
+        sizeType: args.sizeType || ['original', 'compressed'],
+        watermark: args.watermark || {}
+      }
+      /* watermark: {
+        orderNo: 'xx', // 编号
+        submitName: 'xx', // 提交人
+        customerName: 'xx', // 客户
+        cmLocation: '118.730515, 31.982473', // 位置算偏差
+        isWaterMark: '1', // 是否启用水印
+      } */
+      var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = '最多只能传' + s.params.max + '张照片'
-        if (s.params.onError) {
-          s.params.onError({code: 'limit', msg: msg})
-        } else {
-          alert(msg)
-        }
+        msg = '最多只能传' + option.max + '张照片'
+        BridgeBrowser.showToast(msg)
         return
       }
       // 如果设置了安全上传,则每次只允许上传一张
-      if (s.params.safeUpload) count = 1
-
+      if (option.enableSafe) count = 1
       Bridge.chooseImage(Object.assign({
         count: count, // 默认5
-        sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
+        sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
           var imgMap = {}
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
             imgMap[localId] = {
               serverId: '',
-              sourceType: JSON.stringify(s.params.sourceType) === JSON.stringify(['camera']) ? 'camera' : 'album'
+              sourceType: JSON.stringify(option.sourceType) === JSON.stringify(['camera']) ? 'camera' : 'album'
             }
           }
-          if (s.params.onChooseSuccess) s.params.onChooseSuccess(imgMap, res)
+          if (params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
         }
-      }, watermark))
+      }, option.watermark))
     }
   }
 }

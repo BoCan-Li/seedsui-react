@@ -1,5 +1,6 @@
 import BridgeBrowser from './bridgeBrowser.js'
 import client from './../axiosApi.js'
+import Device from './../device.js'
 import DB from './../db.js'
 
 var Bridge = {
@@ -8,7 +9,7 @@ var Bridge = {
    * 初始化配置
    * @opts {onSuccess: func, onError: func}
    */
-  config: function (opts) {
+  config: function (opts = {}) {
     var ticketUrl = '/wxapi/getJsApiTicket.action'
     // 记录进入app的url，后面微信sdk
     var url = encodeURIComponent(window.location.href.split('#')[0]);
@@ -50,19 +51,14 @@ var Bridge = {
           // 桥接失败
           DB.setSession('bridge_isready', '-1')
           // Callback
-          if (opts.onError) {
-            opts.onError({code: 'oauthFail', msg: '微信鉴权失败,请退出重试'})
-          } else {
-            alert('微信鉴权失败,请退出重试' + JSON.stringify(res))
-          }
+          var errMsg = '微信鉴权失败,请退出重试' + JSON.stringify(res)
+          BridgeBrowser.showToast(errMsg, {mask: false})
+          if (opts.onError) opts.onError({code: 'oauthFail', msg: errMsg})
         })
       } else {
-        var msg = response.message
-        if (opts.onError) {
-          opts.onError({code: 'oauthInterfaceFail', msg: msg})
-        } else {
-          alert(msg)
-        }
+        var errMsg = response.message
+        BridgeBrowser.showToast(errMsg, {mask: false})
+        if (opts.onError) opts.onError({code: 'oauthInterfaceFail', msg: errMsg})
       }
     })
     .catch(err => {
@@ -73,6 +69,44 @@ var Bridge = {
       }
     })
   },
+  // 客户端默认返回控制
+  back: function () {
+    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    if (isFromApp === '1') {
+      window.history.go(-1);
+    } else if (isFromApp === 'home') {
+      window.history.go(-1);
+    } else if (isFromApp === 'confirm') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide()
+          window.history.go(-1)
+        }
+      });
+    } else if (isFromApp === 'confirm-close') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide()
+          window.history.go(-1)
+        }
+      });
+    } else {
+      window.history.go(-1)
+    }
+  },
+  // 客户端返回绑定
+  addBackPress: function () {
+    if (wx.onHistoryBack) wx.onHistoryBack(function () { // eslint-disable-line
+      this.back()
+      return false
+    })
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function () {
+    if (wx.onHistoryBack) wx.onHistoryBack(function () { // eslint-disable-line
+      return true
+    })
+  },
   /*
    * 获取当前地理位置
    * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
@@ -80,23 +114,47 @@ var Bridge = {
    * */
   getLocation: function (params) {
     // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
+    var appLocation = DB.getCookie('app_location')
+    if (appLocation === 'undefined') {
+      DB.removeCookie('app_location')
+      appLocation = ''
+    }
+    try {
+      if (appLocation) appLocation = JSON.parse(appLocation)
+    } catch (error) {
+      appLocation = ''
+    }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
+    // 定位超时
+    setTimeout(() => {
+      if (!DB.getCookie('app_location')) {
+        var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
+        BridgeBrowser.showToast(errMsg, {mask: false})
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+      }
+    }, 5000)
     // 定位
     wx.getLocation({ // eslint-disable-line
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: 'gcj02',
       success: function (res) {
-        // 将位置信息存储到cookie中10秒
-        DB.setCookie('app_location', JSON.stringify(res) , 10)
-        if (params.onSuccess) params.onSuccess(res)
+        // 将位置信息存储到cookie中60秒
+        if (res.latitude && res.latitude) {
+          DB.setCookie('app_location', JSON.stringify(res) , 60)
+          if (params.onSuccess) params.onSuccess(res)
+        } else {
+          var errMsg = '定位失败,请重新进入此页面'
+          BridgeBrowser.showToast(errMsg, {mask: false})
+          if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        }
       },
       fail: function () {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查微信定位权限是否开启'})
-        else alert('定位失败,请检查微信定位权限是否开启')
+        var errMsg = '定位失败,请检查微信定位权限是否开启'
+        BridgeBrowser.showToast(errMsg, {mask: false})
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)
@@ -158,7 +216,7 @@ var Bridge = {
         params.onSuccess(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '正在鉴权,请稍后再试' + res})
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)
@@ -198,87 +256,53 @@ var Bridge = {
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
-    max: 5,
-    sourceType: ['album', 'camera'],
-    sizeType: ['original', 'compressed']
     onChooseSuccess: function (imgMap) {},
-    onChooseCancel:function() // 取消选择
-    onChooseFail: function (imgMap) {},
-    onUploadSuccess:function(imgs,imgMap,res) // 单张上传成功
-    onUploadFail:function(imgs,imgMap,res) // 单张上传失败
-    onUploadsSuccess:function(imgs,imgMap) // 全部上传成功
-    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
+    onUploadSuccess:function(imgMap,res) // 单张上传成功
+    onUploadFail:function(index, item) // 单张上传失败
+    onUploadsSuccess:function(imgMap) // 全部上传成功
   })
   */
   Image: function (params) {
-    var defaults = {
-      max: 5,
-      safeUpload: true, // 安全上传,第次只能传一张
-      sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed']
-    }
-    params = params || {}
-    for (var def in defaults) {
-      if (!params[def]) {
-        params[def] = defaults[def]
-      }
-    }
     var s = this
-    s.params = params
-    // 防双击
-    s.isClicked = false
     var msg = ''
     // 选择照片
-    s.choose = function (currentCount, watermark) {
-      if (s.isClicked) {
-        msg = '拍照相册正在启动,请不要重复点击'
-        if (s.params.onError) {
-          s.params.onError({code: 'chooseClicked', msg: msg})
-        } else {
-          alert(msg)
-        }
-        return
+    s.choose = function (args = {}) {
+      var option = {
+        enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
+        max: args.max || 5,
+        currentCount: args.currentCount || 1,
+        sourceType: args.sourceType || ['album', 'camera'],
+        sizeType: args.sizeType || ['original', 'compressed']
       }
-      s.isClicked = true
-      var count = s.params.max - currentCount
+      var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = '最多只能传' + s.params.max + '张照片'
-        if (s.params.onError) {
-          s.params.onError({code: 'limit', msg: msg})
-        } else {
-          alert(msg)
-        }
+        msg = '最多只能传' + option.max + '张照片'
+        BridgeBrowser.showToast(msg)
         return
       }
       // 如果设置了安全上传,则每次只允许上传一张
-      if (s.params.safeUpload) count = 1
+      if (option.enableSafe) count = 1
       Bridge.chooseImage({
         count: count, // 默认5
-        sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
+        sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          s.isClicked = false
           var imgMap = {}
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
             imgMap[localId] = {
               serverId: '',
-              sourceType: res.sourceType,
-              watermark: watermark || ''
+              sourceType: res.sourceType
             }
           }
-          if(s.params.onChooseSuccess) s.params.onChooseSuccess(imgMap, res)
+          if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
           s.upload(imgMap)
         },
         fail: function (res) {
-          s.isClicked = false
-          if(s.params.onChooseFail)s.params.onChooseFail(res)
+          BridgeBrowser.showToast('选择照片失败,请检查是否开启定位权限', {mask: false})
         },
         cancel: function () {
-          s.isClicked = false
-          if(s.params.onChooseCancel)s.params.onChooseCancel()
         },
         complete: function () {
-          s.isClicked = false
         }
       })
     }
@@ -300,19 +324,14 @@ var Bridge = {
           success: function (res) {
             let serverId = res.serverId; // 返回图片的服务器端ID
             imgMap[img].serverId = serverId
-            if (s.params.onUploadSuccess) s.params.onUploadSuccess(imgMap, res)
-            if (index >= imgs.length-1 && s.params.onUploadsSuccess) s.params.onUploadsSuccess(imgMap)
+            if (params.onUploadSuccess) params.onUploadSuccess(imgMap, res)
+            if (index >= imgs.length - 1 && params.onUploadsSuccess) params.onUploadsSuccess(imgMap)
             loop(++index)
           },
-          fail: function (res) {
+          fail: function () {
             var msg = '您选择的第' + index + '张图片上传失败，稍后请重试'
-            if (s.params.onError) {
-              s.params.onError({code: 'uploadImageFail', msg: msg})
-            } else {
-              alert(msg)
-            }
-            s.deleteImg(img)
-            if (s.params.onUploadFail) s.params.onUploadFail(imgMap, res)
+            BridgeBrowser.showToast(msg, {mask: false})
+            if (params.onUploadFail) params.onUploadFail(index, imgMap[img])
             loop(++index)
           }
         })

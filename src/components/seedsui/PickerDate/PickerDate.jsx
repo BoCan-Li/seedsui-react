@@ -58,7 +58,7 @@ export default class PickerDate extends Component {
     // 默认值
     if (type === 'date') {
       // 如果不是合法的日期格式
-      if (!defaultValue.isDate()) {
+      if (!defaultValue || !defaultValue.isDate()) {
         if (onError) onError('请传入合法的日期');
         defaultValue = new Date().format('yyyy-MM-dd');
       }

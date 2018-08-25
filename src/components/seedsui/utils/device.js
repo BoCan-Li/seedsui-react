@@ -131,7 +131,7 @@ var Device = (function () {
     if (platform === 'weixin') {
       // 微信
       var wxScript = document.createElement('script')
-      wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.0.js'
+      wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
       document.body.appendChild(wxScript);
     } else if (platform === 'waiqin') {
       // 外勤

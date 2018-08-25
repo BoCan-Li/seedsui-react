@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Toast from './../Toast/toast.js';
 import bridge from './../utils/bridge';
 import Icon from './../Icon';
 import Close from './../Close';
@@ -40,7 +39,7 @@ export default class InputLocation extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
@@ -74,16 +73,7 @@ export default class InputLocation extends Component {
             // 获取地址失败
             this.$input.value = '';
             // 提示获取地址失败
-            var toast = new Toast({
-              maskClass: 'mask toast-mask middle',
-              html: err.msg,
-              delay: 2000,
-              onHid: (e) => {
-                e.destroy();
-                toast = null;
-              }
-            });
-            toast.show();
+            bridge.showToast(err.msg);
           }
         });
       },
@@ -91,16 +81,7 @@ export default class InputLocation extends Component {
         // 定位失败
         this.$input.value = '';
         // 提示定位失败
-        var toast = new Toast({
-          maskClass: 'mask toast-mask middle',
-          html: err.msg,
-          delay: 2000,
-          onHid: (e) => {
-            e.destroy();
-            toast = null;
-          }
-        });
-        toast.show();
+        bridge.showToast(err.msg);
       }
     });
   }

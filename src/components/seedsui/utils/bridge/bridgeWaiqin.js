@@ -1,14 +1,13 @@
-import BridgeBrowser from './bridgeBrowser.js';
-import Device from './../device.js';
-import DB from './../db.js';
+import BridgeBrowser from './bridgeBrowser.js'
+import Device from './../device.js'
+import DB from './../db.js'
 
 var Bridge = {
   platform: 'waiqin',
   config: function () {
-    var self = this
-    document.addEventListener('deviceready', function () {
+    document.addEventListener('deviceready', () => {
+      this.addBackPress()
       DB.setSession('bridge_isready', '1')
-      self.back()
     })
   },
   // 获得版本信息
@@ -214,26 +213,26 @@ var Bridge = {
   },
   /*
   * 上传图片
-  * params：{uploadDir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
+  * params：{dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
   */
-  uploadImage: function (argParams) {
-    // 格式化localIds
-    var filePathList = argParams.localIds
-    if (argParams && argParams.localIds && argParams.localIds.length) {
-      filePathList = argParams.localIds.map((item) => {
+  uploadImage: function (params = {}) {
+    if (!params.dir) {
+      BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
+      return;
+    }
+    if (!params.localIds || Object.isEmptyObject(params.localIds)) {
+      BridgeBrowser.showToast('请传入上传图片列表后再上传图片')
+      return;
+    }
+    // 格式化params
+    var uploadParams = {
+      filePathList: params.localIds.map((item) => {
         return {path: item}
-      })
+      }),
+      url: params.dir
     }
-    // 格式化uploadDir
-    var url = argParams && argParams.uploadDir ? argParams.uploadDir : ''
-    var params = {
-      filePathList: filePathList,
-      url: url,
-      tenantId: argParams.tenantId || ''
-    }
-    console.log('上传图片:');
-    console.log(params);
-    wq.wqphoto.startUpload(JSON.stringify(params)) // eslint-disable-line
+    if (params.tenantId) uploadParams.tenantId = params.tenantId
+    wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
   },
   /*
   * 图片预览
@@ -263,121 +262,137 @@ var Bridge = {
   // logOut: function (msg) {
   //   wq.wqload.wqBackToLogin({message: msg || ''}) // eslint-disable-line
   // },
-  // 返回按键处理,外勤的特性限制只能在history为底层时才生效
-  back: function () {
-    document.addEventListener('deviceready', function () {
-      wq.wqtitlebar.setTitleBar(function (args) { // eslint-disable-line
-        var isFromApp = Device.getUrlParameter('isFromApp') || ''
-        if (isFromApp === '1' || !window.history.state) {
-          var jsonStr = JSON.stringify({ message: '确定离开当前页面吗？', twoButton: '1', buttonList: [{ btn_name: '确定', button_id: 'ok' }, { btn_name: '取消', button_id: 'cancle' }] })
-          if(window.confirm(jsonStr)){
-            Bridge.closeWindow()
-          }
-        } else {
-          window.history.go(-1)
-        }
-        Bridge.back()
-      }, null, JSON.stringify({backCustom: true}))
-    });
-  },
   /**
-   * 获取客户(单选)
+   * 人员插件
    * params: {onSuccess: fn}
-   */
-  getContact: function (params) {
-    wq.wqcontact.getContact((args) => { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
-    }, { aclType: params.aclType || '0' });
-  },
-  /**
-   * 选择人员(多选)
-   * params: {selectedIds: '',onSuccess: fn}
    */
   getContactMore: function (params) {
     wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"selectedIds":"' + (params.selectedIds || '') + '","aclType":"0"}')
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '","aclType":"' + (params.aclType || '') + '"}') // aclType:人员权限（0：只能看到下属;不传或者其他的参数为全部人员）
+  },
+  getContact: function (params) {
+    wq.wqcontact.getContact((args) => { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    }, '{"id":"' + (params.id || '') + '","aclType":"' + (params.aclType || '') + '"}')
   },
   /**
-   * 获取门店信息(多选)
-   * params: {selectedIds: '',onSuccess: fn}
+   * 客户插件
+   * params: {superTradeType | tradeType: 默认值为1(1.客户 2.经销商 3.门店), selectedIds: '', onSuccess: fn}
    */
   getCustomerMore: function (params) {
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    }, '{"selectedIds":"' + (params.selectedIds || '') + '","hiddenAdd":true}');
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":true}');
   },
-  /**
-   * 选择销售区域(单选)
-   * params: {selectedIds: '',onSuccess: fn}
-   */
+  getCustomer: function (params) {
+    wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
+  },
+  getCustomerType: function (params) {
+    wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
+  },
   getCustomerArea: function (params) {
     wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
   },
-  // 客户端添加返回绑定
+  /**
+   * 部门插件
+   * params: {selectedIds: '',onSuccess: fn}
+   */
+  getDepartmentMore: function (params) {
+    wq.wqdepartment.getDepartmentMore(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '"}');
+  },
+  getDepartment: function (params) {
+    wq.wqdepartment.getDepartment(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
+  },
+  // 客户端默认返回控制
+  back: function () {
+    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    if (isFromApp === '1') {
+      try {
+        Bridge.closeWindow();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'home') {
+      try {
+        Bridge.closeWindow()
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'confirm') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide();
+          window.history.go(-1);
+        }
+      });
+    } else if (isFromApp === 'confirm-close') {
+      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide();
+          Bridge.closeWindow();
+        }
+      });
+    } else {
+      window.history.go(-1)
+    }
+  },
+  // 客户端返回绑定
   addBackPress: function () {
+    document.addEventListener('backbutton', this.back, false) // eslint-disable-line
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-  },
-  /*
-    * 离线上传, 可不带企业id
-    * dir: '目录', imgIds: '图片名称集合', tenantId: '企业id,不传客户端会自己拼上,如果传的话客户端就使用传入的'
-    */
-  offlineUpload: function (params) {
-    const uploadParams = {uploadDir: params.dir, localIds: params.localIds, tenantId: params.tenantId || '' };
-    this.uploadImage(uploadParams);
+    document.removeEventListener('backbutton', this.back, false) // eslint-disable-line
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
-    max: 5,
-    sourceType: ['album', 'camera'],
-    sizeType: ['original', 'compressed']
     onChooseSuccess: function (imgMap) {},
-    onDeleteSuccess:function(imgs,imgMap,key) // 全部删除成功
   })
   */
   Image: function (params) {
-    var defaults = {
-      max: 5,
-      safeUpload: false, // 安全上传,第次只能传一张
-      sourceType: ['album', 'camera'],
-      sizeType: ['original', 'compressed']
-    }
-    params = params || {}
-    for (var def in defaults) {
-      if (!params[def]) {
-        params[def] = defaults[def]
-      }
-    }
     var s = this
-    s.params = params
+    var msg = ''
     // 选择照片
-    s.choose = function (currentCount, watermark) {
-      var msg = ''
-      var count = s.params.max - currentCount
+    s.choose = function (args) {
+      var option = {
+        enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
+        max: args.max || 5,
+        currentCount: args.currentCount || 1,
+        sourceType: args.sourceType || ['album', 'camera'],
+        sizeType: args.sizeType || ['original', 'compressed'],
+        watermark: args.watermark || {}
+      }
+      /* watermark: {
+        photoType: 'xx', // 水印名称
+        customerName: 'xx', // 客户名
+      } */
+      var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = '最多只能传' + s.params.max + '张照片'
-        if (s.params.onError) {
-          s.params.onError({code: 'limit', msg: msg})
-        } else {
-          alert(msg)
-        }
+        msg = '最多只能传' + option.max + '张照片'
+        BridgeBrowser.showToast(msg)
         return
       }
       // 如果设置了安全上传,则每次只允许上传一张
-      if (s.params.safeUpload) count = 1
-
+      if (option.enableSafe) count = 1
       Bridge.chooseImage(Object.assign({
         count: count, // 默认5
-        sizeType: s.params.sizeType, // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: s.params.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
+        sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
-          if(s.params.onChooseSuccess) s.params.onChooseSuccess(res)
+          if(params.onChooseSuccess) params.onChooseSuccess(res)
         }
-      }, watermark || ''))
+      }, option.watermark))
     }
   }
 }

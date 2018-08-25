@@ -47,28 +47,14 @@ export default class NumBoxPop extends Component {
       }
     }
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onChange = (value) => {
     this.setState({
       value: value
     });
   }
-  onClickSubmit = (e) => {
-    e.hide();
+  onClickSubmit = (args) => {
     const {onClickSubmit} = this.props;
-    if (onClickSubmit) onClickSubmit(this.state.value, this.getArgs(e));
+    if (onClickSubmit) onClickSubmit(this.state.value, args);
   }
   focusValue = () => {
     this.$numbox.$input.focus();
@@ -82,9 +68,9 @@ export default class NumBoxPop extends Component {
     if (this.props.onClickCancel) this.props.onClickCancel();
   }
   render() {
-    const {show, caption, min, max, digits} = this.props;
+    const {args, show, caption, min, max, digits} = this.props;
     return (
-      <Alert ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
+      <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
         <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} changeFocus value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
       </Alert>
     );

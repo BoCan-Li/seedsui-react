@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router';
 import Device from './../utils/device.js';
 import bridge from './../utils/bridge'
 import Icon from './../Icon';
 
-@withRouter
 export default class Titlebar extends Component {
   static propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
 
-    caption: PropTypes.string,
+    caption: PropTypes.node,
     captionClassName: PropTypes.string,
     captionStyle: PropTypes.object,
 
@@ -30,28 +28,39 @@ export default class Titlebar extends Component {
     this.state = {}
   }
   onClickBack = () => {
-    const {history, onClickBack} = this.props;
+    const {onClickBack} = this.props;
     // 如果有onClickBack的props,则优先执行props的方法
     if (onClickBack) {
       onClickBack();
       return;
     }
     // 否则走默认的返回
-    const isFromApp = Device.getUrlParameter('isFromApp', this.props.location.search) || '';
+    const isFromApp = Device.getUrlParameter('isFromApp', location.search) || '';
     if (isFromApp === '1') {
       try {
         bridge.closeWindow();
       } catch (error) {
         console.log(error);
       }
-    } else if (isFromApp === '2') {
+    } else if (isFromApp === 'home') {
       try {
         bridge.goHome();
       } catch (error) {
         console.log(error);
       }
+    } else if (isFromApp === 'confirm') {
+      try {
+        bridge.showConfirm('您确定要离开此页面吗?', {
+          onSuccess: (e) => {
+            e.hide();
+            bridge.closeWindow();
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      history.goBack();
+      history.back();
     }
   }
   getButtonsDOM = (arr) => {

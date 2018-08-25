@@ -92,13 +92,14 @@
   top: 50%;
   box-sizing: border-box;
   border-radius: @10px;
-  margin: -@40px 0 0 -15%;
   padding-top: @20px;
-  width: 30%;
+  min-width: 100px;
+  max-width: 90%;
   height: @80px;
   text-align: center;
   color: #fff;
   background-color: rgba(0, 0, 0, .5);
+  .transform-translate-neghalf-neghalf();
 }
 .loading-floating.animated .loading-floating-blade {
   .animationPlayState-running();

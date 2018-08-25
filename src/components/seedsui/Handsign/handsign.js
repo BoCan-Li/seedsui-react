@@ -3,8 +3,8 @@ var Handsign = function (container, params) {
   Model
   ---------------------- */
   var defaults = {
-    color: '#000',
-    lineWidth: '1',
+    strokeStyle: '#000',
+    lineWidth: 3,
 
     suffix: 'image/png',
     quality: 0.92
@@ -32,7 +32,6 @@ var Handsign = function (container, params) {
     endX: 0,
     endY: 0
   }
-  s.isDrew = false
   /* ----------------------
   Events
   ---------------------- */
@@ -56,7 +55,7 @@ var Handsign = function (container, params) {
   s.onTouchStart = function (e) {
     s.container.addEventListener('touchmove', s.preventDefault, false)
     window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
-    s.ctx.strokeStyle = s.params.color
+    s.ctx.strokeStyle = s.params.strokeStyle
     s.ctx.lineWidth = s.params.lineWidth
     s.ctx.beginPath()
     s.ctx.moveTo(
@@ -76,7 +75,6 @@ var Handsign = function (container, params) {
     s.ctx.stroke()
   }
   s.onTouchEnd = function (e) {
-    s.isDrew = true
     s.container.removeEventListener('touchmove', s.preventDefault, false)
   }
   /* ----------------------
@@ -93,14 +91,28 @@ var Handsign = function (container, params) {
         context.backingStorePixelRatio || 1
     return (window.devicePixelRatio || 1) / backingStore
   }
-  // 签名
+  // 清除签名
   s.clear = function () {
-    s.isDrew = false
     s.ctx.clearRect(0, 0, s.width, s.height)
   }
-  s.save = function () {
-    return s.container.toDataURL(s.params.suffix, s.params.quality)
+  // 是否画过
+  s.isDrew = function () {
+    var blank = document.createElement('canvas')
+    blank.width = s.container.width
+    blank.height = s.container.height
+    if (s.container.toDataURL() === blank.toDataURL()) return false
+    return true
   }
+  // 保存签名
+  s.save = function () {
+    // 如果已经画过了,则返回base64,如果没有画过,则返回空
+    if (s.isDrew()) {
+      return s.container.toDataURL(s.params.suffix, s.params.quality)
+    } else {
+      return ''
+    }
+  }
+  // 计算top left bottom center的位置
   s.calcPosition = function (w, h, pos) {
     var posArr = pos.split(' ').map(function (item, index){
       var x = 0

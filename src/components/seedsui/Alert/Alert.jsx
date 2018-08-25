@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Icon from './../Icon';
-import Instance from './alert.js';
 
 export default class Alert extends Component {
   static propTypes = {
@@ -11,97 +10,99 @@ export default class Alert extends Component {
     show: PropTypes.bool,
 
     duration: PropTypes.number,
-    onClickSubmit: PropTypes.func,
-    onClickCancel: PropTypes.func,
+
+    maskClassName: PropTypes.string,
+    maskStyle: PropTypes.object,
     onClickMask: PropTypes.func,
-    onShowed: PropTypes.func,
-    onHid: PropTypes.func,
 
     className: PropTypes.string,
     style: PropTypes.object,
+
     icon: PropTypes.node,
     iconSrc: PropTypes.string,
     iconStyle: PropTypes.object,
     iconClassName: PropTypes.string,
 
     caption: PropTypes.node,
+    captionStyle: PropTypes.object,
+    captionClassName: PropTypes.string,
+
+    contentStyle: PropTypes.object,
+    contentClassName: PropTypes.string,
+
+    children: PropTypes.node,
+
+    submitStyle: PropTypes.object,
+    submitClassName: PropTypes.string,
     submitCaption: PropTypes.node,
+    disabled: PropTypes.bool,
+
+    cancelStyle: PropTypes.object,
+    cancelClassName: PropTypes.string,
     cancelCaption: PropTypes.node,
-    children: PropTypes.node
+
+    onClickSubmit: PropTypes.func,
+    onClickCancel: PropTypes.func,
   }
   static defaultProps = {
-    show: false,
-
-    duration: 300,
-    args: null,
-    caption: '',
     submitCaption: '确定',
     cancelCaption: '取消',
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    };
-  }
-  /* shouldComponentUpdate = (nextProps) => { // 因为是容器,不能使用此方法,不然会影响内部元素的更新
-    if (nextProps.show !== this.props.show) {
-      return true;
-    }
-    return false;
-  } */
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.show !== this.props.show) {
-      // 显示与隐藏
-      if (this.props.show) {
-        this.state.instance.show();
-      } else if (!this.props.show) {
-        this.state.instance.hide();
-      }
-      // 点击事件更新
-      if (this.props.onClickCancel) this.state.instance.setOnClickCancel(this.props.onClickCancel)
-      if (this.props.onClickSubmit) this.state.instance.setOnClickSubmit(this.props.onClickSubmit)
-    }
   }
   componentDidMount = () => {
-    if (this.state.instance) return;
-    const {show, args, duration, onClickSubmit, onClickCancel, onClickMask, onShowed, onHid} = this.props;
-    const instance = new Instance({
-      mask: this.$el,
-      args: args,
-      duration: duration,
-      onClickSubmit: onClickSubmit || null,
-      onClickCancel: onClickCancel || null,
-      onClickMask: onClickMask || null,
-      onShowed: onShowed || null,
-      onHid: onHid || null
-    });
-    if (show) instance.show();
-    this.setState({
-      instance
-    });
+  }
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args !== undefined) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
+  onClickMask = (e) => {
+    if (this.props.onClickMask) this.props.onClickMask(this.getArgs(e));
+    e.stopPropagation();
+  }
+  onClickCancel = (e) => {
+    if (this.props.onClickCancel) this.props.onClickCancel(this.getArgs(e));
+    e.stopPropagation();
+  }
+  onClickSubmit = (e) => {
+    if (this.props.onClickSubmit) this.props.onClickSubmit(this.getArgs(e));
+    e.stopPropagation();
   }
   render() {
     const {
+      duration, show,
+      maskClassName, maskStyle,
       className, style,
-      caption,
+      caption, captionStyle, captionClassName,
+      contentStyle, contentClassName,
       icon, iconSrc, iconStyle, iconClassName,
       children,
-      cancelCaption, submitCaption, onClickCancel, onClickSubmit
+      submitCaption, submitStyle, submitClassName, onClickSubmit, disabled,
+      cancelCaption, cancelStyle, cancelClassName, onClickCancel,
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className="mask alert-mask">
-        <div className={`alert${className ? ' ' + className : ''}`} style={style} data-animation="zoom">
-          {caption && <h1>{caption}</h1>}
-          <div className="alert-content">
+      <div ref={(el) => {this.$el = el}} className={`mask alert-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClickMask}>
+        <div className={`alert${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation="zoom">
+          {caption && <h1 className={captionClassName} style={captionStyle}>{caption}</h1>}
+          <div className={`alert-content${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
             {(iconSrc || iconClassName) && <Icon className={`alert-content-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
             {icon}
             {/* 内容 */}
             {children}
           </div>
           <div className="alert-handler">
-            {onClickCancel && <a className="alert-cancel">{cancelCaption}</a>}
-            {onClickSubmit && <a className="alert-submit">{submitCaption}</a>}
+            {onClickCancel && <a className={`alert-cancel${cancelClassName ? ' ' + cancelClassName : ''}`} style={cancelStyle} onClick={this.onClickCancel}>{cancelCaption}</a>}
+            {onClickSubmit && <a className={`alert-submit${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} onClick={this.onClickSubmit} disabled={disabled}>{submitCaption}</a>}
           </div>
         </div>
       </div>,

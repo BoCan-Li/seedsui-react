@@ -21,15 +21,164 @@ var Bridge = {
   },
   /* 拍照、本地选图 */
   chooseImage: function (params) {
-    console.log('chooseImage方法在浏览器上无法运行')
+    this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+    // 模拟数据
+    // var res = {
+    //   sourceType: 'camera', // 微信返回的两种来源: 'camera', 'album'
+    //   errMsg: 'chooseImage:ok',
+    //   localIds: ['https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', 'https://static.zcool.cn/v3.5.180706.5/zcool/client/image/logo.png']
+    // }
+    // if (params.success) params.success(res)
   },
   /* 上传图片 */
   uploadImage: function (params) {
-    console.log('uploadImage方法在浏览器上无法运行')
+    // this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+    this.showLoading('正在上传...')
+    setTimeout(() => {
+      this.hideLoading()
+      this.showToast('上传完成', {mask: false})
+      var res = {
+        errMsg: 'uploadImage:ok',
+        mediaUrl: '',
+        serverId: '1237378768e7q8e7r8qwesafdasdfasdfaxss111'
+      }
+      if (params.success) params.success(res)
+    }, 1000)
   },
   /* 图片预览 */
   previewImage: function (params) {
     console.log('previewImage方法在浏览器上无法运行')
+  },
+  /**
+   * 人员插件
+   * params: {onSuccess: fn}
+   */
+  getContact: function () {
+    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  },
+  getContactMore: function () {
+    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  },
+  /**
+   * 客户插件
+   * params: {superTradeType | tradeType: 默认值为1(1.客户 2.经销商 3.门店), selectedIds: '', onSuccess: fn}
+   */
+  customerMore: [{
+    "check": true,
+    "distance": 31,
+    "labelType": 0,
+    "addr": "南京市建邺区康文路康缘智汇港附近",
+    "approval_status": "3",
+    "code": "20180403004",
+    "cooperate_status": "1",
+    "district_id": "",
+    "id": "5330457627710680963",
+    "lat": "",
+    "location": "31.983362,118.73069",
+    "lon": "",
+    "manager_name": "",
+    "name": "20180403003",
+    "name_py": "20180403004 20180403004",
+    "trade_type": "3",
+    "type_id": "",
+    "type_image": ""
+  }, {
+    "check": true,
+    "distance": 5,
+    "labelType": 0,
+    "addr": "江苏省南京市建邺区康文路康缘智汇港附近",
+    "approval_status": "3",
+    "code": "storethree",
+    "cooperate_status": "1",
+    "district_id": "",
+    "id": "8834765014408029232",
+    "lat": "",
+    "location": "31.983679,118.730766",
+    "lon": "",
+    "manager_name": "",
+    "name": "门店3",
+    "name_py": "mendian3 md3",
+    "trade_type": "3",
+    "type_id": "",
+    "type_image": ""
+  }, {
+    "addr": "南京市建邺区康文路南京金贝网络科技有限公司附近",
+    "approval_status": "3",
+    "check": false,
+    "code": "CUS000084",
+    "cooperate_status": "1",
+    "distance": -1,
+    "district_id": "-1",
+    "id": "8045732772848971055",
+    "labelType": 2,
+    "lat": "31.983311",
+    "location": "31.983311,118.730527",
+    "lon": "118.730527",
+    "manager_name": "大表哥",
+    "name": "201801171557",
+    "name_py": "201801171557 201801171557",
+    "trade_type": "3",
+    "type_id": "-1",
+    "type_image": ""
+  }, {
+    "addr": "南京市建邺区康文路南京金贝网络科技有限公司附近",
+    "approval_status": "3",
+    "check": true,
+    "code": "CUS000085",
+    "cooperate_status": "1",
+    "distance": 46,
+    "district_id": "",
+    "id": "8353170616312361122",
+    "labelType": 0,
+    "lat": "",
+    "location": "31.983301,118.730517",
+    "lon": "",
+    "manager_name": "",
+    "name": "201801171624",
+    "name_py": "201801171624 201801171624",
+    "trade_type": "3",
+    "type_id": "",
+    "type_image": ""
+  }],
+  customerMoreLen: 1,
+  getCustomerMore: function (params) {
+    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+    const result = []
+    for (let i = 0; i < this.customerMoreLen; i++) {
+      result.push(this.customerMore[i])
+    }
+    this.customerMoreLen++
+    if (this.customerMoreLen > this.customerMore.length) {
+      this.customerMoreLen = 1
+    }
+    params.onSuccess(result)
+  },
+  getCustomer: function (params) {
+    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+    params.onSuccess({
+      id: '5365268129453435373',
+      name: '门店1号'
+    })
+  },
+  getCustomerType: function (params) {
+    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  },
+  getCustomerArea: function (params) {
+    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  },
+  /**
+   * 部门插件
+   * params: {selectedIds: '',onSuccess: fn}
+   */
+  getDepartmentMore: function (params) {
+    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  },
+  getDepartment: function (params) {
+    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+    params.onSuccess({
+      id: '5343180131602024954',
+      name: '开发一部'
+    })
   },
   /*
   * 打开新的窗口
@@ -54,7 +203,32 @@ var Bridge = {
     }
     callback(false)
   },
-  /* 客户端添加返回绑定 */
+  // 客户端默认返回控制
+  back: function () {
+    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    if (isFromApp === '1') {
+      window.history.go(-1);
+    } else if (isFromApp === 'home') {
+      window.history.go(-1);
+    } else if (isFromApp === 'confirm') {
+      Bridge.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide()
+          window.history.go(-1)
+        }
+      });
+    } else if (isFromApp === 'confirm-close') {
+      Bridge.showConfirm('您确定要离开此页面吗?', {
+        onSuccess: (e) => {
+          e.hide()
+          window.history.go(-1)
+        }
+      });
+    } else {
+      window.history.go(-1)
+    }
+  },
+  // 客户端返回绑定
   addBackPress: function () {
     // 微信设置appId
     // const appId = Device.getUrlParameter('appId');
@@ -63,17 +237,20 @@ var Bridge = {
     // }
     console.log('addBackPress方法在浏览器上无法运行')
   },
-  /* 客户端移除返回绑定 */
+  // 客户端移除返回绑定
   removeBackPress: function () {
     console.log('removeBackPress方法在浏览器上无法运行')
   },
-  /* 获取当前地理位置 */
+  /*
+   * 获取当前地理位置
+   * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
+   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
+   * */
   getLocation: function (params) {
-    if (params.onError) params.onError({code:'locationFail', msg: '此功能仅可在微信或APP中使用'})
-    // 模拟getLocation定位
+    this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
+    if (params.onError) params.onError({code:'locationFail', msg: ''})
     // setTimeout(function () {
-    //   var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
-    //   if (params.onSuccess) params.onSuccess(res)
+    //   if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
     // }, 500)
   },
   /*
@@ -153,45 +330,89 @@ var Bridge = {
     }
     window.location.replace(login_url)
   },
-  /*
-    * 获取上传图片路径,与后端约定好的固定格式
-    * dir: '目录', params：{customPath: true | false 自定义目录}
-    * 返回路径/月份
-    */
-  getUploadDir: function (dir, params) {
-    var path = dir || 'test/test01' // 定义的目录
-    var month = new Date().format('yyyyMM') // 增加月份目录
-    if (params) {
-      if (params.customPath) return dir
-    }
-    return `${path + '/' + month}/`;
-  },
-  /*
-    * 获取图片全路径, 用于提交表单
-    * dir: '目录', imgIds: '图片名称集合'
-    */
-  getUploadImgsPath: function (dir, imgIds) {
-    const imgs = imgIds.map((imgId) => {
-      return dir + imgId;
-    });
-    return imgs.join(',');
-  },
+  /* 封装图片控件,使用示例见ImgUploader组件
+  bridge.Image({
+    onChooseSuccess: function (imgMap) {},
+    onUploadSuccess:function(imgMap,res) // 单张上传成功
+    onUploadFail:function(index, item) // 单张上传失败
+    onUploadsSuccess:function(imgMap) // 全部上传成功
+  })
+  */
   Image: function (params) {
     var s = this
-    s.imgs = ''
-    s.imgMap = {}
-    s.choose = function (watermark) {
-      if (params.onError) params.onError({code: 'chooseFail', msg: '此功能仅可在微信或APP中使用'})
+    var msg = ''
+    // 选择照片
+    s.choose = function (args = {}) {
+      var option = {
+        enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
+        max: args.max || 5,
+        currentCount: args.currentCount || 1,
+        sourceType: args.sourceType || ['album', 'camera'],
+        sizeType: args.sizeType || ['original', 'compressed']
+      }
+      var count = option.max - option.currentCount
+      if (count <= 0) {
+        msg = '最多只能传' + option.max + '张照片'
+        Bridge.showToast(msg)
+        return
+      }
+      // 如果设置了安全上传,则每次只允许上传一张
+      if (option.enableSafe) count = 1
+      Bridge.chooseImage({
+        count: count, // 默认5
+        sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
+        success: function (res) {
+          var imgMap = {}
+          for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
+            imgMap[localId] = {
+              serverId: '',
+              sourceType: res.sourceType
+            }
+          }
+          if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
+          s.upload(imgMap)
+        },
+        fail: function (res) {
+          Bridge.showToast('选择照片失败,请检查是否开启定位权限', {mask: false})
+        },
+        cancel: function () {
+        },
+        complete: function () {
+        }
+      })
     }
-    s.deleteImg = function (key) {
-    }
-    s.deleteAfter = function (index) {
-    }
-    s.destory = function () {
-    }
-    s.upload = function () {
-    }
-    s.preview = function (index) {
+    // 上传照片
+    s.upload = function (imgMap) {
+      let imgs = Object.keys(imgMap)
+      let loop = function (index) {
+        if (index >= imgs.length) {
+          return
+        }
+        let img = imgs[index]
+        if (imgMap[img].serverId) {
+          loop(++index)
+          return
+        }
+        Bridge.uploadImage({
+          localId: img, // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function (res) {
+            let serverId = res.serverId; // 返回图片的服务器端ID
+            imgMap[img].serverId = serverId
+            if (params.onUploadSuccess) params.onUploadSuccess(imgMap, res)
+            if (index >= imgs.length - 1 && params.onUploadsSuccess) params.onUploadsSuccess(imgMap)
+            loop(++index)
+          },
+          fail: function () {
+            var msg = '您选择的第' + index + '张图片上传失败，稍后请重试'
+            Bridge.showToast(msg, {mask: false})
+            if (params.onUploadFail) params.onUploadFail(index, imgMap[img])
+            loop(++index)
+          }
+        })
+      }
+      loop(0)
     }
   },
   /*
@@ -297,7 +518,6 @@ var Bridge = {
   // 拨打电话
   tel: function (number) {
     if (Device.device === 'pc') {
-      // 提示获取地址失败
       this.showToast('此功能仅可在微信或APP中使用')
       return
     }
@@ -312,15 +532,22 @@ var Bridge = {
       // 提示错误
       this.toast = new Toast({
         parent: document.body,
-        maskClass: 'mask toast-mask ' + (params.position ? params.position : 'middle') + (params.mask === false ? ' toast-propagation' : ''),
+        maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
+        toastClass: 'toast ' + (params.position ? params.position : 'middle'),
         html: msg,
         delay: params.delay || 2000
       });
     } else {
       this.toast.setHTML(msg)
-      this.toast.setMaskClassName('mask toast-mask ' + (params.position ? params.position : 'middle') + (params.mask === false ? ' toast-propagation' : ''))
+      this.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
+      this.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
     }
     this.toast.show()
+    if (params.onSuccess) {
+      setTimeout(() => {
+        params.onSuccess()
+      }, params.duration ? Math.round(params.duration / 2) : 1000)
+    }
   },
   // 弹出loading
   loading: null,
@@ -337,15 +564,23 @@ var Bridge = {
     }
     this.loading.show()
   },
+  hideLoading: function () {
+    if (!this.loading) {
+      this.toast.showToast('请先showLoading才能hideLoading')
+    } else {
+      this.loading.hide()
+    }
+  },
   // 弹出Alert
   alert: null,
   showAlert: function (msg, params = {}) {
     if (!this.alert) {
       this.alert = new Alert({
-        caption: params.caption || '提示',
+        caption: params.caption || '',
         html: msg,
         onClickSubmit: function (e) {
-					if (params.onSuccess) params.onSuccess(e)
+          if (params.onSuccess) params.onSuccess(e)
+          else e.hide()
         }
       });
     } else {

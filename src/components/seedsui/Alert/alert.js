@@ -201,7 +201,7 @@ var Alert = function (params) {
   }
   s.getArgs = function (e) {
     var args = s.params.args
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {

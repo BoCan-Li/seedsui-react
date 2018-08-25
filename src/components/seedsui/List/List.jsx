@@ -62,7 +62,7 @@ export default class List extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
@@ -85,6 +85,13 @@ export default class List extends Component {
     } else {
       if (onClick) onClick(this.getArgs(e));
     }
+    e.stopPropagation();
+  }
+  onClickContainer = (e) => {
+    if (this.props.onClickContainer) {
+      this.props.onClickContainer(this.getArgs(e));
+      e.stopPropagation();
+    }
   }
   onClickThumbnail = (e) => {
     if (this.props.onClickThumbnail) {
@@ -99,7 +106,7 @@ export default class List extends Component {
     }
   }
   render() {
-    const { style, className, onClickContainer,
+    const { style, className,
       licon, liconSrc, liconClassName, liconStyle,
       ricon, riconSrc, riconClassName, riconStyle,
       showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter,
@@ -123,7 +130,7 @@ export default class List extends Component {
           {avatarSrc && <span className="list-avatar-img" style={{backgroundImage: `url(${avatarSrc})`}}></span>}
           {avatarAfter}
         </div>}
-        <div className={`list-container${containerClassName ? ' ' + containerClassName : ''}`} style={containerStyle} onClick={() => {onClickContainer && onClickContainer()}}>
+        <div className={`list-container${containerClassName ? ' ' + containerClassName : ''}`} style={containerStyle} onClick={this.onClickContainer}>
           {caption && <div className={`list-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</div>}
           {sndcaption && <div className={`list-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{sndcaption}</div>}
           {containerAfter}

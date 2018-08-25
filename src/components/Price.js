@@ -1,16 +1,15 @@
+// 已被订货365定制,不能跟seedsui版本走
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import bridge from 'components/seedsui/utils/bridge';
+const sysDigits = bridge.getSystemParameter({code: 'esssPriceScaleLength', appId: '200003'});
 export default class Price extends Component {
   static propTypes = {
     showSymbol: PropTypes.bool, // 是否显示货币符号
     showThousandth: PropTypes.bool, // 是否显示千分位
     className: PropTypes.string,
     style: PropTypes.object,
-    price: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
+    price: PropTypes.string,
     unit: PropTypes.string,
     digitsFixed: PropTypes.bool, // 固定小数, 例如100仍然显示100.00
     digits: PropTypes.oneOfType([ // 如果设置了小数位控制,则控制小数位,如不控制,则原样显示
@@ -23,12 +22,11 @@ export default class Price extends Component {
     showThousandth: true,
     className: 'capitalize',
     digitsFixed: true,
-    digits: false
+    digits: sysDigits ? Number(sysDigits) : false
   }
   constructor(props, context) {
     super(props, context);
   }
-
   render() {
     const {showSymbol, showThousandth, price, unit, className, digits, digitsFixed, style} = this.props;
     // 价格字符串

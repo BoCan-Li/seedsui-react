@@ -29,27 +29,23 @@
   background-color:@toast-bottom-bg;
 }
 // 底部类型
-.toast-mask.bottom{
-  .toast{
-    bottom:-@100px;
-    font-size:@font-size-sm;
-    &.active{
-      opacity: 1;
-      .transform-translate3d-0-neg150-0();
-    }
+.toast.bottom{
+  bottom:-@100px;
+  font-size:@font-size-sm;
+  &.active{
+    opacity: 1;
+    .transform-translate3d-0-neg150-0();
   }
 }
 // 头部类型
-.toast-mask.top{
-  .toast{
-    top:@44px;
-    &.active{
-      visibility:visible;
-      opacity: 1;
-    }
+.toast.top{
+  top:@44px;
+  &.active{
+    visibility:visible;
+    opacity: 1;
   }
 }
-.toast-mask.top, .toast-mask.bottom{
+.toast.top, .toast.bottom{
   .toast-icon{
     display:block;
     background-size:cover;
@@ -73,15 +69,13 @@
   }
 }
 // 中间类型
-.toast-mask.middle{
-  .toast{
-    top: 50%;
-    .transform-translateY-neghalf();
-    
-    &.active{
-      visibility:visible;
-      opacity: 1;
-    }
+.toast.middle{
+  top: 50%;
+  .transform-translateY-neghalf();
+  
+  &.active{
+    visibility:visible;
+    opacity: 1;
   }
   .toast-wrapper{
     .flex-vertical;

@@ -2,9 +2,10 @@
 判断是否是空对象
 ------------------- */
 Object.isEmptyObject = function (obj) {
-  var name
-  for (name in obj) {
-    return false
+  for (var n in obj) {
+    if (obj.hasOwnProperty(n)) {
+      return false
+    }
   }
   return true
 }

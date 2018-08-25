@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Instance from './dialog.js';
 
 export default class Dialog extends Component {
   static propTypes = {
@@ -9,7 +8,6 @@ export default class Dialog extends Component {
     args: PropTypes.any,
     show: PropTypes.bool,
 
-    position: PropTypes.string,
     animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
     duration: PropTypes.number,
     isClickMaskHide: PropTypes.bool,
@@ -32,9 +30,6 @@ export default class Dialog extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    };
   }
   /* shouldComponentUpdate = (nextProps) => { // 因为是容器,不能使用此方法,不然会影响内部元素的更新
     if (this.props.show === nextProps.show) {
@@ -43,65 +38,62 @@ export default class Dialog extends Component {
     return true;
   } */
   componentDidUpdate = (prevProps) => {
-    if (this.props.show !== prevProps.show) {
-      if (this.props.show) {
-        this.state.instance.show();
-      } else if (!this.props.show) {
-        this.state.instance.hide();
-      }
-    }
   }
   componentDidMount = () => {
-    if (this.state.instance) return;
-    const {args, duration, isClickMaskHide, onClickMask, onShowed, onHid} = this.props;
-    const instance = new Instance({
-      mask: this.$el,
-      args,
-      duration: duration,
-      isClickMaskHide,
-      onClickMask: onClickMask || null,
-      onShowed: onShowed || null,
-      onHid: onHid || null
-    });
-    if (this.props.show) instance.show();
-    this.setState({
-      instance
-    });
+  }
+  getArgs = (e) => {
+    var args = this.props.args;
+    if (args !== undefined) {
+      if (typeof args === 'string' && args === '$event') {
+        args = e;
+      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
+        args[args.indexOf('$event')] = e;
+      }
+    } else {
+      args = e;
+    }
+    return args;
+  }
+  onClickMask = (e) => {
+    if (this.props.onClickMask) this.props.onClickMask(this.getArgs(e));
+    e.stopPropagation();
+  }
+  onClickDialog = (e) => {
+    e.stopPropagation();
   }
   render() {
     const {
+      duration, show,
       maskClassName, maskStyle,
       className, style, animation,
       children
     } = this.props;
-    let position = this.props.position;
-    if (!position) {
-      switch (animation) {
-        case 'slideLeft':
-          position = 'right';
-          break;
-        case 'slideRight':
-          position = 'left';
-          break;
-        case 'slideUp':
-          position = 'bottom';
-          break;
-        case 'slideDown':
-          position = 'top';
-          break;
-        case 'zoom':
-          position = 'middle';
-          break;
-        case 'fade':
-          position = 'middle';
-          break;
-        default:
-        position = 'middle';
-      }
+    let transformOrigin = 'middle';
+    switch (animation) {
+      case 'slideLeft':
+        transformOrigin = 'right-middle';
+        break;
+      case 'slideRight':
+        transformOrigin = 'left-middle';
+        break;
+      case 'slideUp':
+        transformOrigin = 'bottom-center';
+        break;
+      case 'slideDown':
+        transformOrigin = 'top-center';
+        break;
+      case 'zoom':
+        transformOrigin = 'middle';
+        break;
+      case 'fade':
+        transformOrigin = 'middle';
+        break;
+      default:
+        transformOrigin = 'middle';
     }
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle}>
-        <div style={style} className={`dialog${position ? ' ' + position : ''}${className ? ' ' + className : ''}`} data-animation={animation}>
+      <div ref={el => {this.$el = el;}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClickMask}>
+        <div className={`dialog${transformOrigin ? ' ' + transformOrigin : ''}${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation={animation} onClick={this.onClickDialog}>
           {children && children}
         </div>
       </div>,

@@ -10,7 +10,8 @@
 	max-width: 100%;
 	max-height: 100%;
   overflow: auto;
-
+}
+.dialog, .popover{
 	visibility:hidden;
 	.transitionDuration-atanimatioin-duration();
 	.transitionProperty-transform-opacity-visibility();
@@ -84,10 +85,10 @@
 	}
 
 	// 顶部弹出
-	&.top,&.top-center,&.top-right{
+	&.top-left,&.top-center,&.top-right{
 		top:0;
 	}
-	&.top{
+	&.top-left{
 		left:0;
 		.transformOrigin-left-top();
 	}
@@ -115,10 +116,10 @@
 	}
 
 	// 底部弹出
-	&.bottom,&.bottom-center,&.bottom-right{
+	&.bottom-left,&.bottom-center,&.bottom-right{
 		bottom:0;
 	}
-	&.bottom{
+	&.bottom-left{
 		left:0;
 		.transformOrigin-left-bottom();
 	}
@@ -146,10 +147,10 @@
 	}
 
 	// 左侧弹出
-	&.left,&.left-middle,&.left-bottom{
+	&.left-top,&.left-middle,&.left-bottom{
 		left:0;
 	}
-	&.left{
+	&.left-top{
 		top:0;
 		.transformOrigin-left-top();
 	}
@@ -177,10 +178,10 @@
 	}
 	
 	// 右侧弹出
-	&.right,&.right-middle,&.right-bottom{
+	&.right-top,&.right-middle,&.right-bottom{
 		right:0;
 	}
-	&.right{
+	&.right-top{
 		top:0;
 		.transformOrigin-right-top();
 	}

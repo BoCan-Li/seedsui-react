@@ -7,10 +7,10 @@ var Toast = function (params) {
     mask: null,
     parent: document.body, // 创建于哪个元素下
 
-    maskClass: 'mask toast-mask bottom', // 加toast-propagation允许点击
+    maskClass: 'mask toast-mask', // 加toast-propagation允许点击
     maskActiveClass: 'active',
 
-    toastClass: 'toast',
+    toastClass: 'toast bottom',
     toastActiveClass: 'active',
     wrapperClass: 'toast-wrapper',
     

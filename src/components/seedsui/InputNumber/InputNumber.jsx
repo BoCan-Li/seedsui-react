@@ -13,7 +13,10 @@ export default class InputText extends Component {
     // 文本框
     inputStyle: PropTypes.object,
     inputClassName: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     placeholder: PropTypes.string,
     name: PropTypes.string,
     maxLength: PropTypes.number,
@@ -56,7 +59,7 @@ export default class InputText extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {

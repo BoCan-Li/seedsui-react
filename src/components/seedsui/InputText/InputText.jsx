@@ -44,7 +44,7 @@ export default class InputText extends Component {
   }
   getArgs = (e) => {
     var args = this.props.args;
-    if (args) {
+    if (args !== undefined) {
       if (typeof args === 'string' && args === '$event') {
         args = e;
       } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
@@ -60,6 +60,13 @@ export default class InputText extends Component {
     var value = target.value;
     if (this.props.onChange) {
       this.props.onChange(value, this.getArgs(e));
+    }
+  }
+  onClick = (e) => {
+    var target = e.target;
+    var value = target.value;
+    if (this.props.onClick) {
+      this.props.onClick(value, this.getArgs(e));
     }
   }
   onBlur = (e) => {
@@ -81,13 +88,13 @@ export default class InputText extends Component {
   getInputDOM = () => {
     const {
       valueBindProp,
-      inputClassName, inputStyle, maxLength, value, placeholder, name, readOnly, disabled, onClick,
+      inputClassName, inputStyle, maxLength, value, placeholder, name, readOnly, disabled,
     } = this.props;
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input ref={(el) => {this.$input = el;}} type="text" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+      return <input ref={(el) => {this.$input = el;}} type="text" value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
     }
-    return <input ref={(el) => {this.$input = el;}} type="text" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    return <input ref={(el) => {this.$input = el;}} type="text" defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClick} onBlur={this.onBlur} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
   }
   render() {
     const {
