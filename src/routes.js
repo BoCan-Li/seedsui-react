@@ -9,16 +9,21 @@ import NoNetwork from 'components/seedsui/NoNetwork';
 import {
   BrowserSupport,
   NotFound,
-  Exception,
+  Exception
+} from 'containers';
 
+// Demos
+import {
   Home,
+  
   Box,
   Layout,
   CarrouselPage,
   Form,
   CalendarDemo,
   HandsignDemo
-} from 'containers';
+} from '@/demos';
+
 const Routes = () => (
   <Provider store={store}>
     <Router>
