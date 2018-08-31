@@ -1,0 +1,137 @@
+// carrousel.less(start)
+// page模式
+.carrousel-page{
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  .carrousel-wrapper, .carrousel-slide{
+    height: 100%;
+  }
+}
+// container模式
+.carrousel-container{
+  position: relative;
+  width: 100%;
+  overflow: hidden; 
+  .setCarrouselContainer();
+}
+.carrousel-wrapper{
+  position:relative;
+  width: @1122px;
+  left:0;
+  &:after{
+    display:table;
+    content:'';
+    clear: both;
+    zoom:1;
+  }
+}
+.carrousel-slide,.carrousel-slide-duplicate{
+  position: relative;
+  float:left;
+  overflow: auto;
+  background-size:cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+}
+// phone
+@media (min-width: 576px) {
+  .carrousel-slide {
+    background-size: @phone-background-size;
+  }
+}
+// pad
+@media (min-width: 768px) {
+  .carrousel-slide {
+    background-size: @pad-background-size;
+  }
+}
+// pc
+@media (min-width: 992px) {
+  .carrousel-slide {
+    background-size: @pc-background-size;
+  }
+}
+// pc-lg
+@media (min-width: 1200px) {
+  .carrousel-slide {
+    background-size: @pc-lg-background-size;
+  }
+}
+// 图片
+.carrousel-slide-img{
+  pointer-events: none;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+}
+// 标题
+.carrousel-summary{
+  position: absolute;
+  .flex;
+  bottom: 0;
+  width: 100%;
+  padding:@8px @10px;
+  background-color: rgba(0,0,0,.5);
+  text-overflow:nowrap;
+  box-sizing: border-box;
+  color:white;
+  text-align: left;
+}
+.carrousel-summary-icon{
+  display: block;
+  font-size: @20px;
+  width: @20px;
+  height: @20px;
+}
+.carrousel-summary-font{
+  display: block;
+  &:extend(.flex-1);
+}
+.carrousel-summary-icon+.carrousel-summary-font{
+  margin-left: @4px;
+}
+// 分页
+.carrousel-pagination{
+  position: absolute;
+  left:0;
+  bottom:@10px;
+  width: 100%;
+  line-height: 0;
+  font-size: 0;
+  .setCarrouselPagination();
+}
+.carrousel-pagination .bullet{
+  display: inline-block;
+  opacity: 1;
+  width: @5px;
+  height: @5px;
+  border-radius: 100%;
+  margin-right:@5px;
+  line-height: @8px;
+  font-size: @12px;
+  bottom: @10px;
+  .setCarrouselBullet();
+}
+.carrousel-pagination .bullet.active{
+  .setCarrouselBulletActive();
+}
+// 左右箭头
+.carrousel-prev, .carrousel-next{
+  position: absolute;
+  top: 50%;
+  .transform-translateY-neghalf();
+}
+.carrousel-prev{
+  .setCarrouselPrevNext();
+  .setCarrouselPrev();
+}
+.carrousel-next{
+  .setCarrouselPrevNext();
+  .setCarrouselNext();
+}
+// carrousel.less(end)

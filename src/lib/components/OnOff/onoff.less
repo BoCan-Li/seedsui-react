@@ -1,0 +1,107 @@
+// onoff.less(start)
+// 关闭状态
+.onoff {
+	position: relative;
+	display: inline-block;
+	height: @30px;
+	width: @60px;
+	background-color:transparent;
+	border-radius: @30px;
+	.transitionDuration-200ms();
+	.transitionProperty-backgroundColor-border();
+	border-width:@1px;
+	border-style:solid;
+	
+	border-color:@dpborder;
+	// 关闭状态文字off
+	&:after{
+		position: absolute;
+		right: @11px;
+		top:50%;
+		.transform-translateY-neghalf();
+		content: attr(data-off);
+		
+		color: @placeholder;
+	}
+	// 关闭状态圆点
+	.onoff-handle{
+		pointer-events:none;
+		position: absolute;
+		left:0;
+		top:50%;
+		.transform-translate-4-neg50percent();
+		width: @20px;
+		height: @20px;
+		border-radius: @100px;
+		.transitionDuration-200ms();
+		.transitionProperty-transform-border-width();
+		
+		background-color:@dpborder;
+	}
+	// 打开状态
+	&.active {
+		background-color:transparent;
+		// 打开状态文字on
+		&:after{
+			right: auto;
+			left: @11px;
+			content: attr(data-on);
+
+			color: @placeholder;
+		}
+		// 打开状态小圆点
+		.onoff-handle{
+			left:0;
+			top:50%;
+			.transform-translate-34-neg50percent();
+
+			background-color: @onoff-bg-active;
+		}
+	}
+	// 开关控件toggle-反转
+	&.reverse{
+		border:none;
+		background-color:white;
+		box-shadow: inset 0 0 0 @1px @dpborder;
+		
+		.onoff-handle{
+			width: @26px;
+			height: @26px;
+			.transform-translate-2-neg50percent();
+
+			background-color:white;
+			-webkit-box-shadow: @2px @2px @2px rgba(0,0,0,.21);
+		}
+		&.active{
+			background-color:@onoff-bg-active;
+			-webkit-box-shadow: none;
+			&:after{
+				color:white;
+			}
+			.onoff-handle{
+				.transform-translate-32-neg50percent();
+				-webkit-box-shadow: @2px @2px @4px rgba(0,0,0,.21);
+				background-color:white;
+			}
+		}
+		&:after{
+			color:@placeholder;
+		}
+	}
+}
+// 开关控件toggle-无文字
+.notext.onoff{
+	width: @50px;
+	&.active{
+		.onoff-handle{
+			.transform-translate-24-neg50percent();
+		}
+	}
+	&:after{
+		content:none;
+	}
+	&.reverse.active .onoff-handle{
+		.transform-translate-22-neg50percent();
+	}
+}
+// onoff.less(end)

@@ -1,0 +1,87 @@
+// flex.less(start)
+.flex{
+	display:flex;
+}
+.inline-flex{
+	display:inline-flex;
+}
+.flex-0{
+	flex:0;
+}
+.flex-1{
+	flex:1;
+}
+.flex-wrap{
+	flex-wrap: wrap;
+}
+// flex方向
+.flex-vertical{
+	flex-direction:column;
+}
+.flex-horizontal{
+  flex-direction:row;
+}
+.flex-vertical-reverse{
+	flex-direction:column-reverse;
+}
+.flex-horizontal-reverse{
+  flex-direction:row-reverse;
+}
+// flex内部水平对齐
+.flex-left{
+	justify-content:flex-start;
+}
+.flex-center{
+	justify-content:center;
+}
+.flex-right{
+	justify-content:flex-end;
+}
+.flex-between{
+	justify-content:space-between;
+}
+.flex-around{
+	justify-content:space-around;
+}
+// flex内部垂直对齐
+.flex-top{
+	align-items:flex-start;
+}
+.flex-middle{
+	align-items:center;
+}
+.flex-bottom{
+	align-items:flex-end;
+}
+.flex-stretch{
+	align-items:stretch;
+}
+// flex对齐方式
+.flex-middlecenter{
+	justify-content:center;
+	align-items:center;
+}
+.flex-baseline{ // 垂直居中对齐
+	align-items:baseline;
+}
+
+.flex-shrink>div{
+	width:100%;
+	transform-style: preserve-3d;
+  flex-shrink: 0;
+}
+
+// flex自身对齐:设置后则覆盖父容器
+.flex-self-stretch{
+	align-self:stretch;
+}
+.flex-self-top{
+	align-self:flex-start;
+}
+.flex-self-middle{
+	align-self:center;
+}
+.flex-self-bottom{
+	align-self:flex-end;
+}
+// flex.less(end)

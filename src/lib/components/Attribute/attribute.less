@@ -1,0 +1,69 @@
+// attribute.less(start)
+.attribute{
+  .flex;
+  .flex-middle;
+  &:extend(.flex-1);
+  .ricon{
+    margin-left: 4px;
+  }
+}
+
+.attribute-margin{
+  margin: 10px 12px;
+}
+.attribute-padding {
+  padding: 10px 12px;
+}
+
+// 用于2列时左右两部分分割
+.attribute-half{
+  width: 50%;
+  .flex;
+  .flex-middle;
+}
+.attribute-left, .attribute-right {
+  .flex;
+  position: relative;
+}
+.attribute-left {
+  color: @attribute-left-color;
+}
+.attribute-right {
+  &:extend(.flex-1);
+}
+// 对齐布局
+.attributes.align, .attribute.align {
+  .attribute-left {
+    width: 30%;
+  }
+}
+
+// 两端对齐
+.attributes.between, .attribute.between {
+  .attribute-left {
+    &:extend(.flex-1);
+  }
+  .attribute-right {
+    .flex;
+    .flex-right;
+  }
+}
+
+// 换行对齐
+.attributes.wrap {
+  .attribute {
+    display: block;
+  }
+}
+.attribute.wrap, .attribute-half.wrap {
+  display: block;
+}
+
+// 内部文本框
+.attribute{
+  .input-text,.input-textarea,.input-pre-space{
+    display: block;
+    &:extend(.flex-1);
+  }
+}
+// attribute.less(end)

@@ -1,0 +1,24 @@
+// dot.less(start)
+.dot{
+  position:relative;
+  .inline-flex;
+	.flex-middlecenter;
+  vertical-align: middle;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size:@font-size-sm;
+}
+// 小点点
+.dot{
+  height:@5px;
+  width:@5px;
+  border-radius: 100%;
+
+  background-color:@dot-bg;
+}
+.dot.active{
+  background-color:@dot-bg-active;
+}
+// dot.less(end)
