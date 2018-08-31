@@ -68,15 +68,15 @@
 	    width: 100%;
 
 	    background-color:@tabbar-line-border-active;
-	    .transformOrigin-center-center();
-	    .transform-translate-neghalf-0-scale-0-1();
+	    transform-origin:center center;
+	    transform:translate(-50%,0) scale(0,1);
 		}
 	}
 	.tab.active{
 		color:@tabbar-line-color-active;
 		background-color: @tabbar-line-bg-active;
 		&:after {
-			.transform-translate-neghalf-0-scale-1-1();
+			transform:translate(-50%,0) scale(1,1);
 		}
 	}
 	&.tabbar-line-width50{
@@ -113,17 +113,17 @@
 }
 .tabbar-line.animated{
 	.tab{
-		.transitionProperty-color();
-		.transitionDuration-300ms();
+		transition-property:color;
+		transition-duration:300ms;
 		&:after{
-			.transitionProperty-transform();
-			.transitionDuration-100ms();
+			transition-property:transform;
+			transition-duration:100ms;
 		}
 	}
 	.tab.active{
 		&:after {
-			.transitionTimingFunction-cubicBezier-0dot4-0-0dot2-1();
-			.transitionDuration-atanimatioin-duration()
+			transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);
+			transition-duration:@animatioin-duration;
 		}
 	}
 }
@@ -194,8 +194,8 @@
 .tabbar-lump.animated{
 	.tab{
 		.tab-content{
-			.transitionProperty-backgroundColor-color();
-			.transitionDuration-atanimatioin-duration();
+			transition-property:background-color,color;
+			transition-duration:@animatioin-duration;
 		}
 	}
 }
@@ -214,23 +214,23 @@
     height: 20px;
 		top: 50%;
     left: 0;
-    .transform-translate-0-neghalf-scaleX-05();
+    transform: translate(0,-50%) scaleX(0.5);
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
     .tab:after {
-			.transform-translate-0-neghalf-scaleX-05();
+			transform: translate(0,-50%) scaleX(0.5);
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
     .tab:after {
-			.transform-translate-0-neghalf-scaleX-033();
+			transform: translate(0,-50%) scaleX(0.33);
 		}
 	}
 	.tab.active{
 		color: @tabbar-dropdown-color-active;
 		background-color: @tabbar-dropdown-bg-active;
 		.icon{
-			.transform-rotate-180deg();
+			transform: rotate(180deg);
     }
 	}
 }
@@ -247,11 +247,11 @@
 }
 .tabbar-dropdown.animated{
 	.tab{
-		.transitionProperty-color();
-		.transitionDuration-200ms();
+		transition-property:color;
+		transition-duration:200ms;
 		.icon{
-			.transitionProperty-transform();
-			.transitionDuration-200ms();
+			transition-property:transform;
+			transition-duration:200ms;
 		}
 	}
 }

@@ -15,9 +15,9 @@
   pointer-events:none;
   opacity: 0;
 
-  .transitionProperty-transform-opacity-visibility();
-  .transitionDuration-150ms();
-  .transitionTimingFunction-ease();
+  transition-property:transform,opacity,visibility;
+  transition-duration:150ms;
+  transition-timing-function:ease;
 }
 .toast-wrapper{
   .inline-flex;
@@ -41,7 +41,7 @@
   bottom:-@100px;
   &.active{
     opacity: 1;
-    .transform-translate3d-0-neg150-0();
+    transform:translate3d(0,-@150px,0);
   }
 }
 // 头部类型
@@ -74,7 +74,7 @@
 // 中间类型
 .toast.middle{
   top: 50%;
-  .transform-translateY-neghalf();
+  transform: translateY(-50%);
   
   &.active{
     visibility:visible;

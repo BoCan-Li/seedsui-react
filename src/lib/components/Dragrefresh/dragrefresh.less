@@ -1,8 +1,8 @@
 // dragrefresh.less(start)
 @-webkit-keyframes dfAnimate-spinner {
-  0% { .transform-rotate-0deg(); }
-  50% { .transform-rotate-180deg(); }
-  100% { .transform-rotate-360deg(); }
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
 }
 //pull类型
 .df-pull {
@@ -27,8 +27,8 @@
   display: block;
   margin-right: @10px;
   transition-timing-function: ease-in;
-  .transitionProperty-transform();
-  .transitionDuration-atanimatioin-duration();
+  transition-property:transform;
+  transition-duration:@animatioin-duration;
 
   width: @20px;
   height: @20px;
@@ -38,17 +38,17 @@
   background-position: left top;
 
   &.df-pull-icon-up{
-    .transform-rotate-0deg();
+    transform: rotate(0deg);
   }
   &.df-pull-icon-down{
-    .transform-rotate-180deg();
+    transform: rotate(180deg);
   }
   &.df-pull-icon-none{
     display: none;
   }
   &.df-pull-icon-loading{
     background-position: left bottom;
-    .transitionDuration-0();
+    transition-duration:0ms;
     -webkit-animation: dfAnimate-spinner 1000ms infinite linear;
   }
 }
@@ -71,10 +71,10 @@
   color:@primary-bg;
 
   transition-timing-function: ease-in;
-  .transitionProperty-transform();
-  .transitionDuration-atanimatioin-duration();
+  transition-property:transform;
+  transition-duration:@animatioin-duration;
   &.df-circle-show{
-    .transform-translate3d-0-120-0-rotate-0deg();
+    transform:translate3d(0,@120px,0) rotate(0deg);
   }
 }
 .df-circle-icon{
@@ -88,8 +88,8 @@
   .setDragrefreshCircleIcon();
 
   transition-timing-function: ease-in;
-  .transitionProperty-transform();
-  .transitionDuration-atanimatioin-duration();
+  transition-property:transform;
+  transition-duration:@animatioin-duration;
   &.df-circle-icon-loading{
     -webkit-animation: dfAnimate-spinner 1000ms infinite linear;
   }

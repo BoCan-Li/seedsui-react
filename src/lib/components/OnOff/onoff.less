@@ -7,8 +7,8 @@
 	width: @60px;
 	background-color:transparent;
 	border-radius: @30px;
-	.transitionDuration-200ms();
-	.transitionProperty-backgroundColor-border();
+	transition-duration:200ms;
+	transition-property: background-color, border;
 	border-width:@1px;
 	border-style:solid;
 	
@@ -18,7 +18,7 @@
 		position: absolute;
 		right: @11px;
 		top:50%;
-		.transform-translateY-neghalf();
+		transform: translateY(-50%);
 		content: attr(data-off);
 		
 		color: @placeholder;
@@ -29,12 +29,12 @@
 		position: absolute;
 		left:0;
 		top:50%;
-		.transform-translate-4-neg50percent();
+		transform:translate(@4px,-50%);
 		width: @20px;
 		height: @20px;
 		border-radius: @100px;
-		.transitionDuration-200ms();
-		.transitionProperty-transform-border-width();
+		transition-duration:200ms;
+		transition-property:transform, border, width;
 		
 		background-color:@dpborder;
 	}
@@ -53,7 +53,7 @@
 		.onoff-handle{
 			left:0;
 			top:50%;
-			.transform-translate-34-neg50percent();
+			transform: translate(@34px,-50%);
 
 			background-color: @onoff-bg-active;
 		}
@@ -67,7 +67,7 @@
 		.onoff-handle{
 			width: @26px;
 			height: @26px;
-			.transform-translate-2-neg50percent();
+			transform: translate(@2px,-50%);
 
 			background-color:white;
 			-webkit-box-shadow: @2px @2px @2px rgba(0,0,0,.21);
@@ -79,7 +79,7 @@
 				color:white;
 			}
 			.onoff-handle{
-				.transform-translate-32-neg50percent();
+				transform: translate(@32px,-50%);
 				-webkit-box-shadow: @2px @2px @4px rgba(0,0,0,.21);
 				background-color:white;
 			}
@@ -94,14 +94,14 @@
 	width: @50px;
 	&.active{
 		.onoff-handle{
-			.transform-translate-24-neg50percent();
+			transform: translate(@24px,-50%);
 		}
 	}
 	&:after{
 		content:none;
 	}
 	&.reverse.active .onoff-handle{
-		.transform-translate-22-neg50percent();
+		transform: translate(@22px,-50%);
 	}
 }
 // onoff.less(end)

@@ -1,9 +1,11 @@
 import React from 'react';
-import {Page} from '../lib';
+import {Page, Header, Titlebar} from '../lib';
 
 const App = () => (
   <Page>
-    seedsui
+    <Header>
+      <Titlebar caption="SeedsUI"/>
+    </Header>
   </Page>
 );
 

@@ -134,7 +134,7 @@
       right: 0;
       width: @1px;
       height: 100%;
-      .transformOrigin-right-center();
+      transform-origin:right center;
 		}
 		//下横线
 		&:after{
@@ -144,27 +144,27 @@
 	    left: 0;
 	    height: @1px;
 	    width: 100%;
-	    .transformOrigin-center-bottom();
+	    transform-origin:center bottom;
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
 		//下横线
 		li:after {
-			.transform-scaleY-05();
+			transform: scaleY(0.5);
 		}
 		//右竖线
 		li:before {
-			.transform-scaleX-05();
+			transform: scaleX(0.5);
 		}
 	}
 	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
 		//下横线
 		li:after {
-			.transform-scaleY-033();
+			transform: scaleY(0.33);
 		}
 		//右竖线
 		li:before {
-			.transform-scaleX-033();
+			transform: scaleX(0.33);
 		}
 	}
 }
