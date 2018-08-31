@@ -1,6 +1,6 @@
 'use strict';
 
-// const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -12,8 +12,6 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-// postcss配置
-const postcssConfigPath = require('./postcss.config');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -92,13 +90,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      '@': paths.appSrc,
-      'components': paths.appComponents,
-      'containers': paths.appContainers,
-      'store': paths.appStore,
-      'bridge': paths.appBridge,
-      'utils': paths.appUtils,
-      'helpers': paths.appHelpers,
+      
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -115,16 +107,6 @@ module.exports = {
   module: {
     strictExportPresence: true,
     rules: [
-      // 禁用ejs,使用html-loader编译html文件
-      {
-        test: /\.html$/,
-        use: [ {
-          loader: 'html-loader',
-          options: {
-            minimize: true
-          }
-        }],
-      },
       // TODO: Disable require.ensure as it's not a standard language feature.
       // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
       // { parser: { requireEnsure: false } },
@@ -167,7 +149,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              plugins: [require.resolve('babel-plugin-transform-decorators-legacy')],
+              
               compact: true,
             },
           },
@@ -184,7 +166,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css|.less$/,
+            test: /\.css$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -206,10 +188,23 @@ module.exports = {
                     {
                       loader: require.resolve('postcss-loader'),
                       options: {
-                        ...postcssConfigPath
+                        // Necessary for external CSS imports to work
+                        // https://github.com/facebookincubator/create-react-app/issues/2677
+                        ident: 'postcss',
+                        plugins: () => [
+                          require('postcss-flexbugs-fixes'),
+                          autoprefixer({
+                            browsers: [
+                              '>1%',
+                              'last 4 versions',
+                              'Firefox ESR',
+                              'not ie < 9', // React doesn't support IE8 anyway
+                            ],
+                            flexbox: 'no-2009',
+                          }),
+                        ],
                       },
                     },
-                    {loader: require.resolve('less-loader')} // 编译less为css
                   ],
                 },
                 extractTextPluginOptions
@@ -227,7 +222,7 @@ module.exports = {
             // it's runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.js$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
@@ -279,7 +274,7 @@ module.exports = {
       },
       mangle: {
         safari10: true,
-      },        
+      },
       output: {
         comments: false,
         // Turned on because emoji and regex is not minified properly using default

@@ -33,15 +33,13 @@ const getPublicUrl = appPackageJson =>
 // like /todos/42/static/js/bundle.7289d.js. We have to know the root.
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
-  // 打包后放置的服务器目录
-  const servedUrl = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : './'); // 如果入口是jsp,pathname需要换成绝对路径/path/
+  const servedUrl =
+    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/');
   return ensureSlash(servedUrl, true);
 }
 
 // config after eject: we're in ./config/
 module.exports = {
-  // 本地服务器端口号
-  uriPort: 8080,
   dotenv: resolveApp('.env'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
@@ -54,11 +52,4 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
-  appComponents: resolveApp('src/components'),
-  appContainers: resolveApp('src/containers'),
-  appStore: resolveApp('src/store'),
-  appRouter: resolveApp('src/router'),
-  appUtils: resolveApp('src/utils'),
-  appHelpers: resolveApp('src/helpers'),
-  appBridge: resolveApp('src/bridge')
 };

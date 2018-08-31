@@ -2,15 +2,12 @@
 
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
-const path = require('path');
+const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
-
-// 自动登录设置
-const autologinSetting = require(paths.appPackageJson).autoLogin;
 
 module.exports = function(proxy, allowedHost) {
   return {
@@ -71,12 +68,7 @@ module.exports = function(proxy, allowedHost) {
     // src/node_modules is not ignored to support absolute imports
     // https://github.com/facebookincubator/create-react-app/issues/1065
     watchOptions: {
-      ignored: new RegExp(
-        `^(?!${path
-          .normalize(paths.appSrc + '/')
-          .replace(/[\\]+/g, '\\\\')}).+[\\\\/]node_modules[\\\\/]`,
-        'g'
-      ),
+      ignored: ignoredFiles(paths.appSrc),
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
@@ -98,36 +90,6 @@ module.exports = function(proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
       app.use(noopServiceWorkerMiddleware());
-      /**
-       * 使用axios模拟登录过程,在当前域名下注入cookie
-       */
-      var axios = require('axios')
-      var querystring = require('querystring')
-      app.get(autologinSetting.filter, (req, resp) => {
-        const request = axios.post(
-          autologinSetting.url,
-          querystring.stringify(autologinSetting.data)
-        )
-        request.then((result) => {
-          resp.append('Set-Cookie', result.headers['set-cookie'])
-          resp.json({success: true, cookie: result.headers['set-cookie']})
-        })
-      })
-      /**
-       * 使用superagent模拟登录过程,在当前域名下注入cookie
-       */
-      // const superagent = require('superagent');
-      // app.get('/auto/login', (req, resp) => {
-      //   const request = superagent.post(targetUrl + '/portal/logon.action');
-      //   request.type('form');
-      //   request.send({
-      //     // params
-      //   });
-      //   request.end((err, result = {}) => {
-      //     resp.append('Set-Cookie', result.header['set-cookie']);
-      //     resp.json({success: true, cookie: result.header['set-cookie']});
-      //   });
-      // });
     },
   };
 };
