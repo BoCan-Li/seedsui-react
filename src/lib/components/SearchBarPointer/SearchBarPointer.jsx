@@ -25,7 +25,7 @@ export default class SearchBarPointer extends Component {
     return (
       <div className={`searchbar${className ? ' ' + className : ''}`} style={style}>
         <div className={`searchbar-form${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} onClick={() => {onClick()}}>
-          <i className="searchbar-icon-search"></i>
+          <i className="icon searchbar-icon-search"></i>
           <input type="search" className="searchbar-input" readOnly placeholder={placeholder}/>
         </div>
       </div>

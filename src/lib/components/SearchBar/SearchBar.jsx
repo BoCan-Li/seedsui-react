@@ -66,7 +66,7 @@ export default class SearchBar extends Component {
     return (
       <div className={`searchbar${className ? ' ' + className : ''}`} style={style}>
         <form className="searchbar-form" onSubmit={this.onSubmit}>
-          <i className="searchbar-icon-search"></i>
+          <i className="icon searchbar-icon-search"></i>
           <input type="search" ref={input => this.searchInput = input} className="searchbar-input" placeholder={placeholder} onChange={this.onChange} value={this.state.value}/>
           {this.state.showClear && <i className="searchbar-icon-clear" onClick={this.onClear}></i>}
         </form>
