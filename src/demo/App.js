@@ -1,5 +1,5 @@
 import React from 'react';
-import {Page, Header, Container, Alert, Titlebar} from '../lib';
+import {Page, Header, Container, Alert, Titlebar, Progress} from '../lib';
 
 const App = () => (
   <Page>
@@ -8,7 +8,7 @@ const App = () => (
     </Header>
     <Container>
       <Alert></Alert>
-      <input type="search"/>
+      <Progress percentage={50}/>
     </Container>
   </Page>
 );

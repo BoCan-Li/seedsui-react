@@ -71,7 +71,7 @@ export default class NumBoxPop extends Component {
     const {args, show, caption, min, max, digits} = this.props;
     return (
       <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
-        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} changeFocus value={this.state.value} style={{display: '-webkit-box', margin: '0 auto'}} className="xl" onChange={this.onChange}/>
+        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} changeFocus value={this.state.value} style={{margin: '0 auto'}} className="flex xl" onChange={this.onChange}/>
       </Alert>
     );
   }

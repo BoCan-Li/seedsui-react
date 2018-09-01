@@ -316,7 +316,7 @@
 @grid-album-cell-height: @90px;
 .setGridIconAdd(){
   font-family: 'iconfont';
-  &:extend(.icon-plus-fill all);
+  &:extend(.icon-plus all);
 }
 .setGridIconBox(){
 }
@@ -559,7 +559,7 @@
     }
     &.animated:after{
       animation: movestripes 2s linear infinite;
-      -webkit-animation: movestripes 2s linear infinite;
+      animation: movestripes 2s linear infinite;
     }
   }
   */
@@ -714,10 +714,10 @@
 @tree-color-active: #333;
 .setTreeIconCollapse(){
   &:extend(.shape-triangle-right);
-  -webkit-transition: -webkit-transform 100ms;
+  transition: transform 100ms;
 }
 .setTreeIconExtand(){
-  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .setTreeButtonAdd(){
   color: #d1d1d1;
@@ -790,8 +790,8 @@
   &:extend(.shape-triangle-down);
 }
 .setMenuTreeMoreExtand(){
-  -webkit-transform-origin:center;
-  -webkit-transform: rotate(180deg);
+  transform-origin:center;
+  transform: rotate(180deg);
 }
 
 // menutiled弹出菜单
@@ -884,19 +884,19 @@
     border-color: white;
     border-width: 1px 0 0 1px;
     left:50%;
-    -webkit-transform-origin: center;
+    transform-origin: center;
   }
 }
 .setCarrouselPrev(){
   left:0;
   &:after{
-    -webkit-transform: translate(-30%, -50%) rotate(315deg);
+    transform: translate(-30%, -50%) rotate(315deg);
   }
 }
 .setCarrouselNext(){
   right:0;
   &:after{
-    -webkit-transform: translate(-80%, -50%) rotate(134deg);
+    transform: translate(-80%, -50%) rotate(134deg);
   }
 }
 // ticket票券
