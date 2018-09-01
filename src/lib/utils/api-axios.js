@@ -5,13 +5,6 @@ import bridge from './../bridge'
 // 设置头
 axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
 
-const env = process.env.NODE_ENV
-
-if (env === 'development') {
-  axios.defaults.baseURL = `http://localhost:3000/api` // 加上/api,为了匹配代理过滤器,使用代理做跨域
-  // axios.defaults.baseURL = `http://localhost:3000`
-  axios.defaults.withCredentials = true
-}
 // 构建get请求参数
 function buildGetUrl (url, params) {
   var result = Object.params(params)
@@ -79,6 +72,9 @@ function buildParams (params) {
   return params
 }
 const Api = {
+  setBaseURL: function (baseURL) {
+    axios.defaults.baseURL = baseURL
+  },
   post: function (url, params) {
     return axios.post(url, params)
   },
