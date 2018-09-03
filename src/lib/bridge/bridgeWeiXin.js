@@ -112,7 +112,7 @@ var Bridge = {
    * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
-  getLocation: function (params) {
+  getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
     if (appLocation === 'undefined') {
@@ -168,7 +168,7 @@ var Bridge = {
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode (params) {
+  scanQRCode (params = {}) {
     wx.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],

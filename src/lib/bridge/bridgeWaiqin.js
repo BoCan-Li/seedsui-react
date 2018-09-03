@@ -82,7 +82,7 @@ var Bridge = {
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode: function (params) {
+  scanQRCode: function (params = {}) {
     wq.wqhardware.getQrCode((res) => { // eslint-disable-line
       if (res && res.qrCode) {
         var wqRes = res
@@ -98,7 +98,7 @@ var Bridge = {
    * 外勤365默认使用国测局'gcj02'定位,没有参数控制
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
    * */
-  getLocation: function (params) {
+  getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
@@ -133,7 +133,7 @@ var Bridge = {
    * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
-  getAddress: function (params) {
+  getAddress: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
@@ -266,12 +266,12 @@ var Bridge = {
    * 人员插件
    * params: {onSuccess: fn}
    */
-  getContactMore: function (params) {
+  getContactMore: function (params = {}) {
     wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, '{"selectedIds":"' + (params.selectedIds || '') + '","aclType":"' + (params.aclType || '') + '"}') // aclType:人员权限（0：只能看到下属;不传或者其他的参数为全部人员）
   },
-  getContact: function (params) {
+  getContact: function (params = {}) {
     wq.wqcontact.getContact((args) => { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, '{"id":"' + (params.id || '') + '","aclType":"' + (params.aclType || '') + '"}')
@@ -280,22 +280,22 @@ var Bridge = {
    * 客户插件
    * params: {superTradeType | tradeType: 默认值为1(1.客户 2.经销商 3.门店), selectedIds: '', onSuccess: fn}
    */
-  getCustomerMore: function (params) {
+  getCustomerMore: function (params = {}) {
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, '{"selectedIds":"' + (params.selectedIds || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":true}');
   },
-  getCustomer: function (params) {
+  getCustomer: function (params = {}) {
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
   },
-  getCustomerType: function (params) {
+  getCustomerType: function (params = {}) {
     wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
   },
-  getCustomerArea: function (params) {
+  getCustomerArea: function (params = {}) {
     wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
@@ -304,12 +304,12 @@ var Bridge = {
    * 部门插件
    * params: {selectedIds: '',onSuccess: fn}
    */
-  getDepartmentMore: function (params) {
+  getDepartmentMore: function (params = {}) {
     wq.wqdepartment.getDepartmentMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, '{"selectedIds":"' + (params.selectedIds || '') + '"}');
   },
-  getDepartment: function (params) {
+  getDepartment: function (params = {}) {
     wq.wqdepartment.getDepartment(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
@@ -360,7 +360,7 @@ var Bridge = {
     onChooseSuccess: function (imgMap) {},
   })
   */
-  Image: function (params) {
+  Image: function (params = {}) {
     var s = this
     var msg = ''
     // 选择照片

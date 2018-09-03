@@ -197,7 +197,7 @@ var Bridge = {
    * type：坐标类型，订货365默认使用国测局'gcj02'
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
    * */
-  getLocation: function (params) {
+  getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
@@ -219,7 +219,7 @@ var Bridge = {
    * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
-  getAddress: function (params) {
+  getAddress: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
     if (appLocation) {
@@ -417,7 +417,7 @@ var Bridge = {
     onChooseSuccess: function (imgMap) {},
   })
   */
-  Image: function (params) {
+  Image: function (params = {}) {
     var s = this
     var msg = ''
     // 选择照片

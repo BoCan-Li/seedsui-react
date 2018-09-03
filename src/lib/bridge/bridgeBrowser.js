@@ -10,29 +10,39 @@ import Loading from './../components/Loading/loading.js';
 
 var Bridge = {
   platform: 'browser',
-  /* 初始化配置 */
-  config: function (opts) {
-    console.log('config方法仅在微信上工作')
-    if (opts.onSuccess) opts.onSuccess()
+  debug: false,
+  // 初始化配置
+  config: function (params = {}) {
+    if (params.debug) this.debug = params.debug
+    if (!this.debug) {
+      console.log('config方法仅在微信上工作')
+      return
+    }
+    if (params.onSuccess) params.onSuccess()
   },
-  /* 获得版本信息 */
+  // 获得版本信息
   getAppVersion: function () {
     return window.navigator.appVersion
   },
-  /* 拍照、本地选图 */
-  chooseImage: function (params) {
-    this.showToast('此功能仅可在微信或APP中使用', {mask: false})
-    // 模拟数据
-    // var res = {
-    //   sourceType: 'camera', // 微信返回的两种来源: 'camera', 'album'
-    //   errMsg: 'chooseImage:ok',
-    //   localIds: ['https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', 'https://static.zcool.cn/v3.5.180706.5/zcool/client/image/logo.png']
-    // }
-    // if (params.success) params.success(res)
+  // 拍照、本地选图
+  chooseImage: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+      return
+    }
+    var res = {
+      sourceType: 'camera', // 微信返回的两种来源: 'camera', 'album'
+      errMsg: 'chooseImage:ok',
+      localIds: ['https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', 'https://static.zcool.cn/v3.5.180706.5/zcool/client/image/logo.png']
+    }
+    if (params.success) params.success(res)
   },
-  /* 上传图片 */
-  uploadImage: function (params) {
-    // this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+  // 上传图片
+  uploadImage: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+      return
+    }
     this.showLoading('正在上传...')
     setTimeout(() => {
       this.hideLoading()
@@ -45,7 +55,7 @@ var Bridge = {
       if (params.success) params.success(res)
     }, 1000)
   },
-  /* 图片预览 */
+  // 图片预览
   previewImage: function (params) {
     console.log('previewImage方法在浏览器上无法运行')
   },
@@ -141,8 +151,11 @@ var Bridge = {
     "type_image": ""
   }],
   customerMoreLen: 1,
-  getCustomerMore: function (params) {
-    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getCustomerMore: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
     const result = []
     for (let i = 0; i < this.customerMoreLen; i++) {
       result.push(this.customerMore[i])
@@ -151,11 +164,14 @@ var Bridge = {
     if (this.customerMoreLen > this.customerMore.length) {
       this.customerMoreLen = 1
     }
-    params.onSuccess(result)
+    if (params.onSuccess) params.onSuccess(result)
   },
-  getCustomer: function (params) {
-    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
-    params.onSuccess({
+  getCustomer: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess({
       id: '5365268129453435373',
       name: '门店1号'
     })
@@ -173,8 +189,11 @@ var Bridge = {
   getDepartmentMore: function (params) {
     this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
   },
-  getDepartment: function (params) {
-    // this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getDepartment: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
     params.onSuccess({
       id: '5343180131602024954',
       name: '开发一部'
@@ -184,18 +203,18 @@ var Bridge = {
   * 打开新的窗口
   * params: {url:''}
   * */
-  openWindow: function (params) {
-    window.location.href = params.url
+  openWindow: function (params = {}) {
+    if (params.url) window.location.href = params.url
   },
-  /* 关闭窗口 */
+  // 关闭窗口
   closeWindow: function () {
     window.history.go(-1)
   },
-  /* 回到主页 */
+  // 回到主页
   goHome: function () {
     window.history.go(-2)
   },
-  /* 判断是否是主页 */
+  // 判断是否是主页
   isHomePage: function (callback, rule) {
     if (rule && window.location.href.indexOf(rule) >= 0) {
       callback(true)
@@ -246,9 +265,11 @@ var Bridge = {
    * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
    * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
    * */
-  getLocation: function (params) {
-    this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
-    if (params.onError) params.onError({code:'locationFail', msg: ''})
+  getLocation: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
+      if (params.onError) params.onError({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
+    }
     setTimeout(function () {
       if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
     }, 500)
@@ -258,7 +279,7 @@ var Bridge = {
    * params：{type: 'gcj02', longitude: '', latitude: '', onSuccess: fn, onFail: fn}
    * 返回：{address:'地址全称'}
    * */
-  getAddress: function (params) {
+  getAddress: function (params = {}) {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
@@ -279,7 +300,7 @@ var Bridge = {
    * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn)
    * 返回km
    * */
-  getDistance: function(params) {
+  getDistance: function(params = {}) {
     if (!params.point1 || !params.point1.latitude || !params.point1.longitude || !params.point2 || !params.point2.latitude || !params.point2.longitude) {
       if (params.onError) params.onError({code: 'distanceFail', msg: '传入的坐标不正确'})
       return
@@ -301,10 +322,11 @@ var Bridge = {
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode (params) {
+  scanQRCode (params = {}) {
+    this.showToast('扫码功能仅可在微信或APP中使用', {mask: false})
     if (params.onError) params.onError({code: 'qrcodeFail', msg: '此功能仅可在微信或APP中使用'})
   },
-  /* 退出到登陆页面 */
+  // 退出到登陆页面
   logOut: function (message) {
     // 如果有errMsg,则停止
     var errMsg = Device.getUrlParameter('errMsg')
@@ -338,11 +360,15 @@ var Bridge = {
     onUploadsSuccess:function(imgMap) // 全部上传成功
   })
   */
-  Image: function (params) {
+  Image: function (params = {}) {
     var s = this
     var msg = ''
     // 选择照片
     s.choose = function (args = {}) {
+      if (!this.debug) {
+        Bridge.showToast('拍照功能只能在APP或者微信中使用', {mask: false})
+        return
+      }
       var option = {
         enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
         max: args.max || 5,
@@ -453,7 +479,7 @@ var Bridge = {
    * 参数: params{appId: '', code: ''}
    * 返回：{resultStr:''}
    * */
-  getSystemParameter: function (params) {
+  getSystemParameter: function (params = {}) {
     var sysparams = DB.getStore('app_sysparams') || []
     for (var i = 0, sysparam; sysparam = sysparams[i++];) { // eslint-disable-line
       if (sysparam.appId === params.appId && sysparam.code === params.code) {
