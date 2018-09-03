@@ -7,7 +7,7 @@ export default class App extends Component {
   }
   componentDidMount () {
     try {
-      Bridge.config({debug: true, onSuccess: () => {console.log(2)}});
+      Bridge.showToast('test', {icon: 'icon-fav-fill'});
     }
     catch(err) {
       console.log(1)

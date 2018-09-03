@@ -560,6 +560,7 @@ var Bridge = {
         parent: document.body,
         maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
         toastClass: 'toast ' + (params.position ? params.position : 'middle'),
+        icon: params.icon || '',
         html: msg,
         delay: params.delay || 2000
       });
@@ -567,6 +568,7 @@ var Bridge = {
       this.toast.setHTML(msg)
       this.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
       this.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
+      this.toast.setIcon(params.icon || '')
     }
     this.toast.show()
     if (params.onSuccess) {

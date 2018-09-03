@@ -100,6 +100,10 @@ var Toast = function (params) {
     s.params.toastClass = className
     s.toast.setAttribute('class', s.params.toastClass)
   }
+  s.setIcon = function (className) {
+    s.params.icon = className
+    s.icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
+  }
   s.setHTML = function (html) {
     s.caption.innerHTML = html
   }
