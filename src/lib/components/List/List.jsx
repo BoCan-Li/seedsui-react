@@ -78,14 +78,17 @@ export default class List extends Component {
     const classList = e.target.classList;
     if (classList.contains('licon') && onClickLicon) {
       onClickLicon(this.getArgs(e));
+      e.stopPropagation();
     } else if (classList.contains('ricon') && onClickRicon) {
       onClickRicon(this.getArgs(e));
+      e.stopPropagation();
     } else if (classList.contains('list-rcaption') && onClickRcaption) {
       onClickRcaption(this.getArgs(e));
-    } else {
-      if (onClick) onClick(this.getArgs(e));
+      e.stopPropagation();
+    } else if (onClick){
+      onClick(this.getArgs(e));
+      e.stopPropagation();
     }
-    e.stopPropagation();
   }
   onClickContainer = (e) => {
     if (this.props.onClickContainer) {

@@ -66,7 +66,7 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 详见[Bridge 桥接库](#Bridge-桥接库)
 
 ### 属性
-```html
+```js
 <Alert
   portal={传送dom object, 默认document.getElementById('root')}
   args={事件参数 any}
