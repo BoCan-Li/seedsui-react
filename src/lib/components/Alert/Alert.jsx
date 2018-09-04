@@ -11,37 +11,35 @@ export default class Alert extends Component {
 
     duration: PropTypes.number,
 
-    maskClassName: PropTypes.string,
     maskStyle: PropTypes.object,
+    maskClassName: PropTypes.string,
     onClickMask: PropTypes.func,
 
-    className: PropTypes.string,
     style: PropTypes.object,
+    className: PropTypes.string,
+
+    caption: PropTypes.node,
+    captionStyle: PropTypes.object,
+    captionClassName: PropTypes.string,
 
     icon: PropTypes.node,
     iconSrc: PropTypes.string,
     iconStyle: PropTypes.object,
     iconClassName: PropTypes.string,
 
-    caption: PropTypes.node,
-    captionStyle: PropTypes.object,
-    captionClassName: PropTypes.string,
-
     contentStyle: PropTypes.object,
     contentClassName: PropTypes.string,
-
     children: PropTypes.node,
 
     submitStyle: PropTypes.object,
     submitClassName: PropTypes.string,
     submitCaption: PropTypes.node,
     disabled: PropTypes.bool,
+    onClickSubmit: PropTypes.func,
 
     cancelStyle: PropTypes.object,
     cancelClassName: PropTypes.string,
     cancelCaption: PropTypes.node,
-
-    onClickSubmit: PropTypes.func,
     onClickCancel: PropTypes.func,
   }
   static defaultProps = {
