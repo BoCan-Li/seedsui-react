@@ -7,6 +7,11 @@ npm install seedsui-react --save
 ```
 
 ## 换肤
+### 不需要换肤,直接引入css
+```js
+import 'seedsui-react/build/css/index.css';
+```
+### 需要换肤,需要支持less,引入less
 ```less
 // 图标,图标风格
 // @import "../../../node_modules/seedsui-react/src/lib/seedsui-iconfont.less";
