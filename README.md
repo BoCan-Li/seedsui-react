@@ -54,9 +54,9 @@ npm install seedsui-react --save
 ## Alert
 对话框
 ### 建议
-Alert组件更适用于复杂的定制弹框,对于一般弹框建议直接使用工具库的api直接调用
-* alert框建议使用Bridge.showAlert(msg)代替
-* confirm框建议使用Bridge.showConfirm(msg, {onSuccess: fn, onError: fn})代替
+Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api直接调用:
+* alert框:Bridge.showAlert(msg)代替
+* confirm框:Bridge.showConfirm(msg, {onSuccess: fn, onError: fn})代替
 
 详见[Bridge 桥接库](#Bridge-桥接库)
 
