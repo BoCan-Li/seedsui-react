@@ -54,8 +54,8 @@ var Toast = function (params) {
     return wrapper
   }
   s.createToastIcon = function () {
-    if (!s.params.icon) return null
     var icon = document.createElement('span')
+    if (!s.params.icon) return icon
     icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
     return icon
   }
@@ -102,7 +102,11 @@ var Toast = function (params) {
   }
   s.setIcon = function (className) {
     s.params.icon = className
-    s.icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
+    if (s.params.icon) {
+      s.icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
+    } else {
+      s.icon.setAttribute('class', '')
+    }
   }
   s.setHTML = function (html) {
     s.caption.innerHTML = html

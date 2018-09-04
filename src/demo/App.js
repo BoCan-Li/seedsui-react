@@ -7,7 +7,10 @@ export default class App extends Component {
   }
   componentDidMount () {
     try {
-      Bridge.showToast('test', {icon: 'icon-fav-fill'});
+      Bridge.showToast('中华人民共和国中华人民共和国', {position: 'bottom', icon: 'icon-fav-fill'});
+      setTimeout(() => {
+        Bridge.showToast('中华人民共和国中华人民共和国');
+      }, 2000);
     }
     catch(err) {
       console.log(1)

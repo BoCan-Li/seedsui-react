@@ -24,15 +24,17 @@
   padding:@toast-wrapper-padding;
   border-radius:@6px;
   max-width:@toast-max-width;
+  line-height: 0;
 
   color:@toast-bottom-color;
   background-color:@toast-bottom-bg;
 }
+.toast-icon{
+  display:block;
+  background-size:cover;
+}
 .toast-caption{
-  // .nowrap;
-  // .ellipsis;
-  // height: @16px; // 上下类型的左图标为16px,所以文字也设置成16px与之匹配
-  // line-height: @16px;
+  display:block;
   font-size:@toast-caption-font-size;
   line-height:@toast-caption-line-height;
 }
@@ -53,19 +55,20 @@
   }
 }
 .toast.top, .toast.bottom{
+  .toast-wrapper{
+    .flex-middle;
+  }
   .toast-icon{
-    display:block;
-    background-size:cover;
     width:@16px;
     height:@16px;
     font-size: @16px;
-    display:inline-block;
-    vertical-align:middle;
   }
   .toast-caption{
     .flex-1;
-    display:block;
-    vertical-align:middle;
+    // .nowrap;
+    // .ellipsis;
+    // height: @16px; // 上下类型的左图标为16px,所以文字也设置成16px与之匹配
+    // line-height: @16px;
   }
   .toast-icon + .toast-caption{
     margin-left:@2px;
@@ -82,18 +85,14 @@
   }
   .toast-wrapper{
     .flex-vertical;
+    .flex-middle;
   }
   .toast-icon{
-    background-size:cover;
     width:@36px;
     height:@36px;
     font-size: @36px;
-    display:block;
-    margin: 0 auto;
   }
   .toast-caption{
-    display:block;
-    overflow:hidden;
     text-align:center;
   }
   .toast-icon+.toast-caption{
