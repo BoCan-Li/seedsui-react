@@ -108,5 +108,5 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 
 ### 示例
 ```html
-<Alert show={this.state.alertShow} iconSrc={picOk} submitCaption="好的，我已知晓" onClickSubmit={this.onSubmitAlert}>提交成功，请线下及时完成支付！</Alert>
+<Alert show={this.state.alertShow} iconClassName="icon-rdo-ok" submitCaption="好的，我已知晓" onClickSubmit={this.onSubmitAlert}>提交成功，请线下及时完成支付！</Alert>
 ```
