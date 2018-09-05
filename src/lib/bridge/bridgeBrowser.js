@@ -3,7 +3,6 @@ import Device from './../utils/device';
 import EventUtil from './../utils/eventutil';
 import jsonp from './../utils/jsonp';
 // 系统参数
-import client from './../utils/api-axios.js';
 import Toast from './../components/Toast/toast.js';
 import Alert from './../components/Alert/alert.js';
 import Loading from './../components/Loading/loading.js';
@@ -18,6 +17,7 @@ var Bridge = {
       console.log('config方法仅在微信上工作')
       return
     }
+    DB.setSession('bridge_isready', '1')
     if (params.onSuccess) params.onSuccess()
   },
   // 获得版本信息
@@ -249,11 +249,6 @@ var Bridge = {
   },
   // 客户端返回绑定
   addBackPress: function () {
-    // 微信设置appId
-    // const appId = Device.getUrlParameter('appId');
-    // if (appId && appId !== 'false') {
-    //   DB.setStore('app_appId', appId);
-    // }
     console.log('addBackPress方法在浏览器上无法运行')
   },
   // 客户端移除返回绑定
@@ -327,30 +322,8 @@ var Bridge = {
     if (params.onError) params.onError({code: 'qrcodeFail', msg: '此功能仅可在微信或APP中使用'})
   },
   // 退出到登陆页面
-  logOut: function (message) {
-    // 如果有errMsg,则停止
-    var errMsg = Device.getUrlParameter('errMsg')
-    // 如果地址栏有errMsg,则优先显示地址栏
-    if (errMsg) {
-      try {
-        errMsg = decodeURIComponent(errMsg)
-      } catch (e) {
-        errMsg = '未知错误'
-      }
-      window.location.replace('/h5fw/#/_react_/exception/' + errMsg)
-      return
-    }
-    // 否则跳转到登录页面
-    var login_url = '/h5fw/#/_react_/login'
-    // openId & appId
-    login_url += `/${DB.getStore('app_openId') || 'false'}/${DB.getStore('app_appId') || 'false'}`
-    // message
-    login_url += '?msg=' + (message || '')
-    // 红包页面跳回
-    if (window.location.href.indexOf('/redpacket') >= 0) {
-      login_url += '&page=redpacket'
-    }
-    window.location.replace(login_url)
+  logOut: function () {
+    console.log('logOut方法仅在app上工作')
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
@@ -440,73 +413,6 @@ var Bridge = {
       }
       loop(0)
     }
-  },
-  /*
-   * 设置系统参数
-   * @param data: {appId: '', openId: '', image_url: '', mobile: '', selectedSupplier: object, sysParms: object}
-   * */
-  setSystemParameter: function (data) {
-    // 设置系统参数
-    if (data.sysParms) DB.setStore('app_sysparams', data.sysParms)
-    // 设置图片主域名
-    let imgDomain = data.image_url ? data.image_url.clearProtocol() : '';
-    if (imgDomain && imgDomain.length - 1 !== imgDomain.lastIndexOf('/')) {
-      imgDomain = imgDomain + '/';
-      DB.setStore('app_imgDomain', decodeURIComponent(imgDomain));
-    } else {
-      console.log('图片域名未定义');
-      return {code: 'imgDomainFail', msg: '图片域名未定义'};
-    }
-    // 设置uid
-    DB.setStore('app_uid', data.uid || '');
-    // 设置手机号
-    DB.setStore('app_mobile', data.mobile || '');
-    // 设置appId和openId
-    DB.setStore('app_openId', data.openId || '');
-    DB.setStore('app_appId', data.appId || '');
-    // 设置选中的供货商
-    if (data.selectedSupplier && typeof data.selectedSupplier === 'object') {
-      DB.setStore('app_selectedSupplier', data.selectedSupplier);
-    } else {
-      console.log('没有供货商');
-      return {code: 'selectedSupplierFail', msg: '请选择供货商'};
-    }
-    // 记录日志
-    DB.setSession('app_logger', '获得的系统参数:' + JSON.stringify(data));
-  },
-  /*
-   * 获取系统参数
-   * 参数: params{appId: '', code: ''}
-   * 返回：{resultStr:''}
-   * */
-  getSystemParameter: function (params = {}) {
-    var sysparams = DB.getStore('app_sysparams') || []
-    for (var i = 0, sysparam; sysparam = sysparams[i++];) { // eslint-disable-line
-      if (sysparam.appId === params.appId && sysparam.code === params.code) {
-        return sysparam.value
-      }
-    }
-    return ''
-  },
-  loadSystemParameter: function (callback) {
-    // 判断localstorge是否有值
-    if (DB.getStore('app_uid')) {
-      callback();
-      return;
-    }
-    client.get(`/login/getSystemParameter.action`).then(result => {
-      if (result.code === '1') {
-        this.setSystemParameter(result.data);
-        // 加载数据
-        callback();
-      } else {
-        // 提示获取地址失败
-        this.showToast(result.message)
-      }
-    }).catch(() => {
-      this.logOut('请求系统参数异常，请重新登录')
-      // this.showMsg('请求系统参数异常，请稍后重试');
-    });
   },
   /*
    * 打印日志

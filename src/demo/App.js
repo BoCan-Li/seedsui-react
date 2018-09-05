@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Bridge, Page, Header, Container, Alert, Titlebar} from '../lib';
+import {Page, Header, Container, Alert, Titlebar} from '../lib';
 
 export default class App extends Component {
   constructor(props) {

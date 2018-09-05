@@ -259,9 +259,9 @@ var Bridge = {
     wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
   },
   // 退出到登陆页面
-  // logOut: function (msg) {
-  //   wq.wqload.wqBackToLogin({message: msg || ''}) // eslint-disable-line
-  // },
+  logOut: function (msg) {
+    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || ''})) // eslint-disable-line
+  },
   /**
    * 人员插件
    * params: {onSuccess: fn}

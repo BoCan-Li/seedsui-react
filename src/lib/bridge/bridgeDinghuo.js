@@ -341,6 +341,37 @@ var Bridge = {
   systemParameter (callback) {
     this.invoke('getSystemParameter', null, callback)
   },
+  /*
+   * 设置系统参数
+   * @param data: {appId: '', openId: '', image_url: '', mobile: '', selectedSupplier: object, sysParms: object}
+   * */
+  setSystemParameter: function (data) {
+    // 设置系统参数
+    if (data.sysParms) DB.setStore('app_sysparams', data.sysParms)
+    // 设置图片主域名
+    let imgDomain = data.image_url ? data.image_url.clearProtocol() : '';
+    if (imgDomain && imgDomain.length - 1 !== imgDomain.lastIndexOf('/')) {
+      imgDomain = imgDomain + '/';
+      DB.setStore('app_imgDomain', decodeURIComponent(imgDomain));
+    } else {
+      console.log('图片域名未定义');
+      return {code: 'imgDomainFail', msg: '图片域名未定义'};
+    }
+    // 设置uid
+    DB.setStore('app_uid', data.uid || '');
+    // 设置手机号
+    DB.setStore('app_mobile', data.mobile || '');
+    // 设置appId和openId
+    if (data.openId) DB.setStore('app_openId', data.openId || '');
+    if (data.appId) DB.setStore('app_appId', data.appId || '');
+    // 设置选中的供货商
+    if (data.selectedSupplier && typeof data.selectedSupplier === 'object') {
+      DB.setStore('app_selectedSupplier', data.selectedSupplier);
+    } else {
+      console.log('没有供货商');
+      return {code: 'selectedSupplierFail', msg: '请选择供货商'};
+    }
+  },
   /* 修改原生角标 */
   changeBadgeNum: function (count) {
     this.invoke('setBadgeNum', {key: count});
