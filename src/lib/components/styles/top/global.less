@@ -53,11 +53,11 @@ a{
 
 	color:@link;
 	&:active{
-    //color:@link-active;
+    color:@link-active;
   }
-  &[disabled]{
+  &[disabled], &.disabled{
     pointer-events: none;
-    color:@disable-bg;
+    color:@link-disabled;
   }
 }
 a,label, :focus{

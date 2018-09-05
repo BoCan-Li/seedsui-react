@@ -217,8 +217,9 @@
 
 @sub-color:#9e9e9e;
 @placeholder:#b6b6b6;
-@link:#20aeff;
-@link-active:#20aeff;
+@link:@primary-bg;
+@link-active:fade(@primary-bg, 50%);
+@link-disabled:fade(@primary-bg, 50%);
 @border:#E5E5E5;
 @dpborder:#e5e5e5;
 
@@ -418,6 +419,10 @@
 @tabbar-footer-reverse-bg:@primary-bg;
 @tabbar-footer-reverse-color-active:white;
 @tabbar-footer-reverse-bg-active:transparent;
+
+// InputVerify验证码框
+@rsent-border: #E0E0E0;
+@rsent-border: #E0E0E0;
 
 // Button按钮
 @button-bg:white;
