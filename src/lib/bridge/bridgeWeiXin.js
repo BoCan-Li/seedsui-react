@@ -7,10 +7,10 @@ var Bridge = {
   platform: 'weixin',
   /**
    * 初始化配置
-   * @opts {onSuccess: func, onError: func}
+   * @opts {url: string, params: object, onSuccess: func, onError: func}
    */
   config: function (opts = {}) {
-    var ticketUrl = '/wxapi/getJsApiTicket.action'
+    var ticketUrl = opts.url || '/wxapi/getJsApiTicket.action'
     // 记录进入app的url，后面微信sdk
     var url = encodeURIComponent(window.location.href.split('#')[0]);
     var ticketParams = {
@@ -19,7 +19,7 @@ var Bridge = {
     }
     // 记录日志
     DB.setSession('app_logger', DB.getSession('app_logger') + '<br/><br/>1.微信鉴权接口参数:' + JSON.stringify(ticketParams));
-    client.get(ticketUrl, ticketParams).then(response => {
+    client.get(ticketUrl, opts.params || ticketParams).then(response => {
       let result = response
       if (result.code === '1') {
         const params = {
