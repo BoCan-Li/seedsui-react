@@ -6,12 +6,19 @@ SeedsUI,专为移动设备设计的UI框架,组件全面可换肤,以后将会�
 npm install seedsui-react --save
 ```
 
-## 换肤
-### 不需要换肤,直接引入css
+## 导入样式
+使用组件前先要导入样式, 组件才能正常使用, 导入样式的方式如下:
+### 直接导入
 ```js
 import 'seedsui-react/build/css/index.css';
+import {Bridge, Device} from 'seedsui-react';
 ```
-### 需要换肤,需要支持less,引入less
+
+### 换肤需要支持less环境
+
+新建图标文件src/components/seedsui/iconfont.less,
+新建变量文件src/components/seedsui/variables.less,
+新建主文件src/components/seedsui/index.less:
 ```less
 // 图标,图标风格
 // @import "../../../node_modules/seedsui-react/src/lib/seedsui-iconfont.less";
@@ -25,6 +32,17 @@ import 'seedsui-react/build/css/index.css';
 @import "../../../node_modules/seedsui-react/src/lib/seedsui-components.less";
 ```
 
+src/index.js入口文件中导入less
+```js
+import 'components/seedsui/index.less';
+import {Bridge, Device} from 'seedsui-react';
+```
+
+### 传统html引入
+```css
+<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/css/index.css">
+<script src="https://unpkg.com/seedsui-react/build/index.js"></script>
+```
 
 ## 组件
 - [Alert](#alert) 弹出框
