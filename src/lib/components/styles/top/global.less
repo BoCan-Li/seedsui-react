@@ -53,12 +53,11 @@ a{
 
 	color:@link;
 	&:active{
-    color:@link-active;
+    @link-active-property:@link-active-value;
   }
-  &[disabled], &.disabled{
-    pointer-events: none;
-    color:@link-disabled;
-  }
+}
+[disabled], .disabled{
+	@disabled-property: @disabled-value;
 }
 a,label, :focus{
 	outline:0 none;

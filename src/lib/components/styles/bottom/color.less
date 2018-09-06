@@ -3,20 +3,21 @@
 .color-body{
 	color: @body-color;
 }
-.color-link{
-	color: @link;
-}
 .color-sub{
-	color:@sub-color;
-}
-.color-primary {
-	color:@primary-bg;
+	color:@sub;
 }
 .color-placeholder{
 	color:@placeholder;
 }
-.color-disable{
-	color:@disable-bg;
+// 常用色
+.color-link{
+	color: @link-bg;
+}
+.color-primary {
+	color:@primary-bg;
+}
+.color-disabled{
+	color:@disabled-bg;
 }
 .color-submit{
 	color:@submit-bg;
@@ -36,14 +37,14 @@
 .color-warn{
 	color:@warn-bg;
 }
-.color-tip{
-	color:@tip-bg;
+.color-badge{
+	color:@badge-bg;;
 }
 .color-hint{
 	color:@hint-bg;
 }
 
-// 随机颜色
+// 随机色
 .color-white{
 	color:white;
 }
@@ -80,7 +81,7 @@
 .color-10{
 	color:@random10-bg;
 }
-// 边框颜色
+// 随机色-边框
 .border-color-1{
 	border-color:@random1-bg;
 }
@@ -112,6 +113,9 @@
 	border-color:@random10-bg;
 }
 // 背景颜色
+.bg-body{
+	background-color:@body-bg;
+}
 .bg-transparent{
 	background-color:transparent;
 }
@@ -121,11 +125,9 @@
 .bg-white{
 	background-color:white;
 }
-.bg-default{
-	background-color:@body-bg;
-}
-.bg-disable{
-	background-color:@disable-bg;
+
+.bg-disabled{
+	background-color:@disabled-bg;
 }
 .bg-submit{
 	background-color:@submit-bg;
@@ -145,10 +147,10 @@
 .bg-warn{
 	background-color:@warn-bg;
 }
-.bg-tip{
-	background-color:@tip-bg;
+.bg-badge{
+	background-color:@badge-bg;;
 }
-.bg-primary,.bg-default,.bg-disable,.bg-submit,.bg-cancel,.bg-success,.bg-info,.bg-warn,.bg-tip,
+.bg-primary,.bg-body,.bg-disabled,.bg-submit,.bg-cancel,.bg-success,.bg-info,.bg-warn,.bg-badge,
 .bg-1,.bg-2,.bg-3,.bg-4,.bg-5,.bg-6,.bg-7,.bg-8,.bg-9,.bg-10{
 	color:white;
 }

@@ -5,6 +5,7 @@ export default class Page extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
+    animation: PropTypes.string,
     onScroll: PropTypes.func,
     onTouchStart: PropTypes.func,
     onTouchMove: PropTypes.func,
@@ -33,9 +34,9 @@ export default class Page extends Component {
     }
   }
   render() {
-    const {style, className, children} = this.props;
+    const {animation, style, className, children} = this.props;
     return (
-      <section ref={(el) => {this.$el = el}} className={'page' + (className ? ' ' + className : '')} style={style}>
+      <section ref={(el) => {this.$el = el}} className={'page' + (className ? ' ' + className : '')} data-animation={animation} style={style}>
         {children}
       </section>
     );

@@ -34,89 +34,79 @@
 	}
 	// 主色按钮
 	&.primary{
-		color: white;
+		color: @primary-color;
 		background-color:@primary-bg;
-		border-color: @primary-bg;
+		border-color: @primary-border;
 		&:active,&.active{
+			color:@primary-color-active;
 			background-color:@primary-bg-active;
-			border-color:@primary-bg-active;
+			border-color:@primary-border-active;
 		}
 	}
 	// 取消按钮
 	&.cancel{
-		color: white;
+		color: @cancel-color;
 		background-color:@cancel-bg;
-		border-color: @cancel-bg;
+		border-color: @cancel-border;
 		&:active,&.active{
+			color:@cancel-color-active;
 			background-color:@cancel-bg-active;
-			border-color:@cancel-bg-active;
+			border-color:@cancel-border-active;
 		}
 	}
 	// 提交按钮
 	&.submit{
-		color: white;
+		color: @submit-color;
 		background-color:@submit-bg;
-		border-color: @submit-bg;
+		border-color: @submit-border;
 		&:active,&.active{
+			color:@submit-color-active;
 			background-color:@submit-bg-active;
-			border-color:@submit-bg-active;
+			border-color:@submit-border-active;
 		}
 	}
 	// 信息按钮
 	&.info{
-		color: white;
+		color: @info-color;
 		background-color:@info-bg;
-		border-color: @info-bg;
+		border-color: @info-border;
 		&:active,&.active{
+			color:@info-color-active;
 			background-color:@info-bg-active;
-			border-color:@info-bg-active;
+			border-color:@info-border-active;
 		}
 	}
 	// 链接按钮
 	&.link{
-		color: white;
+		color: @link-color;
 		background-color:@link-bg;
-		border-color: @link-bg;
+		border-color: @link-border;
 		&:active,&.active{
+			color:@link-color-active;
 			background-color:@link-bg-active;
-			border-color:@link-bg-active;
+			border-color:@link-border-active;
 		}
 	}
 	// 警告按钮
 	&.warn{
-		color: white;
+		color: @warn-color;
 		background-color:@warn-bg;
-		border-color: @warn-bg;
+		border-color: @warn-border;
 		&:active,&.active{
+			color:@warn-color-active;
 			background-color:@warn-bg-active;
-			border-color:@warn-bg-active;
+			border-color:@warn-border-active;
 		}
 	}
 	// 完成按钮
 	&.success{
-		color: white;
+		color: @success-color;
 		background-color:@success-bg;
-		border-color: @success-bg;
+		border-color: @success-border;
 		&:active,&.active{
+			color:@success-color-active;
 			background-color:@success-bg-active;
-			border-color:@success-bg-active;
-		}
-  }
-  &[disabled]{
-    pointer-events: none;
-  }
-	// 禁用按钮
-	&.disabled,&[disabled]{
-		color:@button-disabled-color;
-		background-color:@button-disabled-bg;
-		border-color:@button-disabled-border;
-		&:active,&.active{
-			color:@button-disabled-color;
-      background-color:@button-disabled-bg;
-      border-color:@button-disabled-border;
-		}
-		.tip,.badge{
-			background-color: @disable-bg;
+			border-color:@success-border-active;
 		}
 	}
 	// 白色按钮
@@ -125,14 +115,23 @@
 		background-color:white;
 		border-color:white;
 		&:active,&.active{
-			background-color:transparentize(white, .5);
-			border-color:transparent;
+			opacity: 0.5;
 		}
 	}
-	// 小汽泡
-	&.primary,&.cancel,&.submit,&.info,&.warn,&.success{
-		.tip,.badge{
-			background-color: @button-tip-bg;
+  &[disabled]{
+    pointer-events: none;
+	}
+	// 禁用按钮
+	&.disabled,&[disabled]{
+		@{button-disabled-color-property}: @button-disabled-color-value;
+		@{button-disabled-bg-property}: @button-disabled-bg-value;
+		@{button-disabled-border-property}: @button-disabled-border-value;
+		@{button-disabled-property}: @button-disabled-value;
+		&:active,&.active{
+			@button-disabled-color-property: @button-disabled-color-value;
+			@button-disabled-bg-property: @button-disabled-bg-value;
+			@button-disabled-border-property: @button-disabled-border-value;
+			@{button-disabled-property}: @button-disabled-value;
 		}
 	}
 }
@@ -143,97 +142,88 @@
 .button.outline{
 	// 线框-主色按钮
 	&.primary{
-		color: @primary-bg;
 		background-color:transparent;
-		border-color: @primary-bg;
+		color: @primary-bg;
+		border-color: @primary-border;
 		&:active,&.active{
 			color:@primary-bg-active;
-			border-color:@primary-bg-active;
+			border-color:@primary-border-active;
 		}
 	}
 	// 线框-取消按钮
 	&.cancel{
-		color:@cancel-bg;
 		background-color:transparent;
-		border-color:@cancel-bg;
+		color:@cancel-bg;
+		border-color:@cancel-border;
 		&:active,&.active{
 			color:@cancel-bg-active;
-			border-color:@cancel-bg-active;
+			border-color:@cancel-border-active;
 		}
 	}
 	// 线框-提交按钮
 	&.submit{
-		color:@submit-bg;
 		background-color:transparent;
-		border-color:@submit-bg;
+		color:@submit-bg;
+		border-color:@submit-border;
 		&:active,&.active{
 			color:@submit-bg-active;
-			border-color:@submit-bg-active;
+			border-color:@submit-border-active;
 		}
 	}
 	// 线框-信息按钮
 	&.info{
-		color:@info-bg;
 		background-color:transparent;
-		border-color:@info-bg;
+		color:@info-bg;
+		border-color:@info-border;
 		&:active,&.active{
 			color:@info-bg-active;
-			border-color:@info-bg-active;
+			border-color:@info-border-active;
 		}
 	}
 	// 线框-链接按钮
 	&.link{
-		color:@link-bg;
 		background-color:transparent;
-		border-color:@link-bg;
+		color:@link-bg;
+		border-color:@link-border;
 		&:active,&.active{
 			color:@link-bg-active;
-			border-color:@link-bg-active;
+			border-color:@link-border-active;
 		}
 	}
 	// 线框-警告按钮
 	&.warn{
-		color:@warn-bg;
 		background-color:transparent;
-		border-color:@warn-bg;
+		color:@warn-bg;
+		border-color:@warn-border;
 		&:active,&.active{
 			color:@warn-bg-active;
-			border-color:@warn-bg-active;
+			border-color:@warn-border-active;
 		}
 	}
 	// 线框-完成按钮
 	&.success{
-		color:@success-bg;
 		background-color:transparent;
-		border-color:@success-bg;
+		color:@success-bg;
+		border-color:@success-border;
 		&:active,&.active{
 			color:@success-bg-active;
-			border-color:@success-bg-active;
+			border-color:@success-border-active;
 		}
 	}
-
-	// 线框-禁用按钮
-	&.disabled,&[disabled]{
-		background-color:transparent;
-		&:active,&.active{
-			background-color:transparent;
-		}
-	}
-
 	// 线框-白色按钮
 	&.white{
 		color:white;
 		background-color:transparent;
 		border-color:white;
 		&:active,&.active{
-			color:transparentize(white,.5);
-			border-color:transparentize(white,.5);
+			opacity: 0.5;
 		}
 	}
-	// 小汽泡
-	&.primary,&.cancel,&.submit,&.info,&.warn,&.success{
-		.tip,.badge{
-			background-color: @tip-bg;
+	// 线框-禁用按钮
+	&.disabled,&[disabled]{
+		background-color:transparent;
+		&:active,&.active{
+			background-color:transparent;
 		}
 	}
 }

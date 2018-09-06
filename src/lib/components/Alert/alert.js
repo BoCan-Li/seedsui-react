@@ -11,16 +11,17 @@ var Alert = function (params) {
 
     maskClass: 'mask alert-mask',
     maskActiveClass: 'active',
-    animation: 'zoom',
 
     duration: 300,
+    animationAttr: 'data-animation',
+    animation: 'zoom',
 
     alertClass: 'alert',
     alertActiveClass: 'active',
     contentClass: 'alert-content',
     handlerClass: 'alert-handler',
-    buttonSubmitClass: 'alert-submit',
-    buttonCancelClass: 'alert-cancel',
+    buttonSubmitClass: 'alert-submit button',
+    buttonCancelClass: 'alert-cancel button',
 
     caption: '',
     html: '',
@@ -70,7 +71,7 @@ var Alert = function (params) {
   s.createAlert = function () {
     s.alert = document.createElement('div')
     s.alert.setAttribute('class', s.params.alertClass)
-    s.alert.setAttribute('data-animation', s.params.animation)
+    s.alert.setAttribute(s.params.animationAttr, s.params.animation)
 
     s.html = document.createElement('div')
     s.html.setAttribute('class', s.params.contentClass)
@@ -216,11 +217,10 @@ var Alert = function (params) {
     s.target = e.target
 
     if (s.params.onClick) s.params.onClick(s, s.getArgs(e))
-
-    if (e.target.classList.contains(s.params.buttonSubmitClass)) {
+    if (e.target.className.indexOf(s.params.buttonSubmitClass) !== -1) {
       if (s.params.onClickSubmit) s.params.onClickSubmit(s, s.getArgs(e))
       else s.hide()
-    } else if (e.target.classList.contains(s.params.buttonCancelClass)) {
+    } else if (e.target.className.indexOf(s.params.buttonCancelClass) !== -1) {
       if (s.params.onClickCancel) s.params.onClickCancel(s, s.getArgs(e))
       else s.hide()
     }
