@@ -1,21 +1,20 @@
 // legend.less(start)
 // 划线标题
 .legend-through{
-  display: flex;
-  justify-content: center;
+  .flex;
+  .flex-center;
   position: relative;
 }
-.legend-through:before{
+.legend-through:before, .legend-through:after{
   content: '';
-  position: absolute;
   display: block;
-  top: 50%;
+  .flex-1;
   height: 1px;
-  width: 100%;
   background-color: @border;
 }
-.legend-through .legend-caption{
-  position: relative;
+.legend-caption{
+  display: block;
+  .flex-1;
   padding: 0 10px;
   color: @legend-through-color;
   background-color: @legend-through-bg;

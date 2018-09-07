@@ -7,16 +7,20 @@ import './utils/string.js';
 import './utils/dateutil.js';
 
 // components
+import Actionsheet from './components/Actionsheet';
 import Alert from './components/Alert';
 import Article from './components/Article';
 // import Aside from './components/Aside'; // 待定
 import Attribute from './components/Attribute';
 import Attributes from './components/Attributes';
 import Badge from './components/Badge';
+import BiDoughnut from './components/BiDoughnut';
+import BiGauge from './components/BiGauge/BiGauge.jsx';
 import Button from './components/Button';
 import Calendar from './components/Calendar';
 import Card from './components/Card';
 import Carrousel from './components/Carrousel';
+import Chat from './components/Chat';
 import Checkbox from './components/Checkbox';
 import Clock from './components/Clock';
 import Close from './components/Close';
@@ -34,6 +38,7 @@ import Header from './components/Header';
 import Icon from './components/Icon';
 import ImgLazy from './components/ImgLazy';
 import ImgUploader from './components/ImgUploader';
+import InputArea from './components/InputArea';
 import InputCity from './components/InputCity';
 import InputDate from './components/InputDate';
 import InputLocation from './components/InputLocation';
@@ -108,16 +113,20 @@ import Math from './utils/math.js';
 import Bridge from './bridge/index.js';
 export {
   // components
+  Actionsheet,
   Alert,
   Article,
   // Aside, // 待定
   Attribute,
   Attributes,
   Badge,
+  BiDoughnut,
+  BiGauge,
   Button,
   Calendar,
   Card,
   Carrousel,
+  Chat,
   Checkbox,
   Clock,
   Close,
@@ -135,6 +144,7 @@ export {
   Icon,
   ImgLazy,
   ImgUploader,
+  InputArea,
   InputCity,
   InputDate,
   InputLocation,

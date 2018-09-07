@@ -57,7 +57,10 @@ export default class Tabbar extends Component {
     const target = e.target;
     if (this.props.exceptOnClickActive && target.classList.contains('active')) return;
     const index = target.getAttribute('data-index');
-    if (this.props.onClick) this.props.onClick(this.props.list[index], Number(index));
+    if (this.props.onClick) {
+      this.props.onClick(this.props.list[index], Number(index));
+      e.stopPropagation();
+    }
   }
   getLIconDOM = (item, isActive) => {
     // iconStyle | iconClassName

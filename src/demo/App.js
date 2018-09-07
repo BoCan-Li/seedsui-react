@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Bridge, Page, Header, Container, Alert, Titlebar, Button} from '../lib';
+import {BiDoughnut, BiGauge, InputArea, Page, Header, Container, Titlebar} from '../lib';
 
 export default class App extends Component {
   constructor(props) {
@@ -16,16 +16,19 @@ export default class App extends Component {
     })
   }
   showDialog = () => {
-    Bridge.showAlert('hahah')
+    this.setState({
+      dialogShow: true
+    })
   }
   render() {
-    return <Page>
+    return <Page style={{backgroundColor: 'white'}}>
       <Header>
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <Button className="primary" onClick={this.showDialog}>显示</Button>
-        <Alert show={this.state.dialogShow} iconClassName="icon-rdo-ok-fill" submitCaption="好的，我已知晓" caption="提交成功，请线下及时完成支付！" onClickSubmit={()=> {}} onClickCancel={this.hideDialog}></Alert>
+        <InputArea placeholder="输入"/>
+        <BiDoughnut className="warn" rotate={35} size={100} lineWidth={10}>haha</BiDoughnut>
+        <BiGauge rotate={360}>haha</BiGauge>
       </Container>
     </Page>
   }

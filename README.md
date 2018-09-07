@@ -16,8 +16,8 @@ import {Bridge, Device} from 'seedsui-react';
 
 ### 换肤需要支持less环境
 
-新建图标文件src/components/seedsui/iconfont.less,
-新建变量文件src/components/seedsui/variables.less,
+新建图标文件src/components/seedsui/iconfont.less,<br/>
+新建变量文件src/components/seedsui/variables.less,<br/>
 新建主文件src/components/seedsui/index.less:
 ```less
 // 图标,图标风格

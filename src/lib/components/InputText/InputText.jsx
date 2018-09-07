@@ -218,6 +218,14 @@ export default class InputText extends Component {
         <pre ref={(el) => {this.$pre = el;}}><span>{value}</span></pre>
       </div>);
     }
+    // textarea类型
+    if (type === 'textarea') {
+      // 如果值绑定属性,则只有通过父组件的prop来改变值
+      if (valueBindProp) {
+        return <textarea ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}></textarea>;
+      }
+      return <textarea ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}></textarea>;
+    }
     // 其它类型
     let inputType = type;
     switch (type) {
