@@ -201,7 +201,7 @@
 // ios11安全区域
 // @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // 向刘海再移动49px
 @safe-bottom: constant(safe-area-inset-bottom); // 刘海留白,内容只显示在安全区域
-@animatioin-duration: 300ms;
+@animation-duration: 300ms;
 
 // 基础
 @font-family:Arial,"Microsoft Yahei";
@@ -343,6 +343,15 @@
 @input-text-padding: @10px 0;
 @input-text-height: @22px;
 
+// InputSafe安全等级
+@input-safe-color:white;
+@input-safe-height: 30px;
+@input-safe-wing: 1px;
+@input-safe-bg:@placeholder;
+@input-safe-bg1:@cancel-bg;
+@input-safe-bg2:@warn-bg;
+@input-safe-bg3:@submit-bg;
+
 // Attribute属性
 @attribute-left-color: #808080;
 
@@ -473,6 +482,9 @@
 @tabbar-footer-reverse-color-active:white;
 @tabbar-footer-reverse-bg-active:transparent;
 
+// InputArea多行文本框
+@input-area-height: @60px;
+
 // InputVerify验证码框
 @rsent-border: #E0E0E0;
 @rsent-border: #E0E0E0;
@@ -513,7 +525,7 @@
 // Dialog、Popover、Alert、Page框动画效果
 .popup-animation {
   &[data-animation]{
-    transition-duration:@animatioin-duration;
+    transition-duration:@animation-duration;
 	  transition-property:transform,opacity,visibility;
 		visibility:hidden;
 		&.active{
@@ -944,12 +956,21 @@
   &:extend(.icon-fav-fill all);
 };
 
+// Sticker
+@sticker-color: @badge-color;
+@sticker-bg: @badge-bg;
+@sticker-font-size: @font-size-sm;
+
 // Attribute属性控件
 
 // Dragrefresh下拉刷新控件
 .setDragrefreshCircleIcon(){
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http://www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20viewBox%3D%220%200%201000.6%201000.6%22%3E%0D%0A%3Cpath%20fill%3D%22%2320aeff%22%20d%3D%22M867.4%2C456.1c-24.1%2C0-43.8%2C19.7-43.8%2C43.8c0%2C1.5%2C0.1%2C3.1%2C0.3%2C4.6c-2.2%2C176.4-147.1%2C319.6-323.7%2C319.6%0D%0A%09c-178.5%2C0-323.8-145.3-323.8-323.8s145.3-323.8%2C323.8-323.8c62.8%2C0%2C122.8%2C17.7%2C174.4%2C50.8l-29%2C52.2c0%2C0%2C138.4%2C2.2%2C149.2%2C2.4%0D%0A%09c10.8%2C0.2%2C14.6-5.6%2C14.6-5.6s5.1-5.8%2C2.4-15.5c-2.6-9.7-43.2-162.2-43.2-162.2l-38.5%2C61.1c-67.3-45.7-146.7-70.1-229.8-70.1%0D%0A%09c-226.6%2C0-411%2C184.4-411%2C411s184.4%2C411%2C411%2C411c225.8%2C0%2C410.1-183.7%2C410.9-407.3l0.2-4.2C911.2%2C475.7%2C891.6%2C456.1%2C867.4%2C456.1z%22/%3E%0D%0A%3C/svg%3E");
 };
+
+// Emoji表情控件
+@emoji-bg: #f0f0f0;
+@emoji-input-bg: white;
 
 // Searchbar搜索栏控件
 @searchbar-icon-color: #b6b6b6;

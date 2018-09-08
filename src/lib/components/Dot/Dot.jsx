@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Dot extends Component {
   static propTypes = {
@@ -16,7 +16,7 @@ export default class Dot extends Component {
   render() {
     const { className, style, size } = this.props;
     return (
-      <i ref={el => {this.$el = el;}} className={`dot ${className}`} style={Object.assign(style, size ? {width: size, height: size} : {})}></i>
+      <i ref={el => {this.$el = el;}} className={`dot${className ? ' ' + className : ''}`} style={Object.assign(style, size ? {width: size, height: size} : {})}></i>
     );
   }
 }

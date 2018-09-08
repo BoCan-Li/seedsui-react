@@ -2,8 +2,8 @@
 .input-pre{
   position: relative; // 为了解决ios输入时白屏的BUG
   height: @input-text-height;
+  width: 100%;
   &,+pre{
-    width: 100%;
     padding: 0px;
     line-height: @input-text-height;
     min-height: @input-text-height;
@@ -11,6 +11,7 @@
   +pre{
     position: absolute;
     left: 0;
+    right: 0;
     top: @100px;
     visibility: hidden;
     span{
@@ -23,5 +24,6 @@
   // margin: 0 @8px;
   padding: @input-text-padding;
   line-height: 0;
+  box-sizing:border-box;
 }
 // inputpre.less(end)

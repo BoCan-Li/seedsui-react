@@ -3,21 +3,18 @@ import PropTypes from 'prop-types';
 
 export default class Peg extends Component {
   static propTypes = {
-    style: PropTypes.object,
     className: PropTypes.string,
-    children: PropTypes.node,
-    onClick: PropTypes.func
+    style: PropTypes.object
+  }
+  static defaultProps = {
   }
   constructor(props) {
     super(props);
   }
-
   render() {
-    const {children, style, className, onClick} = this.props;
+    const {className, style} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={'card' + (className ? ' ' + className : '')} style={style} onClick={onClick}>
-        {children}
-      </div>
+      <i ref={el => {this.$el = el;}} className={`peg${className ? ' ' + className: ''}`} style={style}></i>
     );
   }
 }

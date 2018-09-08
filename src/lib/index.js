@@ -14,10 +14,10 @@ import Article from './components/Article';
 import Attribute from './components/Attribute';
 import Attributes from './components/Attributes';
 import Badge from './components/Badge';
-import BiDoughnut from './components/BiDoughnut';
-import BiGauge from './components/BiGauge/BiGauge.jsx';
+import BiDoughnut from './components/BiDoughnut'; // 不常用
+import BiGauge from './components/BiGauge/BiGauge.jsx'; // 不常用
 import Button from './components/Button';
-import Calendar from './components/Calendar';
+import Calendar from './components/Calendar'; // 不常用
 import Card from './components/Card';
 import Carrousel from './components/Carrousel';
 import Chat from './components/Chat';
@@ -25,21 +25,23 @@ import Checkbox from './components/Checkbox';
 import Clock from './components/Clock';
 import Close from './components/Close';
 import Container from './components/Container';
-import Counter from './components/Counter';
+import Counter from './components/Counter'; // 不常用
 import Dialog from './components/Dialog';
 import Dot from './components/Dot';
 import Dragrefresh from './components/Dragrefresh';
 import Dropdown from './components/Dropdown';
+import Emoji from './components/Emoji'; // 不常用
 import Footer from './components/Footer';
 import Grid from './components/Grid';
 import Group from './components/Group';
-import Handsign from './components/Handsign';
+import Handsign from './components/Handsign'; // 不常用
 import Header from './components/Header';
 import Icon from './components/Icon';
 import ImgLazy from './components/ImgLazy';
 import ImgUploader from './components/ImgUploader';
 import InputArea from './components/InputArea';
 import InputCity from './components/InputCity';
+import InputColor from './components/InputColor'; // 不常用
 import InputDate from './components/InputDate';
 import InputLocation from './components/InputLocation';
 import InputNumber from './components/InputNumber';
@@ -47,6 +49,7 @@ import InputPassword from './components/InputPassword';
 import InputPhone from './components/InputPhone';
 import InputPicker from './components/InputPicker';
 import InputPre from './components/InputPre';
+import InputSafe from './components/InputSafe'; // 不常用
 import InputSelect from './components/InputSelect';
 import InputText from './components/InputText';
 import InputVerify from './components/InputVerify';
@@ -65,7 +68,7 @@ import NumBoxPop from './components/NumBoxPop';
 import NumBoxPopPointer from './components/NumBoxPopPointer';
 import OnOff from './components/OnOff';
 import Page from './components/Page';
-// import Peg from './components/Peg'; // 待定
+import Peg from './components/Peg'; // 不常用
 import Picker from './components/Picker';
 import PickerCity from './components/PickerCity';
 import PickerDate from './components/PickerDate';
@@ -79,9 +82,12 @@ import SearchBoard from './components/SearchBoard';
 import SelectPicker from './components/SelectPicker';
 import Star from './components/Star';
 import StarGroup from './components/StarGroup';
+import Stencil from './components/Stencil'; // 不常用
+import Sticker from './components/Sticker'; // 不常用
 import Tabbar from './components/Tabbar';
-import Ticket from './components/Ticket';
-import Timeline from './components/Timeline';
+import Ticket from './components/Ticket'; // 不常用
+import Timeline from './components/Timeline'; // 不常用
+import Timepart from './components/Timepart'; // 不常用
 import Titlebar from './components/Titlebar';
 import Toast from './components/Toast';
 import Tree from './components/Tree';
@@ -136,6 +142,7 @@ export {
   Dot,
   Dragrefresh,
   Dropdown,
+  Emoji,
   Footer,
   Grid,
   Group,
@@ -146,6 +153,7 @@ export {
   ImgUploader,
   InputArea,
   InputCity,
+  InputColor,
   InputDate,
   InputLocation,
   InputNumber,
@@ -153,6 +161,7 @@ export {
   InputPhone,
   InputPicker,
   InputPre,
+  InputSafe,
   InputSelect,
   InputText,
   InputVerify,
@@ -171,7 +180,7 @@ export {
   NumBoxPopPointer,
   OnOff,
   Page,
-  // Peg, // 待定
+  Peg,
   Picker,
   PickerCity,
   PickerDate,
@@ -185,9 +194,12 @@ export {
   SelectPicker,
   Star,
   StarGroup,
+  Stencil,
+  Sticker,
   Tabbar,
   Ticket,
   Timeline,
+  Timepart,
   Titlebar,
   Toast,
   Tree,

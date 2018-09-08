@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Close from './../Close';
 
@@ -212,10 +212,31 @@ export default class InputText extends Component {
     } = this.props;
     // pre类型
     if (pre) {
+      // pre的左右padding
+      let preLeft = 0;
+      let preRight = 0;
+      if (inputStyle) {
+        if (inputStyle.padding) {
+          const paddingValues = inputStyle.padding.split(' ');
+          if (paddingValues.length === 1) {
+            preLeft = paddingValues[0];
+            preRight = paddingValues[0];
+          } else if (paddingValues.length === 2) {
+            preLeft = paddingValues[1];
+            preRight = paddingValues[1];
+          } else if (paddingValues.length === 4) {
+            preLeft = paddingValues[1];
+            preRight = paddingValues[3];
+          }
+        } else if (inputStyle.paddingLeft || inputStyle.paddingRight) {
+          preLeft = inputStyle.paddingLeft || '0';
+          preRight = inputStyle.paddingRight || '0';
+        }
+      }
       return (<div className={`input-pre-space${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}>
         {valueBindProp && <textarea ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur}></textarea>}
         {!valueBindProp && <textarea ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur}></textarea>}
-        <pre ref={(el) => {this.$pre = el;}}><span>{value}</span></pre>
+        <pre ref={(el) => {this.$pre = el;}} style={{left: preLeft, right: preRight}}><span>{value}</span></pre>
       </div>);
     }
     // textarea类型

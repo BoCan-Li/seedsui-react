@@ -1,5 +1,4 @@
-/*--------------------sticker.less(start)----------------------*/
-/*标签贴*/
+// sticker.less(start)
 .sticker{
   position:absolute;
   width:0px;
@@ -7,11 +6,11 @@
   border-width:0;
   border-style:solid;
 
-  color:@tip-color;
-  border-color:@tip-bg;
+  color:@sticker-color;
+  border-color:@sticker-bg;
   span{
     position:absolute;
-    font-size:@font-size-sm;
+    font-size:@sticker-font-size;
     padding:0 @2px;
   }
   &.top,&.top span{
@@ -51,19 +50,55 @@
 }
 .sticker.sticker-icon{
   &.top{
-        border-top-width: @28px;
-    }
-    &.top span {
-        margin-top: -@26px;
-    }
+    border-top-width: @28px;
+  }
+  &.top span {
+    margin-top: -@26px;
+  }
+  &.left{
+    border-right-width: @28px;
+  }
+  &.right{
+    border-left-width: @28px;
+  }
+  &.bottom{
+    border-bottom-width: @28px;
+  }
+}
+
+.sticker-line{
+  position:absolute;
+  width: @100px;
+  height: @20px;
+  text-align: center;
+  .flex;
+  .flex-middle;
+  .flex-center;
+  transform-origin:center;
+
+  color:@sticker-color;
+  background-color:@sticker-bg;
+  &.top{
+    top: @13px;
     &.left{
-        border-right-width: @28px;
+      left: -@20px;
+      transform:rotate(-42deg);
     }
     &.right{
-        border-left-width: @28px;
+      right: -@20px;
+      transform:rotate(42deg);
     }
-    &.bottom{
-        border-bottom-width: @28px;
+  }
+  &.bottom{
+    bottom:@15px;
+    &.left{
+      left: -@24px;
+      transform:rotate(42deg);
     }
+    &.right{
+      right: -@24px;
+      transform:rotate(-42deg);
+    }
+  }
 }
-/*--------------------sticker.less(end)----------------------*/
+// sticker.less(end)

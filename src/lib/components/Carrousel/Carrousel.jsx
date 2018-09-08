@@ -72,7 +72,7 @@ export default class Carrousel extends Component {
   getCarrouselClassName = () => {
     const {className, list} = this.props;
     if (className) {
-      if (className.hasClass('carrousel-container') || className.hasClass('carrousel-page')) {
+      if (className.indexOf('carrousel-container') !== -1 || className.indexOf('carrousel-page') !== -1) {
         return className;
       }
     }
@@ -123,7 +123,7 @@ export default class Carrousel extends Component {
           return <div className="carrousel-slide" key={index}>{item}</div>
         })}
       </div>
-      {list.length > 1 && pagination && <div className="carrousel-pagination"></div>}
+      {pagination && <div className="carrousel-pagination"></div>}
       {list.length > 1 && <div className="carrousel-prev"></div>}
       {list.length > 1 && <div className="carrousel-next"></div>}
       </div>

@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import {BiDoughnut, BiGauge, InputArea, Page, Header, Container, Titlebar} from '../lib';
+import {Timepart, Page, Header, Container, Titlebar} from '../lib';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: '',
       dialogShow: false
     }
   }
   componentDidMount () {
+  }
+  onChange = (value) => {
+    this.setState({
+      value
+    })
+  }
+  onSubmit = (value) => {
+    console.log(value)
   }
   hideDialog = () => {
     this.setState({
@@ -26,9 +35,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputArea placeholder="输入"/>
-        <BiDoughnut className="warn" rotate={35} size={100} lineWidth={10}>haha</BiDoughnut>
-        <BiGauge rotate={360}>haha</BiGauge>
+        <Timepart/>
       </Container>
     </Page>
   }

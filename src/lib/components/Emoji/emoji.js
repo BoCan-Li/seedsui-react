@@ -1,4 +1,4 @@
-//Emoji 表情管理
+// Emoji 表情管理
 var Emoji = {
 	// 图标对应表
 	icons: {
@@ -76,7 +76,6 @@ var Emoji = {
 		'[菜刀]': '[caidao]',
 		'[太阳]': '[taiyang]',
 		'[夜晚]': '[yewan]',
-		'[骷髅]': '[kulou]',
 		'[花谢了]': '[huaxiele]',
 
 		'[蛋糕]': '[dangao]',
@@ -106,37 +105,52 @@ var Emoji = {
 		}
 		return parseStr
 	},
-	//插入表情
-	insertFace : function (objFace) {
-		var emojiName=objFace.getAttribute("alt");
-		var editText=s.textarea.value;
-		var editTextBefore=editText.substr(0,cursorOffset);
-		var editTextAfter=editText.substr(cursorOffset,editText.length);
-		var editTextInsert=emojiName;
-		cursorOffset=cursorOffset+emojiName.length;
-		s.textarea.value=editTextBefore+editTextInsert+editTextAfter;
-	},
 	// 监听位置
 	cursorOffset: 0,
-	listenOffset: function (elInput) {
+	$input: null,
+	init: function (elInput) {
+		this.$input = elInput
 		document.onselectionchange = (e) => {
-			if (Object.prototype.toString.call(e.target.activeElement) == "[object HTMLTextAreaElement]") {
-				//获得光标位置
-				this.cursorOffset = elInput.selectionStart;
+			if (Object.prototype.toString.call(e.target.activeElement) === '[object HTMLTextAreaElement]') {
+				// 获得光标位置
+				this.cursorOffset = this.$input.selectionStart;
 			}
 		}
-		elInput.addEventListener("input", (e) => {
-			//获得光标位置
+		this.$input.addEventListener('input', (e) => {
+			// 获得光标位置
 			this.cursorOffset = e.target.selectionStart
 		}, false)
 	},
-	// 点击表情
-	getOffset: function (e, elInput) {
-		if(e.target.getAttribute('data-emoji')){
-			this.insertFace(e.target)
-		}
-		elInput.focus()
-		Edit.setCaretPosition(elInput, this.cursorOffset)
-	}
+	// 插入表情文字
+	insertFace : function (emojiName) {
+		// 设置value
+		var value = this.$input.value
+		var valueBefore = value.substr(0, this.cursorOffset)
+		var valueAfter = value.substr(this.cursorOffset, value.length)
+		var valueInsert = emojiName
+		this.cursorOffset = this.cursorOffset + emojiName.length
+		this.$input.value = valueBefore + valueInsert + valueAfter
+		// 设置光杆位置
+		this.$input.focus()
+		this.setCaretPosition(this.$input, this.cursorOffset)
+		return this.$input.value;
+	},
+	// 设置光标位置
+  setCaretPosition: function (elem, caretPos) {
+    if (elem !== null) {
+      if (elem.createTextRange) {
+        var range = elem.createTextRange()
+        range.move('character', caretPos)
+        range.select()
+      } else {
+        if (elem.selectionStart) {
+          elem.focus()
+          elem.setSelectionRange(caretPos, caretPos)
+        } else {
+          elem.focus()
+        }
+      }
+    }
+  }
 }
 export default Emoji

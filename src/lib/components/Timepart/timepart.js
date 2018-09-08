@@ -58,7 +58,7 @@ var Timepart = function (container, params) {
   var partMilliSecond = s.params.partMinute * 60 * 1000
   // 行
   s.rows = []
-  s.rowsCount
+  s.rowsCount = 0
   var rowMilliSecond = partMilliSecond * s.params.colCount
 
   // 字符串转换成Date对象，参数格式如8:00
@@ -383,12 +383,11 @@ var Timepart = function (container, params) {
   // 时间排序
   s.sortTimes = function () {
     var args = [].slice.call(arguments)
-    var sortArr = args.sort(function (x, y) {
+    return args.sort(function (x, y) {
       if (x < y) return -1
-      if (x === y) return 0
       if (x > y) return 1
+      return 0
     })
-    return sortArr
   }
   // 根据段获得时间
   s.getTimesByParts = function (part1, part2) {
@@ -461,4 +460,4 @@ var Timepart = function (container, params) {
   s.init()
 }
 
-;//export default Timepart
+export default Timepart

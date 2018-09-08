@@ -206,3 +206,18 @@ window.String.prototype.getUnitValue = function (argSuffix) {
   }
   return 0
 }
+// 密码等级
+String.charType = function (char) {
+  if (char >= 48 && char <= 57) return 'number' // 数字
+  if (char >= 65 && char <= 90) return 'capitalize' // 大写
+  if (char >= 97 && char <= 122) return 'lowercase' // 小写
+  else return 'other'
+}
+window.String.prototype.safeLvl = function () {
+  if (this.length > 0 && this.length < 6) return 1
+  var mode = {}
+  for (var i = 0; i < this.length; i++) {
+    mode[String.charType(this.charCodeAt(i))] = ''
+  }
+  return Object.values(mode).length
+}
