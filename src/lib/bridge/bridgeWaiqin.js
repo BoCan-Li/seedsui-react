@@ -1,6 +1,6 @@
 import BridgeBrowser from './bridgeBrowser.js'
-import Device from './../utils/device.js'
-import DB from './../utils/db.js'
+import Device from './../Device.js'
+import DB from './../DB.js'
 
 var Bridge = {
   platform: 'waiqin',

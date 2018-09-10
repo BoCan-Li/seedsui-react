@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Device from './../utils/device.js';
+import Device from './../Device.js';
 import Bridge from './../Bridge';
 import Icon from './../Icon';
 

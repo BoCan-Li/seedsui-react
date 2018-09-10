@@ -1,7 +1,7 @@
-import DB from './../utils/db';
-import Device from './../utils/device';
-import EventUtil from './../utils/eventutil';
-import jsonp from './../utils/jsonp';
+import DB from './../DB';
+import Device from './../Device';
+import EventUtil from './../EventUtil';
+import jsonp from './../jsonp';
 // 系统参数
 import Toast from './../Toast/toast.js';
 import Alert from './../Alert/alert.js';

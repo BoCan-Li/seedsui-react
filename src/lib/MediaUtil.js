@@ -1,5 +1,5 @@
-// Media 多媒体控件
-var Media = function (media) {
+// MediaUtil 多媒体控件
+var MediaUtil = function (media) {
   /* ---------------------------
     Model
     --------------------------- */
@@ -233,6 +233,6 @@ var Media = function (media) {
   s.onSeeking = function (callback, detach) {
     event('seeking', callback, detach)
   }
-};
+}
 
-//export default Media
+export default MediaUtil

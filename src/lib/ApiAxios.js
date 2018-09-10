@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Bridge from './../Bridge'
+import Bridge from './Bridge'
 // axios 默认配置
 // axios.defaults.timeout = 5000
 // 设置头

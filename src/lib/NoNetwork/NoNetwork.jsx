@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Notice from './../Notice';
-import Device from './../utils/device.js';
+import Device from './../Device.js';
 export default class NoNetwork extends Component {
   static propTypes = {
     caption: PropTypes.string,

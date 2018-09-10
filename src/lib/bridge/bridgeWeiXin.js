@@ -1,7 +1,7 @@
 import BridgeBrowser from './bridgeBrowser.js'
-import client from './../utils/api-axios.js';
-import Device from './../utils/device.js'
-import DB from './../utils/db.js'
+import client from './../ApiAxios.js'
+import Device from './../Device.js'
+import DB from './../DB.js'
 
 var Bridge = {
   platform: 'weixin',

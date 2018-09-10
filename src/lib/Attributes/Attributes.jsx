@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './../Button';
 import Price from './../Price';
 import Mark from './../Mark';
-import Clipboard from './../utils/clipboard';
+import Clipboard from './../Clipboard';
 import Bridge from './../Bridge';
 
 export default class Attributes extends Component {

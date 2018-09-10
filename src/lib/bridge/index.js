@@ -1,4 +1,4 @@
-import Device from './../utils/device'
+import Device from './../Device'
 
 var Bridge = {}
 if (Device.platform === 'weixin') {

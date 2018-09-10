@@ -1,5 +1,5 @@
-// Edit 富文本编辑框
-var Edit = {
+// EditUtil 富文本编辑框
+var EditUtil = {
   // 获取选区
   selection: function () {
     return document.getSelection()
@@ -208,4 +208,4 @@ var Edit = {
   }
 }
 
-export default Edit
+export default EditUtil
