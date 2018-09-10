@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Device from './../../utils/device.js';
-import bridge from './../../bridge'
+import Device from './../utils/device.js';
+import Bridge from './../Bridge';
 import Icon from './../Icon';
 
 export default class Titlebar extends Component {
@@ -38,22 +38,22 @@ export default class Titlebar extends Component {
     const isFromApp = Device.getUrlParameter('isFromApp', location.search) || '';
     if (isFromApp === '1') {
       try {
-        bridge.closeWindow();
+        Bridge.closeWindow();
       } catch (error) {
         console.log(error);
       }
     } else if (isFromApp === 'home') {
       try {
-        bridge.goHome();
+        Bridge.goHome();
       } catch (error) {
         console.log(error);
       }
     } else if (isFromApp === 'confirm') {
       try {
-        bridge.showConfirm('您确定要离开此页面吗?', {
+        Bridge.showConfirm('您确定要离开此页面吗?', {
           onSuccess: (e) => {
             e.hide();
-            bridge.closeWindow();
+            Bridge.closeWindow();
           }
         });
       } catch (error) {

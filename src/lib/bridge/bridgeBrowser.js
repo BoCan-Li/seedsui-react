@@ -3,9 +3,9 @@ import Device from './../utils/device';
 import EventUtil from './../utils/eventutil';
 import jsonp from './../utils/jsonp';
 // 系统参数
-import Toast from './../components/Toast/toast.js';
-import Alert from './../components/Alert/alert.js';
-import Loading from './../components/Loading/loading.js';
+import Toast from './../Toast/toast.js';
+import Alert from './../Alert/alert.js';
+import Loading from './../Loading/loading.js';
 
 var Bridge = {
   platform: 'browser',

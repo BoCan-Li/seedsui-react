@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import bridge from './../../bridge';
+import Bridge from './../Bridge';
 import Grid from './../Grid';
 
 const Count = {
@@ -53,7 +53,7 @@ export default class ImgUploader extends Component {
   componentDidMount = () => {
     // 初始化图片组件
     this.setState({
-      instance: new bridge.Image({
+      instance: new Bridge.Image({
         onChooseSuccess: this.onChooseSuccess,
         onUploadsSuccess: this.onUploadsSuccess,
         onUploadFail: this.onUploadFail,
@@ -62,7 +62,7 @@ export default class ImgUploader extends Component {
   }
   convertList = (imgMap) => {
     var list = [];
-    if (bridge.platform === 'waiqin') {
+    if (Bridge.platform === 'waiqin') {
       for (let img in imgMap) {
         list.push({
           id: img, // 外勤客户端中,id就是name
@@ -73,7 +73,7 @@ export default class ImgUploader extends Component {
           base64: imgMap[img].path
         });
       }
-    } else if (bridge.platform === 'dinghuo') {
+    } else if (Bridge.platform === 'dinghuo') {
       for (let img in imgMap) {
         list.push({
           id: img,
@@ -82,7 +82,7 @@ export default class ImgUploader extends Component {
           sourceType: imgMap[img].sourceType
         });
       }
-    } else if (bridge.platform === 'weixin') {
+    } else if (Bridge.platform === 'weixin') {
       for (let img in imgMap) {
         list.push({
           id: img,
@@ -142,9 +142,9 @@ export default class ImgUploader extends Component {
     // Callback
     if (this.props.onChange) this.props.onChange(list);
     // 上传失败,则重新鉴权
-    bridge.config({
+    Bridge.config({
       onError: (res) => {
-        bridge.showToast(res.msg, {mask: false});
+        Bridge.showToast(res.msg, {mask: false});
       }
     });
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import InputText from './../InputText';
-import bridge from './../../bridge';
+import Bridge from './../Bridge';
 
 export default class InputLocation extends Component {
   constructor(props) {
@@ -16,9 +16,9 @@ export default class InputLocation extends Component {
     if (this.$input.value === locationingText) return;
     // 定位中...
     if (!this.props.valueBindProp) this.$input.value = locationingText;
-    bridge.getLocation({
+    Bridge.getLocation({
       onSuccess: (data) => {
-        bridge.getAddress({
+        Bridge.getAddress({
           latitude: data.latitude,
           longitude: data.longitude,
           type: 'gcj02',
@@ -32,7 +32,7 @@ export default class InputLocation extends Component {
             if (!this.props.valueBindProp) this.$input.value = '';
             if (onChange) onChange('', this.refs.$ComponentInputText.getArgs(e))
             // 提示获取地址失败
-            bridge.showToast(err.msg, {mask: false});
+            Bridge.showToast(err.msg, {mask: false});
           }
         });
       },
@@ -41,7 +41,7 @@ export default class InputLocation extends Component {
         if (!this.props.valueBindProp) this.$input.value = '';
         if (onChange) onChange('', this.refs.$ComponentInputText.getArgs(e))
         // 提示定位失败
-        bridge.showToast(err.msg, {mask: false});
+        Bridge.showToast(err.msg, {mask: false});
       }
     });
   }

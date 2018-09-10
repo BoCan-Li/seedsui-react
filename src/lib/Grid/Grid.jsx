@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Close from './../Close';
-import bridge from './../../bridge';
+import Bridge from './../Bridge';
 
 export default class Grid extends Component {
   static propTypes = {
@@ -142,7 +142,7 @@ export default class Grid extends Component {
         return n.src;
       });
       if (!imgs) return;
-      bridge.previewImage({
+      Bridge.previewImage({
         urls: imgs,
         current: imgs[index] || imgs[0],
         index: index || 0

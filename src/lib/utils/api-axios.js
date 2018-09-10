@@ -1,5 +1,5 @@
 import axios from 'axios'
-import bridge from './../bridge'
+import Bridge from './../Bridge'
 // axios 默认配置
 // axios.defaults.timeout = 5000
 // 设置头
@@ -57,7 +57,7 @@ axios.interceptors.response.use(response => {
     switch (error.response.status) {
       case 401:
         // 401 跳转到登录页面
-        bridge.logOut(error.response.data.message)
+        Bridge.logOut(error.response.data.message)
         break
       default:
         // alert(JSON.stringify(error.response))

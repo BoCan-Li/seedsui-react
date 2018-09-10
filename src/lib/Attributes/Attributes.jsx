@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Button from './../Button';
 import Price from './../Price';
 import Mark from './../Mark';
-import Clipboard from './../../utils/clipboard';
-import bridge from './../../bridge';
+import Clipboard from './../utils/clipboard';
+import Bridge from './../Bridge';
 
 export default class Attributes extends Component {
   static propTypes = {
@@ -121,7 +121,7 @@ export default class Attributes extends Component {
       if (typeof item.tel === 'string') {
         telValue = item.tel;
       }
-      return <a key={index} className="ricon"  onClick={() => {bridge.tel(telValue)}}>
+      return <a key={index} className="ricon"  onClick={() => {Bridge.tel(telValue)}}>
         <i className="icon bg-tel"/>
       </a>;
     }
