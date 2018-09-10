@@ -261,7 +261,6 @@ var Timepart = function (container, params) {
     if (isListenerConflict && s.hasProgress(startTime, endTime, true)) return false
 
     var range = s.getTimesRange(startTime, endTime)
-
     // 设置parts的class
     /*
     for(var i=range.startNum;i<=range.endNum;i++){
@@ -308,25 +307,20 @@ var Timepart = function (container, params) {
     }
     return true
   }
-  s.activeTimes = function (startTime, endTime, classes, data) {
-    /* eslint-disable */
-    var classes = classes ? [s.params.activeClass].concat(classes) : [s.params.activeClass]
-    var data = data || ''
-    /* eslint-enable */
-    var isDrawed = s.setProgress(startTime, endTime, classes, data, true)
+  s.activeTimes = function (startTime, endTime, argClassName, data) {
+    var className = s.params.activeClass + (argClassName ? ' ' + argClassName : '')
+    var isDrawed = s.setProgress(startTime, endTime, className.split(' '), data || '', true)
     if (isDrawed) {
       s.clickCount = 2
     }
   }
-  s.disableTimes = function (startTime, endTime, classes, data) {
-    /* eslint-disable */
-    var classes = classes ? [s.params.disableClass].concat(classes) : [s.params.disableClass]
-    var data = data || ''
-    /* eslint-enable */
-    s.setProgress(startTime, endTime, classes, data, true)
+  s.disableTimes = function (startTime, endTime, argClassName, data) {
+    var className = s.params.disableClass + (argClassName ? ' ' + argClassName : '')
+    s.setProgress(startTime, endTime, className.split(' '), data || '', true)
   }
-  s.chooseTimes = function (startTime, endTime, classes, data) {
-    s.setProgress(startTime, endTime, classes, data)
+  s.chooseTimes = function (startTime, endTime, argClassName, data) {
+    var className = argClassName ? argClassName.split(' ') : []
+    s.setProgress(startTime, endTime, className, data)
   }
   // 获取选中的时间段
   s.getActiveTimes = function () {
@@ -361,11 +355,9 @@ var Timepart = function (container, params) {
   // 删除进度条
   s.removeProgress = function (className) {
     // 清空parts
-    /* eslint-disable */
-    for (var i = 0, part; part = s.parts[i++];) {
+    for (var i = 0, part; part = s.parts[i++];) { // eslint-disable-line
       part.classList.remove(className)
     }
-    /* eslint-enable */
     // 清空progress
     var activeProgress = s.container.querySelectorAll('.' + s.params.progressClass + '.' + className)
     Array.prototype.slice.call(activeProgress).forEach(function (n, i) {

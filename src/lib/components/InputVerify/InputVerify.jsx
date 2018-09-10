@@ -14,6 +14,6 @@ export default class InputVerify extends Component {
     if (this.props.onClickSent) this.props.onClickSent();
   }
   render() {
-    return <InputNumber ref="$ComponentInputText" {...this.props} type="number" digits={0} rcaption={[<span className="rsent-splitter" key="rsentsplitter">|</span>,<a onClick={this.onClickSent} disabled={this.props.sentDisabled} className="rsent-button" key="rsentbutton">{this.props.sentCaption || '发送验证码'}</a>]}/>;
+    return <InputNumber ref="$ComponentInputText" {...this.props} type="number" digits={0} rcaption={[<span className="splitter" key="rsentsplitter">|</span>,<a onClick={this.onClickSent} disabled={this.props.sentDisabled} className="button primary outline" style={{border: 0}} key="rsentbutton">{this.props.sentCaption || '发送验证码'}</a>]}/>;
   }
 }

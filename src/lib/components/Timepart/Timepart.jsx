@@ -4,18 +4,23 @@ import Instance from './timepart.js';
 
 export default class Timepart extends Component {
   static propTypes = {
+    multiple: PropTypes.bool, // 是否支持多选
     className: PropTypes.string,
     style: PropTypes.object,
 
-    disabledStartTime: PropTypes.string,
-    disabledEndTime: PropTypes.string,
-    selectedStartTime: PropTypes.string, // hh:ss
-    selectedEndTime: PropTypes.string,
+    startTime: PropTypes.string, // hh:ss
+    endTime: PropTypes.string,
 
-    onChange: PropTypes.func,
+    disabledTimes: PropTypes.array, // [{startTime: 'hh:ss', endTime: 'hh:ss', className: string, data: string}]
+    selectedTimes: PropTypes.array, // 同上
+    customTimes: PropTypes.array, // 同上
+
+    onChange: PropTypes.func, // onChange({})
     onError: PropTypes.func
   }
   static defaultProps = {
+    startTime: '7:00',
+    endTime: '22:00'
   }
   constructor(props) {
     super(props);
@@ -24,17 +29,22 @@ export default class Timepart extends Component {
     }
   }
   componentDidUpdate (prevProps) {
-    // if (this.props.selectedStartTime) {
-    //   this.state.timepart.chooseTimes("9:10","12:10",["active"],data);
-    // }
-    // this.state.timepart.disableTimes(null,new Date());
+    if (this.props.disabledTimes && prevProps.disabledTimes.length !== this.props.disabledTimes.length) {
+      this.props.disabledTimes.forEach((time) => {
+        this.state.instance.disableTimes(time.startTime, time.endTime, time.className, time.data);
+      })
+    }
+    if (this.props.customTimes && prevProps.customTimes.length !== this.props.customTimes.length) {
+      this.props.customTimes.forEach((time) => {
+        this.state.instance.chooseTimes(time.startTime, time.endTime, time.className || 'active', time.data);
+      })
+    }
   }
   componentDidMount () {
     var instance = new Instance(this.$el, {
-      startTime: this.startTime,
-      endTime: this.endTime,
+      startTime: this.props.startTime,
+      endTime: this.props.endTime,
       onClick: (e) => {
-        // console.log(e.target)
       },
       onConflictOver: (e) => {
         this.onError('不能跨选禁用时间段', e)
@@ -43,15 +53,17 @@ export default class Timepart extends Component {
         this.error && this.error('时间段冲突', e.target)
       },
       onClickActive: (e) => { // 点击选中区域
-        e.removeAllActive()
+        if (!this.props.multiple) e.removeAllActive()
       },
       onClickDisabled: (e) => { // 点击禁用区域
       },
       onClickChoose: (e) => {
-        // var data = JSON.parse(e.target.getAttribute('data-progress'))
-        // console.log('点击选择区域，数据：{startTime:' + data.startTime + ',endTime:' + data.endTime + '}')
+        var data = JSON.parse(e.target.getAttribute('data-progress'))
+        console.log('点击选择区域，数据：{startTime:' + data.startTime + ',endTime:' + data.endTime + '}')
       },
-      onClickValid: (s) => { // 点击有效区域
+      onClickValid: (s) => { // 点击空白有效区域
+        console.log('有效区域')
+        console.log(s.params.activeClass)
         if (s.clickCount === 1) { // 如果点击了一次
           this.part1 = s.target
           this.part1.classList.add(s.params.activeClass)
@@ -65,12 +77,40 @@ export default class Timepart extends Component {
         }
       }
     });
+    // 禁用时间
+    if (this.props.disabledTimes) {
+      this.props.disabledTimes.forEach((time) => {
+        instance.disableTimes(time.startTime, time.endTime, time.className, time.data);
+      });
+    }
+    // 自定义时间
+    if (this.props.customTimes) {
+      this.props.customTimes.forEach((time) => {
+        instance.chooseTimes(time.startTime, time.endTime, time.className || 'active', time.data);
+      });
+    }
+    // 选中时间
+    if (this.props.selectedTimes) {
+      let selectedTimes = this.props.selectedTimes;
+      if (!this.props.multiple) selectedTimes = [this.props.selectedTimes[0]];
+      selectedTimes.forEach((time) => {
+        instance.activeTimes(time.startTime, time.endTime, time.className || 'active', time.data);
+      });
+    }
     this.setState({
       instance
+    }, () => {
+      this.onChange();
     });
   }
   onChange = () => {
-    if (this.props.onChange) this.props.onChange();
+    console.log(this.state.instance.getActiveTimes())
+    const {disabledTimes, customTimes} = this.props;
+    if (this.props.onChange) this.props.onChange({
+      disabledTimes,
+      customTimes,
+      selectedTimes: this.state.instance.getActiveTimes()
+    });
   }
   render() {
     const {className, style} = this.props;

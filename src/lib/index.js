@@ -58,7 +58,6 @@ import List from './components/List';
 import Loading from './components/Loading';
 import Mark from './components/Mark';
 import Marquee from './components/Marquee';
-import Mask from './components/Mask';
 import MenuTiled from './components/MenuTiled';
 import MenuTree from './components/MenuTree';
 import NoNetwork from './components/NoNetwork';
@@ -170,7 +169,6 @@ export {
   Loading,
   Mark,
   Marquee,
-  Mask,
   MenuTiled,
   MenuTree,
   NoNetwork,

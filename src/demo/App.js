@@ -35,7 +35,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <Timepart/>
+        <Timepart disabledTimes={[{startTime: "08:00", endTime: "10:00", className: null, data: 'haha'}, {startTime: '20:00', endTime: '22:00'}]} customTimes={[{startTime: "12:00", endTime: "14:00"}]} multiple/>
       </Container>
     </Page>
   }
