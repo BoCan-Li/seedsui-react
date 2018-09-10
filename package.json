@@ -1,6 +1,6 @@
 {
   "name": "seedsui-react",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "keywords": [
     "seedsui",
     "react-seedsui",
@@ -11,12 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/colaboy/seedsui-react.git"
   },
-  "author": "Dimitri Mikadze <dimitrimikadze@gmail.com>",
+  "author": "colaboy <49201650@qq.com>",
   "bugs": {
     "url": "https://github.com/colaboy/seedsui-react/issues"
   },
   "homepage": "https://github.com/colaboy/seedsui-react/#readme",
   "peerDependencies": {
+    "axios": ">=0.14",
     "react": ">=0.14",
     "react-dom": ">=0.14"
   },

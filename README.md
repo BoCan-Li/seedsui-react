@@ -7,18 +7,19 @@ npm install seedsui-react --save
 ```
 
 ## 导入样式
-使用组件前先要导入样式, 组件才能正常使用, 导入样式的方式如下:
+建议使用动态导入,以节省打包资源(只有动态导入的方式支持换肤)
 ### 直接导入
 ```js
 import 'seedsui-react/build/css/index.css';
-import {Bridge, Device} from 'seedsui-react';
 ```
-
-### 换肤需要支持less环境
-
-新建图标文件src/components/seedsui/iconfont.less,<br/>
-新建变量文件src/components/seedsui/variables.less,<br/>
-新建主文件src/components/seedsui/index.less:
+```css
+<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/css/index.css">
+```
+### 动态导入(需要环境支持Less)
+新建三个文件:<br/>
+1.图标 src/components/seedsui/iconfont.less,<br/>
+2.变量 src/components/seedsui/variables.less,<br/>
+3.汇集 src/components/seedsui/index.less:
 ```less
 // 图标,图标风格
 // @import "../../../node_modules/seedsui-react/src/lib/seedsui-iconfont.less";
@@ -30,18 +31,29 @@ import {Bridge, Device} from 'seedsui-react';
 
 // 组件
 @import "../../../node_modules/seedsui-react/src/lib/seedsui-components.less";
+// @import "components.less";
 ```
 
 src/index.js入口文件中导入less
 ```js
 import 'components/seedsui/index.less';
-import {Bridge, Device} from 'seedsui-react';
 ```
 
-### 传统html引入
+
+## 导入组件
+建议使用动态导入,以节省打包资源
+### 直接导入
+```js
+import {Bridge, Device} from 'seedsui-react';
+```
 ```css
-<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/css/index.css">
+<script src="https://cdn.bootcss.com/react/16.4.0/cjs/react.production.min.js"></script>
 <script src="https://unpkg.com/seedsui-react/build/index.js"></script>
+```
+### 动态导入
+```js
+import Bridge from 'seedsui-react/src/lib/Bridge';
+import Device from 'seedsui-react/src/lib/Device';
 ```
 
 ## 组件
@@ -83,6 +95,10 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 
 详见[Bridge 桥接库](#Bridge-桥接库)
 
+### 导入
+```js
+import Alert from 'seedsui-react/src/lib/Alert';
+```
 ### 属性
 ```js
 <Alert
