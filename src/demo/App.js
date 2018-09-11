@@ -32,7 +32,7 @@ export default class App extends Component {
   render() {
     return <Page style={{backgroundColor: 'white'}}>
       <Header>
-        <Titlebar caption="SeedsUI"/>
+        <Titlebar caption="SeedsUI" rButtons={[{caption: 'haha'}]}/>
       </Header>
       <Container>
         <Timepart disabledTimes={[{startTime: "08:00", endTime: "10:00", className: null, data: 'haha'}, {startTime: '20:00', endTime: '22:00'}]} customTimes={[{startTime: "12:00", endTime: "14:00"}]} multiple/>

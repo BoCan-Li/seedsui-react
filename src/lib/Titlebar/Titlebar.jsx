@@ -15,7 +15,7 @@ export default class Titlebar extends Component {
 
     onClickBack: PropTypes.func,
     onClickCaption: PropTypes.func,
-    lButtons: PropTypes.array, // [{iconClassName: 'xx', caption: 'xx'}]
+    lButtons: PropTypes.array, // [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
     rButtons: PropTypes.array,
     children: PropTypes.node
   }
@@ -72,7 +72,7 @@ export default class Titlebar extends Component {
         };
       }
       return (
-        <a key={index} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button${item.className ? ' ' + item.className : ''}`} style={item.style}>
+        <a key={index} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
           {(item.iconSrc || item.iconClassName) && <Icon className={`${item.iconClassName ? ' ' + item.iconClassName : ''}`} src={item.iconSrc ? item.iconSrc : ''} style={item.iconStyle}/>}
           {item.icon && item.icon}
           {item.caption && <span>{item.caption}</span>}
