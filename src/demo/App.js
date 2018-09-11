@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Timepart, InputText, Page, Header, Container, Titlebar} from '../lib';
+import {Alert, Timepart, InputText, Page, Header, Container, Titlebar} from '../lib';
 
 export default class App extends Component {
   constructor(props) {
@@ -35,6 +35,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: 'haha'}]}/>
       </Header>
       <Container>
+        <Alert show caption="hehe" submitClassName="disabled" onClickSubmit={() => {}} onClickCancel={() => {}}/>
         <Timepart disabledTimes={[{startTime: "08:00", endTime: "10:00", className: null, data: 'haha'}, {startTime: '20:00', endTime: '22:00'}]} customTimes={[{startTime: "12:00", endTime: "14:00"}]} multiple/>
         <InputText/>
       </Container>

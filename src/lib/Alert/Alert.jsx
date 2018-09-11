@@ -99,8 +99,8 @@ export default class Alert extends Component {
             {children}
           </div>
           <div className="alert-handler">
-            {onClickCancel && <a className={`alert-cancel button${cancelClassName ? ' ' + cancelClassName : ''}`} style={cancelStyle} onClick={this.onClickCancel}>{cancelCaption}</a>}
-            {onClickSubmit && <a className={`alert-submit button${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} onClick={this.onClickSubmit} disabled={disabled}>{submitCaption}</a>}
+            {onClickCancel && <a className={`alert-cancel button lg${cancelClassName ? ' ' + cancelClassName : ''}`} style={cancelStyle} onClick={this.onClickCancel}>{cancelCaption}</a>}
+            {onClickSubmit && <a className={`alert-submit button lg${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} onClick={this.onClickSubmit} disabled={disabled}>{submitCaption}</a>}
           </div>
         </div>
       </div>,
