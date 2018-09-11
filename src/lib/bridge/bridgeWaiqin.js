@@ -293,7 +293,7 @@ var Bridge = {
   getCustomerType: function (params = {}) {
     wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
   },
   getCustomerArea: function (params = {}) {
     wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
