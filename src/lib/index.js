@@ -98,8 +98,8 @@ import Tree from './Tree';
 import Axios from './ApiAxios.js';
 // import Superagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
 // import BackboneRoute from './Route.js'; // 用于路由监听,如不需要，不要加载
-import Clipboard from './Clipboard.js';
 import DB from './DB.js';
+import Clipboard from './Clipboard.js';
 import Device from './Device.js';
 // import EditUtil from './EditUtil.js'; // 用于富文本,如不需要，不要加载
 import EventUtil from './EventUtil.js';

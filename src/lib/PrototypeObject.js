@@ -59,15 +59,15 @@ Object.clone = function (obj) {
 }
 
 /*
-  * get请求：将Json参数转为params字符串
-  * obj:参数, isNotEnCode:是否不编码
-  * 返回：xx=xx&xx=xx
+  * 用于get请求,将Json参数转为params字符串
+  * 参数: obj:请求参数; splitter:dot点 | bracket中括号, isNotEnCode:是否不使用encodeURIComponent编码
+  * 返回: splitter为dot时,返回obj.key=value&obj.key=value; bracket时,返回obj[key]=value&obj[key]=value
   * */
- Object.params = function (obj, op, isNotEnCode) {
+Object.params = function (obj, splitter, isNotEnCode) {
   if (!Object.isPlainObject(obj)) return obj
   if (obj instanceof Object && obj.length > 0) return ''
   // 把{jsonReq:[{0:'0', 1:'1'}]}转成jsonReq=[{0:'0', 1:'1'}]的方式
-  if (op === 'jsonValue') {
+  if (splitter === 'dot') {
     var arr = []
     for (var n in obj) {
       arr.push(n + '=' + JSON.stringify(obj[n]))
@@ -75,7 +75,6 @@ Object.clone = function (obj) {
     return arr.join('&')
   }
   // 把{jsonReq:[{0:'0', 1:'1'}]}转成jsonReq.0=0&jsonReq.1=1的方式(支持嵌套Json)
-  // dynamicPorperty把{jsonReq:[{0:'0', 1:'1'}]}转成jsonReq.0=0&jsonReq[1]=1的方式(支持嵌套Json)
   var result = ''
   function buildParams(obj, prevKey) {
     for (var key in obj) {
@@ -85,8 +84,8 @@ Object.clone = function (obj) {
       } else {
         if (prevKey) {
           // result += '&' + prevKey + '.' + key + '=' + obj[key]
-          if (op !== 'dynamicPorperty') result += '&' + prevKey + '.' + key + '=' + (isNotEnCode ? obj[key] : encodeURIComponent(obj[key]))
-          if (op === 'dynamicPorperty') result += '&' + prevKey + '[' + key + ']=' + (isNotEnCode ? obj[key] : encodeURIComponent(obj[key]))
+          if (splitter !== 'bracket') result += '&' + prevKey + '.' + key + '=' + (isNotEnCode ? obj[key] : encodeURIComponent(obj[key]))
+          if (splitter === 'bracket') result += '&' + prevKey + '[' + key + ']=' + (isNotEnCode ? obj[key] : encodeURIComponent(obj[key]))
         } else {
           // result += '&' + key + '=' + obj[key]
           result += '&' + key + '=' + (isNotEnCode ? obj[key] : encodeURIComponent(obj[key]))
@@ -116,7 +115,7 @@ Object.clone = function (obj) {
 } */
 
 /* -------------------
-  获得类型
+  获得类型, boolean | number | string | function | array | date | regexp
   ------------------- */
 Object.type = function (obj) {
   if (!obj) {
