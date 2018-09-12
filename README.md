@@ -22,15 +22,15 @@ import 'seedsui-react/build/seedsui.min.css';
 3.汇集 src/components/seedsui/index.less:
 ```less
 // 图标,图标风格
-// @import "../../../node_modules/seedsui-react/src/lib/seedsui-iconfont.less";
+// @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
 @import "iconfont.less";
 
 // 变量,换肤文件(需要依赖上面的图标库,因为有一些组件变量用了图标)
-// @import "../../../node_modules/seedsui-react/src/lib/seedsui-variables.less";
+// @import "../../../node_modules/seedsui-react/lib/seedsui-variables.less";
 @import "variables.less";
 
 // 组件
-@import "../../../node_modules/seedsui-react/src/lib/seedsui-components.less";
+@import "../../../node_modules/seedsui-react/lib/seedsui-components.less";
 // @import "components.less";
 ```
 
@@ -39,21 +39,30 @@ src/index.js入口文件中导入less
 import 'components/seedsui/index.less';
 ```
 
-
 ## 导入组件
 建议使用动态导入,以节省打包资源
 ### 直接导入
 ```js
 import {Bridge, Device} from 'seedsui-react';
 ```
+或
 ```css
-<script src="https://cdn.bootcss.com/react/16.4.0/cjs/react.production.min.js"></script>
-<script src="https://unpkg.com/seedsui-react/build/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
+<script src="https://cdn.bootcss.com/react-dom/16.4.0/umd/react-dom.development.js"></script>
+<script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.min.js"></script>
+<script src="https://unpkg.com/seedsui-react/build/seedsui-react.min.js"></script>
+<script type="text/babel">
+  ReactDOM.render(
+    <seedsui.Chat>haha</seedsui.Chat>,
+    document.getElementById('root')
+  );
+</script>
 ```
 ### 动态导入
 ```js
-import Bridge from 'seedsui-react/src/lib/Bridge';
-import Device from 'seedsui-react/src/lib/Device';
+import Bridge from 'seedsui-react/lib/Bridge';
+import Device from 'seedsui-react/lib/Device';
 ```
 
 ## 组件
