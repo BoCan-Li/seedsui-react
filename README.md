@@ -10,10 +10,10 @@ npm install seedsui-react --save
 建议使用动态导入,以节省打包资源(只有动态导入的方式支持换肤)
 ### 直接导入
 ```js
-import 'seedsui-react/build/css/index.css';
+import 'seedsui-react/build/seedsui.min.css';
 ```
 ```css
-<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/css/index.css">
+<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/seedsui.min.css">
 ```
 ### 动态导入(需要环境支持Less)
 新建三个文件:<br/>
