@@ -1,3 +1,3 @@
-import OnOff from './OnOff.jsx';
+import OnOff from './OnOff.js';
 
 export default OnOff;

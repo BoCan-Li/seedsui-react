@@ -1,3 +1,3 @@
-import Marquee from './Marquee.jsx';
+import Marquee from './Marquee.js';
 
 export default Marquee;

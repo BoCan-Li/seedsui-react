@@ -1,3 +1,3 @@
-import Star from './Star.jsx';
+import Star from './Star.js';
 
 export default Star;

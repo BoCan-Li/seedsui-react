@@ -1,3 +1,3 @@
-import PickerCity from './PickerCity.jsx';
+import PickerCity from './PickerCity.js';
 
 export default PickerCity;

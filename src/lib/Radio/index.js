@@ -1,3 +1,3 @@
-import Radio from './Radio.jsx';
+import Radio from './Radio.js';
 
 export default Radio;

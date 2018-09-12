@@ -1,3 +1,3 @@
-import Emoji from './Emoji.jsx';
+import Emoji from './Emoji.js';
 
 export default Emoji;

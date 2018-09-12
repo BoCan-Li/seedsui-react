@@ -1,3 +1,3 @@
-import Stencil from './Stencil.jsx';
+import Stencil from './Stencil.js';
 
 export default Stencil;

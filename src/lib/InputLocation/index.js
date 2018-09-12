@@ -1,3 +1,3 @@
-import InputLocation from './InputLocation.jsx';
+import InputLocation from './InputLocation.js';
 
 export default InputLocation;

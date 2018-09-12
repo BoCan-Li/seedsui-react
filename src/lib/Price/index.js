@@ -1,3 +1,3 @@
-import Price from './Price.jsx';
+import Price from './Price.js';
 
 export default Price;

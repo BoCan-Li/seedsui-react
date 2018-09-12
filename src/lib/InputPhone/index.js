@@ -1,3 +1,3 @@
-import InputPhone from './InputPhone.jsx';
+import InputPhone from './InputPhone.js';
 
 export default InputPhone;

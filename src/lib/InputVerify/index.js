@@ -1,3 +1,3 @@
-import InputVerify from './InputVerify.jsx';
+import InputVerify from './InputVerify.js';
 
 export default InputVerify;

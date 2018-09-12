@@ -241,4 +241,4 @@ var Actionsheet = function (params) {
   s.init()
 }
 
-;//export default Actionsheet
+export default Actionsheet

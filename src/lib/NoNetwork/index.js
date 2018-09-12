@@ -1,3 +1,3 @@
-import NoNetwork from './NoNetwork.jsx';
+import NoNetwork from './NoNetwork.js';
 
 export default NoNetwork;

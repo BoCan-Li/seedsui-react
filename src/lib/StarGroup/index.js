@@ -1,3 +1,3 @@
-import StarGroup from './StarGroup.jsx';
+import StarGroup from './StarGroup.js';
 
 export default StarGroup;

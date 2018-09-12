@@ -1,3 +1,3 @@
-import Footer from './Footer.jsx';
+import Footer from './Footer.js';
 
 export default Footer;

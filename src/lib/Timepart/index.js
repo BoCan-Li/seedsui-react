@@ -1,3 +1,3 @@
-import Timepart from './Timepart.jsx';
+import Timepart from './Timepart.js';
 
 export default Timepart;

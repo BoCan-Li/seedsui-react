@@ -1,3 +1,3 @@
-import SearchBoard from './SearchBoard.jsx';
+import SearchBoard from './SearchBoard.js';
 
 export default SearchBoard;

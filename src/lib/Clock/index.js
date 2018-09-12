@@ -1,3 +1,3 @@
-import Clock from './Clock.jsx';
+import Clock from './Clock.js';
 
 export default Clock;

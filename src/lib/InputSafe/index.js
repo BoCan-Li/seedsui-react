@@ -1,3 +1,3 @@
-import InputSafe from './InputSafe.jsx';
+import InputSafe from './InputSafe.js';
 
 export default InputSafe;

@@ -1,3 +1,3 @@
-import Tabbar from './Tabbar.jsx';
+import Tabbar from './Tabbar.js';
 
 export default Tabbar;

@@ -1,3 +1,3 @@
-import Dot from './Dot.jsx';
+import Dot from './Dot.js';
 
 export default Dot;

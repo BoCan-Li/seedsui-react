@@ -1,3 +1,3 @@
-import Dialog from './Dialog.jsx';
+import Dialog from './Dialog.js';
 
 export default Dialog;

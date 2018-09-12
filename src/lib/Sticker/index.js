@@ -1,3 +1,3 @@
-import Sticker from './Sticker.jsx';
+import Sticker from './Sticker.js';
 
 export default Sticker;

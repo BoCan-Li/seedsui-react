@@ -1,3 +1,3 @@
-import PickerDate from './PickerDate.jsx';
+import PickerDate from './PickerDate.js';
 
 export default PickerDate;

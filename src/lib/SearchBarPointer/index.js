@@ -1,3 +1,3 @@
-import SearchBarPointer from './SearchBarPointer.jsx';
+import SearchBarPointer from './SearchBarPointer.js';
 
 export default SearchBarPointer;

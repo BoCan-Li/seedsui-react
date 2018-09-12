@@ -1,3 +1,3 @@
-import Group from './Group.jsx';
+import Group from './Group.js';
 
 export default Group;

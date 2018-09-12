@@ -1,3 +1,3 @@
-import Attributes from './Attributes.jsx';
+import Attributes from './Attributes.js';
 
 export default Attributes;

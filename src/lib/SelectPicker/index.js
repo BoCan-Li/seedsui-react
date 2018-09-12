@@ -1,3 +1,3 @@
-import SelectPicker from './SelectPicker.jsx';
+import SelectPicker from './SelectPicker.js';
 
 export default SelectPicker;

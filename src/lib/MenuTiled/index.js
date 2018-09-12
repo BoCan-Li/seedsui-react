@@ -1,3 +1,3 @@
-import MenuTiled from './MenuTiled.jsx';
+import MenuTiled from './MenuTiled.js';
 
 export default MenuTiled;

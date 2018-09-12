@@ -1,3 +1,3 @@
-import Progress from './Progress.jsx';
+import Progress from './Progress.js';
 
 export default Progress;

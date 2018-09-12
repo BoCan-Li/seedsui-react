@@ -1,3 +1,3 @@
-import Tree from './Tree.jsx';
+import Tree from './Tree.js';
 
 export default Tree;

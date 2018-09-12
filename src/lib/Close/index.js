@@ -1,3 +1,3 @@
-import Close from './Close.jsx';
+import Close from './Close.js';
 
 export default Close;

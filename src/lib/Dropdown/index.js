@@ -1,3 +1,3 @@
-import Dropdown from './Dropdown.jsx';
+import Dropdown from './Dropdown.js';
 
 export default Dropdown;

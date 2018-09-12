@@ -1,3 +1,3 @@
-import NumBoxPopPointer from './NumBoxPopPointer.jsx';
+import NumBoxPopPointer from './NumBoxPopPointer.js';
 
 export default NumBoxPopPointer;

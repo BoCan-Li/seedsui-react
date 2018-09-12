@@ -1,3 +1,3 @@
-import InputColor from './InputColor.jsx';
+import InputColor from './InputColor.js';
 
 export default InputColor;
