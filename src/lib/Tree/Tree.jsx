@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './tree.js';
+import Instance from './instance.js';
 
 export default class Tree extends Component {
   static propTypes = {

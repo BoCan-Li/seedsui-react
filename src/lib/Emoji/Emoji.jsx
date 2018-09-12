@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
 import Button from './../Button';
-import Instance from './emoji.js';
+import Instance from './instance.js';
 
 export default class Dialog extends Component {
   static propTypes = {
@@ -34,6 +34,9 @@ export default class Dialog extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {
+      instance: Instance
+    };
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.show !== this.props.show && this.props.show === true && this.$inputPre) {

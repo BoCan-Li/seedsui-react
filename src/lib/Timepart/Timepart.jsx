@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './timepart.js';
+import Instance from './instance.js';
 
 export default class Timepart extends Component {
   static propTypes = {

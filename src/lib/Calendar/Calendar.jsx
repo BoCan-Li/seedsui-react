@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './calendar.js';
+import Instance from './instance.js';
 
 export default class Calendar extends Component {
   static propTypes = {

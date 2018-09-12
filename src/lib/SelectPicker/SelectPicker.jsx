@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Instance from './selectpicker.js';
+import Instance from './instance.js';
 
 export default class SelectPicker extends Component {
   static propTypes = {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notice from './../Notice';
-import Instance from './dragrefresh.pull.js';
-import ImgLazy from './../ImgLazy/imglazy';
+import Instance from './instance.pull.js';
+import ImgLazy from './../ImgLazy/instance.js';
 
 export default class Dragrefresh extends Component {
   static propTypes = {

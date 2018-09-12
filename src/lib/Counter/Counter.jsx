@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Counter as Instance} from './counter.js';
+import {Counter as Instance} from './instance.js';
 
 export default class Counter extends Component {
   static propTypes = {

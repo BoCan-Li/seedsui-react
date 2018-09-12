@@ -1,5 +1,5 @@
-import Dragrefresh from './dragrefresh.js'
-var DragPull = function (params) {
+import Dragrefresh from './instance.js'
+var DragCircle = function (params) {
   // 参数改写
   var onTopComplete = params.onTopComplete
   var onBottomRefresh = params.onBottomRefresh
@@ -13,24 +13,21 @@ var DragPull = function (params) {
   // 必须参数
   var container = typeof params.container === 'string' ? document.querySelector(params.container) : params.container
   if (!container) {
-    console.log('SeedsUI Error : DragPull container不存在，请检查页面中是否有此元素')
+    console.log('SeedsUI Error : DragCircle container不存在，请检查页面中是否有此元素')
   }
   var topContainer
   var topIcon
   var topCaption
   if (params.onTopRefresh) {
-    topContainer = container.querySelector('.SID-Dragrefresh-TopContainer')
+    topParent = container.parentNode
+    topContainer = topParent.querySelector('.SID-Dragrefresh-TopContainer')
     if (!topContainer) {
       topContainer = document.createElement('div')
-      topContainer.setAttribute('class', 'SID-Dragrefresh-TopContainer df-pull')
-      topContainer.innerHTML = '<div class="df-pull-box">' +
-      '<div class="df-pull-icon"></div>' +
-      '<div class="df-pull-caption">下拉可以刷新</div>' +
-      '</div>'
-      container.insertBefore(topContainer, container.childNodes[0])
+      topContainer.setAttribute('class', 'SID-Dragrefresh-TopContainer df-circle')
+      topContainer.innerHTML = '<div class="df-circle-icon"></div>'
+      topParent.appendChild(topContainer)
     }
-    topIcon = topContainer.querySelector('.df-pull-icon')
-    topCaption = topContainer.querySelector('.df-pull-caption')
+    topIcon = topContainer.querySelector('.df-circle-icon')
   }
   var bottomContainer
   var nodataContainer
@@ -39,12 +36,8 @@ var DragPull = function (params) {
     bottomContainer = container.querySelector('.SID-Dragrefresh-BottomContainer')
     if (!bottomContainer) {
       bottomContainer = document.createElement('div')
-      bottomContainer.setAttribute('class', 'SID-Dragrefresh-BottomContainer df-pull')
-      bottomContainer.setAttribute('style', 'height: 50px')
-      bottomContainer.innerHTML = '<div class="df-pull-box">' +
-      '<div class="df-pull-icon df-pull-icon-loading"></div>' +
-      '<div class="df-pull-caption">正在加载...</div>' +
-      '</div>'
+      bottomContainer.setAttribute('class', 'SID-Dragrefresh-BottomContainer df-circle-icon df-circle-icon-loading')
+      bottomContainer.setAttribute('style', 'height:50px')
       container.appendChild(bottomContainer)
     }
 
@@ -121,15 +114,9 @@ var DragPull = function (params) {
     },
     // 实体操作
     onPull: function (e) {
-      topContainer.style.height = e.touches.currentPosY + 'px'
       if (e.isRefreshed) {
-        if (e.touches.currentPosY >= e.params.threshold) {
-          topIcon.classList.add('df-pull-icon-down')
-          topCaption.innerHTML = '释放立即刷新'
-        } else {
-          topIcon.classList.remove('df-pull-icon-down')
-          topCaption.innerHTML = '下拉可以刷新'
-        }
+        var rotateDeg = e.touches.currentPosY * 2
+        topContainer.style.webkitTransform = 'translate3d(0,' + e.touches.currentPosY + 'px,0) rotate(' + rotateDeg + 'deg)'
       }
     },
     onShowTop: function (e) {
@@ -156,4 +143,4 @@ var DragPull = function (params) {
   return s
 }
 
-export default DragPull
+export default DragCircle

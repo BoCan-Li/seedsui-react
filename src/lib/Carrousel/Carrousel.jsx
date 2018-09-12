@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './carrousel.js';
-import defaultImg from './images/default.png';
+import Instance from './instance.js';
 
 export default class Carrousel extends Component {
   static propTypes = {
@@ -30,7 +29,7 @@ export default class Carrousel extends Component {
     autoplay: 0,
     slidesPerView: 1,
     list: [],
-    defaultSrc: defaultImg,
+    defaultSrc: '//res.waiqin365.com/d/seedsui/carrousel/default.png',
     enableOnChange: true,
     speed: 300
   }

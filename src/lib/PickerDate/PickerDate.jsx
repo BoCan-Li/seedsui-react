@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Instance from './picker.date.js';
+import Instance from './instance.js';
 
 export default class PickerDate extends Component {
   static propTypes = {

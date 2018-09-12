@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './menutiled.js';
+import Instance from './instance.js';
 
 export default class MenuTiled extends Component {
   static propTypes = {

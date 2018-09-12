@@ -1,4 +1,4 @@
-import Picker from './../Picker/picker.js'
+import Picker from './../Picker/instance.js'
 // 需要string.js的trim方法
 var PickerCity = function (params) {
   // 参数改写

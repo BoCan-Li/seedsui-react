@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import citys from './picker.city.data.js';
-import Instance from './picker.city.js';
+import citys from './instance.data.js';
+import Instance from './instance.js';
 
 export default class PickerCity extends Component {
   static propTypes = {

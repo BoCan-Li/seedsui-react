@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Instance from './marquee.js'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Instance from './instance.js';
 
 export default class Marquee extends Component {
   static propTypes = {

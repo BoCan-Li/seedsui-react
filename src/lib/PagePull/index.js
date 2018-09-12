@@ -1,3 +1,3 @@
-import Aside from './Aside.jsx';
+import PagePull from './PagePull';
 
-export default Aside;
+export default PagePull;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './handsign.js';
+import Instance from './instance.js';
 
 export default class Handsign extends Component {
   static propTypes = {
