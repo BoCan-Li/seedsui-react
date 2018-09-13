@@ -10,7 +10,10 @@ export default class Icon extends Component {
     lazyLoad: PropTypes.bool,
     onClick: PropTypes.func,
 
-    badgeCaption: PropTypes.string,
+    badgeCaption: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     badgeClassName: PropTypes.string,
     badgeStyle: PropTypes.object,
     badgeLimit: PropTypes.number,
