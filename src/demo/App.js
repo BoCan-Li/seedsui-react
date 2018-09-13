@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import {Alert, Timepart, InputText, Page, Header, Container, Titlebar} from '../lib';
+import Alert from '../lib/Alert';
+import Timepart from '../lib/Timepart';
+import InputText from '../lib/InputText';
+import Page from '../lib/Page';
+import Header from '../lib/Header';
+import Container from '../lib/Container';
+import Titlebar from '../lib/Titlebar';
 
 export default class App extends Component {
   constructor(props) {
@@ -10,6 +16,9 @@ export default class App extends Component {
     }
   }
   componentDidMount () {
+    var date = new Date();
+    date.nextDate();
+    console.log(date);
   }
   onChange = (value) => {
     this.setState({
