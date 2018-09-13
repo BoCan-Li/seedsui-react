@@ -41,23 +41,23 @@ import Chat from 'seedsui-react/lib/Chat';
 ```
 #### index.less需要手动配置:
 1.图标 src/components/seedsui/iconfont.less:<br>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/目录后修改
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/iconfont.less后修改
 <br><br>
 2.变量 src/components/seedsui/variables.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/目录后修改
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/variables.less后修改
 <br><br>
 3.组件 src/components/seedsui/components.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/目录后修改<br>
-引入地址修改如下:
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/components.less后修改<br>
+引入地址修改如:
 ```less
 @import "styles/top/appearance.less";
 ```
-改为../../../node_modules/seedsui-react/lib/
+前缀改为../../../node_modules/seedsui-react/lib/
 ```less
 @import "../../../node_modules/seedsui-react/lib/styles/top/appearance.less";
 ```
 
-4.汇集 src/components/seedsui/index.less:
+4.三者汇集 src/components/seedsui/index.less:
 ```less
 // 图标
 // @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
