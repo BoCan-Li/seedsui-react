@@ -1,0 +1,41 @@
+// actionsheet.less(start)
+//遮罩透明
+.actionsheet-mask{
+	z-index:10;
+}
+.actionsheet{
+	position:absolute;
+
+	padding:0 @6px;
+	box-sizing:border-box;
+	width:100%;
+	bottom:0;
+	&:extend(.popup-animation all);
+}
+.actionsheet-group{
+	border-radius:@4px;
+	overflow:hidden;
+	
+	background-color: rgba(255, 255, 255, 0.9);
+}
+.actionsheet-option,.actionsheet-cancel{
+	padding:@12px;
+	display: block;
+	text-align:center;
+	box-sizing:border-box;
+	&:active{
+		background-color:@border;
+	}
+}
+.actionsheet-option{
+	position: relative;
+	&:extend(.border-b);
+}
+
+.actionsheet-cancel{
+	border-radius:@4px;
+	margin:@6px 0;
+	
+	background-color: rgba(255, 255, 255, 0.9);
+}
+// actionsheet.less(end)

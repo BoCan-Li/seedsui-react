@@ -1,0 +1,28 @@
+// page.less(start)
+.pages{
+	position: @pages-position;
+	width:100%;
+	max-width: @body-max-width;
+	min-height: @page-min-height;
+}
+.pages,.page{
+	display: block;
+	box-sizing: border-box;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+.page{
+	position: @page-position;
+	left: 0;
+	right: 0;
+	background-color: @body-bg;
+	z-index: 1;
+	&:extend(.popup-animation all);
+}
+@supports (bottom: constant(safe-area-inset-bottom)) {
+  .pages {
+    bottom: @safe-bottom;
+  }
+}
+// page.less(end)

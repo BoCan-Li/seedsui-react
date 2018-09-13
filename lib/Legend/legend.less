@@ -1,0 +1,30 @@
+// legend.less(start)
+// 划线标题
+.legend-through{
+  .flex;
+  .flex-center;
+  position: relative;
+}
+.legend-through:before, .legend-through:after{
+  content: '';
+  display: block;
+  .flex-1;
+  height: 1px;
+  background-color: @border;
+}
+.legend-caption{
+  display: block;
+  .flex-1;
+  padding: 0 10px;
+  color: @legend-through-color;
+  background-color: @legend-through-bg;
+}
+// 分组标题
+.legend-group{
+  font-size: 17px;
+  margin-top: 16px;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+// legend.less(end)

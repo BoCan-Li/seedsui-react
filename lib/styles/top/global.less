@@ -1,0 +1,100 @@
+// global.less(start)
+body{
+	font-size:@font-size-md;
+	font-family:@font-family;
+
+	color:@body-color;
+	background-color:@body-bg;
+	word-break: break-all;
+	word-wrap: break-word;
+	.setBody();
+}
+// 标签默认样式
+*{
+	margin:0;
+	padding:0;
+}
+html,body {
+	height: 100%;
+}
+.placeholder{
+	color:@placeholder;
+}
+i{
+	font-style:normal;
+}
+a,i,span,label,small{
+	display:inline-block;
+	vertical-align:middle;
+}
+button,input,select,option,textarea,pre{
+	font-size:inherit;
+	font-family:inherit;
+}
+button,input[type="button"],input[type="submit"],input[type="reset"]{
+	// 为了兼容部分手机input[button]inline-box水平居中不工作的问题
+	display:inline-block;
+}
+textarea{
+	resize:none;
+}
+ul,li,dl,dt,dd {
+	list-style: none;
+}
+small{
+	font-size:80%;
+
+	color:@placeholder;
+}
+a{
+	text-decoration:none;
+	outline:none;
+	cursor:pointer;
+
+	color:@link;
+	&:active{
+    @link-active-property:@link-active-value;
+  }
+}
+[disabled], .disabled{
+	@disabled-property: @disabled-value;
+}
+a,label, :focus{
+	outline:0 none;
+}
+img {
+  border: 0;
+  vertical-align:middle;
+}
+abbr[title] {
+  border-bottom: @1px dotted;
+}
+dfn {
+  font-style: italic;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary{
+	display:block;
+}
+pre{
+	white-space:pre-wrap;
+	white-space:-moz-pre-wrap;
+	white-space:-pre-wrap;
+	white-space:-o-pre-wrap;
+	word-wrap:break-word;
+}
+
+br{
+	clear:both;
+}
+// global.less(end)
