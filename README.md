@@ -7,7 +7,7 @@ npm install seedsui-react --save
 ```
 
 ## 导入组件
-建议使用<font color="#dd0000">动态导入</font>,以节省打包资源
+建议使用<span style="color:#dd0000">动态导入</span>,以节省打包资源
 ### 直接导入
 ```js
 import 'seedsui-react/build/seedsui.min.css';
@@ -41,13 +41,13 @@ import Chat from 'seedsui-react/lib/Chat';
 ```
 #### index.less需要手动配置:
 1.图标 src/components/seedsui/iconfont.less:<br>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less){:target="_blank"},放入src/components/seedsui/目录后修改
+<a href="https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less" target="_blank">[下载模板]</a> 放入src/components/seedsui/目录后修改
 <br><br>
 2.变量 src/components/seedsui/variables.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less){:target="_blank"},放入src/components/seedsui/目录后修改
+<a href="https://unpkg.com/seedsui-react/lib/seedsui-variables.less" target="_blank">[下载模板]</a> 放入src/components/seedsui/目录后修改
 <br><br>
 3.组件 src/components/seedsui/components.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less){:target="_blank"},放入src/components/seedsui/目录后修改<br>
+<a href="https://unpkg.com/seedsui-react/lib/seedsui-components.less" target="_blank">[下载模板]</a> 放入src/components/seedsui/目录后修改<br>
 引入地址修改如下:
 ```less
 @import "styles/top/appearance.less";
