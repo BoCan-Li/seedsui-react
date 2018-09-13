@@ -7,7 +7,7 @@ npm install seedsui-react --save
 ```
 
 ## 导入样式
-建议使用<font color="#dd0000">动态导入</font>,以节省打包资源(只有动态导入的方式支持换肤)
+建议使用<font color="#dd0000">动态导入</font>,以节省打包资源
 ### 直接导入
 ```js
 import 'seedsui-react/build/seedsui.min.css';
@@ -16,23 +16,30 @@ import 'seedsui-react/build/seedsui.min.css';
 <link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/seedsui.min.css">
 ```
 ### 动态导入(需要环境支持Less)
-项目新建四个文件:<br/>
-- 1.图标 src/components/seedsui/iconfont.less:<br>
-从seedsui中复制出来后再自行修改
-- 2.变量 src/components/seedsui/variables.less:<br/>
-从seedsui中复制出来后再自行修改
-- 3.组件 src/components/seedsui/components.less:<br/>
-从seedsui中复制出来后再自行修改,地址如下:
+#### 项目新建四个文件:
+1.图标 src/components/seedsui/iconfont.less:<br>
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/目录后修改
+<br><br>
+2.变量 src/components/seedsui/variables.less:<br/>
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/目录后修改
+<br><br>
+3.组件 src/components/seedsui/components.less:<br/>
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/目录后修改<br>
+引入地址修改如下:
 ```less
-// 核心库
+@import "styles/top/appearance.less";
+```
+改为../../../node_modules/seedsui-react/lib/
+```less
 @import "../../../node_modules/seedsui-react/lib/styles/top/appearance.less";
 ```
-- 4.汇集 src/components/seedsui/index.less:
+
+4.汇集 src/components/seedsui/index.less:
 ```less
 // 图标
 // @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
 @import "iconfont.less";
-// 变量,依赖图标,换肤文件
+// 变量,依赖图标(换肤文件)
 // @import "../../../node_modules/seedsui-react/lib/seedsui-variables.less";
 @import "variables.less";
 // 组件,依赖变量库
@@ -49,9 +56,9 @@ import 'components/seedsui/index.less';
 建议使用动态导入,以节省打包资源
 ### 直接导入
 ```js
-import {Bridge, Device} from 'seedsui-react';
+import {Chat} from 'seedsui-react';
 ```
-或
+
 ```css
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
@@ -60,15 +67,22 @@ import {Bridge, Device} from 'seedsui-react';
 <script src="https://unpkg.com/seedsui-react/build/seedsui-react.min.js"></script>
 <script type="text/babel">
   ReactDOM.render(
-    <seedsui.Chat>haha</seedsui.Chat>,
+    <seedsui.Chat>聊天框</seedsui.Chat>,
     document.getElementById('root')
   );
 </script>
 ```
 ### 动态导入
 ```js
-import Bridge from 'seedsui-react/lib/Bridge';
-import Device from 'seedsui-react/lib/Device';
+// 导入seedsui基础库
+import 'components/seedsui/index.less';
+import 'seedsui-react/lib/PrototypeArray.js';
+import 'seedsui-react/lib/PrototypeMath.js';
+import 'seedsui-react/lib/PrototypeObject.js';
+import 'seedsui-react/lib/PrototypeString.js';
+import 'seedsui-react/lib/PrototypeDate.js';
+// 导入组件
+import Chat from 'seedsui-react/lib/Chat';
 ```
 
 ## 组件
