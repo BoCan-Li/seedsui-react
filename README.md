@@ -6,25 +6,48 @@ SeedsUI,专为移动设备设计的UI框架,组件全面可换肤,以后将会�
 npm install seedsui-react --save
 ```
 
-## 导入样式
+## 导入组件
 建议使用<font color="#dd0000">动态导入</font>,以节省打包资源
 ### 直接导入
 ```js
 import 'seedsui-react/build/seedsui.min.css';
+import {Chat} from 'seedsui-react';
 ```
 ```css
 <link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/seedsui.min.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
+<script src="https://cdn.bootcss.com/react-dom/16.4.0/umd/react-dom.development.js"></script>
+<script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.min.js"></script>
+<script src="https://unpkg.com/seedsui-react/build/seedsui-react.min.js"></script>
+<script type="text/babel">
+  ReactDOM.render(
+    <seedsui.Chat>聊天框</seedsui.Chat>,
+    document.getElementById('root')
+  );
+</script>
 ```
 ### 动态导入(需要环境支持Less)
-#### 项目新建四个文件:
+```js
+// 导入seedsui基础库
+import 'components/seedsui/index.less';
+import 'seedsui-react/lib/PrototypeArray.js';
+import 'seedsui-react/lib/PrototypeMath.js';
+import 'seedsui-react/lib/PrototypeObject.js';
+import 'seedsui-react/lib/PrototypeString.js';
+import 'seedsui-react/lib/PrototypeDate.js';
+// 导入组件
+import Chat from 'seedsui-react/lib/Chat';
+```
+#### index.less需要手动配置:
 1.图标 src/components/seedsui/iconfont.less:<br>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/目录后修改
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less){:target="_blank"},放入src/components/seedsui/目录后修改
 <br><br>
 2.变量 src/components/seedsui/variables.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/目录后修改
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less){:target="_blank"},放入src/components/seedsui/目录后修改
 <br><br>
 3.组件 src/components/seedsui/components.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/目录后修改<br>
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less){:target="_blank"},放入src/components/seedsui/目录后修改<br>
 引入地址修改如下:
 ```less
 @import "styles/top/appearance.less";
@@ -45,44 +68,6 @@ import 'seedsui-react/build/seedsui.min.css';
 // 组件,依赖变量库
 // @import "../../../node_modules/seedsui-react/lib/seedsui-components.less";
 @import "components.less";
-```
-
-src/index.js入口文件中导入less
-```js
-import 'components/seedsui/index.less';
-```
-
-## 导入组件
-建议使用动态导入,以节省打包资源
-### 直接导入
-```js
-import {Chat} from 'seedsui-react';
-```
-
-```css
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
-<script src="https://cdn.bootcss.com/react-dom/16.4.0/umd/react-dom.development.js"></script>
-<script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.min.js"></script>
-<script src="https://unpkg.com/seedsui-react/build/seedsui-react.min.js"></script>
-<script type="text/babel">
-  ReactDOM.render(
-    <seedsui.Chat>聊天框</seedsui.Chat>,
-    document.getElementById('root')
-  );
-</script>
-```
-### 动态导入
-```js
-// 导入seedsui基础库
-import 'components/seedsui/index.less';
-import 'seedsui-react/lib/PrototypeArray.js';
-import 'seedsui-react/lib/PrototypeMath.js';
-import 'seedsui-react/lib/PrototypeObject.js';
-import 'seedsui-react/lib/PrototypeString.js';
-import 'seedsui-react/lib/PrototypeDate.js';
-// 导入组件
-import Chat from 'seedsui-react/lib/Chat';
 ```
 
 ## 组件
