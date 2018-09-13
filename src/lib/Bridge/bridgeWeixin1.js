@@ -1,5 +1,5 @@
 import BridgeBrowser from './bridgeBrowser.js'
-import client from './../ApiAxios.js'
+import ApiAxios from './../ApiAxios.js'
 import Device from './../Device.js'
 import DB from './../DB.js'
 
@@ -19,7 +19,7 @@ var Bridge = {
     }
     // 记录日志
     DB.setSession('app_logger', DB.getSession('app_logger') + '<br/><br/>1.微信鉴权接口参数:' + JSON.stringify(ticketParams));
-    client.get(ticketUrl, opts.params || ticketParams).then(response => {
+    ApiAxios.get(ticketUrl, opts.params || ticketParams).then(response => {
       let result = response
       if (result.code === '1') {
         const params = {

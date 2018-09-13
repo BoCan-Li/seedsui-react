@@ -95,7 +95,7 @@ import Tree from './Tree';
 // utils
 // import Ajax from './Ajax.js'; // 原生的Ajax,如不需要，不要加载
 // import Animate from './Animate.js'; // 用于帧率测试一次动画等,如不需要，不要加载
-import Axios from './ApiAxios.js';
+import ApiAxios from './ApiAxios.js';
 // import Superagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
 // import BackboneRoute from './Route.js'; // 用于路由监听,如不需要，不要加载
 import DB from './DB.js';
@@ -205,7 +205,7 @@ export {
 
   // Ajax,
   // Animate,
-  Axios,
+  ApiAxios,
   // Superagent,
   // BackboneRoute,
   Clipboard,
