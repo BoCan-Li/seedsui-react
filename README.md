@@ -30,7 +30,7 @@ import {Chat} from 'seedsui-react';
 ### 动态导入(需要环境支持Less)
 ```js
 // 导入seedsui基础库
-import 'components/seedsui/index.less';
+import 'components/seedsui/index.less'; // 需要手动配置,见下节
 import 'seedsui-react/lib/PrototypeArray.js';
 import 'seedsui-react/lib/PrototypeMath.js';
 import 'seedsui-react/lib/PrototypeObject.js';
