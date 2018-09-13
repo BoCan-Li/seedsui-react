@@ -39,7 +39,7 @@ import 'seedsui-react/lib/PrototypeDate.js';
 // 导入组件
 import Chat from 'seedsui-react/lib/Chat';
 ```
-#### index.less需要手动配置:
+#### index.less手动配置:
 1.图标 src/components/seedsui/iconfont.less:<br>
 [下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/iconfont.less后修改
 <br><br>
