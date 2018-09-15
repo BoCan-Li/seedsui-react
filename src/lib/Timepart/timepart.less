@@ -3,14 +3,14 @@
   padding: @1px 0;
   background-color: white;
 }
-//行
+// 行
 .timepart-row {
   position: relative;
   display: -webkit-box;
   height: @18px;
   margin: @20px @20px @40px @20px;
 }
-//进度条
+// 进度条
 .timepart-progress {
   position: relative;
   //pointer-events: none;
@@ -20,10 +20,10 @@
   left: 0;
   bottom: 0;
   &.active{
-    background-color: @primary-bg;
+    background-color: @timepart-active-bg;
   }
   &.disabled {
-    background-color: @body-bg;
+    background-color: @timepart-disabled-bg;
   }
 }
 //段
@@ -46,20 +46,20 @@
 .timepart-endTime {
   display: none;
 }
-//双行时间不显示
+// 双行时间不显示
 &:nth-of-type(even) {
   .timepart-startTime,.timepart-endTime{
-        display: none;
+    display: none;
+  }
 }
-}
-//第一个part
+// 第一个part
 &:nth-of-type(1) {
   border-width: @1px;
   .timepart-startTime{
-        margin-left: -@7px;
+    margin-left: -@7px;
+  }
 }
-}
-//最后一个part
+// 最后一个part
 &:nth-last-of-type(1) {
   .timepart-startTime{
     display: none;

@@ -46,7 +46,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: 'haha'}]}/>
       </Header>
       <Container>
-        <Timepart onError={this.onError} onChange={this.onChange} multiple times={[{className: 'active', startTime: '08:00', endTime: '09:00', data: 'haha'}]}/>
+        <Timepart onError={this.onError} onChange={this.onChange} multiple times={[{className: 'disabled', startTime: '08:00', endTime: '09:00', data: 'haha'}]}/>
       </Container>
     </Page>
   }
