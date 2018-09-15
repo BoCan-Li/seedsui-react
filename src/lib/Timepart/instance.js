@@ -6,13 +6,11 @@ var Timepart = function (container, params) {
   var defaults = {
     rowClass: 'timepart-row',
     progressClass: 'timepart-progress',
-    progressCaptionClass: 'progress-caption',
-    dataProgressAttr: 'data-progress',
+    progressLegendClass: 'progress-legend',
+    dataProgressAttr: 'data',
     partClass: 'timepart-part',
     partStartClass: 'timepart-startTime',
     partEndClass: 'timepart-endTime',
-    activeClass: 'active',
-    disableClass: 'disabled',
 
     colCount: 6, // 一行6格
     partMinute: 30, // 一格的30分钟
@@ -25,13 +23,11 @@ var Timepart = function (container, params) {
 
     /*
     Callbacks:
-    onConflictOver:function(Timepart)
-    onConflictContain:function(Timepart)
+    onContain:function(Timepart) // 包含
+    onCross:function(Timepart) // 相交
     onClick:function(Timepart)
-    onClickDisabled:function(Timepart)
-    onClickActive:function(Timepart)
-    onClickChoose:function(Timepart)
-    onClickValid:function(Timepart)
+    onClickPart: function (Timepart) // 点击Part
+    onClickProgress:function(Timepart) // 点击Progress
     */
   }
   params = params || {}
@@ -73,9 +69,6 @@ var Timepart = function (container, params) {
     date.setSeconds(0, 0)
     return date
   }
-  // 开始和结束时间
-  s.startTime = s.parseDate(s.params.startTime)
-  s.endTime = s.parseDate(s.params.endTime)
 
   // 总格数
   s.partsCount = 0
@@ -98,16 +91,20 @@ var Timepart = function (container, params) {
   }
   // 创建时间段
   s.createParts = function () {
+    // 总行数s.rowsCount
     s.updateRowsCount()
+    // 总时长
+    var allStartTime = s.parseDate(s.params.startTime)
+    var allEndTime = s.parseDate(s.params.endTime)
     // 总格数
     s.parts = []
     // 总行数
     s.rows = []
     // 创建行
     for (var i = 0; i < s.rowsCount; i++) {
-      var rowStartTime = s.startTime.getTime() + (rowMilliSecond * i)
+      var rowStartTime = allStartTime.getTime() + (rowMilliSecond * i)
       var rowEndTime = rowStartTime + rowMilliSecond
-      if (rowEndTime > s.endTime.getTime()) rowEndTime = s.endTime.getTime()
+      if (rowEndTime > allEndTime.getTime()) rowEndTime = allEndTime.getTime()
 
       var row = document.createElement('div')
       row.setAttribute('class', s.params.rowClass)
@@ -121,7 +118,7 @@ var Timepart = function (container, params) {
       for (var j = 0; j < s.params.colCount; j++) {
         var partStartTime = rowStartTime + (partMilliSecond * j)
         var partEndTime = partStartTime + partMilliSecond
-        if (partStartTime > s.endTime.getTime() || partEndTime > s.endTime.getTime()) return
+        if (partStartTime > allEndTime.getTime() || partEndTime > allEndTime.getTime()) return
 
         var part = document.createElement('label')
         part.setAttribute('class', s.params.partClass)
@@ -144,19 +141,32 @@ var Timepart = function (container, params) {
   /* -----------------------
   Method
   ----------------------- */
-  s.reset = function () {
-    // 重置点击次数
-    s.clickCount = 0
+  s.update = function () {
     // 清空容器
     s.container.innerHTML = ''
     // 重新绘制时间段
     s.createParts()
   }
+  // 获取选中的时间段
+  s.getTimes = function () {
+    var progress = s.container.querySelectorAll('.' + s.params.progressLegendClass)
+    var times = []
+    for (var i = 0, el; el = progress[i++];) { // eslint-disable-line
+      times.push({
+        className: el.className.replace(' ' + s.params.progressLegendClass, '').replace(s.params.progressClass + ' ', ''),
+        startTime: el.startTime,
+        endTime: el.endTime,
+        data: el.getAttribute(s.params.dataProgressAttr) || ''
+      })
+    }
+    return times
+  }
   // 获得进度条的开始行数、结束行数、开始位置、结束位置、开始段数、结束段数
   s.getTimesRange = function (startTime, endTime) {
+    var allStartTime = s.parseDate(s.params.startTime)
     // 开始结束位置总比例
-    var startRatio = ((startTime.getTime() - s.startTime.getTime()) / rowMilliSecond).toString()
-    var endRatio = ((endTime.getTime() - s.startTime.getTime()) / rowMilliSecond).toString()
+    var startRatio = ((startTime.getTime() - allStartTime.getTime()) / rowMilliSecond).toString()
+    var endRatio = ((endTime.getTime() - allStartTime.getTime()) / rowMilliSecond).toString()
     /*
      *行数:开始结束位置行数
      */
@@ -206,38 +216,32 @@ var Timepart = function (container, params) {
       endNum: endNum
     }
   }
-  s.hasProgress = function (startTime, endTime, isCallback) {
-    var progress = s.container.querySelectorAll('.progress-caption')
-    s.conflictTimes = {
-      conflictStartTime: startTime,
-      conflictEndTime: endTime
-    }
-    /* eslint-disable */
-    for (var i = 0, pro; pro = progress[i++];) {
+  s.hasProgress = function (startTime, endTime) {
+    var progress = s.container.querySelectorAll('.' + s.params.progressClass)
+    for (var i = 0, pro; pro = progress[i++];) { // eslint-disable-line
       // 相交
       if ((startTime > pro.startTime && startTime < pro.endTime) || (endTime > pro.startTime && endTime < pro.endTime)) {
         s.target = pro
-        if (s.params.onConflictContain && isCallback) s.params.onConflictContain(s)
+        if (s.params.onCross) s.params.onCross(s)
         return true
       }
       // 包含
       if ((pro.startTime > startTime && pro.startTime < endTime) || (pro.endTime > startTime && pro.endTime < endTime)) {
         s.target = pro
-        if (s.params.onConflictOver && isCallback) s.params.onConflictOver(s)
+        if (s.params.onContain) s.params.onContain(s)
         return true
       }
     }
-    /* eslint-enable */
     return false
   }
-
+  // 进度条id
+  var progressId = 0
   // 设置进度条
-  s.setProgress = function (startTime, endTime, classes, data, isListenerConflict) {
-    /* eslint-disable */
-    var startTime = Object.prototype.toString.call(startTime) === '[object Date]' ? startTime : s.parseDate(startTime || s.params.startTime)
-    var endTime = Object.prototype.toString.call(endTime) === '[object Date]' ? endTime : s.parseDate(endTime || s.params.endTime)
-    var classes = classes && Object.prototype.toString.call(classes) === '[object Array]' ? classes : []
-    /* eslint-enable */
+  s.addProgress = function (argStartTime, argEndTime, className, data, cover) {
+    var allStartTime = s.parseDate(s.params.startTime)
+    var allEndTime = s.parseDate(s.params.endTime)
+    var startTime = Object.prototype.toString.call(argStartTime) === '[object Date]' ? argStartTime : s.parseDate(argStartTime || s.params.startTime)
+    var endTime = Object.prototype.toString.call(argEndTime) === '[object Date]' ? argEndTime : s.parseDate(argEndTime || s.params.endTime)
     startTime.setYear(0)
     startTime.setMonth(0, 0)
     startTime.setSeconds(0, 0)
@@ -247,40 +251,34 @@ var Timepart = function (container, params) {
     endTime.setSeconds(0, 0)
 
     // 时间范围限制
-    if (startTime.getTime() < s.startTime.getTime()) {
-      startTime = s.startTime
-    } else if (startTime.getTime() > s.endTime.getTime()) {
-      startTime = s.endTime
+    if (startTime.getTime() < allStartTime.getTime()) {
+      startTime = allStartTime
+    } else if (startTime.getTime() > allEndTime.getTime()) {
+      startTime = allEndTime
     }
-    if (endTime.getTime() < s.startTime.getTime()) {
-      endTime = s.startTime
-    } else if (endTime.getTime() > s.endTime.getTime()) {
-      endTime = s.endTime
+    if (endTime.getTime() < allStartTime.getTime()) {
+      endTime = allStartTime
+    } else if (endTime.getTime() > allEndTime.getTime()) {
+      endTime = allEndTime
     }
     // 如果开启冲突监听，并且存在冲突，则停止进度条绘制
-    if (isListenerConflict && s.hasProgress(startTime, endTime, true)) return false
+    if (!cover && s.hasProgress(startTime, endTime)) return false
 
     var range = s.getTimesRange(startTime, endTime)
+
     // 设置parts的class
     /*
-    for(var i=range.startNum;i<=range.endNum;i++){
-        for(var k=0,className;className=classes[k++];){
-            s.parts[i].classList.add(className)
-        }
+    for(var i = range.startNum; i <= range.endNum; i++){
+      s.parts[i].setAttribute('class', s.params.partClass + ' ' + className)
     }
     */
 
     // 设置progress的left和right
+    progressId++
     for (var j = range.startRow; j <= range.endRow; j++) {
       var progress = document.createElement('div')
-      progress.setAttribute('class', s.params.progressClass)
-
-      // 设置classes
-      /* eslint-disable */
-      for (var l = 0, className; className = classes[l++];) {
-        progress.classList.add(className)
-      }
-      /* eslint-enable */
+      // 设置class
+      progress.setAttribute('class', s.params.progressClass + ' ' + className)
 
       // 设置style
       progress.style.display = 'block'
@@ -290,14 +288,18 @@ var Timepart = function (container, params) {
       // 设置data
       if (data) progress.setAttribute(s.params.dataProgressAttr, data)
 
+      // 设置id
+      progress.setAttribute('data-id', progressId)
+
+      // 设置时间
+      progress.startTime = startTime
+      progress.endTime = endTime
+
       if (j === range.startRow) {
         progress.style.left = range.left + '%'
-
-        progress.startTime = startTime
-        progress.endTime = endTime
-        progress.classList.add(s.params.progressCaptionClass)
-        progress.setAttribute('data-starttime', startTime)
-        progress.setAttribute('data-endtime', endTime)
+        progress.classList.add(s.params.progressLegendClass)
+        // progress.setAttribute('data-starttime', startTime)
+        // progress.setAttribute('data-endtime', endTime)
       }
       if (j === range.endRow) {
         progress.style.right = range.right + '%'
@@ -306,50 +308,6 @@ var Timepart = function (container, params) {
       s.rows[j].appendChild(progress)
     }
     return true
-  }
-  s.activeTimes = function (startTime, endTime, argClassName, data) {
-    var className = s.params.activeClass + (argClassName ? ' ' + argClassName : '')
-    var isDrawed = s.setProgress(startTime, endTime, className.split(' '), data || '', true)
-    if (isDrawed) {
-      s.clickCount = 2
-    }
-  }
-  s.disableTimes = function (startTime, endTime, argClassName, data) {
-    var className = s.params.disableClass + (argClassName ? ' ' + argClassName : '')
-    s.setProgress(startTime, endTime, className.split(' '), data || '', true)
-  }
-  s.chooseTimes = function (startTime, endTime, argClassName, data) {
-    var className = argClassName ? argClassName.split(' ') : []
-    s.setProgress(startTime, endTime, className, data)
-  }
-  // 获取选中的时间段
-  s.getActiveTimes = function () {
-    var activeProgress = s.container.querySelectorAll('.' + s.params.progressCaptionClass + '.' + s.params.activeClass)
-    if (activeProgress.length === 0) {
-      activeProgress = s.container.querySelectorAll('.' + s.params.partClass + '.' + s.params.activeClass)
-    }
-    if (activeProgress.length <= 0) {
-      return {
-        startTime: null,
-        endTime: null,
-        startTimeString: null,
-        endTimeString: null
-      }
-    }
-    var startTime = activeProgress[0].startTime
-    var startHour = startTime.getHours() < 10 ? '0' + startTime.getHours() : startTime.getHours()
-    var startMinute = startTime.getMinutes() < 10 ? '0' + startTime.getMinutes() : startTime.getMinutes()
-
-    var endTime = activeProgress[activeProgress.length - 1].endTime
-    var endHour = endTime.getHours() < 10 ? '0' + endTime.getHours() : endTime.getHours()
-    var endMinute = endTime.getMinutes() < 10 ? '0' + endTime.getMinutes() : endTime.getMinutes()
-
-    return {
-      startTime: startTime,
-      endTime: endTime,
-      startTimeString: startHour + ':' + startMinute,
-      endTimeString: endHour + ':' + endMinute
-    }
   }
 
   // 删除进度条
@@ -363,14 +321,6 @@ var Timepart = function (container, params) {
     Array.prototype.slice.call(activeProgress).forEach(function (n, i) {
       n.parentNode.removeChild(n)
     })
-  }
-  s.removeAllActive = function () {
-    s.clickCount = 0
-
-    s.removeProgress(s.params.activeClass)
-  }
-  s.removeAllDisabled = function () {
-    s.removeProgress(s.params.disableClass)
   }
   // 时间排序
   s.sortTimes = function () {
@@ -408,40 +358,17 @@ var Timepart = function (container, params) {
   Events Handler
   ----------------------- */
   s.onClickContainer = function (e) {
-    if (e.target.classList.contains(s.params.partClass) || e.target.classList.contains(s.params.progressClass)) { // 点击part
-      s.onClickPart(e)
-    }
-  }
-  s.onClickPart = function (e) {
     s.target = e.target
     // Callback onClick
     if (s.params.onClick) s.params.onClick(s)
-
-    // 点击禁用
-    if (s.target.classList.contains(s.params.disableClass)) {
-      // Callback onClickDisabled
-      if (s.params.onClickDisabled) s.params.onClickDisabled(s)
-      return
+    // Callback onClickPart
+    if (e.target.classList.contains(s.params.partClass)) {
+      if (s.params.onClickPart) s.params.onClickPart(s)
     }
-    // 点击激活
-    if (s.target.classList.contains(s.params.activeClass)) {
-      // Callback onClickActive
-      if (s.params.onClickActive) s.params.onClickActive(s)
-      return
+    // Callback onClickProgress
+    if (e.target.classList.contains(s.params.progressClass)) {
+      if (s.params.onClickProgress) s.params.onClickProgress(s)
     }
-    // 点击进度条
-    if (s.target.classList.contains(s.params.progressClass)) {
-      // Callback onClickChoose
-      if (s.params.onClickChoose) s.params.onClickChoose(s)
-      return
-    }
-
-    // 记录点击次数
-    s.clickCount++
-
-    // 点击合法区域
-    // Callback onClick
-    if (s.params.onClickValid) s.params.onClickValid(s)
   }
   /* -----------------------
   Init

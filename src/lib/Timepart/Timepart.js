@@ -8,18 +8,15 @@ export default class Timepart extends Component {
     className: PropTypes.string,
     style: PropTypes.object,
 
-    startTime: PropTypes.string, // hh:ss
+    startTime: PropTypes.string,
     endTime: PropTypes.string,
+    times: PropTypes.array, // [{className: string, startTime: 'hh:ss', endTime: 'hh:ss', data: string, cover: bool}]
 
-    disabledTimes: PropTypes.array, // [{startTime: 'hh:ss', endTime: 'hh:ss', className: string, data: string}]
-    selectedTimes: PropTypes.array, // 同上
-    customTimes: PropTypes.array, // 同上
-
-    onChange: PropTypes.func, // onChange({})
+    onChange: PropTypes.func, // onChange(times)
     onError: PropTypes.func
   }
   static defaultProps = {
-    startTime: '7:00',
+    startTime: '07:00',
     endTime: '22:00'
   }
   constructor(props) {
@@ -29,88 +26,99 @@ export default class Timepart extends Component {
     }
   }
   componentDidUpdate (prevProps) {
-    if (this.props.disabledTimes && prevProps.disabledTimes.length !== this.props.disabledTimes.length) {
-      this.props.disabledTimes.forEach((time) => {
-        this.state.instance.disableTimes(time.startTime, time.endTime, time.className, time.data);
-      })
-    }
-    if (this.props.customTimes && prevProps.customTimes.length !== this.props.customTimes.length) {
-      this.props.customTimes.forEach((time) => {
-        this.state.instance.chooseTimes(time.startTime, time.endTime, time.className || 'active', time.data);
-      })
+    if (this.props.times && prevProps.times.length !== this.props.times.length) {
+      this.update();
     }
   }
   componentDidMount () {
+    var clickCount = 0;
     var instance = new Instance(this.$el, {
       startTime: this.props.startTime,
       endTime: this.props.endTime,
-      onClick: (e) => {
-      },
-      onConflictOver: (e) => {
-        this.onError('不能跨选禁用时间段', e)
-      },
-      onConflictContain: (e) => {
-        this.error && this.error('时间段冲突', e.target)
-      },
-      onClickActive: (e) => { // 点击选中区域
-        if (!this.props.multiple) e.removeAllActive()
-      },
-      onClickDisabled: (e) => { // 点击禁用区域
-      },
-      onClickChoose: (e) => {
-        var data = JSON.parse(e.target.getAttribute('data-progress'))
-        console.log('点击选择区域，数据：{startTime:' + data.startTime + ',endTime:' + data.endTime + '}')
-      },
-      onClickValid: (s) => { // 点击空白有效区域
-        console.log('有效区域')
-        console.log(s.params.activeClass)
-        if (s.clickCount === 1) { // 如果点击了一次
-          this.part1 = s.target
-          this.part1.classList.add(s.params.activeClass)
-        } else if (s.clickCount === 2) { // 如果点击了两次
-          this.part2 = s.target
-          // 选中
-          var times = s.getTimesByParts(this.part1, this.part2)
-          s.activeTimes(times.startTime, times.endTime)
-        } else if (s.clickCount === 3) { // 如果点击了三次
-          s.removeAllActive()
+      onClickPart: (s) => {
+        if (s.target.classList.contains('active')) {
+          s.target.classList.remove('active');
+          clickCount = 0;
+          // onChange
+          this.onChange();
+          return;
         }
+        // 如果不允许多选,发现有已选中的先清除
+        if (!this.props.multiple) {
+          if (s.container.querySelectorAll('.progress-legend.active').length) {
+            s.removeProgress('active');
+            clickCount = 0;
+            // onChange
+            this.onChange();
+            return;
+          }
+        }
+        // 选中
+        clickCount++;
+        if (clickCount === 1) { // 如果点击了一次
+          this.part1 = s.target;
+          this.part1.classList.add('active');
+          // onChange
+          this.onChange();
+        } else if (clickCount === 2) { // 如果点击了两次
+          this.part1.classList.remove('active');
+          this.part2 = s.target;
+          var times = s.getTimesByParts(this.part1, this.part2);
+          s.addProgress(times.startTime, times.endTime, 'active');
+          clickCount = 0;
+          // onChange
+          this.onChange();
+        }
+      },
+      onContain: (e) => {
+        clickCount = 0;
+        if (this.props.onError) this.props.onError({msg: '已包含其它时间段'});
+      },
+      onCross: (e) => {
+        if (this.props.onError) this.props.onError({msg: '与其它时间段相交'});
+      },
+      onClickProgress: (s) => {
+        if (s.target.classList.contains('active')) {
+          // 根据data-id删除
+          const id = s.target.getAttribute('data-id');
+          [].slice.call(s.container.querySelectorAll(`.timepart-progress[data-id="${id}"]`)).forEach((el) => {
+            el.parentNode.removeChild(el);
+          });
+          // onChange
+          this.onChange();
+        }
+      },
+      onClickWhite: (s) => {
       }
     });
-    // 禁用时间
-    if (this.props.disabledTimes) {
-      this.props.disabledTimes.forEach((time) => {
-        instance.disableTimes(time.startTime, time.endTime, time.className, time.data);
-      });
-    }
-    // 自定义时间
-    if (this.props.customTimes) {
-      this.props.customTimes.forEach((time) => {
-        instance.chooseTimes(time.startTime, time.endTime, time.className || 'active', time.data);
-      });
-    }
-    // 选中时间
-    if (this.props.selectedTimes) {
-      let selectedTimes = this.props.selectedTimes;
-      if (!this.props.multiple) selectedTimes = [this.props.selectedTimes[0]];
-      selectedTimes.forEach((time) => {
-        instance.activeTimes(time.startTime, time.endTime, time.className || 'active', time.data);
-      });
-    }
     this.setState({
       instance
     }, () => {
-      this.onChange();
+      this.update();
     });
   }
+  update = () => {
+    if (!this.props.times) return;
+    for (let i = 0, time; time = this.props.times[i++];) { // eslint-disable-line
+      if (time.className && time.startTime && time.endTime) {
+        this.state.instance.addProgress(time.startTime, time.endTime, time.className, time.data || null, time.cover || false);
+      }
+    }
+    // onChange
+    this.onChange();
+  }
   onChange = () => {
-    console.log(this.state.instance.getActiveTimes())
-    const {disabledTimes, customTimes} = this.props;
-    if (this.props.onChange) this.props.onChange({
-      disabledTimes,
-      customTimes,
-      selectedTimes: this.state.instance.getActiveTimes()
-    });
+    const times = this.state.instance.getTimes();
+    const part = this.state.instance.container.querySelector('.timepart-part.active');
+    if (part) {
+      times.push({
+        className: part.className.replace('timepart-part ', ''),
+        startTime: part.startTime,
+        endTime: part.endTime,
+        data: part.getAttribute('data') || ''
+      })
+    }
+    if (this.props.onChange) this.props.onChange(times);
   }
   render() {
     const {className, style} = this.props;
