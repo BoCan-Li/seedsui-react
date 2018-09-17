@@ -245,7 +245,7 @@ export default class InputText extends Component {
           preRight = inputStyle.paddingRight || '0';
         }
       }
-      return (<div className={`input-pre-space${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}>
+      return (<div className={`input-pre-box${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}>
         {valueBindProp && <textarea ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus}></textarea>}
         {!valueBindProp && <textarea ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus}></textarea>}
         <pre ref={(el) => {this.$pre = el;}} style={{left: preLeft, right: preRight}}><span>{value}</span></pre>

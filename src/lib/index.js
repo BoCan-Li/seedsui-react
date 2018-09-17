@@ -5,13 +5,12 @@ import './PrototypeMath.js';
 import './PrototypeObject.js';
 import './PrototypeString.js';
 import './PrototypeDate.js';
-// import './PrototypePinyin.js'; // 不常用
+import './PrototypePinyin.js'; // 不常用
 
 // components
 import Actionsheet from './Actionsheet';
 import Alert from './Alert';
 import Article from './Article';
-// import Aside from './Aside'; // 待定
 import Attribute from './Attribute';
 import Attributes from './Attributes';
 import Badge from './Badge';
@@ -95,25 +94,25 @@ import Toast from './Toast';
 import Tree from './Tree';
 
 // utils
-// import Ajax from './Ajax.js'; // 原生的Ajax,如不需要，不要加载
-// import Animate from './Animate.js'; // 用于帧率测试一次动画等,如不需要，不要加载
+import Ajax from './Ajax.js'; // 原生的Ajax,如不需要，不要加载
+import Animate from './Animate.js'; // 用于帧率测试一次动画等,如不需要，不要加载
 import ApiAxios from './ApiAxios.js';
 // import Superagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
-// import BackboneRoute from './Route.js'; // 用于路由监听,如不需要，不要加载
+import BackboneRoute from './Route.js'; // 用于路由监听,如不需要，不要加载
 import DB from './DB.js';
 import Clipboard from './Clipboard.js';
 import Device from './Device.js';
-// import EditUtil from './EditUtil.js'; // 用于富文本,如不需要，不要加载
+import EditUtil from './EditUtil.js'; // 用于富文本,如不需要，不要加载
 import EventUtil from './EventUtil.js';
 import FastClick from './FastClick.js';
-// import Form from './Form.js'; // 用于表单序列化等操作,如不需要，不要加载
+import Form from './Form.js'; // 用于表单序列化等操作,如不需要，不要加载
 // import FormControls from './FormControls.js'; // 用于表单动画控件如小眼睛、安全校验框等,如不需要，不要加载
-// import Fullscreen from './Fullscreen.js'; // 用于判断浏览器是否处于全屏状态,如不需要，不要加载
-// import History from './History.js'; // 用于路由监听,如不需要，不要加载
-// import MediaUtil from './MediaUtil.js'; // 用于视频音频
-// import Pubsub from './Pubsub.js'; // 用于订阅发布模式
-// import ValidateID from './ValidateID.js'; // 用于身份证信息查询,很大,如不需要,不要加载
-// import Validator from './Validator.js'; // 用于表单校验,如不需要,不要加载
+import Fullscreen from './Fullscreen.js'; // 用于判断浏览器是否处于全屏状态,如不需要，不要加载
+import History from './History.js'; // 用于路由监听,如不需要，不要加载
+import MediaUtil from './MediaUtil.js'; // 用于视频音频
+import Pubsub from './Pubsub.js'; // 用于订阅发布模式
+import ValidateID from './ValidateID.js'; // 用于身份证信息查询,很大,如不需要,不要加载
+import Validator from './Validator.js'; // 用于表单校验,如不需要,不要加载
 
 // bridge
 import Bridge from './Bridge';
@@ -207,25 +206,25 @@ export {
 
   // utils
 
-  // Ajax,
-  // Animate,
+  Ajax,
+  Animate,
   ApiAxios,
   // Superagent,
-  // BackboneRoute,
+  BackboneRoute,
   Clipboard,
   DB,
   Device,
-  // EditUtil,
+  EditUtil,
   EventUtil,
   FastClick,
-  // Form,
+  Form,
   // FormControls,
-  // Fullscreen,
-  // History,
-  // MediaUtil,
-  // Pubsub,
-  // IDValidator,
-  // Validator,
+  Fullscreen,
+  History,
+  MediaUtil,
+  Pubsub,
+  ValidateID,
+  Validator,
 
   // bridge
   Bridge

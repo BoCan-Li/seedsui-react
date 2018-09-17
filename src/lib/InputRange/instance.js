@@ -19,21 +19,21 @@ var InputRange = function (container, params) {
 	// Container
 	s.container = typeof container === 'string' ? document.querySelector(container) : container
 	if (!s.container) {
-		console.log('SeedsUI Error：未找到Range的DOM对象，请检查传入参数是否正确')
+		console.log('SeedsUI Error：未找到InputRange的DOM对象，请检查传入参数是否正确')
 		return
 	}
 
 	// Tooltip
 	s.tooltip = s.container.querySelector('.' + s.params.tooltipClass)
 	if (!s.container) {
-		console.log('SeedsUI Error：未找到Range的tooltip，请检查传入参数是否正确')
+		console.log('SeedsUI Error：未找到InputRange的tooltip，请检查传入参数是否正确')
 		return
 	}
 
 	// Input
 	s.input = s.container.querySelector('.' + s.params.inputClass)
 	if (!s.input) {
-		console.log('SeedsUI Error：未找到Range的input，请检查传入参数是否正确')
+		console.log('SeedsUI Error：未找到InputRange的input，请检查传入参数是否正确')
 		return
 	}
 
