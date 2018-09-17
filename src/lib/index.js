@@ -51,6 +51,7 @@ import InputPassword from './InputPassword';
 import InputPhone from './InputPhone';
 import InputPicker from './InputPicker';
 import InputPre from './InputPre';
+import InputRange from './InputRange';  // 不常用
 import InputSafe from './InputSafe'; // 不常用
 import InputSelect from './InputSelect';
 import InputText from './InputText';
@@ -161,6 +162,7 @@ export {
   InputPhone,
   InputPicker,
   InputPre,
+  InputRange,
   InputSafe,
   InputSelect,
   InputText,
