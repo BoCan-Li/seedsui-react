@@ -5,6 +5,7 @@ import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
+import ListPull from '../lib/ListPull';
 
 export default class App extends Component {
   constructor(props) {
@@ -40,13 +41,26 @@ export default class App extends Component {
   onChange = (times) => {
     console.log(times);
   }
+  onClick = (args) => {
+    console.log(args)
+  }
   render() {
+    const list = [
+      {
+        container: <div><p>haha</p><small>haha</small></div>,
+        buttons: [
+          {value: '收藏', className: 'warn', onClick: this.onClick},
+          {value: '删除', className: 'cancel', onClick: this.onClick}
+        ]
+      }
+    ]
     return <Page style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>
       <Container>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
+        <ListPull list={list} onClick={this.onClick}/>
       </Container>
     </Page>
   }
