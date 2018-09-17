@@ -1,51 +1,45 @@
-/*---------------indexbar.less(start)---------------*/
-.indexbox,.indexlist{
-    position:relative;
-    height:100%;
-}
-/*列表*/
-.indexlist{
-    overflow:auto;
-}
-/*Bar*/
+// indexbar.less(start)
 .indexbar{
-    position:absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    font-size:@12px;
-    font-weight:bold;
-    a{
-        display:block;
-        height:3.8%;
-        width:@24px;
-        text-align:center;
-        color:@border;
-    }
-    &.active a{
-        color:@body-color;
-    }
+  position:fixed;
+  .flex;
+  .flex-vertical;
+  top:0;
+  right:0;
+  bottom:0;
+  font-size: @indexbar-font-size;
+  font-weight:bold;
+  a{
+    .flex;
+    .flex-1;
+    .flex-middle;
+    .flex-center;
+    padding: 0 @6px;
+    color: @indexbar-color;
+    .setIndexBarButton();
+  }
+  &.active a{
+    color: @indexbar-color-active;
+  }
 }
-/*Tooltip*/
 .indexbar-tooltip{
-    display:none;
-    position: absolute;
-    width: @80px;
-    height: @80px;
-    left: 50%;
-    top: 50%;
-    margin-left: -@40px;
-    margin-top: -@40px;
-    border-radius: @40px;
-    text-align: center;
-    line-height: @80px;
-    font-size: @35px;
-    color: #fff;
-    -webkit-transition: .2s;
+  display:none;
+  position: fixed;
+  width: @80px;
+  height: @80px;
+  left: 50%;
+  top: 50%;
+  margin-left: -@40px;
+  margin-top: -@40px;
+  border-radius: @40px;
+  text-align: center;
+  line-height: @80px;
+  font-size: @35px;
+  color: #fff;
+  transition: 200ms;
 
-    background-color:@mask-bg;
+  background-color:@mask-bg;
 }
 .indexbar.active+.indexbar-tooltip{
-    display:block;
+  display:block;
 }
-/*---------------indexbar.less(end)---------------*/
+// indexbar.less(end)

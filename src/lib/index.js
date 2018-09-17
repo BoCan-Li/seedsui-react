@@ -40,6 +40,7 @@ import Header from './Header';
 import Icon from './Icon';
 import ImgLazy from './ImgLazy';
 import ImgUploader from './ImgUploader';
+import IndexBar from './IndexBar';
 import InputArea from './InputArea';
 import InputCity from './InputCity';
 import InputColor from './InputColor'; // 不常用
@@ -149,6 +150,7 @@ export {
   Icon,
   ImgLazy,
   ImgUploader,
+  IndexBar,
   InputArea,
   InputCity,
   InputColor,
