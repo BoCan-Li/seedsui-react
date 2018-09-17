@@ -26,8 +26,8 @@ export default class Range extends Component {
     onChange: PropTypes.func
   }
   static defaultProps = {
-    value: '1',
-    min: '1',
+    value: '0',
+    min: '0',
     max: '100',
     step: '1'
   }
@@ -92,7 +92,7 @@ export default class Range extends Component {
     return (
       <div ref={el => {this.$el = el;}} className={`range${className ? ' ' + className : ''}`} style={style}>
         <div className="range-tooltip">{value}</div>
-        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchStart={this.show} onTouchMove={this.show} onTouchEnd={this.onChange}/>
+        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchMove={this.show} onTouchEnd={this.onChange}/>
       </div>
     );
   }
