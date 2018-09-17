@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Instance from './aside.js';
+import Page from './../Page';
+import Instance from './instance.js';
 
-export default class Aside extends Component {
+export default class PagePull extends Component {
   static propTypes = {
-    leftAside: PropTypes.node, // 左侧边栏
-    rightAside: PropTypes.node, // 右侧边栏
+    sideLeft: PropTypes.node, // 左侧边栏
+    sideRight: PropTypes.node, // 右侧边栏
     children: PropTypes.node, // 主体内容
     transition: PropTypes.string // 过渡动画, overlay | push
   };
@@ -19,11 +20,20 @@ export default class Aside extends Component {
     this.state = {}
   }
   componentDidMount = () => {
-    if (this.state.instance || (this.props.list.length === 0 && !this.props.children)) return;
     const instance = new Instance(this.$el, {
+      isDrag: true,
       sides: {
-        left: this.$leftEl || null,
-        right: this.$rightEl || null
+        left: this.$sideLeft || null,
+        right: this.$sideRight || null
+      },
+      onStart:function(e){
+        console.log("开始显示");
+      },
+      onShowed:function(e){
+        console.log("显示结束");
+      },
+      onHid:function(e){
+        console.log("隐藏结束");
       }
     });
     this.setState({
@@ -32,26 +42,28 @@ export default class Aside extends Component {
   }
   render() {
     const {
-      leftAside,
-      rightAside,
+      sideLeft,
+      sideRight,
       children,
       transition
     } = this.props;
     return (
-      children ? <div class="aside-page" ref={el => {this.$el = el}}>
-        <div class="aside-wrapper">
+      <div className="aside-page" ref={el => {this.$el = el;}}> 
+        <div className="aside-wrapper"> 
           {/* 主体部分 */}
-          {children}
+          <Page>
+            {children}
+          </Page>
           {/* 左侧边栏 */}
-          <aside class="aside" ref={el => {this.$leftEl = el}} data-transition={{transition}}>
-            {leftAside}
-          </aside>
+          {sideLeft && <aside className="aside-left" data-transition={transition} ref={el => {this.$sideLeft = el;}}> 
+            {sideLeft}
+          </aside>}
           {/* 右侧边栏 */}
-          <aside class="aside" ref={el => {this.$rightEl = el}} data-transition={{transition}}>
-            {rightAside}
-          </aside>
-        </div>
-      </div> : null
+          {sideRight && <aside className="aside-left" data-transition={transition} ref={el => {this.$sideRight = el;}}>
+            {sideRight}
+          </aside>}
+        </div> 
+      </div>
     );
   }
 }

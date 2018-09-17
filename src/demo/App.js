@@ -41,7 +41,7 @@ export default class App extends Component {
     console.log(times);
   }
   render() {
-    return <Page style={{ backgroundColor: 'white' }}>
+    return <Page style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>

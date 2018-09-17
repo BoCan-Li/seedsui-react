@@ -69,6 +69,10 @@ var Bridge = {
       }
     })
   },
+  // 关闭窗口
+  closeWindow: function () {
+    wx.closeWindow() // eslint-disable-line
+  },
   // 客户端默认返回控制
   back: function () {
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''

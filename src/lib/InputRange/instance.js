@@ -59,16 +59,13 @@ var InputRange = function (container, params) {
 	/* -----------------------
 	Touch Handler
 	----------------------- */
-	s.onRangeStart = function (e) {
-		console.log(1)
+	s.onRangeStart = function () {
 		s.showToolTip(s.tooltip, s.input)
 	}
-	s.onRangeMove = function (e) {
-		console.log(2)
+	s.onRangeMove = function () {
 		s.showToolTip(s.tooltip, s.input)
 	}
-	s.onRangeEnd = function (e) {
-		console.log(3)
+	s.onRangeEnd = function () {
 		setTimeout(function () {
 			s.tooltip.style.display = 'none'
 		}, 1000)

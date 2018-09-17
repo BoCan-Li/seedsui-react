@@ -52,21 +52,23 @@ export default class Range extends Component {
     }
     return args;
   }
+  onTouchStart = (e) => {
+    e.stopPropagation();
+  }
+  onTouchMove = (e) => {
+    this.showTooltip(this.$tooltip, this.$input);
+    e.stopPropagation();
+  }
+  onTouchEnd = (e) => {
+    this.onChange(e);
+    e.stopPropagation();
+  }
   onChange = (e) => {
     if (this.props.disabled) return;
-    this.hide(e);
+    this.$tooltip.style.visibility = 'hidden';
     if (this.props.onChange) {
       this.props.onChange(this.$input.value, this.getArgs(e));
     }
-  }
-  show = (e) => {
-    const input = e.target;
-    const tooltip = e.target.previousElementSibling;
-    this.showTooltip(tooltip, input);
-  }
-  hide = (e) => {
-    const tooltip = e.target.previousElementSibling;
-    tooltip.style.visibility = 'hidden';
   }
   // 显示tooltip
 	showTooltip = (tooltip, input) => {
@@ -91,8 +93,8 @@ export default class Range extends Component {
     const {style, className, value, min, max, step} = this.props;
     return (
       <div ref={el => {this.$el = el;}} className={`range${className ? ' ' + className : ''}`} style={style}>
-        <div className="range-tooltip">{value}</div>
-        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchMove={this.show} onTouchEnd={this.onChange}/>
+        <div ref={el => {this.$tooltip = el;}} className="range-tooltip">{value}</div>
+        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchStart={this.onTouchStart} onTouchMove={this.onTouchMove} onTouchEnd={this.onTouchEnd}/>
       </div>
     );
   }

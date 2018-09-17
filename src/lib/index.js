@@ -69,6 +69,7 @@ import NumBoxPop from './NumBoxPop';
 import NumBoxPopPointer from './NumBoxPopPointer';
 import OnOff from './OnOff';
 import Page from './Page';
+import PagePull from './PagePull'; // 不常用
 import Peg from './Peg'; // 不常用
 import Picker from './Picker';
 import PickerCity from './PickerCity';
@@ -180,6 +181,7 @@ export {
   NumBoxPopPointer,
   OnOff,
   Page,
+  PagePull,
   Peg,
   Picker,
   PickerCity,
@@ -218,7 +220,6 @@ export {
   EventUtil,
   FastClick,
   Form,
-  // FormControls,
   Fullscreen,
   History,
   MediaUtil,
