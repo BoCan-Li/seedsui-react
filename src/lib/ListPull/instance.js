@@ -4,10 +4,10 @@ var ListPull = function (container, params) {
 	Model
 	----------------------- */
 	var defaults = {
-		leftClass: 'listpull-left',
-		rightClass: 'listpull-right',
-		handlerClass: 'listpull-handler',
-		activeClass: 'listpull-active',
+		leftClass: 'list-pull-left',
+		rightClass: 'list-pull-right',
+		handlerClass: 'list-pull-handler',
+		activeClass: 'active',
 		threshold: 20,
 		duration: 150
 		/*
@@ -160,15 +160,16 @@ var ListPull = function (container, params) {
 		s.touches.endY = e.clientY || e.changedTouches[0].clientY
 		if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 点击
 			s.target = e.target
-			// Callback onClick
-			if (s.params.onClick) s.params.onClick(s)
-		} else { // 滑动
-			if (s.leftClientWidth || s.rightClientWidth) {
-				if (Math.abs(s.touches.diffX) > s.params.threshold) {
-					s.show(e.target, s.touches.diffX > 0 ? 'left' : 'right')
-				} else {
-					s.hide(e.target)
-				}
+			// 在展开状态下(s.leftClientWidth || s.rightClientWidth),如果点击主容器handler将无效
+			if (!e.target.classList.contains(s.params.handlerClass) || s.leftClientWidth || s.rightClientWidth) {
+				// Callback onClick
+				if (s.params.onClick) s.params.onClick(s)
+			}
+		} else if (s.leftClientWidth || s.rightClientWidth) { // 滑动
+			if (Math.abs(s.touches.diffX) > s.params.threshold) {
+				s.show(e.target, s.touches.diffX > 0 ? 'left' : 'right')
+			} else {
+				s.hide(e.target)
 			}
 		}
 		// 清空滑动方向

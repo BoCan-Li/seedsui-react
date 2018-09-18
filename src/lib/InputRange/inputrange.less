@@ -17,15 +17,8 @@
 	background-color:@dpborder;
 
 	&::-webkit-slider-thumb{
-		-webkit-appearance:none;
-		width:@28px;
-		height:@28px;
-		border-width:0;
-		background-clip:padding-box;
-		border-radius:50%;
-
-		background-color:@primary-bg;
-		border-color:red;
+		&:extend(.appearance);
+		.setInputRangeSliderThumb();
 	}
 }
 .range-tooltip{

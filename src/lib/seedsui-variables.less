@@ -375,9 +375,20 @@
 @bi-gauge-bgs: #1693ce, #19a4e5, #14ba91, #16c447, #2fcf1f, #7cce16, #c0ac05, #c26900, #c02e00, #bf1200, #760403;
 
 
-// Input文本框控件
+// InputText文本框控件
 @input-text-padding: @10px 0;
 @input-text-height: @22px;
+
+// InputRange范围拖动控件
+.setInputRangeSliderThumb(){
+  width:@28px;
+  height:@28px;
+  border-width:0;
+  background-clip:padding-box;
+  border-radius:50%;
+
+  background-color:@primary-bg;
+}
 
 // InputSafe安全等级
 @input-safe-color:white;
@@ -415,6 +426,9 @@
 .setListThumbnail(){
   &:extend(.bg-no-img);
 }
+
+// ListPull列表
+@list-pull-bg: white;
 
 // Grid
 @grid-title-color: @sub;

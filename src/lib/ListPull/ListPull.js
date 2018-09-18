@@ -47,20 +47,20 @@ export default class ListPull extends Component {
   render() {
     const { list, style, className } = this.props;
     return (
-      <ul ref={el => { this.$el = el; }} className={`listpull${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => { this.$el = el; }} className={`list-pull${className ? ' ' + className : ''}`} style={style}>
         {list.map((item, index) => {
-          return <li key={`button${index}`} data-index={`${index}`} className="border-b listpull-li">
-            {item.lButtons && item.lButtons.length && <div className="listpull-left">
+          return <li key={`button${index}`} data-index={`${index}`} className="border-b list-pull-li">
+            {item.lButtons && item.lButtons.length && <div className="list-pull-left">
               {item.lButtons.map((button, i) => {
-                return <Button key={`button${i}`} data-index={`${index}`} data-i={`${i}`} data-direction="left" className={`listpull-button${button.className ? ' ' + button.className : ''}`} style={button.style}>{button.value}</Button>
+                return <Button key={`button${i}`} data-index={`${index}`} data-i={`${i}`} data-direction="left" className={`list-pull-button${button.className ? ' ' + button.className : ''}`} style={button.style}>{button.value}</Button>
               })}
             </div>}
-            <div className="listpull-handler" data-index={`${index}`}>
+            <div className="list-pull-handler" data-index={`${index}`}>
               {item.container}
             </div>
-            {item.rButtons && item.rButtons.length && <div className="listpull-right">
+            {item.rButtons && item.rButtons.length && <div className="list-pull-right">
               {item.rButtons.map((button, i) => {
-                return <Button key={`button${i}`} data-index={`${index}`} data-i={`${i}`} data-direction="right" className={`listpull-button${button.className ? ' ' + button.className : ''}`} style={button.style}>{button.value}</Button>
+                return <Button key={`button${i}`} data-index={`${index}`} data-i={`${i}`} data-direction="right" className={`list-pull-button${button.className ? ' ' + button.className : ''}`} style={button.style}>{button.value}</Button>
               })}
             </div>}
           </li>
