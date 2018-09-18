@@ -6,7 +6,7 @@ import Titlebar from '../lib/Titlebar';
 import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
 import ListPull from '../lib/ListPull';
-import Weather from '../lib/Weather';
+import Timepart from '../lib/Timepart';
 
 export default class App extends Component {
   constructor(props) {
@@ -86,9 +86,9 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>
       <Container>
+        <Timepart/>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
-        <Weather location="成都市"/>
       </Container>
     </Page>
   }

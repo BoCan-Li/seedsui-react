@@ -52,6 +52,30 @@
   background-repeat: no-repeat;
   background-position: top, right, bottom, left;
 }
+.border-lt {
+  background-image: @border-l-1,@border-t-1;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-repeat: no-repeat;
+  background-position: left, top;
+}
+.border-lb {
+  background-image: @border-l-1,@border-b-1;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-repeat: no-repeat;
+  background-position: left, bottom;
+}
+.border-rt {
+  background-image: @border-r-1,@border-t-1;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-size: 1px 100% ,100% 1px;
+  background-repeat: no-repeat;
+  background-position: right, top;
+}
 .border-rb {
   background-image: @border-r-1,@border-b-1;
   background-size: 1px 100% ,100% 1px;
@@ -85,7 +109,15 @@
   .border {
     background-image: @border-t-2,@border-r-2,@border-b-2,@border-l-2;
   }
-
+  .border-lt {
+    background-image: @border-l-2,@border-t-2;
+  }
+  .border-lb {
+    background-image: @border-l-2,@border-b-2;
+  }
+  .border-rt {
+    background-image: @border-r-2,@border-t-2;
+  }
   .border-rb {
     background-image: @border-r-2,@border-b-2;
   }
