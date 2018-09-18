@@ -12,7 +12,6 @@ export default class Button extends Component {
     children: PropTypes.node,
   }
   static defaultProps = {
-    args: null
   }
   constructor(props) {
     super(props);
@@ -37,10 +36,12 @@ export default class Button extends Component {
   render() {
     const {
       className, style, disabled,
-      children
+      children,
+      onClick,
+      ...others
     } = this.props;
     return (
-      <a ref={el => {this.$el = el;}} className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick}>
+      <a ref={el => {this.$el = el;}} className={'button' + (className ? ' ' + className : '')} disabled={disabled} style={style} onClick={this.onClick} {...others}>
         {children}
       </a>
     );

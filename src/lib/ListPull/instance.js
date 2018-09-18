@@ -7,24 +7,16 @@ var ListPull = function (container, params) {
 		leftClass: 'listpull-left',
 		rightClass: 'listpull-right',
 		handlerClass: 'listpull-handler',
-		handlerActiveClass: 'listpull-active',
-		threshold: 50,
+		activeClass: 'listpull-active',
+		threshold: 20,
 		duration: 150
 		/*
 		Callbacks:
 		onClick:function(ListPull)
 
 		onPull:function(ListPull)
-		onPullEnd:function(ListPull)
-
-		onHid:function(ListPull)
-		onShowed:function(ListPull)
-
-		onLeftHid:function(ListPull)
-		onLeftShowed:function(ListPull)
-
-		onRightHid:function(ListPull)
-		onRightShowed:function(ListPull)
+		onShowedLeft:function(ListPull)
+		onShowedRight:function(ListPull)
 		*/
 	}
 	params = params || {}
@@ -36,35 +28,39 @@ var ListPull = function (container, params) {
 	var s = this
 	// Params
 	s.params = params
-	// Container(Element)
+	// Container
 	s.container = typeof container === 'string' ? document.querySelector(container) : container
+	if (!s.container) {
+    console.log('SeedsUI Error：未找到ListPull的DOM对象，请检查传入参数是否正确')
+    return
+  }
 	/* -----------------------
 	Method
 	----------------------- */
 	s.dragHorizontal = 0
 	// 设置左右方向(-1左 | 1右)
-	s.hide = function (argDragContainer, horizontalFlag) {
-		var dragContainer = argDragContainer
-		if (!dragContainer) {
-			dragContainer = s.container.querySelectorAll('.' + s.params.handlerActiveClass)[0]
+	s.hide = function (target) {
+		if (!target) {
+			var actives = s.container.querySelectorAll('.' + s.params.activeClass)
+			if (actives.length > 0) target = actives[0]
 		}
-
-		dragContainer.style.webkitTransitionDuration = s.params.duration + 'ms'
-		dragContainer.style.webkitTransform = 'translate3d(0px,0px,0px)'
-		dragContainer.classList.remove(s.params.handlerActiveClass)
-
-		if (isNaN(horizontalFlag)) {
-			s.dragHorizontal = s.moveX > 0 ? -2 : 2
-		} else {
-			s.dragHorizontal = horizontalFlag
+		if (target) {
+			target.style.webkitTransitionDuration = s.params.duration + 'ms'
+			target.style.webkitTransform = 'translate3d(0px,0px,0px)'
+			target.classList.remove(s.params.activeClass)
 		}
 	}
-	s.show = function (dragContainer, x, horizontalFlag) {
-		dragContainer.style.webkitTransitionDuration = s.params.duration + 'ms'
-		dragContainer.style.webkitTransform = 'translate3d(' + x + 'px,0px,0px)'
-
-		dragContainer.classList.add(s.params.handlerActiveClass)
-		s.dragHorizontal = horizontalFlag
+	s.show = function (target, direction) {
+		target.style.webkitTransitionDuration = s.params.duration + 'ms'
+		var x = direction === 'right' ? -s.rightClientWidth : s.leftClientWidth
+		target.style.webkitTransform = 'translate3d(' + x + 'px,0px,0px)'
+		target.classList.add(s.params.activeClass)
+		// Callback onShowedLeft | onShowedRight
+		s.target = target
+		setTimeout(() => {
+			if (direction === 'left' && s.params.onShowedLeft) s.params.onShowedLeft(s)
+			if (direction === 'right' && s.params.onShowedRight) s.params.onShowedRight(s)
+		}, s.params.duration)
 	}
 	/* -----------------------
 	Touch Events
@@ -76,8 +72,6 @@ var ListPull = function (container, params) {
 		touchTarget[action]('touchmove', s.onTouchMove, false)
 		touchTarget[action]('touchend', s.onTouchEnd, false)
 		touchTarget[action]('touchcancel', s.onTouchEnd, false)
-
-		touchTarget[action]('webkitTransitionEnd', s.onTransitionEnd, false)
 	}
 	s.attach = function (event) {
 		s.events()
@@ -109,41 +103,27 @@ var ListPull = function (container, params) {
 	}
 
 	s.onTouchStart = function (e) {
-		s.container.addEventListener('touchmove', preventDefault, false)
 		s.touches.startX = e.touches[0].clientX
 		s.touches.startY = e.touches[0].clientY
-		// 初始化拉动对象参数
-		s.dragContainer = null
-		s.dragLeftMax = 0
-		s.dragRightMax = -0
-		s.moveX = 0
-		// Callback onClick
-		s.target = e.target
-		if (s.params.onClick) s.params.onClick(s)
+		s.leftClientWidth = 0
+		s.rightClientWidth = 0
 		// 如果点击时有展开的列表项，则先收缩
-		var handlerActives = s.container.querySelectorAll('.' + s.params.handlerActiveClass)
-		if (handlerActives.length > 0) {
-			e.preventDefault()
-			s.hide(handlerActives[0], s.moveX > 0 ? -2 : 2)
-			s.container.removeEventListener('touchmove', preventDefault, false)
-			return
-		}
-		// 拉动对象
-		if (e.target.classList.contains(s.params.handlerClass)) {
-			s.dragContainer = e.target
-			var left = s.dragContainer.parentNode.querySelector('.' + s.params.leftClass)
-			var right = s.dragContainer.parentNode.querySelector('.' + s.params.rightClass)
-			if (left) s.dragLeftMax = left.clientWidth
-			if (right) s.dragRightMax = -right.clientWidth
-		} else {
-			s.container.removeEventListener('touchmove', preventDefault, false)
+		var actives = s.container.querySelectorAll('.' + s.params.activeClass)
+		if (actives.length > 0) {
+			s.hide(actives[0])
+		} else if (e.target.classList.contains(s.params.handlerClass)) { // 拉动对象
+			var left = e.target.parentNode.querySelector('.' + s.params.leftClass)
+			var right = e.target.parentNode.querySelector('.' + s.params.rightClass)
+			s.leftClientWidth = left ? left.clientWidth : 0
+			s.rightClientWidth = right ? right.clientWidth : 0
 		}
 	}
 	s.onTouchMove = function (e) {
+		if (!s.leftClientWidth && !s.rightClientWidth) return
 		s.touches.currentX = e.touches[0].clientX
 		s.touches.currentY = e.touches[0].clientY
-		s.touches.diffX = s.touches.startX - s.touches.currentX
-		s.touches.diffY = s.touches.startY - s.touches.currentY
+		s.touches.diffX = s.touches.currentX - s.touches.startX
+		s.touches.diffY = s.touches.currentY - s.touches.startY
 
 		// 设置滑动方向
 		if (s.touches.direction === 0) {// 设置滑动方向(-1上下 | 1左右)
@@ -164,67 +144,37 @@ var ListPull = function (container, params) {
 
 		// 如果滑动了，则禁止事件向下传播
 		e.stopPropagation()
-
-		s.moveX = -s.touches.diffX
-		if (s.moveX < s.dragRightMax) s.moveX = s.dragRightMax
-		if (s.moveX > s.dragLeftMax) s.moveX = s.dragLeftMax
+		if (s.touches.diffX < -s.rightClientWidth) s.touches.diffX = -s.rightClientWidth
+		if (s.touches.diffX > s.leftClientWidth) s.touches.diffX = s.leftClientWidth
+		
 		// Callback onPull
 		if (s.params.onPull) s.params.onPull(s)
 
 		// 滑动
-		if (s.dragContainer) s.dragContainer.style.webkitTransform = 'translate3d(' + s.moveX + 'px,0px,0px)'
+		e.target.style.webkitTransform = 'translate3d(' + s.touches.diffX + 'px,0px,0px)'
 	}
 	s.onTouchEnd = function (e) {
-		if (s.params.onPullEnd) {
-			s.params.onPullEnd(s)
-			if (s.break === true) {
-				s.break = null
-				return
-			}
-		}
-		if (s.moveX > 0) {// 左pull
-			if (Math.abs(s.moveX) > s.params.threshold) {
-				s.show(s.dragContainer, s.dragLeftMax, -1)
-			} else {
-				s.hide(s.dragContainer, -2)
-			}
-		} else if (s.moveX < 0) {// 右pull
-			if (Math.abs(s.moveX) > s.params.threshold) {
-				s.show(s.dragContainer, s.dragRightMax, 1)
-			} else {
-				s.hide(s.dragContainer, 2)
+		s.touches.endX = e.clientX || e.changedTouches[0].clientX
+		s.touches.endY = e.clientY || e.changedTouches[0].clientY
+		if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 点击
+			s.target = e.target
+			// Callback onClick
+			if (s.params.onClick) s.params.onClick(s)
+		} else { // 滑动
+			if (s.leftClientWidth || s.rightClientWidth) {
+				if (Math.abs(s.touches.diffX) > s.params.threshold) {
+					s.show(e.target, s.touches.diffX > 0 ? 'left' : 'right')
+				} else {
+					s.hide(e.target)
+				}
 			}
 		}
 		// 清空滑动方向
 		s.touches.direction = 0
 		s.touches.vertical = 0
 		s.touches.horizontal = 0
-	}
-	s.onTransitionEnd = function (e) {
-		if (!e.target.classList.contains(s.params.handlerClass) || e.propertyName === 'visibility') return
-		// 有效的显示状态
-		if (s.dragHorizontal === -2 || s.dragHorizontal === 2) {
-			// Callback onHid
-			if (s.params.onHid) s.params.onHid(s)
-		}
-		if (s.dragHorizontal === -1 || s.dragHorizontal === 1) {
-			// Callback onShowed
-			if (s.params.onShowed) s.params.onShowed(s)
-		}
-
-		if (s.dragHorizontal === -1) {// 左显示
-			// Callback onLeftShowed
-			if (s.params.onLeftShowed) s.params.onLeftShowed(s)
-		} else if (s.dragHorizontal === -2) {// 左隐藏
-			// Callback onLeftHid
-			if (s.params.onLeftHid) s.params.onLeftHid(s)
-		} else if (s.dragHorizontal === 1) {// 右显示
-			// Callback onRightShowed
-			if (s.params.onRightShowed) s.params.onRightShowed(s)
-		} else if (s.dragHorizontal === 2) {// 右隐藏
-			// Callback onRightHid
-			if (s.params.onRightHid) s.params.onRightHid(s)
-		}
+		s.left = 0
+		s.right = 0
 	}
 	// Init
 	s.init = function () {
