@@ -86,4 +86,4 @@
 
 })(window);
 
-export default Route;
+export default window.Route;
