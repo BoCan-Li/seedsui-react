@@ -94,7 +94,7 @@ export default class Range extends Component {
     return (
       <div ref={el => {this.$el = el;}} className={`range${className ? ' ' + className : ''}`} style={style}>
         <div ref={el => {this.$tooltip = el;}} className="range-tooltip">{value}</div>
-        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchStart={this.onTouchStart} onTouchMove={this.onTouchMove} onTouchEnd={this.onTouchEnd}/>
+        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchStart={this.onTouchStart} onChange={this.onTouchMove} onTouchEnd={this.onTouchEnd} onMouseUp={this.onTouchEnd}/>
       </div>
     );
   }
