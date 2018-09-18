@@ -4,12 +4,14 @@ import Bridge from './../Bridge';
 
 export default class Weather extends Component {
   static propTypes = {
+    location: PropTypes.string, // location: 'lng,lat|lng,lat|lng,lat' 或 '北京市|上海市'
     className: PropTypes.string,
     style: PropTypes.object,
     icons: PropTypes.object
   };
 
   static defaultProps = {
+    location: '北京市',
     icons: {
 			'qing' : 'icon-wea-qing',
 			'duoyun' : 'icon-wea-duoyun',
@@ -53,19 +55,32 @@ export default class Weather extends Component {
       detail: {}
     }
   }
+  componentDidUpdate (prevProps) {
+    if (this.props.location && prevProps.location !== this.props.location) {
+      Bridge.getWeather({
+        location: this.props.location,
+        onSuccess: (results) => {
+          this.setState({
+            detail: results[0]
+          })
+        }
+      });
+    }
+  }
   onClick = (e) => {
     e.currentTarget.classList.toggle('expand')
   }
   componentDidMount () {
-    Bridge.getWeather({
-      location: '南京市',
-      onSuccess: (results) => {
-        console.log(results[0])
-        this.setState({
-          detail: results[0]
-        })
-      }
-    })
+    if (this.props.location) {
+      Bridge.getWeather({
+        location: this.props.location,
+        onSuccess: (results) => {
+          this.setState({
+            detail: results[0]
+          })
+        }
+      });
+    }
   }
   isNight = () => {
     const date = new Date();
@@ -129,6 +144,11 @@ export default class Weather extends Component {
     if (!weather || !weather.dayPictureUrl) return '';
     return this.replacePicture(weather.dayPictureUrl);
   }
+  getWeekDay = (date) => { // 周二 09月18日 (实时：29℃)
+    if (!date) return '周一';
+    if (date.indexOf(' ') === -1) return date;
+    return date.substring(0, date.indexOf(' '));
+  }
   render() {
     const {className, style} = this.props;
     const {detail} = this.state;
@@ -139,11 +159,7 @@ export default class Weather extends Component {
             <span>{detail.currentCity || '地区'}</span>
             <span>{this.getWeatherName(detail.weather_data)}</span>
           </p>
-          <p>
-            <span>空气</span>
-            <span>{this.pm25ToAirQuality(detail.pm25)}</span>
-            <span>{detail.pm25 || '0'}</span>
-          </p>
+          <p>空气{this.pm25ToAirQuality(detail.pm25)}</p>
         </div>
         <div className="weather-topbar">
           <span>{detail.currentCity || '地区'}</span>
@@ -154,11 +170,7 @@ export default class Weather extends Component {
             <div className="weather-current-temperature">{this.getCurrentTemperature(detail.weather_data)}</div>
             <div className="weather-current-snd">
               <p>{this.getCurrentTempRange(detail.weather_data)}</p>
-              <p>
-                <span>空气</span>
-                <span>{this.pm25ToAirQuality(detail.pm25)}</span>
-                <span>{detail.pm25 || '0'}</span>
-              </p>
+              <p>空气{this.pm25ToAirQuality(detail.pm25)}</p>
             </div>
           </div>
           <div className="weather-today-right">
@@ -175,6 +187,7 @@ export default class Weather extends Component {
             <i className={`weather-icon ${this.getIcon(item)}`}></i>
             <p>{item.temperature}</p>
             <p>{item.weather}</p>
+            <p>{this.getWeekDay(item.date)}</p>
           </li>
         })}
         </ul>

@@ -88,7 +88,7 @@ export default class App extends Component {
       <Container>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
-        <Weather/>
+        <Weather location="成都市"/>
       </Container>
     </Page>
   }
