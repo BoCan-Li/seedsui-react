@@ -287,14 +287,14 @@ var Bridge = {
           if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
         }
       }
-    });
+    })
   },
   /*
-   * 百度地图:获得两个点之间的距离
+   * 获得两个点之间的距离
    * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn)
    * 返回km
    * */
-  getDistance: function(params = {}) {
+  getDistance: function (params = {}) {
     if (!params.point1 || !params.point1.latitude || !params.point1.longitude || !params.point2 || !params.point2.latitude || !params.point2.longitude) {
       if (params.onError) params.onError({code: 'distanceFail', msg: '传入的坐标不正确'})
       return
@@ -313,10 +313,29 @@ var Bridge = {
     return s
   },
   /*
+   * 百度地图:获得天气
+   * params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', onSuccess: fn, onFail: fn)
+   * 返回天气信息results
+   * */
+  getWeather: function (params = {}) {
+    var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.onError) params.onError({code: 'weatherFail', msg: '获取天气失败,请稍后重试' + err})
+      } else {
+        if (data.results && data.results.length) {
+          if (params.onSuccess) params.onSuccess(data.results)
+        } else {
+          if (params.onError) params.onError({code: 'weatherFail', msg: '获取天气失败,请稍后重试'})
+        }
+      }
+    })
+  },
+  /*
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode (params = {}) {
+  scanQRCode: function (params = {}) {
     this.showToast('扫码功能仅可在微信或APP中使用', {mask: false})
     if (params.onError) params.onError({code: 'qrcodeFail', msg: '此功能仅可在微信或APP中使用'})
   },

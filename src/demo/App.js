@@ -6,7 +6,7 @@ import Titlebar from '../lib/Titlebar';
 import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
 import ListPull from '../lib/ListPull';
-import Button from '../lib/Button';
+import Weather from '../lib/Weather';
 
 export default class App extends Component {
   constructor(props) {
@@ -88,6 +88,7 @@ export default class App extends Component {
       <Container>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
+        <Weather/>
       </Container>
     </Page>
   }

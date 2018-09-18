@@ -93,7 +93,8 @@ import Timeline from './Timeline'; // 不常用
 import Timepart from './Timepart'; // 不常用
 import Titlebar from './Titlebar';
 import Toast from './Toast';
-import Tree from './Tree';
+import Tree from './Tree'; // 不常用
+import Weather from './Weather'; // 不常用
 
 // utils
 import Ajax from './Ajax.js'; // 原生的Ajax,如不需要，不要加载
@@ -108,7 +109,6 @@ import EditUtil from './EditUtil.js'; // 用于富文本,如不需要，不要�
 import EventUtil from './EventUtil.js';
 import FastClick from './FastClick.js';
 import Form from './Form.js'; // 用于表单序列化等操作,如不需要，不要加载
-// import FormControls from './FormControls.js'; // 用于表单动画控件如小眼睛、安全校验框等,如不需要，不要加载
 import Fullscreen from './Fullscreen.js'; // 用于判断浏览器是否处于全屏状态,如不需要，不要加载
 import History from './History.js'; // 用于路由监听,如不需要，不要加载
 import MediaUtil from './MediaUtil.js'; // 用于视频音频
@@ -207,9 +207,9 @@ export {
   Titlebar,
   Toast,
   Tree,
+  Weather,
 
   // utils
-
   Ajax,
   Animate,
   ApiAxios,
