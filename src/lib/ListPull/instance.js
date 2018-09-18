@@ -57,10 +57,12 @@ var ListPull = function (container, params) {
 		target.classList.add(s.params.activeClass)
 		// Callback onShowedLeft | onShowedRight
 		s.target = target
-		setTimeout(() => {
-			if (direction === 'left' && s.params.onShowedLeft) s.params.onShowedLeft(s)
-			if (direction === 'right' && s.params.onShowedRight) s.params.onShowedRight(s)
-		}, s.params.duration)
+		if (s.params.onShowedLeft || s.params.onShowedRight) {
+			setTimeout(() => {
+				if (direction === 'left' && s.params.onShowedLeft) s.params.onShowedLeft(s)
+				if (direction === 'right' && s.params.onShowedRight) s.params.onShowedRight(s)
+			}, s.params.duration)
+		}
 	}
 	/* -----------------------
 	Touch Events

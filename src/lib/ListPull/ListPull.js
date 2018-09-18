@@ -37,12 +37,8 @@ export default class ListPull extends Component {
         }
         if (this.props.onClick) this.props.onClick(args1, args2)
       },
-      onShowedLeft: (e) => {
-        if (this.props.onShowedLeft) this.props.onShowedLeft(e)
-      },
-      onShowedRight: (e) => {
-        if (this.props.onShowedRight) this.props.onShowedRight(e)
-      }
+      onShowedLeft: this.props.onShowedLeft,
+      onShowedRight: this.props.onShowedRight
     });
     this.setState({
       instance
