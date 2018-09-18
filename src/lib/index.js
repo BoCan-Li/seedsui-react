@@ -97,65 +97,64 @@ import Tree from './Tree'; // 不常用
 import Weather from './Weather'; // 不常用
 
 // utils
-import Ajax from './Ajax.js'; // 原生的Ajax,如不需要，不要加载
-import Animate from './Animate.js'; // 用于帧率测试一次动画等,如不需要，不要加载
+import Ajax from './Ajax.js'; // 不常用
+import Animate from './Animate.js'; // 不常用
 import ApiAxios from './ApiAxios.js';
 // import Superagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
-import BackboneRoute from './Route.js'; // 用于路由监听,如不需要，不要加载
+import BackboneRoute from './Route.js'; // 不常用
 import DB from './DB.js';
 import Clipboard from './Clipboard.js';
 import Device from './Device.js';
-import EditUtil from './EditUtil.js'; // 用于富文本,如不需要，不要加载
-import EventUtil from './EventUtil.js';
+import EditUtil from './EditUtil.js'; // 不常用
+import EventUtil from './EventUtil.js'; // 不常用
 import FastClick from './FastClick.js';
-import Form from './Form.js'; // 用于表单序列化等操作,如不需要，不要加载
-import Fullscreen from './Fullscreen.js'; // 用于判断浏览器是否处于全屏状态,如不需要，不要加载
-import History from './History.js'; // 用于路由监听,如不需要，不要加载
-import MediaUtil from './MediaUtil.js'; // 用于视频音频
-import Pubsub from './Pubsub.js'; // 用于订阅发布模式
-import ValidateID from './ValidateID.js'; // 用于身份证信息查询,很大,如不需要,不要加载
-import Validator from './Validator.js'; // 用于表单校验,如不需要,不要加载
+import Form from './Form.js'; // 不常用
+import Fullscreen from './Fullscreen.js'; // 不常用
+import History from './History.js'; // 不常用
+import MediaUtil from './MediaUtil.js'; // 不常用
+import Pubsub from './Pubsub.js'; // 不常用
+import ValidateID from './ValidateID.js'; // 不常用
+import Validator from './Validator.js'; // 不常用
 
 // bridge
 import Bridge from './Bridge';
 export {
   // components
-  Actionsheet,
+  Actionsheet, // 不常用
   Alert,
-  Article,
-  // Aside, // 待定
+  Article, // 不常用
   Attribute,
   Attributes,
   Badge,
-  BiDoughnut,
-  BiGauge,
+  BiDoughnut, // 不常用
+  BiGauge, // 不常用
   Button,
-  Calendar,
+  Calendar, // 不常用
   Card,
   Carrousel,
   Chat,
   Checkbox,
-  Clock,
+  Clock, // 不常用
   Close,
   Container,
-  Counter,
+  Counter, // 不常用
   Dialog,
   Dot,
   Dragrefresh,
   Dropdown,
-  Emoji,
+  Emoji, // 不常用
   Footer,
   Grid,
   Group,
-  Handsign,
+  Handsign, // 不常用
   Header,
   Icon,
-  ImgLazy,
+  ImgLazy, // 不常用
   ImgUploader,
-  IndexBar,
+  IndexBar, // 不常用
   InputArea,
   InputCity,
-  InputColor,
+  InputColor, // 不常用
   InputDate,
   InputLocation,
   InputNumber,
@@ -163,19 +162,19 @@ export {
   InputPhone,
   InputPicker,
   InputPre,
-  InputRange,
-  InputSafe,
+  InputRange, // 不常用
+  InputSafe, // 不常用
   InputSelect,
   InputText,
   InputVerify,
-  Legend,
+  Legend, // 不常用
   List,
   ListPull,
   Loading,
   Mark,
   Marquee,
-  MenuTiled,
-  MenuTree,
+  MenuTiled, // 不常用
+  MenuTree, // 不常用
   NoNetwork,
   Notice,
   NumBox,
@@ -183,12 +182,12 @@ export {
   NumBoxPopPointer,
   OnOff,
   Page,
-  PagePull,
+  PagePull, // 不常用
   Peg,
   Picker,
   PickerCity,
   PickerDate,
-  Popover,
+  Popover, // 不常用
   Price,
   Progress,
   Radio,
@@ -198,36 +197,36 @@ export {
   SelectPicker,
   Star,
   StarGroup,
-  Stencil,
-  Sticker,
+  Stencil, // 不常用
+  Sticker, // 不常用
   Tabbar,
   Ticket,
-  Timeline,
-  Timepart,
+  Timeline, // 不常用
+  Timepart, // 不常用
   Titlebar,
   Toast,
   Tree,
-  Weather,
+  Weather, // 不常用
 
   // utils
-  Ajax,
-  Animate,
+  Ajax, // 不常用
+  Animate, // 不常用
   ApiAxios,
   // Superagent,
-  BackboneRoute,
+  BackboneRoute, // 不常用
   Clipboard,
   DB,
   Device,
-  EditUtil,
-  EventUtil,
+  EditUtil, // 不常用
+  EventUtil, // 不常用
   FastClick,
-  Form,
-  Fullscreen,
-  History,
-  MediaUtil,
-  Pubsub,
-  ValidateID,
-  Validator,
+  Form, // 不常用
+  Fullscreen, // 不常用
+  History, // 不常用
+  MediaUtil, // 不常用
+  Pubsub, // 不常用
+  ValidateID, // 不常用
+  Validator, // 不常用
 
   // bridge
   Bridge
