@@ -972,11 +972,21 @@
 // Timeline时间轴
 @timeline-case:#999;
 @timeline-case-active:#51BD89;
+.setTimeline(){
+  margin-left:@24px;
+  padding:0 @18px;
+}
+.setTimelineLine(){
+  top: 0;
+  bottom:0;
+  width:@1px;
+  &:extend(.border-l);
+}
 .setTimelineBadge() {
   position:absolute;
-  top:@17px;
-  left:-@18px;
-  transform: translateX(-50%);
+  top:50%;
+  transform: translateY(-50%);
+  left:-@20px;
   z-index: 1;
 }
 

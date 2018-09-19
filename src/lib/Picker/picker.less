@@ -94,7 +94,9 @@
   pointer-events: none;
 }
 .picker-layer:before,.picker-layer:after{
-  .setContentLine();
+  content: '';
+  display: block;
+  position: absolute;
   width: 100%;
   height: @82px;
 }

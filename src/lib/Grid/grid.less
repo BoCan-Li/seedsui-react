@@ -123,49 +123,7 @@
 // 边框
 .grid-bordered{
 	li{
-		&:before,&:after{
-			.setContentLine();
-		}
-		//右竖线
-		&:before{
-			top: 0;
-			bottom: auto;
-			left: auto;
-      right: 0;
-      width: @1px;
-      height: 100%;
-      transform-origin:right center;
-		}
-		//下横线
-		&:after{
-			top: auto;
-			right: auto;
-	    bottom: 0;
-	    left: 0;
-	    height: @1px;
-	    width: 100%;
-	    transform-origin:center bottom;
-		}
-	}
-	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-		//下横线
-		li:after {
-			transform: scaleY(0.5);
-		}
-		//右竖线
-		li:before {
-			transform: scaleX(0.5);
-		}
-	}
-	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
-		//下横线
-		li:after {
-			transform: scaleY(0.33);
-		}
-		//右竖线
-		li:before {
-			transform: scaleX(0.33);
-		}
+		&:extend(.border-rb);
 	}
 }
 

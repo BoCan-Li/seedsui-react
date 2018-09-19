@@ -7,11 +7,16 @@ import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
 import ListPull from '../lib/ListPull';
 import Timepart from '../lib/Timepart';
+import Grid from '../lib/Grid';
+import Tabbar from '../lib/Tabbar';
+import Timeline from '../lib/Timeline';
+import InputDate from '../lib/InputDate';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tabActiveIndex: 0,
       value: '',
       dialogShow: false
     }
@@ -42,9 +47,10 @@ export default class App extends Component {
   onChange = (times) => {
     console.log(times);
   }
-  onClick = (item, buttonItem) => {
-    console.log(item)
-    console.log(buttonItem)
+  onClick = (item, index) => {
+    this.setState({
+      tabActiveIndex: index
+    })
   }
   onShowedLeft = (s) => {
     var target = s.target.previousSibling.children[0];
@@ -86,6 +92,59 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>
       <Container>
+        <InputDate/>
+        <Timeline list={[
+          {
+            active: true,
+            content: '哈哈'
+          },
+          {
+            content: '哈哈'
+          },
+          {
+            content: '哈哈'
+          },
+          {
+            content: '哈哈'
+          }
+        ]}/>
+        <Tabbar activeIndex={this.state.tabActiveIndex} onClick={this.onClick} list={[
+          {
+            iconClassName: 'shape-triangle-up small',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'shape-triangle-up small',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'shape-triangle-up small',
+            caption: 'haha'
+          }
+        ]}/>
+        <br/>
+        <Grid className="grid-bordered" list={[
+          {
+            iconClassName: 'icon-fav-fill',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'icon-fav-fill',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'icon-fav-fill',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'icon-fav-fill',
+            caption: 'haha'
+          },
+          {
+            iconClassName: 'icon-fav-fill',
+            caption: 'haha'
+          }
+        ]}/>
         <Timepart/>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>

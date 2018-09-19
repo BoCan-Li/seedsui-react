@@ -4,7 +4,7 @@ import Dot from './../Dot';
 
 export default class Timeline extends Component {
   static propTypes = {
-    list: PropTypes.array,
+    list: PropTypes.array, // [{content: node, icon: node(默认Dot), active: bool}]
     style: PropTypes.object,
     badgeStyle: PropTypes.object,
     top: PropTypes.string,
