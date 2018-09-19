@@ -44,9 +44,9 @@ var InputRange = function (container, params) {
 		var touchTarget = s.input
 		var action = detach ? 'removeEventListener' : 'addEventListener'
 		touchTarget[action]('touchstart', s.onRangeStart, false)
-		touchTarget[action]('touchmove', s.onRangeMove, false)
 		touchTarget[action]('input', s.onRangeMove, false)
 		touchTarget[action]('touchend', s.onRangeEnd, false)
+		touchTarget[action]('mouseup', s.onRangeEnd, false)
 	}
 	// attach、dettach事件
 	s.attach = function () {
@@ -59,16 +59,18 @@ var InputRange = function (container, params) {
 	/* -----------------------
 	Touch Handler
 	----------------------- */
-	s.onRangeStart = function () {
-		s.showToolTip(s.tooltip, s.input)
+	s.onRangeStart = function (e) {
+		e.stopPropagation()
 	}
 	s.onRangeMove = function () {
 		s.showToolTip(s.tooltip, s.input)
+		e.stopPropagation()
 	}
-	s.onRangeEnd = function () {
-		setTimeout(function () {
-			s.tooltip.style.display = 'none'
-		}, 1000)
+	s.onRangeEnd = function (e) {
+		s.tooltip.style.visibility = 'hidden'
+		s.target = e.target
+		if (s.params.onChange) s.params.onChange(s)
+    e.stopPropagation()
 	}
 	/* -----------------------
 	Method
