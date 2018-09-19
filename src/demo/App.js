@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Page from '../lib/Page';
+// import Page from '../lib/Page';
+import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
@@ -87,7 +88,7 @@ export default class App extends Component {
         ]
       }
     ]
-    return <Page style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>}>
+    return <PagePull style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>
@@ -149,6 +150,6 @@ export default class App extends Component {
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
       </Container>
-    </Page>
+    </PagePull>
   }
 };

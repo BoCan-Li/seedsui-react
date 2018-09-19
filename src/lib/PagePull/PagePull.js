@@ -5,10 +5,12 @@ import Instance from './instance.js';
 
 export default class PagePull extends Component {
   static propTypes = {
+    // 侧边栏
     sideLeft: PropTypes.node, // 左侧边栏
     sideRight: PropTypes.node, // 右侧边栏
-    children: PropTypes.node, // 主体内容
-    transition: PropTypes.string // 过渡动画, overlay | push
+    transition: PropTypes.string, // 过渡动画, overlay | push
+    // Page
+    children: PropTypes.node
   };
 
   static defaultProps = {
@@ -45,13 +47,14 @@ export default class PagePull extends Component {
       sideLeft,
       sideRight,
       children,
-      transition
+      transition,
+      ...others
     } = this.props;
     return (
       <div className="aside-page" ref={el => {this.$el = el;}}> 
         <div className="aside-wrapper"> 
           {/* 主体部分 */}
-          <Page>
+          <Page {...others}>
             {children}
           </Page>
           {/* 左侧边栏 */}
