@@ -88,7 +88,7 @@ export default class App extends Component {
         ]
       }
     ]
-    return <PagePull style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>}>
+    return <PagePull style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>} sideRight={<p>2</p>}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>

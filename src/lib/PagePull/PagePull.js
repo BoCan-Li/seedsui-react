@@ -62,7 +62,7 @@ export default class PagePull extends Component {
             {sideLeft}
           </aside>}
           {/* 右侧边栏 */}
-          {sideRight && <aside className="aside-left" data-transition={transition} ref={el => {this.$sideRight = el;}}>
+          {sideRight && <aside className="aside-right" data-transition={transition} ref={el => {this.$sideRight = el;}}>
             {sideRight}
           </aside>}
         </div> 

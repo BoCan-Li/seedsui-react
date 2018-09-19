@@ -51,6 +51,9 @@ var PagePull = function (container, params) {
   s.sideLeft = s.container.querySelector('.' + s.params.sideLeftClass)
   // SideRight
   s.sideRight = s.container.querySelector('.' + s.params.sideRightClass)
+  if (!s.sideLeft && !s.sideRight) {
+    return
+  }
   // Mask
   s.createMask = function () {
     var mask = document.createElement('div')
