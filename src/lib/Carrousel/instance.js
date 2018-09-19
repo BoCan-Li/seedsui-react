@@ -305,6 +305,7 @@ var Carrousel = function (container, params) {
   }
   s.startMouseMove = false
   s.onTouchStart = function (e) {
+    e.stopPropagation()
     s.startMouseMove = true
     s.container.addEventListener(s.startMouseMove ? 'touchmove' : 'mousemove', preventDefault, false)
     s.touches.startX = e.clientX || e.touches[0].clientX
@@ -313,6 +314,7 @@ var Carrousel = function (container, params) {
     s.stopAutoplay()
   }
   s.onTouchMove = function (e) {
+    e.stopPropagation()
     if (!s.startMouseMove) return
     s.touches.currentX = e.clientX || e.touches[0].clientX
     s.touches.currentY = e.clientY || e.touches[0].clientY
@@ -338,9 +340,6 @@ var Carrousel = function (container, params) {
       return
     }
 
-    // 如果滑动了，则禁止事件向下传播
-    e.stopPropagation()
-
     // x轴距离左边的像素，向左为负数，向右为正数
     var moveX = s.touches.posX - s.touches.diffX
     // 判断是否是边缘
@@ -350,6 +349,7 @@ var Carrousel = function (container, params) {
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
   }
   s.onTouchEnd = function (e) {
+    e.stopPropagation()
     s.startMouseMove = false
     // s.container.removeEventListener(s.startMouseMove ? 'touchmove' : 'mousemove',preventDefault,false)
     // 左右拉动

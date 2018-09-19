@@ -12,11 +12,11 @@ var ListPull = function (container, params) {
 		duration: 150
 		/*
 		Callbacks:
-		onClick:function(ListPull)
+		onClick:function(s)
 
-		onPull:function(ListPull)
-		onShowedLeft:function(ListPull)
-		onShowedRight:function(ListPull)
+		onPull:function(s)
+		onShowedLeft:function(s)
+		onShowedRight:function(s)
 		*/
 	}
 	params = params || {}
@@ -37,8 +37,6 @@ var ListPull = function (container, params) {
 	/* -----------------------
 	Method
 	----------------------- */
-	s.dragHorizontal = 0
-	// 设置左右方向(-1左 | 1右)
 	s.hide = function (target) {
 		if (!target) {
 			var actives = s.container.querySelectorAll('.' + s.params.activeClass)
@@ -100,11 +98,14 @@ var ListPull = function (container, params) {
 	}
 	// 索引
 	s.activeIndex = 0
-	function preventDefault(e) {
-		e.preventDefault()
-	}
 
 	s.onTouchStart = function (e) {
+		e.stopPropagation()
+		// 清空滑动方向
+		s.touches.direction = 0
+		s.touches.vertical = 0
+		s.touches.horizontal = 0
+		// 记录点击坐标
 		s.touches.startX = e.touches[0].clientX
 		s.touches.startY = e.touches[0].clientY
 		s.leftClientWidth = 0
@@ -121,6 +122,7 @@ var ListPull = function (container, params) {
 		}
 	}
 	s.onTouchMove = function (e) {
+		e.stopPropagation()
 		if (!s.leftClientWidth && !s.rightClientWidth) return
 		s.touches.currentX = e.touches[0].clientX
 		s.touches.currentY = e.touches[0].clientY
@@ -140,12 +142,9 @@ var ListPull = function (container, params) {
 
 		// 如果是上下滑动则不工作
 		if (s.touches.vertical !== 0) {
-			s.container.removeEventListener('touchmove', preventDefault, false)
 			return
 		}
 
-		// 如果滑动了，则禁止事件向下传播
-		e.stopPropagation()
 		if (s.touches.diffX < -s.rightClientWidth) s.touches.diffX = -s.rightClientWidth
 		if (s.touches.diffX > s.leftClientWidth) s.touches.diffX = s.leftClientWidth
 		
@@ -156,10 +155,15 @@ var ListPull = function (container, params) {
 		e.target.style.webkitTransform = 'translate3d(' + s.touches.diffX + 'px,0px,0px)'
 	}
 	s.onTouchEnd = function (e) {
+		e.stopPropagation()
+		if (s.touches.direction === -1) { // 上下滑动阻止工作
+			return
+		}
 		s.touches.endX = e.clientX || e.changedTouches[0].clientX
 		s.touches.endY = e.clientY || e.changedTouches[0].clientY
 		if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 点击
 			s.target = e.target
+			s.hide(e.target)
 			// 在展开状态下(s.leftClientWidth || s.rightClientWidth),如果点击主容器handler将无效
 			if (!e.target.classList.contains(s.params.handlerClass) || s.leftClientWidth || s.rightClientWidth) {
 				// Callback onClick
@@ -172,12 +176,6 @@ var ListPull = function (container, params) {
 				s.hide(e.target)
 			}
 		}
-		// 清空滑动方向
-		s.touches.direction = 0
-		s.touches.vertical = 0
-		s.touches.horizontal = 0
-		s.left = 0
-		s.right = 0
 	}
 	// Init
 	s.init = function () {

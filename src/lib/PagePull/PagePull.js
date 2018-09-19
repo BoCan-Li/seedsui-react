@@ -5,15 +5,23 @@ import Instance from './instance.js';
 
 export default class PagePull extends Component {
   static propTypes = {
-    // 侧边栏
-    sideLeft: PropTypes.node, // 左侧边栏
-    sideRight: PropTypes.node, // 右侧边栏
-    transition: PropTypes.string, // 过渡动画, overlay | push
     // Page
-    children: PropTypes.node
+    children: PropTypes.node,
+    // Side 侧边栏
+    drag: PropTypes.bool,
+    lSide: PropTypes.node, // 左侧边栏
+    lSideStyle: PropTypes.object,
+    lSideClassName: PropTypes.string,
+    rSide: PropTypes.node, // 右侧边栏
+    rSideStyle: PropTypes.object,
+    rSideClassName: PropTypes.string,
+    transition: PropTypes.string, // 过渡动画, push | reveal
+    onShowedLeft: PropTypes.func,
+    onShowedRight: PropTypes.func
   };
 
   static defaultProps = {
+    drag: true,
     transition: 'push'
   }
 
@@ -23,20 +31,10 @@ export default class PagePull extends Component {
   }
   componentDidMount = () => {
     const instance = new Instance(this.$el, {
-      isDrag: true,
-      sides: {
-        left: this.$sideLeft || null,
-        right: this.$sideRight || null
-      },
-      onStart:function(e){
-        console.log("开始显示");
-      },
-      onShowed:function(e){
-        console.log("显示结束");
-      },
-      onHid:function(e){
-        console.log("隐藏结束");
-      }
+      drag: true,
+      transition: this.props.transition || 'push',
+      onShowedLeft: this.props.onShowedLeft,
+      onShowedRight: this.props.onShowedRight
     });
     this.setState({
       instance
@@ -44,28 +42,27 @@ export default class PagePull extends Component {
   }
   render() {
     const {
-      sideLeft,
-      sideRight,
+      lSide, lSideStyle, lSideClassName,
+      rSide, rSideStyle, rSideClassName,
       children,
       transition,
       ...others
     } = this.props;
     return (
-      <div className="aside-page" ref={el => {this.$el = el;}}> 
-        <div className="aside-wrapper"> 
-          {/* 主体部分 */}
-          <Page {...others}>
-            {children}
-          </Page>
-          {/* 左侧边栏 */}
-          {sideLeft && <aside className="aside-left" data-transition={transition} ref={el => {this.$sideLeft = el;}}> 
-            {sideLeft}
-          </aside>}
-          {/* 右侧边栏 */}
-          {sideRight && <aside className="aside-right" data-transition={transition} ref={el => {this.$sideRight = el;}}>
-            {sideRight}
-          </aside>}
-        </div> 
+      <div className="page-pull" ref={el => {this.$el = el;}}> 
+        {/* 主体部分 */}
+        <Page {...others}>
+          {children}
+          <div className="mask"></div>
+        </Page>
+        {/* 左侧边栏 */}
+        {lSide && <aside className={`page-side-left${lSideClassName ? ' ' + lSideClassName : ''}`} style={lSideStyle} data-transition={transition} ref={el => {this.$lSide = el;}}> 
+          {lSide}
+        </aside>}
+        {/* 右侧边栏 */}
+        {rSide && <aside className={`page-side-right${rSideClassName ? ' ' + rSideClassName : ''}`} style={rSideStyle} data-transition={transition} ref={el => {this.$rSide = el;}}>
+          {rSide}
+        </aside>}
       </div>
     );
   }

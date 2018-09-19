@@ -6,6 +6,10 @@ var InputRange = function (container, params) {
 	var defaults = {
 		tooltipClass: 'range-tooltip',
 		inputClass: 'range-input'
+		/*
+		Callbacks:
+		onChange:function(s)
+		*/
 	}
 	params = params || {}
 	for (var def in defaults) {
@@ -41,12 +45,16 @@ var InputRange = function (container, params) {
 	Touch Events
 	----------------------- */
 	s.events = function (detach) {
-		var touchTarget = s.input
-		var action = detach ? 'removeEventListener' : 'addEventListener'
-		touchTarget[action]('touchstart', s.onRangeStart, false)
-		touchTarget[action]('input', s.onRangeMove, false)
-		touchTarget[action]('touchend', s.onRangeEnd, false)
-		touchTarget[action]('mouseup', s.onRangeEnd, false)
+		var touchTarget = s.container
+    var action = detach ? 'removeEventListener' : 'addEventListener'
+		touchTarget[action]('touchstart', s.onTouchStart, false)
+		touchTarget[action]('mousedown', s.onTouchStart, false)
+		touchTarget[action]('touchmove', s.onTouchMove, false)
+		touchTarget[action]('touchend', s.onTouchEnd, false)
+		touchTarget[action]('mouseup', s.onTouchEnd, false)
+		touchTarget[action]('touchcancel', s.onTouchEnd, false)
+		touchTarget[action]('click', s.onClick, false)
+		s.input[action]('input', s.onInput, false)
 	}
 	// attach、dettach事件
 	s.attach = function () {
@@ -55,27 +63,36 @@ var InputRange = function (container, params) {
 	s.detach = function () {
 		s.events(true)
 	}
-	s.attach()
+	// s.attach()
 	/* -----------------------
 	Touch Handler
 	----------------------- */
-	s.onRangeStart = function (e) {
+	s.onTouchStart = function (e) {
 		e.stopPropagation()
 	}
-	s.onRangeMove = function () {
+	s.onTouchMove = function (e) {
+		e.stopPropagation()
+	}
+	s.onTouchEnd = function (e) {
+		e.stopPropagation()
+		s.hideToolTip()
+		s.target = s.input
+		if (s.params.onChange && !s.input.disabled) s.params.onChange(s)
+	}
+	s.onClick = function () {
+		if (s.input.disabled) {
+			s.showToolTip(s.tooltip, s.input)
+			setTimeout(() => {
+				s.hideToolTip()
+			}, 300)
+		}
+	}
+	s.onInput = function () {
 		s.showToolTip(s.tooltip, s.input)
-		e.stopPropagation()
-	}
-	s.onRangeEnd = function (e) {
-		s.tooltip.style.visibility = 'hidden'
-		s.target = e.target
-		if (s.params.onChange) s.params.onChange(s)
-    e.stopPropagation()
 	}
 	/* -----------------------
 	Method
 	----------------------- */
-	// 显示tooltip
 	s.showToolTip = function (tooltip, input) {
 		//当前值所占百分比
 		var percent = ((input.value - input.min) / (input.max - input.min)).toFixed(2)
@@ -94,6 +111,19 @@ var InputRange = function (container, params) {
 		tooltip.style.visibility = 'visible';
     tooltip.style.left = left + 'px';
 	}
+	s.hideToolTip = function () {
+		s.tooltip.style.visibility = 'hidden'
+	}
+	/* -----------------------
+	Init
+	----------------------- */
+  s.update = function () {
+    if (s.container) {
+      s.detach()
+    }
+    s.attach()
+  }
+  s.update()
 }
 
 export default InputRange

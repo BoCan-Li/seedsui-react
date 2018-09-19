@@ -364,8 +364,14 @@
   border-radius: 4px;
 }
 
-// Aside侧边栏控件
-@aside-bg:@body-bg;
+// PagePull侧边栏控件
+@page-bg:@body-bg;
+.setPageSideLeft(){
+  width:@264px;
+}
+.setPageSideRight(){
+  width:@264px;
+}
 
 // BI-Doughnut环形
 @bi-doughtut-size:50px;
@@ -380,6 +386,27 @@
 @input-text-height: @22px;
 
 // InputRange范围拖动控件
+@input-range-height: 35px;
+.setInputRangeToolTip(){
+  display:block;
+	position:absolute;
+	visibility: hidden;
+	top:-@60px;
+	width:@48px;
+	height:@48px;
+	font-size:@20px;
+	line-height:@48px;
+	text-align:center;
+	border-radius:@6px;
+	border-width:@1px;
+	border-style:solid;
+	text-shadow:0 @1px 0 #f3f3f3;
+	background-color:white;
+	border-color:@dpborder;
+	opacity:.8;
+	transition-property: visibility;
+	transition-duration: 300ms;
+}
 .setInputRangeSliderThumb(){
   width:@28px;
   height:@28px;

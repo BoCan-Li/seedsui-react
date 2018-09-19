@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Instance from './instance';
 
 export default class Range extends Component {
   static propTypes = {
@@ -34,10 +35,15 @@ export default class Range extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instance: null
+      instance: null,
+      onChange: this.onChange
     }
   }
   componentDidMount () {
+    const instance = new Instance(this.$el);
+    this.setState({
+      instance
+    });
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -52,49 +58,17 @@ export default class Range extends Component {
     }
     return args;
   }
-  onTouchStart = (e) => {
-    e.stopPropagation();
-  }
-  onTouchMove = (e) => {
-    this.showTooltip(this.$tooltip, this.$input);
-    e.stopPropagation();
-  }
-  onTouchEnd = (e) => {
-    this.onChange(e);
-    e.stopPropagation();
-  }
   onChange = (e) => {
-    if (this.props.disabled) return;
-    this.$tooltip.style.visibility = 'hidden';
     if (this.props.onChange) {
       this.props.onChange(this.$input.value, this.getArgs(e));
     }
   }
-  // 显示tooltip
-	showTooltip = (tooltip, input) => {
-		//当前值所占百分比
-		var percent = ((input.value - input.min) / (input.max - input.min)).toFixed(2)
-
-		//距左的位置
-		var dragRange = input.clientWidth * percent
-		var offsetLeft = input.offsetLeft + dragRange - 10
-		//var currentOffsetLeft=offsetLeft-input.parentNode.offsetLeft
-
-		//滑块内部的实际位置
-		var currentBallLeft = 28 * percent
-
-		//当前值的位置-滑块的位置=小球正中间的位置
-		var left = offsetLeft - currentBallLeft
-		tooltip.innerHTML = input.value
-    tooltip.style.visibility = 'visible';
-    tooltip.style.left = left + 'px';
-	}
   render() {
-    const {style, className, value, min, max, step} = this.props;
+    const {disabled, style, className, value, min, max, step} = this.props;
     return (
       <div ref={el => {this.$el = el;}} className={`range${className ? ' ' + className : ''}`} style={style}>
+        <input disabled={disabled} ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value}/>
         <div ref={el => {this.$tooltip = el;}} className="range-tooltip">{value}</div>
-        <input ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value} onTouchStart={this.onTouchStart} onChange={this.onTouchMove} onTouchEnd={this.onTouchEnd} onMouseUp={this.onTouchEnd}/>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import Page from '../lib/Page';
+import Page from '../lib/Page';
 import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
@@ -8,9 +8,7 @@ import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
 import ListPull from '../lib/ListPull';
 import Timepart from '../lib/Timepart';
-import Grid from '../lib/Grid';
-import Tabbar from '../lib/Tabbar';
-import Timeline from '../lib/Timeline';
+import Carrousel from '../lib/Carrousel';
 import InputDate from '../lib/InputDate';
 
 export default class App extends Component {
@@ -48,10 +46,8 @@ export default class App extends Component {
   onChange = (times) => {
     console.log(times);
   }
-  onClick = (item, index) => {
-    this.setState({
-      tabActiveIndex: index
-    })
+  onClick = (item, i) => {
+    console.log(item, i)
   }
   onShowedLeft = (s) => {
     var target = s.target.previousSibling.children[0];
@@ -88,63 +84,15 @@ export default class App extends Component {
         ]
       }
     ]
-    return <PagePull style={{ backgroundColor: 'white' }} sideLeft={<p>1</p>} sideRight={<p>2</p>}>
+    return <PagePull style={{ backgroundColor: 'white' }} lSide={<p>1</p>} rSide={<p>2</p>}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
       </Header>
       <Container>
         <InputDate/>
-        <Timeline list={[
-          {
-            active: true,
-            content: '哈哈'
-          },
-          {
-            content: '哈哈'
-          },
-          {
-            content: '哈哈'
-          },
-          {
-            content: '哈哈'
-          }
-        ]}/>
-        <Tabbar activeIndex={this.state.tabActiveIndex} onClick={this.onClick} list={[
-          {
-            iconClassName: 'shape-triangle-up small',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'shape-triangle-up small',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'shape-triangle-up small',
-            caption: 'haha'
-          }
-        ]}/>
-        <br/>
-        <Grid className="grid-bordered" list={[
-          {
-            iconClassName: 'icon-fav-fill',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'icon-fav-fill',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'icon-fav-fill',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'icon-fav-fill',
-            caption: 'haha'
-          },
-          {
-            iconClassName: 'icon-fav-fill',
-            caption: 'haha'
-          }
+        <Carrousel style={{height: '100px', backgroundColor: '#ff8800'}} list={[
+          {img: 'https://api.map.baidu.com/images/weather/night/yin.png'},
+          {img: 'https://api.map.baidu.com/images/weather/night/yin.png'}
         ]}/>
         <Timepart/>
         <InputRange style={{margin: '100px 12px 0 12px'}}/>
