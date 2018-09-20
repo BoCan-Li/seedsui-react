@@ -23,51 +23,15 @@
 .list-li-hasclick:active{
   background-color:@list-bg-active;
 }
-.list-avatar,.list-avatar-img, .list-thumbnail,.list-thumbnail-img{
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.list-avatar,.list-avatar-img{
-  background-size: @avatar-background-size;
-}
-.list-thumbnail,.list-thumbnail-img{
-  background-size: @thumbnail-background-size;
-}
-.list-avatar-img{
-  background-color: @list-avatar-img-bg;
-}
-.list-thumbnail-img{
-  background-color: @list-thumbnail-img-bg;
-}
-.list-avatar-img,.list-thumbnail-img,.icon-img{
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
 .list-avatar{
   position: relative;
-  width: @36px;
-  height: @36px;
-  border-radius: 100%;
-
   background-color: @avatar-bg;
   border: @avatar-border;
   .setListAvatar();
 }
-.list-avatar-img{
-  border-radius: 100%;
-}
+
 .list-thumbnail{
-  .flex;
-	.flex-middlecenter;
-  
   position:relative;
-  width: @62px;
-  height:@62px;
-  overflow:hidden;
-  
   background-color: @thumbnail-bg;
   border: @thumbnail-border;
   .setListThumbnail();
