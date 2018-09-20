@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notice from './../Notice';
 import Instance from './instance.pull.js';
-import ImgLazy from './../ImgLazy/instance.js';
+import ImgLazyInstance from './../ImgLazy/instance.js';
 
 export default class Dragrefresh extends Component {
   static propTypes = {
@@ -57,12 +57,11 @@ export default class Dragrefresh extends Component {
       instance
     });
     // 懒人加载
-    let imgLazy = null;
-    if (this.props.lazyLoad && !imgLazy) {
-      imgLazy = new ImgLazy({
+    if (this.props.lazyLoad) {
+      var imglazy = new ImgLazyInstance({
         overflowContainer: this.$el
       });
-      imgLazy.load();
+      imglazy.load();
     }
   }
   componentDidUpdate = (prevProps) => {

@@ -117,6 +117,7 @@ var ImgLazy = function (params) {
   Init
   -------------------- */
   s.load = function () {
+    s.imgs = s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')
     if (s.params.load === 'queue') {
       s.queue(0)
       return
@@ -162,7 +163,6 @@ var ImgLazy = function (params) {
     }, false)
   }
   s.update = function () {
-    s.imgs = s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')
     if (s.params.load === 'scroll') {
       s.detach()
       s.attach()

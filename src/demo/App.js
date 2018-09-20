@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import ImgLazyInstance from '../lib/ImgLazy/instance';
 import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
-import Container from '../lib/Container';
+// import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import Progress from '../lib/Progress';
+import Dragrefresh from '../lib/Dragrefresh';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,13 +15,13 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    var imglazy = new ImgLazyInstance({
-      overflowContainer: document.getElementById('art'),
-      load: 'queue'
-    })
-    this.setState({
-      imglazy
-    })
+    // var imglazy = new ImgLazyInstance({
+    //   overflowContainer: document.getElementById('art'),
+    //   load: 'scroll'
+    // })
+    // this.setState({
+    //   imglazy
+    // })
   }
   onClick = (arg) => {
     console.log(arg)
@@ -31,15 +32,15 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
-      <Container id="art">
-        <Progress value="50"/>
+      <Dragrefresh lazyLoad>
+        <Progress value="50" onClick={this.onClick}/>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/yin.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/mai.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/qiangshachenbao.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/yangsha.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/fuchen.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/daxuezhuanbaoxue.png" style={{height: '200px'}}></div>
-      </Container>
+      </Dragrefresh>
     </PagePull>
   }
 };
