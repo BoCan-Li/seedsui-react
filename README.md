@@ -8,7 +8,7 @@ npm install seedsui-react --save
 
 ## 导入组件
 建议使用`动态导入`,以节省打包资源
-### 直接导入
+### 静态导入
 ```js
 import 'seedsui-react/build/seedsui.min.css';
 import {Chat} from 'seedsui-react';
@@ -71,8 +71,8 @@ import Chat from 'seedsui-react/lib/Chat';
 ```
 
 ## 组件
-- [Actionsheet](#Actionsheet) 卡片弹框
-- [Alert](#Alert) 弹出框
+- [Actionsheet](#actionsheet) 卡片弹框
+- [Alert](#alert) 弹出框
 - [Aside](#aside) 侧滑
 - [Article](#article) 文章
 - [Attribute](#attribute) 键值对
@@ -108,14 +108,10 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 * alert框:Bridge.showAlert(msg)代替
 * confirm框:Bridge.showConfirm(msg, {onSuccess: fn, onError: fn})代替
 
-详见[Bridge 桥接库](#Bridge) 桥接库
+详见[Bridge 桥接库](#bridge) 桥接库
 
-### 导入
-```js
-import Alert from 'seedsui-react/lib/Alert';
-```
 ### 属性
-```html
+```javascript
 <Alert
   portal={传送dom object, 默认document.getElementById('root')}
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
@@ -156,7 +152,8 @@ import Alert from 'seedsui-react/lib/Alert';
 ```
 
 ### 示例
-```html
+```javascript
+import Alert from 'seedsui-react/lib/Alert';
 <Alert
   show={this.state.alertShow}
   iconClassName="icon-图标"
