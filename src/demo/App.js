@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-// import ImgLazyInstance from '../lib/ImgLazy/instance';
+import ImgLazyInstance from '../lib/ImgLazy/instance';
 import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import List from '../lib/List';
+import Grid from '../lib/Grid';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,6 +14,12 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
+    var lazy = new ImgLazyInstance({
+      overflowContainer: this.$elDrag.$el
+    });
+    setTimeout(() => {
+      lazy.load();
+    }, 2000);
   }
   onClick = (arg) => {
     console.log(arg)
@@ -24,8 +30,8 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
-      <Container>
-        <List caption="商品" showAvatar lazyLoad avatarSrc="//image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320"/>
+      <Container ref={(el) => {this.$elDrag = el;}}>
+        <Grid lazyLoad className="border-b" col="4" iconClassName="size40" iconDefaultImgStyle={{borderRadius: '100%'}} list={[{caption: '111', iconSrc: 'https://api.map.baidu.com/images/weather/night/yin.png'}]}/>
       </Container>
     </PagePull>
   }

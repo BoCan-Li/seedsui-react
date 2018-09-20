@@ -126,7 +126,7 @@ var ImgLazy = function (params) {
       var flag = true
       if (s.params.load === 'scroll') flag = s.isInScreen(s.imgs[i]) // 滚动加载
       if (flag && !s.imgs[i].getAttribute(s.params.completeAttr)) {
-        console.log('加载第' + i + '张：')
+        console.log('加载第' + i + '张')
         var loadSrc = s.imgs[i].getAttribute(s.params.loadAttr)
         var errorSrc = s.imgs[i].getAttribute(s.params.imgErrorAttr) || ''
         var image = new Image()

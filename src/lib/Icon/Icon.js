@@ -8,6 +8,7 @@ export default class Icon extends Component {
     baseClassName: PropTypes.string,
     className: PropTypes.string,
     defaultImgClassName: PropTypes.string,
+    defaultImgStyle: PropTypes.object,
     src: PropTypes.string,
     lazyLoad: PropTypes.bool,
     onClick: PropTypes.func,
@@ -34,11 +35,11 @@ export default class Icon extends Component {
   }
 
   render() {
-    const {style, baseClassName, defaultImgClassName, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis, ...others} = this.props;
+    const {style, baseClassName, defaultImgClassName, defaultImgStyle, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis, ...others} = this.props;
     return (
       <span ref={el => {this.$el = el;}} className={`${baseClassName}${className ? ' ' + className : ''}`} style={style} {...others}>
-      {lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} data-load-src={src}></span>}
-      {!lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} style={{backgroundImage: `url(${src})`}}></span>}
+      {lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>}
+      {!lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>}
       {children}
       {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}
       </span>
