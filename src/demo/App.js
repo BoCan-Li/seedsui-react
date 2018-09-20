@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Page from '../lib/Page';
+import Actionsheet from '../lib/Actionsheet';
 import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import InputRange from '../lib/InputRange';
 import Bridge from '../lib/Bridge';
-import ListPull from '../lib/ListPull';
 import Timepart from '../lib/Timepart';
 import Carrousel from '../lib/Carrousel';
 import InputDate from '../lib/InputDate';
@@ -17,7 +16,7 @@ export default class App extends Component {
     this.state = {
       tabActiveIndex: 0,
       value: '',
-      dialogShow: false
+      show: true
     }
   }
   componentDidMount() {
@@ -32,12 +31,12 @@ export default class App extends Component {
   }
   hideDialog = () => {
     this.setState({
-      dialogShow: false
+      show: false
     })
   }
   showDialog = () => {
     this.setState({
-      dialogShow: true
+      show: true
     })
   }
   onError = (err) => {
@@ -64,29 +63,15 @@ export default class App extends Component {
   render() {
     const list = [
       {
-        container: <div className="border-b" style={{padding: '12px'}}><p>haha</p><small>haha</small></div>,
-        lButtons: [
-          {value: '未读', className: 'info', args: 'unread', style: {padding: '0 12px'}}
-        ],
-        rButtons: [
-          {value: '收藏', className: 'warn', args: 'fav', style: {padding: '0 12px'}},
-          {value: '删除', className: 'cancel', args: 'del', style: {padding: '0 12px'}}
-        ]
+        caption: '菜单'
       },
       {
-        container: <div className="border-b" style={{padding: '12px'}}><p>haha</p><small>haha</small></div>,
-        lButtons: [
-          {value: '未读', className: 'info', args: 'unread', style: {padding: '0 12px'}}
-        ],
-        rButtons: [
-          {value: '收藏', className: 'warn', args: 'fav', style: {padding: '0 12px'}},
-          {value: '删除', className: 'cancel', args: 'del', style: {padding: '0 12px'}}
-        ]
+        caption: '菜单'
       }
     ]
     return <PagePull style={{ backgroundColor: 'white' }} lSide={<p>1</p>} rSide={<p>2</p>}>
       <Header>
-        <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' }]} />
+        <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Container>
         <InputDate/>
@@ -96,7 +81,7 @@ export default class App extends Component {
         ]}/>
         <Timepart/>
         <InputRange style={{margin: '100px 12px'}}/>
-        <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
+        <Actionsheet show={this.state.show} list={list} onClick={this.onClick} onClickMask={this.hideDialog} onClickCancel={this.hideDialog}/>
       </Container>
     </PagePull>
   }

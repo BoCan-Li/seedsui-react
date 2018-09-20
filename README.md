@@ -71,7 +71,8 @@ import Chat from 'seedsui-react/lib/Chat';
 ```
 
 ## 组件
-- [Alert](#alert) 弹出框
+- [Actionsheet](#Actionsheet) 卡片弹框
+- [Alert](#Alert) 弹出框
 - [Aside](#aside) 侧滑
 - [Article](#article) 文章
 - [Attribute](#attribute) 键值对
@@ -107,17 +108,17 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 * alert框:Bridge.showAlert(msg)代替
 * confirm框:Bridge.showConfirm(msg, {onSuccess: fn, onError: fn})代替
 
-详见[Bridge 桥接库](#Bridge-桥接库)
+详见[Bridge 桥接库](#Bridge) 桥接库
 
 ### 导入
 ```js
-import Alert from 'seedsui-react/src/lib/Alert';
+import Alert from 'seedsui-react/lib/Alert';
 ```
 ### 属性
-```js
+```html
 <Alert
   portal={传送dom object, 默认document.getElementById('root')}
-  args={事件参数 any}
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
   duration={动画时长 number, 默认见seedsui-variables.less}
 
@@ -145,16 +146,22 @@ import Alert from 'seedsui-react/src/lib/Alert';
   submitClassName={确定按钮className string, 默认无}
   submitCaption={确定按钮文字 node, 默认'确定'}
   disabled={确定按钮是否禁用 bool, 默认false}
-  onClickSubmit={点击确定按钮 func, 默认隐藏}
+  onClickSubmit={点击确定按钮 func(args), 有此属性才显示确定按钮}
 
   cancelStyle={取消按钮style object, 默认无}
   cancelClassName={取消按钮className string, 默认无}
-  cancelCaption={取消按钮文字 node, 默认'确定'}
-  onClickCancel={点击取消按钮 func, 默认无, 当有此事件时显示取消按钮}
+  cancelCaption={取消按钮文字 node, 默认'取消'}
+  onClickCancel={点击取消按钮 func(args), 默认无, 有此属性才显示取消按钮}
 />
 ```
 
 ### 示例
-```js
-<Alert show={this.state.alertShow} iconClassName="icon-rdo-ok" submitCaption="好的，我已知晓" onClickSubmit={this.onSubmitAlert}>提交成功，请线下及时完成支付！</Alert>
+```html
+<Alert
+  show={this.state.alertShow}
+  iconClassName="icon-图标"
+  submitCaption="确定按钮"
+  onClickSubmit={this.onSubmitAlert}>
+  提交成功，请线下及时完成支付！
+</Alert>
 ```
