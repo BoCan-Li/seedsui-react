@@ -446,10 +446,23 @@
 @list-avatar-img-bg: transparent;
 @list-thumbnail-img-bg: white;
 .setListAvatar(){
-  &:extend(.bg-no-avatar);
+  .flex;
+  .flex-middle;
+  .flex-center;
+  width: @36px;
+  height: @36px;
+  border-radius: 100%;
+  .icon-img{
+    border-radius: 100%;
+  }
 }
 .setListThumbnail(){
-  &:extend(.bg-no-img);
+  .flex;
+  .flex-middle;
+  .flex-center;
+  width: @62px;
+  height:@62px;
+  overflow:hidden;
 }
 
 // ListPull列表

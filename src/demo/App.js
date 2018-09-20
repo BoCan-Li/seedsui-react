@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import ImgLazyInstance from '../lib/ImgLazy/instance';
+// import ImgLazyInstance from '../lib/ImgLazy/instance';
 import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
-// import Container from '../lib/Container';
+import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import Progress from '../lib/Progress';
-import Dragrefresh from '../lib/Dragrefresh';
+import List from '../lib/List';
 
 export default class App extends Component {
   constructor(props) {
@@ -15,13 +14,6 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    // var imglazy = new ImgLazyInstance({
-    //   overflowContainer: document.getElementById('art'),
-    //   load: 'scroll'
-    // })
-    // this.setState({
-    //   imglazy
-    // })
   }
   onClick = (arg) => {
     console.log(arg)
@@ -32,15 +24,9 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
-      <Dragrefresh lazyLoad>
-        <Progress value="50" onClick={this.onClick}/>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/yin.png" style={{height: '200px'}}></div>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/mai.png" style={{height: '200px'}}></div>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/qiangshachenbao.png" style={{height: '200px'}}></div>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/yangsha.png" style={{height: '200px'}}></div>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/fuchen.png" style={{height: '200px'}}></div>
-        <div data-load-src="https://api.map.baidu.com/images/weather/night/daxuezhuanbaoxue.png" style={{height: '200px'}}></div>
-      </Dragrefresh>
+      <Container>
+        <List caption="商品" showAvatar lazyLoad avatarSrc="//image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320"/>
+      </Container>
     </PagePull>
   }
 };

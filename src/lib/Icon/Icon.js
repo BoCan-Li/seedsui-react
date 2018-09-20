@@ -5,7 +5,9 @@ import Badge from './../Badge';
 export default class Icon extends Component {
   static propTypes = {
     style: PropTypes.object,
+    baseClassName: PropTypes.string,
     className: PropTypes.string,
+    defaultImgClassName: PropTypes.string,
     src: PropTypes.string,
     lazyLoad: PropTypes.bool,
     onClick: PropTypes.func,
@@ -22,6 +24,8 @@ export default class Icon extends Component {
     children: PropTypes.node,
   }
   static defaultProps = {
+    baseClassName: 'icon',
+    defaultImgClassName: 'bg-no-img',
     lazyLoad: false
   }
   constructor(props) {
@@ -30,24 +34,14 @@ export default class Icon extends Component {
   }
 
   render() {
-    const {style, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis, ...others} = this.props;
-    let nodataIconClassName = '';
-    let newStyle = style;
-    // 懒人加载时,先显示一张默认的背景图,然后在子元素上显示在线图片
-    if (lazyLoad && src) {
-      newStyle = style;
-      nodataIconClassName = 'bg-no-img';
-    } else if (src) {
-      nodataIconClassName = '';
-      newStyle = Object.assign({backgroundImage: 'url(' + src + ')'}, style);
-    }
-    
+    const {style, baseClassName, defaultImgClassName, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis, ...others} = this.props;
     return (
-      <i ref={el => {this.$el = el;}} className={`icon${nodataIconClassName ? ' ' + nodataIconClassName : ''}${className ? ' ' + className : ''}`} style={newStyle} {...others}>
-      {lazyLoad && src && <span className="icon-img" data-load-src={{src}}></span>}
+      <span ref={el => {this.$el = el;}} className={`${baseClassName}${className ? ' ' + className : ''}`} style={style} {...others}>
+      {lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} data-load-src={src}></span>}
+      {!lazyLoad && src && <span className={`icon-img ${defaultImgClassName}`} style={{backgroundImage: `url(${src})`}}></span>}
       {children}
       {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}
-      </i>
+      </span>
     );
   }
 }

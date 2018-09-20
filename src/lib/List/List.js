@@ -26,13 +26,14 @@ export default class List extends Component {
     showThumbnail: PropTypes.bool,
     thumbnailStyle: PropTypes.object,
     thumbnailSrc: PropTypes.string,
+    thumbnailClassName: PropTypes.string,
     thumbnailAfter: PropTypes.node,
     onClickThumbnail: PropTypes.func,
 
     showAvatar: PropTypes.bool,
-    avatar: PropTypes.bool,
     avatarStyle: PropTypes.object,
     avatarSrc: PropTypes.string,
+    avatarClassName: PropTypes.string,
     avatarAfter: PropTypes.node,
     onClickAvatar: PropTypes.func,
 
@@ -52,6 +53,8 @@ export default class List extends Component {
     containerClassName: PropTypes.string,
     containerStyle: PropTypes.object,
     containerAfter: PropTypes.node,
+
+    lazyLoad: PropTypes.bool
   }
   static defaultProps = {
     args: null
@@ -113,26 +116,23 @@ export default class List extends Component {
       licon, liconSrc, liconClassName, liconStyle,
       ricon, riconSrc, riconClassName, riconStyle,
       showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter,
-      showAvatar, avatarSrc, avatarStyle, avatarAfter,
+      showAvatar, avatarSrc, avatarClassName, avatarStyle, avatarAfter,
       caption, captionClassName, captionStyle,
       rcaption, rcaptionClassName, rcaptionStyle,
       sndcaption, sndcaptionClassName, sndcaptionStyle,
-      containerClassName, containerStyle, containerAfter} = this.props;
+      containerClassName, containerStyle, containerAfter,
+      lazyLoad
+    } = this.props;
     return (
       <div ref={el => {this.$el = el;}} className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {(liconSrc || liconClassName) && <Icon className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
-        {showThumbnail && <div className={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
-          {thumbnailSrc && <span className="list-thumbnail-img" style={{backgroundImage: `url(${thumbnailSrc})`}}></span>}
+        {showThumbnail && <Icon lazyLoad={lazyLoad} src={thumbnailSrc || ''} baseClassName={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
           {thumbnailAfter}
-          {/* <div className="sticker sticker-icon top left">
-            <span className="size12 icon-fav-fill"></span>
-          </div> */}
-        </div>}
-        {showAvatar && <div className="list-avatar" style={avatarStyle} onClick={this.onClickAvatar}>
-          {avatarSrc && <span className="list-avatar-img" style={{backgroundImage: `url(${avatarSrc})`}}></span>}
+        </Icon>}
+        {showAvatar && <Icon lazyLoad={lazyLoad} src={avatarSrc || ''} baseClassName={`list-avatar${avatarClassName ? ' ' + avatarClassName : ''}`} defaultImgClassName="bg-no-avatar" style={avatarStyle} onClick={this.onClickAvatar}>
           {avatarAfter}
-        </div>}
+        </Icon>}
         <div className={`list-container${containerClassName ? ' ' + containerClassName : ''}`} style={containerStyle} onClick={this.onClickContainer}>
           {caption && <div className={`list-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</div>}
           {sndcaption && <div className={`list-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{sndcaption}</div>}
