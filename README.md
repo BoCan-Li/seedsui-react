@@ -1,18 +1,20 @@
-## 简介
+# 简介
 SeedsUI,专为移动设备设计的UI框架,组件全面可换肤,以后将会有react版和vue版、h5版
 
-## 安装
+# 安装
 ```js
 npm install seedsui-react --save
 ```
 
-## 导入组件
-建议使用`动态导入`,以节省打包资源
-### 静态导入
+# 导入组件
+
+## 静态导入
+工程化项目
 ```js
 import 'seedsui-react/build/seedsui.min.css';
 import {Chat} from 'seedsui-react';
 ```
+HTML项目
 ```css
 <link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/seedsui.min.css">
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -27,7 +29,14 @@ import {Chat} from 'seedsui-react';
   );
 </script>
 ```
-### 动态导入(需要环境支持Less)
+## 动态导入
+用于工程化项目,建议使用动态导入, 以节省打包文件体积, 动态导入需要Less环境支持：
+```js
+npm install less less-loader --save-dev
+```
+修改 webpack.config.dev.js 和 webpack.config.prod.js 配置文件:<br>
+搜索“/\.css”，修改规则为/\.css|.less$/,use -> {loader: require.resolve('less-loader')}
+
 ```js
 // 导入seedsui基础库
 import 'components/seedsui/index.less'; // 需要手动配置,见下节
@@ -39,14 +48,14 @@ import 'seedsui-react/lib/PrototypeDate.js';
 // 导入组件
 import Chat from 'seedsui-react/lib/Chat';
 ```
-#### index.less手动配置:
-1.图标 src/components/seedsui/iconfont.less:<br>
+### index.less手动配置:
+#### 1.图标 src/components/seedsui/iconfont.less:<br>
 [下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/iconfont.less后修改
 <br><br>
-2.变量 src/components/seedsui/variables.less:<br/>
+#### 2.变量 src/components/seedsui/variables.less:<br/>
 [下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/variables.less后修改
 <br><br>
-3.组件 src/components/seedsui/components.less:<br/>
+#### 3.组件 src/components/seedsui/components.less:<br/>
 [下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/components.less后修改<br>
 引入地址修改如:
 ```less
@@ -57,7 +66,7 @@ import Chat from 'seedsui-react/lib/Chat';
 @import "../../../node_modules/seedsui-react/lib/styles/top/appearance.less";
 ```
 
-4.三者汇集 src/components/seedsui/index.less:
+#### 三个less汇集 src/components/seedsui/index.less:
 ```less
 // 图标
 // @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
@@ -70,7 +79,7 @@ import Chat from 'seedsui-react/lib/Chat';
 @import "components.less";
 ```
 
-## 组件
+# 组件
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
 - [Aside](#aside) 侧滑
