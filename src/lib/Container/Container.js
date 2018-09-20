@@ -11,6 +11,9 @@ export default class Container extends Component {
   }
   constructor(props) {
     super(props);
+    this.setState({
+      lazyLoadInstance: null
+    });
   }
   componentDidMount () {
     if (this.props.lazyLoad) {
@@ -18,6 +21,9 @@ export default class Container extends Component {
         overflowContainer: this.$el
       });
       imglazy.load();
+      this.setState({
+        lazyLoadInstance: imglazy
+      });
     }
   }
   render() {

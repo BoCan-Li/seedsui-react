@@ -35,7 +35,7 @@ export default class Dragrefresh extends Component {
     super(props);
     this.state = {
       instance: null,
-      // noData: false
+      lazyLoadInstance: null
     };
   }
   componentDidMount = () => {
@@ -55,14 +55,18 @@ export default class Dragrefresh extends Component {
     });
     this.setState({
       instance
+    }, () => {
+      // 懒人加载
+      if (this.props.lazyLoad) {
+        var imglazy = new ImgLazyInstance({
+          overflowContainer: this.$el
+        });
+        imglazy.load();
+        this.setState({
+          lazyLoadInstance: imglazy
+        });
+      }
     });
-    // 懒人加载
-    if (this.props.lazyLoad) {
-      var imglazy = new ImgLazyInstance({
-        overflowContainer: this.$el
-      });
-      imglazy.load();
-    }
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.hasMore === this.props.hasMore) return;
