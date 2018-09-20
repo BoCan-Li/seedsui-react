@@ -95,7 +95,7 @@ export default class App extends Component {
           {img: 'https://api.map.baidu.com/images/weather/night/yin.png'}
         ]}/>
         <Timepart/>
-        <InputRange style={{margin: '100px 12px 0 12px'}}/>
+        <InputRange style={{margin: '100px 12px'}}/>
         <ListPull list={list} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
       </Container>
     </PagePull>
