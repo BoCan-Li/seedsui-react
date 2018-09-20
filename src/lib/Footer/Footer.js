@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Footer extends Component {
   static propTypes = {
@@ -12,10 +12,10 @@ export default class Footer extends Component {
   }
 
   render() {
-    const { style, className } = this.props;
+    const {style, className, children, ...others} = this.props;
     return (
-      <footer ref={el => {this.$el = el;}} className={'footer' + (className ? ' ' + className : '')} style={style}>
-        { this.props.children }
+      <footer ref={el => {this.$el = el;}} className={'footer' + (className ? ' ' + className : '')} style={style} {...others}>
+        {children}
       </footer>
     );
   }

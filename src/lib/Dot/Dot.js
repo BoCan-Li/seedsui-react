@@ -14,9 +14,9 @@ export default class Dot extends Component {
     super(props);
   }
   render() {
-    const { className, style, size } = this.props;
+    const {className, style, size, ...others} = this.props;
     return (
-      <i ref={el => {this.$el = el;}} className={`dot${className ? ' ' + className : ''}`} style={Object.assign(style, size ? {width: size, height: size} : {})}></i>
+      <i ref={el => {this.$el = el;}} className={`dot${className ? ' ' + className : ''}`} style={Object.assign(style, size ? {width: size, height: size} : {})} {...others}></i>
     );
   }
 }

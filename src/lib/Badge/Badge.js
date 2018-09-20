@@ -19,7 +19,7 @@ export default class Badge extends Component {
     this.state = {}
   }
   render() {
-    const {className, style, children, limit, ellipsis} = this.props;
+    const {className, style, children, limit, ellipsis, ...others} = this.props;
     // 标题
     let caption = children;
     // 自动宽度,当大于两位时变宽
@@ -33,7 +33,7 @@ export default class Badge extends Component {
       autoWidthClass = children.length >= 2 ? 'badge-max-width' : '';
     }
     return (
-      <span ref={el => {this.$el = el;}} className={`badge${autoWidthClass ? ' ' + autoWidthClass : ''}${className ? ' ' + className : ''}`} style={style}>{caption}</span>
+      <span ref={el => {this.$el = el;}} className={`badge${autoWidthClass ? ' ' + autoWidthClass : ''}${className ? ' ' + className : ''}`} style={style} {...others}>{caption}</span>
     );
   }
 }

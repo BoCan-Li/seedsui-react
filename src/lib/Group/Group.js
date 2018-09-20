@@ -10,7 +10,6 @@ export default class Group extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {}
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -29,9 +28,9 @@ export default class Group extends Component {
     if (this.props.onClick) this.props.onClick(this.getArgs(e));
   }
   render() {
-    const {children, style, className} = this.props;
+    const {children, style, className, onClick, ...others} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={'group' + (className ? ' ' + className : '')} style={style} onClick={this.onClick}>
+      <div ref={el => {this.$el = el;}} className={'group' + (className ? ' ' + className : '')} style={style} onClick={this.onClick} {...others}>
         {children}
       </div>
     );

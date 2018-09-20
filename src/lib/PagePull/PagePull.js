@@ -44,6 +44,7 @@ export default class PagePull extends Component {
     const {
       lSide, lSideStyle, lSideClassName,
       rSide, rSideStyle, rSideClassName,
+      drag,
       children,
       transition,
       ...others

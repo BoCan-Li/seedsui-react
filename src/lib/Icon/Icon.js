@@ -30,7 +30,7 @@ export default class Icon extends Component {
   }
 
   render() {
-    const {onClick, style, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis} = this.props;
+    const {style, className, src, lazyLoad, children, badgeCaption, badgeClassName, badgeStyle, badgeLimit, badgeEllipsis, ...others} = this.props;
     let nodataIconClassName = '';
     let newStyle = style;
     // 懒人加载时,先显示一张默认的背景图,然后在子元素上显示在线图片
@@ -43,7 +43,7 @@ export default class Icon extends Component {
     }
     
     return (
-      <i ref={el => {this.$el = el;}} onClick={onClick} className={`icon${nodataIconClassName ? ' ' + nodataIconClassName : ''}${className ? ' ' + className : ''}`} style={newStyle}>
+      <i ref={el => {this.$el = el;}} className={`icon${nodataIconClassName ? ' ' + nodataIconClassName : ''}${className ? ' ' + className : ''}`} style={newStyle} {...others}>
       {lazyLoad && src && <span className="icon-img" style={{backgroundImage: 'url(' + src + ')'}}></span>}
       {children}
       {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}

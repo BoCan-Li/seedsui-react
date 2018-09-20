@@ -62,6 +62,7 @@ export default class Dragrefresh extends Component {
       imgLazy = new ImgLazy({
         overflowContainer: this.$el
       });
+      imgLazy.load();
     }
   }
   componentDidUpdate = (prevProps) => {
