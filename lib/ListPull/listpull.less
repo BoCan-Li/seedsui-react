@@ -1,36 +1,30 @@
-/*----------------listpull.less(start)--------------*/
-.listpull-li{
+// list-pull.less(start)
+.list-pull-li{
 	position: relative;
 	overflow: hidden;
 }
-.listpull-handler{
+.list-pull-handler{
 	position: relative;
 	z-index: 1;
-
-	background-color: white;
+	background-color: @list-pull-bg;
 }
-.listpull-handler *{
+.list-pull-handler *{
 	pointer-events: none;
 }
-.listpull-left,.listpull-right{
-	display:-webkit-inline-box;
+.list-pull-left,.list-pull-right{
+	.inline-flex;
 	position: absolute;
 	height: 100%;
-	font-size: 0;
-	line-height: 0;
 	top:0;
 	z-index:0;
-
-	background-color: #e1e1e1;
 }
-.listpull-left{
+.list-pull-left{
 	left:0;
 }
-.listpull-right{
+.list-pull-right{
 	right:0;
 }
-.listpull-button{
-	font-size: @font-size-md;
+.list-pull-button{
 	height: 100%;
 }
-/*----------------listpull.less(end)--------------*/
+// list-pull.less(end)

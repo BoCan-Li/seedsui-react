@@ -50,31 +50,32 @@
 	}
 }
 
-//单线形tabbar-line
+// 单线形tabbar-line
 .tabbar-line{
 	color: @tabbar-line-color;
 	background-color: @tabbar-line-bg;
-	.tab:after {
-		.setContentLine(@tabbar-line-border);
-	}
 	.tab{
-		//选中状态下横线
-		&:after{
+		// 选中状态下横线,由无到有动画
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
 			top: auto;
 			right: auto;
-	    bottom: 0;
-	    left: 50%;
-	    height: @2px;
-	    width: 100%;
+			bottom: 0;
+			left: 50%;
+			height: @2px;
+			width: 100%;
 
-	    background-color:@tabbar-line-border-active;
-	    transform-origin:center center;
-	    transform:translate(-50%,0) scale(0,1);
+			background-color:@tabbar-line-border-active;
+			transform-origin:center center;
+			transform:translate(-50%,0) scale(0,1);
 		}
 	}
 	.tab.active{
 		color:@tabbar-line-color-active;
 		background-color: @tabbar-line-bg-active;
+		// 选中状态下横线
 		&:after {
 			transform:translate(-50%,0) scale(1,1);
 		}
@@ -128,7 +129,7 @@
 	}
 }
 
-//矩形tabbar-rect
+// 矩形tabbar-rect
 .tabbar-rect{
 	color:@tabbar-rect-color;
 	background-color: @tabbar-rect-bg;
@@ -159,7 +160,7 @@
 	}
 }
 
-//滑块形tabbar-lump
+// 滑块形tabbar-lump
 .tabbar-lump{
 	color: @tabbar-lump-color;
 	background-color: @tabbar-lump-bg;
@@ -199,7 +200,7 @@
 		}
 	}
 }
-//下拉型tabbar-dropdown
+// 下拉型tabbar-dropdown
 .tabbar-dropdown{
 	color: @tabbar-dropdown-color;
 	background-color: @tabbar-dropdown-bg;
@@ -207,24 +208,15 @@
 		max-width: 80px;
 	}
 	.tab:not(:first-child):after{
-		.setContentLine(@tabbar-dropdown-border);
-	}
-	.tab:not(:first-child):after{
-    width: 1px;
+		content: '';
+		display: block;
+  	position: absolute;
+    width: 2px;
     height: 20px;
 		top: 50%;
     left: 0;
-    transform: translate(0,-50%) scaleX(0.5);
-	}
-	@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-    .tab:after {
-			transform: translate(0,-50%) scaleX(0.5);
-		}
-	}
-	@media only screen and (-webkit-min-device-pixel-ratio: 3) {
-    .tab:after {
-			transform: translate(0,-50%) scaleX(0.33);
-		}
+		transform: translate(0,-50%);
+		&:extend(.border-r);
 	}
 	.tab.active{
 		color: @tabbar-dropdown-color-active;

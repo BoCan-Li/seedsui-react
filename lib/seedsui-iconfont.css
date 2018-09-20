@@ -1,4 +1,5 @@
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'iconfont' !important;
   speak: none;
@@ -11,232 +12,238 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-// 天气-白天
-.icon-wea-qing { // 晴
+.icon-wea-qing {
   background-image: url(https://api.map.baidu.com/images/weather/day/qing.png);
 }
-.icon-wea-duoyun { // 多云
+.icon-wea-duoyun {
   background-image: url(https://api.map.baidu.com/images/weather/day/duoyun.png);
 }
-.icon-wea-zhenyu { // 阵雨
+.icon-wea-zhenyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhenyu.png);
 }
-.icon-wea-leizhenyu { // 雷阵雨
+.icon-wea-leizhenyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/leizhenyu.png);
 }
-.icon-wea-leizhenyubanyoubingbao { // 雷阵雨伴有冰雹
+.icon-wea-leizhenyubanyoubingbao {
   background-image: url(https://api.map.baidu.com/images/weather/day/leizhenyubanyoubingbao.png);
 }
-.icon-wea-yujiaxue { // 雨加雪
+.icon-wea-yujiaxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/yujiaxue.png);
 }
-.icon-wea-xiaoyu { // 小雨
+.icon-wea-xiaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/xiaoyu.png);
 }
-.icon-wea-zhongyu { // 中雨
+.icon-wea-zhongyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhongyu.png);
 }
-.icon-wea-dayu { // 大雨
+.icon-wea-dayu {
   background-image: url(https://api.map.baidu.com/images/weather/day/dayu.png);
 }
-.icon-wea-baoyu { // 大暴雨
+.icon-wea-baoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/baoyu.png);
 }
-.icon-wea-dabaoyu { // 大到暴雨
+.icon-wea-dabaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/dabaoyu.png);
 }
-.icon-wea-tedabaoyu { // 特大暴雨
+.icon-wea-tedabaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/tedabaoyu.png);
 }
-.icon-wea-zhenxue { // 阵雪
+.icon-wea-zhenxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhenxue.png);
 }
-.icon-wea-xiaoxue { // 小雪
+.icon-wea-xiaoxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/xiaoxue.png);
 }
-.icon-wea-zhongxue { // 中雪
+.icon-wea-zhongxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhongxue.png);
 }
-.icon-wea-daxue { // 大雪
+.icon-wea-daxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/daxue.png);
 }
-.icon-wea-baoxue { // 暴雪
+.icon-wea-baoxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/baoxue.png);
 }
-.icon-wea-wu { // 雾
+.icon-wea-wu {
   background-image: url(https://api.map.baidu.com/images/weather/day/wu.png);
 }
-.icon-wea-dongyu { // 冻雨
+.icon-wea-dongyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/dongyu.png);
 }
-.icon-wea-shachenbao { // 沙尘暴
+.icon-wea-shachenbao {
   background-image: url(https://api.map.baidu.com/images/weather/day/shachenbao.png);
 }
-.icon-wea-xiaoyuzhuanzhongyu { // 小雨转中雨
+.icon-wea-xiaoyuzhuanzhongyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/xiaoyuzhuanzhongyu.png);
 }
-.icon-wea-zhongyuzhuandayu { // 中雨转大雨
+.icon-wea-zhongyuzhuandayu {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhongyuzhuandayu.png);
 }
-.icon-wea-dayuzhuanbaoyu { // 大雨转暴雨
+.icon-wea-dayuzhuanbaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/dayuzhuanbaoyu.png);
 }
-.icon-wea-baoyuzhuandabaoyu { // 暴雨转大暴雨
+.icon-wea-baoyuzhuandabaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/baoyuzhuandabaoyu.png);
 }
-.icon-wea-dabaoyuzhuantedabaoyu { // 大暴雨转特大暴雨
+.icon-wea-dabaoyuzhuantedabaoyu {
   background-image: url(https://api.map.baidu.com/images/weather/day/dabaoyuzhuantedabaoyu.png);
 }
-.icon-wea-xiaoxuezhuanzhongxue { // 中雪
+.icon-wea-xiaoxuezhuanzhongxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/xiaoxuezhuanzhongxue.png);
 }
-.icon-wea-zhongxuezhuandaxue { // 中雪转大雪
+.icon-wea-zhongxuezhuandaxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/zhongxuezhuandaxue.png);
 }
-.icon-wea-daxuezhuanbaoxue { // 大雪转暴雪
+.icon-wea-daxuezhuanbaoxue {
   background-image: url(https://api.map.baidu.com/images/weather/day/daxuezhuanbaoxue.png);
 }
-.icon-wea-fuchen { // 浮尘
+.icon-wea-fuchen {
   background-image: url(https://api.map.baidu.com/images/weather/day/fuchen.png);
 }
-.icon-wea-yangsha { // 扬沙
+.icon-wea-yangsha {
   background-image: url(https://api.map.baidu.com/images/weather/day/yangsha.png);
 }
-.icon-wea-qiangshachenbao { // 强沙尘暴
+.icon-wea-qiangshachenbao {
   background-image: url(https://api.map.baidu.com/images/weather/day/qiangshachenbao.png);
 }
-.icon-wea-mai { // 霾
+.icon-wea-mai {
   background-image: url(https://api.map.baidu.com/images/weather/day/mai.png);
 }
-.icon-wea-yin { // 阴
+.icon-wea-yin {
   background-image: url(https://api.map.baidu.com/images/weather/day/yin.png);
 }
-// 天气-晚上
-.weather-night {
-  &.icon-wea-qing { // 晴
-    background-image: url(https://api.map.baidu.com/images/weather/night/qing.png);
-  }
-  &.icon-wea-duoyun { // 多云
-    background-image: url(https://api.map.baidu.com/images/weather/night/duoyun.png);
-  }
-  &.icon-wea-zhenyu { // 阵雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhenyu.png);
-  }
-  &.icon-wea-leizhenyu { // 雷阵雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/leizhenyu.png);
-  }
-  &.icon-wea-leizhenyubanyoubingbao { // 雷阵雨伴有冰雹
-    background-image: url(https://api.map.baidu.com/images/weather/night/leizhenyubanyoubingbao.png);
-  }
-  &.icon-wea-yujiaxue { // 雨加雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/yujiaxue.png);
-  }
-  &.icon-wea-xiaoyu { // 小雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/xiaoyu.png);
-  }
-  &.icon-wea-zhongyu { // 中雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhongyu.png);
-  }
-  &.icon-wea-dayu { // 大雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/dayu.png);
-  }
-  &.icon-wea-baoyu { // 大暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/baoyu.png);
-  }
-  &.icon-wea-dabaoyu { // 大到暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/dabaoyu.png);
-  }
-  &.icon-wea-tedabaoyu { // 特大暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/tedabaoyu.png);
-  }
-  &.icon-wea-zhenxue { // 阵雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhenxue.png);
-  }
-  &.icon-wea-xiaoxue { // 小雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/xiaoxue.png);
-  }
-  &.icon-wea-zhongxue { // 中雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhongxue.png);
-  }
-  &.icon-wea-daxue { // 大雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/daxue.png);
-  }
-  &.icon-wea-baoxue { // 暴雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/baoxue.png);
-  }
-  &.icon-wea-wu { // 雾
-    background-image: url(https://api.map.baidu.com/images/weather/night/wu.png);
-  }
-  &.icon-wea-dongyu { // 冻雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/dongyu.png);
-  }
-  &.icon-wea-shachenbao { // 沙尘暴
-    background-image: url(https://api.map.baidu.com/images/weather/night/shachenbao.png);
-  }
-  &.icon-wea-xiaoyuzhuanzhongyu { // 小雨转中雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/xiaoyuzhuanzhongyu.png);
-  }
-  &.icon-wea-zhongyuzhuandayu { // 中雨转大雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhongyuzhuandayu.png);
-  }
-  &.icon-wea-dayuzhuanbaoyu { // 大雨转暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/dayuzhuanbaoyu.png);
-  }
-  &.icon-wea-baoyuzhuandabaoyu { // 暴雨转大暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/baoyuzhuandabaoyu.png);
-  }
-  &.icon-wea-dabaoyuzhuantedabaoyu { // 大暴雨转特大暴雨
-    background-image: url(https://api.map.baidu.com/images/weather/night/dabaoyuzhuantedabaoyu.png);
-  }
-  &.icon-wea-xiaoxuezhuanzhongxue { // 中雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/xiaoxuezhuanzhongxue.png);
-  }
-  &.icon-wea-zhongxuezhuandaxue { // 中雪转大雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/zhongxuezhuandaxue.png);
-  }
-  &.icon-wea-daxuezhuanbaoxue { // 大雪转暴雪
-    background-image: url(https://api.map.baidu.com/images/weather/night/daxuezhuanbaoxue.png);
-  }
-  &.icon-wea-fuchen { // 浮尘
-    background-image: url(https://api.map.baidu.com/images/weather/night/fuchen.png);
-  }
-  &.icon-wea-yangsha { // 扬沙
-    background-image: url(https://api.map.baidu.com/images/weather/night/yangsha.png);
-  }
-  &.icon-wea-qiangshachenbao { // 强沙尘暴
-    background-image: url(https://api.map.baidu.com/images/weather/night/qiangshachenbao.png);
-  }
-  &.icon-wea-mai { // 霾
-    background-image: url(https://api.map.baidu.com/images/weather/night/mai.png);
-  }
-  &.icon-wea-yin { // 阴
-    background-image: url(https://api.map.baidu.com/images/weather/night/yin.png);
-  }
+.weather-night.icon-wea-qing {
+  background-image: url(https://api.map.baidu.com/images/weather/night/qing.png);
 }
-
-@font-face {font-family: "iconfont";
+.weather-night.icon-wea-duoyun {
+  background-image: url(https://api.map.baidu.com/images/weather/night/duoyun.png);
+}
+.weather-night.icon-wea-zhenyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhenyu.png);
+}
+.weather-night.icon-wea-leizhenyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/leizhenyu.png);
+}
+.weather-night.icon-wea-leizhenyubanyoubingbao {
+  background-image: url(https://api.map.baidu.com/images/weather/night/leizhenyubanyoubingbao.png);
+}
+.weather-night.icon-wea-yujiaxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/yujiaxue.png);
+}
+.weather-night.icon-wea-xiaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/xiaoyu.png);
+}
+.weather-night.icon-wea-zhongyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhongyu.png);
+}
+.weather-night.icon-wea-dayu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/dayu.png);
+}
+.weather-night.icon-wea-baoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/baoyu.png);
+}
+.weather-night.icon-wea-dabaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/dabaoyu.png);
+}
+.weather-night.icon-wea-tedabaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/tedabaoyu.png);
+}
+.weather-night.icon-wea-zhenxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhenxue.png);
+}
+.weather-night.icon-wea-xiaoxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/xiaoxue.png);
+}
+.weather-night.icon-wea-zhongxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhongxue.png);
+}
+.weather-night.icon-wea-daxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/daxue.png);
+}
+.weather-night.icon-wea-baoxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/baoxue.png);
+}
+.weather-night.icon-wea-wu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/wu.png);
+}
+.weather-night.icon-wea-dongyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/dongyu.png);
+}
+.weather-night.icon-wea-shachenbao {
+  background-image: url(https://api.map.baidu.com/images/weather/night/shachenbao.png);
+}
+.weather-night.icon-wea-xiaoyuzhuanzhongyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/xiaoyuzhuanzhongyu.png);
+}
+.weather-night.icon-wea-zhongyuzhuandayu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhongyuzhuandayu.png);
+}
+.weather-night.icon-wea-dayuzhuanbaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/dayuzhuanbaoyu.png);
+}
+.weather-night.icon-wea-baoyuzhuandabaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/baoyuzhuandabaoyu.png);
+}
+.weather-night.icon-wea-dabaoyuzhuantedabaoyu {
+  background-image: url(https://api.map.baidu.com/images/weather/night/dabaoyuzhuantedabaoyu.png);
+}
+.weather-night.icon-wea-xiaoxuezhuanzhongxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/xiaoxuezhuanzhongxue.png);
+}
+.weather-night.icon-wea-zhongxuezhuandaxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/zhongxuezhuandaxue.png);
+}
+.weather-night.icon-wea-daxuezhuanbaoxue {
+  background-image: url(https://api.map.baidu.com/images/weather/night/daxuezhuanbaoxue.png);
+}
+.weather-night.icon-wea-fuchen {
+  background-image: url(https://api.map.baidu.com/images/weather/night/fuchen.png);
+}
+.weather-night.icon-wea-yangsha {
+  background-image: url(https://api.map.baidu.com/images/weather/night/yangsha.png);
+}
+.weather-night.icon-wea-qiangshachenbao {
+  background-image: url(https://api.map.baidu.com/images/weather/night/qiangshachenbao.png);
+}
+.weather-night.icon-wea-mai {
+  background-image: url(https://api.map.baidu.com/images/weather/night/mai.png);
+}
+.weather-night.icon-wea-yin {
+  background-image: url(https://api.map.baidu.com/images/weather/night/yin.png);
+}
+@font-face {
+  font-family: "iconfont";
   src: url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff');
 }
-
-.icon-fav-fill:before { content: "\e71b"; }
-
-.icon-fav:before { content: "\e71c"; }
-
-.icon-hook-fill:before { content: "\e721"; }
-
-.icon-no-data:before { content: "\e733"; }
-
-.icon-no-network:before { content: "\e734"; }
-
-.icon-plus:before { content: "\e73c"; }
-
-.icon-rdo-close-fill:before { content: "\e73e"; }
-
-.icon-rdo-ok-fill:before { content: "\e748"; }
-
-.icon-rdo:before { content: "\e754"; }
-
-.icon-search:before { content: "\e757"; }
-
-.icon-trash:before { content: "\e782"; }
-
+.icon-fav-fill:before {
+  content: "\e71b";
+}
+.icon-fav:before {
+  content: "\e71c";
+}
+.icon-hook-fill:before {
+  content: "\e721";
+}
+.icon-no-data:before {
+  content: "\e733";
+}
+.icon-no-network:before {
+  content: "\e734";
+}
+.icon-plus:before {
+  content: "\e73c";
+}
+.icon-rdo-close-fill:before {
+  content: "\e73e";
+}
+.icon-rdo-ok-fill:before {
+  content: "\e748";
+}
+.icon-rdo:before {
+  content: "\e754";
+}
+.icon-search:before {
+  content: "\e757";
+}
+.icon-trash:before {
+  content: "\e782";
+}

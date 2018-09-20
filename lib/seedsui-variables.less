@@ -364,8 +364,14 @@
   border-radius: 4px;
 }
 
-// Aside侧边栏控件
-@aside-bg:@body-bg;
+// PagePull侧边栏控件
+@page-bg:@body-bg;
+.setPageSideLeft(){
+  width:@264px;
+}
+.setPageSideRight(){
+  width:@264px;
+}
 
 // BI-Doughnut环形
 @bi-doughtut-size:50px;
@@ -375,9 +381,39 @@
 @bi-gauge-bgs: #1693ce, #19a4e5, #14ba91, #16c447, #2fcf1f, #7cce16, #c0ac05, #c26900, #c02e00, #bf1200, #760403;
 
 
-// Input文本框控件
+// InputText文本框控件
 @input-text-padding: @10px 0;
 @input-text-height: @22px;
+
+// InputRange范围拖动控件
+@input-range-height: 35px;
+@input-range-border: @dpborder;
+.setInputRangeToolTip(){
+	top:-@60px;
+	width:@48px;
+	height:@48px;
+	font-size:@20px;
+	line-height:@48px;
+	text-align:center;
+	border-radius:@6px;
+	border-width:@1px;
+	border-style:solid;
+	border-color:@dpborder;
+	text-shadow:0 @1px 0 #f3f3f3;
+	background-color:white;
+	opacity:.8;
+	transition-property: visibility;
+	transition-duration: 300ms;
+}
+.setInputRangeSliderThumb(){
+  width:@28px;
+  height:@28px;
+  border-width:0;
+  background-clip:padding-box;
+  border-radius:50%;
+
+  background-color:@primary-bg;
+}
 
 // InputSafe安全等级
 @input-safe-color:white;
@@ -415,6 +451,9 @@
 .setListThumbnail(){
   &:extend(.bg-no-img);
 }
+
+// ListPull列表
+@list-pull-bg: white;
 
 // Grid
 @grid-title-color: @sub;
@@ -958,11 +997,21 @@
 // Timeline时间轴
 @timeline-case:#999;
 @timeline-case-active:#51BD89;
+.setTimeline(){
+  margin-left:@24px;
+  padding:0 @18px;
+}
+.setTimelineLine(){
+  top: 0;
+  bottom:0;
+  width:@1px;
+  &:extend(.border-l);
+}
 .setTimelineBadge() {
   position:absolute;
-  top:@17px;
-  left:-@18px;
-  transform: translateX(-50%);
+  top:50%;
+  transform: translateY(-50%);
+  left:-@20px;
   z-index: 1;
 }
 
@@ -1270,3 +1319,11 @@
 @ticket-disabled-sawtooth-bg: #B9BEC5;
 @ticket-disabled-legend-color: white;
 @ticket-disabled-legend-bg-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);
+
+// Weather天气
+.setWeather(){
+  color:white;
+  font-size: @font-size-sm;
+	transition:height 0.5s linear;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#37acf1), to(#7accfe));
+}
