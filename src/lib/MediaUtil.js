@@ -98,10 +98,6 @@ var MediaUtil = function (media) {
         maybeMedia = 'audio/mp4'
         probablyMedia = 'audio/mp4; codecs="mp4a.40.2"'
         break
-      case 'mp3':
-        maybeMedia = 'audio/mpeg'
-        probablyMedia = 'audio/mpeg'
-        break
       case 'vorbis':
         maybeMedia = 'audio/ogg'
         probablyMedia = 'audio/ogg; codecs="vorbis"'
@@ -123,6 +119,9 @@ var MediaUtil = function (media) {
         maybeMedia = 'video/webm'
         probablyMedia = 'video/webm; codecs="vp8, vorbis"'
         break // 后缀通常为webm
+      default:
+        maybeMedia = 'audio/mpeg'
+        probablyMedia = 'audio/mpeg'
     }
     var player = document.createElement('video')
     if (maybeMedia !== '' && probablyMedia !== '' && (player.canPlayType(maybeMedia) || player.canPlayType(probablyMedia))) {
