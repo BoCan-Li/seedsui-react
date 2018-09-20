@@ -15,10 +15,10 @@ var Validator = function () {
     negativeInteger: /^-[1-9][0-9]*$/, // 负整数
     username: /^[\w]+$/, // 用户名
     password: /^[0-9_a-zA-Z-~!@#$]*$/, // 密码
-    mail: /^(\w+@\w+\.[\.\w]+)$/,  // eslint-disabled-line
+    mail: /^(\w+@\w+\.[\.\w]+)$/,  // eslint-disable-line
     phone: /^([0-9]{11})$/, // 手机
     chinese: /^[\u4E00-\u9FA5]*$/, // 中文
-    specialchar: /^[。~!@#$%\^\+\*&\\\/\?\|:\.<>{}()';="]*$/ // eslint-disabled-line
+    specialchar: /^[。~!@#$%\^\+\*&\\\/\?\|:\.<>{}()';="]*$/ // eslint-disable-line
   }
   /* ------------------------
   验证策略类

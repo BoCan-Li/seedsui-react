@@ -16,12 +16,14 @@ export default class List extends Component {
     liconClassName: PropTypes.string,
     liconStyle: PropTypes.object,
     onClickLicon: PropTypes.func,
+    liconLazyLoad: PropTypes.bool,
 
     ricon: PropTypes.node,
     riconSrc: PropTypes.string,
     riconClassName: PropTypes.string,
     riconStyle: PropTypes.object,
     onClickRicon: PropTypes.func,
+    riconLazyLoad: PropTypes.bool,
 
     showThumbnail: PropTypes.bool,
     thumbnailStyle: PropTypes.object,
@@ -113,8 +115,8 @@ export default class List extends Component {
   }
   render() {
     const { style, className,
-      licon, liconSrc, liconClassName, liconStyle,
-      ricon, riconSrc, riconClassName, riconStyle,
+      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
+      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
       showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter,
       showAvatar, avatarSrc, avatarClassName, avatarStyle, avatarAfter,
       caption, captionClassName, captionStyle,
@@ -125,7 +127,7 @@ export default class List extends Component {
     } = this.props;
     return (
       <div ref={el => {this.$el = el;}} className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
-        {(liconSrc || liconClassName) && <Icon className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
+        {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
         {showThumbnail && <Icon lazyLoad={lazyLoad} src={thumbnailSrc || ''} baseClassName={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
           {thumbnailAfter}
@@ -149,7 +151,7 @@ export default class List extends Component {
           </div> */}
         </div>
         {rcaption && <div className={`list-rcaption${rcaptionClassName ? ' ' + rcaptionClassName : ''}`} style={rcaptionStyle}>{rcaption}</div>}
-        {(riconSrc || riconClassName) && <Icon className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
+        {(riconSrc || riconClassName) && <Icon lazyLoad={riconLazyLoad} className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
         {ricon && ricon}
       </div>
     );
