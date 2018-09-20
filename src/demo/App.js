@@ -4,7 +4,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import Card from '../lib/Card';
+import Progress from '../lib/Progress';
 
 export default class App extends Component {
   constructor(props) {
@@ -22,8 +22,8 @@ export default class App extends Component {
       imglazy
     })
   }
-  onClick = () => {
-    console.log(1)
+  onClick = (arg) => {
+    console.log(arg)
     this.state.imglazy.load()
   }
   render() {
@@ -32,7 +32,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Container id="art">
-        <Card onClick={this.onClick}>加载图片</Card>
+        <Progress value="50"/>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/yin.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/mai.png" style={{height: '200px'}}></div>
         <div data-load-src="https://api.map.baidu.com/images/weather/night/qiangshachenbao.png" style={{height: '200px'}}></div>

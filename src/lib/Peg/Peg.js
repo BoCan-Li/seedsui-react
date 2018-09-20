@@ -12,9 +12,9 @@ export default class Peg extends Component {
     super(props);
   }
   render() {
-    const {className, style} = this.props;
+    const {className, style, ...others} = this.props;
     return (
-      <i ref={el => {this.$el = el;}} className={`peg${className ? ' ' + className: ''}`} style={style}></i>
+      <i ref={el => {this.$el = el;}} className={`peg${className ? ' ' + className: ''}`} style={style} {...others}></i>
     );
   }
 }

@@ -30,7 +30,7 @@ export default class Price extends Component {
   }
 
   render() {
-    const {showSymbol, showThousandth, price, unit, className, digits, digitsFixed, style} = this.props;
+    const {showSymbol, showThousandth, price, unit, className, digits, digitsFixed, style, ...others} = this.props;
     // 价格字符串
     let priceString = '';
     // 如果价格不是数字,则直接显示
@@ -56,7 +56,7 @@ export default class Price extends Component {
       priceInteger = priceString;
     }
     return (
-      <span style={style} className={`price ${className}`}>{showSymbol && <span className="price-symbol">￥</span>}<span className="price-integer">{priceInteger}</span>{priceDecimal && <span className="price-digits">{priceDecimal}</span>}{unit && <span className="price-unit">{unit}</span>}</span>
+      <span style={style} className={`price ${className}`} {...others}>{showSymbol && <span className="price-symbol">￥</span>}<span className="price-integer">{priceInteger}</span>{priceDecimal && <span className="price-digits">{priceDecimal}</span>}{unit && <span className="price-unit">{unit}</span>}</span>
     );
   }
 }

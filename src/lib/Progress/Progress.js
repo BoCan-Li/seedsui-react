@@ -4,7 +4,6 @@ import Counter from './../Counter';
 
 export default class Progress extends Component {
   static propTypes = {
-    args: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
     barStyle: PropTypes.object,
@@ -18,7 +17,7 @@ export default class Progress extends Component {
   }
   static defaultProps = {
     showPercentage: true,
-    max: 0,
+    max: 100,
     min: 0,
     value: '0'
   }
@@ -26,15 +25,6 @@ export default class Progress extends Component {
     super(props);
   }
   componentDidMount = () => {
-    const {percentage, max, min, value} = this.props;
-    // 计算百分比
-    let barPercentage = 0;
-    if (percentage) {
-      barPercentage = percentage;
-    } else if (max && value) {
-      barPercentage = (value / (max - min)) * 100;
-    }
-    this.$bar.style.width = barPercentage + '%';
   }
   onClick = () => {
   }
@@ -42,7 +32,8 @@ export default class Progress extends Component {
     const {
       style, className,
       barStyle, barClassName,
-      percentage, max, min, value, showPercentage
+      percentage, max, min, value, showPercentage,
+      ...others
     } = this.props;
 
     // 计算百分比
@@ -52,9 +43,8 @@ export default class Progress extends Component {
     } else if (max && value) {
       barPercentage = (value / (max - min)) * 100;
     }
-
-    return <div className={`progress${className ? ' ' + className : ''}`} style={style}>
-      <span ref={(el) => {this.$bar = el;}} className={`progress-bar${barClassName ? ' ' + barClassName : ''}`} style={barStyle}>
+    return <div className={`progress${className ? ' ' + className : ''}`} style={style} {...others}>
+      <span ref={(el) => {this.$bar = el;}} className={`progress-bar${barClassName ? ' ' + barClassName : ''}`} style={Object.assign({}, barStyle, {width: barPercentage + '%'})}>
         {showPercentage && <Counter duration={1000} to={barPercentage} from={0} suffix={'%'} style={{fontSize: '12px', marginRight: '4px'}}/>}
         {!showPercentage && <Counter duration={1000} to={Number(value)} from={min} suffix={'/' + max} style={{fontSize: '12px', marginRight: '4px'}}/>}
       </span>

@@ -19,9 +19,6 @@ export default class Counter extends Component {
     super(props);
   }
   componentDidMount = () => {
-    this.init();
-  }
-  init = () => {
     var instance = new Instance(this.$el);
     instance.play();
     this.setState({
