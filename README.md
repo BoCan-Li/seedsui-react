@@ -82,23 +82,28 @@ import Chat from 'seedsui-react/lib/Chat';
 # 组件
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
-- [Aside](#aside) 侧滑
 - [Article](#article) 文章
 - [Attribute](#attribute) 键值对
 - [Attributes](#attributes) 键值组
 - [Badge](#badge) 徽章
+- [BiDoughnut](#bidoughnut) 环形图
+- [BiGauge](#bigauge) 导航
+- [Bridge](#bridge) 桥接
 - [Button](#button) 按钮
 - [Calendar](#calendar) 日历
 - [Card](#card) 卡片
 - [Carrousel](#carrousel) 轮播
+- [Chat](#chat) 聊天
 - [Checkbox](#carrousel) 复选框
+- [Clock](#clock) 时钟
 - [Close](#close) 关闭清除图标
 - [Container](#container) page主体
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
 - [Dot](#dot) 小点点
 - [Dragrefresh](#dragrefresh) 下拉刷新
-- [Dropdown](#dropdown) 菜单下拉
+- [Dropdown](#dropdown) 页签菜单
+- [Emoji](#emoji) 表情
 - [Footer](#footer) page底部
 - [Grid](#grid) 栅格
 - [Group](#group) 分组
@@ -107,8 +112,52 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Icon](#icon) 图标
 - [ImgLazy](#imglazy) 懒人加载
 - [ImgUploader](#imguploader) 图片上传
+- [IndexBar](#imguploader) 侧边索引栏
+- [InputArea](#inputarea) 多行文本框
 - [InputCity](#inputcity) 城市选择
+- [InputColor](#inputcolor) 颜色选择框
 - [InputDate](#inputdate) 日期选择
+
+## Actionsheet
+卡片框
+### 属性
+```javascript
+<Actionsheet
+  portal={传送dom object, 默认document.getElementById('root')}
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  show={*显隐 bool, 默认false}
+  duration={动画时长 number, 默认见seedsui-variables.less}
+
+  list={*按钮项 array, 如: [{caption: string}]}
+  onClick={点击项 func(item, index), 有此属性才显示确定按钮}
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无}
+  onClickMask={点击遮罩 func, 默认无}
+
+  style={容器style object, 默认无}
+  className={容器className string, 默认无}
+
+  cancelStyle={取消按钮style object, 默认无}
+  cancelClassName={取消按钮className string, 默认无}
+  cancelCaption={取消按钮文字 node, 默认'取消'}
+  onClickCancel={点击取消按钮 func(), 默认无, 有此属性才显示取消按钮}
+/>
+```
+### 示例
+```javascript
+import Actionsheet from 'seedsui-react/lib/Actionsheet';
+onClickActionsheet = (item, index) => {
+  console.log(item) // => {caption: '菜单1'}
+}
+<Actionsheet
+  show={this.state.actionsheetShow}
+  list={[{caption: '菜单1'}, {caption: '菜单2'}]}
+  onClick={this.onClickActionsheet}
+  onClickCancel={this.hideActionsheet}
+  onClickMask={this.hideActionsheet}/>
+```
+
 
 ## Alert
 对话框
@@ -131,8 +180,8 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   maskClassName={遮罩className string, 默认无}
   onClickMask={点击遮罩 func, 默认无}
 
-  style={alert框style object, 默认无}
-  className={alert框className string, 默认无}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无}
 
   caption={标题文字 node, 默认无}
   captionStyle={标题style object, 默认无}
@@ -168,6 +217,37 @@ import Alert from 'seedsui-react/lib/Alert';
   iconClassName="icon-图标"
   submitCaption="确定按钮"
   onClickSubmit={this.onSubmitAlert}>
-  提交成功，请线下及时完成支付！
+  提示内容
 </Alert>
+```
+
+
+## Article
+文章
+### 属性
+```javascript
+<Article
+  caption={标题文字 node, 默认无}
+  captionStyle={标题style object, 默认无}
+  captionClassName={标题className string, 默认无}
+
+  sndcaption={副标题文字 node, 默认无}
+  sndcaptionStyle={副标题style object, 默认无}
+  sndcaptionClassName={副标题className string, 默认无}
+
+  paragraphs={段落 array, 如: ['段落1', '段落2']}
+  paragraphStyle={段落style object, 默认无}
+  paragraphClassName={段落className string, 默认无}
+>
+  提示内容
+</Article>
+```
+### 示例
+```javascript
+import Article from 'seedsui-react/lib/Article';
+<Article
+  caption="标题"
+  sndcaption="副标题"
+  paragraphs={['段落1', '段落2']}
+/>
 ```
