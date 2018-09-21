@@ -67,26 +67,26 @@ var ImgLazy = function (params) {
   s.onLoad = function (e) {
     var target = e.target
     var imgTarget = s.imgs[target.index]
+    imgTarget.setAttribute(s.params.completeAttr, '1')
     if (imgTarget.tagName === 'IMG') {
       imgTarget.src = target.src
     } else {
       imgTarget.style.backgroundImage = 'url(' + target.src + ')'
     }
-    imgTarget.setAttribute(s.params.completeAttr, '1')
     // console.log('加载图片'+target.index)
   }
   // 加载失败事件
   s.onError = function (e) {
     var target = e.target
-    if (!target.errorSrc) return
-
     var imgTarget = s.imgs[target.index]
-    if (imgTarget.tagName === 'IMG') {
-      imgTarget.src = target.errorSrc
-    } else {
-      imgTarget.style.backgroundImage = 'url(' + target.errorSrc + ')'
-    }
     imgTarget.setAttribute(s.params.completeAttr, '0')
+    if (target.errorSrc) {
+      if (imgTarget.tagName === 'IMG') {
+        imgTarget.src = target.errorSrc
+      } else {
+        imgTarget.style.backgroundImage = 'url(' + target.errorSrc + ')'
+      }
+    }
     // console.log('错误图片'+target.index)
   }
   // 滚动完成事件 (如果300毫秒内滚动条没变,则视为onScrollEnd)

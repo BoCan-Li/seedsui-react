@@ -45,9 +45,7 @@ export default class ImgUploader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instance: null,
-      count: 0, // 剩余可上传数量
-      showUpload: true
+      instance: null
     }
   }
   componentDidMount = () => {
@@ -115,20 +113,6 @@ export default class ImgUploader extends Component {
       return true;
     })
     var list = currentList.concat(prevList);
-    // 显示和隐藏添加按钮
-    if (list.length >= this.props.max) {
-      this.setState({
-        showUpload: false
-      });
-    } else {
-      this.setState({
-        showUpload: true
-      });
-    }
-    // 设置数量
-    this.setState({
-      count: list.length
-    });
     // Callback
     if (this.props.onChange) this.props.onChange(list);
   }
@@ -167,9 +151,6 @@ export default class ImgUploader extends Component {
       if (photo.id === item.id) return false
       return true
     });
-    this.setState({
-      count: list.length
-    })
     // Callback
     if (this.props.onChange) this.props.onChange(list);
   }
@@ -181,8 +162,26 @@ export default class ImgUploader extends Component {
       showDelete
     } = this.props;
     return ([
-    caption && <div key="iuCaption" className={`grid-title${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}{showCount ? <span style={Count}>({this.state.count}/{max})</span> : null}</div>,
-      <Grid onClickDelete={this.props.showDelete ? this.deleteImg : null} onClickAdd={this.chooseImg} list={list} showUpload={this.state.showUpload && this.props.showUpload} showDelete={showDelete} key="iuGrid" className={`grid-album${className ? ' ' + className : ''}`} wing={12} space={12} style={style}/>
+    caption &&
+      <div
+        key="iuCaption"
+        className={`grid-title${captionClassName ? ' ' + captionClassName : ''}`}
+        style={captionStyle}>
+        {caption}{showCount ? <span style={Count}>({list.length}/{max})</span> : null}
+      </div>,
+      <Grid
+        key="iuGrid"
+        onClickDelete={this.props.showDelete ? this.deleteImg : null}
+        onClickAdd={this.chooseImg}
+        list={list}
+        showUpload={list.length < max && this.props.showUpload}
+        showDelete={showDelete}
+        className={`grid-album${className ? ' ' + className : ''}`}
+        iconClassName="icon-full"
+        wing={12}
+        space={12}
+        style={style}
+      />
     ]);
   }
 }

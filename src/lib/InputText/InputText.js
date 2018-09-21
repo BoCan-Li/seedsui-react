@@ -46,7 +46,6 @@ export default class InputText extends Component {
     onClickRicon: PropTypes.func,
     // 清除按键
     clearClassName: PropTypes.string,
-    clearIconClassName: PropTypes.string,
     clear: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.func
@@ -279,14 +278,14 @@ export default class InputText extends Component {
       className, style,
       liconClassName,
       value,
-      clearClassName, clearIconClassName, clear,
+      clearClassName, clear,
       riconClassName,
       rcaption
     } = this.props;
     return (<div className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {liconClassName && <Icon className={`color-placeholder ${liconClassName}`} onClick={this.onClickLicon}/>}
         {this.getInputDOM()}
-        {clear && <Close onClick={this.onClear} className={`${clearClassName ? clearClassName : ''} ${value.length === 0 ? 'hide' : ''}`} iconClassName={clearIconClassName}/>}
+        {clear && <Close onClick={this.onClear} className={`${clearClassName ? clearClassName : ''} ${value.length === 0 ? 'hide' : ''}`}/>}
         {riconClassName && <Icon className={`color-placeholder ${riconClassName}`} onClick={this.onClickRicon}/>}
         {rcaption && rcaption}
       </div>);
