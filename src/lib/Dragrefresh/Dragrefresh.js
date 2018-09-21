@@ -70,6 +70,7 @@ export default class Dragrefresh extends Component {
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.hasMore === this.props.hasMore) return;
+    this.state.lazyLoadInstance.load();
     if (this.props.hasMore === 404) {
       console.log('dragrefresh:解除touch事件，暂无数据');
       this.state.instance.detach();
