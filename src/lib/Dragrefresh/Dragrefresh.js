@@ -58,19 +58,20 @@ export default class Dragrefresh extends Component {
     }, () => {
       // 懒人加载
       if (this.props.lazyLoad) {
-        var imglazy = new ImgLazyInstance({
-          overflowContainer: this.$el
-        });
-        imglazy.load();
-        this.setState({
-          lazyLoadInstance: imglazy
-        });
+        this.setLazyLoad();
       }
     });
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.hasMore === this.props.hasMore) return;
-    this.state.lazyLoadInstance.load();
+    // 懒加载
+    if (this.props.lazyLoad) {
+      if (!this.state.lazyLoadInstance) {
+        this.setLazyLoad();
+      } else {
+        this.state.lazyLoadInstance.load();
+      }
+    }
     if (this.props.hasMore === 404) {
       console.log('dragrefresh:解除touch事件，暂无数据');
       this.state.instance.detach();
@@ -83,6 +84,15 @@ export default class Dragrefresh extends Component {
     }
     console.log('dragrefresh:DidUpdate, hasMore:' + this.props.hasMore);
     this.setPagination();
+  }
+  setLazyLoad = () => {
+    var imglazy = new ImgLazyInstance({
+      overflowContainer: this.$el
+    });
+    imglazy.load();
+    this.setState({
+      lazyLoadInstance: imglazy
+    });
   }
   setPagination = () => {
     // 如果还没有初始化完成,则会再轮询调用一下
