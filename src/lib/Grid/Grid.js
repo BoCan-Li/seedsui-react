@@ -35,7 +35,7 @@ export default class Grid extends Component {
     iconDefaultImgClassName: PropTypes.string,
     iconDefaultImgStyle: PropTypes.object,
 
-    badgeClassName: PropTypes.string,
+    iconBadgeClassName: PropTypes.string,
 
     onClick: PropTypes.func,
     onClickCell: PropTypes.func,
@@ -56,10 +56,10 @@ export default class Grid extends Component {
     src: '', // 预览地址
     caption: '',
     onClick: function() {},
-    iconBadgeCaption: '',
-    showClose: false
+    iconBadgeCaption: ''
   }] */
   static defaultProps = {
+    iconBadgeClassName: 'top right',
     list: [],
     args: null,
     iconStyle: {},
