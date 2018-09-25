@@ -132,14 +132,20 @@ import Chat from 'seedsui-react/lib/Chat';
   onClick={点击项 func(item, index), 有此属性才显示确定按钮}
 
   maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask actionsheet-mask'}
   onClickMask={点击遮罩 func, 默认无}
 
   style={容器style object, 默认无}
-  className={容器className string, 默认无}
+  className={容器className string, 默认无, 基础'actionsheet'}
+
+  groupStyle={组style object, 默认无}
+  groupClassName={组className string, 默认无, 基础'actionsheet-group'}
+
+  optionStyle={项style object, 默认无}
+  optionClassName={项className string, 默认无, 基础'actionsheet-option'}
 
   cancelStyle={取消按钮style object, 默认无}
-  cancelClassName={取消按钮className string, 默认无}
+  cancelClassName={取消按钮className string, 默认无, 基础'actionsheet-cancel'}
   cancelCaption={取消按钮文字 node, 默认'取消'}
   onClickCancel={点击取消按钮 func(), 默认无, 有此属性才显示取消按钮}
 />
@@ -250,4 +256,222 @@ import Article from 'seedsui-react/lib/Article';
   sndcaption="副标题"
   paragraphs={['段落1', '段落2']}
 />
+```
+
+## Attribute
+属性
+### 属性
+```javascript
+<Attribute
+  name={标题文字 node, 默认无}
+  value={内容文字 node, 默认无}
+  required={是否显示'*'号 bool, 默认false}
+
+  showValidValue={value合法时显示 bool, 默认false}
+  showValidName={name合法时显示 bool, 默认false}
+
+  className={容器className string[attribute-margin(margin: 10px 12px;) | attribute-padding(padding: 10px 12px;) | align(左右对齐布局) | start(左端对齐) | between(两端对齐)], 默认'attribute-margin', 基础'attribute'}
+  style={容器style object, 默认无}
+
+  cellClassName={列className string, 默认无}
+  cellStyle={列style object, 默认无}
+
+  nameClassName={name的className string, 默认无, 基础'attribute-left'}
+  nameStyle={name的style object, 默认无}
+  requiredClassName={'*'号的className string, 默认无, 基础'required required-left'}
+  requiredStyle={'*'号的style object, 默认无}
+  valueClassName={value的className string, 默认无, 基础'attribute-right'}
+  valueStyle={value的style object, 默认无}
+
+  rowAfter={行后DOM node, 默认无}
+  onClick={点击项 func(args)}
+>
+  value下方的DOM node, 默认无
+</Attribute>
+```
+### 示例
+```javascript
+import Attribute from 'seedsui-react/lib/Attribute';
+<Attribute name="收货人:" required="*" className="attribute-padding align border-b" requiredStyle={{left: '-18px'}} nameStyle={{color: '#333'}} style={{padding: '0 12px 0 30px'}}>
+  <InputText placeholder="点击输入" valueBindProp value={receive_name} onChange={nameChange}/>
+</Attribute>
+```
+
+## Attributes
+属性组合
+### 属性
+```javascript
+<Attributes
+  showValidValue={value合法时显示 bool, 默认false}
+  showValidName={name合法时显示 bool, 默认false}
+
+  list={内容列表 array, 默认[], 格式如下:}
+  // [
+  //   {
+  //     name: string, // 标题文字
+  //     value: string, // 内容文字
+  //     copy: bool | string, // 复制value的按钮,string时指替换按钮默认的"复制"二字
+  //     tel: bool | string, // 打value电话,string时替换默认拨打的电话
+  //     price: bool | string, // 显示value金额格式,string时将替换默认显示的金额
+  //     priceClassName: string, // 金额className
+  //     priceStyle: object, // 金额style
+  //     button: bool | string, // value显示成按钮样式,string时则替换按钮中文字
+  //     buttonClassName: string, // 按钮className
+  //     buttonStyle: object, // 按钮style
+  //     buttonClick: func, // 点击按钮,buttonClick(item, index)
+  //     show: bool, // 是否显示此行,默认无
+  //     mark: string, // 标签
+  //     markClassName: string, // 标签className
+  //     markStyle: object // 标签style
+  //   }
+  // ]
+  className={容器className string[attribute-margin(margin: 10px 12px;) | attribute-padding(padding: 10px 12px;) | align(左右对齐布局) | start(左端对齐) | between(两端对齐)], 默认'attribute-margin', 基础'attributes'}
+  style={容器style object, 默认无}
+
+  rowClassName={行容器className string[attribute-margin(margin: 10px 12px;) | attribute-padding(padding: 10px 12px;) | align(左右对齐布局) | start(左端对齐) | between(两端对齐)], 默认'attribute-margin', 基础'attribute'}
+  rowStyle={行容器style object, 默认无}
+
+  col={列数 string, 默认1}
+  colClassName={当col为2时列className string, 默认无, 基础'attribute-half'}
+  colStyle={当col为2时列style object, 默认无}
+
+  cellClassName={列className string, 默认无}
+  cellStyle={列style object, 默认无}
+
+  nameClassName={name的className string, 默认无, 基础'attribute-left'}
+  nameStyle={name的style object, 默认无}
+  valueClassName={value的className string, 默认无, 基础'attribute-right'}
+  valueStyle={value的style object, 默认无}
+
+  rowAfter={行后DOM node, 默认无}
+  onClick={点击行 func(args)}
+  rowAfterExclude={行后过滤 number, 默认无, 例如最后一行hr不渲染}
+  onCopy={拷贝事件 func(text, msg)}
+  onClick={点击项 func(text, msg)}
+>
+attributes渲染后的DOM
+</Attributes>
+```
+### 示例
+```javascript
+import Attributes from 'seedsui-react/lib/Attribute';
+<Attributes list={list} className="border-b" valueStyle={{marginLeft: '8px'}}>
+  <span style={{position: 'absolute', top: '10px', right: '10px'}} className="color-sub">状态</span>
+</Attributes>
+```
+
+## Badge
+徽章
+### 属性
+```javascript
+<Badge
+  className={容器className string, 默认无, 基础'badge',内容大于两位时会加上'badge-max-width'}
+  style={容器style object, 默认无}
+  limit={位数限制 number, 默认2, 如:1000,将显示99+}
+  ellipsis={位数限制省略号 string, 默认'+'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Actionsheet from 'seedsui-react/lib/Actionsheet';
+
+const BadgeStyle = {
+  position: 'absolute',
+  left: '13px',
+  top: '-5px',
+};
+
+<Icon className="icon-cart">
+  {cartCount > 0 && <Badge style={BadgeStyle}>{cartCount}</Badge>}
+</Icon>
+```
+
+## BiClock
+时钟
+### 属性
+```javascript
+<BiClock
+  lineWidth={边框宽度px number, 默认2}
+  size={宽高大小px number, 默认50}
+  time={时间 string, 默认'00:00'} // 格式 hh:mm
+  className={容器className string, 默认无, 基础'bi-clock'}
+  style={容器style object, 默认无}
+
+  duration={动画时长 number, 默认1000}
+  delay={延时 number, 默认100}
+/>
+```
+### 示例
+```javascript
+import BiClock from 'seedsui-react/lib/BiClock';
+
+<BiClock time="11:30"/>
+```
+
+
+## BiDoughnut
+环形图
+### 属性
+```javascript
+<BiDoughnut
+  lineWidth={边框宽度px number, 默认3}
+  size={宽高大小px number, 默认50}
+  duration={动画时长 number, 默认1000}
+  rotate={旋转角度 number, 默认0, 最大360}
+  delay={延时 number, 默认100}
+
+  className={容器className string, 默认无, 基础'bi-doughtut'}
+  captionClassName={标题className string, 默认无, 基础'bi-doughtut-caption'}
+  captionStyle={标题style object, 默认无}
+>
+标题内容
+<BiDoughnut>
+```
+### 示例
+```javascript
+import BiDoughnut from 'seedsui-react/lib/BiDoughnut';
+
+<BiDoughnut rotate={15} className="success">
+  待审批
+</BiDoughnut>
+<BiDoughnut rotate={45} className="warn">
+  准备中
+</BiDoughnut>
+<BiDoughnut rotate={315} className="submit">
+  进行中
+</BiDoughnut>
+<BiDoughnut rotate={360} className="disabled">
+  已结束
+</BiDoughnut>
+<BiDoughnut rotate={120} className="cancel">
+  已取消
+</BiDoughnut>
+```
+
+
+## BiGauge
+仪表盘
+### 属性
+```javascript
+<BiGauge
+  duration={动画时长 number, 默认1000}
+  rotate={旋转角度 number, 默认0, 最大270}
+  delay={延时 number, 默认100}
+
+  className={容器className string, 默认无, 基础'bi-gauge-box'}
+  style={容器style object, 默认无}
+  captionClassName={标题className string, 默认无, 基础'bi-gauge-caption'}
+  captionStyle={标题style object, 默认无}
+>
+标题内容
+<BiGauge>
+```
+### 示例
+```javascript
+import BiGauge from 'seedsui-react/lib/BiGauge';
+
+<BiGauge rotate={15} className="success">
+  15
+</BiGauge>
 ```

@@ -1,8 +1,8 @@
 // Clock 时钟控件
-var Clock = function (clock, params) {
+var BiClock = function (clock, params) {
   var defaults = {
-    hourClass: 'clock-hour',
-    minuteClass: 'clock-minute',
+    hourClass: 'bi-clock-hour',
+    minuteClass: 'bi-clock-minute',
     time: '', // 格式08:30
     duration: '500',
     delay: '0'
@@ -54,7 +54,7 @@ var Clock = function (clock, params) {
     s.minute.style.webkitTransform = 'rotate(' + s.minuteDeg + 'deg)'
   }
 }
-var Clocks = function (params) {
+var BiClocks = function (params) {
   params = params || {}
   var clockAttr = 'data-clock'
   var s = this
@@ -63,7 +63,7 @@ var Clocks = function (params) {
   s.update = function () {
     for (var i = 0; i < elements.length; i++) {
       params.time = elements[i].getAttribute(clockAttr)
-      s.clocks[i] = new Clock(elements[i], params)
+      s.clocks[i] = new BiClock(elements[i], params)
     }
   }
   s.update()
@@ -74,4 +74,4 @@ var Clocks = function (params) {
   }
 }
 
-export {Clocks, Clock}
+export {BiClocks, BiClock}

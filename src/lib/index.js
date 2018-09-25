@@ -14,6 +14,7 @@ import Article from './Article';
 import Attribute from './Attribute';
 import Attributes from './Attributes';
 import Badge from './Badge';
+import BiClock from './BiClock'; // 不常用
 import BiDoughnut from './BiDoughnut'; // 不常用
 import BiGauge from './BiGauge'; // 不常用
 import Button from './Button';
@@ -22,7 +23,6 @@ import Card from './Card';
 import Carrousel from './Carrousel';
 import Chat from './Chat';
 import Checkbox from './Checkbox';
-import Clock from './Clock';
 import Close from './Close';
 import Container from './Container';
 import Counter from './Counter'; // 不常用
@@ -126,6 +126,7 @@ export {
   Attribute,
   Attributes,
   Badge,
+  BiClock, // 不常用
   BiDoughnut, // 不常用
   BiGauge, // 不常用
   Button,
@@ -134,7 +135,6 @@ export {
   Carrousel,
   Chat,
   Checkbox,
-  Clock, // 不常用
   Close,
   Container,
   Counter, // 不常用

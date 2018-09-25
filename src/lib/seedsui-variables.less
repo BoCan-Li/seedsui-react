@@ -399,9 +399,20 @@
   width:@264px;
 }
 
+// BI-Clock时钟
+@bi-clock-line-width:@2px;
+@bi-clock-color:@primary-bg;
+@bi-clock-hour-height: 35%;
+@bi-clock-minute-height: 43%;
+.setBiClockTransition(){
+  transition-timing-function:ease;
+	transition-duration:500ms;
+	transition-delay:0ms;
+}
+
 // BI-Doughnut环形
 @bi-doughtut-size:50px;
-@bi-line-width:3px;
+@bi-doughtut-line-width:3px;
 
 // BI-Gauge仪表盘
 @bi-gauge-bgs: #1693ce, #19a4e5, #14ba91, #16c447, #2fcf1f, #7cce16, #c0ac05, #c26900, #c02e00, #bf1200, #760403;

@@ -10,9 +10,10 @@ export default class BiDoughnut extends Component {
     delay: PropTypes.number, // 延时
 
     className: PropTypes.string,
+
     children: PropTypes.node,
-    childrenClassName: PropTypes.string,
-    childrenStyle: PropTypes.object
+    captionClassName: PropTypes.string,
+    captionStyle: PropTypes.object
   };
 
   static defaultProps = {
@@ -89,7 +90,7 @@ export default class BiDoughnut extends Component {
     const {
       lineWidth, size,
       className,
-      children, childrenClassName, childrenStyle
+      children, captionClassName, captionStyle
     } = this.props;
     // 动画旋转
     this.aniRotate();
@@ -101,7 +102,7 @@ export default class BiDoughnut extends Component {
         <div className="bi-doughtut-wrapper right">
           <div ref={(el) => {this.$elRightCircle = el;}} className="bi-doughtut-circle right" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
         </div>
-        <div className={`bi-doughtut-label${childrenClassName ? ' ' + childrenClassName : ''}`} style={childrenStyle}>{children}</div>
+        <div className={`bi-doughtut-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{children}</div>
       </div>
     );
   }

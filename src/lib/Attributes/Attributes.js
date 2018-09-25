@@ -26,7 +26,6 @@ export default class Attributes extends Component {
     //     buttonClassName: string,
     //     buttonStyle: object,
     //     buttonClick: func,
-    //     buttonArgs: array,
     //     show: bool,
     //     mark: string,
     //     markClassName: string,
@@ -94,7 +93,7 @@ export default class Attributes extends Component {
       if (typeof item.button === 'string') {
         buttonValue = item.button;
       }
-      return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item.buttonArgs || '');}}>{buttonValue}</Button>;
+      return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item, index);}}>{buttonValue}</Button>;
     // html
     } else if (item.html) {
       let htmlValue = item.value || '';

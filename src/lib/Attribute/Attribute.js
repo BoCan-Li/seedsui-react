@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class Attributes extends Component {
+export default class Attribute extends Component {
   static propTypes = {
     name: PropTypes.node, // 标题
     value: PropTypes.node, // 内容

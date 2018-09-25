@@ -19,6 +19,12 @@ export default class Actionsheet extends Component {
     style: PropTypes.object,
     className: PropTypes.string,
 
+    groupStyle: PropTypes.object,
+    groupClassName: PropTypes.string,
+
+    optionStyle: PropTypes.object,
+    optionClassName: PropTypes.string,
+
     cancelStyle: PropTypes.object,
     cancelClassName: PropTypes.string,
     cancelCaption: PropTypes.node,
