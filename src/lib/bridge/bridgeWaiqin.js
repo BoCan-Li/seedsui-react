@@ -278,17 +278,17 @@ var Bridge = {
   },
   /**
    * 客户插件
-   * params: {superTradeType | tradeType: 默认值为1(1.客户 2.经销商 3.门店), selectedIds: '', onSuccess: fn}
+   * params: {tradeType: 1:客户 2:经销商 3:门店 空串:全部; 默认为空串, selectedIds: '', onSuccess: fn}
    */
   getCustomerMore: function (params = {}) {
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    }, '{"selectedIds":"' + (params.selectedIds || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":true}');
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":' + (params.hiddenAdd || true) + '}');
   },
   getCustomer: function (params = {}) {
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
+    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":' + (params.hiddenAdd || true) + '}')
   },
   getCustomerType: function (params = {}) {
     wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line

@@ -3,7 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import Weather from '../lib/Weather';
+import Loading from '../lib/Loading';
 
 export default class App extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh lazyLoad hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <Weather/>
+      <Loading type="custom" caption="" iconSrc="//res.waiqin365.com/d/dinghuo365/loading.gif"/>
       </Dragrefresh>
     </PagePull>
   }

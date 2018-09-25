@@ -372,15 +372,15 @@ var Bridge = {
       return {code: 'selectedSupplierFail', msg: '请选择供货商'};
     }
   },
-  /* 修改原生角标 */
+  // 修改原生角标
   changeBadgeNum: function (count) {
     this.invoke('setBadgeNum', {key: count});
   },
-  /* 去首页 */
+  // 去首页
   goHome: function (callback) {
     this.invoke('goHome', null, callback)
   },
-  /* 返回按键处理 */
+  // 返回按键处理
   back: function () {
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
     if (isFromApp === '1') {

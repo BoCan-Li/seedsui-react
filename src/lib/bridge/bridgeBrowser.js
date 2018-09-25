@@ -60,17 +60,15 @@ var Bridge = {
   },
   /**
    * 人员插件
-   * params: {onSuccess: fn}
    */
-  getContact: function () {
+  getContactMore: function () {
     this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
   },
-  getContactMore: function () {
+  getContact: function () {
     this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
   },
   /**
    * 客户插件
-   * params: {superTradeType | tradeType: 默认值为1(1.客户 2.经销商 3.门店), selectedIds: '', onSuccess: fn}
    */
   customerMore: [{
     "check": true,
@@ -291,7 +289,7 @@ var Bridge = {
   },
   /*
    * 获得两个点之间的距离
-   * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn)
+   * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn
    * 返回km
    * */
   getDistance: function (params = {}) {
@@ -507,12 +505,14 @@ var Bridge = {
     if (!this.loading) {
       this.loading = new Loading({
         type: params.type,
+        icon: params.icon || '',
         maskCss: params.css || null
       });
     } else {
       if (params.type) this.loading.setType(params.type)
       if (params.css) this.loading.setMaskCss(params.css)
-      this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
+      if (params.icon) this.toast.setIcon(params.icon || '')
+      if (params.mask) this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
     }
     this.loading.show()
   },

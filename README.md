@@ -86,6 +86,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Attribute](#attribute) 键值对
 - [Attributes](#attributes) 键值组
 - [Badge](#badge) 徽章
+- [BiClock](#biclock) 时钟
 - [BiDoughnut](#bidoughnut) 环形图
 - [BiGauge](#bigauge) 导航
 - [Bridge](#bridge) 桥接
@@ -95,7 +96,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Carrousel](#carrousel) 轮播
 - [Chat](#chat) 聊天
 - [Checkbox](#carrousel) 复选框
-- [Clock](#clock) 时钟
 - [Close](#close) 关闭清除图标
 - [Container](#container) page主体
 - [Counter](#counter) 计数器
@@ -474,4 +474,255 @@ import BiGauge from 'seedsui-react/lib/BiGauge';
 <BiGauge rotate={15} className="success">
   15
 </BiGauge>
+```
+
+
+## Bridge
+桥接, 现支持三个平台的桥接适配, 浏览器、订货、外勤、微信客户端
+### 属性
+```javascript
+Bridge:{
+  platform: 'browser', // 'dinghuo' | 'waiqin' | 'weixin'
+  debug: false, // 在浏览器中,为true时将会启动调试模式,会使用假数据
+  config: fn, // Bridge.config(); 在应用初始化时需要执行此方法, 连接桥接
+  getAppVersion: fn, // 获取版本信息
+  chooseImage: fn({
+    count: number,
+    sizeType: ['original', 'compressed'],
+    sourceType: ['album', 'camera'],
+    success: fn({sourceType: 'camera | album', errMsg: 'chooseImage:ok', localIds: array}),
+    fail: fn({code: number, errMsg: 'chooseImage:fail'})
+  }),
+  uploadImage: fn({
+    success: fn({mediaUrl: string, errMsg: 'uploadImage:ok', serverId: '1237378768e7q8e7r8qwesafdasdfasdfaxss111'}),
+  }),
+  previewImage: fn({
+    urls:'需要预览的图片http链接列表',
+    current:'当前显示图片的http链接'
+  }),
+  getContactMore: fn({ // 外勤客户端专用, 人员插件多选
+    selectedIds: '5330457627710680963,5330457627710680963',
+    aclType: '0', // 人员权限, 0只能看到下属, 不传或者其他的参数为全部人员, 默认为空串
+    onSuccess: fn([{
+      "id": "5330457627710680963",
+      "name": "张三"
+    }])
+  }),
+  getContact: fn({ // 外勤客户端专用, 人员插件单选
+    id: '5330457627710680963',
+    aclType: '0', // 人员权限, 0只能看到下属, 不传或者其他的参数为全部人员, 默认为空串
+    onSuccess: fn({
+      "id": "5330457627710680963",
+      "name": "张三"
+    })
+  }),
+  getCustomerMore: fn({ // 外勤客户端专用, 客户插件多选
+    selectedIds: '5330457627710680963,5330457627710680963',
+    tradeType: '1', // 1:客户 2:经销商 3:门店 空串:全部, 默认为空串
+    hiddenAdd: true, // 是否隐藏添加按钮, 默认true
+    onSuccess: fn([{
+      "check": true,
+      "distance": 31,
+      "labelType": 0,
+      "addr": "南京市建邺区康文路康缘智汇港附近",
+      "approval_status": "3",
+      "code": "20180403004",
+      "cooperate_status": "1",
+      "district_id": "",
+      "id": "5330457627710680963",
+      "lat": "",
+      "location": "31.983362,118.73069",
+      "lon": "",
+      "manager_name": "",
+      "name": "20180403003",
+      "name_py": "20180403004 20180403004",
+      "trade_type": "3",
+      "type_id": "",
+      "type_image": ""
+    }])
+  }),
+  getCustomer: fn({ // 外勤客户端专用, 客户插件单选
+    id: '5330457627710680963',
+    tradeType: '1', // 1:客户 2:经销商 3:门店 空串:全部, 默认为空串
+    hiddenAdd: true, // 是否隐藏添加按钮, 默认true
+    onSuccess: fn({
+      "check": true,
+      "distance": 31,
+      "labelType": 0,
+      "addr": "南京市建邺区康文路康缘智汇港附近",
+      "approval_status": "3",
+      "code": "20180403004",
+      "cooperate_status": "1",
+      "district_id": "",
+      "id": "5330457627710680963",
+      "lat": "",
+      "location": "31.983362,118.73069",
+      "lon": "",
+      "manager_name": "",
+      "name": "20180403003",
+      "name_py": "20180403004 20180403004",
+      "trade_type": "3",
+      "type_id": "",
+      "type_image": ""
+    })
+  }),
+  getCustomerType: fn({ // 外勤客户端专用, 客户插件, 客户类型选择
+    id: '5330457627710680963',
+    name: '类型1',
+    tradeType: '1', // 1:客户 2:经销商 3:门店 其它为客户, 默认为空串
+    onSuccess: fn([{
+      "id": "5330457627710680963",
+      "name": "类型1"
+    }])
+  }),
+  getCustomerArea: fn({ // 外勤客户端专用, 客户插件, 客户区域选择
+    id: '5330457627710680963',
+    name: '区域1',
+    onSuccess: fn([{
+      "id": "5330457627710680963",
+      "name": "区域1"
+    }])
+  }),
+  getDepartmentMore: fn({ // 外勤客户端专用, 部门插件, 部门多选
+    selectedIds: '5330457627710680963,5330457627710680963',
+    onSuccess: fn([{
+      "id": "5330457627710680963",
+      "name": "市场部"
+    }])
+  }),
+  getDepartment: fn({ // 外勤客户端专用, 部门插件, 部门单选
+    id: '5330457627710680963',
+    name: '市场部',
+    onSuccess: fn([{
+      "id": "5330457627710680963",
+      "name": "市场部"
+    }])
+  }),
+  openWindow: fn( // 打开新窗口
+    {
+      url: string, // 打开的地址
+      title: '', // 外勤客户端专用, 标题, 默认为空串
+    },
+    fn() // 外勤客户端专用, 打开回调
+  ),
+  closeWindow: fn( // 关闭窗口, 客户端关闭窗口, 浏览器和微信go(-1)
+    fn() // 订货客户端专用, 关闭回调
+  ),
+  goHome: fn(
+    fn() // 外勤客户端专用, 回到首页回调
+  )
+  isHomePage: fn(
+    fn(true | false), // 是否是首页回调
+    rule: '地址栏包含的字符串' // 用于判断是不是首页
+  ),
+  back: fn(), // 返回, 地址栏参数isFromApp: home(调用goHome) | confirm(对话框后go(-1)) | confirm-close(对话框后调用closeWindow) | 1(go(-1))
+  addBackPress: fn(), // 绑定返回按键监听back方法
+  removeBackPress: fn(), // 移除返回按键监听
+  getLocation: fn({ // 定位, 默认为gcj02坐标
+    onSuccess: fn({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}),
+    onError: fn({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
+  }),
+  getAddress: fn({ // 地址逆解析
+    latitude: '',
+    longitude: '',
+    onSuccess: fn('地址'),
+    onError: fn({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
+  }),
+  getDistance: fn({ // 获取两点间的距离,返回km
+    point1: {longitude: '', latitude: ''},
+    point2: {longitude: '', latitude: ''},
+    onError： fn({code: 'distanceFail', msg: '传入的坐标不正确'})
+  }),
+  getWeather: fn({ // 获得天气
+    location: 'lng,lat|lng,lat|lng,lat', // 可以用坐标或者地名, 如:'北京市|上海市', 用|隔开返回结果集
+    onSuccess: fn([{
+      currentCity: "北京市",
+      index: [
+        {
+          des: "建议着长袖T恤、衬衫加单裤等服装。年老体弱者宜着针织长袖衬衫、马甲和长裤。",
+          tipt: "穿衣指数",
+          title: "穿衣",
+          zs: "舒适"
+        }
+        ...
+      ],
+      pm25: "48",
+      weather_data: [
+        {
+          date: "周二 09月25日 (实时：20℃)",
+          dayPictureUrl: "http://api.map.baidu.com/images/weather/day/duoyun.png",
+          nightPictureUrl: "http://api.map.baidu.com/images/weather/night/duoyun.png",
+          temperature: "22 ~ 12℃",
+          weather: "多云",
+          wind: "南风3-4级"
+        },{
+          date: "周三",
+          dayPictureUrl: "http://api.map.baidu.com/images/weather/day/duoyun.png",
+          nightPictureUrl: "http://api.map.baidu.com/images/weather/night/duoyun.png",
+          temperature: "24 ~ 14℃",
+          weather: "多云",
+          wind: "南风微风"
+        }
+      ]
+    }]),
+    onFail: fn({code: 'weatherFail', msg: '获取天气失败,请稍后重试'})
+  }),
+  scanQRCode: fn({
+    needResult: 1, // 微信专用, 默认为1，0扫描结果由微信处理，1则直接返回扫描结果
+    scanType: ['qrCode', 'barCode'], // 微信专用, 扫码类型
+    onSuccess: fn({resultStr: ''}),
+    onError: fn({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res})
+  }),
+  logOut: fn(), // 外勤和订货客户端专用, 退出到登录页面
+  Image: { // 照片选择上传
+    onChooseSuccess: fn ({ // 选择完成, 出参为imgMap
+      localId: {
+        serverId: '',
+        sourceType: 'camera | album',
+        name: '', // 外勤客户端专用
+        base64: '', // 外勤客户端专用
+        src: '' //外勤客户端专用, 本地地址
+      }
+    }),
+    onUploadSuccess:fn(imgMap,res) // 微信专用, 单张上传成功
+    onUploadFail:fn(index, item) // 微信专用, 单张上传失败
+    onUploadsSuccess:fn(imgMap) // 微信专用, 全部上传成功
+  },
+  logger: fn(el), // 打印日志, el监听触发的元素, 点击十次显示, 用DB.setSession('app_logger', '')设置日志
+  tel: fn('13800000000'), // 打电话
+  showToast: fn('消息内容', {
+    mask: true, // true下层事件会被阻止,false则不阻止
+    position: 'middle', // 弹框位置, top | middle | bottom
+    icon: 'icon-xx', // 图标class名称
+    delay: 2000, // 延时关闭
+    onSuccess: fn() // 完成关闭时回调
+  }),
+  showLoading: fn({ // 弹出loading
+    type: 'floating流光 | filling填料环 | custom自定义',
+    css: '', // 设置mask的css
+    icon: 'icon-xx', // 自定义loading时,图标class名称
+    mask: true, // true下层事件会被阻止,false则不阻止
+  }),
+  hideLoading: fn() // 隐藏loading
+  showAlert: fn('消息内容', {
+    caption: '', // 标题, 默认为空串
+    onSuccess: fn({hide: fn()}) // 点击确定时回调, 默认为隐藏弹出框
+  }),
+  showConfirm: fn('消息内容', {
+    caption: '', // 标题, 默认为空串
+    onSuccess: fn({hide: fn()}), // 点击确定时回调
+    onError: fn() // 点击取消时回调, 默认为隐藏弹出框
+  })
+}
+```
+### 示例
+```javascript
+import Bridge from 'seedsui-react/lib/Bridge';
+
+Bridge.showToast('提交成功', {
+  mask: false,
+  onSuccess: () => {
+    history.go(-1);
+  }
+});
 ```

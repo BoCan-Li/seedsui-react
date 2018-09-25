@@ -5,8 +5,9 @@ import {createPortal} from 'react-dom';
 export default class Loading extends Component {
   static propTypes = {
     portal: PropTypes.object, // 传送至DOM
-    type: PropTypes.string, // floating | filling
+    type: PropTypes.string, // floating | filling | custom
     maskBefore: PropTypes.node,
+    iconClassName: PropTypes.string,
     iconSrc: PropTypes.string,
     caption: PropTypes.string,
     style: PropTypes.object,
@@ -23,12 +24,12 @@ export default class Loading extends Component {
     this.state = {}
   }
   render() {
-    const { style, className, type, iconSrc, caption, loadingStyle, maskBefore } = this.props;
+    const { style, className, type, iconClassName, iconSrc, caption, loadingStyle, maskBefore } = this.props;
     let content = <div>加载中...</div>;
-    if (iconSrc) { // 自定义样式
+    if (type === 'custom') { // 自定义样式
       content = (<div className="loading-wrapper" style={loadingStyle}>
-        {iconSrc && <img alt="" src={iconSrc} className="loading-icon"/>}
-        {caption && <p>{caption}</p>}
+        {(iconClassName || iconSrc) && <span style={iconSrc ? {backgroundImage: `url(${iconSrc})`} : {}} className={`loading-custom-icon${iconClassName ? ' ' + iconClassName : ''}`}></span>}
+        {caption && <p className="loading-custom-caption">{caption}</p>}
       </div>);
     } else if(type === 'filling') { // 填料环
       content = (<div className="loading-filling active" style={loadingStyle}>
