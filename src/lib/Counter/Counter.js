@@ -11,25 +11,38 @@ export default class Counter extends Component {
     from: PropTypes.number,
     to: PropTypes.number,
     suffix: PropTypes.string, // 后缀
+    autoplay: PropTypes.bool, // 是否自动播放
   }
   static defaultProps = {
-    from: 0
+    duration: 5000,
+    from: 0,
+    to: 10,
+    autoplay: true
   }
   constructor(props) {
     super(props);
   }
   componentDidMount = () => {
     var instance = new Instance(this.$el);
-    instance.play();
+    if (this.props.autoplay) {
+      instance.play();
+    }
     this.setState({
       instance
     });
   }
+  play = () => {
+    if (this.state.instance) {
+      this.state.instance.play();
+    }
+  }
   render() {
     const {
       style, className,
-      duration, from, to, suffix
+      duration, from, to, suffix,
+      autoplay,
+      ...others
     } = this.props;
-    return <span ref={el => {this.$el = el;}} className={`counter${className ? ' ' + className: ''}`} style={style} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
+    return <span ref={el => {this.$el = el;}} className={`counter${className ? ' ' + className: ''}`} style={style} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix} {...others}>1</span>;
   }
 }

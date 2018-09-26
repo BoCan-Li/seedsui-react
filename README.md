@@ -478,11 +478,11 @@ import BiGauge from 'seedsui-react/lib/BiGauge';
 
 
 ## Bridge
-桥接, 现支持三个平台的桥接适配, 浏览器、订货、外勤、微信客户端
+桥接, 现支持四个平台的桥接适配, 浏览器、订货、外勤、微信客户端
 ### 属性
 ```javascript
 Bridge:{
-  platform: 'browser', // 'dinghuo' | 'waiqin' | 'weixin'
+  platform: 'browser', // 根据不同的环境将返回不同的结果 'browser' | 'dinghuo' | 'waiqin' | 'weixin'
   debug: false, // 在浏览器中,为true时将会启动调试模式,会使用假数据
   config: fn, // Bridge.config(); 在应用初始化时需要执行此方法, 连接桥接
   getAppVersion: fn, // 获取版本信息
@@ -720,9 +720,338 @@ Bridge:{
 import Bridge from 'seedsui-react/lib/Bridge';
 
 Bridge.showToast('提交成功', {
-  mask: false,
+  mask: true,
   onSuccess: () => {
     history.go(-1);
   }
 });
+```
+
+
+## Button
+按钮
+### 属性
+```javascript
+<Button
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={按钮style object, 默认无}
+  className={按钮className string, 默认无, 基础'button'} // 尺寸样式'sm | lg | xl'
+  disabled={是否禁用 bool, 默认false}
+  onClick={点击项 func(args)}
+  {...others}
+>
+  按钮内容
+</Button>
+```
+### 示例
+```javascript
+import Button from 'seedsui-react/lib/Button';
+
+<Button className="lg">提交</Button>
+```
+
+
+## Calendar
+日历
+### 属性
+```javascript
+<Calendar
+  type={日历类型 string, 默认'month'} // week|month
+  showTitleDay={是否显示周几 bool, 默认true}
+  showTitleWeek={是否显示周数 bool, 默认false}
+  disableBeforeDate={禁用此前日期 date, 默认无}
+  disableAfterDate={禁用此后日期 date, 默认无}
+  verticalDrag={是否允许垂直拖动 bool, 默认true}
+  defaultDate={默认选中日期 date, 默认new Date()}
+  prevHTML={左箭头html string, 默认'&lt'}
+  nextHTML={右箭头html string, 默认'&gt'}
+  onChange={选中日期发生变化 func(date)}
+  onClick={点击 func(date)}
+  onError={非法操作,如选择禁用日期 func(date)}
+/>
+```
+### 示例
+```javascript
+import Calendar from 'seedsui-react/lib/Calendar';
+
+onChangeCalendar = (date) => {
+  console.log(date)
+}
+onClickCalendar = (date) => {
+  console.log(date)
+}
+
+<Calendar onChange={this.onChangeCalendar} onClick={this.onClickCalendar}/>
+```
+
+
+## Card
+卡片
+### 属性
+```javascript
+<Card
+  style={卡片style object, 默认无}
+  className={卡片className string, 默认无, 基础'card'}
+  onClick={点击项 func(args)}
+  {...others}
+>
+卡片内容
+</Card>
+```
+### 示例
+```javascript
+import Card from 'seedsui-react/lib/Card';
+
+<Card>
+卡片内容
+</Card>
+```
+
+
+## Carrousel
+轮播
+### 属性
+```javascript
+<Carrousel
+  style={容器style object, 默认无}
+  classNameclassName={容器className string, 默认无, 基础'carrousel-container'}
+  slideStyle={单块style object, 默认无}
+  slideClassName={单块className string, 默认无, 基础'carrousel-slide'}
+  loop={是否循环显示 bool, 默认false}
+  activeIndex={默认选中第几块 number, 默认0}
+  pagination={是否显示小点点 bool, 默认false}
+  autoplay={自动播放毫秒数 number, 默认0} // 设置大于0的数值才会触发自动播放
+  slidesPerView={一屏显示几块 number, 默认1}
+  defaultSrc={默认图片 string, 默认'//res.waiqin365.com/d/seedsui/carrousel/default.png'}
+  list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
+  speed={动画过渡的速度 number, 默认300}
+  enableOnChange={启用轮播时事件回调 bool, 默认true} // 此事件为true时onChange事件才会生效
+  onChange={轮播时事件回调 func()}
+  onClick={点击块 func(item, index)}
+>
+<div>轮播页时, 用此div, 轮播图则使用list属性</div>
+</Carrousel>
+```
+### 示例
+```javascript
+import Calendar from 'seedsui-react/lib/Calendar';
+// 轮播页
+onCarrouselChange = (e) => {
+  this.props.changeActiveTab(e.activeIndex);
+  if (e.activeIndex === 1) { // 加载第二页内容
+    if (!this.sndLoaded) {
+      this.loadSnd(false);
+      this.sndLoaded = true;
+    }
+  }
+}
+<Carrousel style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.props.tabActiveIndex}>
+  <Page>第一页</Page>
+  <Page>第二页</Page>
+</Carrousel>
+// 轮播图
+<Carrousel list={imgsList} style={{height: document.getElementById('root').clientWidth + 'px'}} pagination loop/>
+```
+
+
+## Chat
+聊天框
+### 属性
+```javascript
+<Chat
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'chat'}
+  onClick={点击聊天框 func()}
+
+  showAvatar={是否显示照片 bool, 默认false}
+  avatarClassName={照片className string, 默认'chat-avatar'}
+  avatarStyle={照片style object, 默认无}
+  avatarSrc={照片src string, 默认无}
+  avatarAfter={照片后元素 node, 默认无}
+  onClickAvatar={点击照片 func()}
+
+  author={用户名称 string, 默认无}
+  authorClassName={用户名称className string, 默认无, 基础'chat-author'}
+  authorStyle={用户名称style object, 默认无}
+
+  contentClassName={内容className string, 默认无, 基础'chat-content'}
+  contentStyle={内容style object, 默认无}
+  onClickContent={点击内容 func()}
+>
+内容
+</Chat>
+```
+### 示例
+```javascript
+import Chat from 'seedsui-react/lib/Chat';
+
+<Chat>
+内容
+</Chat>
+```
+
+
+## Checkbox
+复选框
+### 属性
+```javascript
+<Checkbox
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'chat'}
+  onClick={点击复选框 func(checked, args)}
+
+  name={复选框name string, 默认无}
+  value={复选框value string, 默认无}
+  checked={是否选中 bool, 默认false}
+  disabled={是否禁用 bool, 默认false}
+
+  caption={复选框标题 string, 默认无}
+  captionClassName={复选框标题className string, 默认无, 基础'checkbox-caption'}
+  captionStyle={复选框标题style object, 默认无}
+/>
+```
+### 示例
+```javascript
+import Checkbox from 'seedsui-react/lib/Checkbox';
+
+onClick = (checked) => {
+  this.props.checkChange(!checked)
+}
+
+const {checked} = this.props;
+<Checkbox caption="全选" checked={checked} onClick={this.onClick}/>
+```
+
+
+## Close
+关闭删除图标
+### 属性
+```javascript
+<Close
+  style={图标style object, 默认无}
+  className={图标className string, 默认'close-icon close-icon-clear size18', 基础'icon'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Close from 'seedsui-react/lib/Close';
+
+<Close onClick={this.onClear} className="cancel"/>
+```
+
+
+## Container
+主体内容, 通常与Page、Header一起使用, 位于Header下面的位置
+### 属性
+```javascript
+<Container
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'container'}
+  {...others}
+>
+主体内容
+</Container>
+```
+### 示例
+```javascript
+import Page from 'seedsui-react/lib/Page';
+import Header from 'seedsui-react/lib/Header';
+import Container from 'seedsui-react/lib/Container';
+
+<Page>
+  <Header>
+    头部
+  </Header>
+  <Container>
+    中部
+  </Container>
+</Page>
+```
+
+
+## Counter
+计数器
+### 属性
+```javascript
+<Counter
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'container'}
+  duration={动画时长 number, 默认5000}
+  from={开始数字 number, 默认0}
+  to={结束数字 number, 默认10}
+  suffix={数字不变的后缀 string, 默认无} // 如设置为/10, 则显示为0/10
+  autoplay={是否自动播放 bool, 默认true}
+  {...others}
+/>
+```
+### ref方法
+```javascript
+play() // 播放
+```
+### 示例
+```javascript
+import Counter from 'seedsui-react/lib/Counter';
+
+onClick = () => {
+  this.refs.$counter.play();
+}
+
+<Counter to={500} autoplay={false} ref="$counter"/>
+```
+
+
+## Dialog
+弹出框
+### 属性
+```javascript
+<Dialog
+  portal={传送dom object, 默认document.getElementById('root')}
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  show={*显隐 bool, 默认false}
+
+  animation={动画 string, 默认'fade'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  duration={动画时长 number, 默认见seedsui-variable.less}
+  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
+  onClickMask={点击遮罩 func(s)}
+  onShowed={显示完成 func(s)}
+  onHid={隐藏完成 func(s)}
+
+  maskClassName={遮罩className string, 默认无, 基础'mask dialog-mask'}
+  maskStyle={遮罩style object, 默认无}
+
+  className={容器className string, 默认无, 基础'container'}
+  style={容器style object, 默认无}
+>
+</Dialog>
+```
+### 示例
+```javascript
+import Dialog from 'seedsui-react/lib/Dialog';
+
+<Dialog show={this.state.showDialog} animation="zoom" duration={200} style={{width: '80%', height: '80%', backgroundColor: 'white', borderRadius: '10px'}}>
+弹出框内容
+</Dialog>
+```
+
+
+
+## Dot
+小圆点
+### 属性
+```javascript
+<Dot
+  style={图标style object, 默认无}
+  className={图标className string, 默认无, 基础'dot'}
+  size={宽高大小px number, 默认无}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Dot from 'seedsui-react/lib/Dot';
+
+<Dot size={8}/>
 ```

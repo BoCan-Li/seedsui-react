@@ -3,7 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import Loading from '../lib/Loading';
+import Counter from '../lib/Counter';
 
 export default class App extends Component {
   constructor(props) {
@@ -23,12 +23,10 @@ export default class App extends Component {
   }
   onClick = (arg) => {
     console.log(arg)
+    this.refs.$counter.play();
   }
   onChange = (arg) => {
     console.log(arg)
-    this.setState({
-      alumb: arg
-    })
   }
   render() {
     return <PagePull style={{ backgroundColor: 'white' }} lSide={<p>1</p>} rSide={<p>2</p>}>
@@ -36,7 +34,8 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh lazyLoad hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-      <Loading type="custom" caption="" iconSrc="//res.waiqin365.com/d/dinghuo365/loading.gif"/>
+        <Counter to={500} autoplay={false} ref="$counter"/>
+        <button onClick={this.onClick}>播放</button>
       </Dragrefresh>
     </PagePull>
   }

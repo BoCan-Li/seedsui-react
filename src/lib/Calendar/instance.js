@@ -528,11 +528,13 @@ var Calendar = function (container, params) {
     if (s.params.onClick) s.params.onClick(s)
   }
   s.onTouchStart = function (e) {
+    e.stopPropagation()
     s.container.addEventListener('touchmove', s.preventDefault, false)
     s.touches.startX = e.touches[0].clientX
     s.touches.startY = e.touches[0].clientY
   }
   s.onTouchMove = function (e) {
+    e.stopPropagation()
     s.touches.currentX = e.touches[0].clientX
     s.touches.currentY = e.touches[0].clientY
     s.touches.diffX = s.touches.startX - s.touches.currentX
@@ -562,6 +564,7 @@ var Calendar = function (container, params) {
     }
   }
   s.onTouchEnd = function (e) {
+    e.stopPropagation()
     if (s.touches.direction === 1) { // 左右滑动
       if (Math.abs(s.touches.diffX) < s.params.threshold) s.touches.horizontal = 0
       if (s.touches.horizontal === 1) s.slideXTo(2) // 下一页

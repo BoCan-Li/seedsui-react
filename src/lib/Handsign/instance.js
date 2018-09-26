@@ -53,6 +53,7 @@ var Handsign = function (container, params) {
     s.events(true)
   }
   s.onTouchStart = function (e) {
+    e.stopPropagation()
     s.container.addEventListener('touchmove', s.preventDefault, false)
     window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
     s.ctx.strokeStyle = s.params.strokeStyle
@@ -66,6 +67,7 @@ var Handsign = function (container, params) {
     s.path.beginY = e.changedTouches[0].clientY - s.stage_info.top
   }
   s.onTouchMove = function (e) {
+    e.stopPropagation()
     s.ctx.lineTo(
       e.changedTouches[0].clientX - s.stage_info.left,
       e.changedTouches[0].clientY - s.stage_info.top

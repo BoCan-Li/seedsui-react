@@ -9,7 +9,6 @@ export default class Chat extends Component {
     onClick: PropTypes.func,
 
     showAvatar: PropTypes.bool,
-    avatar: PropTypes.bool,
     avatarClassName: PropTypes.string,
     avatarStyle: PropTypes.object,
     avatarSrc: PropTypes.string,
