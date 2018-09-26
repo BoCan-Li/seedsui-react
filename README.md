@@ -1405,7 +1405,6 @@ import Container from 'seedsui-react/lib/Container';
 ```
 
 
-
 ## Icon
 图标
 ### 属性
@@ -1478,3 +1477,61 @@ this.setState({
 this.state.lazy.load();
 ```
 
+
+## ImgUploader
+图片上传
+### 属性
+```javascript
+<ImgUploader
+  className={容器className string, 默认无}
+  style={容器style object, 默认无}
+
+  caption={标题文字 node, 默认无}
+  captionStyle={标题style object, 默认无}
+  captionClassName={标题className string, 默认无}
+  list={内容列表 array, 默认[], 格式如下:}
+  // [{
+  //   id: '',
+  //   src: '',
+  //   thumb: ''
+  // }]
+  enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
+  max={最大选择数 number, 默认5}
+  sourceType={上传类型 array, 默认['album', 'camera']}
+  sizeType={压缩 array, 默认['compressed']} // ['original', 'compressed']
+
+  showUpload={是否显示上传按钮 bool, 默认false}
+  showDelete={是否显示删除按钮 bool, 默认false}
+  readOnly={是否只读 bool, 默认false}
+
+  showCount={标题是否显示上传个数 bool, 默认false}
+  watermark={增加水印 object, 默认无, 格式如下:} // 订货和外勤客户端专用
+  /* 订货: {
+    orderNo: 'xx', // 编号
+    submitName: 'xx', // 提交人
+    customerName: 'xx', // 客户
+    cmLocation: '118.730515, 31.982473', // 位置算偏差
+    isWaterMark: '1', // 是否启用水印
+  } */
+  /* 外勤: {
+    photoType: 'xx', // 水印名称
+    customerName: 'xx', // 客户名
+  } */
+   
+  onChange={照片发生变化 func(list)}
+/>
+```
+### 示例
+```javascript
+import ImgUploader from 'seedsui-react/lib/ImgUploader';
+
+const list = [
+  {
+    id: '',
+    src: '',
+    thumb: ''
+  }
+];
+
+<ImgUploader caption="上传照片" showUpload list={list} onChange={onChangeImg}/>
+```

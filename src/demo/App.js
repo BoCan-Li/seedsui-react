@@ -3,7 +3,8 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import Emoji from '../lib/Emoji';
+import Grid from '../lib/Grid';
+import ImgLazy from '../lib/ImgLazy';
 
 export default class App extends Component {
   constructor(props) {
@@ -20,6 +21,12 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
+    var lazy = new ImgLazy({
+      overflowContainer: this.$elDrag.$el
+    })
+    setTimeout(() => {
+      lazy.load();
+    }, 2000);
   }
   onClick = (arg) => {
     console.log(arg)
@@ -33,8 +40,8 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
-      <Dragrefresh lazyLoad hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <Emoji show/>
+      <Dragrefresh hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
+        <Grid lazyLoad list={this.state.alumb} iconClassName="size80"/>
       </Dragrefresh>
     </PagePull>
   }
