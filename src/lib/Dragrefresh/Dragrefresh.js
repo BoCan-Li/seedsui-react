@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Notice from './../Notice';
 import Instance from './instance.pull.js';
-import ImgLazyInstance from './../ImgLazy/instance.js';
+import ImgLazy from './../ImgLazy';
 
 export default class Dragrefresh extends Component {
   static propTypes = {
@@ -86,7 +86,7 @@ export default class Dragrefresh extends Component {
     this.setPagination();
   }
   setLazyLoad = () => {
-    var imglazy = new ImgLazyInstance({
+    var imglazy = new ImgLazy({
       overflowContainer: this.$el
     });
     imglazy.load();

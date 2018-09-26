@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImgLazyInstance from './../ImgLazy/instance.js';
+import ImgLazy from './../ImgLazy';
 
 export default class Container extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ export default class Container extends Component {
   }
   componentDidMount () {
     if (this.props.lazyLoad) {
-      var imglazy = new ImgLazyInstance({
+      var imglazy = new ImgLazy({
         overflowContainer: this.$el
       });
       imglazy.load();

@@ -3,7 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import Counter from '../lib/Counter';
+import Emoji from '../lib/Emoji';
 
 export default class App extends Component {
   constructor(props) {
@@ -34,8 +34,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh lazyLoad hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <Counter to={500} autoplay={false} ref="$counter"/>
-        <button onClick={this.onClick}>播放</button>
+        <Emoji show/>
       </Dragrefresh>
     </PagePull>
   }

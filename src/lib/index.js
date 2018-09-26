@@ -37,7 +37,6 @@ import Group from './Group';
 import Handsign from './Handsign'; // 不常用
 import Header from './Header';
 import Icon from './Icon';
-import ImgLazy from './ImgLazy';
 import ImgUploader from './ImgUploader';
 import IndexBar from './IndexBar';
 import InputArea from './InputArea';
@@ -111,6 +110,7 @@ import FastClick from './FastClick.js';
 import Form from './Form.js'; // 不常用
 import Fullscreen from './Fullscreen.js'; // 不常用
 import History from './History.js'; // 不常用
+import ImgLazy from './ImgLazy';
 import MediaUtil from './MediaUtil.js'; // 不常用
 import Pubsub from './Pubsub.js'; // 不常用
 import ValidateID from './ValidateID.js'; // 不常用
@@ -149,7 +149,6 @@ export {
   Handsign, // 不常用
   Header,
   Icon,
-  ImgLazy, // 不常用
   ImgUploader,
   IndexBar, // 不常用
   InputArea,
@@ -223,6 +222,7 @@ export {
   Form, // 不常用
   Fullscreen, // 不常用
   History, // 不常用
+  ImgLazy,
   MediaUtil, // 不常用
   Pubsub, // 不常用
   ValidateID, // 不常用

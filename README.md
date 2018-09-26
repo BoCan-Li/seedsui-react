@@ -479,7 +479,7 @@ import BiGauge from 'seedsui-react/lib/BiGauge';
 
 ## Bridge
 桥接, 现支持四个平台的桥接适配, 浏览器、订货、外勤、微信客户端
-### 属性
+### 对象
 ```javascript
 Bridge:{
   platform: 'browser', // 根据不同的环境将返回不同的结果 'browser' | 'dinghuo' | 'waiqin' | 'weixin'
@@ -1055,3 +1055,426 @@ import Dot from 'seedsui-react/lib/Dot';
 
 <Dot size={8}/>
 ```
+
+
+
+## Dragrefresh
+下拉刷新
+### 属性
+```javascript
+<Dragrefresh
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'dot'}
+  onTopRefresh={头部刷新 func(s)}
+  onTopComplete={头部刷新完成 func(s)}
+  onBottomRefresh={底部刷新 func(s)}
+  onBottomComplete={底部刷新完成 func(s)}
+  hasMore={状态标识 string, 默认-2} // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
+
+  showNoData={是否允许暂无数据 bool, 默认false}
+  noDataClassName={暂无数据容器className string, 默认无}
+  noDataStyle={暂无数据容器style object, 默认无}
+  noDataCaption={暂无数据标题 string, 默认'暂无数据'}
+  noDataIconSrc={暂无数据图标src string, 默认无}
+  noDataIconClassName={暂无数据图标className string, 默认'notice-icon-nodata'}
+  noDataOnClick={点击暂无数据 func(e)}
+
+  lazyLoad={是否启用懒人加载 bool, 默认false}
+
+  onScroll={滚动事件 func(e)}
+>
+内容
+</Dragrefresh>
+```
+### 示例
+```javascript
+import Dragrefresh from 'seedsui-react/lib/Dragrefresh';
+
+// 下拉刷新配置
+onTopRefresh = () => {
+  console.log('头部刷新');
+  this.loadData(false);
+}
+onBottomRefresh = () => {
+  console.log('底部刷新');
+  this.loadData(true);
+}
+loadData = (isNext) => {
+  // 分页
+  let page = this.props.page;
+  if (isNext) {
+    page++;
+  } else {
+    page = 1;
+  }
+  const params = {
+    page,
+    rows: this.props.rows
+  };
+  // 获得数据
+  this.props.getList(params).then((result) => {
+    if (result.code !== '1') {
+      Bridge.showToast(result.message, {mask: false});
+    }
+  }).catch((err) => {
+    Bridge.showToast('请求错误，请稍后再试', {mask: false});
+  });
+}
+
+<Dragrefresh ref={(el) => {this.$elDrag = el;}} hasMore={this.props.hasMore} onTopRefresh={this.onTopRefresh} onBottomRefresh={this.onBottomRefresh}>
+内容内容
+</Dragrefresh>
+```
+
+
+
+## Dropdown
+下拉菜单
+### 属性
+```javascript
+<Dropdown
+  portal={弹出框传送至dom object, 默认document.getElementById('root')}
+  top={头部距离 number, 默认0}
+  disabled={是否禁用 bool, 默认false}
+  onChange={选中菜单发生变化 func([{id: '', caption: ''}])}
+  list={菜单 array, 默认无} // 格式:[{id: '', caption: '分类', data: [{id: '1',caption: '测试数据1',children:[]}]}]
+/>
+```
+### 示例
+```javascript
+import Dropdown from 'seedsui-react/lib/Dropdown';
+
+onChangeDropdown = (items) => {
+  if (this.props.onChange) this.props.onChange(items)
+}
+const dropdownList = [
+  {
+    id: '', caption: '加载中...'
+  }, {
+    id: '', caption: '加载中...'
+  }, {
+    id: '', caption: '加载中...'
+  }
+]
+<Dropdown portal={this.state.$page} list={dropdownList} onChange={this.onChangeDropdown}/>
+```
+
+
+
+## Emoji
+表情弹出输入框
+### 属性
+```javascript
+<Emoji
+  portal={弹出框传送至dom object, 默认document.getElementById('root')}
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  show={*显隐 bool, 默认false}
+
+  value={值 string, 默认''}
+  placeholder={占位文字 string, 默认''}
+
+  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
+  onClickMask={点击遮罩 func(s)}
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask emoji-mask'}
+
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'emoji'}
+
+  onChange={值变化 func(value, args)}
+  onSubmit={提交 func(value, args)}
+/>
+```
+### 示例
+```javascript
+import Emoji from 'seedsui-react/lib/Emoji';
+
+<Emoji show={this.state.showEmoji}/>
+```
+
+
+
+## Footer
+底部内容, 通常与Page、Header、Container一起使用
+### 属性
+```javascript
+<Footer
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'container'}
+  {...others}
+>
+底部内容
+</Footer>
+```
+### 示例
+```javascript
+import Page from 'seedsui-react/lib/Page';
+import Header from 'seedsui-react/lib/Header';
+import Footer from 'seedsui-react/lib/Footer';
+import Container from 'seedsui-react/lib/Container';
+
+<Page>
+  <Header>
+    头部
+  </Header>
+  <Container>
+    中部
+  </Container>
+  <Footer>
+    底部
+  </Footer>
+</Page>
+```
+
+
+
+## Grid
+栅格
+### 属性
+```javascript
+<Grid
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  lazyLoad={是否启用懒人加载 bool, 默认false}
+  className={容器className string, 默认无, 基础'grid'}
+  style={容器style object, 默认无}
+  space={上下间距 number, 默认12}
+  wing={左右间距 number, 默认12}
+  col={一行列数 string, 默认3}
+  showUpload={是否显示上传按钮 bool, 默认false}
+  list={单元格 array, 默认[], 格式见下方示例}
+  /* list: [{
+    iconClassName: '',
+    iconStyle: {},
+    iconSrc: '',
+    preview: true | false, // 是否支持预览,默认true
+    thumb: '', // 缩略图
+    src: '', // 预览地址
+    caption: '',
+    onClick: function() {},
+    iconBadgeCaption: ''
+  }] */
+  cellClassName={单元格className string, 默认无, 基础'grid-cell'}
+  cellStyle={单元格style object, 默认无}
+
+  caption={标题文字 node, 默认无}
+  captionStyle={标题style object, 默认无}
+  captionClassName={标题className string, 默认无}
+
+  sndcaption={副标题文字 node, 默认无}
+  sndcaptionStyle={副标题style object, 默认无}
+  sndcaptionClassName={副标题className string, 默认无}
+
+  iconBoxStyle={图标容器style object, 默认无}
+  iconBoxClassName={图标容器className string, 默认无, 基础'grid-iconbox'}
+
+  iconClassName={图标className string, 默认无}
+  iconStyle={图标style object, 默认无}
+  iconDefaultImgClassName={懒人加载默认图标className string, 默认无}
+  iconDefaultImgStyle={懒人加载默认图标style object, 默认无}
+
+  iconBadgeClassName={徽章className string, 默认无}
+
+  onClickCell={点击单元格 func(item, index, args)}
+  onClickContent={点击图标容器 func(item, index, args)}
+  onClickIcon={点击图标 func(item, index, args)}
+
+  closeClassName={删除图标className string, 默认无}
+  onClickDelete={点击删除 func(item, index, args)}
+
+  onClickAdd={点击添加 func()}
+>
+<!-- 直接放子元素，grid将自动排列 -->
+<div>菜单按钮1</div>
+<div>菜单按钮2</div>
+</Grid>
+```
+### 示例
+```javascript
+import Grid from 'seedsui-react/lib/Grid';
+const products = [
+  {
+    id: '1',
+    iconSrc: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320',
+    caption: '冰红茶',
+    sndcaption: '￥100.00'
+  }
+];
+<Grid
+  list={products}
+  args={combine.ptype}
+  onClickIcon={onClick}
+  lazyLoad
+  col="3"
+  className="grid-bordered"
+  space={15}
+  iconBoxClassName="size100"
+  iconClassName="size100"
+  captionClassName="text-left nowrap2"
+  captionStyle={{height: '38px', lineHeight: '20px', width: '100px'}}
+  sndcaptionClassName="text-left nowrap"
+  sndcaptionStyle={{height: '18px', width: '100px'}}
+/>
+```
+
+
+## Group
+分组
+### 属性
+```javascript
+<Group
+  style={卡片style object, 默认无}
+  className={卡片className string, 默认无, 基础'group'}
+  onClick={点击 func(args)}
+  {...others}
+>
+分组
+</Group>
+```
+### 示例
+```javascript
+import Group from 'seedsui-react/lib/Group';
+
+<Group>
+分组
+</Group>
+```
+
+
+## Handsign
+签名
+### 属性
+```javascript
+<Handsign
+  strokeStyle={签名颜色 string, 默认'#000'}
+  lineWidth={签名线粗px number, 默认3}
+  quality={存储时的图片质量 number, 默认0.92}
+  width={宽度px number, 默认300} // 不能通过style设置宽度,否则canvas会错位
+  height={高度px number, 默认300} // 不能通过style设置高度,否则canvas会错位
+  style={签名面板style object, 默认无}
+  className={签名面板className string, 默认无}
+/>
+```
+### 示例
+```javascript
+import Handsign from 'seedsui-react/lib/Handsign';
+
+save = () => {
+  const sign_pic = this.$handsign.state.instance.save();
+  if (!sign_pic) {
+    Bridge.showToast('请先签名!', {mask: false})
+    return;
+  }
+}
+
+<Handsign ref={(el) => {this.$handsign = el;}} width={window.innerWidth} strokeStyle="#c72a1d" height={window.innerHeight - 88} style={{marginTop: '44px'}}/>
+```
+
+
+
+## Header
+底部内容, 通常与Page、Container一起使用
+### 属性
+```javascript
+<Header
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'container'}
+  {...others}
+>
+头部内容
+</Header>
+```
+### 示例
+```javascript
+import Page from 'seedsui-react/lib/Page';
+import Header from 'seedsui-react/lib/Header';
+import Footer from 'seedsui-react/lib/Footer';
+import Container from 'seedsui-react/lib/Container';
+
+<Page>
+  <Header>
+    头部
+  </Header>
+  <Container>
+    中部
+  </Container>
+  <Footer>
+    底部
+  </Footer>
+</Page>
+```
+
+
+
+## Icon
+图标
+### 属性
+```javascript
+<Icon
+  base={基础标签 string, 默认'icon'}
+  // img: 返回<span><img class="icon-img"/></span>
+  // pureImg: 返回<img class="icon-img"/>
+  // icon: 返回<span><i class="icon-full"/></span>
+  // pureIcon: 返回<i class="icon-full"/>
+  baseClassName={基础className string, 默认无, 基础'icon'}
+  className={图标className string, 默认无}
+  style={图标style object, 默认无}
+  lazyLoad={是否启用懒人加载 bool, 默认false}
+
+  defaultImgClassName={懒人加载默认图标className string, 默认无, 基础icon时'icon-full', img时'icon-img'}
+  defaultImgStyle={懒人加载默认图标style object, 默认无}
+  src={图标地址 string, 默认无}
+
+  badgeCaption={角标标题 number | string, 默认无}
+  badgeClassName={角标className string, 默认无}
+  badgeStyle={角标style object, 默认无}
+  badgeLimit={角标位数限制 number, 默认2, 如:1000,将显示99+}
+  badgeEllipsis={角标位数限制省略号 string, 默认'+'}
+  
+  onClickClose={点击删除 func(e)}
+  closeClassName={关闭className string, 默认无}
+  closeStyle={关闭style object, 默认无}
+>
+图标内容
+</Icon>
+```
+### 示例
+```javascript
+import Icon from 'seedsui-react/lib/Icon';
+
+<Icon className="icon-edit size20"/>
+```
+
+
+## ImgLazy
+懒人加载, 主要为了解决图片过多, 造成网络阻塞的问题, 一般采用的是滚动加载, 并在页面加载完成后, 执行滚动加载方法load()
+### 对象实例
+```javascript
+var imglazy = new ImgLazy({
+  overflowContainer: el, // 滚动区域, 滚动加载时需要用到, 默认document.body
+  load: 'scroll', // scroll 滚动加载 | queue 队列加载 | all 全部加载
+  threshold: 300, // 滚动加载时, 上下扩展px加载
+  loadAttr: 'data-load-src', // 加载地址
+  errorAttr: 'data-error-src', // 错误地址
+  completeAttr: 'data-complete' // 完成加载, data-complete=0代表加载错误, =1代码加载正确
+});
+```
+### 对象方法
+```javascript
+load(); // 加载图片, load为scroll时加载可见区域, queue时队列加载完所有图片, all时加载所有图片
+```
+### 示例
+```javascript
+import ImgLazy from 'seedsui-react/lib/ImgLazy';
+
+// 懒人加载
+this.setState({
+  lazy: new ImgLazy({
+    overflowContainer: this.$elDrag.$el
+  })
+});
+
+// 在页面加载完成的时候
+this.state.lazy.load();
+```
+

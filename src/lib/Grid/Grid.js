@@ -27,8 +27,8 @@ export default class Grid extends Component {
     sndcaptionClassName: PropTypes.string,
     sndcaptionStyle: PropTypes.object,
 
-    contentClassName: PropTypes.string, // 单元格内容Class
-    contentStyle: PropTypes.object, // 单元格内容Style
+    iconBoxClassName: PropTypes.string, // 图标容器Class
+    iconBoxStyle: PropTypes.object, // 图标容器Style
 
     iconClassName: PropTypes.string,
     iconStyle: PropTypes.object,
@@ -37,9 +37,8 @@ export default class Grid extends Component {
 
     iconBadgeClassName: PropTypes.string,
 
-    onClick: PropTypes.func,
     onClickCell: PropTypes.func,
-    onClickContent: PropTypes.func,
+    onClickIconBox: PropTypes.func,
     onClickIcon: PropTypes.func,
 
     closeClassName: PropTypes.string,
@@ -133,9 +132,9 @@ export default class Grid extends Component {
       e.stopPropagation();
     }
   }
-  onClickContent = (e, item, index) => {
-    if (this.props.onClickContent) {
-      this.props.onClickContent(item, index, this.getArgs(e));
+  onClickIconBox = (e, item, index) => {
+    if (this.props.onClickIconBox) {
+      this.props.onClickIconBox(item, index, this.getArgs(e));
       e.stopPropagation();
     }
   }
@@ -174,7 +173,7 @@ export default class Grid extends Component {
     const {
       className, style, col, list,
       cellClassName, cellStyle,
-      contentClassName, contentStyle,
+      iconBoxClassName, iconBoxStyle,
       iconClassName, iconStyle, iconDefaultImgClassName, iconDefaultImgStyle, lazyLoad,
       iconBadgeClassName,
       closeClassName, onClickDelete,
@@ -188,7 +187,7 @@ export default class Grid extends Component {
       {list.length > 0 && list.map((item, index) =>{
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
-          <a onClick={(e) => {this.onClickContent(e, item, index);}} className={`grid-iconbox${contentClassName ? ' ' + contentClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(contentStyle ? contentStyle : {}, item.style ? item.style : {})}>
+          <a onClick={(e) => {this.onClickIconBox(e, item, index);}} className={`grid-iconbox${iconBoxClassName ? ' ' + iconBoxClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(iconBoxStyle ? iconBoxStyle : {}, item.style ? item.style : {})}>
             {(item.iconSrc || item.iconClassName || item.thumb) &&
             <Icon
               base={item.thumb ? 'img' : 'icon'}
@@ -210,7 +209,7 @@ export default class Grid extends Component {
         </li>);
       })}
       {showUpload === true && <li className={`grid-cell`} style={this.getLiStyle()}>
-        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
+        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${iconBoxClassName ? ' ' + iconBoxClassName : ''}`} style={iconBoxStyle}>
           <Icon className="grid-icon-add"/>
         </a>
       </li>}

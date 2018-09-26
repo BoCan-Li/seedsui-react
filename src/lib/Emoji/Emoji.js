@@ -6,7 +6,7 @@ import InputPre from './../InputPre';
 import Button from './../Button';
 import Instance from './instance.js';
 
-export default class Dialog extends Component {
+export default class Emoji extends Component {
   static propTypes = {
     portal: PropTypes.object,
     args: PropTypes.any,
