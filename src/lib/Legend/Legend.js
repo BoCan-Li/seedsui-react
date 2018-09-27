@@ -3,22 +3,19 @@ import PropTypes from 'prop-types';
 
 export default class Legend extends Component {
   static propTypes = {
-    style: PropTypes.object,
     className: PropTypes.string,
-    children: PropTypes.node,
-    onClick: PropTypes.func
+    children: PropTypes.node
   }
   static defaultProps = {
-    className: 'legend-through'
   }
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {children, style, className, onClick} = this.props;
+    const {className, children, ...others} = this.props;
     return (
-      <div className={className} style={style} onClick={onClick}>
+      <div className={`legend${className ? ' ' + className : ''}`} {...others}>
         <div className="legend-caption">
           {children}
         </div>

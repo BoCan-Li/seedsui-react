@@ -6,7 +6,7 @@ export default class Close extends Component {
     style: PropTypes.object
   }
   static defaultProps = {
-    className: 'close-icon close-icon-clear size18'
+    className: 'close-icon-clear size18'
   }
   constructor(props) {
     super(props);

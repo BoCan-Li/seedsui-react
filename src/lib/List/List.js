@@ -9,8 +9,6 @@ export default class List extends Component {
     className: PropTypes.string,
     onClick: PropTypes.func,
 
-    onClickContainer: PropTypes.func,
-
     licon: PropTypes.node,
     liconSrc: PropTypes.string,
     liconClassName: PropTypes.string,
@@ -55,6 +53,7 @@ export default class List extends Component {
     containerClassName: PropTypes.string,
     containerStyle: PropTypes.object,
     containerAfter: PropTypes.node,
+    onClickContainer: PropTypes.func,
 
     lazyLoad: PropTypes.bool
   }

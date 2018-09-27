@@ -117,6 +117,18 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputCity](#inputcity) 城市选择
 - [InputColor](#inputcolor) 颜色选择框
 - [InputDate](#inputdate) 日期选择
+- [InputLocation](#inputlocation) 定位
+- [InputNumber](#inputnumber) 数字输入框
+- [InputPassword](#inputpassword) 密码框
+- [InputPhone](#inputphone) 手机号码输入框
+- [InputPicker](#inputpicker) 滚动选择框
+- [InputPre](#inputpre) 自增高输入框
+- [InputRange](#inputrange) 范围选择框
+- [InputSafe](#inputsafe) 安全强度检验框
+- [InputSelect](#inputselect) 选择框
+- [InputText](#inputtext) 文本框
+- [InputVerify](#inputverify) 验证码文本框
+- [Verify](#verify) 验证码文本框
 
 ## Actionsheet
 卡片框
@@ -1725,7 +1737,7 @@ onChangeRange = (value, args) => {
 
 
 ## InputSafe
-安全验证框, 展现三个状态: 弱、中、强
+安全强度检验框, 展现三个状态: 弱、中、强
 ### 属性
 ```javascript
 <InputSafe
@@ -1815,8 +1827,8 @@ onChangeSelect = (value, options, args) => {
   onFocus={获取焦点 func(value, args), 默认无}
 
   // 左右图标
-  liconClassName={左图标className string, 默认无, 基础'color-placeholder'}
-  riconClassName={右图标className string, 默认无, 基础'color-placeholder'}
+  liconClassName={左图标className string, 默认无, 基础'licon'}
+  riconClassName={右图标className string, 默认无, 基础'ricon'}
   onClickLicon={点击左图标 func(value, args), 默认无}
   onClickRicon={点击右图标 func(value, args), 默认无}
 
@@ -1841,7 +1853,7 @@ onChangeText = (value, args) => {
 
 
 ## InputVerify
-发送验证文本框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+验证码文本框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 ### 属性
 ```javascript
 <InputVerify
@@ -1865,7 +1877,7 @@ onClickSent = () => {
 
 
 ## Verify
-验证码控件, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+验证码文本框, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 ### 属性
 ```javascript
 <Verify
@@ -1896,4 +1908,86 @@ onValiChange = (error, value, data) => {
 }
 
 <Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
+```
+
+
+
+## Legend
+标题
+### 属性
+```javascript
+<Legend
+  className={容器className string, 默认无, 基础'legend'}
+>
+标题
+</Legend>
+```
+### 示例
+```javascript
+import Legend from 'seedsui-react/lib/Legend';
+
+<Legend>标题</Legend>
+```
+
+
+
+## List
+列表
+### 属性
+```javascript
+<List
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'attribute'}
+  onClick={点击容器 func(args), 默认无}
+  lazyLoad={懒人加载 bool, 默认无}
+
+  licon={左图标 node, 默认无}
+  liconSrc={左图标地址 node, 默认无}
+  liconClassName={左图标className string, 默认无, 基础'licon'}
+  liconStyle={左图标style object, 默认无}
+  onClickLicon={点击左图标 func(args), 默认无}
+  liconLazyLoad={左图标懒人加载 bool, 默认无}
+
+  ricon={右图标 node, 默认无}
+  riconSrc={右图标地址 node, 默认无}
+  riconClassName={右图标className string, 默认无, 基础'ricon'}
+  riconStyle={右图标style object, 默认无}
+  onClickRicon={点击右图标 func(args), 默认无}
+  riconLazyLoad={右图标懒人加载 bool, 默认无}
+
+  showThumbnail={是否显示缩略图 bool, 默认无}
+  thumbnailSrc={缩略图地址 node, 默认无}
+  thumbnailClassName={缩略图className string, 默认无, 基础'list-thumbnail'}
+  thumbnailStyle={缩略图style object, 默认无}
+  onClickThumbnail={点击缩略图 func(args), 默认无}
+  thumbnailAfter={缩略图后 node, 默认无}
+
+  showAvatar={是否显示照片 bool, 默认无}
+  avatarSrc={照片地址 node, 默认无}
+  avatarClassName={照片className string, 默认无, 基础'list-avatar'}
+  avatarStyle={照片style object, 默认无}
+  onClickAvatar={点击照片 func(args), 默认无}
+  avatarAfter={照片后 node, 默认无}
+
+  caption={标题 node, 默认无}
+  captionClassName={标题className string, 默认无, 基础'list-caption'}
+  captionStyle={标题style object, 默认无}
+  onClickRcaption={点击标题 func(args), 默认无}
+  
+  sndcaption={副标题 node, 默认无}
+  sndcaptionClassName={副标题className string, 默认无, 基础'list-caption'}
+  sndcaptionStyle={副标题style object, 默认无}
+
+  containerClassName={中间区域className string, 默认无, 基础'list-caption'}
+  containerStyle={中间区域style object, 默认无}
+  onClickContainer={点击中间区域 func(args), 默认无}
+  containerAfter={中间区域后 node, 默认无}
+/>
+```
+### 示例
+```javascript
+import List from 'seedsui-react/lib/List';
+
+<List onClick={() => {Bridge.tel('02568736873')}} caption="技术支持" rcaption="02568736873" className="list-li-oneline" rcaptionClassName="color-placeholder" liconClassName="icon-support" riconClassName="shape-arrow-right sm" style={{padding: '10px 12px'}}/>
 ```

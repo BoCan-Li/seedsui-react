@@ -60,7 +60,8 @@ export default class InputText extends Component {
     value: '',
     readOnly: false,
     disabled: false,
-    digits: false
+    digits: false,
+    clearClassName: 'ricon close-icon-clear size18'
   }
   constructor(props) {
     super(props);
@@ -284,10 +285,10 @@ export default class InputText extends Component {
       rcaption
     } = this.props;
     return (<div className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
-        {liconClassName && <Icon className={`color-placeholder ${liconClassName}`} onClick={this.onClickLicon}/>}
+        {liconClassName && <Icon className={`licon ${liconClassName}`} onClick={this.onClickLicon}/>}
         {this.getInputDOM()}
-        {clear && <Close onClick={this.onClear} className={`${clearClassName ? clearClassName : ''} ${value.length === 0 ? 'hide' : ''}`}/>}
-        {riconClassName && <Icon className={`color-placeholder ${riconClassName}`} onClick={this.onClickRicon}/>}
+        {clear && <Close onClick={this.onClear} className={`${value.length === 0 ? 'hide' : ''}${clearClassName ? ' ' + clearClassName : ''}`}/>}
+        {riconClassName && <Icon className={`ricon ${riconClassName}`} onClick={this.onClickRicon}/>}
         {rcaption && rcaption}
       </div>);
   }

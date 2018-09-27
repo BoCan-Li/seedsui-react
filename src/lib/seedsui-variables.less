@@ -471,6 +471,14 @@
 
 // Attribute属性
 @attribute-left-color: #808080;
+.setAttributeLicon(){
+  margin-right: 4px;
+  color:rgba(0,0,0,.2);
+}
+.setAttributeRicon(){
+  margin-left: 4px;
+  color:rgba(0,0,0,.2);
+}
 
 // List列表
 @list-bg: transparent;
@@ -538,8 +546,23 @@
 }
 
 // Legend
-@legend-through-color: @sub;
-@legend-through-bg: @body-bg;
+.setLegend(){
+  .flex;
+  .flex-middle;
+  position: relative;
+  &:before, &:after{
+    content: '';
+    display: block;
+    .flex-1;
+    height: 1px;
+    background-color: @border;
+  }
+}
+.setLegendCaption(){
+  display: block;
+  padding: 0 10px;
+  color: @sub;
+}
 
 // Titlebar
 @titlebar-bg:#fff;

@@ -3,13 +3,14 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import InputDate from '../lib/InputDate';
+import Grid from '../lib/Grid';
 
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: '',
       hasMore: -2,
       alumb: [
         {id: '1', thumb: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320'},
@@ -31,8 +32,10 @@ export default class App extends Component {
     console.log(arg)
     this.refs.$counter.play();
   }
-  onChangeSelect = (value, options) => {
-    console.log(value, options)
+  onChange = (value) => {
+    this.setState({
+      value
+    })
   }
   render() {
     // const list = [
@@ -54,7 +57,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <InputDate type="time" max="09:40"  value="12" onChange={this.onChangeSelect}/>
+        <Grid list={this.state.alumb} onClickDelete={() => {}} iconBoxClassName="size100" iconClassName="size100"/>
       </Dragrefresh>
     </PagePull>
   }
