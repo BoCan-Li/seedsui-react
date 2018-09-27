@@ -54,6 +54,7 @@ import InputSafe from './InputSafe'; // 不常用
 import InputSelect from './InputSelect';
 import InputText from './InputText';
 import InputVerify from './InputVerify';
+import Verify from './Verify';
 import Legend from './Legend';
 import List from './List';
 import ListPull from './ListPull'; // 不常用
@@ -166,6 +167,7 @@ export {
   InputSelect,
   InputText,
   InputVerify,
+  Verify,
   Legend, // 不常用
   List,
   ListPull,

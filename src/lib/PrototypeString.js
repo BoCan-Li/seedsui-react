@@ -97,10 +97,12 @@ window.String.prototype.isMonth = function () {
 // 判断是否是日期格式
 window.String.prototype.isDateTime = function () {
   if (!this.length) return false
+  /* eslint-disable */
   var patts = [
-    '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$', // yyyy-MM-dd HH:mm
-    '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$' // yyyy-MM-dd HH:mm:ss
+    '^[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}$', // yyyy-MM-dd HH:mm
+    '^[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}$' // yyyy-MM-dd HH:mm:ss
   ]
+  /* eslint-enable */
   for (var i in patts) {
     if (new RegExp(patts[i]).test(this)) return true
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance';
 
-export default class Range extends Component {
+export default class InputRange extends Component {
   static propTypes = {
     args: PropTypes.any,
     style: PropTypes.object,

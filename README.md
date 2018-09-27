@@ -1535,3 +1535,365 @@ const list = [
 
 <ImgUploader caption="上传照片" showUpload list={list} onChange={onChangeImg}/>
 ```
+
+
+## IndexBar
+索引栏, IndexBar组件默认fixed定位, 并在父组件中寻找data-indexbar-name属性的元素, 与indexs对应, 滑动或点击切换时, 修改父组件的scrollTop, 以达到滚动的效果
+### 属性
+```javascript
+<IndexBar
+  className={索引栏className string, 默认无, 基础'indexbar'}
+  style={索引栏style object, 默认无}
+  // indexs与父组件中所有data-indexbar-name元素对应即可
+  indexs={索引集合 array, 默认['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']}
+/>
+```
+### 示例
+```javascript
+import Container from 'seedsui-react/lib/Container';
+import IndexBar from 'seedsui-react/lib/IndexBar';
+<Container>
+  <ul>
+    <li data-indexbar-name="A">A</li>
+    <li>阿华</li>
+    <li>阿敏</li>
+    <li>阿全</li>
+    <li>阿达</li>
+    <li data-indexbar-name="B">B</li>
+    <li>白起</li>
+    <li>白旭</li>
+    <li>冰冰</li>
+    <li data-indexbar-name="C">C</li>
+    <li>曹操</li>
+    <li>曹鸣</li>
+    <li>曹捷</li>
+    <li>陈真</li>
+    <li>陈进</li>
+    <li>陈明</li>
+    <li>陈伟</li>
+    <li>陈文</li>
+    <li>陈晓</li>
+    <li>陈娟</li>
+    <li>成勇</li>
+    <li>成婷</li>
+    <li>成龙</li>
+    <li data-indexbar-name="D">D</li>
+    <li>大成子</li>
+    <li>大舅子</li>
+    <li>戴笠</li>
+    <li>戴坤</li>
+    <li>戴成虎</li>
+    <li>邓小平</li>
+    <li>邓稼先</li>
+    <li>邓文迪</li>
+    <li>邓等</li>
+    <li>狄仁杰</li>
+    <li>狄弟</li>
+    <li>董文华</li>
+    <li>董事</li>
+    <li data-indexbar-name="F">F</li>
+    <li>樊哙</li>
+    <li>樊心</li>
+    <li>冯晨晨</li>
+    <li>冯敬尧</li>
+    <li>冯成虎</li>
+    <li>冯小平</li>
+    <li>冯稼先</li>
+    <li>冯文迪</li>
+    <li>冯晨</li>
+    <li>福尔杰</li>
+    <li>福尔康</li>
+    <li>福文华</li>
+    <li>方文山</li>
+  </ul>
+  <IndexBar style={{top: '44px'}}/>
+</Container>
+```
+
+
+## IndexArea
+多行文本框, 默认高度见seedsui-variable.less中@input-area-height, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+## InputCity
+城市选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputCity
+  type={城市类型 string, 默认'area'} // 'area' | 'city'
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
+  onChange={值改变 func(value, option, args), 默认无}
+/>
+```
+
+## InputColor
+颜色选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+## InputDate
+日期选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputDate
+  type={日期类型 string, 默认'date'} // 'date | month | time | datetime'
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
+  onChange={值改变 func(value, option, args), 默认无}
+/>
+```
+
+## InputLocation
+定位框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+## InputNumber
+数字输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+## InputPassword
+密码输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+## InputPhone
+手机输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+
+## InputPicker
+选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputPicker
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
+  list={选择列表 array, 默认无}
+  onChange={值改变 func(value, option, args), 默认无}
+/>
+```
+### 示例
+```javascript
+import InputPicker from 'seedsui-react/lib/InputPicker';
+
+const list = [
+  {
+    key: '1',
+    value: '111'
+  },
+  {
+    key: '2',
+    value: '222'
+  },
+  {
+    key: '3',
+    value: '333'
+  }
+];
+
+onChangePicker = (value, option, args) => {
+  console.log(value, option, args);
+}
+
+<InputPicker value="222" list={list} onChange={this.onChangePicker}/>
+```
+
+## InputPre
+自增高输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+
+## InputRange
+范围选择框
+### 属性
+```javascript
+<InputRange
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无}
+  value={值 string | number, 默认'0'}
+  min={最小值 string | number, 默认'0'}
+  max={最小值 string | number, 默认'100'}
+  step={步进值 string | number, 默认'1'}
+  disabled={是否禁用 bool, 默认false}
+  onChange={值改变 func(value, args), 默认无}
+/>
+```
+### 示例
+```javascript
+import InputRange from 'seedsui-react/lib/InputRange';
+
+onChangeRange = (value, args) => {
+  console.log(value, args);
+}
+
+<InputRange onChange={this.onChangeRange}/>
+```
+
+
+
+## InputSafe
+安全验证框, 展现三个状态: 弱、中、强
+### 属性
+```javascript
+<InputSafe
+  style={容器style object, 默认无}
+  className={容器className string, 默认无}
+  value={值 string | number, 默认''}
+/>
+```
+### 示例
+```javascript
+import InputSafe from 'seedsui-react/lib/InputSafe';
+
+<InputSafe value="Zk001"/>
+```
+
+
+## InputSelect
+选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputSelect
+  multiple={是否允许多选 bool, 默认false}
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
+  list={选择列表 array, 默认无}
+  onChange={值改变 func(value, options, args), 默认无}
+/>
+```
+### 示例
+```javascript
+import InputSelect from 'seedsui-react/lib/InputSelect';
+
+const list = [
+  {
+    key: '1',
+    value: '111'
+  },
+  {
+    key: '2',
+    value: '222'
+  },
+  {
+    key: '3',
+    value: '333'
+  }
+];
+
+onChangeSelect = (value, options, args) => {
+  console.log(value, options, args);
+}
+
+<InputSelect value="222" list={list} onChange={this.onChangeSelect}/>
+```
+
+
+
+## InputText
+文本框, 很多组件继承自此组件, 拥有此组件的属性, 如: InputPhone、InputPre、InputArea等
+### 属性
+```javascript
+<InputText
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  type={类型 string, 默认'text'} // text | password
+  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
+  pre={是否启用自动扩充功能 bool, 默认无}
+  // 容器
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'attribute'}
+  onClick={点击容器 func(value, args), 默认无}
+    
+  // 文本框
+  name={文本框name string, 默认无}
+  maxLength={文本框最大输入长度 string, 默认无}
+  max={文本框最大值 string | number, 默认无} // 日期或者数字框专用
+  min={文本框最小值 string | number, 默认无} // 日期或者数字框专用
+  digits={文本框截取小数 string | number, 默认false} // 日期或者数字框专用
+  readOnly={文本是否只读 bool, 默认无}
+  disabled={文本是否禁用 bool, 默认无}
+
+  inputStyle={文本框style object, 默认无}
+  inputClassName={文本框className string, 默认无}
+  value={值 string | number, 默认''}
+  placeholder={占位符 string, 默认''}
+  onChange={值改变 func(value, args), 默认无}
+  onClickInput={点击文本框 func(value, args), 默认无}
+  onBlur={失去焦点 func(value, args), 默认无}
+  onFocus={获取焦点 func(value, args), 默认无}
+
+  // 左右图标
+  liconClassName={左图标className string, 默认无, 基础'color-placeholder'}
+  riconClassName={右图标className string, 默认无, 基础'color-placeholder'}
+  onClickLicon={点击左图标 func(value, args), 默认无}
+  onClickRicon={点击右图标 func(value, args), 默认无}
+
+  // 清除按钮
+  clearClassName={清除图标className string, 默认无} // 见Close组件
+  clear={清除 bool | func('', args), 默认无}
+
+  // 右侧内容
+  rcaption={右侧内容 string, 默认无}
+/>
+```
+### 示例
+```javascript
+import InputText from 'seedsui-react/lib/InputText';
+
+onChangeText = (value, args) => {
+  console.log(value, args);
+}
+
+<InputText onChange={this.onChangeText}/>
+```
+
+
+## InputVerify
+发送验证文本框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputVerify
+  sentCaption={发送验证码文字 string, 默认'发送验证码'}
+  sentDisabled={发送按钮是否禁用 bool, 默认无}
+  onClickSent={值改变 func(), 默认无}
+/>
+```
+### 示例
+```javascript
+import InputVerify from 'seedsui-react/lib/InputVerify';
+
+onChangeVali = (value, args) => {
+  console.log(value, args);
+}
+onClickSent = () => {
+  console.log('发送验证码');
+}
+<InputVerify clear onChange={this.onChangeVali} value={verifycode} placeholder="验证码" maxLength="6" onClickSent={this.onClickSent}/>
+```
+
+
+## Verify
+验证码控件, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<Verify
+  autoSent={是否自动发送 bool, 默认无}
+  url={请求url string, 默认'/login/sendLoginSmsVerifyCode.action'}
+  params={请求参数 object, 默认无}
+  sentDisabled={是否禁用发送验证码 bool, 默认无}
+  syncData={值改变 func('error', 'verifycode', {data: '发送成功后会有data', op: 'input输入中 | sms短信中 | resume恢复重新发送'}), 默认无}
+  beforeSent={点击发送 func() => bool, 默认无} // 如果返回false将不再发送验证码
+/>
+```
+### 示例
+```javascript
+import Verify from 'seedsui-react/lib/Verify';
+
+const VerifyStyle = {
+  backgroundColor: 'white',
+  padding: '0 12px',
+  borderRadius: '4px'
+}
+
+onValiChange = (error, value, data) => {
+  if (data.op === 'input') {
+    this.setState({
+      verifyCode: value
+    })
+  }
+}
+
+<Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
+```

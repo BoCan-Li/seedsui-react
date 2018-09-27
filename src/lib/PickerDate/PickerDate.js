@@ -58,7 +58,7 @@ export default class PickerDate extends Component {
     // 默认值
     if (type === 'date') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !defaultValue.isDate()) {
+      if (!defaultValue || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(defaultValue)) {
         if (onError) onError('请传入合法的日期');
         defaultValue = new Date().format('yyyy-MM-dd');
       }
@@ -91,7 +91,7 @@ export default class PickerDate extends Component {
       defaultMinute = timeValues[1]
     } else if (type === 'time') {
       // 如果不是合法的日期格式
-      if (!defaultValue.isTime()) {
+      if (!/^[0-9]{2}:[0-9]{2}$/.test(defaultValue)) {
         if (onError) onError('请传入合法的时间');
         defaultValue = new Date().format('hh:mm');
       }

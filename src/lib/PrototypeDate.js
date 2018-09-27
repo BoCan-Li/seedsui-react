@@ -428,11 +428,12 @@ window.Date.prototype.compareTime = function (date) {
   var date1 = new Date(this)
   date1.setYear(0)
   date1.setMonth(0, 0)
+  date1.setSeconds(0, 0)
   var date2 = new Date()
-  if (date.isTime) {
-    date2.setHours(date.split(':')[0], date.split(':')[1], date.split(':')[2] || 0, 0)
-  } else if (date instanceof Date) {
+  if (date instanceof Date) {
     date2 = date
+  } else if (/^[0-9]{2}:[0-9]{2}$/.test(date)) {
+    date2.setHours(date.split(':')[0], date.split(':')[1], 0, 0)
   } else {
     console.log('请传入hh:mm的字符串,或者一个Date对象')
     return false
@@ -627,4 +628,40 @@ window.Date.prototype.getPrevDate = function (count) { // 获得前几个天日�
   var date = new Date(this)
   date.prevDate()
   return date
+}
+
+// 字符串转成日期对象
+window.Date.parse = function (str, type) {
+  var date = new Date()
+  if (type === 'time') {
+    if (/^[0-9]{2}:[0-9]{2}$/.test(str)) {
+      date.setHours(str.split(':')[0], str.split(':')[1], 0)
+    }
+    return date
+  }
+  if (type === 'date') {
+    if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(str)) {
+      date.setYear(str.split('-')[0])
+      date.setMonth(str.split('-')[1], str.split('-')[2])
+    }
+    return date
+  }
+  if (type === 'month') {
+    if (/^[0-9]{4}-[0-9]{2}$/.test(str)) {
+      date.setYear(str.split('-')[0])
+      date.setMonth(str.split('-')[1])
+    }
+    return date
+  }
+  if (type === 'datetime') {
+    if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}\s[0-9]{2}:[0-9]{2}$/.test(str)) { // eslint-disable-line
+      var strArr = str.split(' ')
+      var str1 = strArr[0]
+      var str2 = strArr[1]
+      date.setYear(str1.split('-')[0])
+      date.setMonth(str1.split('-')[1], str1.split('-')[2])
+      date.setHours(str2.split(':')[0], str2.split(':')[1], 0)
+    }
+    return date
+  }
 }

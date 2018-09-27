@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import SelectPicker from './../SelectPicker';
 
 export default class InputSelect extends Component {
+  static propTypes = {
+    list: PropTypes.array, // [{key: '', value: ''}]
+    multiple: PropTypes.bool,
+    pickerStyle: PropTypes.bool,
+    pickerClassName: PropTypes.string
+  }
+  static defaultProps = {
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -51,13 +60,14 @@ export default class InputSelect extends Component {
     });
   }
   render() {
+    const {list, multiple, pickerStyle, pickerClassName, ...others} = this.props;
     return [
-      <InputText key="input" ref="$ComponentInputText" {...this.props} readOnly onClick={this.onClick}/>,
+      <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker
-        list={this.props.list} value={this.$input ? this.$input.value : this.props.value} key="picker"
+        list={list} value={this.$input ? this.$input.value : this.props.value} key="picker"
         show={this.state.show}
-        multiple={this.props.multiple}
-        style={this.props.pickerStyle} className={this.props.pickerClassName}
+        multiple={multiple}
+        style={pickerStyle} className={pickerClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
     ];

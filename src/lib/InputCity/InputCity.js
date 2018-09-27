@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerCity from './../PickerCity';
 
-export default class InputPicker extends Component {
+export default class InputCity extends Component {
+  static propTypes = {
+    type: PropTypes.string, // 'area' | 'city'
+    pickerStyle: PropTypes.bool,
+    pickerClassName: PropTypes.string
+  }
+  static defaultProps = {
+    type: 'area'
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -47,13 +56,14 @@ export default class InputPicker extends Component {
     });
   }
   render() {
+    const {type, pickerStyle, pickerClassName, ...others} = this.props;
     return [
-      <InputText key="input" ref="$ComponentInputText" {...this.props} type="text" readOnly onClick={this.onClick}/>,
+      <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerCity
-        type={this.props.type || 'area'} // 'area' | 'city'
+        type={type}
         value={this.$input ? this.$input.value : this.props.value} key="pickercity"
         show={this.state.show}
-        style={this.props.pickerStyle} className={this.props.pickerClassName}
+        style={pickerStyle} className={pickerClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
     ];

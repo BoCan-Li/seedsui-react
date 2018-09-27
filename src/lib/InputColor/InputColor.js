@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InputText from './../InputText';
 
-export default class InputPhone extends Component {
+export default class InputColor extends Component {
   constructor(props) {
     super(props);
   }
