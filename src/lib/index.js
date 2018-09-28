@@ -52,6 +52,7 @@ import InputPre from './InputPre';
 import InputRange from './InputRange';  // 不常用
 import InputSafe from './InputSafe'; // 不常用
 import InputSelect from './InputSelect';
+import InputStar from './InputStar';
 import InputText from './InputText';
 import InputVerify from './InputVerify';
 import Verify from './Verify';
@@ -84,7 +85,6 @@ import SearchBarPointer from './SearchBarPointer';
 import SearchBoard from './SearchBoard';
 import SelectPicker from './SelectPicker';
 import Star from './Star';
-import StarGroup from './StarGroup';
 import Stencil from './Stencil'; // 不常用
 import Sticker from './Sticker'; // 不常用
 import Tabbar from './Tabbar';
@@ -165,6 +165,7 @@ export {
   InputRange, // 不常用
   InputSafe, // 不常用
   InputSelect,
+  InputStar,
   InputText,
   InputVerify,
   Verify,
@@ -197,7 +198,6 @@ export {
   SearchBoard,
   SelectPicker,
   Star,
-  StarGroup,
   Stencil, // 不常用
   Sticker, // 不常用
   Tabbar,

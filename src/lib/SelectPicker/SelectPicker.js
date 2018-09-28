@@ -13,7 +13,6 @@ export default class SelectPicker extends Component {
     slotClassName: PropTypes.string,
     value: PropTypes.string,
     show: PropTypes.bool,
-    onChange: PropTypes.func,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
     onClickSubmit: PropTypes.func,

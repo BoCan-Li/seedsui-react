@@ -79,7 +79,7 @@ import Chat from 'seedsui-react/lib/Chat';
 @import "components.less";
 ```
 
-# 组件
+# Component
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
 - [Article](#article) 文章
@@ -126,9 +126,49 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputRange](#inputrange) 范围选择框
 - [InputSafe](#inputsafe) 安全强度检验框
 - [InputSelect](#inputselect) 选择框
+- [InputStar](#inputstar) 评分框
 - [InputText](#inputtext) 文本框
 - [InputVerify](#inputverify) 验证码文本框
 - [Verify](#verify) 验证码文本框
+- [Legend](#legend) 标题
+- [List](#list) 列表
+- [ListPull](#listpull) 可推动列表
+- [Loading](#loading) 加载中
+- [Mark](#mark) 标记
+- [Marquee](#marquee) 跑马灯
+- [MenuTiled](#menutiled) 平铺弹出菜单
+- [MenuTree](#menutree) 侧边树形菜单
+- [NoNetwork](#nonetwork) 无网络
+- [Notice](#notice) 公告
+- [NumBox](#numbox) 数字加减框
+- [NumBoxPop](#numboxpop) 数字加减弹出框
+- [NumBoxPopPointer](#numboxpoppointer) 数字加减指针
+- [OnOff](#onoff) 开关
+- [Page](#page) 页面
+- [PagePull](#pagepull) 可推动页面
+- [Peg](#peg) 小竖条
+- [Picker](#picker) 滚动选择弹框
+- [PickerCity](#pickercity) 城市选择弹框
+- [PickerDate](#pickerdate) 日期选择弹框
+- [Popover](#popover) 箭头弹框
+- [Price](#price) 价格
+- [Progress](#progress) 进度条
+- [Radio](#radio) 单选框
+- [SearchBar](#searchbar) 搜索框
+- [SearchBarPointer](#searchbarpointer) 搜索指针
+- [SearchBoard](#searchboard) 搜索面板
+- [SelectPicker](#selectpicker) 选择弹框
+- [Star](#star) 星星
+- [Stencil](#stencil) 加载模板
+- [Sticker](#sticker) 标签贴
+- [Tabbar](#tabbar) 页签
+- [Ticket](#ticket) 票券
+- [Timeline](#timeline) 时间轴
+- [Timepart](#timepart) 时间段
+- [Titlebar](#titlebar) 标题栏
+- [Toast](#toast) 提示弹框
+- [Tree](#tree) 树结构
+- [Weather](#weather) 天气
 
 ## Actionsheet
 卡片框
@@ -905,13 +945,13 @@ import Chat from 'seedsui-react/lib/Chat';
 
 
 ## Checkbox
-复选框
+[复选框](https://unpkg.com/seedsui-react/src/lib/Checkbox/Checkbox.js)
 ### 属性
 ```javascript
 <Checkbox
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'chat'}
+  className={容器className string, 默认无, 基础'checkbox-box'}
   onClick={点击复选框 func(checked, args)}
 
   name={复选框name string, 默认无}
@@ -1662,6 +1702,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   onClick={点击 func(value,args), 默认无}
   onChange={值改变 func(value,args), 默认无}
 />
+```
 
 ## InputNumber
 数字输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
@@ -1674,7 +1715,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 
 
 ## InputPicker
-选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[Picker 滚动选择弹框](#picker)组件
 ### 属性
 ```javascript
 <InputPicker
@@ -1762,7 +1803,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 
 
 ## InputSelect
-选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[SelectPicker 选择弹框](#selectpicker)组件
 ### 属性
 ```javascript
 <InputSelect
@@ -1798,6 +1839,48 @@ onChangeSelect = (value, options, args) => {
 
 <InputSelect value="222" list={list} onChange={this.onChangeSelect}/>
 ```
+[返回目录](#component)
+
+
+
+
+
+## InputStar
+[评分框](https://unpkg.com/seedsui-react/src/lib/InputStar/InputStar.js)
+### 属性
+```javascript
+<InputStar
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  min={最小值 number, 默认0}
+  max={最大值 number, 默认5}
+  value={值 number, 默认0}
+  onChange={值改变 func(value), 默认无}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'input-star'}
+/>
+```
+### 示例
+```javascript
+import InputStar from '../lib/InputStar';
+
+this.state = {
+  value: 0
+}
+
+onChange = (value) => {
+  this.setState({
+    value
+  })
+}
+
+<InputStar
+  min={2}
+  value={this.state.value}
+  onChange={this.onChange}
+/>
+```
+[返回目录](#component)
+
 
 
 
@@ -1916,6 +1999,7 @@ onValiChange = (error, value, data) => {
 
 <Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
 ```
+[返回目录](#component)
 
 
 
@@ -1935,6 +2019,7 @@ import Legend from 'seedsui-react/lib/Legend';
 
 <Legend>标题</Legend>
 ```
+[返回目录](#component)
 
 
 
@@ -1998,6 +2083,7 @@ import List from 'seedsui-react/lib/List';
 
 <List onClick={() => {Bridge.tel('02568736873')}} caption="技术支持" rcaption="02568736873" className="list-li-oneline" rcaptionClassName="color-placeholder" liconClassName="icon-support" riconClassName="shape-arrow-right sm" style={{padding: '10px 12px'}}/>
 ```
+[返回目录](#component)
 
 
 
@@ -2066,7 +2152,7 @@ onClickListPull = (item, index, btn) => {
 
 <ListPull list={this.state.listpull} onClick={this.onClickListPull} onShowedLeft={this.onShowedLeft}/>
 ```
-
+[返回目录](#component)
 
 
 ## Loading
@@ -2094,6 +2180,8 @@ import Loading from 'seedsui-react/lib/Loading';
 
 <Loading maskStyle={{top: '44px'}}/>
 ```
+[返回目录](#component)
+
 
 
 ## Mark
@@ -2113,6 +2201,7 @@ import Mark from 'seedsui-react/lib/Mark';
 
 <Mark className="success">进行中</Mark>
 ```
+[返回目录](#component)
 
 
 
@@ -2153,6 +2242,7 @@ const list = [
   contentClassName="flex flex-center nowrap2"
 />
 ```
+[返回目录](#component)
 
 
 
@@ -2186,6 +2276,7 @@ onClickMenu = (item) => {
 }
 <MenuTiled list={menus} activeId={activeMenuId} onClick={this.onClickMenu}/>
 ```
+[返回目录](#component)
 
 
 
@@ -2230,6 +2321,7 @@ const Container = {
 };
 <MenuTree ref="$menutree" list={list} activeId={activeId} onClick={this.onClickMenu} style={Container}/>
 ```
+[返回目录](#component)
 
 
 
@@ -2248,6 +2340,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
 <NoNetwork/>
 ```
+[返回目录](#component)
 
 
 
@@ -2279,6 +2372,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
 <Notice iconClassName="icon-no-network" caption="网络状态不佳" sndcaption="请尝试开关飞行模式后再试"/>
 ```
+[返回目录](#component)
 
 
 
@@ -2330,6 +2424,7 @@ onChangeNum = (val, args) => {
   args={['1', '2']}
 />
 ```
+[返回目录](#component)
 
 
 
@@ -2374,11 +2469,12 @@ onClickSubmit = (count) => {
   onClickSubmit={this.onClickSubmit}
 />
 ```
+[返回目录](#component)
 
 
 
 ## NumBoxPopPointer
-数字加减框弹出框, 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
+数字加减指针, 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
 ### 属性
 ```javascript
 <NumBoxPopPointer
@@ -2415,6 +2511,7 @@ onChangeCount = (value) => {
   onChange={this.onChangeCount}
 />
 ```
+[返回目录](#component)
 
 
 ## OnOff
@@ -2453,6 +2550,7 @@ const {checked} = this.props;
   }
 />
 ```
+[返回目录](#component)
 
 
 ## Page
@@ -2483,6 +2581,7 @@ import Container from 'seedsui-react/lib/Container';
   </Container>
 </Page>
 ```
+[返回目录](#component)
 
 
 ## PagePull
@@ -2521,7 +2620,7 @@ import Container from 'seedsui-react/lib/Container';
   </Container>
 </PagePull>
 ```
-
+[返回目录](#component)
 
 
 ## Peg
@@ -2539,6 +2638,7 @@ import Peg from 'seedsui-react/lib/Peg';
 
 <Peg/>
 ```
+[返回目录](#component)
 
 
 ## Picker
@@ -2589,6 +2689,7 @@ onClickMask = () => {
   onClickMask={this.onClickMask}
 />
 ```
+[返回目录](#component)
 
 
 ## PickerCity
@@ -2637,6 +2738,8 @@ onClickMask = () => {
   onClickMask={this.onClickMask}
 />
 ```
+[返回目录](#component)
+
 
 
 ## PickerDate
@@ -2686,3 +2789,305 @@ onClickMask = () => {
   onClickMask={this.onClickMask}
 />
 ```
+[返回目录](#component)
+
+
+
+## Popover
+箭头弹框
+### 属性
+```javascript
+<Popover
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  portal={传送dom object, 默认document.getElementById('root')}
+  show={*显隐 bool, 默认false}
+
+  animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
+  onClickMask={点击遮罩 func(args), 默认无}
+
+  className={容器className string, 默认无, 基础'popover'}
+  style={容器style object, 默认无}
+>
+内容内容
+</Popover>
+```
+### 示例
+```javascript
+import Popover from 'seedsui-react/lib/Popover';
+
+this.state = {
+  show: false
+}
+
+onHide = () => {
+  this.setState({
+    show: false
+  })
+}
+
+<Popover show={this.state.show} className="top-left" style={{left: '10px', top: '44px'}} onClickMask={this.onHide}>
+  <List caption="本月" className="border-b"/>
+  <List caption="上月" className="border-b"/>
+  <List caption="自定义时间"/>
+</Popover>
+```
+[返回目录](#component)
+
+
+
+## Price
+[价格](https://unpkg.com/seedsui-react/src/lib/Price/Price.js)
+### 属性
+```javascript
+<Price
+  showSymbol={是否显示货币符号 bool, 默认true}
+  showThousandth={是否显示千分位 bool, 默认true}
+  className={容器className string, 默认'capitalize', 基础'price'} // normal | capitalize | capitalize lg
+  style={容器style object, 默认无}
+  price={价格数值 string | number, 默认无} // 如果不是数字的话, 将原样显示
+  unit={单位 string, 默认无}
+  digitsFixed={固定小数 bool, 默认true} // 例如100仍然显示100.00
+  digits={小数位控制 bool | number, 默认false}
+/>
+```
+### 示例
+```javascript
+import Price from 'seedsui-react/lib/Price';
+
+<Price price={100} digits={2} digitsFixed/>
+```
+[返回目录](#component)
+
+
+## Progress
+[进度条](https://unpkg.com/seedsui-react/src/lib/Progress/Progress.js)
+### 属性
+```javascript
+<Progress
+  className={容器className string, 默认无, 基础'progress'}
+  style={容器style object, 默认无}
+  barStyle={进度条style object, 默认无}
+  barClassName={进度条className string, 默认无, 基础'progress-bar'}
+
+  percentage={百分比 number, 默认无} // 百分比与max min value, 只要一种就行了
+  max={最大值 number, 默认100}
+  min={最小值 number, 默认0}
+  value={值 string, 默认'0'}
+  showPercentage={是否显示百分比文字 bool, 默认true} // 若为false则不显示文字
+/>
+```
+### 示例
+```javascript
+import Progress from 'seedsui-react/lib/Progress';
+
+<Progress percentage={10}/>
+```
+[返回目录](#component)
+
+
+## Radio
+[单选框](https://unpkg.com/seedsui-react/src/lib/Radio/Radio.js)
+### 属性
+```javascript
+<Radio
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'radio-box'}
+  onClick={点击复选框 func(checked, args)}
+
+  name={复选框name string, 默认无}
+  value={复选框value string, 默认无}
+  checked={是否选中 bool, 默认false}
+  disabled={是否禁用 bool, 默认false}
+
+  caption={复选框标题 string, 默认无}
+  captionClassName={复选框标题className string, 默认无, 基础'radio-caption'}
+  captionStyle={复选框标题style object, 默认无}
+/>
+```
+### 示例
+```javascript
+import Radio from 'seedsui-react/lib/Radio';
+
+onClick = (checked, args) => {
+  console.log(checked, args)
+}
+
+<Radio onClick={this.onClick}/>
+```
+[返回目录](#component)
+
+
+
+## SearchBar
+[搜索栏](https://unpkg.com/seedsui-react/src/lib/SearchBar/SearchBar.js)
+### 属性
+```javascript
+<SearchBar
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'searchbar'}
+  placeholder={占位文字 string, 默认无}
+  value={值 string, 默认无}
+  onClear={清空 func(), 默认无}
+  onChange={值改变 func(value), 默认无}
+  onSubmit={值改变 func(value), 默认无}
+  onClickCancel={点击取消 func(e), 默认无}
+/>
+```
+### 示例
+```javascript
+import SearchBar from 'seedsui-react/lib/SearchBar';
+
+searchOrders = (value) => {
+  console.log(value)
+}
+
+<SearchBar
+  placeholder={'商品名称/单据编号'}
+  value={this.state.searchValue}
+  className="border-b"
+  onSubmit={this.searchOrders}
+  style={{marginLeft: '12px'}}
+/>
+```
+[返回目录](#component)
+
+
+
+## SearchBarPointer
+[搜索指针](https://unpkg.com/seedsui-react/src/lib/SearchBarPointer/SearchBarPointer.js)
+### 属性
+```javascript
+<SearchBarPointer
+  className={容器className string, 默认无, 基础'searchbar'}
+  style={容器style object, 默认无}
+
+  inputClassName={文本框容器className string, 默认无, 基础'searchbar-form'}
+  inputStyle={文本框容器style object, 默认无}
+  placeholder={占位符 string, 默认无}
+
+  onClick={点击容器 func(), 默认无}
+/>
+```
+### 示例
+```javascript
+import SearchBarPointer from 'seedsui-react/lib/SearchBarPointer';
+
+goSearch = () => {
+  history.push('/search');
+}
+
+<SearchBarPointer
+  onClick={this.goSearch}
+  placeholder="输入名称查找商品"
+  style={{margin: '0 12px'}}
+/>
+```
+[返回目录](#component)
+
+
+
+## SearchBoard
+[搜索面板](https://unpkg.com/seedsui-react/src/lib/SearchBoard/SearchBoard.js)
+### 属性
+```javascript
+<SearchBoard
+  style={容器style object, 默认无}
+  className={容器className string, 默认'border-b', 基础'searchboard'}
+  dbKey={搜索历史存储到db中的key string, 默认'app_search_history'}
+  show={*显隐 bool, 默认true}
+  showValidTags={如果没有历史记录是否隐藏面板 bool, 默认true}
+  onClick={点击标签 func(item, index), 默认无}
+  onClear={点击清除 func(), 默认无}
+  expandCaption={扩展标题 string, 默认无}
+  expandTags={扩展标签 array, 默认无} // 格式 [{value: 'xx'}]
+  onClickExpand={点击扩展标签 func(item, index), 默认无}
+>
+</SearchBoard>
+```
+### 示例
+```javascript
+import SearchBoard from 'seedsui-react/lib/SearchBoard';
+
+this.state = {
+  searchValue: ''
+}
+
+searchGoods = (value) => {
+  this.setState({searchValue: value});
+  if (this.$historySearch) this.$historySearch.add({key: value, value: value});
+  // 加载数据
+}
+
+<SearchBar
+  placeholder={'商品名称/单据编号'}
+  value={this.state.searchValue}
+  className="border-b"
+  onSubmit={this.searchGoods}
+  style={{marginLeft: '12px'}}
+/>
+
+<SearchBoard
+  show={goods.length === 0 && !this.state.searchValue}
+  ref={(el) => {this.$historySearch = el;}}
+  dbKey="app_history_search_goods"
+  onClick={(item) => {this.searchGoods(item.value)}}
+/>
+```
+[返回目录](#component)
+
+
+
+## SelectPicker
+[选择弹框](https://unpkg.com/seedsui-react/src/lib/SelectPicker/SelectPicker.js)
+### 属性
+```javascript
+<SelectPicker
+  portal={传送dom object, 默认document.getElementById('root')}
+  multiple={是否允许多选 bool, 默认false}
+  list={选择列表 array, 默认无} // 格式 [key: 'xx', value: 'xx']
+  className={容器className string, 默认无, 基础'selectpicker'}
+  style={容器style object, 默认无}
+  slotClassName={一槽className string, 默认'text-center'}
+  value={值 string, 默认无}
+  show={*显隐 bool, 默认false}
+  onClickMask={点击遮罩 func(s), 默认无}
+  onClickCancel={点击取消按钮 func(s), 默认无}
+  onClickSubmit={点击确定按钮 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import SelectPicker from 'seedsui-react/lib/SelectPicker';
+
+onClickSubmit = (e) => {
+  const value = e.activeOptions[0].value;
+  console.log(value);
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickCancel = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickMask = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+
+<SelectPicker
+  value=""
+  show={this.state.show}
+  onClickSubmit={this.onClickSubmit}
+  onClickCancel={this.onClickCancel}
+  onClickMask={this.onClickMask}
+/>
+```
+[返回目录](#component)

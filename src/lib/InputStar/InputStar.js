@@ -4,16 +4,17 @@ import Star from './../Star';
 
 export default class StarGroup extends Component {
   static propTypes = {
+    args: PropTypes.any,
     min: PropTypes.number,
     max: PropTypes.number,
-    star: PropTypes.number,
+    value: PropTypes.number,
     onChange: PropTypes.func,
     className: PropTypes.string,
     style: PropTypes.object,
-    // args: PropTypes.array
   }
   static defaultProps = {
     args: null,
+    value: 0,
     min: 0,
     max: 5
   }
@@ -46,15 +47,17 @@ export default class StarGroup extends Component {
     if (onChange) onChange(num, this.getArgs(e));
   }
   render() {
-    const {max, star, className, style} = this.props;
+    const {max, min, value, className, style} = this.props;
     const stars = [];
     for (var i = 1; i <= max; i++) {
       stars.push(i);
     }
+    let current = value
+    if (current < min) current = min
     return (
-      <div className={`stargroup${className ? ' ' + className : ''}`} style={style}>
-        {stars.map((num) => (
-          <Star onClick={(e) => {this.onChange(e, num);}} key={num} active={num <= star ? true : false}/>
+      <div className={`input-star${className ? ' ' + className : ''}`} style={style}>
+        {stars.map((index) => (
+          <Star onClick={(e) => {this.onChange(e, index);}} key={index} className={index <= current ? 'active' : ''}/>
         ))}
       </div>
     );

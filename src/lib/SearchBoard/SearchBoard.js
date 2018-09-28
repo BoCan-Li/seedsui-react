@@ -8,7 +8,7 @@ export default class SearchBoard extends Component {
     className: PropTypes.string,
     dbKey: PropTypes.string, // 存储到db中的key
     show: PropTypes.bool,
-    showValidTags: PropTypes.bool,
+    showValidTags: PropTypes.bool, // 如果没有历史记录是否隐藏面板
     onClick: PropTypes.func,
     onClear: PropTypes.func,
     expandCaption: PropTypes.string, // 扩展标题
