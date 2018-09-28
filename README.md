@@ -171,7 +171,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Weather](#weather) 天气
 
 ## Actionsheet
-卡片框
+[卡片框](#https://unpkg.com/seedsui-react/src/lib/Actionsheet/Actionsheet.js)
 ### 属性
 ```javascript
 <Actionsheet
@@ -215,10 +215,11 @@ onClickActionsheet = (item, index) => {
   onClickCancel={this.hideActionsheet}
   onClickMask={this.hideActionsheet}/>
 ```
+[返回目录](#component)
 
 
 ## Alert
-对话框
+[对话框](#https://unpkg.com/seedsui-react/src/lib/Alert/Alert.js)
 ### 建议
 Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api直接调用:
 * alert框:Bridge.showAlert(msg)代替
@@ -278,10 +279,12 @@ import Alert from 'seedsui-react/lib/Alert';
   提示内容
 </Alert>
 ```
+[返回目录](#component)
+
 
 
 ## Article
-文章
+[文章](#https://unpkg.com/seedsui-react/src/lib/Article/Article.js)
 ### 属性
 ```javascript
 <Article
@@ -309,9 +312,12 @@ import Article from 'seedsui-react/lib/Article';
   paragraphs={['段落1', '段落2']}
 />
 ```
+[返回目录](#component)
+
+
 
 ## Attribute
-属性
+[属性](#https://unpkg.com/seedsui-react/src/lib/Attribute/Attribute.js)
 ### 属性
 ```javascript
 <Attribute
@@ -348,9 +354,12 @@ import Attribute from 'seedsui-react/lib/Attribute';
   <InputText placeholder="点击输入" valueBindProp value={receive_name} onChange={nameChange}/>
 </Attribute>
 ```
+[返回目录](#component)
+
+
 
 ## Attributes
-属性组合
+[属性组合](#https://unpkg.com/seedsui-react/src/lib/Attributes/Attributes.js)
 ### 属性
 ```javascript
 <Attributes
@@ -411,9 +420,12 @@ import Attributes from 'seedsui-react/lib/Attribute';
   <span style={{position: 'absolute', top: '10px', right: '10px'}} className="color-sub">状态</span>
 </Attributes>
 ```
+[返回目录](#component)
+
+
 
 ## Badge
-徽章
+[徽章](#https://unpkg.com/seedsui-react/src/lib/Badge/Badge.js)
 ### 属性
 ```javascript
 <Badge
@@ -438,9 +450,13 @@ const BadgeStyle = {
   {cartCount > 0 && <Badge style={BadgeStyle}>{cartCount}</Badge>}
 </Icon>
 ```
+[返回目录](#component)
+
+
+
 
 ## BiClock
-时钟
+[时钟](#https://unpkg.com/seedsui-react/src/lib/BiClock/BiClock.js)
 ### 属性
 ```javascript
 <BiClock
@@ -460,10 +476,12 @@ import BiClock from 'seedsui-react/lib/BiClock';
 
 <BiClock time="11:30"/>
 ```
+[返回目录](#component)
+
 
 
 ## BiDoughnut
-环形图
+[环形图](#https://unpkg.com/seedsui-react/src/lib/BiDoughnut/BiDoughnut.js)
 ### 属性
 ```javascript
 <BiDoughnut
@@ -500,10 +518,13 @@ import BiDoughnut from 'seedsui-react/lib/BiDoughnut';
   已取消
 </BiDoughnut>
 ```
+[返回目录](#component)
+
+
 
 
 ## BiGauge
-仪表盘
+[仪表盘](#https://unpkg.com/seedsui-react/src/lib/BiGauge/BiGauge.js)
 ### 属性
 ```javascript
 <BiGauge
@@ -527,10 +548,14 @@ import BiGauge from 'seedsui-react/lib/BiGauge';
   15
 </BiGauge>
 ```
+[返回目录](#component)
+
+
 
 
 ## Bridge
-桥接, 现支持四个平台的桥接适配, 浏览器、订货、外勤、微信客户端
+[桥接](#https://unpkg.com/seedsui-react/src/lib/Bridge/index.js)
+, 现支持四个平台的桥接适配, 浏览器、订货、外勤、微信客户端
 ### 对象
 ```javascript
 Bridge:{
@@ -778,10 +803,13 @@ Bridge.showToast('提交成功', {
   }
 });
 ```
+[返回目录](#component)
+
+
 
 
 ## Button
-按钮
+[按钮](#https://unpkg.com/seedsui-react/src/lib/Button/Button.js)
 ### 属性
 ```javascript
 <Button
@@ -801,10 +829,13 @@ import Button from 'seedsui-react/lib/Button';
 
 <Button className="lg">提交</Button>
 ```
+[返回目录](#component)
+
+
 
 
 ## Calendar
-日历
+[日历](#https://unpkg.com/seedsui-react/src/lib/Calendar/Calendar.js)
 ### 属性
 ```javascript
 <Calendar
@@ -835,10 +866,13 @@ onClickCalendar = (date) => {
 
 <Calendar onChange={this.onChangeCalendar} onClick={this.onClickCalendar}/>
 ```
+[返回目录](#component)
+
+
 
 
 ## Card
-卡片
+[卡片](#https://unpkg.com/seedsui-react/src/lib/Card/Card.js)
 ### 属性
 ```javascript
 <Card
@@ -858,10 +892,13 @@ import Card from 'seedsui-react/lib/Card';
 卡片内容
 </Card>
 ```
+[返回目录](#component)
+
+
 
 
 ## Carrousel
-轮播
+[轮播](#https://unpkg.com/seedsui-react/src/lib/Carrousel/Carrousel.js)
 ### 属性
 ```javascript
 <Carrousel
@@ -904,10 +941,13 @@ onCarrouselChange = (e) => {
 // 轮播图
 <Carrousel list={imgsList} style={{height: document.getElementById('root').clientWidth + 'px'}} pagination loop/>
 ```
+[返回目录](#component)
+
+
 
 
 ## Chat
-聊天框
+[聊天框](#https://unpkg.com/seedsui-react/src/lib/Chat/Chat.js)
 ### 属性
 ```javascript
 <Chat
@@ -942,6 +982,9 @@ import Chat from 'seedsui-react/lib/Chat';
 内容
 </Chat>
 ```
+[返回目录](#component)
+
+
 
 
 ## Checkbox
@@ -975,10 +1018,13 @@ onClick = (checked) => {
 const {checked} = this.props;
 <Checkbox caption="全选" checked={checked} onClick={this.onClick}/>
 ```
+[返回目录](#component)
+
+
 
 
 ## Close
-关闭删除图标
+[关闭删除图标](#https://unpkg.com/seedsui-react/src/lib/Close/Close.js)
 ### 属性
 ```javascript
 <Close
@@ -993,10 +1039,14 @@ import Close from 'seedsui-react/lib/Close';
 
 <Close onClick={this.onClear} className="cancel"/>
 ```
+[返回目录](#component)
+
+
 
 
 ## Container
-主体内容, 通常与Page、Header一起使用, 位于Header下面的位置
+[主体内容](#https://unpkg.com/seedsui-react/src/lib/Container/Container.js)
+, 通常与Page、Header一起使用, 位于Header下面的位置
 ### 属性
 ```javascript
 <Container
@@ -1022,10 +1072,13 @@ import Container from 'seedsui-react/lib/Container';
   </Container>
 </Page>
 ```
+[返回目录](#component)
+
+
 
 
 ## Counter
-计数器
+[计数器](#https://unpkg.com/seedsui-react/src/lib/Counter/Counter.js)
 ### 属性
 ```javascript
 <Counter
@@ -1053,10 +1106,13 @@ onClick = () => {
 
 <Counter to={500} autoplay={false} ref="$counter"/>
 ```
+[返回目录](#component)
+
+
 
 
 ## Dialog
-弹出框
+[弹出框](#https://unpkg.com/seedsui-react/src/lib/Dialog/Dialog.js)
 ### 属性
 ```javascript
 <Dialog
@@ -1087,11 +1143,13 @@ import Dialog from 'seedsui-react/lib/Dialog';
 弹出框内容
 </Dialog>
 ```
+[返回目录](#component)
+
 
 
 
 ## Dot
-小圆点
+[小圆点](#https://unpkg.com/seedsui-react/src/lib/Dot/Dot.js)
 ### 属性
 ```javascript
 <Dot
@@ -1107,11 +1165,13 @@ import Dot from 'seedsui-react/lib/Dot';
 
 <Dot size={8}/>
 ```
+[返回目录](#component)
+
 
 
 
 ## Dragrefresh
-下拉刷新
+[下拉刷新](#https://unpkg.com/seedsui-react/src/lib/Dragrefresh/Dragrefresh.js)
 ### 属性
 ```javascript
 <Dragrefresh
@@ -1177,11 +1237,13 @@ loadData = (isNext) => {
 内容内容
 </Dragrefresh>
 ```
+[返回目录](#component)
+
 
 
 
 ## Dropdown
-下拉菜单
+[下拉菜单](#https://unpkg.com/seedsui-react/src/lib/Dropdown/Dropdown.js)
 ### 属性
 ```javascript
 <Dropdown
@@ -1210,11 +1272,13 @@ const dropdownList = [
 ]
 <Dropdown portal={this.state.$page} list={dropdownList} onChange={this.onChangeDropdown}/>
 ```
+[返回目录](#component)
+
 
 
 
 ## Emoji
-表情弹出输入框
+[表情弹出输入框](#https://unpkg.com/seedsui-react/src/lib/Emoji/Emoji.js)
 ### 属性
 ```javascript
 <Emoji
@@ -1244,11 +1308,14 @@ import Emoji from 'seedsui-react/lib/Emoji';
 
 <Emoji show={this.state.showEmoji}/>
 ```
+[返回目录](#component)
+
 
 
 
 ## Footer
-底部内容, 通常与Page、Header、Container一起使用
+[底部内容](#https://unpkg.com/seedsui-react/src/lib/Footer/Footer.js)
+, 通常与Page、Header、Container一起使用
 ### 属性
 ```javascript
 <Footer
@@ -1278,11 +1345,13 @@ import Container from 'seedsui-react/lib/Container';
   </Footer>
 </Page>
 ```
+[返回目录](#component)
+
 
 
 
 ## Grid
-栅格
+[栅格](#https://unpkg.com/seedsui-react/src/lib/Grid/Grid.js)
 ### 属性
 ```javascript
 <Grid
@@ -1368,10 +1437,14 @@ const products = [
   sndcaptionStyle={{height: '18px', width: '100px'}}
 />
 ```
+[返回目录](#component)
+
+
+
 
 
 ## Group
-分组
+[分组](#https://unpkg.com/seedsui-react/src/lib/Group/Group.js)
 ### 属性
 ```javascript
 <Group
@@ -1394,7 +1467,7 @@ import Group from 'seedsui-react/lib/Group';
 
 
 ## Handsign
-签名
+[签名](#https://unpkg.com/seedsui-react/src/lib/Handsign/Handsign.js)
 ### 属性
 ```javascript
 <Handsign
@@ -1421,11 +1494,14 @@ save = () => {
 
 <Handsign ref={(el) => {this.$handsign = el;}} width={window.innerWidth} strokeStyle="#c72a1d" height={window.innerHeight - 88} style={{marginTop: '44px'}}/>
 ```
+[返回目录](#component)
+
 
 
 
 ## Header
-底部内容, 通常与Page、Container一起使用
+[头部内容](#https://unpkg.com/seedsui-react/src/lib/Header/Header.js)
+, 通常与Page、Container一起使用
 ### 属性
 ```javascript
 <Header
@@ -1455,10 +1531,13 @@ import Container from 'seedsui-react/lib/Container';
   </Footer>
 </Page>
 ```
+[返回目录](#component)
+
+
 
 
 ## Icon
-图标
+[图标](#https://unpkg.com/seedsui-react/src/lib/Icon/Icon.js)
 ### 属性
 ```javascript
 <Icon
@@ -1495,10 +1574,14 @@ import Icon from 'seedsui-react/lib/Icon';
 
 <Icon className="icon-edit size20"/>
 ```
+[返回目录](#component)
+
+
 
 
 ## ImgLazy
-懒人加载, 主要为了解决图片过多, 造成网络阻塞的问题, 一般采用的是滚动加载, 并在页面加载完成后, 执行滚动加载方法load()
+[懒人加载](#https://unpkg.com/seedsui-react/src/lib/ImgLazy/ImgLazy.js)
+, 主要为了解决图片过多, 造成网络阻塞的问题, 一般采用的是滚动加载, 并在页面加载完成后, 执行滚动加载方法load()
 ### 对象实例
 ```javascript
 var imglazy = new ImgLazy({
@@ -1528,10 +1611,13 @@ this.setState({
 // 在页面加载完成的时候
 this.state.lazy.load();
 ```
+[返回目录](#component)
+
+
 
 
 ## ImgUploader
-图片上传
+[图片上传](#https://unpkg.com/seedsui-react/src/lib/ImgUploader/ImgUploader.js)
 ### 属性
 ```javascript
 <ImgUploader
@@ -1587,10 +1673,14 @@ const list = [
 
 <ImgUploader caption="上传照片" showUpload list={list} onChange={onChangeImg}/>
 ```
+[返回目录](#component)
+
+
 
 
 ## IndexBar
-索引栏, IndexBar组件默认fixed定位, 并在父组件中寻找data-indexbar-name属性的元素, 与indexs对应, 滑动或点击切换时, 修改父组件的scrollTop, 以达到滚动的效果
+[索引栏](#https://unpkg.com/seedsui-react/src/lib/IndexBar/IndexBar.js)
+, IndexBar组件默认fixed定位, 并在父组件中寻找data-indexbar-name属性的元素, 与indexs对应, 滑动或点击切换时, 修改父组件的scrollTop, 以达到滚动的效果
 ### 属性
 ```javascript
 <IndexBar
@@ -1661,13 +1751,18 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   <IndexBar style={{top: '44px'}}/>
 </Container>
 ```
+[返回目录](#component)
+
+
 
 
 ## IndexArea
-多行文本框, 默认高度见seedsui-variable.less中@input-area-height, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[多行文本框](#https://unpkg.com/seedsui-react/src/lib/IndexArea/IndexArea.js)
+, 默认高度见seedsui-variable.less中@input-area-height, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputCity
-城市选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerCity 城市选择弹框](#pickercity)组件
+[城市选择框](#https://unpkg.com/seedsui-react/src/lib/InputCity/InputCity.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerCity 城市选择弹框](#pickercity)组件
 ### 属性
 ```javascript
 <InputCity
@@ -1677,12 +1772,17 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   onChange={值改变 func(value, option, args), 默认无}
 />
 ```
+[返回目录](#component)
+
+
 
 ## InputColor
-颜色选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[颜色选择框](#https://unpkg.com/seedsui-react/src/lib/InputColor/InputColor.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputDate
-日期选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerDate 日期选择弹框](#pickerdate)组件
+[日期选择框](#https://unpkg.com/seedsui-react/src/lib/InputDate/InputDate.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerDate 日期选择弹框](#pickerdate)组件
 ### 属性
 ```javascript
 <InputDate
@@ -1694,8 +1794,11 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 />
 ```
 
+
+
 ## InputLocation
-定位框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[定位框](#https://unpkg.com/seedsui-react/src/lib/InputLocation/InputLocation.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 ### 属性
 ```javascript
 <InputLocation
@@ -1705,17 +1808,21 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```
 
 ## InputNumber
-数字输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[数字输入框](#https://unpkg.com/seedsui-react/src/lib/InputNumber/InputNumber.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputPassword
-密码输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[密码输入框](#https://unpkg.com/seedsui-react/src/lib/InputPassword/InputPassword.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputPhone
-手机输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[手机输入框](#https://unpkg.com/seedsui-react/src/lib/InputPhone/InputPhone.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 
 ## InputPicker
-选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[Picker 滚动选择弹框](#picker)组件
+[选择框](#https://unpkg.com/seedsui-react/src/lib/InputPicker/InputPicker.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[Picker 滚动选择弹框](#picker)组件
 ### 属性
 ```javascript
 <InputPicker
@@ -1750,9 +1857,13 @@ onChangePicker = (value, option, args) => {
 
 <InputPicker value="222" list={list} onChange={this.onChangePicker}/>
 ```
+[返回目录](#component)
+
+
 
 ## InputPre
-自增高输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[自增高输入框](#https://unpkg.com/seedsui-react/src/lib/InputPre/InputPre.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 
 ## InputRange
@@ -1781,11 +1892,14 @@ onChangeRange = (value, args) => {
 
 <InputRange onChange={this.onChangeRange}/>
 ```
+[返回目录](#component)
+
 
 
 
 ## InputSafe
-安全强度检验框, 展现三个状态: 弱、中、强
+[安全强度检验框](#https://unpkg.com/seedsui-react/src/lib/InputSafe/InputSafe.js)
+, 展现三个状态: 弱、中、强
 ### 属性
 ```javascript
 <InputSafe
@@ -1803,7 +1917,8 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 
 
 ## InputSelect
-选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[SelectPicker 选择弹框](#selectpicker)组件
+[选择框](#https://unpkg.com/seedsui-react/src/lib/InputSelect/InputSelect.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[SelectPicker 选择弹框](#selectpicker)组件
 ### 属性
 ```javascript
 <InputSelect
@@ -1885,7 +2000,8 @@ onChange = (value) => {
 
 
 ## InputText
-文本框, 很多组件继承自此组件, 拥有此组件的属性, 如: InputPhone、InputPre、InputArea等
+[文本框](#https://unpkg.com/seedsui-react/src/lib/InputText/InputText.js)
+, 很多组件继承自此组件, 拥有此组件的属性, 如: InputPhone、InputPre、InputArea等
 ### 属性
 ```javascript
 <InputText
@@ -1943,7 +2059,8 @@ onChangeText = (value, args) => {
 
 
 ## InputVerify
-验证码文本框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[验证码文本框](#https://unpkg.com/seedsui-react/src/lib/InputVerify/InputVerify.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 ### 属性
 ```javascript
 <InputVerify
@@ -1967,7 +2084,8 @@ onClickSent = () => {
 
 
 ## Verify
-验证码文本框, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+[验证码文本框](#https://unpkg.com/seedsui-react/src/lib/Verify/Verify.js)
+, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 ### 属性
 ```javascript
 <Verify
@@ -2004,7 +2122,7 @@ onValiChange = (error, value, data) => {
 
 
 ## Legend
-标题
+[标题](#https://unpkg.com/seedsui-react/src/lib/Legend/Legend.js)
 ### 属性
 ```javascript
 <Legend
@@ -2024,7 +2142,7 @@ import Legend from 'seedsui-react/lib/Legend';
 
 
 ## List
-列表
+[列表](#https://unpkg.com/seedsui-react/src/lib/List/List.js)
 ### 属性
 ```javascript
 <List
@@ -2088,7 +2206,7 @@ import List from 'seedsui-react/lib/List';
 
 
 ## ListPull
-推送列表
+[推送列表](#https://unpkg.com/seedsui-react/src/lib/ListPull/ListPull.js)
 ### 属性
 ```javascript
 <ListPull
@@ -2156,7 +2274,7 @@ onClickListPull = (item, index, btn) => {
 
 
 ## Loading
-加载中
+[加载中](#https://unpkg.com/seedsui-react/src/lib/Loading/Loading.js)
 ### 属性
 ```javascript
 <Loading
@@ -2185,7 +2303,7 @@ import Loading from 'seedsui-react/lib/Loading';
 
 
 ## Mark
-标记
+[标记](#https://unpkg.com/seedsui-react/src/lib/Mark/Mark.js)
 ### 属性
 ```javascript
 <Mark
@@ -2206,7 +2324,7 @@ import Mark from 'seedsui-react/lib/Mark';
 
 
 ## Marquee
-跑马灯
+[跑马灯](#https://unpkg.com/seedsui-react/src/lib/Marquee/Marquee.js)
 ### 属性
 ```javascript
 <Marquee
@@ -2247,7 +2365,8 @@ const list = [
 
 
 ## MenuTiled
-平铺弹出菜单, [Dropdown下拉菜单](#dropdown)组件的子组件
+[平铺弹出菜单](#https://unpkg.com/seedsui-react/src/lib/MenuTiled/MenuTiled.js)
+, [Dropdown下拉菜单](#dropdown)组件的子组件
 ### 属性
 ```javascript
 <MenuTiled
@@ -2281,7 +2400,7 @@ onClickMenu = (item) => {
 
 
 ## MenuTree
-侧边树形菜单
+[侧边树形菜单](#https://unpkg.com/seedsui-react/src/lib/MenuTree/MenuTree.js)
 ### 属性
 ```javascript
 <MenuTree
@@ -2326,7 +2445,8 @@ const Container = {
 
 
 ## NoNetwork
-无网络, 基于[Notice 通知公告](#notice)组件, 自动检测网络状态, 无网络时自动显示
+[无网络](#https://unpkg.com/seedsui-react/src/lib/NoNetwork/NoNetwork.js)
+, 基于[Notice 通知公告](#notice)组件, 自动检测网络状态, 无网络时自动显示
 ### 属性
 ```javascript
 <NoNetwork
@@ -2345,7 +2465,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
 
 ## Notice
-通知公告
+[公告](#https://unpkg.com/seedsui-react/src/lib/Notice/Notice.js)
 ### 属性
 ```javascript
 <Notice
@@ -2377,7 +2497,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
 
 ## NumBox
-数字加减框
+[数字加减框](#https://unpkg.com/seedsui-react/src/lib/NumBox/NumBox.js)
 ### 属性
 ```javascript
 <NumBox
@@ -2429,7 +2549,8 @@ onChangeNum = (val, args) => {
 
 
 ## NumBoxPop
-数字加减弹出框, 基于[NumBox 数字加减框](#numbox)组件
+[数字加减弹出框](#https://unpkg.com/seedsui-react/src/lib/NumBoxPop/NumBoxPop.js)
+, 基于[NumBox 数字加减框](#numbox)组件
 ### 属性
 ```javascript
 <NumBoxPop
@@ -2474,7 +2595,8 @@ onClickSubmit = (count) => {
 
 
 ## NumBoxPopPointer
-数字加减指针, 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
+[数字加减指针](#https://unpkg.com/seedsui-react/src/lib/NumBoxPopPointer/NumBoxPopPointer.js)
+, 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
 ### 属性
 ```javascript
 <NumBoxPopPointer
@@ -2515,7 +2637,7 @@ onChangeCount = (value) => {
 
 
 ## OnOff
-开关
+[开关](#https://unpkg.com/seedsui-react/src/lib/OnOff/OnOff.js)
 ### 属性
 ```javascript
 <OnOff
@@ -2554,7 +2676,8 @@ const {checked} = this.props;
 
 
 ## Page
-页面, 通常与Container、Header一起使用
+[页面](#https://unpkg.com/seedsui-react/src/lib/Page/Page.js)
+, 通常与Container、Header一起使用
 ### 属性
 ```javascript
 <Page
@@ -2585,7 +2708,8 @@ import Container from 'seedsui-react/lib/Container';
 
 
 ## PagePull
-可推动页面, 基于[Page 页面](#page)组件
+[可推动页面](#https://unpkg.com/seedsui-react/src/lib/PagePull/PagePull.js)
+, 基于[Page 页面](#page)组件
 ### 属性
 ```javascript
 <PagePull
@@ -2623,8 +2747,10 @@ import Container from 'seedsui-react/lib/Container';
 [返回目录](#component)
 
 
+
+
 ## Peg
-小竖条
+[小竖条](#https://unpkg.com/seedsui-react/src/lib/Peg/Peg.js)
 ### 属性
 ```javascript
 <Peg
@@ -2641,8 +2767,10 @@ import Peg from 'seedsui-react/lib/Peg';
 [返回目录](#component)
 
 
+
+
 ## Picker
-滚动选择弹框
+[滚动选择弹框](#https://unpkg.com/seedsui-react/src/lib/Picker/Picker.js)
 ### 属性
 ```javascript
 <Picker
@@ -2692,8 +2820,11 @@ onClickMask = () => {
 [返回目录](#component)
 
 
+
+
 ## PickerCity
-城市选择弹框, 基于[Picker 滚动选择弹框](#picker)组件
+[城市选择弹框](#https://unpkg.com/seedsui-react/src/lib/PickerCity/PickerCity.js)
+, 基于[Picker 滚动选择弹框](#picker)组件
 ### 属性
 ```javascript
 <PickerCity
@@ -2743,7 +2874,8 @@ onClickMask = () => {
 
 
 ## PickerDate
-日期选择弹框, 基于[Picker 滚动选择弹框](#picker)组件
+[日期选择弹框](#https://unpkg.com/seedsui-react/src/lib/PickerDate/PickerDate.js)
+, 基于[Picker 滚动选择弹框](#picker)组件
 ### 属性
 ```javascript
 <PickerDate
@@ -2794,7 +2926,7 @@ onClickMask = () => {
 
 
 ## Popover
-箭头弹框
+[箭头弹框](#https://unpkg.com/seedsui-react/src/lib/Popover/Popover.js)
 ### 属性
 ```javascript
 <Popover
@@ -2810,6 +2942,7 @@ onClickMask = () => {
   onClickMask={点击遮罩 func(args), 默认无}
 
   className={容器className string, 默认无, 基础'popover'}
+  // 'top-left | top-center | top-right | left-top | left-middle | left-bottom', 其中top与bottom、left与right拥有相同属性
   style={容器style object, 默认无}
 >
 内容内容
@@ -3089,5 +3222,399 @@ onClickMask = () => {
   onClickCancel={this.onClickCancel}
   onClickMask={this.onClickMask}
 />
+```
+[返回目录](#component)
+
+
+
+
+## Star
+[小竖条](#https://unpkg.com/seedsui-react/src/lib/Star/Star.js)
+### 属性
+```javascript
+<Star
+  className={图标className string, 默认无, 基础'star'}
+  onClick={点击 func(args), 默认无}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Star from 'seedsui-react/lib/Star';
+
+<Star/>
+```
+[返回目录](#component)
+
+
+
+
+## Stencil
+[加载模板](#https://unpkg.com/seedsui-react/src/lib/Stencil/Stencil.js)
+### 属性
+```javascript
+<Stencil
+  className={图标className string, 默认'stencil-list', 基础'stencil'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Stencil from 'seedsui-react/lib/Stencil';
+
+<Stencil/>
+```
+[返回目录](#component)
+
+
+
+
+## Sticker
+[标签贴](#https://unpkg.com/seedsui-react/src/lib/Sticker/Sticker.js)
+### 属性
+```javascript
+<Sticker
+  type={类型 string, 默认无} // 默认className加上'sticker', type设置为line时,className加上'sticker-line'
+  iconClassName={图标className string, 默认无, 基础'size12'}
+  className={容器className string, 默认'top right', 基础'size12'} // 'top | bottom | right | left'
+  style={容器style object, 默认无}
+>
+</Sticker>
+```
+### 示例
+```javascript
+import Sticker from 'seedsui-react/lib/Sticker';
+
+<Sticker>NEW</Sticker>
+```
+[返回目录](#component)
+
+
+
+
+## Tabbar
+[页签](#https://unpkg.com/seedsui-react/src/lib/Tabbar/Tabbar.js)
+### 属性
+```javascript
+<Tabbar
+  style={容器style object, 默认无}
+  className={容器className string, 默认'tabbar-line tabbar-line-width70 border-b'}
+  // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
+  iconBadgeStyle={图标徽章style object, 默认无}
+  iconBadgeClassName={图标徽章className string, 默认无}
+  riconBadgeStyle={右图标徽章style object, 默认无}
+  riconBadgeClassName={右图标徽章className string, 默认无}
+  list={列表 array, 默认无, 格式如下:}
+  // [
+  //   {
+  //     iconStyle: object,
+  //     iconClassName: string,
+  //     iconActiveStyle: object,
+  //     iconActiveClassName: string,
+
+  //     iconBadgeClassName: string,
+  //     iconBadgeStyle: object,
+  //     iconBadgeCaption: string,
+
+  //     riconStyle: object,
+  //     riconClassName: string,
+  //     riconActiveStyle: object,
+  //     riconActiveClassName: string,
+
+  //     riconBadgeClassName: string,
+  //     riconBadgeStyle: object,
+  //     riconBadgeCaption: string,
+
+  //     caption: string,
+  //     sndcaption: string,
+  //     active: bool,
+  //     id: string
+  //   }
+  // ]
+  tiled={宽度等分 bool, 默认宽度弹性伸缩}
+  disabled={是否禁用 bool, 默认无}
+  exceptOnClickActive={排除点击选中的菜单 bool, 默认true}
+  onClick={点击页签 func(item, index), 默认无}
+  activeIndex={选中项 number, 默认0}
+/>
+```
+### 示例
+```javascript
+import Tabbar from 'seedsui-react/lib/Tabbar';
+
+const tabbar = [
+  {caption: '月', dateType: '0'},
+  {caption: '季', dateType: '1'},
+  {caption: '年', dateType: '2'}
+];
+const tabActiveIndex = 0;
+
+onClickTab = (item, index) => {
+  console.log(item, index)
+}
+
+<Tabbar list={tabbar} activeIndex={tabActiveIndex} onClick={this.onClickTab}/>
+```
+[返回目录](#component)
+
+
+
+
+## Ticket
+[票券]](#https://unpkg.com/seedsui-react/src/lib/Ticket/Ticket.js)
+### 属性
+```javascript
+<Ticket
+  style={容器style object, 默认无}
+  className={左侧容器className string, 默认无, 基础'ticket'}
+  legendStyle={左侧容器style object, 默认无}
+  legendClassName={左侧容器className string, 默认无, 基础'ticket-legend'}
+  legend={左侧容器 node, 默认无}
+  containerStyle={左侧容器style object, 默认无}
+  containerClassName={内容className string, 默认无, 基础'ticket-container'}
+  onClick={点击页签 func(e), 默认无}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Ticket from 'seedsui-react/lib/Ticket';
+
+<Ticket onClick={this.onClick} className={disabled ? 'disabled' : ''} style={{margin: '12px 14px'}} legend={
+    <div className="text-center">
+      <p style={{fontSize: '20px'}}>{item.num}{item.input_unit_name}</p>
+      <p style={{fontSize: '12px', marginTop: '4px'}}>满30元可用</p>
+    </div>
+  }
+  containerStyle={{padding: '12px'}}>
+  <div className="flex flex-top" style={{height: '60px'}}>
+    <p className="list-caption nowrap2 flex-1" style={{height: '40px'}}>商品名称 规格</p>
+  </div>
+  <div className="flex">
+    <p className="list-sndcaption font-size-sm flex-1">2017-07-07</p>
+    <Price price={item.amount} unit="元" className="normal color-primary"/>
+  </div>
+</Ticket>
+```
+[返回目录](#component)
+
+
+
+
+## Timeline
+[时间轴](#https://unpkg.com/seedsui-react/src/lib/Timeline/Timeline.js)
+### 属性
+```javascript
+<Timeline
+  list={列表 array, 默认无, 格式如下:}
+  // [{content: node, icon: node(默认Dot), active: bool}]
+  style={容器style object, 默认无}
+  badgeStyle={左侧style object, 默认无}
+  top={上间距px number, 默认0}
+  bottom={下间距px number, 默认0}
+/>
+```
+### 示例
+```javascript
+import Timeline from 'seedsui-react/lib/Timeline';
+
+const timeList = [
+  {content: <p>内容</p>, active: true}
+]
+<Timeline list={timeList} top={20} bottom={15} style={{padding: '0 0 0 18px'}}/>
+```
+[返回目录](#component)
+
+
+
+
+## Timepart
+[时间段](#https://unpkg.com/seedsui-react/src/lib/Timepart/Timepart.js)
+### 属性
+```javascript
+<Timepart
+  multiple={是否允许多选 bool, 默认false}
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'timepart'}
+
+  startTime={开始时间 string, 默认'07:00'}
+  endTime={结束时间 string, 默认'22:00'}
+  times={设置时间段 array, 默认无}
+  // [{className: string, startTime: 'hh:ss', endTime: 'hh:ss', data: string, cover: bool}], 其中cover指允许覆盖显示
+
+  onChange={选中发生变化 func(times:array), 默认无}
+  onError={发生冲突错误 func({msg:''}), 默认无}
+/>
+```
+### 示例
+```javascript
+import Timepart from 'seedsui-react/lib/Timepart';
+
+<Timepart times={[{className: 'disabled', startTime: '09:00', endTime: '10:00'}]}/>
+```
+[返回目录](#component)
+
+
+
+
+## Titlebar
+[标题栏](#https://unpkg.com/seedsui-react/src/lib/Titlebar/Titlebar.js)
+### 属性
+```javascript
+<Titlebar
+  className={容器className string, 默认无, 基础'titlebar'}
+
+  caption={标题 string, 默认无}
+  captionClassName={标题className string, 默认无, 基础'titlebar-caption nowrap text-center'}
+  captionStyle={标题style object, 默认无}
+  onClickCaption={点击标题 func(e), 默认无}
+
+  lButtons={左按钮 array, 默认['$back']}
+  // '$back' 等同于{iconClassName: 'shape-arrow-left', onClick: this.onClickBack}
+  // 格式 [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
+
+  rButtons={右按钮 array, 默认无}
+  onClickBack={点击标题 func(), 默认无} // 当设置onClickBack后, 默认的onClickBack事件将被代替
+>
+如果此处写了内容, 将代替caption
+</Titlebar>
+```
+### 示例
+```javascript
+import Timepart from 'seedsui-react/lib/Timepart';
+
+<Titlebar caption="SeedsUI" rButtons={[{ caption: 'try' , onClick: () => {console.log(1)}}]} />
+```
+[返回目录](#component)
+
+
+
+
+## Toast
+[提示弹框](#https://unpkg.com/seedsui-react/src/lib/Toast/Toast.js)
+### 建议
+Toast组件更适用于复杂的定制弹框,一般弹框建议直接使用Api直接调用:
+* Bridge.showToast(msg, {mask: false})代替
+
+详见[Bridge 桥接库](#bridge) 桥接库
+### 属性
+```javascript
+<Toast
+  portal={传送dom object, 默认document.getElementById('root')}
+  show={*显隐 bool, 默认false}
+
+  duration={动画时长 number, 默认false}
+
+  maskClassName={遮罩className string, 默认无, 基础'mask toast-mask'}
+  maskStyle={遮罩style object, 默认无}
+
+  className={弹框className string, 默认无, 基础'toast'}
+  style={弹框style object, 默认无}
+
+  caption={消息 node, 默认无}
+  captionStyle={消息style object, 默认无}
+  captionClassName={消息className string, 默认无, 基础'toast-caption'}
+
+  icon={图标dom node, 默认无}
+  iconSrc={图标地址 string, 默认无}
+  iconStyle={图标style object, 默认无}
+  iconClassName={图标className string, 默认无}
+/>
+```
+### 示例
+```javascript
+import Toast from 'seedsui-react/lib/Toast';
+
+this.state = {
+  toastShow: false,
+  toastMsg: '',
+}
+
+showMsg = (msg) => {
+  if (this.timeout) window.clearTimeout(this.timeout);
+  this.setState({
+    toastShow: true,
+    toastMsg: msg
+  });
+  this.timeout = setTimeout(() => {
+    this.setState({
+      toastShow: false
+    });
+  }, 2000);
+}
+
+<Toast caption={this.state.toastMsg} show={this.state.toastShow} className="middle" style={{borderRadius: '4px'}}/>
+```
+[返回目录](#component)
+
+
+
+
+## Tree
+[树结构](#https://unpkg.com/seedsui-react/src/lib/Tree/Tree.js)
+### 属性
+```javascript
+<Tree
+  checkbox={是否支持选择 bool, 默认无}
+  bar={选中项聚合展现栏 string | node, 默认无}
+  selected={选中项 array, 默认无} // 格式 [{id: '', name: '', parentid: ''}]
+  list={列表项 array, 默认无} // [{id: '', name: '', parentid: ''}]
+
+  buttonAddHTML={添加按钮 string, 默认无}
+  buttonAddClassName={添加按钮className string, 默认无}
+  buttonAddSrc={添加按钮src string, 默认无}
+  onClickAdd={点击添加按钮 func(s), 默认无}
+
+  buttonDelHTML={添加按钮 string, 默认无}
+  buttonDelClassName={添加按钮className string, 默认无}
+  buttonDelSrc={添加按钮src string, 默认无}
+  onClickDel={点击添加按钮 func(s), 默认无}
+
+  onClickLastChild={点击底层节点 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import Tree from 'seedsui-react/lib/Tree';
+
+onClickAdd = () => {
+  if (!this.props.multiple) this.onSubmit();
+}
+
+onSubmit = () => {
+  let selected = this.$customerTree.state.instance.selected;
+  console.log(selected) // => {'id1': {id: 'id1', name: '', parentid: ''}, 'id2': {id: 'id2', name: '', parentid: ''}}
+}
+
+<Tree
+  ref={el => {this.$tree = el;}}
+  list={customerList}
+  selected={selectedList}
+  checkbox
+  onClickAdd={this.onClickAdd}
+/>
+```
+[返回目录](#component)
+
+
+
+
+## Weather
+[天气](#https://unpkg.com/seedsui-react/src/lib/Weather/Weather.js)
+### 属性
+```javascript
+<Weather
+  location={位置 string, 默认'北京市'} // 格式 'lng,lat|lng,lat|lng,lat' 或 '北京市|上海市'
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'weather'}
+
+  icons={图标 object, 默认见Weather.js}
+/>
+```
+### 示例
+```javascript
+import Weather from 'seedsui-react/lib/Weather';
+
+<Weather location="上海市"/>
 ```
 [返回目录](#component)

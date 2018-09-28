@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 export default class Star extends Component {
   static propTypes = {
     args: PropTypes.any,
-    active: PropTypes.bool,
     className: PropTypes.string,
     onClick: PropTypes.func
   };
@@ -33,9 +32,9 @@ export default class Star extends Component {
     }
   }
   render() {
-    const {args, active, className, onClick, ...others} = this.props;
+    const {args, className, onClick, ...others} = this.props;
     return (
-      <i className={`star${active ? ' active' : ''}${className ? ' ' + className : ''}`} {...others} onClick={this.onClick}/>
+      <i className={`star${className ? ' ' + className : ''}`} {...others} onClick={this.onClick}/>
     );
   }
 }

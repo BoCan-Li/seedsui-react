@@ -7,10 +7,12 @@ export default class Timeline extends Component {
     list: PropTypes.array, // [{content: node, icon: node(默认Dot), active: bool}]
     style: PropTypes.object,
     badgeStyle: PropTypes.object,
-    top: PropTypes.string,
-    bottom: PropTypes.string
+    top: PropTypes.number,
+    bottom: PropTypes.number
   }
   static defaultProps = {
+    top: 0,
+    bottom: 0,
     list: [],
     style: {}
   }
@@ -29,7 +31,7 @@ export default class Timeline extends Component {
     });
     return (
       <div className="timeline" style={style}>
-        <span className="timeline-line" style={{top: top, bottom: bottom}}></span>
+        <span className="timeline-line" style={{top: top + 'px', bottom: bottom + 'px'}}></span>
         {listDOM}
       </div>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Star from './../Star';
 
-export default class StarGroup extends Component {
+export default class InputStar extends Component {
   static propTypes = {
     args: PropTypes.any,
     min: PropTypes.number,

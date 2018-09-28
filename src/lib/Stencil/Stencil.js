@@ -14,11 +14,9 @@ export default class Dialog extends Component {
     super(props);
   }
   render() {
-    const {
-      className, style
-    } = this.props;
+    const {className, ...others} = this.props;
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`stencil${className ? ' ' + className : ''}`} style={style}>
+      <div ref={el => {this.$el = el;}} className={`stencil${className ? ' ' + className : ''}`} {...others}>
       </div>,
       this.props.portal || document.getElementById('root')
     );

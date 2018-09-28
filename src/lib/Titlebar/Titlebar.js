@@ -7,16 +7,15 @@ import Icon from './../Icon';
 export default class Titlebar extends Component {
   static propTypes = {
     className: PropTypes.string,
-    style: PropTypes.object,
 
     caption: PropTypes.node,
     captionClassName: PropTypes.string,
     captionStyle: PropTypes.object,
-
-    onClickBack: PropTypes.func,
     onClickCaption: PropTypes.func,
+
     lButtons: PropTypes.array, // [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
     rButtons: PropTypes.array,
+    onClickBack: PropTypes.func,
     children: PropTypes.node
   }
   static defaultProps = {
@@ -82,9 +81,9 @@ export default class Titlebar extends Component {
   }
   render() {
     const {
-      className, style,
+      className,
       caption, captionClassName, captionStyle, children, onClickCaption,
-      lButtons, rButtons
+      lButtons, rButtons, onClickBack, ...others
     } = this.props;
     let lButtonsDOM = null;
     if (Array.isArray(lButtons)) {
@@ -96,7 +95,7 @@ export default class Titlebar extends Component {
     }
     const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>);
     return (
-      <div className={`titlebar${className ? ' ' + className : ''}`} style={style}>
+      <div className={`titlebar${className ? ' ' + className : ''}`} {...others}>
         <div className="titlebar-left">
           {lButtonsDOM}
         </div>
