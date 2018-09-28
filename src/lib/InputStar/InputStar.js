@@ -7,7 +7,10 @@ export default class StarGroup extends Component {
     args: PropTypes.any,
     min: PropTypes.number,
     max: PropTypes.number,
-    value: PropTypes.number,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     onChange: PropTypes.func,
     className: PropTypes.string,
     style: PropTypes.object,
