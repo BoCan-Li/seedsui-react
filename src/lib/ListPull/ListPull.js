@@ -5,7 +5,7 @@ import Button from './../Button';
 
 export default class ListPull extends Component {
   static propTypes = {
-    list: PropTypes.array, // [{container: node, lButtons: [{onClick: fn, value: string, className: 'warn'}], rButtons: 同lButtons}]
+    list: PropTypes.array, // [{container: node, lButtons: [{value: '按钮文字', className: 'warn', style: object}], rButtons: 同lButtons}]
     style: PropTypes.object,
     className: PropTypes.string,
     onClick: PropTypes.func,
@@ -24,18 +24,18 @@ export default class ListPull extends Component {
     var instance = new Instance(this.$el, {
       onClick: (e) => {
         const index = e.target.getAttribute('data-index');
-        const args1 = this.props.list[index];
-        let args2 = null;
+        const item = this.props.list[index];
+        let btn = null;
         const i = e.target.getAttribute('data-i');
         const direction = e.target.getAttribute('data-direction');
         if (i && direction) {
           if (direction === 'left') {
-            args2 = args1.lButtons[i];
+            btn = item.lButtons[i];
           } else {
-            args2 = args1.rButtons[i];
+            btn = item.rButtons[i];
           }
         }
-        if (this.props.onClick) this.props.onClick(args1, args2)
+        if (this.props.onClick) this.props.onClick(item, index, btn)
       },
       onShowedLeft: this.props.onShowedLeft,
       onShowedRight: this.props.onShowedRight

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 export default class NumBox extends Component {
   static propTypes = {
     args: PropTypes.any,
-    changeFocus: PropTypes.bool, // 点击加减时激活
+    changeFocus: PropTypes.bool, // 是否点击加減时获取焦点
     // 容器
     style: PropTypes.object,
     className: PropTypes.string,
@@ -13,7 +13,6 @@ export default class NumBox extends Component {
     value: PropTypes.string,
     placeholder: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.string,
     maxLength: PropTypes.string,
     disabled: PropTypes.bool,
     readOnly: PropTypes.bool,
@@ -33,7 +32,6 @@ export default class NumBox extends Component {
     min: PropTypes.number,
   }
   static defaultProps = {
-    args: null,
     maxLength: '8',
     min: 0,
     max: 99999999,
@@ -163,12 +161,12 @@ export default class NumBox extends Component {
     const {max, min} = this.props;
     if (!isNaN(max) && num > max) {
       // callback onError
-      if (this.props.onError) this.props.onError('最大不能超过' + max);
+      if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
       return '' + max;
     }
     if (!isNaN(min) && num < min) {
       // callback onError
-      if (this.props.onError) this.props.onError('最小不能小于' + min);
+      if (this.props.onError) this.props.onError({msg: '最小不能小于' + min});
       return '' + min;
     }
     var value = argNumstr;
@@ -195,7 +193,7 @@ export default class NumBox extends Component {
   render() {
     const {min, max, style, className, disabled, onClick} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} disabled={(min >= max) || disabled} style={style} className={`numbox bordered ${className ? className : ''}`} onClick={onClick}>
+      <div ref={el => {this.$el = el;}} disabled={(min >= max) || disabled} style={style} className={`numbox bordered${className ? ' ' + className : ''}`} onClick={onClick}>
         <input ref={(el) => {this.$minus = el;}} type="button" className="numbox-button" value="-" onClick={this.onClickMinus} />
         {this.getInputDOM()}
         <input ref={(el) => {this.$plus = el;}} type="button" className="numbox-button" value="+" onClick={this.onClickPlus} />

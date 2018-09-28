@@ -31,7 +31,6 @@ export default class NumBoxPopPointer extends Component {
   };
 
   static defaultProps = {
-    args: null,
     min: 0,
     max: 99999,
     numboxClassName: 'sm'

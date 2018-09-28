@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import Icon from './../Icon';
 export default class Notice extends Component {
   static propTypes = {
-    onClick: PropTypes.func,
+    args: PropTypes.any,
     show: PropTypes.bool,
-    // args: PropTypes.array
     
     className: PropTypes.string,
     style: PropTypes.object,
+    onClick: PropTypes.func, // 点击内容区域
     icon: PropTypes.node,
     iconSrc: PropTypes.string,
     iconStyle: PropTypes.object,
@@ -21,12 +21,10 @@ export default class Notice extends Component {
     args: null,
     show: true,
     caption: '',
-    sndcaption: '',
-    style: {}
+    sndcaption: ''
   }
   constructor(props) {
     super(props);
-    this.state = {}
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -48,15 +46,17 @@ export default class Notice extends Component {
   }
   render() {
     const {
+      args,
       show,
-      className, style,
+      className, style, onClick,
       icon, iconSrc, iconStyle, iconClassName,
       caption,
       sndcaption,
-      children
+      children,
+      ...others
     } = this.props;
     return (
-      show ? <div ref={el => {this.$el = el;}} className={`notice${className ? ' ' + className : ''}`} style={style}>
+      show ? <div ref={el => {this.$el = el;}} className={`notice${className ? ' ' + className : ''}`} style={style} {...others}>
         <div className="notice-content" onClick={this.onClick}>
           {(iconSrc || iconClassName) && <Icon className={`notice-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
           {icon}

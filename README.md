@@ -95,7 +95,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Card](#card) 卡片
 - [Carrousel](#carrousel) 轮播
 - [Chat](#chat) 聊天
-- [Checkbox](#carrousel) 复选框
+- [Checkbox](#checkbox) 复选框
 - [Close](#close) 关闭清除图标
 - [Container](#container) page主体
 - [Counter](#counter) 计数器
@@ -1990,4 +1990,527 @@ import Legend from 'seedsui-react/lib/Legend';
 import List from 'seedsui-react/lib/List';
 
 <List onClick={() => {Bridge.tel('02568736873')}} caption="技术支持" rcaption="02568736873" className="list-li-oneline" rcaptionClassName="color-placeholder" liconClassName="icon-support" riconClassName="shape-arrow-right sm" style={{padding: '10px 12px'}}/>
+```
+
+
+
+## ListPull
+推送列表
+### 属性
+```javascript
+<ListPull
+  list={列表 array, 默认无, 示例如下:}
+  // [{
+  //   container: node,
+  //   lButtons: [{value: '按钮文字', className: 'warn', style: object}],
+  //   rButtons: 同lButtons
+  // }]
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'list-pull'}
+  onClick={点击列表 func(item, index, btn), 默认无}
+  onShowedLeft={左侧显示 func(s), 默认无}
+  onShowedRight={右侧显示 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import ListPull from 'seedsui-react/lib/ListPull';
+
+this.state = {
+  listpull: [
+    {
+      container: <p style={{height: '50px'}}>内容</p>,
+      lButtons: [
+        {value: '未读', className: 'info', style: {padding: '0 12px'}}
+      ],
+      rButtons: [
+        {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
+        {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
+      ],
+    },
+    {
+      container: <p style={{height: '50px'}}>内容</p>,
+      lButtons: [
+        {value: '未读', className: 'info', style: {padding: '0 12px'}}
+      ],
+      rButtons: [
+        {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
+        {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
+      ],
+    }
+  ]
+}
+
+onShowedLeft = (s) => {
+  var target = s.target.previousElementSibling.children[0];
+  if (target.innerHTML === '未读') {
+    target.classList.add('disabled');
+    target.innerHTML = '已读';
+  } else {
+    target.classList.remove('disabled');
+    target.innerHTML = '未读';
+  }
+  s.hide();
+}
+
+onClickListPull = (item, index, btn) => {
+  console.log(item, index, btn)
+}
+
+<ListPull list={this.state.listpull} onClick={this.onClickListPull} onShowedLeft={this.onShowedLeft}/>
+```
+
+
+
+## Loading
+加载中
+### 属性
+```javascript
+<Loading
+  portal={加载框传送至dom object, 默认无} // 不设置protal, 则不传送
+  type={加载框类型 string, 默认'floating'} // 'floating | filling | custom'
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className object, 默认无}
+  maskBefore={遮罩第一层dom node, 默认无}
+
+  style={加载框style object, 默认无}
+
+  iconClassName={图标className string, 默认无, 基础'loading-custom-icon'}
+  iconSrc={图标地址 string, 默认无}
+  caption={标题 string, 默认'正在加载...'}
+/>
+```
+### 示例
+```javascript
+import Loading from 'seedsui-react/lib/Loading';
+
+<Loading maskStyle={{top: '44px'}}/>
+```
+
+
+## Mark
+标记
+### 属性
+```javascript
+<Mark
+  className={标记className string, 默认无, 基础'card'} // 'info | success | cancel | warn | disable | primary | hint'
+  {...others}
+>
+标记文字
+</Mark>
+```
+### 示例
+```javascript
+import Mark from 'seedsui-react/lib/Mark';
+
+<Mark className="success">进行中</Mark>
+```
+
+
+
+## Marquee
+跑马灯
+### 属性
+```javascript
+<Marquee
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'marquee'}
+  list={列表 array, 默认无} // [{key: 'xx', value: ''}]
+
+  contentStyle={单条style object, 默认无}
+  contentClassName={单条className string, 默认无, 基础'marquee-li'}
+
+  step={一次移动数值 number, 默认50}
+  duration={移动动画时长 number, 默认300}
+  delay={一次移动停留时长 number, 默认2000}
+  direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
+  loop={是否循环 bool, 默认true}
+  onClick={点击 func(item, index), 默认无}
+/>
+```
+### 示例
+```javascript
+import Marquee from 'seedsui-react/lib/Marquee';
+const list = [
+  {
+    key: '1',
+    value: '标题标题'
+  }
+]
+<Marquee
+  list={list}
+  onClick={onClick}
+  step={48}
+  contentStyle={{height: '38px', padding: '5px 0'}}
+  contentClassName="flex flex-center nowrap2"
+/>
+```
+
+
+
+## MenuTiled
+平铺弹出菜单, [Dropdown下拉菜单](#dropdown)组件的子组件
+### 属性
+```javascript
+<MenuTiled
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'marquee'}
+  list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
+  activeId={默认选中项的id string, 默认无}
+  onClick={点击 func(item), 默认无}
+/>
+```
+### 示例
+```javascript
+import MenuTiled from 'seedsui-react/lib/MenuTiled';
+const activeMenuId = '';
+const menus = [
+  {
+    id: '1',
+    caption: '测试数据1',
+    children: [
+      {id: 'a', caption: '测试数据1-a'}
+    ]
+  }
+];
+onClickMenu = (item) => {
+  console.log(item);
+}
+<MenuTiled list={menus} activeId={activeMenuId} onClick={this.onClickMenu}/>
+```
+
+
+
+## MenuTree
+侧边树形菜单
+### 属性
+```javascript
+<MenuTree
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'menutree'}
+  list={列表 array, 默认无, 示例如下:}
+  /* list: [{
+    id: '',
+    caption: '',
+    active: false,
+    children
+  }] */
+  activeId={默认选中项的id string, 默认无}
+  onClick={点击 func(item, isActived, isExtand, hasChildren), 默认无}
+/>
+```
+### 示例
+```javascript
+import MenuTree from 'seedsui-react/lib/MenuTree';
+const activeId = '';
+const list = [
+  {
+    id: '1',
+    caption: '测试数据1',
+    children: [
+      {id: 'a', caption: '测试数据1-a'}
+    ]
+  }
+];
+onClickMenu = (item, isActived, isExtand, hasChildren) => {
+  console.log(item, isActived, isExtand, hasChildren);
+}
+const Container = {
+  position: 'absolute',
+  top: '0',
+  bottom: '0'
+};
+<MenuTree ref="$menutree" list={list} activeId={activeId} onClick={this.onClickMenu} style={Container}/>
+```
+
+
+
+## NoNetwork
+无网络, 基于[Notice 通知公告](#notice)组件, 自动检测网络状态, 无网络时自动显示
+### 属性
+```javascript
+<NoNetwork
+  caption={标题 string, 默认'网络状态不佳'}
+  sndcaption={副标题 string, 默认'请尝试开关飞行模式后再试'}
+/>
+```
+### 示例
+```javascript
+import NoNetwork from 'seedsui-react/lib/NoNetwork';
+
+<NoNetwork/>
+```
+
+
+
+## Notice
+通知公告
+### 属性
+```javascript
+<Notice
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  show={显隐 bool, 默认true}
+    
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'notice'}
+  onClick={点击内容区域 func(args), 默认无}
+  icon={图标dom node, 默认无}
+  iconSrc={图标地址 string, 默认无}
+  iconStyle={图标style object, 默认无}
+  iconClassName={图标className string, 默认无} // 'notice-icon-nodata | notice-icon-error'
+
+  caption={标题 string, 默认''}
+  sndcaption={副标题 string, 默认''}
+>
+其它内容
+</Notice>
+```
+### 示例
+```javascript
+import NoNetwork from 'seedsui-react/lib/NoNetwork';
+
+<Notice iconClassName="icon-no-network" caption="网络状态不佳" sndcaption="请尝试开关飞行模式后再试"/>
+```
+
+
+
+## NumBox
+数字加减框
+### 属性
+```javascript
+<NumBox
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  changeFocus={是否点击加減时获取焦点 bool, 默认无}
+  // 容器
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'numbox bordered'}
+  // 文本框
+  inputStyle={文本框style object, 默认无}
+  inputClassName={文本框className string, 默认无, 基础'numbox-input'}
+  value={值 string, 默认'0'}
+  placeholder={占位符 string, 默认''}
+  name={文本框name string, 默认无}
+  maxLength={输入长度 string, 默认'8'}
+  disabled={是否禁用 bool, 默认无}
+  readOnly={是否只读 bool, 默认无}
+  // events
+  onClick={点击容器 func(e), 默认无}
+  onClickMinus={点击减 func(value, args), 默认无}
+  onClickPlus={点击加 func(value, args), 默认无}
+  onClickInput={点击文本框 func(e), 默认无}
+  onChange={值发生变化 func(value, args), 默认无}
+  onError={值发生变化 func({msg:''}), 默认无}
+  // rule设置
+  digits={文本框截取小数 string | number, 默认false}
+  max={最大值 number, 默认99999999}
+  min={最小值 number, 默认0}
+/>
+```
+### 示例
+```javascript
+import NumBox from 'seedsui-react/lib/NumBox';
+
+onChangeNum = (val, args) => {
+  console.log(val, args)
+}
+
+<NumBox
+  style={{width: '150px'}}
+  digits={2}
+  value={'1'}
+  onChange={this.onChangeNum}
+  args={['1', '2']}
+/>
+```
+
+
+
+## NumBoxPop
+数字加减弹出框, 基于[NumBox 数字加减框](#numbox)组件
+### 属性
+```javascript
+<NumBoxPop
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  // 文本框
+  value={值 string, 默认'0'}
+  // events
+  onClickCancel={点击取消 func(), 默认无}
+  onClickSubmit={点击确定 func(), 默认无}
+  show={*显隐 bool, 默认false}
+  caption={标题 string, 默认'修改购买数量'}
+  // rule设置
+  digits={文本框截取小数 string | number, 默认false}
+  max={最大值 number, 默认99999999}
+  min={最小值 number, 默认0}
+/>
+```
+### 示例
+```javascript
+import NumBoxPop from 'seedsui-react/lib/NumBoxPop';
+
+this.state = {
+  show: true
+}
+onClickCancel = () => {
+  this.setState({show: false});
+}
+onClickSubmit = (count) => {
+  this.setState({show: false});
+}
+
+<NumBoxPop
+  min={1}
+  show={this.state.show}
+  value='5'
+  onClickCancel={this.onClickCancel}
+  onClickSubmit={this.onClickSubmit}
+/>
+```
+
+
+
+## NumBoxPopPointer
+数字加减框弹出框, 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
+### 属性
+```javascript
+<NumBoxPopPointer
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  // 容器
+  style={容器style object, 默认无, 基础{position: 'relative'}}
+  className={容器className string, 默认无}
+  // numbox
+  numboxClassName={加减框className string, 默认无}
+  numboxStyle={加减框style object, 默认无}
+  value={值 string, 默认无}
+  disabled={是否禁用 bool, 默认无}
+  unit={单位 string, 默认无}
+  // events
+  onChange={点击确定时触发 func(value, args), 默认无}
+  // rule设置
+  min={最小值 number, 默认0}
+  max={最大值 number, 默认99999999}
+  digits={文本框截取小数 string | number, 默认无}
+/>
+```
+### 示例
+```javascript
+import NumBoxPopPointer from 'seedsui-react/lib/NumBoxPopPointer';
+
+onChangeCount = (value) => {
+  console.log(value)
+}
+
+<NumBoxPopPointer
+  min={1}
+  value={'3'}
+  unit={'/箱'}
+  onChange={this.onChangeCount}
+/>
+```
+
+
+## OnOff
+开关
+### 属性
+```javascript
+<OnOff
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'onoff'}
+  readOnly={是否只读 bool, 默认无}
+  checked={是否选中 bool, 默认无} // 选中时clasName将会增加'active'
+  onCaption={开文字 string, 默认无} // 开关文字有一个为空时, className将会增加'notext'
+  offCaption={关文字 string, 默认无}
+  onClick={点击容器 func(bool), 默认无}
+/>
+```
+### 示例
+```javascript
+import Checkbox from 'seedsui-react/lib/Checkbox';
+
+onClick = (checked) => {
+  this.props.checkChange(!checked)
+}
+
+const {checked} = this.props;
+<List
+  className="list-li-oneline"
+  caption="设置为默认收货地址"
+  rcaption={
+    <OnOff
+      readOnly={this.state.isFirst}
+      className="reverse"
+      checked={is_default === '0'}
+      onClick={(isChecked) => {defaultChange(isChecked ? '1' : '0')}}
+    />
+  }
+/>
+```
+
+
+## Page
+页面, 通常与Container、Header一起使用
+### 属性
+```javascript
+<Page
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'container'}
+  animation={动画 string, 默认无}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  {...others}
+>
+页面
+</Page>
+```
+### 示例
+```javascript
+import Page from 'seedsui-react/lib/Page';
+import Header from 'seedsui-react/lib/Header';
+import Container from 'seedsui-react/lib/Container';
+
+<Page>
+  <Header>
+    头部
+  </Header>
+  <Container>
+    中部
+  </Container>
+</Page>
+```
+
+
+## PagePull
+可推动页面, 基于[Page 页面](#page)组件
+### 属性
+```javascript
+<PagePull
+  // Side 侧边栏
+    drag={是否允许拖拽 bool, 默认true}
+    lSide={左侧边栏 node, 默认无}
+    lSideStyle={左侧边栏style object, 默认无}
+    lSideClassName={左侧边栏className string, 默认无, 基础'page-side-left'}
+    rSide={右侧边栏 node, 默认无}
+    rSideStyle={右侧边栏style object, 默认无}
+    rSideClassName={右侧边栏className string, 默认无, 基础'page-side-right'}
+    transition={过渡动画 string, 默认'push'} // 'push | reveal'
+    onShowedLeft={左侧显示 func(s), 默认无}
+    onShowedRight={右侧显示 func(s), 默认无}
+  {...others}
+>
+页面
+</PagePull>
+```
+### 示例
+```javascript
+import Page from 'seedsui-react/lib/Page';
+import Header from 'seedsui-react/lib/Header';
+import Container from 'seedsui-react/lib/Container';
+
+<PagePull lSide={<p>左侧边栏</p>} rSide={<p>右侧边栏</p>}>
+  <Header>
+    头部
+  </Header>
+  <Container>
+    中部
+  </Container>
+</PagePull>
 ```

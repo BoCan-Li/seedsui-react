@@ -3,7 +3,8 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import Grid from '../lib/Grid';
+import ListPull from '../lib/ListPull';
+import Loading from '../lib/Loading';
 
 
 export default class App extends Component {
@@ -18,6 +19,28 @@ export default class App extends Component {
         {id: '3', thumb: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320'},
         {id: '4', thumb: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320'},
         {id: '5', thumb: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320'}
+      ],
+      listpull: [
+        {
+          container: <p style={{height: '50px'}}>内容</p>,
+          lButtons: [
+            {value: '未读', className: 'info', style: {padding: '0 12px'}}
+          ],
+          rButtons: [
+            {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
+            {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
+          ],
+        },
+        {
+          container: <p style={{height: '50px'}}>内容</p>,
+          lButtons: [
+            {value: '未读', className: 'info', style: {padding: '0 12px'}}
+          ],
+          rButtons: [
+            {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
+            {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
+          ],
+        }
       ]
     }
   }
@@ -28,14 +51,24 @@ export default class App extends Component {
     //   window.location.replace('weixin://dl/business/?ticket=t59a2235a3662135bfb0e8f7edccc22c5#wechat_redirect#wechat_redirect');
     // }
   }
-  onClick = (arg) => {
-    console.log(arg)
-    this.refs.$counter.play();
+  onClick = (item, index, btn) => {
+    console.log(item, index, btn)
   }
   onChange = (value) => {
     this.setState({
       value
     })
+  }
+  onShowedLeft = (s) => {
+    var target = s.target.previousElementSibling.children[0];
+    if (target.innerHTML === '未读') {
+      target.classList.add('disabled');
+      target.innerHTML = '已读';
+    } else {
+      target.classList.remove('disabled');
+      target.innerHTML = '未读';
+    }
+    s.hide();
   }
   render() {
     // const list = [
@@ -57,7 +90,8 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <Grid list={this.state.alumb} onClickDelete={() => {}} iconBoxClassName="size100" iconClassName="size100"/>
+        <ListPull list={this.state.listpull} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
+        <Loading maskStyle={{top: '44px'}}/>
       </Dragrefresh>
     </PagePull>
   }

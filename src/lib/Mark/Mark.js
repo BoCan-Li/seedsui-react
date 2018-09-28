@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Mark extends Component {
   static propTypes = {
-    className: PropTypes.string, // info/success/cancel/warn/disable/primary
-    style: PropTypes.object,
-    onClick: PropTypes.func,
+    className: PropTypes.string, // 'info | success | cancel | warn | disable | primary | hint'
     children: PropTypes.node,
   }
   static defaultProps = {
@@ -16,9 +14,9 @@ export default class Mark extends Component {
   }
 
   render() {
-    const { className, style, children, onClick } = this.props;
+    const {className, children, ...others} = this.props;
     return (
-      children ? <span ref={el => {this.$el = el;}} className={`mark ${className}`} style={style} onClick={onClick}>{children}</span> : null
+      children ? <span ref={el => {this.$el = el;}} className={`mark${className ? ' ' + className : ''}`} {...others}>{children}</span> : null
     );
   }
 }
