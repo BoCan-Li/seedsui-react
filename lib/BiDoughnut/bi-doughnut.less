@@ -7,7 +7,7 @@
 	.flex-middle;
 	.flex-center;
 }
-.bi-doughtut-label{
+.bi-doughtut-caption{
 	display:block;
 	font-size:@12px;
 }
@@ -25,9 +25,9 @@
 	right:0;
 }
 .bi-doughtut-circle{
-	width: @bi-doughtut-size - @bi-line-width * 2;
-	height: @bi-doughtut-size - @bi-line-width * 2;
-	border: @bi-line-width solid @success-bg;
+	width: @bi-doughtut-size - @bi-doughtut-line-width * 2;
+	height: @bi-doughtut-size - @bi-doughtut-line-width * 2;
+	border: @bi-doughtut-line-width solid @success-bg;
 	border-radius: 50%;
 	position: absolute;
 	top: 0;
@@ -40,120 +40,120 @@
 	transition-duration: 0ms;
 }
 .bi-doughtut-circle.left{
-	border-bottom: @bi-line-width solid @primary-bg;
-	border-left: @bi-line-width solid @primary-bg; 
+	border-bottom: @bi-doughtut-line-width solid @primary-bg;
+	border-left: @bi-doughtut-line-width solid @primary-bg; 
 }
 .bi-doughtut-circle.right{
-	border-top: @bi-line-width solid @primary-bg;
-	border-right: @bi-line-width solid @primary-bg;
+	border-top: @bi-doughtut-line-width solid @primary-bg;
+	border-right: @bi-doughtut-line-width solid @primary-bg;
 	right: 0;
 }
 
 // 颜色
 .bi-doughtut{
 	&.info .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@info-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@info-bg, 20%);
 	}
-	&.info .bi-doughtut-label{
+	&.info .bi-doughtut-caption{
 		color: @info-bg;
 	}
 	&.info .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid @info-bg;
-		border-left: @bi-line-width solid @info-bg; 
+		border-bottom: @bi-doughtut-line-width solid @info-bg;
+		border-left: @bi-doughtut-line-width solid @info-bg; 
 	}
 	&.info .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @info-bg;
-		border-right: @bi-line-width solid @info-bg;
+		border-top: @bi-doughtut-line-width solid @info-bg;
+		border-right: @bi-doughtut-line-width solid @info-bg;
 	}
 	
 	&.success .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@success-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@success-bg, 20%);
 	}
-	&.success .bi-doughtut-label{
+	&.success .bi-doughtut-caption{
 		color: @success-bg;
 	}
 	&.success .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid @success-bg;
-		border-left: @bi-line-width solid @success-bg; 
+		border-bottom: @bi-doughtut-line-width solid @success-bg;
+		border-left: @bi-doughtut-line-width solid @success-bg; 
 	}
 	&.success .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @success-bg;
-		border-right: @bi-line-width solid @success-bg;
+		border-top: @bi-doughtut-line-width solid @success-bg;
+		border-right: @bi-doughtut-line-width solid @success-bg;
 	}
 
 	&.warn .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@warn-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@warn-bg, 20%);
 	}
-	&.warn .bi-doughtut-label{
+	&.warn .bi-doughtut-caption{
 		color: @warn-bg;
 	}
 	&.warn .bi-doughtut-circle.left{
-			border-bottom: @bi-line-width solid @warn-bg;
-			border-left: @bi-line-width solid @warn-bg; 
+			border-bottom: @bi-doughtut-line-width solid @warn-bg;
+			border-left: @bi-doughtut-line-width solid @warn-bg; 
 	}
 	&.warn .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @warn-bg;
-		border-right: @bi-line-width solid @warn-bg;
+		border-top: @bi-doughtut-line-width solid @warn-bg;
+		border-right: @bi-doughtut-line-width solid @warn-bg;
 	}
 	
 	&.hint .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@hint-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@hint-bg, 20%);
 	}
-	&.hint .bi-doughtut-label{
+	&.hint .bi-doughtut-caption{
 		color: @hint-bg;
 	}
 	&.hint .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid ;
-		border-left: @bi-line-width solid @hint-bg; 
+		border-bottom: @bi-doughtut-line-width solid ;
+		border-left: @bi-doughtut-line-width solid @hint-bg; 
 	}
 	&.hint .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @hint-bg;
-		border-right: @bi-line-width solid @hint-bg;
+		border-top: @bi-doughtut-line-width solid @hint-bg;
+		border-right: @bi-doughtut-line-width solid @hint-bg;
 	}
 	
 	&.cancel .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@cancel-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@cancel-bg, 20%);
 	}
-	&.cancel .bi-doughtut-label{
+	&.cancel .bi-doughtut-caption{
 		color: @cancel-bg;
 	}
 	&.cancel .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid @cancel-bg;
-		border-left: @bi-line-width solid @cancel-bg;
+		border-bottom: @bi-doughtut-line-width solid @cancel-bg;
+		border-left: @bi-doughtut-line-width solid @cancel-bg;
 	}
 	&.cancel .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @cancel-bg;
-		border-right: @bi-line-width solid @cancel-bg;
+		border-top: @bi-doughtut-line-width solid @cancel-bg;
+		border-right: @bi-doughtut-line-width solid @cancel-bg;
 	}
 
 	&.submit .bi-doughtut-circle{
-		border: @bi-line-width solid fade(@submit-bg, 20%);
+		border: @bi-doughtut-line-width solid fade(@submit-bg, 20%);
 	}
-	&.submit .bi-doughtut-label{
+	&.submit .bi-doughtut-caption{
 		color: @submit-bg;
 	}
 	&.submit .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid @submit-bg;
-		border-left: @bi-line-width solid @submit-bg;
+		border-bottom: @bi-doughtut-line-width solid @submit-bg;
+		border-left: @bi-doughtut-line-width solid @submit-bg;
 	}
 	&.submit .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @submit-bg;
-		border-right: @bi-line-width solid @submit-bg;
+		border-top: @bi-doughtut-line-width solid @submit-bg;
+		border-right: @bi-doughtut-line-width solid @submit-bg;
 	}
 
 	&.disabled .bi-doughtut-circle{
-		border: @bi-line-width solid @disabled-bg;
+		border: @bi-doughtut-line-width solid @disabled-bg;
 	}
-	&.disabled .bi-doughtut-label{
+	&.disabled .bi-doughtut-caption{
 		color: #acacac;
 	}
 	&.disabled .bi-doughtut-circle.left{
-		border-bottom: @bi-line-width solid @disabled-bg;
-		border-left: @bi-line-width solid @disabled-bg; 
+		border-bottom: @bi-doughtut-line-width solid @disabled-bg;
+		border-left: @bi-doughtut-line-width solid @disabled-bg; 
 	}
 	&.disabled .bi-doughtut-circle.right{
-		border-top: @bi-line-width solid @disabled-bg;
-		border-right: @bi-line-width solid @disabled-bg;
+		border-top: @bi-doughtut-line-width solid @disabled-bg;
+		border-right: @bi-doughtut-line-width solid @disabled-bg;
 	}
 }
 // bi-doughtut.less(end)
