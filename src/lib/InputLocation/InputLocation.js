@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 
 export default class InputLocation extends Component {
+  static propTypes = {
+    valueBindProp: PropTypes.bool,
+    locationingText: PropTypes.string,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func
+  }
+  static defaultProps = {
+    locationingText: '定位中...'
+  }
   constructor(props) {
     super(props);
   }
   componentDidMount () {
     this.$input = this.refs.$ComponentInputText.$input;
   }
-  onClick = (e) => {
-    const {onChange, onClick} = this.props;
-    const locationingText = '定位中...';
-    if (onClick) onClick(this.refs.$ComponentInputText.getArgs(e));
+  onClick = (value, args) => {
+    const {valueBindProp, locationingText, onChange, onClick} = this.props;
+    if (onClick) onClick(value, args);
     if (this.$input.value === locationingText) return;
     // 定位中...
-    if (!this.props.valueBindProp) this.$input.value = locationingText;
+    if (!valueBindProp) {
+      this.$input.value = locationingText;
+    }
     Bridge.getLocation({
       onSuccess: (data) => {
         Bridge.getAddress({
@@ -24,13 +35,13 @@ export default class InputLocation extends Component {
           type: 'gcj02',
           onSuccess: (addrs) => {
             // 赋值
-            if (!this.props.valueBindProp) this.$input.value = addrs.address;
-            if (onChange) onChange(addrs.address, this.refs.$ComponentInputText.getArgs(e))
+            if (!valueBindProp) this.$input.value = addrs.address;
+            if (onChange) onChange(addrs.address, args)
           },
           onError: (err) => {
             // 赋值
-            if (!this.props.valueBindProp) this.$input.value = '';
-            if (onChange) onChange('', this.refs.$ComponentInputText.getArgs(e))
+            if (!valueBindProp) this.$input.value = '';
+            if (onChange) onChange('', args)
             // 提示获取地址失败
             Bridge.showToast(err.msg, {mask: false});
           }
@@ -38,14 +49,15 @@ export default class InputLocation extends Component {
       },
       onError: (err) => {
         // 赋值
-        if (!this.props.valueBindProp) this.$input.value = '';
-        if (onChange) onChange('', this.refs.$ComponentInputText.getArgs(e))
+        if (!valueBindProp) this.$input.value = '';
+        if (onChange) onChange('', args)
         // 提示定位失败
         Bridge.showToast(err.msg, {mask: false});
       }
     });
   }
   render() {
-    return <InputText ref="$ComponentInputText" {...this.props} readOnly onClick={this.onClick}/>;
+    const {valueBindProp, locationingText, onChange, onClick, ...others} = this.props;
+    return <InputText ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>;
   }
 }

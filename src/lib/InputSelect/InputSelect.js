@@ -5,10 +5,13 @@ import SelectPicker from './../SelectPicker';
 
 export default class InputSelect extends Component {
   static propTypes = {
+    valueBindProp: PropTypes.bool,
     list: PropTypes.array, // [{key: '', value: ''}]
     multiple: PropTypes.bool,
     pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string
+    pickerClassName: PropTypes.string,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func
   }
   static defaultProps = {
   }
@@ -31,7 +34,8 @@ export default class InputSelect extends Component {
   getOptions = (options) => {
     return this.props.multiple ? options : options[0]
   }
-  onClick = () => {
+  onClick = (value, args) => {
+    if (this.props.onClick) this.props.onClick(value, args);
     this.setState({
       show: !this.state.show
     });
@@ -46,7 +50,7 @@ export default class InputSelect extends Component {
       show: !this.state.show
     });
     if (this.props.onChange) {
-      this.props.onChange(value, options, this.refs.$ComponentInputText.getArgs());
+      this.props.onChange(value, options, this.props.args);
     }
   }
   onClickCancel = () => {
@@ -60,7 +64,7 @@ export default class InputSelect extends Component {
     });
   }
   render() {
-    const {list, multiple, pickerStyle, pickerClassName, ...others} = this.props;
+    const {valueBindProp, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker

@@ -1627,7 +1627,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 多行文本框, 默认高度见seedsui-variable.less中@input-area-height, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputCity
-城市选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+城市选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerCity 城市选择弹框](#pickercity)组件
 ### 属性
 ```javascript
 <InputCity
@@ -1642,7 +1642,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 颜色选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
 
 ## InputDate
-日期选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+日期选择框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerDate 日期选择弹框](#pickerdate)组件
 ### 属性
 ```javascript
 <InputDate
@@ -1650,11 +1650,18 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+  onError={错误 func({msg: ''}), 默认无}
 />
 ```
 
 ## InputLocation
 定位框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputLocation
+  onClick={点击 func(value,args), 默认无}
+  onChange={值改变 func(value,args), 默认无}
+/>
 
 ## InputNumber
 数字输入框, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
@@ -2454,7 +2461,7 @@ const {checked} = this.props;
 ```javascript
 <Page
   style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'container'}
+  className={容器className string, 默认无, 基础'page'}
   animation={动画 string, 默认无}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
   {...others}
 >
@@ -2513,4 +2520,169 @@ import Container from 'seedsui-react/lib/Container';
     中部
   </Container>
 </PagePull>
+```
+
+
+
+## Peg
+小竖条
+### 属性
+```javascript
+<Peg
+  className={图标className string, 默认无, 基础'peg'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Peg from 'seedsui-react/lib/Peg';
+
+<Peg/>
+```
+
+
+## Picker
+滚动选择弹框
+### 属性
+```javascript
+<Picker
+  portal={传送dom object, 默认document.getElementById('root')}
+  show={*显隐 bool, 默认false}
+  list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
+  style={容器style object, 默认无}
+  className={容器className string, 默认无, 基础'picker'}
+  slotClassName={一槽className string, 默认'text-center'}
+  value={值 string, 默认无}
+  onClickMask={点击遮罩 func, 默认无}
+  onClickCancel={点击取消按钮 func(s), 默认无}
+  onClickSubmit={点击确定按钮 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import Picker from 'seedsui-react/lib/Picker';
+
+onClickSubmit = (e) => {
+  const value = e.activeOptions[0].value;
+  console.log(value);
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickCancel = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickMask = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+
+<Picker
+  list={[{key: '1', value: '111'}, {key: '2', value: '222'}]}
+  value=""
+  show={this.state.show}
+  onClickSubmit={this.onClickSubmit}
+  onClickCancel={this.onClickCancel}
+  onClickMask={this.onClickMask}
+/>
+```
+
+
+## PickerCity
+城市选择弹框, 基于[Picker 滚动选择弹框](#picker)组件
+### 属性
+```javascript
+<PickerCity
+  portal={传送dom object, 默认document.getElementById('root')}
+  type={类型 string, 默认'area'} // area | city
+  className={容器className string, 默认无, 基础'picker'}
+  style={容器style object, 默认无}
+  value={值 string, 默认无}
+  show={*显隐 bool, 默认false}
+  onClickMask={点击遮罩 func, 默认无}
+  onClickCancel={点击取消按钮 func(s), 默认无}
+  onClickSubmit={点击确定按钮 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import PickerCity from 'seedsui-react/lib/PickerCity';
+
+onClickSubmit = (e) => {
+  const value = e.activeOptions[0].value;
+  console.log(value);
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickCancel = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickMask = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+
+<PickerCity
+  value=""
+  show={this.state.show}
+  onClickSubmit={this.onClickSubmit}
+  onClickCancel={this.onClickCancel}
+  onClickMask={this.onClickMask}
+/>
+```
+
+
+## PickerDate
+日期选择弹框, 基于[Picker 滚动选择弹框](#picker)组件
+### 属性
+```javascript
+<PickerDate
+  portal={传送dom object, 默认document.getElementById('root')}
+  type={类型 string, 默认'area'} // area | city
+  className={容器className string, 默认无, 基础'picker'}
+  style={容器style object, 默认无}
+  value={值 string, 默认无}
+  show={*显隐 bool, 默认false}
+  onClickMask={点击遮罩 func, 默认无}
+  onClickCancel={点击取消按钮 func(s), 默认无}
+  onClickSubmit={点击确定按钮 func(s), 默认无}
+  onError={错误 func(s), 默认无}
+/>
+```
+### 示例
+```javascript
+import PickerDate from 'seedsui-react/lib/PickerDate';
+
+onClickSubmit = (e) => {
+  const value = e.activeOptions[0].value;
+  console.log(value);
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickCancel = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickMask = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+
+<PickerDate
+  value=""
+  show={this.state.show}
+  onClickSubmit={this.onClickSubmit}
+  onClickCancel={this.onClickCancel}
+  onClickMask={this.onClickMask}
+/>
 ```

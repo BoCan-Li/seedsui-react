@@ -6,9 +6,13 @@ import PickerDate from './../PickerDate';
 
 export default class InputDate extends Component {
   static propTypes = {
+    valueBindProp: PropTypes.bool,
     type: PropTypes.string, // 'date | month | time | datetime'
     pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string
+    pickerClassName: PropTypes.string,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func,
+    onError: PropTypes.func
   }
   static defaultProps = {
     type: 'date',
@@ -26,7 +30,8 @@ export default class InputDate extends Component {
   componentDidMount () {
     this.$input = this.refs.$ComponentInputText.$input;
   }
-  onClick = () => {
+  onClick = (value, args) => {
+    if (this.props.onClick) this.props.onClick(value, args);
     this.setState({
       show: !this.state.show
     });
@@ -42,7 +47,7 @@ export default class InputDate extends Component {
       show: !this.state.show
     });
     if (this.props.onChange) {
-      this.props.onChange(value, options, this.refs.$ComponentInputText.getArgs());
+      this.props.onChange(value, options, this.props.args);
     }
   }
   onClickCancel = () => {
@@ -119,7 +124,7 @@ export default class InputDate extends Component {
     return text;
   }
   render() {
-    const {min, max, type, pickerStyle, pickerClassName, ...others} = this.props;
+    const {valueBindProp, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerDate

@@ -5,9 +5,12 @@ import Picker from './../Picker';
 
 export default class InputPicker extends Component {
   static propTypes = {
+    valueBindProp: PropTypes.bool,
     list: PropTypes.array, // [{key: '', value: ''}]
     pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string
+    pickerClassName: PropTypes.string,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func,
   }
   static defaultProps = {
   }
@@ -20,7 +23,8 @@ export default class InputPicker extends Component {
   componentDidMount () {
     this.$input = this.refs.$ComponentInputText.$input;
   }
-  onClick = () => {
+  onClick = (value, args) => {
+    if (this.props.onClick) this.props.onClick(value, args);
     this.setState({
       show: !this.state.show
     });
@@ -34,7 +38,7 @@ export default class InputPicker extends Component {
       show: !this.state.show
     });
     if (this.props.onChange) {
-      this.props.onChange(value, e.activeOptions[0], this.refs.$ComponentInputText.getArgs());
+      this.props.onChange(value, e.activeOptions[0], this.props.args);
     }
   }
   onClickCancel = () => {
@@ -48,7 +52,7 @@ export default class InputPicker extends Component {
     });
   }
   render() {
-    const {list, pickerStyle, pickerClassName, ...others} = this.props;
+    const {valueBindProp, list, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <Picker

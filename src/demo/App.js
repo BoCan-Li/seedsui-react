@@ -3,8 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Dragrefresh from '../lib/Dragrefresh';
 import Titlebar from '../lib/Titlebar';
-import ListPull from '../lib/ListPull';
-import Loading from '../lib/Loading';
+import InputLocation from '../lib/InputLocation';
 
 
 export default class App extends Component {
@@ -90,8 +89,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Dragrefresh hasMore={this.state.hasMore} ref={(el) => {this.$elDrag = el;}}>
-        <ListPull list={this.state.listpull} onClick={this.onClick} onShowedLeft={this.onShowedLeft}/>
-        <Loading maskStyle={{top: '44px'}}/>
+        <InputLocation onClick={(e, args) => {console.log(e, args);}}/>
       </Dragrefresh>
     </PagePull>
   }

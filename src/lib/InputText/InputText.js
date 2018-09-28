@@ -56,7 +56,6 @@ export default class InputText extends Component {
   }
   static defaultProps = {
     type: 'text',
-    args: null,
     value: '',
     readOnly: false,
     disabled: false,

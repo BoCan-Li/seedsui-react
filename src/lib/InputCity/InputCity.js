@@ -5,9 +5,12 @@ import PickerCity from './../PickerCity';
 
 export default class InputCity extends Component {
   static propTypes = {
+    valueBindProp: PropTypes.bool,
     type: PropTypes.string, // 'area' | 'city'
     pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string
+    pickerClassName: PropTypes.string,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func
   }
   static defaultProps = {
     type: 'area'
@@ -27,7 +30,8 @@ export default class InputCity extends Component {
   componentDidMount () {
     this.$input = this.refs.$ComponentInputText.$input;
   }
-  onClick = () => {
+  onClick = (value, args) => {
+    if (this.props.onClick) this.props.onClick(value, args);
     this.setState({
       show: !this.state.show
     });
@@ -42,7 +46,7 @@ export default class InputCity extends Component {
       show: !this.state.show
     });
     if (this.props.onChange) {
-      this.props.onChange(value, options, this.refs.$ComponentInputText.getArgs());
+      this.props.onChange(value, options, this.props.args);
     }
   }
   onClickCancel = () => {
@@ -56,7 +60,7 @@ export default class InputCity extends Component {
     });
   }
   render() {
-    const {type, pickerStyle, pickerClassName, ...others} = this.props;
+    const {valueBindProp, type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerCity

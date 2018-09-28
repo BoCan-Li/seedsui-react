@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class Card extends Component {
   static propTypes = {
-    style: PropTypes.object,
     className: PropTypes.string,
     children: PropTypes.node,
     onClick: PropTypes.func
@@ -28,9 +27,9 @@ export default class Card extends Component {
     if (this.props.onClick) this.props.onClick(this.getArgs(e));
   }
   render() {
-    const {children, style, className, onClick, ...others} = this.props;
+    const {children, className, onClick, ...others} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={'card' + (className ? ' ' + className : '')} style={style} onClick={this.onClick} {...others}>
+      <div ref={el => {this.$el = el;}} className={'card' + (className ? ' ' + className : '')} onClick={this.onClick} {...others}>
         {children}
       </div>
     );
