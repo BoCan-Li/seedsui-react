@@ -384,6 +384,9 @@ import Attribute from 'seedsui-react/lib/Attribute';
   //     mark: string, // 标签
   //     markClassName: string, // 标签className
   //     markStyle: object // 标签style
+  //     suffix: node // value后缀
+  //     suffixClassName: string,
+  //     suffixStyle: object,
   //   }
   // ]
   className={容器className string[attribute-margin(margin: 10px 12px;) | attribute-padding(padding: 10px 12px;) | align(左右对齐布局) | start(左端对齐) | between(两端对齐)], 默认'attribute-margin', 基础'attributes'}
@@ -392,7 +395,7 @@ import Attribute from 'seedsui-react/lib/Attribute';
   rowClassName={行容器className string[attribute-margin(margin: 10px 12px;) | attribute-padding(padding: 10px 12px;) | align(左右对齐布局) | start(左端对齐) | between(两端对齐)], 默认'attribute-margin', 基础'attribute'}
   rowStyle={行容器style object, 默认无}
 
-  col={列数 string, 默认1}
+  col={列数 string | number, 默认1}
   colClassName={当col为2时列className string, 默认无, 基础'attribute-half'}
   colStyle={当col为2时列style object, 默认无}
 
@@ -405,10 +408,9 @@ import Attribute from 'seedsui-react/lib/Attribute';
   valueStyle={value的style object, 默认无}
 
   rowAfter={行后DOM node, 默认无}
-  onClick={点击行 func(args)}
   rowAfterExclude={行后过滤 number, 默认无, 例如最后一行hr不渲染}
   onCopy={拷贝事件 func(text, msg)}
-  onClick={点击项 func(text, msg)}
+  onClick={点击行 func(item, index, item2?, index2?)}
 >
 attributes渲染后的DOM
 </Attributes>
@@ -1361,7 +1363,7 @@ import Container from 'seedsui-react/lib/Container';
   style={容器style object, 默认无}
   space={上下间距 number, 默认12}
   wing={左右间距 number, 默认12}
-  col={一行列数 string, 默认3}
+  col={一行列数 string | number, 默认3}
   showUpload={是否显示上传按钮 bool, 默认false}
   list={单元格 array, 默认[], 格式见下方示例}
   /* list: [{
@@ -2175,7 +2177,7 @@ import Legend from 'seedsui-react/lib/Legend';
 
   showAvatar={是否显示照片 bool, 默认无}
   avatarSrc={照片地址 node, 默认无}
-  avatarClassName={照片className string, 默认'bg-no-img', 基础'list-avatar'}
+  avatarClassName={照片className string, 默认'bg-no-avatar', 基础'list-avatar'}
   avatarStyle={照片style object, 默认无}
   onClickAvatar={点击照片 func(args), 默认无}
   avatarAfter={照片后 node, 默认无}

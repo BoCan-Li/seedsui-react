@@ -11,7 +11,10 @@ export default class Attributes extends Component {
     showValidValue: PropTypes.bool, // 值合法时显示
     showValidName: PropTypes.bool, // name合法时显示
 
-    col: PropTypes.string, // 列数, 默认1
+    col: PropTypes.oneOfType([ // 列数, 默认1
+      PropTypes.string,
+      PropTypes.number
+    ]),
     list: PropTypes.array,
     // [
     //   {
@@ -29,7 +32,10 @@ export default class Attributes extends Component {
     //     show: bool,
     //     mark: string,
     //     markClassName: string,
-    //     markStyle: object
+    //     markStyle: object,
+    //     suffix: node // value后缀
+    //     suffixClassName: string,
+    //     suffixStyle: object,
     //   }
     // ]
     className: PropTypes.string, // align(左右对齐布局) | start(左端对齐) | between(两端对齐)
@@ -75,6 +81,7 @@ export default class Attributes extends Component {
       }
     })
   }
+  // 点击行
   onClick = (item, index, item2, index2) => { // eslint-disable-line
     if (this.props.onClick) this.props.onClick(arguments);
   }
@@ -88,14 +95,7 @@ export default class Attributes extends Component {
       }
       return <Price digits={item.priceDigits} key={'price' + index} style={item.priceStyle} className={item.priceClassName ? item.priceClassName : 'capitalize'} price={priceValue} unit={item.priceUnit || ''}/>;
     // 按钮
-    } else if (item.button) {
-      let buttonValue = item.value || '';
-      if (typeof item.button === 'string') {
-        buttonValue = item.button;
-      }
-      return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item, index);}}>{buttonValue}</Button>;
-    // html
-    } else if (item.html) {
+    } else if (item.html) { // html
       let htmlValue = item.value || '';
       if (typeof item.html === 'string') {
         htmlValue = item.html;
@@ -103,6 +103,10 @@ export default class Attributes extends Component {
       return <div dangerouslySetInnerHTML={{__html: htmlValue}}/>;
     }
     return item.value;
+  }
+  getSuffixDOM = (item, index) => {
+    if (!item.suffix) return null;
+    return <span className={item.suffixClassName} style={item.suffixStyle} key={`suffix${index}`}>{item.suffix}</span>;
   }
   // 获得操作DOM
   getOpDOM = (item, index) => {
@@ -112,7 +116,7 @@ export default class Attributes extends Component {
       if (typeof item.copy === 'string') {
         copyValue = item.copy;
       }
-      return <Button key={index} className="ricon sm" style={{borderRadius: '3px'}} args={copyValue} onClick={this.onCopyToClipboard}>复制</Button>
+      return <Button key={index} className="rbtn sm" style={{borderRadius: '3px'}} args={copyValue} onClick={this.onCopyToClipboard}>复制</Button>
     }
     // 电话
     if (item.tel) {
@@ -128,11 +132,20 @@ export default class Attributes extends Component {
     if (item.mark) {
       return <Mark className={item.markClassName} style={item.markStyle}>{item.mark}</Mark>
     }
+    // 按钮
+    if (item.button) {
+      let buttonValue = item.value || '';
+      if (typeof item.button === 'string') {
+        buttonValue = item.button;
+      }
+      return <Button key={'button' + index} style={item.buttonStyle} className={item.buttonClassName} onClick={(e) => {e.stopPropagation();if (item.buttonClick) item.buttonClick(item, index);}}>{buttonValue}</Button>;
+    }
   }
   // 获得2列的value的DOM
   getCol2ValueDOM = (item, index) => {
     let dom = [];
     dom.push(this.getValueDOM(item, index));
+    if (item.suffix) dom.push(this.getSuffixDOM(item, index));
     const opDOM = this.getOpDOM(item, index);
     if (opDOM) dom.push(opDOM);
     return dom;
@@ -155,7 +168,7 @@ export default class Attributes extends Component {
     } = this.props;
     const attrsDOM = [];
     for (let i = 0; i < list.length;) {
-      if (col === '2') {
+      if (col == 2) { // eslint-disable-line
         attrsDOM.push(
           <div key={`row${i}`} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i, list[i + 1], i + 1);}}>
             <div className={`attribute-half${colClassName ? ' ' + colClassName : ''}`} style={colStyle}>
@@ -164,7 +177,6 @@ export default class Attributes extends Component {
               {/* 右 */}
               <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}${valueClassName ? ' ' + valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
                 {this.getCol2ValueDOM(list[i], i)}
-                {list[i].ricon && <span>{list[i].ricon}</span>}
               </div>
             </div>
             {list[i + 1] && <div className={`attribute-half${colClassName ? ' ' + colClassName : ''}`} style={colStyle}>
@@ -173,7 +185,6 @@ export default class Attributes extends Component {
               {/* 右 */}
               <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}  ${valueClassName ? valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
                 {this.getCol2ValueDOM(list[i + 1], i + 1)}
-                {list[i + 1].ricon && <span>{list[i + 1].ricon}</span>}
               </div>
             </div>}
           </div>,
@@ -193,7 +204,7 @@ export default class Attributes extends Component {
               {/* 右 */}
               <div className={`attribute-right${cellClassName ? ' ' + cellClassName : ''}${valueClassName ? ' ' + valueClassName : ''}`} style={Object.assign({}, cellStyle, valueStyle)}>
                 {this.getValueDOM(list[i], i)}
-                {list[i].ricon && <span>{list[i].ricon}</span>}
+                {list[i].suffix && this.getSuffixDOM(list[i], i)}
               </div>
               {/* 操作 */}
               {this.getOpDOM(list[i], i)}

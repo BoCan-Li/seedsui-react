@@ -11,7 +11,10 @@ export default class Grid extends Component {
     className: PropTypes.string, // grid-album | grid-bordered
     space: PropTypes.number, // 上下间距
     wing: PropTypes.number, // 左右间距
-    col: PropTypes.string, // 一行列数
+    col: PropTypes.oneOfType([ // 一行列数
+      PropTypes.string,
+      PropTypes.number
+    ]),
     showUpload: PropTypes.bool,
     list: PropTypes.array, // 单元格，见下方示例
     children: PropTypes.node, // 也可以直接放子元素，grid将自动排列

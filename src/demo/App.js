@@ -3,7 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import List from '../lib/List';
+import Attributes from '../lib/Attributes';
 
 export default class App extends Component {
   constructor(props) {
@@ -41,7 +41,20 @@ export default class App extends Component {
       </Header>
       <Container>
         <input type="button" value="按钮" onClick={this.changeDate}/>
-        <List showAvatar caption="haha"/>
+        <Attributes col={2} list={[
+          {
+            name: '标题',
+            value: '内容',
+            copy: '15651871075',
+            suffix: <span>后缀</span>
+          },
+          {
+            name: '标题2',
+            value: '内容2',
+            copy: '15651871075',
+            suffix: '后缀'
+          }
+        ]}/>
       </Container>
     </PagePull>
   }
