@@ -2168,14 +2168,14 @@ import Legend from 'seedsui-react/lib/Legend';
 
   showThumbnail={是否显示缩略图 bool, 默认无}
   thumbnailSrc={缩略图地址 node, 默认无}
-  thumbnailClassName={缩略图className string, 默认无, 基础'list-thumbnail'}
+  thumbnailClassName={缩略图className string, 默认'bg-no-img', 基础'list-thumbnail'}
   thumbnailStyle={缩略图style object, 默认无}
   onClickThumbnail={点击缩略图 func(args), 默认无}
   thumbnailAfter={缩略图后 node, 默认无}
 
   showAvatar={是否显示照片 bool, 默认无}
   avatarSrc={照片地址 node, 默认无}
-  avatarClassName={照片className string, 默认无, 基础'list-avatar'}
+  avatarClassName={照片className string, 默认'bg-no-img', 基础'list-avatar'}
   avatarStyle={照片style object, 默认无}
   onClickAvatar={点击照片 func(args), 默认无}
   avatarAfter={照片后 node, 默认无}

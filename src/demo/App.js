@@ -3,7 +3,7 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import InputDate from '../lib/InputDate';
+import List from '../lib/List';
 
 export default class App extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class App extends Component {
       </Header>
       <Container>
         <input type="button" value="按钮" onClick={this.changeDate}/>
-        <InputDate value={this.state.value}/>
+        <List showAvatar caption="haha"/>
       </Container>
     </PagePull>
   }

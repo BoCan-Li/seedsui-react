@@ -58,6 +58,8 @@ export default class List extends Component {
     lazyLoad: PropTypes.bool
   }
   static defaultProps = {
+    thumbnailClassName: 'bg-no-img',
+    avatarClassName: 'bg-no-avatar',
     args: null
   }
   constructor(props) {

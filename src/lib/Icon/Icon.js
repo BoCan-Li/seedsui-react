@@ -51,29 +51,29 @@ export default class Icon extends Component {
       ...others
     } = this.props;
     if (base === 'pureImg') {
-      if (lazyLoad && src) {
+      if (src && lazyLoad) {
         return <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>
       }
-      if (!lazyLoad && src) {
+      if (src && !lazyLoad) {
         return <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>
       }
       return null
     }
     if (base === 'pureIcon') {
-      if (lazyLoad && src) {
+      if (src && lazyLoad) {
         return <span className={`icon-full ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>
       }
-      if (!lazyLoad && src) {
+      if (src && !lazyLoad) {
         return <span className={`icon-full ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>
       }
       return null
     }
     return (
       <span ref={el => {this.$el = el;}} className={`${baseClassName}${className ? ' ' + className : ''}`} style={style} {...others}>
-        {base === 'icon' && lazyLoad && src && <span className={`icon-full ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>}
-        {base === 'icon' && !lazyLoad && src && <span className={`icon-full ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>}
-        {base === 'img' && lazyLoad && src && <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>}
-        {base === 'img' && !lazyLoad && src && <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>}
+        {src && base === 'icon' && lazyLoad && <span className={`icon-full ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>}
+        {src && base === 'icon' && !lazyLoad && <span className={`icon-full ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>}
+        {src && base === 'img' && lazyLoad && <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>}
+        {src && base === 'img' && !lazyLoad && <img alt="" className={`icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>}
         {children}
         {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}
         {onClickClose && <Close onClick={onClickClose} className={`${closeClassName ? ' ' + closeClassName : ''}`}/>}
