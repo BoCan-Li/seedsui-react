@@ -20,7 +20,7 @@ export default class InputLocation extends Component {
     this.$input = this.refs.$ComponentInputText.$input;
   }
   onClick = (value, args) => {
-    const {valueBindProp, locationingText, onChange, onClick} = this.props;
+    const {locationingText, onChange, onClick} = this.props;
     if (onClick) onClick(value, args);
     if (this.$input.value === locationingText) return;
     // 定位中...
@@ -57,7 +57,7 @@ export default class InputLocation extends Component {
     });
   }
   render() {
-    const {valueBindProp, locationingText, onChange, onClick, ...others} = this.props;
+    const {locationingText, onChange, onClick, ...others} = this.props;
     return <InputText ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>;
   }
 }

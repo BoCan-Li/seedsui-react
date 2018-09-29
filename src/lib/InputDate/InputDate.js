@@ -124,7 +124,7 @@ export default class InputDate extends Component {
     return text;
   }
   render() {
-    const {valueBindProp, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
+    const {min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerDate

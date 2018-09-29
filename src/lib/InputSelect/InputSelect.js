@@ -64,7 +64,7 @@ export default class InputSelect extends Component {
     });
   }
   render() {
-    const {valueBindProp, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker

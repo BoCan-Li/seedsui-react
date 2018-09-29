@@ -3,13 +3,13 @@ import PagePull from '../lib/PagePull';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import InputStar from '../lib/InputStar';
+import InputDate from '../lib/InputDate';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 0
+      value: '0'
     }
   }
   componentDidMount() {
@@ -24,6 +24,11 @@ export default class App extends Component {
       value
     })
   }
+  changeDate = () => {
+    this.setState({
+      value: '2018-08-08'
+    })
+  }
   onHide = () => {
     this.setState({
       show: false
@@ -35,7 +40,8 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Container>
-        <InputStar value={this.state.value} onChange={this.onChange}/>
+        <input type="button" value="按钮" onClick={this.changeDate}/>
+        <InputDate value={this.state.value}/>
       </Container>
     </PagePull>
   }

@@ -60,7 +60,7 @@ export default class InputCity extends Component {
     });
   }
   render() {
-    const {valueBindProp, type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerCity
