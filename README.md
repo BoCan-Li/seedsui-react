@@ -1054,6 +1054,11 @@ import Close from 'seedsui-react/lib/Close';
 <Container
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'container'}
+  lazyLoad={是否启用懒人加载 bool, 默认false} // 只会在didMount时执行lazyLoadInstance.load();
+  // 异步加载时需要使用:
+  // ref="$container" 和 ref={(el) => {this.$container = el;}}, this.refs.$container === this.$container
+  // this.refs.$container.state.lazyLoadInstance.load();或this.$container.state.lazyLoadInstance.load();
+  
   {...others}
 >
 主体内容
@@ -1193,7 +1198,7 @@ import Dot from 'seedsui-react/lib/Dot';
   noDataIconClassName={暂无数据图标className string, 默认'notice-icon-nodata'}
   noDataOnClick={点击暂无数据 func(e)}
 
-  lazyLoad={是否启用懒人加载 bool, 默认false}
+  lazyLoad={是否启用懒人加载 bool, 默认false} // 每当didUpdate时会执行lazyLoadInstance.load();
 
   onScroll={滚动事件 func(e)}
 >
@@ -3306,6 +3311,10 @@ import Sticker from 'seedsui-react/lib/Sticker';
   iconBadgeClassName={图标徽章className string, 默认无}
   riconBadgeStyle={右图标徽章style object, 默认无}
   riconBadgeClassName={右图标徽章className string, 默认无}
+  captionClassName={标题className string, 默认无, 基础'tab-caption'}
+  captionStyle={标题style object, 默认无}
+  sndCaptionClassName={副标题className string, 默认无, 基础'tab-sndcaption'}
+  sndCaptionStyle={副标题style object, 默认无}
   list={列表 array, 默认无, 格式如下:}
   // [
   //   {

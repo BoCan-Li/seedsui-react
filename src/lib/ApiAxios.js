@@ -1,5 +1,39 @@
 import axios from 'axios'
-import Bridge from './Bridge'
+
+// 封装成Api类
+function buildParams (params) {
+  if (params && !params.data) return {data: params}
+  return params
+}
+const Api = {
+  logOut: function () {
+    console.warn('401, 您已被挤下线, 需要重新登录, 可是您未设置ApiAxios.setLogOut方法')
+  },
+  setLogOut: function (fn) {
+    this.logOut = fn
+  },
+  setBaseURL: function (baseURL) {
+    axios.defaults.baseURL = baseURL
+  },
+  post: function (url, params) {
+    return axios.post(url, params)
+  },
+  get: function (url, params) {
+    const newParams = buildParams(params)
+    return axios.get(url, newParams)
+  },
+  all: function (requests) {
+    const methods = requests.map((request) => {
+      if (request.method === 'post') {
+        return this.post(request.url, request.data || null)
+      } else {
+        return this.get(request.url, request.data || null)
+      }
+    })
+    return axios.all(methods)
+  }
+}
+
 // axios 默认配置
 // axios.defaults.timeout = 5000
 // 设置头
@@ -57,7 +91,7 @@ axios.interceptors.response.use(response => {
     switch (error.response.status) {
       case 401:
         // 401 跳转到登录页面
-        Bridge.logOut(error.response.data.message)
+        Api.logOut(error.response.data.message)
         break
       default:
         // alert(JSON.stringify(error.response))
@@ -66,31 +100,4 @@ axios.interceptors.response.use(response => {
   return Promise.reject(error)
 })
 
-// 封装成Api类
-function buildParams (params) {
-  if (params && !params.data) return {data: params}
-  return params
-}
-const Api = {
-  setBaseURL: function (baseURL) {
-    axios.defaults.baseURL = baseURL
-  },
-  post: function (url, params) {
-    return axios.post(url, params)
-  },
-  get: function (url, params) {
-    const newParams = buildParams(params)
-    return axios.get(url, newParams)
-  },
-  all: function (requests) {
-    const methods = requests.map((request) => {
-      if (request.method === 'post') {
-        return this.post(request.url, request.data || null)
-      } else {
-        return this.get(request.url, request.data || null)
-      }
-    })
-    return axios.all(methods)
-  }
-}
 export default Api

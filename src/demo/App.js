@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import PagePull from '../lib/PagePull';
+import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import Attributes from '../lib/Attributes';
+import Tabbar from '../lib/Tabbar';
+import ApiAxios from '../lib/ApiAxios';
 
 export default class App extends Component {
   constructor(props) {
@@ -13,11 +14,13 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
+    ApiAxios.setLogOut(() => {
+      console.log(1)
+    })
+    ApiAxios.logOut('haha')
   }
   onClick = () => {
-    this.setState({
-      show: true
-    })
+    console.log(this.refs.$handsign.state.instance.save())
   }
   onChange = (value) => {
     this.setState({
@@ -35,27 +38,14 @@ export default class App extends Component {
     })
   }
   render() {
-    return <PagePull style={{ backgroundColor: 'white' }} lSide={<p>1</p>} rSide={<p>2</p>}>
+    return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Container>
-        <input type="button" value="按钮" onClick={this.changeDate}/>
-        <Attributes col={2} list={[
-          {
-            name: '标题',
-            value: '内容',
-            copy: '15651871075',
-            suffix: <span>后缀</span>
-          },
-          {
-            name: '标题2',
-            value: '内容2',
-            copy: '15651871075',
-            suffix: '后缀'
-          }
-        ]}/>
+        <input type="button" value="按钮" onClick={this.onClick}/>
+        <Tabbar tiled sndCaptionStyle={{color: 'yellow'}} list={[{caption: '标题', sndcaption: '副标题副标题副标题副标题副标题'}, {caption: '标题', sndcaption: '副标题'}, {caption: '标题', sndcaption: '副标题'}, {caption: '标题', sndcaption: '副标题'}]}/>
       </Container>
-    </PagePull>
+    </Page>
   }
 };

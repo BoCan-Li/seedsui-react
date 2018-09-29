@@ -10,6 +10,10 @@ export default class Tabbar extends Component {
     iconBadgeClassName: PropTypes.string,
     riconBadgeStyle: PropTypes.object,
     riconBadgeClassName: PropTypes.string,
+    captionClassName: PropTypes.string,
+    captionStyle: PropTypes.object,
+    sndCaptionClassName: PropTypes.string,
+    sndCaptionStyle: PropTypes.object,
     list: PropTypes.array,
     tiled: PropTypes.bool, // 宽度等分, 默认宽度弹性伸缩
     disabled: PropTypes.bool,
@@ -57,6 +61,7 @@ export default class Tabbar extends Component {
     const target = e.target;
     if (this.props.exceptOnClickActive && target.classList.contains('active')) return;
     const index = target.getAttribute('data-index');
+    if (!index) return;
     if (this.props.onClick) {
       this.props.onClick(this.props.list[index], Number(index));
       e.stopPropagation();
@@ -117,7 +122,7 @@ export default class Tabbar extends Component {
     return <Icon className={riconClassName} style={riconStyle} badgeCaption={riconBadgeCaption} badgeClassName={riconBadgeClassName} badgeStyle={riconBadgeStyle}/>
   }
   getTabsDOM = () => {
-    const {list, style, activeIndex} = this.props;
+    const {list, activeIndex, style, captionClassName, captionStyle, sndCaptionClassName, sndCaptionStyle} = this.props;
     // tabStyle高度
     var tabStyle = {};
     if (style && style.height) {
@@ -139,8 +144,8 @@ export default class Tabbar extends Component {
       return (<li id={item.id} data-index={index} className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, item.style || {})} key={index}>
         {liconDOM && liconDOM}
         <div className="tab-content">
-          <div className="tab-caption">{item.caption}</div>
-          {item.sndcaption && <div className="tab-sndcaption">{item.sndcaption}</div>}
+          <div className={`tab-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</div>
+          {item.sndcaption && <div className={`tab-sndcaption${sndCaptionClassName ? ' ' + sndCaptionClassName : ''}`} style={sndCaptionStyle}>{item.sndcaption}</div>}
         </div>
         {riconDOM && riconDOM}
       </li>);

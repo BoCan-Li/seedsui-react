@@ -28,17 +28,25 @@
 	height:@40px;
 	vertical-align: middle;
 }
-.tab-content{
-	display:inline-block;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	white-space:nowrap;
-	pointer-events:none;
-  vertical-align:middle;
-}
 .tab-icon{
 	margin:0 4px;
 	pointer-events:none;
+}
+.tab-content{
+	display:inline-block;
+	pointer-events:none;
+  vertical-align:middle;
+}
+.tab-caption, .tab-sndcaption{
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.tab-caption{
+	.setTabCaption();
+}
+.tab-sndcaption{
+	.setTabSndCaption();
 }
 // 平铺等分
 .tabbar-tiled{
@@ -47,6 +55,13 @@
 		.flex;
 		&:extend(.flex-1);
 		.flex-middlecenter;
+	}
+	.tab-icon{
+		display: block;
+	}
+	.tab-content{
+		display: block;
+		.flex-1;
 	}
 }
 
