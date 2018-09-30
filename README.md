@@ -2381,7 +2381,7 @@ const list = [
   className={容器className string, 默认无, 基础'marquee'}
   list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
   activeId={默认选中项的id string, 默认无}
-  onClick={点击 func(item), 默认无}
+  onClick={点击 func(item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
@@ -2397,8 +2397,8 @@ const menus = [
     ]
   }
 ];
-onClickMenu = (item) => {
-  console.log(item);
+onClickMenu = (item, isActived, extandStatus, childrenCount) => {
+  console.log(item, isActived, extandStatus, childrenCount);
 }
 <MenuTiled list={menus} activeId={activeMenuId} onClick={this.onClickMenu}/>
 ```
@@ -2421,7 +2421,7 @@ onClickMenu = (item) => {
     children
   }] */
   activeId={默认选中项的id string, 默认无}
-  onClick={点击 func(item, isActived, isExtand, hasChildren), 默认无}
+  onClick={点击 func(item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
@@ -2437,8 +2437,8 @@ const list = [
     ]
   }
 ];
-onClickMenu = (item, isActived, isExtand, hasChildren) => {
-  console.log(item, isActived, isExtand, hasChildren);
+onClickMenu = (item, isActived, extandStatus, childrenCount) => {
+  console.log(item, isActived, extandStatus, childrenCount);
 }
 const Container = {
   position: 'absolute',
@@ -3329,8 +3329,6 @@ import Sticker from 'seedsui-react/lib/Sticker';
 
   //     riconStyle: object,
   //     riconClassName: string,
-  //     riconActiveStyle: object,
-  //     riconActiveClassName: string,
 
   //     riconBadgeClassName: string,
   //     riconBadgeStyle: object,

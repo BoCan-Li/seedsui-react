@@ -54,8 +54,7 @@ export default class Dropdown extends Component {
       tabbar.push({
         id: item.id,
         caption: item.caption,
-        riconClassName: 'shape-triangle-down',
-        riconActiveStyle: {borderTopColor: '#EB464A'}
+        riconClassName: 'shape-triangle-down'
       });
     };
     this.setState({
@@ -109,11 +108,9 @@ export default class Dropdown extends Component {
   }
   render() {
     const DOM = [<Tabbar key="tabbar" ref={el => {this.$tabbar = el}} exceptOnClickActive={false} list={this.state.tabbar} onClick={this.onClickTab} activeIndex={this.state.tabbarActiveIndex} className="tabbar-dropdown tabbar-tiled border-b"/>];
-    if (this.props.portal) {
-      DOM.push(<Dialog key="dialog" portal={this.props.portal} onClickMask={this.onClickMask} animation="slideDown" style={{width: '100%'}} maskStyle={{top: this.state.top + 'px'}} show={this.state.dialogShow}>
-        <MenuTiled list={this.state.menus} activeId={this.state.activeMenuId} onClick={this.onClickMenu}/>
-      </Dialog>);
-    }
+    DOM.push(<Dialog key="dialog" portal={this.props.portal} onClickMask={this.onClickMask} animation="slideDown" style={{width: '100%'}} maskStyle={{top: this.state.top + 'px'}} show={this.state.dialogShow}>
+      <MenuTiled list={this.state.menus} activeId={this.state.activeMenuId} onClick={this.onClickMenu}/>
+    </Dialog>);
     return DOM;
   }
 }

@@ -36,8 +36,6 @@ export default class Tabbar extends Component {
 
     //     riconStyle: object,
     //     riconClassName: string,
-    //     riconActiveStyle: object,
-    //     riconActiveClassName: string,
 
     //     riconBadgeClassName: string,
     //     riconBadgeStyle: object,

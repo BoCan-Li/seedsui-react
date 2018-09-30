@@ -41,19 +41,16 @@ export default class MenuTiled extends Component {
     const instance = new Instance(this.$el, {
       data: list,
       activeId,
-      onClick: this.onClick
+      onClick: this.props.onClick
     });
     this.setState({
       instance
     });
   }
-  onClick = (item, isActived, isExtand) => {
-    if (isExtand && this.props.onClick) this.props.onClick(item);
-  }
   render() {
-    const {className, style} = this.props;
+    const {className, activeId, onClick, list, ...others} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} style={style}>
+      <div ref={el => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} {...others}>
       </div>
     );
   }

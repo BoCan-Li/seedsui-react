@@ -4,7 +4,6 @@ import Instance from './instance.js';
 
 export default class MenuTree extends Component {
   static propTypes = {
-    style: PropTypes.object,
     className: PropTypes.string,
     activeId: PropTypes.string, // 默认选中项的id
     onClick: PropTypes.func,
@@ -41,19 +40,16 @@ export default class MenuTree extends Component {
     const instance = new Instance(this.$el, {
       data: list,
       activeId,
-      onClick: this.onClick
+      onClick: this.props.onClick // (item, isActive, isExtand: -1无子节点 | true展开 | false收缩, childrenCount))
     });
     this.setState({
       instance
     });
   }
-  onClick = (item, isActived, isExtand, hasChildren) => {
-    if (this.props.onClick) this.props.onClick(item, isActived, isExtand, hasChildren);
-  }
   render() {
-    const {className, style} = this.props;
+    const {className, activeId, onClick, list, ...others} = this.props;
     return (
-      <ul ref={el => {this.$el = el;}} className={`menutree${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => {this.$el = el;}} className={`menutree${className ? ' ' + className : ''}`} {...others}>
       </ul>
     );
   }

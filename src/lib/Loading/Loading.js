@@ -33,17 +33,17 @@ export default class Loading extends Component {
       iconClassName, iconSrc, caption } = this.props;
     let content = <div>加载中...</div>;
     if (type === 'custom') { // 自定义样式
-      content = (<div className="loading-wrapper" style={style}>
+      content = (<div className="loading-custom" style={style}>
         {(iconClassName || iconSrc) && <span style={iconSrc ? {backgroundImage: `url(${iconSrc})`} : {}} className={`loading-custom-icon${iconClassName ? ' ' + iconClassName : ''}`}></span>}
         {caption && <p className="loading-custom-caption">{caption}</p>}
       </div>);
     } else if(type === 'filling') { // 填料环
       content = (<div className="loading-filling active" style={style}>
-        <div className="loading-filling-wrapper"></div>
+        <div className="loading-filling-icon"></div>
       </div>);
     } else if (type === 'floating') { // 流光
       content = (<div className="loading-floating animated" style={style}>
-        <div className="loading-floating-wrapper">
+        <div className="loading-floating-icon">
           <div className="loading-floating-blade"></div>
           <div className="loading-floating-blade"></div>
           <div className="loading-floating-blade"></div>
