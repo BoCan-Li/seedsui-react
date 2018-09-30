@@ -8,16 +8,18 @@
 .loading-mask {
   background-color: transparent;
   transition-duration:0ms;
+  .setLoadingMask();
 }
 
 // 自定义gif动画
-.loading-wrapper {
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  transform: translate(-50%,-50%);
+.loading-custom {
+  .setLoadingCustom();
+  // height: auto;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
+  // text-align: center;
+  // transform: translate(-50%,-50%);
 }
 .loading-custom-icon {
   .setLoadingCustomIcon();
@@ -35,34 +37,18 @@
   }
 }
 .loading-filling {
-  .flex;
-  .flex-middlecenter;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  right: 0;
-  bottom: 0;
   width: @100px;
   height: @100px;
   border-radius: @12px;
-  z-index: 10;
-  transform: translate(-50%,-50%);
 
-  background-color: white;
-  
-  .loading-filling{
-    margin:@30px;
-  }
+  .setLoadingFilling();
 }
-.loading-filling-wrapper {
-  display: inline-block;
-  vertical-align: middle;
+.loading-filling-icon {
   width: @40px;
   height: @40px;
   border-radius: 50%;
   position:relative;
-  box-shadow:inset 0 0 0 @4px @primary-bg;
+  .setLoadingFillingIcon();
   &:before,
   &:after {
     position: absolute;
@@ -87,33 +73,21 @@
 
 // 流光loading-floating
 .loading-floating{
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  box-sizing: border-box;
-  border-radius: @10px;
-  padding-top: @20px;
-  min-width: 100px;
-  max-width: 90%;
-  height: @80px;
-  text-align: center;
-  color: #fff;
-  background-color: rgba(0, 0, 0, .5);
-  transform: translate(-50%,-50%);
+  .setLoadingFloating();
 }
 .loading-floating.animated .loading-floating-blade {
   animation-play-state: running;
 }
-.loading-floating-wrapper {
+.loading-floating-icon {
   position: relative;
-  margin: 0 auto @10px;
   width: @25px;
   height: @25px;
+  .setLoadingFloatingIcon();
 }
-.loading-floating-wrapper .loading-floating-blade {
-  background-color: white;
+.loading-floating-blade {
+  .setLoadingFloatingBlade();
 }
-.loading-floating-wrapper .loading-floating-blade {
+.loading-floating-blade {
   position: absolute;
   left: 44.5%;
   top: 37%;
@@ -123,57 +97,53 @@
   animation: loading-floating-blade-fade 1s linear infinite;
   animation-play-state: paused;
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(1) {
+.loading-floating-blade:nth-child(1) {
   animation-delay: -1.66667s;
   transform: rotate(30deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(2) {
+.loading-floating-blade:nth-child(2) {
   animation-delay: -1.58333s;
   transform: rotate(60deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(3) {
+.loading-floating-blade:nth-child(3) {
   animation-delay: -1.5s;
   transform: rotate(90deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(4) {
+.loading-floating-blade:nth-child(4) {
   animation-delay: -1.41667s;
   transform: rotate(120deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(5) {
+.loading-floating-blade:nth-child(5) {
   animation-delay: -1.33333s;
   transform: rotate(150deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(6) {
+.loading-floating-blade:nth-child(6) {
   animation-delay: -1.25s;
   transform: rotate(180deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(7) {
+.loading-floating-blade:nth-child(7) {
   animation-delay: -1.16667s;
   transform: rotate(210deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(8) {
+.loading-floating-blade:nth-child(8) {
   animation-delay: -1.08333s;
   transform: rotate(240deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(9) {
+.loading-floating-blade:nth-child(9) {
   animation-delay: -1s;
   transform: rotate(270deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(10) {
+.loading-floating-blade:nth-child(10) {
   animation-delay: -0.91667s;
   transform: rotate(300deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(11) {
+.loading-floating-blade:nth-child(11) {
   animation-delay: -0.83333s;
   transform: rotate(330deg) translate(0, -150%);
 }
-.loading-floating-wrapper .loading-floating-blade:nth-child(12) {
+.loading-floating-blade:nth-child(12) {
   animation-delay: -0.75s;
   transform: rotate(360deg) translate(0, -150%);
-}
-
-.loading-floating-wrapper.loading-floating-wrapper-gray .loading-floating-blade {
-  background-color: #8C8C8C;
 }
 
 @-webkit-keyframes loading-floating-blade-fade {
