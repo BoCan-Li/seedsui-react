@@ -369,6 +369,9 @@
 }
 .setIconFull(){ // 图标内span
   position: relative;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
   .flex;
   .flex-middle;
   .flex-center;
@@ -511,12 +514,15 @@
   .flex;
   .flex-middle;
   .flex-center;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   width: @62px;
   height:@62px;
   overflow:hidden;
+  .icon-full{
+    background-color: white;
+  }
 }
 
 // ListPull列表
