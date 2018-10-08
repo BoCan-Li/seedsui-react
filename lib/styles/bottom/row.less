@@ -1,40 +1,9 @@
 // row.less(start)
 .row {
-  position: relative;
-}
-.col-flex{
-  display: block;
-  position: relative;
-  &:extend(.flex-1);
-}
-.col-flex:before,
-.col-flex:after,
-.row:before,
-.row:after {
-  display: table;
-  content: " ";
-}
-.col-flex:after,
-.row:after{
-  clear: both;
-}
-.row-flex:extend(.row all){
-  .flex;
-  &.row-middle{
-    .flex-middle;
-  }
-  &.row-top{
-    .flex-top;
-  }
-  &.row-bottom{
-    .flex-bottom;
-  }
+  .setRow();
 }
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
-  position: relative;
-  min-height: 1px;
-  box-sizing: border-box;
-  float: left;
+  .setRowCol();
 }
 .col-12 {
   width: 100%;

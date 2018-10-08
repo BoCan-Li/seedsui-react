@@ -117,7 +117,10 @@ var ImgLazy = function (params) {
   Init
   -------------------- */
   s.load = function () {
-    s.imgs = s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')
+    s.imgs = [].slice.call(s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')).filter((n) => {
+      if (n.getAttribute(s.params.loadAttr)) return true
+      return false
+    })
     if (s.params.load === 'queue') {
       s.queue(0)
       return
