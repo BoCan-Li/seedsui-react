@@ -354,7 +354,7 @@ var Bridge = {
     var msg = ''
     // 选择照片
     s.choose = function (args = {}) {
-      if (!this.debug) {
+      if (!Bridge.debug) {
         Bridge.showToast('拍照功能只能在APP或者微信中使用', {mask: false})
         return
       }
