@@ -43,7 +43,7 @@ var Loading = function (params) {
     var loading = document.createElement('div')
     loading.setAttribute('class', s.params.loadingClass + ' loading-floating animated')
     // 流光loading-floating
-    var html = '<div class="loading-floating-wrapper">' +
+    var html = '<div class="loading-floating-icon">' +
         '<div class="loading-floating-blade"></div>' +
         '<div class="loading-floating-blade"></div>' +
         '<div class="loading-floating-blade"></div>' +
@@ -59,10 +59,11 @@ var Loading = function (params) {
       '</div>' +
     '<div class="loading-floating-caption">' + s.params.caption + '</div>';
     if (s.params.type === 'filling') { // 填料环loading-filling
-      loading.setAttribute('class', s.params.loadingClass + ' loading-filling active')
-      html = '<div class="loading-filling-wrapper"></div>'
+      loading.setAttribute('class', s.params.loadingClass + ' loading-filling')
+      html = '<div class="loading-filling-icon"></div>'+
+      '<div class="loading-filling-caption">' + s.params.caption + '</div>';
     } else if (s.params.type === 'custom') { // 自定义样式,icon
-      loading.setAttribute('class', s.params.loadingClass + ' loading-wrapper')
+      loading.setAttribute('class', s.params.loadingClass + ' loading-custom')
       html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption">' + s.params.caption + '</p>'
     }
     loading.innerHTML = html

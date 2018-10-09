@@ -4,6 +4,7 @@ import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import OnOff from '../lib/OnOff';
+import Bridge from '../lib/Bridge';
 
 export default class App extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
+    Bridge.showLoading({type: 'filling'})
   }
   onClick = (item, isActived, extandStatus, childrenCount) => {
     console.log(item, isActived, extandStatus, childrenCount)

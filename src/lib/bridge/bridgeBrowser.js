@@ -42,7 +42,7 @@ var Bridge = {
       this.showToast('此功能仅可在微信或APP中使用', {mask: false})
       return
     }
-    this.showLoading('正在上传...')
+    this.showLoading()
     setTimeout(() => {
       this.hideLoading()
       this.showToast('上传完成', {mask: false})
