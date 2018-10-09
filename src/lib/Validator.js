@@ -1,4 +1,4 @@
-// Validator 表单验证 (require object.js)
+// require PrototypeObject.js
 var Validator = function () {
   /* ------------------------
   正则

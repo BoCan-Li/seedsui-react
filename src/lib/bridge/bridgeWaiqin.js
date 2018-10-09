@@ -1,3 +1,4 @@
+// require PrototypeObject.js
 import BridgeBrowser from './bridgeBrowser.js'
 import Device from './../Device.js'
 import DB from './../DB.js'
@@ -149,7 +150,7 @@ var Bridge = {
   * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
   */
   chooseImage: function (argParams) {
-    var params = {}
+    var params = Object.clone(argParams)
     // 格式化sourceType
     var operation = '2'
     if (argParams && argParams.sourceType) {
@@ -165,9 +166,11 @@ var Bridge = {
     // 格式化sizeType
     var pwidth = null
     if (argParams && argParams.sizeType) {
-      if (argParams.sizeType === 'compressed') {
+      if (!isNaN(argParams.sizeType)) {
+        pwidth = argParams.sizeType
+      } else if (argParams.sizeType === 'compressed') {
         pwidth = '750'
-        params.operation = pwidth
+        params.pwidth = pwidth
       }
     }
     // 格式化count
@@ -176,23 +179,10 @@ var Bridge = {
       max = argParams.count
       params.max = '' + max
     }
-    // viewId
+    // viewId | 水印相关: photoType | customerName | submitName | cmLocation | selectItems
     params.viewId = '' + parseInt(Math.random() * 1000, 10)
-    // photoType
-    if (argParams && argParams.photoType) {
-      params.photoType = argParams.photoType;
-    }
-    // customerName
-    if (argParams && argParams.customerName) {
-      params.customerName = argParams.customerName;
-    }
-    // submitName
-    if (argParams && argParams.submitName) {
-      params.submitName = argParams.submitName;
-    }
-    // cmLocation
-    if (argParams && argParams.cmLocation) {
-      params.cmLocation = argParams.cmLocation;
+    if (argParams && argParams.viewId) {
+      params.viewId = argParams.viewId;
     }
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {

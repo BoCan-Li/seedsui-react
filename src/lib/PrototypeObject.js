@@ -115,8 +115,8 @@ Object.params = function (obj, splitter, isNotEnCode) {
 } */
 
 /* -------------------
-  获得类型, boolean | number | string | function | array | date | regexp
-  ------------------- */
+获得类型, boolean | number | string | function | array | date | regexp
+------------------- */
 Object.type = function (obj) {
   if (!obj) {
     return obj + ''
@@ -124,6 +124,29 @@ Object.type = function (obj) {
   return Object.prototype.toString.call(obj).replace('[', '').replace(']', '').split(' ')[1].toLowerCase()
 }
 
+/* -------------------
+字符类型
+------------------- */
+Object.charType = function (char) {
+  if (char >= 48 && char <= 57) return 'number' // 数字
+  if (char >= 65 && char <= 90) return 'capitalize' // 大写
+  if (char >= 97 && char <= 122) return 'lowercase' // 小写
+  else return 'other'
+}
+Object.passwordLvl = function (value) {
+  var mode = {}
+  for (var i = 0; i < value.length; i++) {
+    mode[Object.charType(value.charCodeAt(i))] = ''
+  }
+  var lvl = 0
+  /* eslint-disable */
+  for (m in mode) {
+    lvl++
+  }
+  /* eslint-enable */
+  if (value.length > 0 && value.length < 6) return 1
+  return lvl
+}
 /* -------------------
   是否是方法
   ------------------- */
