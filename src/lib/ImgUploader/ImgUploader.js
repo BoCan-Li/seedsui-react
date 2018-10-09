@@ -22,7 +22,11 @@ export default class ImgUploader extends Component {
     enableSafe: PropTypes.bool,
     max: PropTypes.number,
     sourceType: PropTypes.array,
-    sizeType: PropTypes.array,
+    sizeType: oneOfType([ // 压缩['original', 'compressed']
+      PropTypes.array,
+      PropTypes.string,
+      PropTypes.number
+    ]),
 
     showUpload: PropTypes.bool, // 显示上传按钮
     showDelete: PropTypes.bool, // 显示删除按钮

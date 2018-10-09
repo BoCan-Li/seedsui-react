@@ -168,7 +168,7 @@ var Bridge = {
     if (argParams && argParams.sizeType) {
       if (!isNaN(argParams.sizeType)) {
         pwidth = argParams.sizeType
-      } else if (argParams.sizeType === 'compressed') {
+      } else if (JSON.stringify(argParams.sizeType) === JSON.stringify(['compressed']) || argParams.sizeType === 'compressed') {
         pwidth = '750'
         params.pwidth = pwidth
       }
