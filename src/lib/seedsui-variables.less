@@ -1216,8 +1216,92 @@
   &:extend(.icon-rdo-ok-fill all);
 }
 
-// OnOff控件
-@onoff-bg-active: @primary-bg;
+// OnOff开关
+.setOnOff(){
+  height: @30px;
+  width: @60px;
+  border-radius: @30px;
+	transition-duration:200ms;
+  transition-property: background-color, border;
+  
+  // 小球风格
+	// background-color:transparent;
+	// border:@1px solid @dpborder;
+  
+  // ios风格
+  background-color:white;
+  border:none;
+  box-shadow: inset 0 0 0 @1px @dpborder;
+
+  &.notext{ // 无文字时宽度应当小一些
+    width: @50px;
+  }
+}
+.setOnOffActive(){
+  // 小球风格
+
+  // ios风格
+  background-color:@primary-bg;
+	box-shadow: none;
+}
+
+.setOnOffCaption(){
+  right: @11px;
+
+  // 小球风格
+  // color: @placeholder;
+
+  // ios风格
+  color:@placeholder;
+}
+.setOnOffCaptionActive(){
+  right: auto;
+  left: @11px;
+
+  // 小球风格
+  // color: @placeholder;
+
+  // ios风格
+  color:white;
+}
+
+.setOnOffHandle(){
+  border-radius: @100px;
+  transition-duration:200ms;
+  transition-property:transform, border, width;
+
+  // 小球风格
+  // width: @20px;
+  // height: @20px;
+  // transform:translate(@4px,-50%);
+  // background-color:@dpborder;
+
+  // ios风格
+  width: @26px;
+  height: @26px;
+  transform: translate(@2px,-50%);
+  background-color:white;
+  box-shadow: @2px @2px @2px rgba(0,0,0,.21);
+}
+.setOnOffHandleActive(){
+  left:0;
+  top:50%;
+
+  // 小球风格
+  // transform: translate(@34px,-50%);
+  // background-color: @primary-bg;
+
+  // ios风格
+  transform: translate(@32px,-50%);
+  box-shadow: @2px @2px @4px rgba(0,0,0,.21);
+  background-color:white;
+}
+.setOnOffHandleActive-noText(){
+  // 小球风格
+  // transform: translate(@24px,-50%);
+  // ios风格
+  transform: translate(@22px,-50%);
+}
 
 // InputStar
 .setInputStar(){
