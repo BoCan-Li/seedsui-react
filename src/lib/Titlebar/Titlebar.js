@@ -7,7 +7,8 @@ import Icon from './../Icon';
 export default class Titlebar extends Component {
   static propTypes = {
     className: PropTypes.string,
-
+    
+    showUrlTitle: PropTypes.bool, // 标题是否显示url中的title
     caption: PropTypes.node,
     captionClassName: PropTypes.string,
     captionStyle: PropTypes.object,
@@ -19,6 +20,7 @@ export default class Titlebar extends Component {
     children: PropTypes.node
   }
   static defaultProps = {
+    showUrlTitle: true,
     lButtons: ['$back'],
     className: 'border-b'
   }
@@ -82,6 +84,7 @@ export default class Titlebar extends Component {
   render() {
     const {
       className,
+      showUrlTitle,
       caption, captionClassName, captionStyle, children, onClickCaption,
       lButtons, rButtons, onClickBack, ...others
     } = this.props;
@@ -93,7 +96,12 @@ export default class Titlebar extends Component {
     if (Array.isArray(rButtons)) {
       rButtonsDOM = this.getButtonsDOM(rButtons);
     }
-    const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>);
+    // 设置标题显示url中的title,则默认优先显示title
+    let title = caption;
+    if (showUrlTitle) {
+      title = Device.getUrlParameter('title', location.search) || caption;
+    }
+    const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{title}</h1>);
     return (
       <div className={`titlebar${className ? ' ' + className : ''}`} {...others}>
         <div className="titlebar-left">
