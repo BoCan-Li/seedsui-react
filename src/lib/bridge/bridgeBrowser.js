@@ -504,11 +504,13 @@ var Bridge = {
   showLoading: function (params = {}) {
     if (!this.loading) {
       this.loading = new Loading({
+        caption: params.caption || '正在加载...',
         type: params.type,
         icon: params.icon || '',
         maskCss: params.css || null
       });
     } else {
+      if (params.caption) this.loading.setCaption(params.caption)
       if (params.type) this.loading.setType(params.type)
       if (params.css) this.loading.setMaskCss(params.css)
       if (params.icon) this.toast.setIcon(params.icon || '')

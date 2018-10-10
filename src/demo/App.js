@@ -14,7 +14,7 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    Bridge.showLoading({type: 'filling'})
+    Bridge.showLoading({type: 'filling', caption: ''})
   }
   onClick = (item, isActived, extandStatus, childrenCount) => {
     console.log(item, isActived, extandStatus, childrenCount)

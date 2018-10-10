@@ -57,14 +57,14 @@ var Loading = function (params) {
         '<div class="loading-floating-blade"></div>' +
         '<div class="loading-floating-blade"></div>' +
       '</div>' +
-    '<div class="loading-floating-caption">' + s.params.caption + '</div>';
+    '<div class="loading-floating-caption caption">' + s.params.caption + '</div>';
     if (s.params.type === 'filling') { // 填料环loading-filling
       loading.setAttribute('class', s.params.loadingClass + ' loading-filling')
       html = '<div class="loading-filling-icon"></div>'+
-      '<div class="loading-filling-caption">' + s.params.caption + '</div>';
+      '<div class="loading-filling-caption caption">' + s.params.caption + '</div>';
     } else if (s.params.type === 'custom') { // 自定义样式,icon
       loading.setAttribute('class', s.params.loadingClass + ' loading-custom')
-      html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption">' + s.params.caption + '</p>'
+      html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption caption">' + s.params.caption + '</p>'
     }
     loading.innerHTML = html
     return loading
@@ -100,6 +100,14 @@ var Loading = function (params) {
     if (s.params.type === type || s.params.types.indexOf(type) === -1) return
     s.params.type = type
     s.loading = s.createLoading()
+  }
+  s.setCaption = function (caption) {
+    if (!caption) return
+    s.params.caption = caption
+    var captionEl = s.loading.querySelector('.caption')
+    if (captionEl) {
+      captionEl.innerHTML = caption
+    }
   }
   s.setIcon = function (className) {
     s.params.icon = className
