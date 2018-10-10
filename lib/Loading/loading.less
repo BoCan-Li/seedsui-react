@@ -11,7 +11,7 @@
   .setLoadingMask();
 }
 
-// 自定义gif动画
+// 自定义
 .loading-custom {
   .setLoadingCustom();
   // height: auto;
@@ -27,7 +27,8 @@
 .loading-custom-caption {
   .setLoadingCustomCaption();
 }
-// 填料环loading-filling
+
+// 填料环
 @-webkit-keyframes loading-filling {
   0% {
     transform: rotate(0deg);
@@ -70,8 +71,11 @@
     animation: loading-filling 1.2s infinite ease;
   }
 }
+.loading-filling-caption {
+  .setLoadingFillingCaption();
+}
 
-// 流光loading-floating
+// 流光
 .loading-floating{
   .setLoadingFloating();
 }
@@ -169,8 +173,7 @@
   }
 }
 .loading-floating-caption {
-  font-size: @font-size-sm;
-  text-align: center;
+  .setLoadingFloatingCaption();
 }
 
 // 加载更多
