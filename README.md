@@ -2099,7 +2099,7 @@ onClickSent = () => {
   autoSent={是否自动发送 bool, 默认无}
   url={请求url string, 默认'/login/sendLoginSmsVerifyCode.action'}
   params={请求参数 object, 默认无}
-  syncData={值改变 func('错误信息', 'value', {result: object, status: 'input输入中 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}}
+  syncData={值改变 func('错误信息', 'value', {result: object, status: 'input输入中 | send_fail发送失败 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}}
   beforeSent={点击发送 func() => bool, 默认无} // 如果返回字符串,将弹出信息,并不发短信
   sentDisabled={是否禁用发送验证码 bool, 默认无}
   sentSecond={秒数 bool, 默认60}

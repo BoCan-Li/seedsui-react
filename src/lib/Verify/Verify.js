@@ -9,7 +9,7 @@ export default class Verify extends Component {
     autoSent: PropTypes.bool, // 自动发送
     url: PropTypes.string,
     params: PropTypes.object,
-    syncData: PropTypes.func, // '错误信息', 'value', {result: object, status: 'input输入中 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}
+    syncData: PropTypes.func, // '错误信息', 'value', {result: object, status: 'input输入中 | send_fail发送失败 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}
     beforeSent: PropTypes.func, // 如果返回字符串,将弹出信息,并不发短信
     sentDisabled: PropTypes.bool, // 是否禁用发送验证码
     sentSecond: PropTypes.number,
@@ -42,8 +42,10 @@ export default class Verify extends Component {
     if (syncData) syncData('', value, {result: null, status: 'input'});
   }
   onClickSent = () => {
+    const input = this.$el.$input;
     if (this.state.second !== this.props.sentSecond) {
       Bridge.showToast(this.state.second + '秒后重试', {mask: false});
+      if (syncData) syncData('', input.value, {result: null, status: 'send_fail'});
       return;
     }
     const {url, params, syncData, beforeSent} = this.props;
@@ -54,18 +56,18 @@ export default class Verify extends Component {
         return;
       }
     }
-    if (syncData) syncData('', this.$el.$input.value, {result: null, status: 'send'});
+    if (syncData) syncData('', input.value, {result: null, status: 'send'});
     ApiAxios.get(url, params).then(result => {
       if (result.code === '1') {
         this.countdown();
-        if (syncData) syncData('', this.$el.$input.value, {result: result, status: 'sent_ok'});
+        if (syncData) syncData('', input.value, {result: result, status: 'sent_ok'});
       } else {
-        if (syncData) syncData(result.message, this.$el.$input.value, {result: result, status: 'sent_fail'})
+        if (syncData) syncData(result.message, input.value, {result: result, status: 'sent_fail'})
         Bridge.showToast(result.message, {mask: false});
       }
     }).catch(() => {
       const errMsg = '短信发送异常, 请稍后再试';
-      if (syncData) syncData(errMsg, this.$el.$input.value, {data: null, status: 'sent_fail'});
+      if (syncData) syncData(errMsg, input.value, {data: null, status: 'sent_fail'});
       Bridge.showToast(errMsg, {mask: false});
     });
   }
