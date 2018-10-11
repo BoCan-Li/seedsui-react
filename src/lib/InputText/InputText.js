@@ -63,7 +63,8 @@ export default class InputText extends Component {
     readOnly: false,
     disabled: false,
     digits: false,
-    clearClassName: 'ricon close-icon-clear size18'
+    clearClassName: 'ricon close-icon-clear size18',
+    isShowClear: false // 是否显示小叉叉
   }
   constructor(props) {
     super(props);
@@ -141,7 +142,7 @@ export default class InputText extends Component {
   onChange = (e) => {
     var target = e.target;
     var value = target.value;
-    const {type, onChange} = this.props;
+    const {valueBindProp, type, onChange} = this.props;
     // 自动扩充功能
     if (this.props.pre) {
       this.$pre.children[0].innerText = value;
@@ -150,7 +151,7 @@ export default class InputText extends Component {
     // 手机组件
     if (type === 'phone') {
       value = this.correctPhone(value);
-      if (!this.props.valueBindProp) target.value = value;
+      if (!valueBindProp) target.value = value;
       if (onChange) onChange(value, this.getArgs(e));
       return;
     }
@@ -158,11 +159,24 @@ export default class InputText extends Component {
     if (type === 'number') {
       // target.validity.badInput
       value = this.correctNumber(value.toString());
-      if (!this.props.valueBindProp) target.value = value;
+      if (!valueBindProp) target.value = value;
       if (onChange) onChange(value, this.getArgs(e));
     }
     // 文本框组件
     if (onChange) onChange(value, this.getArgs(e));
+
+    // 是否显示小叉叉
+    if (this.props.clear) {
+      let isShowClear = false;
+      if (!valueBindProp) {
+        if (this.$input) isShowClear = this.$input.value.length > 0;
+      } else {
+        isShowClear = value.length > 0;
+      }
+      this.setState({
+        isShowClear
+      });
+    }
   }
   onClickInput = (e) => {
     var target = e.target;
@@ -203,6 +217,10 @@ export default class InputText extends Component {
     if (this.props.pre) {
       this.preAutoSize();
     }
+    // 隐藏小叉叉
+    this.setState({
+      isShowClear: false
+    });
     e.stopPropagation();
   }
   // 点击左右图标
@@ -281,15 +299,15 @@ export default class InputText extends Component {
     const {
       className, style,
       liconClassName,
-      value,
       clearClassName, clear,
       riconClassName,
       rcaption
     } = this.props;
+    const {isShowClear} = this.state;
     return (<div className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {liconClassName && <Icon className={`licon ${liconClassName}`} onClick={this.onClickLicon}/>}
         {this.getInputDOM()}
-        {clear && <Close onClick={this.onClear} className={`${value.length === 0 ? 'hide' : ''}${clearClassName ? ' ' + clearClassName : ''}`}/>}
+        {clear && <Close onClick={this.onClear} className={`${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`}/>}
         {riconClassName && <Icon className={`ricon ${riconClassName}`} onClick={this.onClickRicon}/>}
         {rcaption && rcaption}
       </div>);

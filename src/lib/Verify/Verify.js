@@ -18,14 +18,19 @@ export default class Verify extends Component {
       PropTypes.string,
       PropTypes.number
     ]),
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    clear: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.func
+    ])
   };
   static defaultProps = {
     url: '/login/sendLoginSmsVerifyCode.action',
     sentSecond: 60,
     sentCaption: '发送验证码',
     maxLength: 6,
-    placeholder: '验证码'
+    placeholder: '验证码',
+    clear: true
   }
   constructor (props) {
     super(props);
@@ -112,9 +117,9 @@ export default class Verify extends Component {
   }
   render() {
     const {caption} = this.state;
-    const {autoSent, url, params, syncData, beforeSent, sentDisabled, sentSecond, sentCaption, maxLength, placeholder, ...others} = this.props;
+    const {autoSent, url, params, syncData, beforeSent, sentDisabled, sentSecond, sentCaption, maxLength, placeholder, clear, ...others} = this.props;
     return (
-      <InputVerify ref={(el) => {this.$el = el;}} clear onChange={this.onValiChange} placeholder={placeholder} maxLength={maxLength} sentCaption={caption} sentDisabled={sentDisabled} onClickSent={this.onClickSent} {...others}/>
+      <InputVerify ref={(el) => {this.$el = el;}} clear={clear} onChange={this.onValiChange} placeholder={placeholder} maxLength={maxLength} sentCaption={caption} sentDisabled={sentDisabled} onClickSent={this.onClickSent} {...others}/>
     );
   }
 }
