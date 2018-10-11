@@ -11,10 +11,12 @@ export default class Verify extends Component {
     params: PropTypes.object, // 登录时用{clientType: 'appId', mobile: '138xxxxxx'},
     sentDisabled: PropTypes.bool, // 是否禁用发送验证码
     syncData: PropTypes.func, // 'error', 'verifycode', {data: 'data', op: 'input | sms | resume'}
-    beforeSent: PropTypes.func
+    beforeSent: PropTypes.func,
+    second: PropTypes.number
   };
   static defaultProps = {
-    url: '/login/sendLoginSmsVerifyCode.action'
+    url: '/login/sendLoginSmsVerifyCode.action',
+    second: 60
   }
   constructor (props) {
     super(props);
@@ -22,7 +24,7 @@ export default class Verify extends Component {
       data: null, // 服务端返回的data
       verifycode: '',
       interval: null,
-      second: 60,
+      second: props.second || 60,
       sentCaption: '发送验证码',
       sentDisabled: false
     }
@@ -86,7 +88,7 @@ export default class Verify extends Component {
       if (this.state.second - 1 <= 0) {
         window.clearInterval(interval);
         this.setState({
-          second: 60,
+          second: this.props.second || 60,
           interval: null,
           sentCaption: '发送验证码'
         });
