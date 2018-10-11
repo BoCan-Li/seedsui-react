@@ -19,7 +19,8 @@ export default class Carrousel extends Component {
     enableOnChange: PropTypes.bool, // 启用改变事件回调
     speed: PropTypes.number, // 动画过渡的速度
     onClick: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    delay: PropTypes.number, // 延迟初始化秒数
   }
   static defaultProps = {
     activeIndex: 0,
@@ -31,7 +32,8 @@ export default class Carrousel extends Component {
     list: [],
     defaultSrc: '//res.waiqin365.com/d/seedsui/carrousel/default.png',
     enableOnChange: true,
-    speed: 300
+    speed: 300,
+    delay: 500
   }
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ export default class Carrousel extends Component {
       this.setState({
         instance
       });
-    }, 300);
+    }, this.props.delay);
   }
   onClick = (e) => {
     const index = e.activeIndex;
