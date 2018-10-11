@@ -29,10 +29,10 @@ export default class App extends Component {
       value: !this.state.value
     })
   }
-  onChange = (error, value, data) => {
-    console.log(error);
-    console.log(value);
-    console.log(data);
+  onChange = (error, value, {result, status, op}) => {
+    // console.log(error);
+    // console.log(value);
+    console.log(result, status, op);
   }
   onHide = () => {
     this.setState({

@@ -9,7 +9,7 @@ export default class Verify extends Component {
     autoSent: PropTypes.bool, // 自动发送
     url: PropTypes.string,
     params: PropTypes.object,
-    syncData: PropTypes.func, // '错误信息', 'value', {result: object, status: 'input输入中 | send_fail发送失败 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}
+    syncData: PropTypes.func, // '错误信息', 'value', {result: object, status: 'send_fail | send_ok | sent_ok | sent_fail', op: 'click | input | timeover'}
     beforeSent: PropTypes.func, // 如果返回字符串,将弹出信息,并不发短信
     sentDisabled: PropTypes.bool, // 是否禁用发送验证码
     sentSecond: PropTypes.number,
@@ -37,18 +37,24 @@ export default class Verify extends Component {
   componentDidMount = () => {
     if (this.props.autoSent) this.onClickSent()
   }
+  status = ''
   onValiChange = (value) => {
     const {syncData} = this.props;
-    if (syncData) syncData('', value, {result: null, status: 'input'});
+    if (syncData) syncData('', value, {result: null, status: this.status, op: 'input'});
   }
   onClickSent = () => {
+    const {url, params, syncData, beforeSent} = this.props;
     const input = this.$el.$input;
+    // 倒计时中,阻止继续
     if (this.state.second !== this.props.sentSecond) {
       Bridge.showToast(this.state.second + '秒后重试', {mask: false});
-      if (syncData) syncData('', input.value, {result: null, status: 'send_fail'});
+      if (syncData) {
+        this.status = 'send_fail';
+        syncData(this.state.second + '秒后重试', input.value, {result: null, status: this.status, op: 'click'});
+      }
       return;
     }
-    const {url, params, syncData, beforeSent} = this.props;
+    // 发送前回调不为空,阻止继续
     if (beforeSent) {
       const beforeSentMsg = beforeSent();
       if (beforeSentMsg) {
@@ -56,18 +62,31 @@ export default class Verify extends Component {
         return;
       }
     }
-    if (syncData) syncData('', input.value, {result: null, status: 'send'});
+    // 开始发送
+    if (syncData) {
+      this.status = 'send_ok';
+      syncData('', input.value, {result: null, status: this.status, op: 'click'});
+    }
     ApiAxios.get(url, params).then(result => {
       if (result.code === '1') {
         this.countdown();
-        if (syncData) syncData('', input.value, {result: result, status: 'sent_ok'});
+        if (syncData) {
+          this.status = 'sent_ok';
+          syncData('', input.value, {result: result, status: this.status, op: 'click'});
+        }
       } else {
-        if (syncData) syncData(result.message, input.value, {result: result, status: 'sent_fail'})
+        if (syncData) {
+          this.status = 'sent_fail';
+          syncData(result.message, input.value, {result: result, status: this.status, op: 'click'})
+        }
         Bridge.showToast(result.message, {mask: false});
       }
     }).catch(() => {
       const errMsg = '短信发送异常, 请稍后再试';
-      if (syncData) syncData(errMsg, input.value, {data: null, status: 'sent_fail'});
+      if (syncData) {
+        this.status = 'sent_fail';
+        syncData(errMsg, input.value, {result: null, status: this.status, op: 'click'});
+      }
       Bridge.showToast(errMsg, {mask: false});
     });
   }
@@ -84,7 +103,10 @@ export default class Verify extends Component {
           second: this.props.sentSecond || 60,
           caption: this.props.sentCaption || '发送验证码'
         });
-        if (syncData) syncData('', this.$el.$input.value, {result: null, status: 'sent'});
+        if (syncData) {
+          this.status = '';
+          syncData('', this.$el.$input.value, {result: null, status: this.status, op: 'timeover'});
+        }
       }
     }, 1000);
   }
