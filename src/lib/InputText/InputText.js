@@ -16,7 +16,10 @@ export default class InputText extends Component {
     // 文本框
     autoFocus: PropTypes.bool,
     name: PropTypes.string,
-    maxLength: PropTypes.string,
+    maxLength: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     max: PropTypes.oneOfType([ // 日期或者数字框
       PropTypes.string,
       PropTypes.number

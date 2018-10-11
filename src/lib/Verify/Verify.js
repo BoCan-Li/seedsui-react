@@ -8,39 +8,44 @@ export default class Verify extends Component {
   static propTypes = {
     autoSent: PropTypes.bool, // 自动发送
     url: PropTypes.string,
-    params: PropTypes.object, // 登录时用{clientType: 'appId', mobile: '138xxxxxx'},
+    params: PropTypes.object,
+    syncData: PropTypes.func, // '错误信息', 'value', {result: object, status: 'input输入中 | send发送 | sent_ok发送成功 | sent_fail发送失败 | sent发送完成}'}
+    beforeSent: PropTypes.func, // 如果返回字符串,将弹出信息,并不发短信
     sentDisabled: PropTypes.bool, // 是否禁用发送验证码
-    syncData: PropTypes.func, // 'error', 'verifycode', {data: 'data', op: 'input | sms | resume'}
-    beforeSent: PropTypes.func,
-    second: PropTypes.number
+    sentSecond: PropTypes.number,
+    sentCaption: PropTypes.string,
+    maxLength: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    placeholder: PropTypes.string
   };
   static defaultProps = {
     url: '/login/sendLoginSmsVerifyCode.action',
-    second: 60
+    sentSecond: 60,
+    sentCaption: '发送验证码',
+    maxLength: 6,
+    placeholder: '验证码'
   }
   constructor (props) {
     super(props);
     this.state = {
-      data: null, // 服务端返回的data
-      verifycode: '',
-      interval: null,
-      second: props.second || 60,
-      sentCaption: '发送验证码',
-      sentDisabled: false
+      second: props.sentSecond || 60,
+      caption: props.sentCaption || '发送验证码'
     }
   }
   componentDidMount = () => {
     if (this.props.autoSent) this.onClickSent()
   }
   onValiChange = (value) => {
-    this.setState({
-      verifycode: value
-    });
-    // this.validateSubmit(this.state.username, value);
     const {syncData} = this.props;
-    if (syncData) syncData('', value, {data: this.state.data, op: 'input'});
+    if (syncData) syncData('', value, {result: null, status: 'input'});
   }
   onClickSent = () => {
+    if (this.state.second !== this.props.sentSecond) {
+      Bridge.showToast(this.state.second + '秒后重试', {mask: false});
+      return;
+    }
     const {url, params, syncData, beforeSent} = this.props;
     if (beforeSent) {
       const beforeSentMsg = beforeSent();
@@ -49,31 +54,18 @@ export default class Verify extends Component {
         return;
       }
     }
-    this.setState({
-      sentDisabled: true
-    });
+    if (syncData) syncData('', this.$el.$input.value, {result: null, status: 'send'});
     ApiAxios.get(url, params).then(result => {
       if (result.code === '1') {
-        this.setState({
-          data: result.data
-        });
         this.countdown();
-        if (syncData) syncData('', this.state.verifycode, {data: result.data, op: 'sms'});
+        if (syncData) syncData('', this.$el.$input.value, {result: result, status: 'sent_ok'});
       } else {
-        this.setState({
-          sentDisabled: false,
-          data: null
-        });
-        if (syncData) syncData(result.message, this.state.verifycode, {data: null, op: 'sms'})
+        if (syncData) syncData(result.message, this.$el.$input.value, {result: result, status: 'sent_fail'})
         Bridge.showToast(result.message, {mask: false});
       }
     }).catch(() => {
-      this.setState({
-        sentDisabled: false,
-        data: null
-      });
       const errMsg = '短信发送异常, 请稍后再试';
-      if (syncData) syncData(errMsg, this.state.verifycode, {data: null, op: 'sms'});
+      if (syncData) syncData(errMsg, this.$el.$input.value, {data: null, status: 'sent_fail'});
       Bridge.showToast(errMsg, {mask: false});
     });
   }
@@ -82,33 +74,23 @@ export default class Verify extends Component {
     let interval = setInterval(() => {
       this.setState({
         second: this.state.second - 1,
-        sentCaption: (this.state.second - 1) + '秒后重试',
-        sentDisabled: true
+        caption: (this.state.second - 1) + '秒后重试'
       });
       if (this.state.second - 1 <= 0) {
         window.clearInterval(interval);
         this.setState({
-          second: this.props.second || 60,
-          interval: null,
-          sentCaption: '发送验证码'
+          second: this.props.sentSecond || 60,
+          caption: this.props.sentCaption || '发送验证码'
         });
-        if (syncData) syncData('', this.state.verifycode, {data: this.state.data, op: 'resume'});
-        // if (this.validateUserName(this.state.username)) {
-        //   this.setState({
-        //     sentDisabled: true
-        //   });
-        // }
+        if (syncData) syncData('', this.$el.$input.value, {result: null, status: 'sent'});
       }
     }, 1000);
-    this.setState({
-      interval: true
-    });
   }
   render() {
-    const {verifycode, sentCaption} = this.state;
-    const {autoSent, url, params, sentDisabled, syncData, beforeSent, maxLength = '6', placeholder = '验证码', ...others} = this.props;
+    const {caption} = this.state;
+    const {autoSent, url, params, syncData, beforeSent, sentDisabled, sentSecond, sentCaption, maxLength, placeholder, ...others} = this.props;
     return (
-      <InputVerify clear onChange={this.onValiChange} value={verifycode} placeholder={placeholder} maxLength={maxLength} sentCaption={sentCaption} sentDisabled={sentDisabled || this.state.sentDisabled} onClickSent={this.onClickSent} {...others}/>
+      <InputVerify ref={(el) => {this.$el = el;}} clear onChange={this.onValiChange} placeholder={placeholder} maxLength={maxLength} sentCaption={caption} sentDisabled={sentDisabled} onClickSent={this.onClickSent} {...others}/>
     );
   }
 }

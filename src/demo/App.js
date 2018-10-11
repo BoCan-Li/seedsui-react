@@ -3,8 +3,7 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import OnOff from '../lib/OnOff';
-import Bridge from '../lib/Bridge';
+import Verify from '../lib/Verify';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,7 +13,6 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    Bridge.showLoading({type: 'filling', caption: ''})
   }
   onClick = (item, isActived, extandStatus, childrenCount) => {
     console.log(item, isActived, extandStatus, childrenCount)
@@ -31,10 +29,10 @@ export default class App extends Component {
       value: !this.state.value
     })
   }
-  changeDate = () => {
-    this.setState({
-      value: '2018-08-08'
-    })
+  onChange = (error, value, data) => {
+    console.log(error);
+    console.log(value);
+    console.log(data);
   }
   onHide = () => {
     this.setState({
@@ -47,7 +45,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{ caption: 'haha' , onClick: this.showDialog}]} />
       </Header>
       <Container>
-        <OnOff onClick={this.onChange} checked={this.state.value}/>
+        <Verify sentSecond={5} syncData={this.onChange}/>
       </Container>
     </Page>
   }
