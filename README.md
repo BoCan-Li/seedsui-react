@@ -130,6 +130,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputText](#inputtext) 文本框
 - [InputVerify](#inputverify) 验证码文本框
 - [Verify](#verify) 验证码文本框
+- [Jcrop](#jcrop) 图片裁切
 - [Legend](#legend) 标题
 - [List](#list) 列表
 - [ListPull](#listpull) 可推动列表
@@ -2160,6 +2161,48 @@ import Legend from 'seedsui-react/lib/Legend';
 ```
 [返回目录](#component)
 
+
+
+## Jcrop
+[标题](#https://unpkg.com/seedsui-react/src/lib/Jcrop/Jcrop.js)
+### 属性
+```javascript
+<Jcrop
+  src={图片地址 string, 默认无}
+  rect={选区方形坐标 array, 默认无} // [10,10,100,100]
+  scale={选区比例大小 array, 默认[.7,.5]} // [.7,.5]
+  options={初始化选项 obj, 默认{multi: false}}
+  onChange={选区变化事件 func({pos, src}), 默认无}
+  className={容器className string, 默认无, 基础'legend'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import CanvasUtil from 'seedsui-react/lib/CanvasUtil';
+import Jcrop from 'seedsui-react/lib/Jcrop';
+
+onChange = (e) => {
+  console.log(e)
+  this.setState({
+    pos: e.pos,
+    src: e.src
+  });
+}
+
+onSubmit = () => {
+  CanvasUtil.cropImg({
+    src: this.state.src,
+    ...this.state.pos,
+    onSuccess: function (base64) {
+      console.log(base64)
+    }
+  });
+}
+
+<Jcrop src={srcData} onChange={this.onChange} style={{width: '300px'}}/>
+```
+[返回目录](#component)
 
 
 ## List
