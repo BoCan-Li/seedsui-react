@@ -1,4 +1,19 @@
 // inputtext.less(start)
+.input-text-box{
+  .flex;
+  .flex-middle;
+  &:extend(.flex-1);
+  .licon{
+    .setInputTextLicon();
+  }
+  .ricon{
+    .setInputTextRicon();
+  }
+  .input-text,.input-textarea,.input-pre-box{
+    display: block;
+    &:extend(.flex-1);
+  }
+}
 .input-text{
   &:extend(.appearance);
   position: relative; // 为了解决ios输入时白屏的BUG

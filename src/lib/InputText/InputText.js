@@ -63,12 +63,13 @@ export default class InputText extends Component {
     readOnly: false,
     disabled: false,
     digits: false,
-    clearClassName: 'ricon close-icon-clear size18',
-    isShowClear: false // 是否显示小叉叉
+    clearClassName: 'ricon close-icon-clear size18'
   }
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      changeUpdate: false // 输入时更新DOM, 是否显示小叉叉(!valueBindProp状态)时使用
+    }
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -151,30 +152,18 @@ export default class InputText extends Component {
     // 手机组件
     if (type === 'phone') {
       value = this.correctPhone(value);
-      if (!valueBindProp) target.value = value;
-      if (onChange) onChange(value, this.getArgs(e));
-      return;
-    }
     // 数字组件
-    if (type === 'number') {
+    } else if (type === 'number') {
       // target.validity.badInput
       value = this.correctNumber(value.toString());
-      if (!valueBindProp) target.value = value;
-      if (onChange) onChange(value, this.getArgs(e));
     }
-    // 文本框组件
+    // onChange
+    if (!valueBindProp) target.value = value;
     if (onChange) onChange(value, this.getArgs(e));
-
     // 是否显示小叉叉
-    if (this.props.clear) {
-      let isShowClear = false;
-      if (!valueBindProp) {
-        if (this.$input) isShowClear = this.$input.value.length > 0;
-      } else {
-        isShowClear = value.length > 0;
-      }
+    if (this.props.clear && !this.props.valueBindProp) {
       this.setState({
-        isShowClear
+        changeUpdate: true
       });
     }
   }
@@ -217,10 +206,12 @@ export default class InputText extends Component {
     if (this.props.pre) {
       this.preAutoSize();
     }
-    // 隐藏小叉叉
-    this.setState({
-      isShowClear: false
-    });
+    // 是否显示小叉叉
+    if (this.props.clear && !this.props.valueBindProp) {
+      this.setState({
+        changeUpdate: true
+      });
+    }
     e.stopPropagation();
   }
   // 点击左右图标
@@ -297,14 +288,22 @@ export default class InputText extends Component {
   }
   render() {
     const {
+      value,
       className, style,
       liconClassName,
       clearClassName, clear,
       riconClassName,
       rcaption
     } = this.props;
-    const {isShowClear} = this.state;
-    return (<div className={`attribute${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+    let isShowClear = false;
+    if (!this.props.valueBindProp) {
+      if (this.$input) {
+        if (this.$input.value.length && clear) isShowClear = true;
+      }
+    } else {
+      if (value && clear) isShowClear = true;
+    }
+    return (<div className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {liconClassName && <Icon className={`licon ${liconClassName}`} onClick={this.onClickLicon}/>}
         {this.getInputDOM()}
         {clear && <Close onClick={this.onClear} className={`${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`}/>}
