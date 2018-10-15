@@ -68,7 +68,7 @@ export default class InputText extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      changeUpdate: false // 输入时更新DOM, 是否显示小叉叉(!valueBindProp状态)时使用
+      clearUpdate: props.value && props.clear // 小叉叉DOM更新, !valueBindProp状态时不会更新DOM, 所以用state变态的方法触发更新DOM
     }
   }
   getArgs = (e) => {
@@ -163,7 +163,7 @@ export default class InputText extends Component {
     // 是否显示小叉叉
     if (this.props.clear && !this.props.valueBindProp) {
       this.setState({
-        changeUpdate: true
+        clearUpdate: false
       });
     }
   }
@@ -209,7 +209,7 @@ export default class InputText extends Component {
     // 是否显示小叉叉
     if (this.props.clear && !this.props.valueBindProp) {
       this.setState({
-        changeUpdate: true
+        clearUpdate: false
       });
     }
     e.stopPropagation();
@@ -295,7 +295,7 @@ export default class InputText extends Component {
       riconClassName,
       rcaption
     } = this.props;
-    let isShowClear = false;
+    let isShowClear = this.state.clearUpdate;
     if (!this.props.valueBindProp) {
       if (this.$input) {
         if (this.$input.value.length && clear) isShowClear = true;
