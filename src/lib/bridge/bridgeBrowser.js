@@ -23,6 +23,9 @@ var Bridge = {
   getAppVersion: function () {
     return window.navigator.appVersion
   },
+  /**
+   * 图片插件
+   */
   // 拍照、本地选图
   chooseImage: function (params = {}) {
     if (!this.debug) {
@@ -57,6 +60,23 @@ var Bridge = {
   // 图片预览
   previewImage: function (params) {
     console.log('previewImage方法在浏览器上无法运行')
+  },
+  /**
+   * 视频插件
+   */
+  // 录像
+  chooseVideo: function (params = {}) {
+    console.log('chooseVideo方法在浏览器上无法运行')
+    var res = {
+      sourceType: 'camera', // 微信返回的两种来源: 'camera', 'album'
+      errMsg: 'chooseVideo:ok',
+      tempFilePath: 'http://res.waiqin365.com/video/v2001.MP4',
+      duration: '',
+      size: '',
+      height: '',
+      width: ''
+    }
+    if (params.success) params.success(res)
   },
   /**
    * 人员插件

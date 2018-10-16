@@ -24,15 +24,16 @@ var FullScreen = {
       null)
   },
   // 是否全屏
-  isFull: function () {
-    return !!(document.webkitIsFullScreen || this.getElement())
+  isFull: function (el) {
+    var target = el || document
+    return !!(target.webkitIsFullScreen || this.getElement())
   },
   // 进入全屏
   enter: function (el) {
-    var element = el || document.body
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen
+    var target = el || document.body
+    var requestMethod = target.requestFullScreen || target.webkitRequestFullScreen || target.mozRequestFullScreen || target.msRequestFullScreen
     if (requestMethod) {
-      requestMethod.call(element)
+      requestMethod.call(target)
     } else if (typeof window.ActiveXObject !== 'undefined') {
       var wscript = new window.ActiveXObject('WScript.Shell')
       if (wscript !== null) {
@@ -41,18 +42,19 @@ var FullScreen = {
     }
   },
   // 退出全屏
-  exit: function () {
+  exit: function (el) {
+    var target = el || document
     if (document.exitFullscreen) {
-      document.exitFullscreen()
+      target.exitFullscreen()
     }
     else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen()
+      target.mozCancelFullScreen()
     }
     else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen()
+      target.webkitExitFullscreen()
     }
     else if (document.msExitFullscreen) {
-      document.msExitFullscreen()
+      target.msExitFullscreen()
     }
     return this
   },

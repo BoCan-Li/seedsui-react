@@ -3,29 +3,37 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import InputText from '../lib/InputText';
+import VideoUploader from '../lib/VideoUploader';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 'adfasdfs'
+      show: false,
+      list: [
+        {
+          id: '1',
+          src: 'http://res.waiqin365.com/video/v2001.MP4',
+          type: 'video'
+        }
+      ]
+      
     }
   }
   componentDidMount() {
   }
-  onChagne = (val) => {
-    // this.setState({
-    //   value: val
-    // })
+  onChagne = (e) => {
+    var input = e.target;
+    var file = input.files && input.files[0] ? input.files[0] : null;
+    console.log(file);
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
-        <Titlebar caption="SeedsUI" rButtons={[{ caption: '裁切' , onClick: this.onSubmit}]} />
+        <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputText value={this.state.value} clear onChange={this.onChagne}/>
+        <VideoUploader list={this.state.list}caption={"拍照上传"} showUpload showDelete showCount onChange={this.onChange} max={15} sourceType={['camera']}/>
       </Container>
     </Page>
   }

@@ -1376,6 +1376,7 @@ import Container from 'seedsui-react/lib/Container';
     iconClassName: '',
     iconStyle: {},
     iconSrc: '',
+    type: 'video | image(默认)',
     preview: true | false, // 是否支持预览,默认true
     thumb: '', // 缩略图
     src: '', // 预览地址

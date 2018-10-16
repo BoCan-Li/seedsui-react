@@ -56,6 +56,7 @@ import InputStar from './InputStar';
 import InputText from './InputText';
 import InputVerify from './InputVerify';
 import Verify from './Verify';
+import VideoPreview from './VideoPreview';
 import Legend from './Legend';
 import List from './List';
 import ListPull from './ListPull'; // 不常用
@@ -169,6 +170,7 @@ export {
   InputText,
   InputVerify,
   Verify,
+  VideoPreview, // 不常用
   Legend, // 不常用
   List,
   ListPull,

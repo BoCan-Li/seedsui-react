@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Bridge from './../Bridge';
+import VideoPreview from './../VideoPreview';
 
 export default class Grid extends Component {
   static propTypes = {
@@ -56,6 +57,7 @@ export default class Grid extends Component {
     preview: true | false, // 是否支持预览,默认true
     thumb: '', // 缩略图
     src: '', // 预览地址
+    type: 'video', // 视频或者图片
     caption: '',
     onClick: function() {},
     iconBadgeCaption: ''
@@ -71,7 +73,10 @@ export default class Grid extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      videoShow: false, // 视频预览
+      videoSrc: ''
+    }
   }
   getSpaceStyle = () => {
     const {className, space, wing} = this.props;
@@ -142,21 +147,31 @@ export default class Grid extends Component {
     }
   }
   onClickCell = (e, item, index) => {
-    // 如果有src,说明需要预览
-    if (item.src && item.preview !== false && this.props.list) {
-      var imgs = this.props.list.map(n => {
-        return n.src;
-      });
-      if (!imgs) return;
-      Bridge.previewImage({
-        urls: imgs,
-        current: imgs[index] || imgs[0],
-        index: index || 0
-      })
-      e.stopPropagation();
-    }
+    // onClickCell
     if (this.props.onClickCell) {
       this.props.onClickCell(item, index, this.getArgs(e));
+      e.stopPropagation();
+    }
+    // 预览
+    if (!item.src || item.preview === false) return;
+    if (item.type === 'video') {
+      this.setState({
+        videoShow: true,
+        videoSrc: item.src
+      })
+      e.stopPropagation();
+    } else {
+      if (this.props.list) {
+        var imgs = this.props.list.map(n => {
+          return n.src;
+        });
+        if (!imgs) return;
+        Bridge.previewImage({
+          urls: imgs,
+          current: imgs[index] || imgs[0],
+          index: index || 0
+        })
+      }
       e.stopPropagation();
     }
   }
@@ -223,6 +238,7 @@ export default class Grid extends Component {
           {item}
         </li>);
       })}
+      <VideoPreview show={this.state.videoShow} src={this.state.videoSrc}/>
     </ul>);
     return dom;
   }
