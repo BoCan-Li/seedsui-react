@@ -278,17 +278,22 @@ var Bridge = {
   getCustomer: function (params = {}) {
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":' + (params.hiddenAdd || true) + '}')
+    }, '{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '","hiddenAdd":' + (params.hiddenAdd || true) + '}')
   },
   getCustomerType: function (params = {}) {
     wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
+    }, '{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '","tradeType":"' + (params.tradeType || '') + '"}')
   },
   getCustomerArea: function (params = {}) {
     wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
-    },'{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
+    }, '{"id":"' + (params.id || '') + '","name":"' + (params.name || '') + '"}')
+  },
+  getCustomerAreaMore: function (params = {}) {
+    wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    }, '{"selectedIds":"' + (params.selectedIds || '') + '"}')
   },
   /**
    * 部门插件
