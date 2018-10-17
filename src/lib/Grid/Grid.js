@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Bridge from './../Bridge';
-import VideoPreview from './../VideoPreview';
 
 export default class Grid extends Component {
   static propTypes = {
@@ -74,8 +73,6 @@ export default class Grid extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      videoShow: false, // 视频预览
-      videoSrc: ''
     }
   }
   getSpaceStyle = () => {
@@ -155,10 +152,6 @@ export default class Grid extends Component {
     // 预览
     if (!item.src || item.preview === false) return;
     if (item.type === 'video') {
-      this.setState({
-        videoShow: true,
-        videoSrc: item.src
-      })
       e.stopPropagation();
     } else {
       if (this.props.list) {
@@ -238,7 +231,6 @@ export default class Grid extends Component {
           {item}
         </li>);
       })}
-      <VideoPreview show={this.state.videoShow} src={this.state.videoSrc}/>
     </ul>);
     return dom;
   }
