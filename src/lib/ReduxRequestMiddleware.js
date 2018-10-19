@@ -1,4 +1,4 @@
-export default function clientMiddleware(client) {
+export default function requestMiddleware(request) {
   return ({dispatch, getState}) => {
     return next => action => {
       if (typeof action === 'function') {
@@ -13,7 +13,7 @@ export default function clientMiddleware(client) {
       const [REQUEST, SUCCESS, FAILURE] = types;
       next({...rest, type: REQUEST});
 
-      const actionPromise = promise(client);
+      const actionPromise = promise(request);
       actionPromise.then(
         (result) => next({...rest, result, type: SUCCESS}),
         (error) => next({...rest, error, type: FAILURE})

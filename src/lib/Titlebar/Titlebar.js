@@ -16,13 +16,20 @@ export default class Titlebar extends Component {
 
     lButtons: PropTypes.array, // [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
     rButtons: PropTypes.array,
+    backClassName: PropTypes.string,
+    backStyle: PropTypes.object,
+    backIcon: PropTypes.node,
+    backIconClassName: PropTypes.string,
+    backIconStyle: PropTypes.object,
+    backCaption: PropTypes.string,
     onClickBack: PropTypes.func,
     children: PropTypes.node
   }
   static defaultProps = {
     showUrlTitle: true,
     lButtons: ['$back'],
-    className: 'border-b'
+    className: 'border-b',
+    backIconClassName: 'shape-arrow-left'
   }
   constructor(props) {
     super(props);
@@ -68,7 +75,12 @@ export default class Titlebar extends Component {
     return arr.map((item, index) => {
       if (item === '$back') {
         item = {
-          iconClassName: 'shape-arrow-left',
+          className: this.props.backClassName || null,
+          style: this.props.backStyle || null,
+          icon: this.props.backIcon || null,
+          iconClassName: this.props.backIconClassName || null,
+          iconStyle: this.props.backIconStyle || null,
+          caption: this.props.backCaption || null,
           onClick: this.onClickBack
         };
       }
@@ -86,7 +98,7 @@ export default class Titlebar extends Component {
       className,
       showUrlTitle,
       caption, captionClassName, captionStyle, children, onClickCaption,
-      lButtons, rButtons, onClickBack, ...others
+      lButtons, rButtons, backIconClassName, backIconStyle, backClassName, backStyle, backCaption, onClickBack, ...others
     } = this.props;
     let lButtonsDOM = null;
     if (Array.isArray(lButtons)) {

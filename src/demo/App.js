@@ -30,7 +30,7 @@ export default class App extends Component {
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
-        <Titlebar caption="SeedsUI"/>
+        <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
         <video ref={(el) => {this.$video = el;}} className="video-js vjs-big-play-centered" controls playsInline preload="auto" data-setup="{}" style={{width: '300px', height: '200px', backgroundColor: 'black'}}>

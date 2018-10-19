@@ -3532,7 +3532,7 @@ import Timepart from 'seedsui-react/lib/Timepart';
   className={容器className string, 默认无, 基础'titlebar'}
 
   showUrlTitle={标题是否显示url中的title bool, 默认true}
-  caption={标题 string, 默认无}
+  caption={标题 node, 默认无}
   captionClassName={标题className string, 默认无, 基础'titlebar-caption nowrap text-center'}
   captionStyle={标题style object, 默认无}
   onClickCaption={点击标题 func(e), 默认无}
@@ -3542,6 +3542,12 @@ import Timepart from 'seedsui-react/lib/Timepart';
   // 格式 [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
 
   rButtons={右按钮 array, 默认无}
+  backClassName={返回按钮className string, 默认无}
+  backStyle={返回按钮style object, 默认无}
+  backIcon={返回按钮图标 node, 默认无}
+  backIconClassName={返回按钮图标className string, 默认无}
+  backIconStyle={返回按钮图标style object, 默认无}
+  backCaption={返回按钮标题 string, 默认无}
   onClickBack={点击标题 func(), 默认无} // 当设置onClickBack后, 默认的onClickBack事件将被代替
 >
 如果此处写了内容, 将代替caption
