@@ -10,7 +10,14 @@ export default class Picker extends Component {
     className: PropTypes.string,
     style: PropTypes.object,
     slotClassName: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    valueForKey: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -46,10 +53,12 @@ export default class Picker extends Component {
     }
   }
   setDefault = () => {
-    const {list} = this.props;
-    let key = '';
-    const defaultOpt = this.getDefaults();
-    if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
+    const {valueForKey, list} = this.props;
+    let key = valueForKey || '';
+    if (!key) {
+      const defaultOpt = this.getDefaults();
+      if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
+    }
     this.state.instance.clearSlots();
     this.state.instance.addSlot(list, key || '', this.props.slotClassName); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
   }

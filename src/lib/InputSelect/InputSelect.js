@@ -6,6 +6,14 @@ import SelectPicker from './../SelectPicker';
 export default class InputSelect extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    valueForKey: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     list: PropTypes.array, // [{key: '', value: ''}]
     multiple: PropTypes.bool,
     pickerStyle: PropTypes.bool,
@@ -64,11 +72,11 @@ export default class InputSelect extends Component {
     });
   }
   render() {
-    const {list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {valueForKey, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker
-        list={list} value={this.$input ? this.$input.value : this.props.value} key="picker"
+        list={list} valueForKey={valueForKey} value={this.$input ? this.$input.value : this.props.value} key="picker"
         show={this.state.show}
         multiple={multiple}
         style={pickerStyle} className={pickerClassName}

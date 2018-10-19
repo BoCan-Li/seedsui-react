@@ -8,10 +8,17 @@ export default class SelectPicker extends Component {
     portal: PropTypes.object,
     multiple: PropTypes.bool, // 是否允许多选
     list: PropTypes.array, // [key: 'xx', value: 'xx']
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    valueForKey: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     className: PropTypes.string,
     style: PropTypes.object,
     slotClassName: PropTypes.string,
-    value: PropTypes.string,
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -43,10 +50,12 @@ export default class SelectPicker extends Component {
     }
   }
   setDefaults = () => {
-    if (this.props.value) {
-      const options = this.props.value.split(',').map((value) => {
+    const selected = this.props.valueForKey || this.props.value;
+    const selectedName = this.props.valueForKey ? 'key' : 'value';
+    if (selected) {
+      const options = selected.split(',').map((value) => {
         for (var i = 0, li; li = this.props.list[i++];) { // eslint-disable-line
-          if (li.value === value) {
+          if (li[selectedName] === value) {
             return li;
           }
         }

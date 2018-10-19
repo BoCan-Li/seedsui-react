@@ -1837,6 +1837,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 <InputPicker
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
+  valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
 />
@@ -1934,6 +1935,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
   multiple={是否允许多选 bool, 默认false}
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
+  valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, options, args), 默认无}
 />
@@ -2841,11 +2843,12 @@ import Peg from 'seedsui-react/lib/Peg';
 <Picker
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
+  value={值 number | string, 默认无}
+  valueForKey={选中key number | string, 默认无}
   list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'picker'}
   slotClassName={一槽className string, 默认'text-center'}
-  value={值 string, 默认无}
   onClickMask={点击遮罩 func, 默认无}
   onClickCancel={点击取消按钮 func(s), 默认无}
   onClickSubmit={点击确定按钮 func(s), 默认无}
@@ -3247,11 +3250,12 @@ searchGoods = (value) => {
 <SelectPicker
   portal={传送dom object, 默认document.getElementById('root')}
   multiple={是否允许多选 bool, 默认false}
+  value={值 number | string, 默认无}
+  valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无} // 格式 [key: 'xx', value: 'xx']
   className={容器className string, 默认无, 基础'selectpicker'}
   style={容器style object, 默认无}
   slotClassName={一槽className string, 默认'text-center'}
-  value={值 string, 默认无}
   show={*显隐 bool, 默认false}
   onClickMask={点击遮罩 func(s), 默认无}
   onClickCancel={点击取消按钮 func(s), 默认无}
