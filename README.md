@@ -155,6 +155,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Price](#price) 价格
 - [Progress](#progress) 进度条
 - [Radio](#radio) 单选框
+- [RouteComment](#routecomment) 评价路由
 - [SearchBar](#searchbar) 搜索框
 - [SearchBarPointer](#searchbarpointer) 搜索指针
 - [SearchBoard](#searchboard) 搜索面板
@@ -3119,6 +3120,31 @@ onClick = (checked, args) => {
 }
 
 <Radio onClick={this.onClick}/>
+```
+[返回目录](#component)
+
+
+
+## RouteComment
+[单选框](https://unpkg.com/seedsui-react/src/lib/RouteComment/RouteComment.js)
+### 属性
+```javascript
+<RouteComment
+  title={标题 string, 默认'填写意见'}
+  placeholder={占位符 string, 默认'点击输入'}
+  onSubmit={提交 func(value)}
+  submitStyle={提交样式style object, 默认无}
+/>
+```
+### 示例
+```javascript
+import RouteComment from 'seedsui-react/lib/RouteComment';
+
+onDelete = (value) => {
+  console.log(value)
+}
+
+<Route path={`${this.props.match.path}/deletePop`} render={() => <CommentRoute title="删除宴会申报" placeholder="请填写删除原因" onSubmit={this.onDelete} submitStyle={{backgroundColor: '#FF9008', borderColor: '#FF9008'}}/>} />
 ```
 [返回目录](#component)
 

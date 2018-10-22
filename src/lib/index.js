@@ -80,6 +80,7 @@ import Popover from './Popover';
 import Price from './Price';
 import Progress from './Progress';
 import Radio from './Radio';
+import RouteComment from './RouteComment'; // 不常用
 import SearchBar from './SearchBar';
 import SearchBarPointer from './SearchBarPointer';
 import SearchBoard from './SearchBoard';
@@ -193,6 +194,7 @@ export {
   Price,
   Progress,
   Radio,
+  RouteComment,
   SearchBar,
   SearchBarPointer,
   SearchBoard,
