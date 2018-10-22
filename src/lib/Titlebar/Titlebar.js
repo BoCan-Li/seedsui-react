@@ -111,7 +111,8 @@ export default class Titlebar extends Component {
     // 设置标题显示url中的title,则默认优先显示title
     let title = caption;
     if (showUrlTitle) {
-      title = Device.getUrlParameter('title', location.search) || caption;
+      title = Device.getUrlParameter('titlebar', location.search) || caption;
+      title = decodeURIComponent(title);
     }
     const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{title}</h1>);
     return (

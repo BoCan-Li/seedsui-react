@@ -3535,7 +3535,7 @@ import Timepart from 'seedsui-react/lib/Timepart';
 <Titlebar
   className={容器className string, 默认无, 基础'titlebar'}
 
-  showUrlTitle={标题是否显示url中的title bool, 默认true}
+  showUrlTitle={标题是否显示url中的title bool, 默认true, 将会读取url中'titlebar'参数做为标准}
   caption={标题 node, 默认无}
   captionClassName={标题className string, 默认无, 基础'titlebar-caption nowrap text-center'}
   captionStyle={标题style object, 默认无}
