@@ -196,8 +196,31 @@ var Bridge = {
   getCustomerType: function (params) {
     this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
   },
-  getCustomerArea: function (params) {
-    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getCustomerArea: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess({
+      id: '5365268129453435373',
+      name: '门店1号'
+    })
+  },
+  getCustomerAreaMore: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess([
+      {
+        id: '5365268129453435373',
+        name: '门店1号'
+      },
+      {
+        id: '5365268129453435374',
+        name: '门店2号'
+      }
+    ])
   },
   /**
    * 部门插件
