@@ -81,11 +81,31 @@ var Bridge = {
   /**
    * 人员插件
    */
-  getContactMore: function () {
-    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getContactMore: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess([
+      {
+        id: '4655721687632479006',
+        name: '员工1'
+      },
+      {
+        id: '4655721687632479007',
+        name: '员工2'
+      }
+    ])
   },
-  getContact: function () {
-    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getContact: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess({
+      id: '4655721687632479006',
+      name: '员工1'
+    })
   },
   /**
    * 客户插件
@@ -104,7 +124,7 @@ var Bridge = {
     "location": "31.983362,118.73069",
     "lon": "",
     "manager_name": "",
-    "name": "20180403003",
+    "name": "客户门店经销商1",
     "name_py": "20180403004 20180403004",
     "trade_type": "3",
     "type_id": "",
@@ -123,7 +143,7 @@ var Bridge = {
     "location": "31.983679,118.730766",
     "lon": "",
     "manager_name": "",
-    "name": "门店3",
+    "name": "客户门店经销商2",
     "name_py": "mendian3 md3",
     "trade_type": "3",
     "type_id": "",
@@ -142,7 +162,7 @@ var Bridge = {
     "location": "31.983311,118.730527",
     "lon": "118.730527",
     "manager_name": "大表哥",
-    "name": "201801171557",
+    "name": "客户门店经销商3",
     "name_py": "201801171557 201801171557",
     "trade_type": "3",
     "type_id": "-1",
@@ -161,7 +181,7 @@ var Bridge = {
     "location": "31.983301,118.730517",
     "lon": "",
     "manager_name": "",
-    "name": "201801171624",
+    "name": "客户门店经销商4",
     "name_py": "201801171624 201801171624",
     "trade_type": "3",
     "type_id": "",
@@ -190,11 +210,18 @@ var Bridge = {
     }
     if (params.onSuccess) params.onSuccess({
       id: '5365268129453435373',
-      name: '门店1号'
+      name: '客户门店经销商1'
     })
   },
-  getCustomerType: function (params) {
-    this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+  getCustomerType: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess({
+      id: '5365268129453435373',
+      name: '客户类型1'
+    })
   },
   getCustomerArea: function (params = {}) {
     if (!this.debug) {
@@ -203,7 +230,7 @@ var Bridge = {
     }
     if (params.onSuccess) params.onSuccess({
       id: '5365268129453435373',
-      name: '门店1号'
+      name: '客户区域1'
     })
   },
   getCustomerAreaMore: function (params = {}) {
@@ -214,11 +241,11 @@ var Bridge = {
     if (params.onSuccess) params.onSuccess([
       {
         id: '5365268129453435373',
-        name: '门店1号'
+        name: '客户区域1'
       },
       {
         id: '5365268129453435374',
-        name: '门店2号'
+        name: '客户区域2'
       }
     ])
   },
