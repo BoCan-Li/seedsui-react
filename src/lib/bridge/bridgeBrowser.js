@@ -223,16 +223,6 @@ var Bridge = {
       name: '客户类型1'
     })
   },
-  getCustomerArea: function (params = {}) {
-    if (!this.debug) {
-      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
-      return
-    }
-    if (params.onSuccess) params.onSuccess({
-      id: '5365268129453435373',
-      name: '客户区域1'
-    })
-  },
   getCustomerAreaMore: function (params = {}) {
     if (!this.debug) {
       this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
@@ -248,6 +238,16 @@ var Bridge = {
         name: '客户区域2'
       }
     ])
+  },
+  getCustomerArea: function (params = {}) {
+    if (!this.debug) {
+      this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
+      return
+    }
+    if (params.onSuccess) params.onSuccess({
+      id: '5365268129453435373',
+      name: '客户区域1'
+    })
   },
   /**
    * 部门插件
