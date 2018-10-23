@@ -70,16 +70,16 @@ export default class RouteComment extends Component {
           <Titlebar caption={title}/>
         </Header>
         <Container>
-          <div className="routecomment-input-box">
-            <textarea ref={(el) => {this.$textarea = el}} className="routecomment-input" placeholder={placeholder} onChange={this.onChange}></textarea>
+          <div className="route-comment-input-box">
+            <textarea ref={(el) => {this.$textarea = el}} className="route-comment-input" placeholder={placeholder} onChange={this.onChange}></textarea>
           </div>
           {!this.props.onClickCancel &&
-            <Button onClick={this.onClickSubmit} className={`routecomment-button-single routecomment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+            <Button onClick={this.onClickSubmit} className={`route-comment-button-single route-comment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
           }
           {this.props.onClickCancel &&
-          <div className="routecomment-button-box">
-            <Button onClick={this.onClickCancel} className={`routecomment-button ${cancelClassName}`} disabled={cancelValid && !this.state.isEnable} style={cancelStyle}>{cancelCaption}</Button>
-            <Button onClick={this.onClickSubmit} className={`routecomment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+          <div className="route-comment-button-box">
+            <Button onClick={this.onClickCancel} className={`route-comment-button ${cancelClassName}`} disabled={cancelValid && !this.state.isEnable} style={cancelStyle}>{cancelCaption}</Button>
+            <Button onClick={this.onClickSubmit} className={`route-comment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
           </div>}
         </Container>
       </Page>

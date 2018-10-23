@@ -1234,7 +1234,6 @@
 }
 
 // RouteComment控件
-@routecomment-button-wing: 12px;
 .setRouteCommentInputBox(){
   &:extend(.border-b);
   padding: 10px 0;
@@ -1256,6 +1255,9 @@
 .setRouteCommentButton(){
   &:extend(.flex-1);
   border-radius: 4px;
+  &+&{
+    margin-left: 12px;
+  }
 }
 .setRouteCommentButtonSingle(){
   margin: 30px 60px;
