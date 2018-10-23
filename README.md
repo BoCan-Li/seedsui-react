@@ -3153,7 +3153,7 @@ import {Route, withRouter} from 'react-router';
 import RouteComment from 'seedsui-react/lib/RouteComment';
 
 onApproverPop = () => {
-  this.props.history.push(`${this.props.match.path}/approverPop`);
+  this.props.history.push(window.location.href.split('#')[1] + `/approverPop`);
 }
 onApprover = (value, obj) => {
   console.log(value, obj);
