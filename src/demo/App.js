@@ -3,8 +3,7 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import InputPicker from '../lib/InputPicker';
-import InputSelect from '../lib/InputSelect';
+import RouteComment from '../lib/RouteComment';
 
 export default class App extends Component {
   constructor(props) {
@@ -23,9 +22,8 @@ export default class App extends Component {
   }
   componentDidMount() {
   }
-  onChange = (value, options) => {
-    console.log(value);
-    console.log(options);
+  onApprover = (value, obj) => {
+    console.log(value, obj)
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -33,9 +31,16 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputPicker onChange={this.onChange} list={[{key: '1', value: '1个'}, {key: '2', value: '2个'}]} value="2个" valueForKey="1"/>
-        <InputSelect multiple valueBindProp onChange={this.onChange} list={[{key: '1', value: '1个'}, {key: '2', value: '2个'}]} value="2个" valueForKey="1"/>
       </Container>
+      <RouteComment
+        submitValid={false}
+          title="审核"
+          placeholder="请填写审批意见"
+          cancelCaption="再次审核"
+          submitCaption="直接打回"
+          onClickCancel={this.onApprover}
+          onClickSubmit={this.onApprover}
+        />
     </Page>
   }
 };

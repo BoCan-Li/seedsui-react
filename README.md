@@ -3126,25 +3126,50 @@ onClick = (checked, args) => {
 
 
 ## RouteComment
-[单选框](https://unpkg.com/seedsui-react/src/lib/RouteComment/RouteComment.js)
+[评价路由](https://unpkg.com/seedsui-react/src/lib/RouteComment/RouteComment.js)
 ### 属性
 ```javascript
 <RouteComment
   title={标题 string, 默认'填写意见'}
   placeholder={占位符 string, 默认'点击输入'}
-  onSubmit={提交 func(value)}
-  submitStyle={提交样式style object, 默认无}
+
+  submitValid={确定按钮校验 bool, 默认true}
+  cancelValid={取消按钮校验 bool, 默认true}
+
+  submitStyle={确定按钮style object, 默认无}
+  submitClassName={确定按钮className string, 默认无}
+  submitCaption={确定按钮文字 node, 默认'确定'}
+  onClickSubmit={点击确定按钮 func(value, {op: 'submit'})}
+
+  cancelStyle={取消按钮style object, 默认无}
+  cancelClassName={取消按钮className string, 默认无}
+  cancelCaption={取消按钮文字 node, 默认'取消'}
+  onClickCancel={点击取消按钮 func(value, {op: 'cancel'}), 默认无, 有此属性才显示取消按钮}
 />
 ```
 ### 示例
 ```javascript
+import {Route, withRouter} from 'react-router';
 import RouteComment from 'seedsui-react/lib/RouteComment';
 
-onDelete = (value) => {
-  console.log(value)
+onApproverPop = () => {
+  this.props.history.push(`${this.props.match.path}/approverPop`);
+}
+onApprover = (value, obj) => {
+  console.log(value, obj);
 }
 
-<Route path={`${this.props.match.path}/deletePop`} render={() => <CommentRoute title="删除宴会申报" placeholder="请填写删除原因" onSubmit={this.onDelete} submitStyle={{backgroundColor: '#FF9008', borderColor: '#FF9008'}}/>} />
+<Route
+  path={`${this.props.match.path}/approverPop`}
+  render={() => <RouteComment
+    title="审核"
+    placeholder="请填写审批意见"
+    cancelCaption="再次审核"
+    submitCaption="直接打回"
+    onClickCancel={this.onApprover}
+    onClickSubmit={this.onApprover}
+  />}
+/>
 ```
 [返回目录](#component)
 

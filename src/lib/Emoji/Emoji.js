@@ -25,7 +25,7 @@ export default class Emoji extends Component {
     style: PropTypes.object,
 
     onChange: PropTypes.func,
-    onSubmit: PropTypes.func,
+    onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
     args: null,
@@ -63,8 +63,8 @@ export default class Emoji extends Component {
     if (this.props.onClickMask) this.props.onClickMask(this.getArgs(e));
     e.stopPropagation();
   }
-  onSubmit = (e) => {
-    if (this.props.onSubmit) this.props.onSubmit(this.props.value, this.getArgs(e));
+  onClickSubmit = (e) => {
+    if (this.props.onClickSubmit) this.props.onClickSubmit(this.props.value, this.getArgs(e));
   }
   onClick = (e) => {
     const target = e.target;
@@ -118,7 +118,7 @@ export default class Emoji extends Component {
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            rcaption={<Button className="link outline emoji-button" disabled={!value} onClick={this.onSubmit}>提交</Button>}
+            rcaption={<Button className="link outline emoji-button" disabled={!value} onClick={this.onClickSubmit}>提交</Button>}
           />
         </div>
       </div>,

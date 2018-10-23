@@ -10,12 +10,29 @@ export default class RouteComment extends Component {
   static propTypes = {
     title: PropTypes.string,
     placeholder: PropTypes.string,
-    onSubmit: PropTypes.func,
-    submitStyle: PropTypes.object
+
+    submitValid: PropTypes.bool,
+    cancelValid: PropTypes.bool,
+
+    submitCaption: PropTypes.node,
+    submitStyle: PropTypes.object,
+    submitClassName: PropTypes.string,
+    onClickSubmit: PropTypes.func,
+
+    cancelCaption: PropTypes.node,
+    cancelStyle: PropTypes.object,
+    cancelClassName: PropTypes.string,
+    onClickCancel: PropTypes.func,
   };
   static defaultProps = {
+    submitValid: true,
+    cancelValid: true,
     title: '填写意见',
-    placeholder: '点击输入'
+    placeholder: '点击输入',
+    submitCaption: '提交',
+    submitClassName: 'lg primary',
+    cancelCaption: '取消',
+    cancelClassName: 'lg bg-white'
   }
   constructor(props) {
     super(props);
@@ -39,21 +56,31 @@ export default class RouteComment extends Component {
       })
     }
   }
-  onSubmit = () => {
-    if (this.props.onSubmit) this.props.onSubmit(this.$textarea.value)
+  onClickSubmit = () => {
+    if (this.props.onClickSubmit) this.props.onClickSubmit(this.$textarea.value, {op: 'submit'})
+  }
+  onClickCancel = () => {
+    if (this.props.onClickCancel) this.props.onClickCancel(this.$textarea.value, {op: 'cancel'})
   }
   render() {
-    const {title, placeholder, submitStyle} = this.props;
+    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, cancelCaption, cancelStyle, cancelClassName} = this.props;
     return (
       <Page>
         <Header>
           <Titlebar caption={title}/>
         </Header>
         <Container>
-          <div style={{padding: '10px 0', backgroundColor: 'white'}} className="border-b">
-            <textarea ref={(el) => {this.$textarea = el}} style={{display: 'block', width: '100%', lineHeight: '22px', border: '0', padding: '0 12px', boxSizing: 'border-box', height: '100px'}} placeholder={placeholder} onChange={this.onChange}></textarea>
+          <div className="routecomment-input-box">
+            <textarea ref={(el) => {this.$textarea = el}} className="routecomment-input" placeholder={placeholder} onChange={this.onChange}></textarea>
           </div>
-          <Button onClick={this.onSubmit} className={`lg primary`} disabled={!this.state.isEnable} style={Object.assign({margin: '30px 60px', borderRadius: '4px'}, submitStyle)}>提交</Button>
+          {!this.props.onClickCancel &&
+            <Button onClick={this.onClickSubmit} className={`routecomment-button-single routecomment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+          }
+          {this.props.onClickCancel &&
+          <div className="routecomment-button-box">
+            <Button onClick={this.onClickCancel} className={`routecomment-button ${cancelClassName}`} disabled={cancelValid && !this.state.isEnable} style={cancelStyle}>{cancelCaption}</Button>
+            <Button onClick={this.onClickSubmit} className={`routecomment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+          </div>}
         </Container>
       </Page>
     );
