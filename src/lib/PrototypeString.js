@@ -22,12 +22,22 @@ window.String.prototype.toASCII = function () {
   }
   return value
 }
+window.String.prototype.fromASCII = function () {
+  return this.replace(/(\\u)(\w{1,4})/gi, function ($0) {
+    return (String.fromCharCode(parseInt((escape($0).replace(/(%5Cu)(\w{1,4})/g, "$2")), 16)))
+  })
+}
 // 转为unicode编码
 window.String.prototype.toUnicode = function () {
-  var value = '';
+  var value = ''
   for (var i = 0; i < this.length; i++)
-    value += '&#' + this.charCodeAt(i) + ';';
-  return value;
+    value += '&#' + this.charCodeAt(i) + ';'
+  return value
+}
+window.String.prototype.fromUnicode = function () {
+  return this.replace(/(&#x)(\w{1,4});/gi, function ($0) {
+    return String.fromCharCode(parseInt(escape($0).replace(/(%26%23x)(\w{1,4})(%3B)/g, "$2"), 16))
+  })
 }
 // 转为UTF8编码
 window.String.prototype.toUTF8 = function () {
@@ -37,27 +47,31 @@ window.String.prototype.toUTF8 = function () {
   }
   return value
 }
+window.String.prototype.fromUTF8 = function () {
+  return this.replace(/(&#)(\d{1,6});/gi, function ($0) {
+    return String.fromCharCode(parseInt(escape($0).replace(/(%26%23)(\d{1,6})(%3B)/g, "$2"), 10))
+  })
+}
 // 转为URI编码
 window.String.prototype.toURI = function () {
   return encodeURI(this)
+}
+window.String.prototype.fromURI = function () {
+  return decodeURI(this)
 }
 // 转为URI全编码
 window.String.prototype.toURIComponent = function () {
   return encodeURIComponent(this)
 }
-// ASCII,unicode,UTF8解码
-window.String.prototype.decode = function () {
-  var str = this
-  str = str.replace(/(\\u)(\w{1,4})/gi, function ($0) {
-    return (String.fromCharCode(parseInt((escape($0).replace(/(%5Cu)(\w{1,4})/g, "$2")), 16)))
-  })
-  str = str.replace(/(&#x)(\w{1,4});/gi, function ($0) {
-    return String.fromCharCode(parseInt(escape($0).replace(/(%26%23x)(\w{1,4})(%3B)/g, "$2"), 16))
-  })
-  str = str.replace(/(&#)(\d{1,6});/gi, function ($0) {
-    return String.fromCharCode(parseInt(escape($0).replace(/(%26%23)(\d{1,6})(%3B)/g, "$2"), 10))
-  })
-  return decodeURIComponent(str)
+window.String.prototype.fromURIComponent = function () {
+  return decodeURIComponent(this)
+}
+// 地址编码,地址栏不允许有百分号,可用此方法规避此问题
+window.String.prototype.encodePercent = function () {
+  return this.replace(/%/g, 'percent_25_percent')
+}
+window.String.prototype.decodePercent = function () {
+  return this.replace(/percent_25_percent/g, '%')
 }
 
 // 去除字符串左右两端的空格
