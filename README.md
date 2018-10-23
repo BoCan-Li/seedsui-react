@@ -3530,10 +3530,11 @@ import Ticket from 'seedsui-react/lib/Ticket';
 <Timeline
   list={列表 array, 默认无, 格式如下:}
   // [{content: node, icon: node(默认Dot), active: bool}]
+  className={容器className string, 默认无, 基础'timeline'}
   style={容器style object, 默认无}
   badgeStyle={左侧style object, 默认无}
-  top={上间距px number, 默认0}
-  bottom={下间距px number, 默认0}
+  className={左线条className string, 默认无, 基础'timeline-line'}
+  style={左线条style object, 默认无}
 />
 ```
 ### 示例
@@ -3543,7 +3544,7 @@ import Timeline from 'seedsui-react/lib/Timeline';
 const timeList = [
   {content: <p>内容</p>, active: true}
 ]
-<Timeline list={timeList} top={20} bottom={15} style={{padding: '0 0 0 18px'}}/>
+<Timeline list={timeList} style={{padding: '0 0 0 18px'}}/>
 ```
 [返回目录](#component)
 
