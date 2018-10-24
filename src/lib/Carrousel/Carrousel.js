@@ -16,7 +16,7 @@ export default class Carrousel extends Component {
     slidesPerView: PropTypes.number, // 一屏显示几块,默认1块
     defaultSrc: PropTypes.string, // 默认图片
     list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
-    enableOnChange: PropTypes.bool, // 启用改变事件回调
+    enableOnChange: PropTypes.bool, // 手动调用slideTo方法是否触发onChange事件回调
     speed: PropTypes.number, // 动画过渡的速度
     onClick: PropTypes.func,
     onChange: PropTypes.func,
@@ -50,21 +50,27 @@ export default class Carrousel extends Component {
     }
   }
   componentDidMount = () => {
-    if (this.state.instance || (this.props.list.length === 0 && !this.props.children)) return;
-    setTimeout(() => {
-      const instance = new Instance(this.$el, {
-        height: this.props.style && this.props.style.height ? this.props.style.height : null,
-        pagination: '.carrousel-pagination',
-        autoplay: this.props.autoplay,
-        slidesPerView: this.props.slidesPerView,
-        loop: this.props.loop,
-        onClick: this.onClick,
-        onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
-      });
-      this.setState({
-        instance
-      });
-    }, this.props.delay);
+    if (this.props.list.length) {
+      setTimeout(() => {
+        this.instance();
+      }, this.props.delay);
+    } else if (this.props.children) {
+      this.instance();
+    }
+  }
+  instance = () => {
+    const instance = new Instance(this.$el, {
+      height: this.props.style && this.props.style.height ? this.props.style.height : null,
+      pagination: '.carrousel-pagination',
+      autoplay: this.props.autoplay,
+      slidesPerView: this.props.slidesPerView,
+      loop: this.props.loop,
+      onClick: this.onClick,
+      onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
+    });
+    this.setState({
+      instance
+    });
   }
   onClick = (e) => {
     const index = e.activeIndex;

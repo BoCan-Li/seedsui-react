@@ -918,7 +918,7 @@ import Card from 'seedsui-react/lib/Card';
   defaultSrc={默认图片 string, 默认'//res.waiqin365.com/d/seedsui/carrousel/default.png'}
   list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
   speed={动画过渡的速度 number, 默认300}
-  enableOnChange={启用轮播时事件回调 bool, 默认true} // 此事件为true时onChange事件才会生效
+  enableOnChange={手动调用slideTo方法是否触发onChange事件回调 bool, 默认true}
   onChange={轮播时事件回调 func()}
   onClick={点击块 func(item, index)}
 >

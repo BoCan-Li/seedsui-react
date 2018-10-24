@@ -284,10 +284,7 @@ var Carrousel = function (container, params) {
       touchTarget[action]('touchend', s.onTouchEnd, false)
       touchTarget[action]('touchcancel', s.onTouchEnd, false)
     } else {
-      // pc端禁用拖动功能,不然会与下拉刷新冲突
-      touchTarget[action]('mousedown', s.onTouchStart, false)
-      // touchTarget[action]('mousemove', s.onTouchMove, false)
-      touchTarget[action]('mouseup', s.onTouchEnd, false)
+      touchTarget[action]('click', s.onClick, false)
     }
   }
   // attach、dettach事件
@@ -303,19 +300,16 @@ var Carrousel = function (container, params) {
   function preventDefault (e) {
     e.preventDefault()
   }
-  s.startMouseMove = false
   s.onTouchStart = function (e) {
-    e.stopPropagation()
-    s.startMouseMove = true
-    s.container.addEventListener(s.startMouseMove ? 'touchmove' : 'mousemove', preventDefault, false)
+    e.stopPropagation() // 此属性与FastClick冲突
+    s.container.addEventListener('touchmove', preventDefault, false)
     s.touches.startX = e.clientX || e.touches[0].clientX
     s.touches.startY = e.clientY || e.touches[0].clientY
     // 关闭自动播放
     s.stopAutoplay()
   }
   s.onTouchMove = function (e) {
-    e.stopPropagation()
-    if (!s.startMouseMove) return
+    e.stopPropagation() // 此属性与FastClick冲突
     s.touches.currentX = e.clientX || e.touches[0].clientX
     s.touches.currentY = e.clientY || e.touches[0].clientY
     s.touches.diffX = s.touches.startX - s.touches.currentX
@@ -336,7 +330,7 @@ var Carrousel = function (container, params) {
 
     // 如果是上下滑动则不工作
     if (s.touches.vertical !== 0) {
-      s.container.removeEventListener(s.startMouseMove ? 'touchmove' : 'mousemove', preventDefault, false)
+      s.container.removeEventListener('touchmove', preventDefault, false)
       return
     }
 
@@ -349,9 +343,8 @@ var Carrousel = function (container, params) {
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
   }
   s.onTouchEnd = function (e) {
-    e.stopPropagation()
-    s.startMouseMove = false
-    // s.container.removeEventListener(s.startMouseMove ? 'touchmove' : 'mousemove',preventDefault,false)
+    e.stopPropagation() // 此属性与FastClick冲突
+    // s.container.removeEventListener('touchmove', preventDefault, false)
     // 左右拉动
     if (s.touches.direction === 1) {
       if (s.touches.diffX > s.params.threshold) {
@@ -371,19 +364,22 @@ var Carrousel = function (container, params) {
     s.touches.endX = e.clientX || e.changedTouches[0].clientX
     s.touches.endY = e.clientY || e.changedTouches[0].clientY
     if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
-      // PC单击页码需要翻页
-      if (!s.isSupportTouch && e.target.classList.contains(s.params.bulletClass)) {
-        s.onClickBullet(e)
-      } else if (e.target.classList.contains(s.params.controlPrevClass)) {
-        s.onClickPrev(e)
-      } else if (e.target.classList.contains(s.params.controlNextClass)) {
-        s.onClickNext(e)
-      } else {
-        if (s.params.onClick) s.params.onClick(s)
-      }
+      if (s.params.onClick) s.params.onClick(s)
     }
     // 开启自动播放
     s.startAutoplay()
+  }
+  s.onClick = function (e) {
+    e.stopPropagation()
+    if (e.target.classList.contains(s.params.bulletClass)) {
+      s.onClickBullet(e)
+    } else if (e.target.classList.contains(s.params.controlPrevClass)) {
+      s.onClickPrev(e)
+    } else if (e.target.classList.contains(s.params.controlNextClass)) {
+      s.onClickNext(e)
+    } else {
+      if (s.params.onClick) s.params.onClick(s)
+    }
   }
   s.onClickBullet = function (e) {
     var index = Number(e.target.getAttribute('data-index')) || 0

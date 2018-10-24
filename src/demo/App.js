@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
+import Carrousel from '../lib/Carrousel';
 import Titlebar from '../lib/Titlebar';
-import RouteComment from '../lib/RouteComment';
+import FastClick from '../lib/FastClick';
 
 export default class App extends Component {
   constructor(props) {
@@ -21,26 +22,28 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
+    FastClick.attach(document.getElementById('root'));
   }
-  onApprover = (value, obj) => {
-    console.log(value, obj)
+  onChange = () => {
+    console.log(1)
+  }
+  onClick = () => {
+    console.log(2)
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
-      <Container>
-      </Container>
-      <RouteComment
-        submitValid={false}
-          title="审核"
-          placeholder="请填写审批意见"
-          cancelCaption="再次审核"
-          submitCaption="直接打回"
-          onClickCancel={this.onApprover}
-          onClickSubmit={this.onApprover}
-        />
+      <Carrousel style={{top: '44px'}} onChange={this.onChange}>
+        <Container>
+          <Carrousel enableOnChange={false} list={[{img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}, {img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}]}/>
+          <p onClick={this.onClick}>第一页</p>
+        </Container>
+        <Container>
+        <p onClick={this.onClick}>第二页</p>
+        </Container>
+      </Carrousel>
     </Page>
   }
 };
