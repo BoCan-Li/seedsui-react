@@ -293,6 +293,10 @@ var Bridge = {
     }, JSON.stringify(params))
   },
   getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', onSuccess([{id: '', name: ''}])}
+    if (Device.platformVersion < '6.2.2') {
+      BridgeBrowser.showToast('此功能需要升级至6.2.2及以上的客户端', {mask: false})
+      return
+    }
     wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(params))

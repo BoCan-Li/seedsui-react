@@ -4,7 +4,7 @@ import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Carrousel from '../lib/Carrousel';
 import Titlebar from '../lib/Titlebar';
-import FastClick from '../lib/FastClick';
+import Bridge from '../lib/Bridge';
 
 export default class App extends Component {
   constructor(props) {
@@ -22,7 +22,11 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    FastClick.attach(document.getElementById('root'));
+    Bridge.getCustomerAreaMore({
+      onSuccess: function () {
+        console.log(1)
+      }
+    })
   }
   onChange = () => {
   }
