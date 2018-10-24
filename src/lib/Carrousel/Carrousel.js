@@ -9,6 +9,7 @@ export default class Carrousel extends Component {
     slideStyle: PropTypes.object, // 设置块style
     slideClassName: PropTypes.string, // 设置块className
     children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
+    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播
     loop: PropTypes.bool, // 是否循环显示
     activeIndex: PropTypes.number, // 默认选中第几块
     pagination: PropTypes.bool, // 是否显示小点点
@@ -18,11 +19,12 @@ export default class Carrousel extends Component {
     list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
     enableOnChange: PropTypes.bool, // 手动调用slideTo方法是否触发onChange事件回调
     speed: PropTypes.number, // 动画过渡的速度
-    onClick: PropTypes.func,
+    onClick: PropTypes.func, // func(s, e)
     onChange: PropTypes.func,
     delay: PropTypes.number, // 延迟初始化秒数
   }
   static defaultProps = {
+    stopPropagation: true,
     activeIndex: 0,
     page: 0,
     loop: false,
@@ -45,6 +47,9 @@ export default class Carrousel extends Component {
     if (this.state.instance && this.state.instance.activeIndex !== this.props.activeIndex) {
       this.state.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
     }
+    if (this.props.stopPropagation !== prevProps.stopPropagation) {
+      this.state.instance.setParams({stopPropagation: this.props.stopPropagation});
+    }
     if (!this.props.list.equals(prevProps.list)) {
       this.update();
     }
@@ -61,11 +66,12 @@ export default class Carrousel extends Component {
   instance = () => {
     const instance = new Instance(this.$el, {
       height: this.props.style && this.props.style.height ? this.props.style.height : null,
+      stopPropagation: this.props.stopPropagation,
       pagination: '.carrousel-pagination',
       autoplay: this.props.autoplay,
       slidesPerView: this.props.slidesPerView,
       loop: this.props.loop,
-      onClick: this.onClick,
+      onClick: this.props.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
     this.setState({

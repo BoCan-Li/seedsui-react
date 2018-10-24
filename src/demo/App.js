@@ -25,23 +25,46 @@ export default class App extends Component {
     FastClick.attach(document.getElementById('root'));
   }
   onChange = () => {
-    console.log(1)
   }
-  onClick = () => {
-    console.log(2)
+  onClick = (s, e) => {
+    console.log(s.target)
+    e.stopPropagation()
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
-      <Carrousel style={{top: '44px'}} onChange={this.onChange}>
+      <Carrousel style={{top: '44px'}} onChange={this.onChange} onClick={this.onClick}>
         <Container>
-          <Carrousel enableOnChange={false} list={[{img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}, {img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}]}/>
-          <p onClick={this.onClick}>第一页</p>
+          <Carrousel stopPropagation={true} loop enableOnChange={false} list={[{img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}, {img: 'http://www.waiqin365.com/p/upload/www/201810/17153207o8m8.jpg'}]}/>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p><p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p><p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p><p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
         </Container>
         <Container>
-        <p onClick={this.onClick}>第二页</p>
+        <p>第二页</p>
         </Container>
       </Carrousel>
     </Page>

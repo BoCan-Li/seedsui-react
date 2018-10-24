@@ -15,6 +15,7 @@ var Carrousel = function (container, params) {
   Model
   -------------------- */
   var defaults = {
+    stopPropagation: true, // 是否阻止点击事件的传播
     pagination: null, // 小点点
     controlPrev: null, // 左箭头
     controlNext: null, // 右箭头
@@ -272,7 +273,7 @@ var Carrousel = function (container, params) {
   /* --------------------
   Touch Events
   -------------------- */
-  // 绑定事件
+  // 是否支持触摸事件
   s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
     var touchTarget = s.container
@@ -301,7 +302,7 @@ var Carrousel = function (container, params) {
     e.preventDefault()
   }
   s.onTouchStart = function (e) {
-    e.stopPropagation() // 此属性与FastClick冲突
+    if (s.params.stopPropagation) e.stopPropagation() // 此属性与FastClick冲突
     s.container.addEventListener('touchmove', preventDefault, false)
     s.touches.startX = e.clientX || e.touches[0].clientX
     s.touches.startY = e.clientY || e.touches[0].clientY
@@ -309,7 +310,7 @@ var Carrousel = function (container, params) {
     s.stopAutoplay()
   }
   s.onTouchMove = function (e) {
-    e.stopPropagation() // 此属性与FastClick冲突
+    e.stopPropagation()
     s.touches.currentX = e.clientX || e.touches[0].clientX
     s.touches.currentY = e.clientY || e.touches[0].clientY
     s.touches.diffX = s.touches.startX - s.touches.currentX
@@ -343,10 +344,16 @@ var Carrousel = function (container, params) {
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
   }
   s.onTouchEnd = function (e) {
-    e.stopPropagation() // 此属性与FastClick冲突
+    if (s.params.stopPropagation) e.stopPropagation() // 此属性与FastClick冲突
     // s.container.removeEventListener('touchmove', preventDefault, false)
-    // 左右拉动
-    if (s.touches.direction === 1) {
+    s.touches.endX = e.clientX || e.changedTouches[0].clientX
+    s.touches.endY = e.clientY || e.changedTouches[0].clientY
+
+    // 单击事件
+    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
+      if (s.params.onClick) s.params.onClick(s, e)
+    // 滑动事件,左右拉动
+    } else if (s.touches.direction === 1) {
       if (s.touches.diffX > s.params.threshold) {
         // 下一页
         s.activeIndexTruth++
@@ -356,17 +363,13 @@ var Carrousel = function (container, params) {
       }
       s.slideTo(s.activeIndexTruth)
     }
+
     // 清空滑动方向
     s.touches.direction = 0
     s.touches.vertical = 0
     s.touches.horizontal = 0
-    // 单击事件
-    s.touches.endX = e.clientX || e.changedTouches[0].clientX
-    s.touches.endY = e.clientY || e.changedTouches[0].clientY
-    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
-      if (s.params.onClick) s.params.onClick(s)
-    }
-    // 开启自动播放
+    
+    // 重新开启自动播放
     s.startAutoplay()
   }
   s.onClick = function (e) {
@@ -378,7 +381,7 @@ var Carrousel = function (container, params) {
     } else if (e.target.classList.contains(s.params.controlNextClass)) {
       s.onClickNext(e)
     } else {
-      if (s.params.onClick) s.params.onClick(s)
+      if (s.params.onClick) s.params.onClick(s, e)
     }
   }
   s.onClickBullet = function (e) {
@@ -468,7 +471,12 @@ var Carrousel = function (container, params) {
       }
     }, duration)
   }
-
+  // 更改params
+  s.setParams = function (params) {
+    for (var n in params) {
+      s.params[n] = params[n]
+    }
+  }
   // 主函数
   s.init = function () {
     // s.update()
