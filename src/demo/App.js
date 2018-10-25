@@ -4,7 +4,7 @@ import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Carrousel from '../lib/Carrousel';
 import Titlebar from '../lib/Titlebar';
-import Bridge from '../lib/Bridge';
+import Device from '../lib/Device';
 
 export default class App extends Component {
   constructor(props) {
@@ -22,11 +22,8 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    Bridge.getCustomerAreaMore({
-      onSuccess: function () {
-        console.log(1)
-      }
-    })
+    // 适配刘海屏和andriod5.0以下的手机
+    Device.adapterMobile();
   }
   onChange = () => {
   }
@@ -51,18 +48,48 @@ export default class App extends Component {
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
-          <p>第一页</p><p>第一页</p>
-          <p>第一页</p>
-          <p>第一页</p>
-          <p>第一页</p>
-          <p>第一页</p><p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
-          <p>第一页</p><p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
+          <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
           <p>第一页</p>
