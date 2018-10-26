@@ -22,10 +22,8 @@ export default class App extends Component {
   }
   componentDidMount() {
     // 适配刘海屏和andriod5.0以下的手机
-    var num = 0.0007;
-    console.log(Number(num.toFixed(0)));
-    console.log(Math.Calc.toFixed(num, 0, true, true))
-    console.log(Math.Calc.toDigits(num, 0))
+    var num = 1234.123456789;
+    console.log(Math.Calc.toThousandth(num));
   }
   onChange = () => {
   }
