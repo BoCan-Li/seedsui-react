@@ -113,7 +113,7 @@ export default class InputText extends Component {
     var num = Number(value);
     if (isNaN(num)) return '';
     // 判断是否超出限制
-    const {max, min} = this.props;
+    const {max, min, digits} = this.props;
     if (!isNaN(max) && num > max) {
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
@@ -126,8 +126,11 @@ export default class InputText extends Component {
     }
     var val = value;
     // 截取小数位数
-    if (this.props.digits !== false) {
-      if (String(num).indexOf('.') >= 0) val = Math.Calc.toDigits(num, this.props.digits);
+    if (!isNaN(digits)) {
+      if (String(num).indexOf('.') >= 0) {
+        var numStr = String(num);
+        val = numStr.substring(0, numStr.indexOf('.') + (Number(digits) === 0 ? 0 : digits + 1));
+      }
     }
     // 最大长度限制
     if (this.props.maxLength && val && val.length > this.props.maxLength) {

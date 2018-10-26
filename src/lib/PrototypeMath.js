@@ -2,34 +2,25 @@
 解决加减乘除精度
 ------------------- */
 Math.Calc = (function () {
-  // 判断obj是否为一个整数
-  function isInteger (obj) {
-    return Math.floor(obj) === obj
-  }
-
   /* -----------------------------------------------------
   将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
-  @param floatNum {number} 小数
-  @return ret {times:100, num: 314}
+  @param (argNum: {number} 小数, argDigits: {number} 截取小数位, round: {bool} 是否四舍五入 默认为true)
+  @return result {times:100, num: 314}
   ----------------------------------------------------- */
-  function toInteger (floatNum) {
-    var ret = { times: 1, num: 0 }
-    var isNegative = floatNum < 0
-    if (isInteger(floatNum)) {
-      ret.num = floatNum
-      return ret
+  function toInteger (argNum, argDigits, round) {
+    var result = { times: 1, num: 0 }
+    var argNumStr = argNum + ''
+    if (argNumStr.indexOf('.') === -1) {
+      result.num = argNum
+      return result
     }
-    var strfi = floatNum + ''
-    var dotPos = strfi.indexOf('.')
-    var len = strfi.substr(dotPos + 1).length
-    var times = Math.pow(10, len)
-    var intNum = parseInt(Math.abs(floatNum) * times + 0.5, 10)
-    ret.times = times
-    if (isNegative) {
-      intNum = -intNum
-    }
-    ret.num = intNum
-    return ret
+    var digits = isNaN(argDigits) ? argNumStr.substr(argNumStr.indexOf('.') + 1).length : argDigits // 小数位数
+    var times = Math.pow(10, digits)
+    var num = parseInt(Math.abs(argNum) * times + (round === false ? 0 : 0.5), 10) // 转成整数,并且小数位四舍五入
+    var isNegative = argNum < 0 // 是否是负数
+    result.times = times
+    result.num = isNegative ? -num : num
+    return result
   }
 
   /* -----------------------------------------------------
@@ -82,7 +73,7 @@ Math.Calc = (function () {
     }
     if (digits && !isNaN(digits)) {
       // 精度设置
-      return toDigits(result, digits)
+      return result.toFixed(digits)
     }
     return result
   }
@@ -100,21 +91,11 @@ Math.Calc = (function () {
   function divide (a, b, digits) {
     return operation(a, b, digits, 'divide')
   }
-  // toFixed 修复两位小数不会四舍五入的问题
-  function toFixed (num, digits) {
-    var times = Math.pow(10, digits)
-    var result = num * times + 0.5
-    result = parseInt(result, 10) / times
-    return result
-  }
-  // toDigits 精度
-  function toDigits (argNum, digits) {
-    if (Number(digits) === 0) return Math.floor(argNum)
-    if (!digits) return argNum
-    var digitsMatch = new RegExp('[0-9]+(\\.[0-9]{1,' + digits + '})?')
-    var num = ('' + argNum).match(digitsMatch)
-    if (num && num[0]) return Number(num[0])
-    return argNum
+  // toFixed 修复老牌0.07.toFixed(1) => 0.0不会四舍五入的问题
+  function toFixed (argNum, argDigits, fixed, round) {
+    var result = toInteger(argNum, argDigits, round)
+    if (fixed) return (result.num / result.times).toFixed(argDigits)
+    return result.num / result.times
   }
   // 转换为千分位字符
   function toThousandth (num) {
@@ -133,7 +114,6 @@ Math.Calc = (function () {
     multiply: multiply,
     divide: divide,
     toFixed: toFixed,
-    toDigits: toDigits,
     toThousandth: toThousandth
   }
 })();

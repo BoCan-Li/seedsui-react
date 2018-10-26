@@ -158,7 +158,7 @@ export default class NumBox extends Component {
     }
     var num = Number(argNumstr);
     // 判断是否超出限制
-    const {max, min} = this.props;
+    const {max, min, digits} = this.props;
     if (!isNaN(max) && num > max) {
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
@@ -171,8 +171,11 @@ export default class NumBox extends Component {
     }
     var value = argNumstr;
     // 截取小数位数
-    if (this.props.digits) {
-      if (String(num).indexOf('.') >= 0) value = Math.Calc.toDigits(num, this.props.digits);
+    if (!isNaN(digits)) {
+      if (String(num).indexOf('.') >= 0) {
+        var numStr = String(num);
+        value = numStr.substring(0, numStr.indexOf('.') + (Number(digits) === 0 ? 0 : digits + 1));
+      }
     // 整数
     } else {
       value = Math.floor(num);
