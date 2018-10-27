@@ -355,7 +355,7 @@ var Bridge = {
   /*
    * 获取当前地理位置带地图
    * */
-  getLocation: function (params = {}) {
+  getLocationMap: function (params = {}) {
     if (!this.debug) {
       this.showToast('带地图定位功能仅可在外勤APP中使用', {mask: false})
       if (params.onError) params.onError({code:'locationFail', msg: '带地图定位功能仅可在外勤APP中使用'})
