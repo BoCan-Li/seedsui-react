@@ -21,9 +21,8 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    // 适配刘海屏和andriod5.0以下的手机
-    var num = 1234.123456789;
-    console.log(Math.Calc.toThousandth(num));
+    var date = '2018/08/07 08:08'.toDate('/');
+    console.log(date.toLocaleString())
   }
   onChange = () => {
   }
