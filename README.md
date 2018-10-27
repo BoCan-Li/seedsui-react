@@ -1781,6 +1781,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+  {...others}
 />
 ```
 [返回目录](#component)
@@ -1802,6 +1803,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
   onError={错误 func({msg: ''}), 默认无}
+  {...others}
 />
 ```
 
@@ -1813,8 +1815,35 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputLocation
-  onClick={点击 func(value,args), 默认无}
-  onChange={值改变 func(value,args), 默认无}
+  locationingText={定位中显示文字 string, 默认'定位中...'}
+  onClick={点击 func(value, args), 默认无}
+  onChange={值改变 func(value, args), 默认无}
+  {...others}
+/>
+```
+
+## InputLocationMap
+[定位框](#https://unpkg.com/seedsui-react/src/lib/InputLocationMap/InputLocationMap.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputLocationMap
+  locationingText={定位中显示文字 string, 默认'定位中...'}
+  onClick={点击 func(value, args), 默认无}
+  onChange={值改变 func(value, args), 默认无}
+  {...others}
+/>
+```
+
+## InputGoods
+[定位框](#https://unpkg.com/seedsui-react/src/lib/InputGoods/InputGoods.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<InputGoods
+  onClick={点击 func(value, args), 默认无}
+  onChange={值改变 func(value, option, args), 默认无}
+  {...others}
 />
 ```
 

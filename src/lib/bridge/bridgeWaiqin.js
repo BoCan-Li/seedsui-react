@@ -19,17 +19,6 @@ var Bridge = {
     return '';
   },
   /*
-  * 打开新的窗口
-  * params: {url:'', title: ''}默认为打开一个webview页面
-  * */
-  openWindow: function (params, callback) {
-    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
-  },
-  // 关闭当前窗
-  closeWindow: function () {
-    wq.wqload.wqClosePage() // eslint-disable-line
-  },
-  /*
   * 商联支付
   * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
   * */
@@ -94,11 +83,23 @@ var Bridge = {
       }
     })
   },
-  /*
-   * 获取当前地理位置
-   * 外勤365默认使用国测局'gcj02'定位,没有参数控制
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
-   * */
+  /* -----------------------------------------------------
+    获取当前地理位置
+    外勤365默认使用国测局'gcj02'定位,没有参数控制
+    @return {
+      "city": "南京市",
+      "citycode": "0",
+      "district": "秦淮区",
+      "wqAddress": "江苏省南京市",
+      "street": "应天大街388号",
+      "loctime": "2015-09-22 17:31:25",
+      "province": "江苏省",
+      "wqLongitude": 118.787027,
+      "wqLatitude": 32.007889,
+      "radius": 40.25990676879883,
+      "mokelocation": false
+    }
+  ----------------------------------------------------- */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
@@ -123,6 +124,47 @@ var Bridge = {
         }
         // 将位置信息存储到cookie中10秒
         DB.setCookie('app_location', JSON.stringify(location) , 10)
+        if (params.onSuccess) params.onSuccess(location)
+      } else {
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+      }
+    }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
+  },
+  /* -----------------------------------------------------
+    获取当前地理位置带地图
+    外勤365默认使用国测局'gcj02'定位, 没有参数控制
+    @return {
+      "city": "南京市",
+      "citycode": "0",
+      "district": "秦淮区",
+      "wqAddress": "江苏省南京市",
+      "street": "应天大街388号",
+      "loctime": "2015-09-22 17:31:25",
+      "province": "江苏省",
+      "wqLongitude": 118.787027,
+      "wqLatitude": 32.007889,
+      "radius": 40.25990676879883,
+      "mokelocation": false,
+      "poiname":""
+    }
+  ----------------------------------------------------- */
+  getLocationMap: function (params = {}) {
+    wq.wqlocation.getLocationMap((res) => { // eslint-disable-line
+      if (res && res.wqLatitude) {
+        // 格式化为标准的返回信息
+        var location = {
+          latitude: res.wqLatitude,
+          longitude: res.wqLongitude,
+          speed: null,
+          accuracy: res.radius,
+          address: res.poiname || res.wqAddress,
+          country: '中国',
+          province: res.province,
+          city: res.city,
+          area: res.district,
+          street: res.street,
+          locationLie: res.mokelocation
+        }
         if (params.onSuccess) params.onSuccess(location)
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
@@ -252,10 +294,10 @@ var Bridge = {
   logOut: function (msg) {
     wq.wqload.wqBackToLogin(JSON.stringify({message: msg || ''})) // eslint-disable-line
   },
-  /**
-   * 人员插件
-   * params: {onSuccess: fn}
-   */
+  /* -----------------------------------------------------
+    人员插件
+    @params {onSuccess: fn}
+  ----------------------------------------------------- */
   getContactMore: function (params = {}) { // {selectedIds: 'id,id', aclType: '0只能看到下属 不传或者其他的参数为全部人员,默认为空', onSuccess([{id: '', name: ''}])}
     wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
@@ -266,17 +308,17 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(params))
   },
-  /**
-   * 客户插件
-   * dms_type说明
-	 * DMS需要的客户选择接口类型 【1】当前用户所属的经销商的下级终端+直属下级经销商(经销商:销售订单、发货单确认、回单确认) ；
-	 *【2】自己是客户经理的经销商(业代:经销商库存盘点、经销商库存查询)；
-	 *【3】自己是客户经理（或者客户经理是自己下属），如果tradeType=3,结果为没有经销商的终端，否则结果为没有上级经销商的经销商（业代：采购订单(又称直营订单)选客户）
-	 *【4】自己是客户经理,且是“终端或有上级的经销商”（业代：销售订单(又称分销订单)选客户）；
-	 *【5】根据dms_type=4选择的客户筛选经销商，需要传dms_cm_id、dms_trade_type参数，如果客户是终端，则选择终端所属的经销商，
-	 * 如果客户是经销商，则选择上级经销商(（业代：销售订单(又称分销订单)选供货商）)。
-	 *【6】获取当前人所属的经销商的上级经销商
-   */
+  /* -----------------------------------------------------
+    客户插件
+    dms_type说明,DMS需要的客户选择接口类型:
+    【1】当前用户所属的经销商的下级终端+直属下级经销商(经销商:销售订单、发货单确认、回单确认) ；
+    【2】自己是客户经理的经销商(业代:经销商库存盘点、经销商库存查询)；
+    【3】自己是客户经理（或者客户经理是自己下属），如果tradeType=3,结果为没有经销商的终端，否则结果为没有上级经销商的经销商（业代：采购订单(又称直营订单)选客户）
+    【4】自己是客户经理,且是“终端或有上级的经销商”（业代：销售订单(又称分销订单)选客户）；
+    【5】根据dms_type=4选择的客户筛选经销商，需要传dms_cm_id、dms_trade_type参数，如果客户是终端，则选择终端所属的经销商，
+    如果客户是经销商，则选择上级经销商(（业代：销售订单(又称分销订单)选供货商）)。
+    【6】获取当前人所属的经销商的上级经销商
+  ----------------------------------------------------- */
   getCustomerMore: function (params = {}) { // {selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', onSuccess([{id: '', name: ''}])}
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
@@ -319,6 +361,37 @@ var Bridge = {
     wq.wqdepartment.getDepartment(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(params))
+  },
+  /* -----------------------------------------------------
+    单选商品
+    @return {
+      id: '5343180131602024954',
+      name: '商品1',
+      propvalues: '', // 商品属性不带排序号
+      nameSpec: '', // 规格名称
+      productRemarks: '', // 备注
+      props: '', // 商品属性介绍
+      propDetail: '', // 商品属性详情
+      reportUnitName: '', // 报表单位名称
+      reportUnitID: '', // 报表单位ID
+      reportUnitRatio: '', // 报表单位比率
+    }
+  ----------------------------------------------------- */
+  getGoods: function (params = {}) {
+    wq.wqproduct.wqSelectSingleProduct(function (args) { // eslint-disable-line
+      if (params.onSuccess) params.onSuccess(args)
+    }, JSON.stringify(params));
+  },
+  /* -----------------------------------------------------
+    打开新的窗口
+    @params {url:'', title: ''}默认为打开一个webview页面
+  ----------------------------------------------------- */
+  openWindow: function (params, callback) {
+    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
+  },
+  // 关闭当前窗
+  closeWindow: function () {
+    wq.wqload.wqClosePage() // eslint-disable-line
   },
   // 客户端默认返回控制
   back: function () {
