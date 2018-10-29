@@ -192,11 +192,11 @@ var Bridge = {
   scanQRCode: function (params) {
     this.invoke('scanQRCode', null, params.onSuccess)
   },
-  /*
-   * 获取当前地理位置
-   * type：坐标类型，订货365默认使用国测局'gcj02'
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
-   * */
+  /* -----------------------------------------------------
+    获取当前地理位置
+    @params {type: 'wgs84'|'gcj02'订货365默认使用国测局'gcj02'}
+    @return {latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
+  ----------------------------------------------------- */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location') || ''
@@ -213,21 +213,6 @@ var Bridge = {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
       }
     })
-  },
-  /*
-   * 获取当前位置名称
-   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
-   * */
-  getAddress: function (params = {}) {
-    // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
-    if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
-      return
-    }
-    if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
-    else alert('获取位置名称失败,请稍后重试')
   },
   /*
   * 获取当前网络状态

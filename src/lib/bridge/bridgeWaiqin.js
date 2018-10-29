@@ -133,6 +133,7 @@ var Bridge = {
   /* -----------------------------------------------------
     获取当前地理位置带地图
     外勤365默认使用国测局'gcj02'定位, 没有参数控制
+    @params {editable: '是否可以标记位置, 1可标记', latlng: '经纬度,只在editable为0时生效', title: '标题, 可不传'}
     @return {
       "city": "南京市",
       "citycode": "0",
@@ -169,22 +170,7 @@ var Bridge = {
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
       }
-    }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
-  },
-  /*
-   * 获取当前位置名称
-   * params：{type: 'gcj02', longitude: 'xx', latitude: 'xx', onSuccess: (), onError: ()}
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
-   * */
-  getAddress: function (params = {}) {
-    // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
-    if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
-      return
-    }
-    if (params.onError) params.onError({code: 'addressFail', msg: '获取位置名称失败,请稍后重试'})
-    else alert('获取位置名称失败,请稍后重试')
+    }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
   /*
   * 拍照、本地选图
@@ -320,11 +306,13 @@ var Bridge = {
     【6】获取当前人所属的经销商的上级经销商
   ----------------------------------------------------- */
   getCustomerMore: function (params = {}) { // {selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', onSuccess([{id: '', name: ''}])}
+    alert(JSON.stringify(Object.assign({hiddenAdd: true}, params)));
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)));
   },
   getCustomer: function (params = {}) {
+    alert(JSON.stringify(Object.assign({hiddenAdd: true}, params)));
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)))

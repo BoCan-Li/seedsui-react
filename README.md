@@ -129,6 +129,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputStar](#inputstar) 评分框
 - [InputText](#inputtext) 文本框
 - [InputVerify](#inputverify) 验证码文本框
+- [InputWaiqin](#inputwaiqin) 外勤原生选择框
 - [Verify](#verify) 验证码文本框
 - [Jcrop](#jcrop) 图片裁切
 - [Legend](#legend) 标题
@@ -1822,30 +1823,6 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 />
 ```
 
-## InputLocationMap
-[定位框](#https://unpkg.com/seedsui-react/src/lib/InputLocationMap/InputLocationMap.js)
-, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
-### 属性
-```javascript
-<InputLocationMap
-  locationingText={定位中显示文字 string, 默认'定位中...'}
-  onClick={点击 func(value, args), 默认无}
-  onChange={值改变 func(value, args), 默认无}
-  {...others}
-/>
-```
-
-## InputGoods
-[定位框](#https://unpkg.com/seedsui-react/src/lib/InputGoods/InputGoods.js)
-, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
-### 属性
-```javascript
-<InputGoods
-  onClick={点击 func(value, args), 默认无}
-  onChange={值改变 func(value, option, args), 默认无}
-  {...others}
-/>
-```
 
 ## InputNumber
 [数字输入框](#https://unpkg.com/seedsui-react/src/lib/InputNumber/InputNumber.js)
@@ -2123,6 +2100,69 @@ onClickSent = () => {
 }
 <InputVerify clear onChange={this.onChangeVali} value={verifycode} placeholder="验证码" maxLength="6" onClickSent={this.onClickSent}/>
 ```
+
+
+
+## InputWaiqin
+[外勤原生选择框](#https://unpkg.com/seedsui-react/src/lib/InputWaiqin/InputWaiqin.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 外勤专用控件
+### 属性
+```javascript
+<InputWaiqin
+  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
+  value={值 string | number, 默认无}
+  valueForKey={选中key number | string, 默认无}
+  chooseType={选择类型 string, 默认'getCustomer'} // getCustomer|getCustomerMore|getCustomerType|getCustomerArea|getCustomerAreaMore|getDepartment|getDepartmentMore|getContact|getContactMore|getGoods|getLocationMap
+  chooseParams={选择参数 object, 默认会带上id-valueForKey和name-value, 配置如下:}
+  // 【getCustomer与getCustomerMore 的 chooseParams】:
+  // tradeType: PropTypes.string, // 1客户 2经销商 3门店,默认1
+  // hiddenAdd: PropTypes.bool, // 是否显示添加按钮, 默认false
+  // dms_type: PropTypes.string, // dms类型
+
+  // 【getCustomerType】
+
+  // 【getCustomerArea与getCustomerAreaMore】:
+
+  // 【getDepartment与getDepartmentMore】:
+
+  // 【getContact与getContactMore 的 chooseParams】:
+  // aclType: PropTypes.string, // 0只能看到下属 不传或者其他的参数为全部人员,默认为空
+
+  // 【getGoods】
+
+  // 【getLocationMap 的 chooseParams】:
+  // editable: PropTypes.string, // 是否可以标记位置, 1可标记
+  // latlng: PropTypes.string // 经纬度, 只在editable为0时生效
+  // title: PropTypes.string // 标题, 可不传
+  onClick={点击 func(value, args), 默认无}
+  onChange={值改变 func(value, option, args), 默认无}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import InputWaiqin from 'seedsui-react/lib/InputWaiqin';
+
+this.state = {
+  id: '',
+  value: ''
+}
+
+onValiChange = (error, value, data) => {
+  if (data.op === 'input') {
+    this.setState({
+      verifyCode: value
+    })
+  }
+}
+
+<InputWaiqin chooseType="getCustomer" valueBindProp chooseParams={{tradeType: '1'}} onChange={this.onChange} value={this.state.value} valueForKey={this.state.id} placeholder="客户单择"/>
+<InputWaiqin chooseType="getCustomerMore" chooseParams={{tradeType: '1'}} placeholder="客户多择"/>
+<InputWaiqin chooseType="getContact" placeholder="全部员工"/>
+<InputWaiqin chooseType="getContact" chooseParams={{aclType: '0'}} placeholder="下属员工"/>
+```
+[返回目录](#component)
+
 
 
 ## Verify

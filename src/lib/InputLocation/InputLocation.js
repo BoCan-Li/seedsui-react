@@ -28,20 +28,27 @@ export default class InputLocation extends Component {
       this.$input.value = locationingText;
     }
     Bridge.getLocation({
+      type: 'gcj02',
       onSuccess: (data) => {
-        Bridge.getAddress({
+        // 客户端中不需要再getAddress
+        if (data.address) {
+          // 赋值
+          if (!valueBindProp) this.$input.value = data.address;
+          if (onChange) onChange(data.address, data, args);
+          return;
+        }
+        Bridge.getAddress({ // 只支持gcj02
           latitude: data.latitude,
           longitude: data.longitude,
-          type: 'gcj02',
           onSuccess: (addrs) => {
             // 赋值
             if (!valueBindProp) this.$input.value = addrs.address;
-            if (onChange) onChange(addrs.address, args)
+            if (onChange) onChange(addrs.address, data, args);
           },
           onError: (err) => {
             // 赋值
             if (!valueBindProp) this.$input.value = '';
-            if (onChange) onChange('', args)
+            if (onChange) onChange('', data, args)
             // 提示获取地址失败
             Bridge.showToast(err.msg, {mask: false});
           }
@@ -50,7 +57,7 @@ export default class InputLocation extends Component {
       onError: (err) => {
         // 赋值
         if (!valueBindProp) this.$input.value = '';
-        if (onChange) onChange('', args)
+        if (onChange) onChange('', null, args)
         // 提示定位失败
         Bridge.showToast(err.msg, {mask: false});
       }

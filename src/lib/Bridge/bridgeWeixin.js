@@ -111,11 +111,11 @@ var Bridge = {
       return true
     })
   },
-  /*
-   * 获取当前地理位置
-   * type：'wgs84'|'gcj02'坐标类型，微信默认使用国际坐标'wgs84'
-   * 返回：{latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度'}
-   * */
+  /* -----------------------------------------------------
+    获取当前地理位置
+    @params {type: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84'}
+    @return {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+  ----------------------------------------------------- */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')

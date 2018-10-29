@@ -347,28 +347,28 @@ var Bridge = {
     if (!this.debug) {
       this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
       if (params.onError) params.onError({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
+      return
     }
     setTimeout(function () {
       if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
     }, 500)
   },
-  /*
-   * 获取当前地理位置带地图
-   * */
+  // 获取当前地理位置带地图
   getLocationMap: function (params = {}) {
     if (!this.debug) {
       this.showToast('带地图定位功能仅可在外勤APP中使用', {mask: false})
-      if (params.onError) params.onError({code:'locationFail', msg: '带地图定位功能仅可在外勤APP中使用'})
+      if (params.onError) params.onError({code:'locationMapFail', msg: '带地图定位功能仅可在外勤APP中使用'})
+      return
     }
     setTimeout(function () {
       if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0', address: '江苏省南京市新城科技园'})
     }, 500)
   },
-  /*
-   * 百度地图:获取当前位置名称
-   * params：{type: 'gcj02', longitude: '', latitude: '', onSuccess: fn, onFail: fn}
-   * 返回：{address:'地址全称'}
-   * */
+  /* -----------------------------------------------------
+    百度地图:获取当前位置名称,只支持gcj02
+    @params {longitude: '', latitude: '', onSuccess: fn, onError: fn}
+    @return {address:'地址全称'}
+  ----------------------------------------------------- */
   getAddress: function (params = {}) {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
@@ -385,11 +385,11 @@ var Bridge = {
       }
     })
   },
-  /*
-   * 获得两个点之间的距离
-   * params: {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn
-   * 返回km
-   * */
+  /* -----------------------------------------------------
+    获得两个点之间的距离
+    @params {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, onError: fn
+    @return km
+  ----------------------------------------------------- */
   getDistance: function (params = {}) {
     if (!params.point1 || !params.point1.latitude || !params.point1.longitude || !params.point2 || !params.point2.latitude || !params.point2.longitude) {
       if (params.onError) params.onError({code: 'distanceFail', msg: '传入的坐标不正确'})

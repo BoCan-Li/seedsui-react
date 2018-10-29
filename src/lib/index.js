@@ -55,6 +55,7 @@ import InputSelect from './InputSelect';
 import InputStar from './InputStar';
 import InputText from './InputText';
 import InputVerify from './InputVerify';
+import InputWaiqin from './InputWaiqin'; // 不常用,外勤专用
 import Verify from './Verify';
 import Legend from './Legend';
 import List from './List';
@@ -169,6 +170,7 @@ export {
   InputStar,
   InputText,
   InputVerify,
+  InputWaiqin, // 不常用,外勤专用
   Verify,
   Legend, // 不常用
   List,
