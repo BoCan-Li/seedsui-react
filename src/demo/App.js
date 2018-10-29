@@ -5,6 +5,7 @@ import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import InputWaiqin from '../lib/InputWaiqin';
 import InputLocation from '../lib/InputLocation';
+import InputText from '../lib/InputText';
 import Bridge from '../lib/Bridge';
 
 export default class App extends Component {
@@ -24,9 +25,8 @@ export default class App extends Component {
       value: value
     })
   }
-  onClick = (s, e) => {
-    console.log(s.target)
-    e.stopPropagation()
+  onClick = (value, args) => {
+    console.log(value, args);
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -34,12 +34,13 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputWaiqin chooseType="getCustomer" valueBindProp chooseParams={{tradeType: '1,2,3'}} onChange={this.onChange} value={this.state.value} valueForKey={this.state.id} placeholder="客户单择"/>
-        <InputWaiqin chooseType="getCustomerMore" chooseParams={{tradeType: '1,2,3'}} placeholder="客户多择"/>
+        <InputWaiqin chooseType="getCustomer" valueBindProp chooseParams={{tradeType: ''}} onChange={this.onChange} value={this.state.value} valueForKey={this.state.id} placeholder="客户单择"/>
+        <InputWaiqin chooseType="getCustomerMore" chooseParams={{tradeType: ''}} placeholder="客户多择"/>
         <InputWaiqin chooseType="getContact" placeholder="全部员工"/>
         <InputWaiqin chooseType="getContact" chooseParams={{aclType: '0'}} placeholder="下属员工"/>
         <InputWaiqin chooseType="getLocationMap" placeholder="地图"/>
         <InputLocation placeholder="定位" onChange={this.onChange}/>
+        <InputText clearStyle={{height: '42px'}} args="haha" clear placeholder="文本框" liconClassName="icon-rdo-minus-fill color-primary" onClickLicon={this.onClick}/>
       </Container>
     </Page>
   }

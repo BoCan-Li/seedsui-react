@@ -23,9 +23,9 @@ var Bridge = {
   getAppVersion: function () {
     return window.navigator.appVersion
   },
-  /**
-   * 图片插件
-   */
+  /* -----------------------------------------------------
+    图片插件
+  ----------------------------------------------------- */
   // 拍照、本地选图
   chooseImage: function (params = {}) {
     if (!this.debug) {
@@ -61,9 +61,9 @@ var Bridge = {
   previewImage: function (params) {
     console.log('previewImage方法在浏览器上无法运行')
   },
-  /**
-   * 视频插件
-   */
+  /* -----------------------------------------------------
+    视频插件
+  ----------------------------------------------------- */
   // 录像
   chooseVideo: function (params = {}) {
     console.log('chooseVideo方法在浏览器上无法运行')
@@ -78,9 +78,9 @@ var Bridge = {
     }
     if (params.success) params.success(res)
   },
-  /**
-   * 人员插件
-   */
+  /* -----------------------------------------------------
+    人员插件
+  ----------------------------------------------------- */
   getContactMore: function (params = {}) {
     if (!this.debug) {
       this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
@@ -107,9 +107,9 @@ var Bridge = {
       name: '员工1'
     })
   },
-  /**
-   * 客户插件
-   */
+  /* -----------------------------------------------------
+    客户插件
+  ----------------------------------------------------- */
   customerMore: [{
     "check": true,
     "distance": 31,
@@ -249,10 +249,7 @@ var Bridge = {
       name: '客户区域1'
     })
   },
-  /**
-   * 部门插件
-   * params: {selectedIds: '',onSuccess: fn}
-   */
+  // 部门插件
   getDepartmentMore: function (params) {
     this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
   },
@@ -266,9 +263,7 @@ var Bridge = {
       name: '开发一部'
     })
   },
-  /* -----------------------------------------------------
-    单选商品
-  ----------------------------------------------------- */
+  // 单选商品
   getGoods: function (params = {}) {
     if (!this.debug) {
       this.showToast('此功能仅可在外勤客户端中使用', {mask: false})
@@ -340,9 +335,7 @@ var Bridge = {
   removeBackPress: function () {
     console.log('removeBackPress方法在浏览器上无法运行')
   },
-  /*
-   * 获取当前地理位置
-   * */
+  // 获取当前地理位置
   getLocation: function (params = {}) {
     if (!this.debug) {
       this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
@@ -408,11 +401,11 @@ var Bridge = {
     s = Math.round(s * 10000) / 10000
     return s
   },
-  /*
-   * 百度地图:获得天气
-   * params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', onSuccess: fn, onFail: fn)
-   * 返回天气信息results
-   * */
+  /* -----------------------------------------------------
+    百度地图:获得天气
+    @params {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', onSuccess: fn, onFail: fn)
+    @return 天气信息results
+  ----------------------------------------------------- */
   getWeather: function (params = {}) {
     var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
@@ -427,13 +420,19 @@ var Bridge = {
       }
     })
   },
-  /*
-   * 扫描二维码并返回结果
-   * 返回：{resultStr:''}
-   * */
+  /* -----------------------------------------------------
+    扫描二维码并返回结果
+    @return {resultStr:''}
+  ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
-    this.showToast('扫码功能仅可在微信或APP中使用', {mask: false})
-    if (params.onError) params.onError({code: 'qrcodeFail', msg: '此功能仅可在微信或APP中使用'})
+    if (!this.debug) {
+      this.showToast('扫码功能仅可在微信或APP中使用', {mask: false})
+      if (params.onError) params.onError({code:'qrcodeFail', msg: '扫码失败'})
+      return
+    }
+    setTimeout(function () {
+      if (params.onSuccess) params.onSuccess({resultStr: '504823170310092750280333'})
+    }, 500)
   },
   // 退出到登陆页面
   logOut: function () {

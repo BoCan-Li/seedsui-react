@@ -44,16 +44,26 @@ export default class InputText extends Component {
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     // 左右图标
+    licon: PropTypes.node,
+    liconSrc: PropTypes.string,
     liconClassName: PropTypes.string,
-    riconClassName: PropTypes.string,
+    liconStyle: PropTypes.object,
     onClickLicon: PropTypes.func,
+    liconLazyLoad: PropTypes.bool,
+
+    ricon: PropTypes.node,
+    riconSrc: PropTypes.string,
+    riconClassName: PropTypes.string,
+    riconStyle: PropTypes.object,
     onClickRicon: PropTypes.func,
+    riconLazyLoad: PropTypes.bool,
     // 清除按键
-    clearClassName: PropTypes.string,
     clear: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.func
     ]),
+    clearClassName: PropTypes.string,
+    clearStyle: PropTypes.object,
     // 右侧内容
     rcaption: PropTypes.node
   }
@@ -86,12 +96,21 @@ export default class InputText extends Component {
   }
   // 点击容器
   onClick = (e) => {
+    e.stopPropagation();
+    const {onClick, onClickInput, onClickLicon, onClickRicon} = this.props;
     if (this.props.disabled) return;
-    if (this.props.onClick) {
-      var target = e.currentTarget.querySelector('input');
-      var value = target.value;
-      this.props.onClick(value, this.getArgs(e));
-      e.stopPropagation();
+    var target = e.target;
+    if (target.classList.contains('clearicon')) {
+      this.onClear(e);
+    } else if (target.classList.contains('licon')) {
+      if (onClickLicon) onClickLicon(this.$input.value, this.getArgs(e));
+    } else if (target.classList.contains('ricon')) {
+      if (onClickRicon) onClickLicon(this.$input.value, this.getArgs(e));
+    } else if (target.classList.contains('input-text')) {
+      if (onClick) onClick(this.$input.value, this.getArgs(e));
+      if (onClickInput) onClickInput(this.$input.value, this.getArgs(e));
+    } else {
+      if (onClick) onClick(this.$input.value, this.getArgs(e));
     }
   }
   // 手机号码纠正
@@ -170,14 +189,6 @@ export default class InputText extends Component {
       });
     }
   }
-  onClickInput = (e) => {
-    var target = e.target;
-    var value = target.value;
-    if (this.props.onClick) {
-      this.props.onClick(value, this.getArgs(e));
-      e.stopPropagation();
-    }
-  }
   onBlur = (e) => {
     var target = e.target;
     var value = target.value;
@@ -217,23 +228,13 @@ export default class InputText extends Component {
     }
     e.stopPropagation();
   }
-  // 点击左右图标
-  onClickLicon = (e) => {
-    if (this.props.onClickLicon) {
-      this.props.onClickLicon(this.$input.value, this.getArgs(e));
-      e.stopPropagation();
-    }
-  }
-  onClickRicon = (e) => {
-    if (this.props.onClickRicon) {
-      this.props.onClickRicon(this.$input.value, this.getArgs(e));
-      e.stopPropagation();
-    }
-  }
   getInputDOM = () => {
     const {
       args, style, className, onClick, max, min, digits, onChange, onClickInput, onBlur, onFocus,
-      liconClassName, riconClassName, onClickLicon, onClickRicon, clearClassName, clear, rcaption, // 为others不多属性
+      licon, liconSrc, liconClassName, liconStyle, onClickLicon, liconLazyLoad,
+      ricon, riconSrc, riconClassName, riconStyle, onClickRicon, riconLazyLoad,
+      clear, clearClassName, clearStyle,
+      rcaption, // 为others不多属性
       pre, // 自动伸缩文本框
       type,
       valueBindProp,
@@ -273,9 +274,9 @@ export default class InputText extends Component {
     if (type === 'textarea') {
       // 如果值绑定属性,则只有通过父组件的prop来改变值
       if (valueBindProp) {
-        return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+        return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
       }
-      return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+      return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
     }
     // 其它类型
     let inputType = type;
@@ -288,17 +289,17 @@ export default class InputText extends Component {
     }
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+      return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
     }
-    return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onClick={this.onClickInput} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+    return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onInput={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
   }
   render() {
     const {
       value,
       className, style,
-      liconClassName,
-      clearClassName, clear,
-      riconClassName,
+      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
+      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
+      clear, clearClassName, clearStyle,
       rcaption
     } = this.props;
     let isShowClear = this.state.clearUpdate;
@@ -310,10 +311,12 @@ export default class InputText extends Component {
       if (value && clear) isShowClear = true;
     }
     return (<div className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
-        {liconClassName && <Icon className={`licon ${liconClassName}`} onClick={this.onClickLicon}/>}
+        {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
+        {licon && licon}
         {this.getInputDOM()}
-        {clear && <Close onClick={this.onClear} className={`${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`}/>}
-        {riconClassName && <Icon className={`ricon ${riconClassName}`} onClick={this.onClickRicon}/>}
+        {clear && <Close className={`clearicon ${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle}/>}
+        {(riconSrc || riconClassName) && <Icon lazyLoad={riconLazyLoad} className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
+        {ricon && ricon}
         {rcaption && rcaption}
       </div>);
   }
