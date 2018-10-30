@@ -42,6 +42,12 @@ var MediaUtil = {
     if (bytes > 1024 * 1024) return (Math.round(bytes * 1000 / (1024 * 1024)) / 1000).toString() + 'MB'
     return (Math.round(bytes * 1000 / 1024) / 1000).toString() + 'KB'
   },
+  play: function (target) {
+    target.play()
+  },
+  pause: function () {
+    target.pause()
+  },
   resume: function (target) {
     if (target.paused) {
       target.play()

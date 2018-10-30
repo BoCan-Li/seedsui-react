@@ -15,7 +15,7 @@ var FullScreen = {
     return !!(requestFullscreen && fullscreenEnabled)
   },
   // 获取当前全屏的元素
-  getElement: function () {
+  getFullscreenElement: function () {
     return (
       document.fullscreenElement ||
       document.webkitFullscreenElement ||
@@ -26,7 +26,7 @@ var FullScreen = {
   // 是否全屏
   isFull: function (el) {
     var target = el || document
-    return !!(target.webkitIsFullScreen || this.getElement())
+    return !!(target.webkitIsFullScreen || this.getFullscreenElement())
   },
   // 进入全屏
   enter: function (el) {
@@ -62,6 +62,14 @@ var FullScreen = {
   toggle: function (el) {
     if (this.isFull()) this.exit()
     else this.enter(el)
+  },
+  // 监听
+  addHandler: function (element, handler) {
+    var target = element || document
+    target.addEventListener('webkitfullscreenchange', handler, false)
+    target.addEventListener('mozfullscreenchange', handler, false)
+    target.addEventListener('fullscreenchange', handler, false)
+    target.addEventListener('MSFullscreenChange', handler, false)
   }
 }
 
