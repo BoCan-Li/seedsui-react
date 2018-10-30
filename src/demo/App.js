@@ -6,6 +6,7 @@ import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Carrousel from '../lib/Carrousel';
 import NumBox from '../lib/NumBox';
+import InputDate from '../lib/InputDate';
 
 export default class App extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ export default class App extends Component {
           }
         ]}/>
         <NumBox style={{width: '300px'}}/>
+        <InputDate value={''} min={'2018-11-11'} max={'2018-08-08'} className="border-b" placeholder="请选择" riconClassName="shape-arrow-right sm"/>
       </Container>
     </Page>
   }

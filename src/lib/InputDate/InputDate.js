@@ -8,6 +8,8 @@ export default class InputDate extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
     type: PropTypes.string, // 'date | month | time | datetime'
+    min: PropTypes.string, // yyyy-MM-dd
+    max: PropTypes.string, // yyyy-MM-dd
     pickerStyle: PropTypes.bool,
     pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
@@ -64,29 +66,29 @@ export default class InputDate extends Component {
   correctDate = (value) => {
     let text = value;
     const {type, min, max, onError} = this.props;
-    const selectDate = Date.parse(text, type);
+    const selectDate = text.toDate();
     const current = this.$input.value;
     const error = this.props.error;
     if (min && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(min) || /^[0-9]{2}:[0-9]{2}$/.test(min))) {
-      if (type === 'date' && selectDate.compareDate(min) === -1) {
+      if (type === 'date' && selectDate.compareDate(min.toDate()) === -1) {
         if (onError) {
           onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
-      } else if (type === 'month' && selectDate.compareMonth(min) === -1) {
+      } else if (type === 'month' && selectDate.compareMonth(min.toDate()) === -1) {
         if (onError) {
           onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
-      } else if (type === 'time' && selectDate.compareTime(min) === -1) {
+      } else if (type === 'time' && selectDate.compareTime(min.toDate()) === -1) {
         if (onError) {
           onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
-      } else if (type === 'datetime' && selectDate.compareDateTime(min) === -1) {
+      } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate()) === -1) {
         if (onError) {
           onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
           return false;
@@ -95,25 +97,25 @@ export default class InputDate extends Component {
       }
     }
     if (max && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(max) || /^[0-9]{2}:[0-9]{2}$/.test(max))) {
-      if (type === 'date' && selectDate.compareDate(max) === 1) {
+      if (type === 'date' && selectDate.compareDate(max.toDate()) === 1) {
         if (onError) {
           onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
-      } else if (type === 'month' && selectDate.compareMonth(max) === 1) {
+      } else if (type === 'month' && selectDate.compareMonth(max.toDate()) === 1) {
         if (onError) {
           onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
-      } else if (type === 'time' && selectDate.compareTime(max) === 1) {
+      } else if (type === 'time' && selectDate.compareTime(max.toDate()) === 1) {
         if (onError) {
           onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
-      } else if (type === 'datetime' && selectDate.compareDateTime(max) === 1) {
+      } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate()) === 1) {
         if (onError) {
           onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
           return false;
