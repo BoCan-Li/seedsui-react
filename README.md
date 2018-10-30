@@ -922,7 +922,7 @@ import Card from 'seedsui-react/lib/Card';
   speed={动画过渡的速度 number, 默认300}
   enableOnChange={手动调用slideTo方法是否触发onChange事件回调 bool, 默认true}
   onChange={轮播时事件回调 func()}
-  onClick={点击块 func(item, index)}
+  onClick={点击块 func(item, index, s, e)}
 >
 <div>轮播页时, 用此div, 轮播图则使用list属性</div>
 </Carrousel>
@@ -2052,14 +2052,24 @@ onChange = (value) => {
   onFocus={获取焦点 func(value, args), 默认无}
 
   // 左右图标
+  licon={左图标 node, 默认无}
+  liconSrc={左图标地址 node, 默认无}
   liconClassName={左图标className string, 默认无, 基础'licon'}
+  liconStyle={左图标style object, 默认无}
+  onClickLicon={点击左图标 func(args), 默认无}
+  liconLazyLoad={左图标懒人加载 bool, 默认无}
+
+  ricon={右图标 node, 默认无}
+  riconSrc={右图标地址 node, 默认无}
   riconClassName={右图标className string, 默认无, 基础'ricon'}
-  onClickLicon={点击左图标 func(value, args), 默认无}
-  onClickRicon={点击右图标 func(value, args), 默认无}
+  riconStyle={右图标style object, 默认无}
+  onClickRicon={点击右图标 func(args), 默认无}
+  riconLazyLoad={右图标懒人加载 bool, 默认无}
 
   // 清除按钮
-  clearClassName={清除图标className string, 默认无} // 见Close组件
   clear={清除 bool | func('', args), 默认无}
+  clearClassName={清除图标className string, 默认'ricon close-icon-clear size18'} // 见Close组件
+  clearStyle={清除图标style object, 默认无}
 
   // 右侧内容
   rcaption={右侧内容 string, 默认无}
