@@ -3,10 +3,9 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
-import InputWaiqin from '../lib/InputWaiqin';
-import InputLocation from '../lib/InputLocation';
-import InputText from '../lib/InputText';
 import Bridge from '../lib/Bridge';
+import Carrousel from '../lib/Carrousel';
+import NumBox from '../lib/NumBox';
 
 export default class App extends Component {
   constructor(props) {
@@ -18,6 +17,7 @@ export default class App extends Component {
   }
   componentDidMount() {
     Bridge.debug = true;
+    console.log(Math.Calc.toFixed(0.07, 3, true))
   }
   onChange = (value, opt) => {
     this.setState({
@@ -25,8 +25,8 @@ export default class App extends Component {
       value: value
     })
   }
-  onClick = (value, args) => {
-    console.log(value, args);
+  onClick = (item) => {
+    console.log(item);
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -34,13 +34,15 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputWaiqin chooseType="getCustomer" valueBindProp chooseParams={{tradeType: ''}} onChange={this.onChange} value={this.state.value} valueForKey={this.state.id} placeholder="客户单择"/>
-        <InputWaiqin chooseType="getCustomerMore" chooseParams={{tradeType: ''}} placeholder="客户多择"/>
-        <InputWaiqin chooseType="getContact" placeholder="全部员工"/>
-        <InputWaiqin chooseType="getContact" chooseParams={{aclType: '0'}} placeholder="下属员工"/>
-        <InputWaiqin chooseType="getLocationMap" placeholder="地图"/>
-        <InputLocation placeholder="定位" onChange={this.onChange}/>
-        <InputText clearStyle={{height: '42px'}} args="haha" clear placeholder="文本框" liconClassName="icon-rdo-minus-fill color-primary" onClickLicon={this.onClick}/>
+        <Carrousel onClick={this.onClick} list={[
+          {
+            img: 'http://g.hiphotos.baidu.com/image/h%3D300/sign=6f4318466e2762d09f3ea2bf90ed0849/5243fbf2b211931376d158d568380cd790238dc1.jpg'
+          },
+          {
+            img: 'http://h.hiphotos.baidu.com/image/h%3D300/sign=b12ec0dd93510fb367197197e932c893/b999a9014c086e064a76b12f0f087bf40bd1cbfc.jpg'
+          }
+        ]}/>
+        <NumBox/>
       </Container>
     </Page>
   }

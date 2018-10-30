@@ -123,7 +123,7 @@ export default class NumBox extends Component {
   };
   // 点击减
   onClickMinus = (e) => {
-    let value = Math.Calc.subtract(this.$input.value, 1);
+    let value = this.$input.value - 1;
     if (value < this.props.min) value = this.props.min;
     if (value > this.props.max) value = this.props.max;
     // 赋值
@@ -138,7 +138,7 @@ export default class NumBox extends Component {
   };
   // 点击加
   onClickPlus = (e) => {
-    let value = Math.Calc.add(this.$input.value, 1);
+    let value = Number(this.$input.value) + 1;
     if (value < this.props.min) value = this.props.min;
     if (value > this.props.max) value = this.props.max;
     // 赋值

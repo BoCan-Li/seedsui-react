@@ -44,11 +44,11 @@ Math.Calc = (function () {
     switch (op) {
       case 'add':
         if (t1 === t2) { // 两个小数位数相同
-          result = n1 + n2
+          result = Number(n1) + Number(n2)
         } else if (t1 > t2) { // o1 小数位 大于 o2
-          result = n1 + n2 * (t1 / t2)
+          result = Number(n1) + Number(n2 * (t1 / t2))
         } else { // o1 小数位 小于 o2
-          result = n1 * (t2 / t1) + n2
+          result = Number(n1 * (t2 / t1)) + Number(n2)
         }
         result = result / max
         break
@@ -91,7 +91,7 @@ Math.Calc = (function () {
   function divide (a, b, digits) {
     return operation(a, b, digits, 'divide')
   }
-  // toFixed 修复老牌0.07.toFixed(1) => 0.0不会四舍五入的问题
+  // toFixed 修复旧浏览器0.07.toFixed(1) => 0.0不会四舍五入的问题
   function toFixed (argNum, argDigits, fixed, round) {
     var result = toInteger(argNum, argDigits, round)
     if (fixed) return (result.num / result.times).toFixed(argDigits)

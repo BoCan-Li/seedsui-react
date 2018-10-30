@@ -71,7 +71,7 @@ export default class Carrousel extends Component {
       autoplay: this.props.autoplay,
       slidesPerView: this.props.slidesPerView,
       loop: this.props.loop,
-      onClick: this.props.onClick,
+      onClick: this.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
     this.setState({
