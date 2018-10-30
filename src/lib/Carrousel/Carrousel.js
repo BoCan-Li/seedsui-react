@@ -79,7 +79,7 @@ export default class Carrousel extends Component {
     });
   }
   onClick = (s, e) => {
-    const index = e.activeIndex;
+    const index = s.activeIndex;
     if (this.props.onClick) this.props.onClick(this.props.list[index], index, s, e);
   }
   getCarrouselClassName = () => {

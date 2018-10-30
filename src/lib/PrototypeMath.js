@@ -109,8 +109,8 @@ Math.Calc = (function () {
   }
   // exports
   return {
-    add: add,
-    subtract: subtract,
+    add: add, // 解决运算中1.22+1不等于2.22的问题
+    subtract: subtract, // 解决运算中1.22-1不等于0.22的问题
     multiply: multiply,
     divide: divide,
     toFixed: toFixed,

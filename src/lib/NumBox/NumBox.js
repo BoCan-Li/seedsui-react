@@ -32,7 +32,7 @@ export default class NumBox extends Component {
     min: PropTypes.number,
   }
   static defaultProps = {
-    maxLength: '8',
+    maxLength: '12',
     min: 0,
     max: 99999999,
     value: '0',
@@ -123,7 +123,7 @@ export default class NumBox extends Component {
   };
   // 点击减
   onClickMinus = (e) => {
-    let value = this.$input.value - 1;
+    let value = Math.Calc.subtract(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
     if (value > this.props.max) value = this.props.max;
     // 赋值
@@ -138,7 +138,7 @@ export default class NumBox extends Component {
   };
   // 点击加
   onClickPlus = (e) => {
-    let value = Number(this.$input.value) + 1;
+    let value = Math.Calc.add(this.$input.value, 1);
     if (value < this.props.min) value = this.props.min;
     if (value > this.props.max) value = this.props.max;
     // 赋值
@@ -170,14 +170,13 @@ export default class NumBox extends Component {
       return '' + min;
     }
     var value = argNumstr;
-    // 截取小数位数
-    if (!isNaN(digits)) {
+    if (digits === true) { // 不截取小数
+    } else if (!isNaN(digits)) { // 截取小数位数
       if (String(num).indexOf('.') >= 0) {
         var numStr = String(num);
         value = numStr.substring(0, numStr.indexOf('.') + (Number(digits) === 0 ? 0 : digits + 1));
       }
-    // 整数
-    } else {
+    } else { // 整数
       value = Math.floor(num);
     }
     // 最大长度限制

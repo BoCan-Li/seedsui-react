@@ -42,7 +42,7 @@ export default class App extends Component {
             img: 'http://h.hiphotos.baidu.com/image/h%3D300/sign=b12ec0dd93510fb367197197e932c893/b999a9014c086e064a76b12f0f087bf40bd1cbfc.jpg'
           }
         ]}/>
-        <NumBox/>
+        <NumBox style={{width: '300px'}}/>
       </Container>
     </Page>
   }
