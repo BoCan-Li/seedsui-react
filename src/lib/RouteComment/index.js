@@ -63,7 +63,7 @@ export default class RouteComment extends Component {
     if (this.props.onClickCancel) this.props.onClickCancel(this.$textarea.value, {op: 'cancel'})
   }
   render() {
-    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, cancelCaption, cancelStyle, cancelClassName} = this.props;
+    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, onClickSubmit, cancelCaption, cancelStyle, cancelClassName, onClickCancel, ...others} = this.props;
     return (
       <Page>
         <Header>
@@ -71,7 +71,7 @@ export default class RouteComment extends Component {
         </Header>
         <Container>
           <div className="route-comment-input-box">
-            <textarea ref={(el) => {this.$textarea = el}} className="route-comment-input" placeholder={placeholder} onChange={this.onChange}></textarea>
+            <textarea ref={(el) => {this.$textarea = el}} className="route-comment-input" placeholder={placeholder} onChange={this.onChange} {...others}></textarea>
           </div>
           {!this.props.onClickCancel &&
             <Button onClick={this.onClickSubmit} className={`route-comment-button-single route-comment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
