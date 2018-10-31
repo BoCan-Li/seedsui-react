@@ -264,7 +264,7 @@ var Bridge = {
   /*
   * 图片预览
   * params：{urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
-  * 备注：图片url后面带localId为标识为本地，客户端优先从本地查找，本地没有再从网络加载
+  * 备注：图片LocalResource://imageid标识为本地，客户端优先从本地查找，本地没有再从网络加载
   */
   previewImage: function (argParams) {
     if (!argParams.urls || !argParams.urls.length) return

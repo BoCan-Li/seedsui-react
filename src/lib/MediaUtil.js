@@ -45,7 +45,7 @@ var MediaUtil = {
   play: function (target) {
     target.play()
   },
-  pause: function () {
+  pause: function (target) {
     target.pause()
   },
   resume: function (target) {

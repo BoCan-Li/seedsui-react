@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from './../Icon';
 import Bridge from './../Bridge';
+import Player from './../Player';
 
 export default class Grid extends Component {
   static propTypes = {
     args: PropTypes.any,
+    type: PropTypes.string, // video 视频
+    preview: PropTypes.bool, // 是否预览, 默认为true
     lazyLoad: PropTypes.bool, // 图标是否懒人加载
     style: PropTypes.object,
     className: PropTypes.string, // grid-album | grid-bordered
@@ -142,29 +145,32 @@ export default class Grid extends Component {
       this.props.onClickIconBox(item, index, this.getArgs(e));
       e.stopPropagation();
     }
+    // 如果是视频则自带预览功能,不需要预览
+    if (this.props.type === 'video' || item.type === 'video') {
+      return;
+    }
+    // 如果没有src则认为不是相册,不需要预览
+    if (!item.src || item.preview === false || this.props.preview === false) {
+      return;
+    }
+    // 预览
+    if (this.props.list) {
+      var imgs = this.props.list.map(n => {
+        return n.src;
+      });
+      if (!imgs) return;
+      Bridge.previewImage({
+        urls: imgs,
+        current: imgs[index] || imgs[0],
+        index: index || 0
+      })
+    }
+    e.stopPropagation();
   }
   onClickCell = (e, item, index) => {
     // onClickCell
     if (this.props.onClickCell) {
       this.props.onClickCell(item, index, this.getArgs(e));
-      e.stopPropagation();
-    }
-    // 预览
-    if (!item.src || item.preview === false) return;
-    if (item.type === 'video') {
-      e.stopPropagation();
-    } else {
-      if (this.props.list) {
-        var imgs = this.props.list.map(n => {
-          return n.src;
-        });
-        if (!imgs) return;
-        Bridge.previewImage({
-          urls: imgs,
-          current: imgs[index] || imgs[0],
-          index: index || 0
-        })
-      }
       e.stopPropagation();
     }
   }
@@ -182,6 +188,7 @@ export default class Grid extends Component {
   }
   render() {
     const {
+      type,
       className, style, col, list,
       cellClassName, cellStyle,
       iconBoxClassName, iconBoxStyle,
@@ -199,7 +206,7 @@ export default class Grid extends Component {
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
           <a onClick={(e) => {this.onClickIconBox(e, item, index);}} className={`grid-iconbox${iconBoxClassName ? ' ' + iconBoxClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(iconBoxStyle ? iconBoxStyle : {}, item.style ? item.style : {})}>
-            {(item.iconSrc || item.iconClassName || item.thumb) &&
+            {(type !== 'video' && item.type !== 'video') && (item.iconSrc || item.iconClassName || item.thumb) &&
             <Icon
               base={item.thumb ? 'img' : 'icon'}
               src={item.iconSrc ? item.iconSrc : item.thumb ? item.thumb : ''}
@@ -213,6 +220,13 @@ export default class Grid extends Component {
               badgeCaption={item.iconBadgeCaption}
               closeClassName={`grid-close close-icon-clear color-cancel${closeClassName ? ' ' + closeClassName : ''}`}
               onClickClose={onClickDelete ? (e) => {this.onClickDelete(e, item, index);} : null}
+            />}
+            {(type === 'video' || item.type === 'video') && item.src &&
+            <Player
+              src={item.src}
+              poster={item.iconSrc ? item.iconSrc : item.thumb ? item.thumb : ''}
+              className={`${iconClassName || ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`}
+              style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})}
             />}
           </a>
           {item.caption && <label className={`grid-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</label>}

@@ -18,6 +18,10 @@ var Bridge = {
     if (verExp && verExp[1]) return verExp[1].trim();
     return '';
   },
+  // 退出到登陆页面
+  logOut: function (msg) {
+    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || ''})) // eslint-disable-line
+  },
   /*
   * 商联支付
   * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
@@ -27,10 +31,10 @@ var Bridge = {
       if (callback) callback(result)
     }, null, params ? JSON.stringify(params) : null)
   },
-  /*
-  * 文件操作
-  * */
-  /* 文件是否存在
+  /* -----------------------------------------------------
+    文件操作
+  ----------------------------------------------------- */
+  /* // 文件是否存在
   isExistsFile({
     "fileName": "ss.txt",
     "size": 200
@@ -43,7 +47,7 @@ var Bridge = {
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null)
   },
-  /* 附件下载
+  /* // 附件下载
   downloadFile({
     "id": "id",
     "fileName": "ss.txt",
@@ -57,7 +61,7 @@ var Bridge = {
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null)
   },
-  /* 附件打开
+  /* // 附件打开
   openFile（{
     "filePath": ""
   }，(result) => {
@@ -68,10 +72,26 @@ var Bridge = {
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null)
   },
-  /*
-   * 扫描二维码并返回结果
-   * 返回：{resultStr:''}
-   * */
+  /* -----------------------------------------------------
+    视频录制
+    @params {
+      "id": '21341234' // 宴会id
+    }
+    @return [
+    ]
+  ----------------------------------------------------- */
+  /* -----------------------------------------------------
+    视频上传
+    @params {
+      "id": '21341234' // 宴会id
+    }
+    @return [
+    ]
+  ----------------------------------------------------- */
+  /* -----------------------------------------------------
+    扫描二维码并返回结果
+    @return {resultStr:''}
+  ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
     wq.wqhardware.getQrCode((res) => { // eslint-disable-line
       if (res && res.qrCode) {
@@ -84,7 +104,7 @@ var Bridge = {
     })
   },
   /* -----------------------------------------------------
-    获取当前地理位置
+    获取当前地理位置 转为与微信的api一致, 原api如下:
     外勤365默认使用国测局'gcj02'定位,没有参数控制
     @return {
       "city": "南京市",
@@ -131,7 +151,7 @@ var Bridge = {
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
   /* -----------------------------------------------------
-    获取当前地理位置带地图
+    获取当前地理位置带地图 转为与微信的api一致, 原api如下:
     外勤365默认使用国测局'gcj02'定位, 没有参数控制
     @params {editable: '是否可以标记位置, 1可标记', latlng: '经纬度,只在editable为0时生效', title: '标题, 可不传'}
     @return {
@@ -172,11 +192,37 @@ var Bridge = {
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
-  /*
-  * 拍照、本地选图
-  * params：{sourceType:['album', 'camera'],sizeType:['original', 'compressed'],count:'最大张数', success:fn, fail:fn, photoType:'', customerName: ''}
-  * 返回选定照片的本地ID列表{localIds:[LocalResource://imageid123456789987654321]'}
-  */
+  /* -----------------------------------------------------
+    拍照选图: 转为与微信的api一致, 原api如下:
+    @params {
+      "operation": 1, // 操作：0：拍照；1，相册； 2：拍照/相册。
+      "max": 2,
+      "pwidth": 2, // 照片宽度
+      "viewId": 41236, // 页面控件ID
+      "photoType": "考勤", // 水印: 项目模块
+      "customerName": "客户名", // 水印: 客户名
+      "submitName": "提交人", // 水印: 提交人
+      "cmLocation": "门店位置", // 水印: 用于计算偏差
+      "selectItems": [ // 水印: 已有图片的路径和id
+        {
+          "id": "1211aa",
+          "path": "sdcard/"
+        },
+        {
+          "id": "2145aa",
+          "path": "sdcard//www.baidu.co"
+        }
+      ]
+    }
+    @return [
+      {
+        "path": "data:image/png;base64,/9j/Q...",
+        "id": "3500",
+        "name": "xxx.jpg",
+        "src": "/storage/emulated/0/iMobii/data/camera/waiqin365@zhangkong8585235895/files/20150909090153661_26873987_ALBUM.jpg"
+      }
+    ]
+  ----------------------------------------------------- */
   chooseImage: function (argParams) {
     var params = Object.clone(argParams)
     // 格式化sourceType
@@ -229,10 +275,11 @@ var Bridge = {
       }
     }, null, JSON.stringify(params))
   },
-  /*
-  * 上传图片
-  * params：{dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
-  */
+  /* -----------------------------------------------------
+    上传图片
+    @params {dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
+    @return 无
+  ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
       BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
@@ -252,11 +299,10 @@ var Bridge = {
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
   },
-  /*
-  * 图片预览
-  * params：{urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
-  * 备注：图片url后面带localId为标识为本地，客户端优先从本地查找，本地没有再从网络加载
-  */
+  /* -----------------------------------------------------
+    图片预览
+    @params {urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
+  ----------------------------------------------------- */
   previewImage: function (argParams) {
     // 格式化index
     var position = 0
@@ -275,10 +321,6 @@ var Bridge = {
       photos: photos
     }
     wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
-  },
-  // 退出到登陆页面
-  logOut: function (msg) {
-    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || ''})) // eslint-disable-line
   },
   /* -----------------------------------------------------
     人员插件
@@ -306,13 +348,11 @@ var Bridge = {
     【6】获取当前人所属的经销商的上级经销商
   ----------------------------------------------------- */
   getCustomerMore: function (params = {}) { // {selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', onSuccess([{id: '', name: ''}])}
-    alert(JSON.stringify(Object.assign({hiddenAdd: true}, params)));
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)));
   },
   getCustomer: function (params = {}) {
-    alert(JSON.stringify(Object.assign({hiddenAdd: true}, params)));
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)))
@@ -336,10 +376,10 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(args)
     }, JSON.stringify(params))
   },
-  /**
-   * 部门插件
-   * params: {selectedIds: '',onSuccess: fn}
-   */
+  /* -----------------------------------------------------
+    部门插件
+    @params: {selectedIds: '',onSuccess: fn}
+  ----------------------------------------------------- */
   getDepartmentMore: function (params = {}) { // {selectedIds: 'id,id', onSuccess([{id: '', name: ''}])}
     wq.wqdepartment.getDepartmentMore(function (args) { // eslint-disable-line
       if (params.onSuccess) params.onSuccess(args)

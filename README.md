@@ -1367,6 +1367,8 @@ import Container from 'seedsui-react/lib/Container';
 ```javascript
 <Grid
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  type={类型 string, 默认无} // video和空
+  preview={是否预览 bool, 默认true}
   lazyLoad={是否启用懒人加载 bool, 默认false}
   className={容器className string, 默认无, 基础'grid'}
   style={容器style object, 默认无}
@@ -1376,6 +1378,7 @@ import Container from 'seedsui-react/lib/Container';
   showUpload={是否显示上传按钮 bool, 默认false}
   list={单元格 array, 默认[], 格式见下方示例}
   /* list: [{
+    type: '',
     iconClassName: '',
     iconStyle: {},
     iconSrc: '',

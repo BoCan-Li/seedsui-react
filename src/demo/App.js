@@ -5,6 +5,7 @@ import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Player from '../lib/Player';
+import VideoUploader from '../lib/VideoUploader';
 
 export default class App extends Component {
   constructor(props) {
@@ -31,6 +32,12 @@ export default class App extends Component {
       </Header>
       <Container>
         <Player src="http://res.waiqin365.com/video/v2001.MP4" poster="https://static.zcool.cn/git_z/z/common/images/svg/logo.svg"/>
+        <VideoUploader list={[
+          {
+            src: 'http://res.waiqin365.com/video/v2001.MP4',
+            thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'
+          }
+        ]}/>
       </Container>
     </Page>
   }
