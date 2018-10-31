@@ -23,6 +23,8 @@ export default class RouteComment extends Component {
     cancelStyle: PropTypes.object,
     cancelClassName: PropTypes.string,
     onClickCancel: PropTypes.func,
+
+    children: PropTypes.node
   };
   static defaultProps = {
     submitValid: true,
@@ -63,7 +65,7 @@ export default class RouteComment extends Component {
     if (this.props.onClickCancel) this.props.onClickCancel(this.$textarea.value, {op: 'cancel'})
   }
   render() {
-    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, onClickSubmit, cancelCaption, cancelStyle, cancelClassName, onClickCancel, ...others} = this.props;
+    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, onClickSubmit, cancelCaption, cancelStyle, cancelClassName, onClickCancel, children, ...others} = this.props;
     return (
       <Page>
         <Header>
@@ -73,8 +75,9 @@ export default class RouteComment extends Component {
           <div className="route-comment-input-box">
             <textarea ref={(el) => {this.$textarea = el}} className="route-comment-input" placeholder={placeholder} onChange={this.onChange} {...others}></textarea>
           </div>
+          {children}
           {!this.props.onClickCancel &&
-            <Button onClick={this.onClickSubmit} className={`route-comment-button-single route-comment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+            <Button onClick={this.onClickSubmit} className={`route-comment-button-single ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
           }
           {this.props.onClickCancel &&
           <div className="route-comment-button-box">
