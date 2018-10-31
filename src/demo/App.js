@@ -4,8 +4,9 @@ import Header from '../lib/Header';
 import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
-import Player from '../lib/Player';
+import InputWaiqin from '../lib/InputWaiqin';
 import VideoUploader from '../lib/VideoUploader';
+import RouteComment from '../lib/RouteComment';
 
 export default class App extends Component {
   constructor(props) {
@@ -24,20 +25,44 @@ export default class App extends Component {
       value: value
     })
   }
-  
+  onClickCancel = (value, item, index) => {
+    console.log(value, item, index);
+  }
+  onClickSubmit = (value, item, index) => {
+    console.log(value, item, index);
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <Player src="http://res.waiqin365.com/video/v2001.MP4" poster="https://static.zcool.cn/git_z/z/common/images/svg/logo.svg"/>
+        <InputWaiqin placeholder="选两项" chooseType="getCustomer" chooseParams={{tradeType: '2,3'}}/>
         <VideoUploader list={[
           {
             src: 'http://res.waiqin365.com/video/v2001.MP4',
             thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'
           }
         ]}/>
+        <RouteComment
+          buttons={[
+            {
+              valid: false,
+              className: 'lg bg-white',
+              caption: '取消',
+              onClick: this.onClickCancel
+            },
+            {
+              valid: false,
+              className: 'lg primary',
+              caption: '提交',
+              onClick: this.onClickSubmit
+            }
+          ]}
+          maxLength="100"
+          title="反审核1"
+          placeholder="请填写审批意见"
+        />
       </Container>
     </Page>
   }

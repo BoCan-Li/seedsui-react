@@ -3216,18 +3216,17 @@ onClick = (checked, args) => {
   title={标题 string, 默认'填写意见'}
   placeholder={占位符 string, 默认'点击输入'}
 
-  submitValid={确定按钮校验 bool, 默认true}
-  cancelValid={取消按钮校验 bool, 默认true}
-
-  submitStyle={确定按钮style object, 默认无}
-  submitClassName={确定按钮className string, 默认无}
-  submitCaption={确定按钮文字 node, 默认'确定'}
-  onClickSubmit={点击确定按钮 func(value, {op: 'submit'})}
-
-  cancelStyle={取消按钮style object, 默认无}
-  cancelClassName={取消按钮className string, 默认无}
-  cancelCaption={取消按钮文字 node, 默认'取消'}
-  onClickCancel={点击取消按钮 func(value, {op: 'cancel'}), 默认无, 有此属性才显示取消按钮}
+  buttons={操作按钮 array, 默认无, 示例如下:}
+  /*
+  [{
+    valid: PropTypes.bool,
+    caption: PropTypes.node,
+    style: PropTypes.object,
+    className: PropTypes.string,
+    onClick={点击事件 func(value, item, index)}
+  }]
+  */
+  children={子元素 node, 默认无}
 />
 ```
 ### 示例
@@ -3235,22 +3234,33 @@ onClick = (checked, args) => {
 import {Route, withRouter} from 'react-router';
 import RouteComment from 'seedsui-react/lib/RouteComment';
 
-onApproverPop = () => {
-  this.props.history.push(window.location.href.split('#')[1] + `/approverPop`);
+onClickCancel = (value, item, index) => {
+  console.log(value, item, index);
 }
-onApprover = (value, obj) => {
-  console.log(value, obj);
+onClickSubmit = (value, item, index) => {
+  console.log(value, item, index);
 }
 
 <Route
   path={`${this.props.match.path}/approverPop`}
   render={() => <RouteComment
-    title="审核"
+    buttons={[
+      {
+        valid: false,
+        className: 'lg bg-white',
+        caption: '取消',
+        onClick: this.onClickCancel
+      },
+      {
+        valid: false,
+        className: 'lg primary',
+        caption: '提交',
+        onClick: this.onClickSubmit
+      }
+    ]}
+    maxLength="100"
+    title="审批"
     placeholder="请填写审批意见"
-    cancelCaption="再次审核"
-    submitCaption="直接打回"
-    onClickCancel={this.onApprover}
-    onClickSubmit={this.onApprover}
   />}
 />
 ```

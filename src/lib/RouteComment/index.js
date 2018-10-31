@@ -11,30 +11,21 @@ export default class RouteComment extends Component {
     title: PropTypes.string,
     placeholder: PropTypes.string,
 
-    submitValid: PropTypes.bool,
-    cancelValid: PropTypes.bool,
-
-    submitCaption: PropTypes.node,
-    submitStyle: PropTypes.object,
-    submitClassName: PropTypes.string,
-    onClickSubmit: PropTypes.func,
-
-    cancelCaption: PropTypes.node,
-    cancelStyle: PropTypes.object,
-    cancelClassName: PropTypes.string,
-    onClickCancel: PropTypes.func,
+    buttons: PropTypes.array,
+    /*
+    {
+      valid: PropTypes.bool,
+      caption: PropTypes.node,
+      style: PropTypes.object,
+      className: PropTypes.string,
+      onClick: PropTypes.func,
+    }*/
 
     children: PropTypes.node
   };
   static defaultProps = {
-    submitValid: true,
-    cancelValid: true,
     title: '填写意见',
-    placeholder: '点击输入',
-    submitCaption: '提交',
-    submitClassName: 'lg primary',
-    cancelCaption: '取消',
-    cancelClassName: 'lg bg-white'
+    placeholder: '点击输入'
   }
   constructor(props) {
     super(props);
@@ -58,14 +49,13 @@ export default class RouteComment extends Component {
       })
     }
   }
-  onClickSubmit = () => {
-    if (this.props.onClickSubmit) this.props.onClickSubmit(this.$textarea.value, {op: 'submit'})
-  }
-  onClickCancel = () => {
-    if (this.props.onClickCancel) this.props.onClickCancel(this.$textarea.value, {op: 'cancel'})
+  onClick = ([item, index]) => {
+    if (item.onClick) {
+      item.onClick(this.$textarea.value, item, index);
+    }
   }
   render() {
-    const {title, placeholder, submitValid, cancelValid, submitCaption, submitStyle, submitClassName, onClickSubmit, cancelCaption, cancelStyle, cancelClassName, onClickCancel, children, ...others} = this.props;
+    const {title, placeholder, buttons, children, ...others} = this.props;
     return (
       <Page>
         <Header>
@@ -76,14 +66,18 @@ export default class RouteComment extends Component {
             <textarea ref={(el) => {this.$textarea = el}} className="route-comment-input" placeholder={placeholder} onChange={this.onChange} {...others}></textarea>
           </div>
           {children}
-          {!this.props.onClickCancel &&
-            <Button onClick={this.onClickSubmit} className={`route-comment-button-single ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
+          {buttons && buttons.length === 1 &&
+            buttons.map((item, index) => {
+              return <Button key={index} args={[item, index]} onClick={this.onClick} className={`route-comment-button-single ${item.className || ''}`} disabled={item.valid && !this.state.isEnable} style={item.style}>{item.caption}</Button>
+            })
           }
-          {this.props.onClickCancel &&
-          <div className="route-comment-button-box">
-            <Button onClick={this.onClickCancel} className={`route-comment-button ${cancelClassName}`} disabled={cancelValid && !this.state.isEnable} style={cancelStyle}>{cancelCaption}</Button>
-            <Button onClick={this.onClickSubmit} className={`route-comment-button ${submitClassName}`} disabled={submitValid && !this.state.isEnable} style={submitStyle}>{submitCaption}</Button>
-          </div>}
+          {buttons && buttons.length > 1 &&
+            <div className="route-comment-button-box">
+              {buttons.map((item, index) => {
+                return <Button key={index} args={[item, index]} onClick={this.onClick} className={`route-comment-button ${item.className || ''}`} disabled={item.valid && !this.state.isEnable} style={item.style}>{item.caption}</Button>
+              })}
+            </div>
+          }
         </Container>
       </Page>
     );
