@@ -6,7 +6,7 @@ import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import InputWaiqin from '../lib/InputWaiqin';
 import VideoUploader from '../lib/VideoUploader';
-import RouteComment from '../lib/RouteComment';
+import WqVideoRecord from './WqVideoRecord';
 
 export default class App extends Component {
   constructor(props) {
@@ -37,6 +37,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
+        <WqVideoRecord id="1234" style={{margin: '10px 12px 10px 16px'}}/>
         <InputWaiqin placeholder="选两项" chooseType="getCustomer" chooseParams={{tradeType: '2,3'}}/>
         <VideoUploader list={[
           {
@@ -44,25 +45,6 @@ export default class App extends Component {
             thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'
           }
         ]}/>
-        <RouteComment
-          buttons={[
-            {
-              valid: false,
-              className: 'lg bg-white',
-              caption: '取消',
-              onClick: this.onClickCancel
-            },
-            {
-              valid: false,
-              className: 'lg primary',
-              caption: '提交',
-              onClick: this.onClickSubmit
-            }
-          ]}
-          maxLength="100"
-          title="反审核1"
-          placeholder="请填写审批意见"
-        />
       </Container>
     </Page>
   }

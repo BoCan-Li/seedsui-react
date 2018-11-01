@@ -22,5 +22,7 @@ Device.adapterMobile();
 // 动态加载桥接库
 Device.dynamicLoadBridge();
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+window.addEventListener('load', function() {
+  ReactDOM.render(<App />, document.getElementById('root'));
+  registerServiceWorker();
+}, false);

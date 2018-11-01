@@ -98,7 +98,7 @@ var Bridge = {
       } else {
         if (params.onError) params.onError({code: 'videoUploadFail', msg: '上传失败'})
       }
-    }, JSON.stringify(params));
+    }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
     视频是否已经录制过了
@@ -112,7 +112,7 @@ var Bridge = {
       } else {
         if (params.onError) params.onError({code: 'videoInfoFail', msg: '未查到此视频信息'})
       }
-    }, JSON.stringify(params));
+    }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
     扫描二维码并返回结果
