@@ -101,7 +101,27 @@ export default class WqVideoRecord extends Component {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: '仅在hasUpload=1的情况下返回', hasVideo: '0|1', hasUpload: '0|1}
   ----------------------------------------------------- */
   videoInfo = () => {
-    Bridge.videoInfo();
+    Bridge.videoInfo({
+      id: this.props.id,
+      onSuccess: (res) => {
+        if (res.hasUpload === '1') { // 已上传
+          this.setState({
+            recordStatus: '2',
+            recordTime: MediaUtil.convertTime(res.secs)
+          });
+          if (this.props.onChange) this.props.onChange(Object.assign({status: '2'}, res))
+        } else if (res.hasVideo === '1') { // 未上传
+          this.setState({
+            recordStatus: '1',
+            recordTime: MediaUtil.convertTime(res.secs)
+          });
+          if (this.props.onChange) this.props.onChange(Object.assign({status: '1'}, res))
+        }
+      },
+      onFail: () => {
+        Bridge.showToast('未查到此视频信息', {mask: false});
+      }
+    });
   }
   render() {
     const {style, className} = this.props;
