@@ -74,20 +74,46 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     视频录制
-    @params {
-      "id": '21341234' // 宴会id
-    }
-    @return [
-    ]
+    @params {id: '宴会id'}
+    @return {result: '1', ID: '宴会id', secs: '毫秒'}
   ----------------------------------------------------- */
+  videoRecord: function (params = {}) {
+    wq.wqjnc.videoRecord((res) => { // eslint-disable-line
+      if (res.result === '1'){
+        if (params.onSuccess) params.onSuccess(res)
+      } else {
+        if (params.onError) params.onError({code: 'videoRecordFail', msg: '录制失败'})
+      }
+    }, JSON.stringify(params))
+  },
   /* -----------------------------------------------------
     视频上传
-    @params {
-      "id": '21341234' // 宴会id
-    }
-    @return [
-    ]
+    @params {id: '宴会id'}
+    @return {result: '1', ID: '宴会id', secs: '毫秒', vid: ''}
   ----------------------------------------------------- */
+  videoUpload: function (params = {}) {
+    wq.wqjnc.videoUpload((res) => { // eslint-disable-line
+      if (res.result === '1'){
+        if (params.onSuccess) params.onSuccess(res)
+      } else {
+        if (params.onError) params.onError({code: 'videoUploadFail', msg: '上传失败'})
+      }
+    }, JSON.stringify(params));
+  },
+  /* -----------------------------------------------------
+    视频是否已经录制过了
+    @params {id: '宴会id'}
+    @return {result: '1', ID: '宴会id', secs: '毫秒', vid: '仅在hasUpload=1的情况下返回', hasVideo: '0|1', hasUpload: '0|1}
+  ----------------------------------------------------- */
+  videoInfo: function (params = {}) {
+    wq.wqjnc.videoInfo((res) => { // eslint-disable-line
+      if (res.result === '1') {
+        if (params.onSuccess) params.onSuccess(res)
+      } else {
+        if (params.onError) params.onError({code: 'videoInfoFail', msg: '未查到此视频信息'})
+      }
+    }, JSON.stringify(params));
+  },
   /* -----------------------------------------------------
     扫描二维码并返回结果
     @return {resultStr:''}
