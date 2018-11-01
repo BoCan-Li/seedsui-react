@@ -332,26 +332,26 @@ var Bridge = {
    * */
   setSystemParameter: function (data) {
     // 设置系统参数
-    if (data.sysParms) DB.setStore('app_sysparams', data.sysParms)
+    if (data.sysParms) DB.setStore('dinghuo_sysparams', data.sysParms)
     // 设置图片主域名
     let imgDomain = data.image_url ? data.image_url.clearProtocol() : '';
     if (imgDomain && imgDomain.length - 1 !== imgDomain.lastIndexOf('/')) {
       imgDomain = imgDomain + '/';
-      DB.setStore('app_imgDomain', decodeURIComponent(imgDomain));
+      DB.setStore('dinghuo_img_domain', decodeURIComponent(imgDomain));
     } else {
       console.log('图片域名未定义');
       return {code: 'imgDomainFail', msg: '图片域名未定义'};
     }
     // 设置uid
-    DB.setStore('app_uid', data.uid || '');
+    DB.setStore('dinghuo_uid', data.uid || '');
     // 设置手机号
-    DB.setStore('app_mobile', data.mobile || '');
+    DB.setStore('dinghuo_mobile', data.mobile || '');
     // 设置appId和openId
     if (data.openId) DB.setStore('app_openId', data.openId || '');
     if (data.appId) DB.setStore('app_appId', data.appId || '');
     // 设置选中的供货商
     if (data.selectedSupplier && typeof data.selectedSupplier === 'object') {
-      DB.setStore('app_selectedSupplier', data.selectedSupplier);
+      DB.setStore('dinghuo_selected_supplier', data.selectedSupplier);
     } else {
       console.log('没有供货商');
       return {code: 'selectedSupplierFail', msg: '请选择供货商'};
@@ -399,10 +399,10 @@ var Bridge = {
     }
   },
   // 客户端添加返回绑定
-  addBackPress: function () {
+  addBackPress: function (fn) {
     try {
       this.setBackEnable(true);
-      window.addEventListener('onBackPress', this.back);
+      window.addEventListener('onBackPress', fn || this.back);
     } catch (error) {
       console.log(error);
     }
@@ -415,15 +415,15 @@ var Bridge = {
         data.mobile = loginData.mobile;
         data.selectedSupplier = loginData.selectedSupplier;
         data.sysParms = sysData;
-        BridgeBrowser.setSystemParameter(data);
+        this.setSystemParameter(data);
       });
     });
   },
   // 客户端移除返回绑定
-  removeBackPress: function () {
+  removeBackPress: function (fn) {
     try {
       this.setBackEnable(false);
-      window.removeEventListener('onBackPress', this.back);
+      window.removeEventListener('onBackPress', fn || this.back);
     } catch (error) {
       console.log(error);
     }
