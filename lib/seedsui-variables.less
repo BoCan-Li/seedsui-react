@@ -1584,12 +1584,14 @@
 @pc-background-size: cover;
 @pc-lg-background-size: cover;
 .setCarrouselContainer(){
-  &:hover{
-    .carrousel-prev{
-      display: block;
-    }
-    .carrousel-next{
-      display: block;
+  @media (min-width: 992px) {
+    &:hover{
+      .carrousel-prev{
+        display: block;
+      }
+      .carrousel-next{
+        display: block;
+      }
     }
   }
 }
