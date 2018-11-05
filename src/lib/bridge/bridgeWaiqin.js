@@ -73,11 +73,37 @@ var Bridge = {
     }, params ? JSON.stringify(params) : null)
   },
   /* -----------------------------------------------------
+    视频播放
+    @params {src: '视频地址', title: '标题'}
+  ----------------------------------------------------- */
+  previewVideo: function (params = {}) {
+    if (Device.platformVersion < '6.2.2') {
+      BridgeBrowser.showToast('视频播放功能需要升级至6.2.2及以上的客户端', {mask: false})
+      return
+    }
+    wq.wqload.wqOpenCustomerPager(JSON.stringify({ // eslint-disable-line
+      IOSViewController: 'JNCVideoPlayerVC',
+      androidUIR: 'com.ct.XXActivity',
+      androidParma: {
+        videoUrl: params.src,
+        title: params.title || ''
+      },
+      IOSParma: {
+        videoUrl: params.src,
+        title: params.title || ''
+      }
+    }))
+  },
+  /* -----------------------------------------------------
     视频录制
     @params {id: '宴会id'}
     @return {result: '1', ID: '宴会id', secs: '毫秒'}
   ----------------------------------------------------- */
   videoRecord: function (params = {}) {
+    if (Device.platformVersion < '6.2.2') {
+      BridgeBrowser.showToast('视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
+      return
+    }
     wq.wqjnc.videoRecord((res) => { // eslint-disable-line
       if (res.result === '1'){
         if (params.onSuccess) params.onSuccess(res)
@@ -92,6 +118,10 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: ''}
   ----------------------------------------------------- */
   videoUpload: function (params = {}) {
+    if (Device.platformVersion < '6.2.2') {
+      BridgeBrowser.showToast('视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
+      return
+    }
     wq.wqjnc.videoUpload((res) => { // eslint-disable-line
       if (res.result === '1'){
         if (params.onSuccess) params.onSuccess(res)
@@ -106,6 +136,10 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: '仅在hasUpload=1的情况下返回', hasVideo: '0|1', hasUpload: '0|1}
   ----------------------------------------------------- */
   videoInfo: function (params = {}) {
+    if (Device.platformVersion < '6.2.2') {
+      BridgeBrowser.showToast('视频功能需要升级至6.2.2及以上的客户端', {mask: false})
+      return
+    }
     wq.wqjnc.videoInfo((res) => { // eslint-disable-line
       if (res.result === '1') {
         if (params.onSuccess) params.onSuccess(res)

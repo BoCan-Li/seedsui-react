@@ -5,6 +5,8 @@ import EventUtil from './../EventUtil';
 import Toast from './../Toast/instance.js';
 import Alert from './../Alert/instance.js';
 import Loading from './../Loading/instance.js';
+import MediaUtil from './../MediaUtil';
+import FullScreen from './../FullScreen';
 
 var Bridge = {
   platform: 'browser',
@@ -27,10 +29,26 @@ var Bridge = {
   logOut: function () {
     console.log('logOut方法仅在app上工作')
   },
+  // 视频播放
+  previewVideo: function (params = {}) {
+    var target = document.getElementById('seedsui_preview_video')
+    if (!target) {
+      target = MediaUtil.video(params.src)
+      target.id = 'seedsui_preview_video'
+      target.style = 'position:absolute;top:-1000px;left:-1000px;width:100;height:100px;'
+      document.body.appendChild(target)
+    }
+    if (target) {
+      FullScreen.enter(target)
+      setTimeout(() => {
+        target.play()
+      }, 500)
+    }
+  },
   // 视频录制, 外勤app
   videoRecord: function (params = {}) {
     if (!this.debug) {
-      this.showToast('此功能仅可在外勤APP中使用', {mask: false})
+      this.showToast('视频录制功能仅可在外勤APP中使用', {mask: false})
       return
     }
     var res = {result: '1', ID: '1234', secs: '2'}
@@ -41,7 +59,7 @@ var Bridge = {
   // 视频上传, 外勤app
   videoUpload: function (params = {}) {
     if (!this.debug) {
-      this.showToast('此功能仅可在外勤APP中使用', {mask: false})
+      this.showToast('视频上传功能仅可在外勤APP中使用', {mask: false})
       return
     }
     var res = {result: '1', ID: '1234', secs: '2', vid: '123456'}
@@ -52,7 +70,7 @@ var Bridge = {
   // 视频是否已经录制过了, 外勤app
   videoInfo: function (params = {}) {
     if (!this.debug) {
-      this.showToast('此功能仅可在外勤APP中使用', {mask: false})
+      this.showToast('视频功能仅可在外勤APP中使用', {mask: false})
       return
     }
     var res = {result: '1', ID: '1234', secs: '2', hasVideo: '1', hasUpload: '0'}

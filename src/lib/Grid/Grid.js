@@ -223,10 +223,12 @@ export default class Grid extends Component {
             />}
             {(type === 'video' || item.type === 'video') && item.src &&
             <Player
+              args={item}
               src={item.src}
               poster={item.iconSrc ? item.iconSrc : item.thumb ? item.thumb : ''}
               className={`${iconClassName || ''}${item.iconClassName ? ' ' + item.iconClassName : ''}`}
               style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})}
+              onClick={item.onClick}
             />}
           </a>
           {item.caption && <label className={`grid-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</label>}

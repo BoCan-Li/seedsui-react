@@ -31,6 +31,9 @@ export default class App extends Component {
   onClickSubmit = (value, item, index) => {
     console.log(value, item, index);
   }
+  onClickVideo = (args) => {
+    Bridge.previewVideo({src: args.src});
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
@@ -42,7 +45,8 @@ export default class App extends Component {
         <VideoUploader list={[
           {
             src: 'http://res.waiqin365.com/video/v2001.MP4',
-            thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'
+            thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg',
+            onClick: this.onClickVideo
           }
         ]}/>
       </Container>

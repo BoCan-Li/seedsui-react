@@ -24,5 +24,6 @@ Device.dynamicLoadBridge();
 
 window.addEventListener('load', function() {
   ReactDOM.render(<App />, document.getElementById('root'));
-  registerServiceWorker();
 }, false);
+
+registerServiceWorker();
