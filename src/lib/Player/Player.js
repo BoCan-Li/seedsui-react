@@ -64,10 +64,10 @@ export default class Player extends Component {
     if (Device.os === 'andriod' || onClick) {
       return (
         <div ref={(el) => {this.$el = el}} className={'player-thumbnail' + (className ? ' ' + className : '')} style={style} onClick={this.onClick}>
-          <video ref={(el) => {this.$video = el}} {...others}>
+          {!onClick && <video ref={(el) => {this.$video = el}} {...others}>
             <source src={src} type={this.getType()} />
             您的浏览器不支持 video 标签。
-          </video>
+          </video>}
           {this.props.poster && <div style={{backgroundImage: `url(${this.props.poster})`}} className="player-thumbnail-poster"/>}
           <div className="player-thumbnail-button"></div>
           {children}

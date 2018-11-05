@@ -83,14 +83,14 @@ var Bridge = {
     }
     wq.wqload.wqOpenCustomerPager(JSON.stringify({ // eslint-disable-line
       IOSViewController: 'JNCVideoPlayerVC',
-      androidUIR: 'com.ct.XXActivity',
+      androidUIR: 'com.waiqin365.lightapp.jiannanchun.VideoPlayActivity',
       androidParma: {
         videoUrl: params.src,
-        title: params.title || ''
+        title: params.title || '视频播放'
       },
       IOSParma: {
         videoUrl: params.src,
-        title: params.title || ''
+        title: params.title || '视频播放'
       }
     }))
   },
@@ -488,26 +488,26 @@ var Bridge = {
       try {
         Bridge.closeWindow();
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     } else if (isFromApp === 'home') {
       try {
         Bridge.closeWindow()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     } else if (isFromApp === 'confirm') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
         onSuccess: (e) => {
           e.hide();
-          window.history.go(-1);
+          window.history.go(-1)
         }
       });
     } else if (isFromApp === 'confirm-close') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
         onSuccess: (e) => {
           e.hide();
-          Bridge.closeWindow();
+          Bridge.closeWindow()
         }
       });
     } else {

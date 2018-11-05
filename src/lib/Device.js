@@ -57,10 +57,10 @@ var Device = (function () {
   } else {
     platform = 'browser'
   }
-  
+
 
   // 获得苹果机型
-  function appleModel () { // 获取设备型号
+  function appleModel() { // 获取设备型号
     if (ua && /(iphone|ipad|ipod|ios)/i.test(ua)) {
       var m = ua.match(/mobile\/([\w.]*)/)
       if (m && m[1]) {
@@ -69,7 +69,7 @@ var Device = (function () {
     }
     return ''
   }
-  function getAppleDevice () { // 获取苹果设备名称
+  function getAppleDevice() { // 获取苹果设备名称
     // iPhoneX | iPhoneXS
     if (/iphone/gi.test(ua) && (window.screen.height === 812 && window.screen.width === 375)) return 'iPhoneX'
     // iPhoneXSM | iPhoneXSR
@@ -90,13 +90,13 @@ var Device = (function () {
   }
   // 网络监听
   var onLineCallback
-  function handleOnline (e) {
+  function handleOnline(e) {
     onLineCallback(true)
   }
-  function handleOffline (e) {
+  function handleOffline(e) {
     onLineCallback(false)
   }
-  function onLine (callback) {
+  function onLine(callback) {
     onLineCallback = callback
     window.removeEventListener('online', handleOnline, false)
     window.removeEventListener('offline', handleOffline, false)
@@ -106,7 +106,7 @@ var Device = (function () {
   // 适配iPhoneX
   var isX = getAppleDevice().indexOf('iPhoneX') >= 0
   var root = document.getElementById('root')
-  function viewSafeArea () {
+  function viewSafeArea() {
     if (isX && root) {
       switch (window.orientation) {
         case 0: // 竖屏
@@ -130,7 +130,7 @@ var Device = (function () {
     }
   }
   // 适配刘海屏和andriod5.0以下的手机
-  function adapterMobile () {
+  function adapterMobile() {
     // 刘海屏自适应(微信 | 订货 | 外勤客户端)
     if (platform === 'weixin' || platform === 'dinghuo' || platform === 'waiqin') {
       viewSafeArea();
@@ -142,21 +142,40 @@ var Device = (function () {
     }
   }
   // 动态加载桥接库
-  function dynamicLoadBridge () {
+  function dynamicLoadBridge(callback) {
+    if (platform !== 'weixin' && platform !== 'waiqin') {
+      if (callback) window.addEventListener('load', callback, false)
+      return
+    }
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.defer = 'defer'
     if (platform === 'weixin') {
       // 微信
-      var wxScript = document.createElement('script')
-      wxScript.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
-      document.body.appendChild(wxScript);
+      script.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
+      if (callback) {
+        script.onload = function () {
+          document.addEventListener('WeixinJSBridgeReady', () => {
+            callback()
+          })
+        }
+      }
     } else if (platform === 'waiqin') {
       // 外勤
-      var wqScript = document.createElement('script')
-      wqScript.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
-      document.body.appendChild(wqScript);
+      script.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
+      if (callback) {
+        script.onload = function () {
+          document.addEventListener('deviceready', () => {
+            callback()
+          })
+        }
+      }
     }
+    document.body.appendChild(script)
+    
   }
   // 获取地址栏参数
-  function getUrlParameter(argName, argSearch){
+  function getUrlParameter(argName, argSearch) {
     var url = window.location.href
     if (argSearch) url = argSearch
     var params = {}
@@ -165,7 +184,7 @@ var Device = (function () {
       // 获取所有参数options: 如?a=1&b=2转为['a=1','b=2']
       var options = url.split('?')[1].split('&')
       if (options.length) {
-        for(var i = 0; i < options.length; i ++) {
+        for (var i = 0; i < options.length; i++) {
           // 获取单项option: 如'a=1'转为['a', '1']
           var option = options[i].split('=')
           if (option.length === 2) {

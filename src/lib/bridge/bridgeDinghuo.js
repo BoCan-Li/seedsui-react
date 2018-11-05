@@ -397,15 +397,6 @@ var Bridge = {
     } else {
       window.history.go(-1);
     }
-  },
-  // 客户端添加返回绑定
-  addBackPress: function (fn) {
-    try {
-      this.setBackEnable(true);
-      window.addEventListener('onBackPress', fn || this.back);
-    } catch (error) {
-      console.log(error);
-    }
     // 使用桥接初始化系统参数
     this.loginInfo((loginData) => {
       this.systemParameter((sysData) => {
@@ -418,6 +409,15 @@ var Bridge = {
         this.setSystemParameter(data);
       });
     });
+  },
+  // 客户端添加返回绑定
+  addBackPress: function (fn) {
+    try {
+      this.setBackEnable(true);
+      window.addEventListener('onBackPress', fn || this.back);
+    } catch (error) {
+      console.log(error);
+    }
   },
   // 客户端移除返回绑定
   removeBackPress: function (fn) {

@@ -61,6 +61,17 @@ export default class Titlebar extends Component {
         Bridge.showConfirm('您确定要离开此页面吗?', {
           onSuccess: (e) => {
             e.hide();
+            window.history.go(-1);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'confirm-close') {
+      try {
+        Bridge.showConfirm('您确定要离开此页面吗?', {
+          onSuccess: (e) => {
+            e.hide();
             Bridge.closeWindow();
           }
         });
