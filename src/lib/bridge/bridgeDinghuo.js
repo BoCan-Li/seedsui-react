@@ -5,17 +5,21 @@ import DB from './../DB.js';
 var Bridge = {
   platform: 'dinghuo',
   config: function () {
+    // 更新系统参数
+    this.updateSystemParameter()
+    // 返回物理按键绑定
+    this.addBackPress()
     DB.setSession('bridge_isready', '1')
-    this.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp']);
+    this.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp'])
   },
-  /* 获得版本信息 */
+  // 获得版本信息
   getAppVersion: function () {
     const ua = navigator.userAgent;
     var verExp = ua.match(/DinghuoAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
     if (verExp && verExp[1]) return verExp[1].trim();
     return '';
   },
-  /* 公共方法，通过桥接调用原生方法公共入口 */
+  // 公共方法，通过桥接调用原生方法公共入口
   invoke: function (name, param, callback) {
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
       /* eslint-disable */
@@ -77,9 +81,7 @@ var Bridge = {
     /* eslint-enable */
   },
 
-  /**
-   * 注册事件
-   */
+  // 注册事件
   registerHandler: function (events) {
     if (typeof window !== 'undefined') {
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
@@ -119,10 +121,10 @@ var Bridge = {
       }
     }
   },
-  /*
-  * 判断是否是首页
-  * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
-  * */
+  /* -----------------------------------------------------
+    判断是否是首页
+    @params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
+  ----------------------------------------------------- */
   isHomePage: function (callback) {
     this.invoke('isHomePage', null, function (data) {
       if (data.result.toString() === '1') {
@@ -132,27 +134,27 @@ var Bridge = {
       }
     });
   },
-  /*
-  * 商联支付
-  * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
-  * */
+  /* -----------------------------------------------------
+    商联支付
+    @params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
+  ----------------------------------------------------- */
   slopenpay: function (params, callback) {
     this.invoke('slopenpay', params, callback)
   },
-  /*
-  * 打开新的窗口
-  * params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
-  * */
+  /* -----------------------------------------------------
+    打开新的窗口
+    @params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
+  ----------------------------------------------------- */
   openWindow: function (params, callback) {
     this.invoke('openWindow', params, callback)
   },
-  /* 关闭当前窗 */
+  // 关闭当前窗
   closeWindow: function (callback) {
     this.invoke('closeWindow', null, callback)
   },
-  /*
-  * 文件操作
-  * */
+  /* -----------------------------------------------------
+    文件操作
+  ----------------------------------------------------- */
   /* 文件是否存在
   isExistsFile({
     "fileName": "ss.txt",
@@ -185,10 +187,10 @@ var Bridge = {
   openFile: function (params, callback) {
     this.invoke('openFile', params, callback)
   },
-  /*
-   * 扫描二维码并返回结果
-   * 返回：{resultStr:''}
-   * */
+  /* -----------------------------------------------------
+    扫描二维码并返回结果
+    @return {resultStr:''}
+  ----------------------------------------------------- */
   scanQRCode: function (params) {
     this.invoke('scanQRCode', null, params.onSuccess)
   },
@@ -214,25 +216,25 @@ var Bridge = {
       }
     })
   },
-  /*
-  * 获取当前网络状态
-  * 返回：{networkType:'返回网络类型2g，3g，4g，wifi'}
-  * */
+  /* -----------------------------------------------------
+    获取当前网络状态
+    @return {networkType:'返回网络类型2g，3g，4g，wifi'}
+  ----------------------------------------------------- */
   getNetworkType: function (callback) {
     this.invoke('getNetworkType', null, callback)
   },
-  /*
-  * 拍照、本地选图
-  * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
-  * 返回选定照片的本地ID列表{localIds:[id,id,id]'}, src需要增加前缀'LocalResource://imageid'+id才能显示
-  */
+  /* -----------------------------------------------------
+    拍照、本地选图
+    @params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
+    @return 选定照片的本地ID列表{localIds:[id,id,id]'}, src需要增加前缀'LocalResource://imageid'+id才能显示
+  ----------------------------------------------------- */
   chooseImage: function (params) {
     this.invoke('chooseImage', params, params.success);
   },
-  /*
-  * 上传图片
-  * params：{dir:'',localIds:['localId', 'localId'], tenantId: ''}
-  */
+  /* -----------------------------------------------------
+    上传图片
+    @params {dir:'',localIds:['localId', 'localId'], tenantId: ''}
+  ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
       BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
@@ -250,9 +252,7 @@ var Bridge = {
     if (uploadParams.tenantId) params.tenantId = params.tenantId
     this.invoke('uploadImage', uploadParams);
   },
-  /**
-   * 获取带前缀的图片
-   */
+  // 获取带前缀的图片
   getPreviewImages: function (imgIds) {
     return imgIds.map((imgId) => {
       return 'LocalResource://imageid' + imgId
@@ -261,11 +261,11 @@ var Bridge = {
   getPreviewImage: function (imgId) {
     return 'LocalResource://imageid' + imgId
   },
-  /*
-  * 图片预览
-  * params：{urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
-  * 备注：图片LocalResource://imageid标识为本地，客户端优先从本地查找，本地没有再从网络加载
-  */
+  /* -----------------------------------------------------
+    图片预览
+    备注：图片LocalResource://imageid标识为本地，客户端优先从本地查找，本地没有再从网络加载
+    @params {urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
+  ----------------------------------------------------- */
   previewImage: function (argParams) {
     if (!argParams.urls || !argParams.urls.length) return
     var self = this
@@ -279,57 +279,53 @@ var Bridge = {
     })
     this.invoke('previewImage', params)
   },
-  /*
-    * 监听/取消监听物理返回事件(仅android)
-    * flag（true：监听，false：取消监听）
-    */
+  /* -----------------------------------------------------
+    监听/取消监听物理返回事件(仅android)
+    @params true:监听 | false:取消监听
+  ----------------------------------------------------- */
   setBackEnable: function (flag) {
     if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
       this.invoke('setBackEnable', flag);
     }
   },
-  /*
-  * 获取图片前缀
-  * */
+  // 获取图片前缀
   getImagePrefix: function () {
     return 'LocalResource://imageid';
   },
-  /*
-  * 下载图片
-  */
+  // 下载图片
   downloadImage: function () {
 
   },
-  /* 分享给朋友 */
+  // 分享给朋友
   onMenuShareAppMessage: function () {
 
   },
-  /* 分享到朋友圈 */
+  // 分享到朋友圈
   onMenuShareTimeline: function () {
 
   },
-  /* 退出到登陆页面 */
+  // 退出到登陆页面
   logOut: function () {
     this.invoke('logOut');
   },
-  /* 获取登陆信息 */
+  // 获取登陆信息
   loginInfo: function (callback) {
     this.invoke('getLoginInfo', null, callback);
   },
-  /* 根据key获取登陆信息 */
+  // 根据key获取登陆信息
   getLoginInfo (key, callback) {
     this.loginInfo(function (result) {
       callback(result[key])
     })
   },
-  /* 获取系统参数 */
+  // 获取系统参数
   systemParameter (callback) {
     this.invoke('getSystemParameter', null, callback)
   },
-  /*
-   * 设置系统参数
-   * @param data: {appId: '', openId: '', image_url: '', mobile: '', selectedSupplier: object, sysParms: object}
-   * */
+  /* -----------------------------------------------------
+  设置系统参数
+  @params {appId: '', openId: '', image_url: '', mobile: '', selectedSupplier: object, sysParms: object}
+  ----------------------------------------------------- */
   setSystemParameter: function (data) {
     // 设置系统参数
     if (data.sysParms) DB.setStore('dinghuo_sysparams', data.sysParms)
@@ -357,6 +353,22 @@ var Bridge = {
       return {code: 'selectedSupplierFail', msg: '请选择供货商'};
     }
   },
+  // 更新系统参数
+  updateSystemParameter: function (callback) {
+    // 更新系统参数
+    this.loginInfo((loginData) => {
+      this.systemParameter((sysData) => {
+        const data = {}
+        data.image_url = loginData.image_url
+        data.uid = loginData.uid
+        data.mobile = loginData.mobile
+        data.selectedSupplier = loginData.selectedSupplier
+        data.sysParms = sysData
+        this.setSystemParameter(data)
+        if (callback) callback()
+      });
+    });
+  },
   // 修改原生角标
   changeBadgeNum: function (count) {
     this.invoke('setBadgeNum', {key: count});
@@ -367,16 +379,17 @@ var Bridge = {
   },
   // 返回按键处理
   back: function () {
+    var self = Bridge
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
     if (isFromApp === '1') {
       try {
-        Bridge.closeWindow();
+        self.closeWindow();
       } catch (error) {
         console.log(error);
       }
     } else if (isFromApp === 'home') {
       try {
-        Bridge.goHome();
+        self.goHome();
       } catch (error) {
         console.log(error);
       }
@@ -391,24 +404,14 @@ var Bridge = {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
         onSuccess: (e) => {
           e.hide();
-          Bridge.closeWindow();
+          self.closeWindow();
         }
       });
     } else {
-      window.history.go(-1);
+      window.history.go(-1)
     }
-    // 使用桥接初始化系统参数
-    this.loginInfo((loginData) => {
-      this.systemParameter((sysData) => {
-        const data = {};
-        data.image_url = loginData.image_url;
-        data.uid = loginData.uid;
-        data.mobile = loginData.mobile;
-        data.selectedSupplier = loginData.selectedSupplier;
-        data.sysParms = sysData;
-        this.setSystemParameter(data);
-      });
-    });
+    // 更新系统参数
+    self.updateSystemParameter()
   },
   // 客户端添加返回绑定
   addBackPress: function (fn) {

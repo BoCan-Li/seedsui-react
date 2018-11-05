@@ -49,6 +49,7 @@ export default class App extends Component {
             onClick: this.onClickVideo
           }
         ]}/>
+        <a href="http://172.31.1.187:3001?isFromApp=confirm">跳转</a>
       </Container>
     </Page>
   }
