@@ -1671,7 +1671,10 @@ this.state.lazy.load();
     customerName: 'xx', // 客户名
   } */
    
-  onChange={照片发生变化 func(list)}
+  onChange={照片发生变化 func(list, {op: 'chooseSuccess|uploadsSuccess|deleteSuccess'})}
+  onChooseSuccess={照片选择完成 func(list)}
+  onUploadsSuccess={照片上传完成 func(list)}
+  onDeleteSuccess={照片删除完成 func(list)}
 />
 ```
 ### 示例
@@ -1782,6 +1785,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```javascript
 <InputCity
   type={城市类型 string, 默认'area'} // 'area' | 'city'
+  split={分隔符 string, 默认'-'}
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
@@ -1803,6 +1807,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```javascript
 <InputDate
   type={日期类型 string, 默认'date'} // 'date | month | time | datetime'
+  split={分隔符 string, 默认'-'}
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
@@ -2981,6 +2986,7 @@ onClickMask = () => {
 ```javascript
 <PickerCity
   portal={传送dom object, 默认document.getElementById('root')}
+  split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
   className={容器className string, 默认无, 基础'picker'}
   style={容器style object, 默认无}
@@ -3032,6 +3038,7 @@ onClickMask = () => {
 ```javascript
 <PickerDate
   portal={传送dom object, 默认document.getElementById('root')}
+  split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
   className={容器className string, 默认无, 基础'picker'}
   style={容器style object, 默认无}

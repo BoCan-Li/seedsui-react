@@ -9,11 +9,13 @@ import InputCity from '../lib/InputCity';
 import InputDate from '../lib/InputDate';
 import VideoUploader from '../lib/VideoUploader';
 import WqVideoRecord from './WqVideoRecord';
+import WqImgUpload from './WqImgUpload';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      picList: [{upload: true, id: '43213421', thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', src: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'}],
       id: '',
       value: ''
     }
@@ -21,11 +23,11 @@ export default class App extends Component {
   componentDidMount() {
     Bridge.debug = true;
   }
-  onChange = (value, opt) => {
+  onWqPhotoChange = (list) => {
+    console.log(list)
     this.setState({
-      id: Object.type(opt) === 'array' ? opt.map((item) => {return item.id}).join(',') : opt.id,
-      value: value
-    })
+      picList: list
+    });
   }
   onClickCancel = (value, item, index) => {
     console.log(value, item, index);
@@ -37,6 +39,7 @@ export default class App extends Component {
     Bridge.previewVideo({src: args.src});
   }
   render() {
+    const {picList} = this.state;
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
@@ -54,6 +57,7 @@ export default class App extends Component {
         <a href="http://172.31.1.187:3001?isFromApp=confirm">跳转</a>
         <InputCity placeholder="选城市" value="北京,西城区" split=","/>
         <InputDate type="date" placeholder="选日期" value="10:50:10"/>
+        <WqImgUpload list={picList} onChange={this.onWqPhotoChange}/>
       </Container>
     </Page>
   }

@@ -35,7 +35,10 @@ export default class ImgUploader extends Component {
     showCount: PropTypes.bool, // 标题显示图片张字
     watermark: PropTypes.object, // 增加水印
    
-    onChange: PropTypes.func // 照片发生变化
+    onChange: PropTypes.func, // 照片发生变化
+    onChooseSuccess: PropTypes.func, // 照片选择完成
+    onUploadsSuccess: PropTypes.func, // 照片上传完成
+    onDeleteSuccess: PropTypes.func // 照片删除完成
   }
   static defaultProps = {
     enableSafe: false, // 安全上传,第次只能传一张
@@ -56,9 +59,9 @@ export default class ImgUploader extends Component {
     // 初始化图片组件
     this.setState({
       instance: new Bridge.Image({
-        onChooseSuccess: this.onChooseSuccess,
-        onUploadsSuccess: this.onUploadsSuccess,
-        onUploadFail: this.onUploadFail,
+        onChooseSuccess: this.chooseSuccess,
+        onUploadsSuccess: this.uploadsSuccess,
+        onUploadFail: this.uploadFail,
       })
     });
   }
@@ -98,6 +101,7 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img,
+          name: img, // 外勤客户端用于上传到服务器dir+name拼接时使用
           src: img,
           thumb: img,
           sourceType: imgMap[img].sourceType,
@@ -107,7 +111,7 @@ export default class ImgUploader extends Component {
     }
     return list;
   }
-  onChange = (imgMap) => {
+  onChange = (imgMap, op) => {
     var currentList = this.convertList(imgMap);
     // 过滤原有list中和现在list中相同的图片
     var prevList = this.props.list.filter((item) => {
@@ -118,12 +122,17 @@ export default class ImgUploader extends Component {
     })
     var list = currentList.concat(prevList);
     // Callback
-    if (this.props.onChange) this.props.onChange(list);
+    if (this.props.onChange) this.props.onChange(list, op);
   }
-  onChooseSuccess = (imgMap) => {
-    this.onChange(imgMap);
+  chooseSuccess = (imgMap) => {
+    this.onChange(imgMap, {op: 'chooseSuccess'});
+    if (this.props.onChooseSuccess) this.props.onChooseSuccess(this.convertList(imgMap));
   }
-  onUploadFail = (index) => {
+  uploadsSuccess = (imgMap) => {
+    this.onChange(imgMap, {op: 'uploadsSuccess'});
+    if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(this.convertList(imgMap));
+  }
+  uploadFail = (index) => {
     // 删除上传错误的一项
     const list = Object.clone(this.props.list);
     list.splice(index, 1);
@@ -135,9 +144,6 @@ export default class ImgUploader extends Component {
         Bridge.showToast(res.msg, {mask: false});
       }
     });
-  }
-  onUploadsSuccess = (imgMap) => {
-    this.onChange(imgMap);
   }
   chooseImg = () => {
     const {enableSafe, max, sourceType, sizeType, watermark} = this.props;
@@ -156,7 +162,8 @@ export default class ImgUploader extends Component {
       return true
     });
     // Callback
-    if (this.props.onChange) this.props.onChange(list);
+    if (this.props.onChange) this.props.onChange(list, {op: 'deleteSuccess'});
+    if (this.props.onDeleteSuccess) this.props.onDeleteSuccess(list);
   }
   render() {
     const {
