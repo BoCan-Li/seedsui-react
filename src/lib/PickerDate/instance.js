@@ -10,6 +10,8 @@ var PickerDate = function (params) {
     Model
     ---------------- */
   var defaults = {
+    split: '-',
+    
     viewType: 'date', // 'date','month','time','datetime'
     isSimpleYear: false,
 
@@ -239,10 +241,10 @@ var PickerDate = function (params) {
     var activeKeys = activeData.map(function (n, i, a) {
       return n['key']
     })
-    if (s.params.viewType === 'date') return activeKeys[0] + '-' + activeKeys[1] + '-' + activeKeys[2]
-    else if (s.params.viewType === 'datetime') return activeKeys[0] + '-' + activeKeys[1] + '-' + activeKeys[2] + ' ' + activeKeys[3] + ':' + activeKeys[4]
+    if (s.params.viewType === 'date') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2]
+    else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + ':' + activeKeys[4]
     else if (s.params.viewType === 'time') return activeKeys[0] + ':' + activeKeys[1]
-    else if (s.params.viewType === 'month') return activeKeys[0] + '-' + activeKeys[1]
+    else if (s.params.viewType === 'month') return activeKeys[0] + s.params.split + activeKeys[1]
   }
   s.setDefaultsByKeys = function (activeKeys) {
     if (s.params.viewType === 'date' || s.params.viewType === 'datetime' || s.params.viewType === 'month') {

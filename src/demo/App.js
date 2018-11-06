@@ -5,6 +5,8 @@ import Container from '../lib/Container';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import InputWaiqin from '../lib/InputWaiqin';
+import InputCity from '../lib/InputCity';
+import InputDate from '../lib/InputDate';
 import VideoUploader from '../lib/VideoUploader';
 import WqVideoRecord from './WqVideoRecord';
 
@@ -50,6 +52,8 @@ export default class App extends Component {
           }
         ]}/>
         <a href="http://172.31.1.187:3001?isFromApp=confirm">跳转</a>
+        <InputCity placeholder="选城市" value="北京,西城区" split=","/>
+        <InputDate type="date" placeholder="选日期" value="10:50:10"/>
       </Container>
     </Page>
   }

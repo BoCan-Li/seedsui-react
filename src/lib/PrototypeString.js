@@ -95,24 +95,20 @@ window.String.prototype.isQueryId = function () {
   return true
 }
 // 判断是否是合法的日期 yyyy-MM-dd
-window.String.prototype.isDate = function () {
-  if (/^[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}$/.test(this)) return true
-  return false
+window.String.prototype.isDate = function (split) {
+  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}$`).test(this)
 }
 // 判断是否是合法的月份 yyyy-MM
-window.String.prototype.isMonth = function () {
-  if (/^[0-9]{4}[-/][0-9]{2}$/.test(this)) return true
-  return false
+window.String.prototype.isMonth = function (split) {
+  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}$`).test(this)
 }
 // 判断是否是日期格式 yyyy-MM-dd HH:mm:ss 或 yyyy-MM-dd HH:mm
-window.String.prototype.isDateTime = function () {
-  if (/^[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$/.test(this)) return true
-  return false
+window.String.prototype.isDateTime = function (split) {
+  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}\\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(this)
 }
 // 判断是否是时间格式 HH:mm 或 HH:mm:ss
 window.String.prototype.isTime = function () {
-  if (/^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$/.test(this)) return true
-  return false
+  return new RegExp(`^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(this)
 }
 // 转换成日期
 window.String.prototype.toDate = function (dateSplit) {

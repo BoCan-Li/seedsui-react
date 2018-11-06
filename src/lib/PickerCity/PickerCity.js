@@ -7,6 +7,7 @@ import Instance from './instance.js';
 export default class PickerCity extends Component {
   static propTypes = {
     portal: PropTypes.object,
+    split: PropTypes.string,
     type: PropTypes.string, // area | city
     className: PropTypes.string,
     style: PropTypes.object,
@@ -17,6 +18,7 @@ export default class PickerCity extends Component {
     onClickSubmit: PropTypes.func
   }
   static defaultProps = {
+    split: '-',
     type: 'area'
   }
   constructor(props) {
@@ -51,7 +53,7 @@ export default class PickerCity extends Component {
     var defaultValue = this.props.value;
     var defaultValues = [];
     if (defaultValue) {
-      defaultValues = defaultValue.split('-').map((item) => {
+      defaultValues = defaultValue.split(this.props.split).map((item) => {
         return item.trim();
       });
     }
@@ -62,6 +64,7 @@ export default class PickerCity extends Component {
     // render数据
     const instance = new Instance({
       mask: this.$el,
+      split: this.props.split,
       viewType: this.props.type,
       data: citys,
       defaultProvince: defaultValues[0] || '',

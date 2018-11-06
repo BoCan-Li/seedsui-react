@@ -6,6 +6,7 @@ import Instance from './instance.js';
 export default class PickerDate extends Component {
   static propTypes = {
     portal: PropTypes.object,
+    split: PropTypes.string,
     type: PropTypes.string, // 'date','month','time','datetime'
     className: PropTypes.string,
     style: PropTypes.object,
@@ -18,6 +19,7 @@ export default class PickerDate extends Component {
     onError: PropTypes.func
   }
   static defaultProps = {
+    split: '-',
     type: 'date'
   }
   constructor(props) {
@@ -48,56 +50,62 @@ export default class PickerDate extends Component {
     this.state.instance.update();
   }
   getDefault = () => {
-    const {type, onError} = this.props;
-    var defaultValue = this.props.value
-    var defaultYear = ''
-    var defaultMonth = ''
-    var defaultDay = ''
-    var defaultHour = ''
-    var defaultMinute = ''
+    const {split, type, onError} = this.props;
+    var defaultValue = this.props.value;
+    var now = new Date();
+    var nowYear = now.getFullYear();
+    var nowMonth = now.getMonth() + 1;
+    var nowDate = now.getDate();
+    var nowHour = now.getHours();
+    var nowMinute = now.getMinutes();
+    var defaultYear = nowYear;
+    var defaultMonth = nowMonth < 10 ? '0' + nowMonth : nowMonth;
+    var defaultDay = nowDate < 10 ? '0' + nowDate : nowDate;
+    var defaultHour = nowHour < 10 ? '0' + nowHour : nowHour;
+    var defaultMinute = nowMinute < 10 ? '0' + nowMinute : nowMinute;
     // 默认值
     if (type === 'date') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(defaultValue)) {
+      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
         if (onError) onError('请传入合法的日期');
-        defaultValue = new Date().format('yyyy-MM-dd');
+      } else {
+        let dateValues = defaultValue.split(this.props.split)
+        defaultYear = dateValues[0]
+        defaultMonth = dateValues[1]
+        defaultDay = dateValues[2] || '01'
       }
-      let dateValues = defaultValue.split('-')
-      defaultYear = dateValues[0]
-      defaultMonth = dateValues[1]
-      defaultDay = dateValues[2] || '01'
     } else if (type === 'month') {
       // 如果不是合法的日期格式
-      if (!defaultValue.isMonth()) {
+      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
         if (onError) onError('请传入合法的年月日期');
-        defaultValue = new Date().format('yyyy-MM');
+      } else {
+        let monthValues = defaultValue.split(this.props.split)
+        defaultYear = monthValues[0]
+        defaultMonth = monthValues[1]
       }
-      let monthValues = defaultValue.split('-')
-      defaultYear = monthValues[0]
-      defaultMonth = monthValues[1]
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
-      if (!defaultValue.isMonth()) {
+      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}\\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
         if (onError) onError('请传入合法的日期时间');
-        defaultValue = new Date().format('yyyy-MM-dd hh:mm');
+      } else {
+        let values = defaultValue.split(' ')
+        let dateValues = values[0].split(this.props.split)
+        let timeValues = values[1].split(':')
+        defaultYear = dateValues[0]
+        defaultMonth = dateValues[1]
+        defaultDay = dateValues[2]
+        defaultHour = timeValues[0]
+        defaultMinute = timeValues[1]
       }
-      let values = defaultValue.split(' ')
-      let dateValues = values[0].split('-')
-      let timeValues = values[1].split(':')
-      defaultYear = dateValues[0]
-      defaultMonth = dateValues[1]
-      defaultDay = dateValues[2]
-      defaultHour = timeValues[0]
-      defaultMinute = timeValues[1]
     } else if (type === 'time') {
       // 如果不是合法的日期格式
-      if (!/^[0-9]{2}:[0-9]{2}$/.test(defaultValue)) {
+      if (!defaultValue || !new RegExp(`^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
         if (onError) onError('请传入合法的时间');
-        defaultValue = new Date().format('hh:mm');
+      } else {
+        let timeValues = defaultValue.split(':')
+        defaultHour = timeValues[0]
+        defaultMinute = timeValues[1]
       }
-      let timeValues = defaultValue.split(':')
-      defaultHour = timeValues[0]
-      defaultMinute = timeValues[1]
     }
     return {
       year: defaultYear,
@@ -170,6 +178,7 @@ export default class PickerDate extends Component {
     // render数据
     const instance = new Instance({
       mask: this.$el,
+      split: this.props.split,
       viewType: this.props.type,
       yearsData: data.yearsData,
       monthsData: data.monthsData,

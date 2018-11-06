@@ -10,6 +10,8 @@ var PickerCity = function (params) {
     Model
     -------------------- */
   var defaults = {
+    split: '-',
+    
     viewType: 'area',
     data: null,
 
@@ -124,8 +126,8 @@ var PickerCity = function (params) {
     })
     var activeText = ''
     if (activeValues[0]) activeText += activeValues[0]
-    if (activeValues[1]) activeText += '-' + activeValues[1]
-    if (activeValues[2] && activeValues[2] !== s.params.defaultValues[0].value) activeText += '-' + activeValues[2]
+    if (activeValues[1]) activeText += s.params.split + activeValues[1]
+    if (activeValues[2] && activeValues[2] !== s.params.defaultValues[0].value) activeText += s.params.split + activeValues[2]
     return activeText
   }
   // 设置选中的keys
