@@ -25,12 +25,35 @@ var Handsign = function (container, params) {
   s.width = s.container.width
   s.height = s.container.height
   s.ctx = s.container.getContext('2d')
-  s.stage_info = s.container.getBoundingClientRect()
+  s.stageInfo = s.container.getBoundingClientRect()
   s.path = {
     beginX: 0,
     beginY: 0,
     endX: 0,
     endY: 0
+  }
+  /* ----------------------
+  Model Method
+  ---------------------- */
+  s.setStrokeStyle = function (strokeStyle) {
+    if (strokeStyle) {
+      s.params.strokeStyle = strokeStyle
+    }
+  }
+  s.setLineWidth = function (lineWidth) {
+    if (lineWidth) {
+      s.params.lineWidth = lineWidth
+    }
+  }
+  s.setSuffix = function (suffix) {
+    if (suffix) {
+      s.params.suffix = suffix
+    }
+  }
+  s.setQuality = function (quality) {
+    if (quality) {
+      s.params.quality = quality
+    }
   }
   /* ----------------------
   Events
@@ -58,22 +81,23 @@ var Handsign = function (container, params) {
     window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
     s.ctx.strokeStyle = s.params.strokeStyle
     s.ctx.lineWidth = s.params.lineWidth
+    s.stageInfo = s.container.getBoundingClientRect()
     s.ctx.beginPath()
     s.ctx.moveTo(
-      e.changedTouches[0].clientX - s.stage_info.left,
-      e.changedTouches[0].clientY - s.stage_info.top
+      e.changedTouches[0].clientX - s.stageInfo.left,
+      e.changedTouches[0].clientY - s.stageInfo.top
     )
-    s.path.beginX = e.changedTouches[0].clientX - s.stage_info.left
-    s.path.beginY = e.changedTouches[0].clientY - s.stage_info.top
+    s.path.beginX = e.changedTouches[0].clientX - s.stageInfo.left
+    s.path.beginY = e.changedTouches[0].clientY - s.stageInfo.top
   }
   s.onTouchMove = function (e) {
     e.stopPropagation()
     s.ctx.lineTo(
-      e.changedTouches[0].clientX - s.stage_info.left,
-      e.changedTouches[0].clientY - s.stage_info.top
+      e.changedTouches[0].clientX - s.stageInfo.left,
+      e.changedTouches[0].clientY - s.stageInfo.top
     )
-    s.path.endX = e.changedTouches[0].clientX - s.stage_info.left
-    s.path.endY = e.changedTouches[0].clientY - s.stage_info.top
+    s.path.endX = e.changedTouches[0].clientX - s.stageInfo.left
+    s.path.endY = e.changedTouches[0].clientY - s.stageInfo.top
     s.ctx.stroke()
   }
   s.onTouchEnd = function (e) {

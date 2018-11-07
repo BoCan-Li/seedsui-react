@@ -26,6 +26,19 @@ export default class Handsign extends Component {
       instance: null
     };
   }
+  componentDidUpdate (prevProps) {
+    if (this.state.instance) {
+      if (prevProps.strokeStyle !== this.props.strokeStyle) {
+        this.state.instance.setStrokeStyle(this.props.strokeStyle);
+      }
+      if (prevProps.lineWidth !== this.props.lineWidth) {
+        this.state.instance.setLineWidth(this.props.lineWidth);
+      }
+      if (prevProps.quality !== this.props.quality) {
+        this.state.instance.setQuality(this.props.quality);
+      }
+    }
+  }
   componentDidMount () {
     if (this.state.instance) return;
     var instance = new Instance(this.$el, {

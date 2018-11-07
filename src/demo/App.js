@@ -8,6 +8,7 @@ import InputWaiqin from '../lib/InputWaiqin';
 import InputCity from '../lib/InputCity';
 import InputDate from '../lib/InputDate';
 import VideoUploader from '../lib/VideoUploader';
+import Handsign from '../lib/Handsign';
 import WqVideoRecord from './WqVideoRecord';
 import WqImgUpload from './WqImgUpload';
 
@@ -17,7 +18,8 @@ export default class App extends Component {
     this.state = {
       picList: [{upload: true, id: '43213421', thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', src: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'}],
       id: '',
-      value: ''
+      value: '',
+      color: "#c72a1d"
     }
   }
   componentDidMount() {
@@ -37,6 +39,11 @@ export default class App extends Component {
   }
   onClickVideo = (args) => {
     Bridge.previewVideo({src: args.src});
+  }
+  onChangeColor = () => {
+    this.setState({
+      color: 'green'
+    })
   }
   render() {
     const {picList} = this.state;
@@ -58,6 +65,8 @@ export default class App extends Component {
         <InputCity placeholder="选城市" value="北京,西城区" split=","/>
         <InputDate type="date" placeholder="选日期" value="10:50:10"/>
         <WqImgUpload list={picList} onChange={this.onWqPhotoChange}/>
+        <Handsign ref={(el) => {this.$handsign = el;}} width={300} strokeStyle={this.state.color} height={300} style={{marginTop: '44px'}}/>
+        <input type="button" value="绿色" onClick={this.onChangeColor}/>
       </Container>
     </Page>
   }
