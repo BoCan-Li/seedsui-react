@@ -200,7 +200,7 @@ var Device = (function () {
         callback()
       }
     }
-    document.body.appendChild(script)
+    if (script.src) document.body.appendChild(script)
   }
   // 获取地址栏参数
   function getUrlParameter(argName, argSearch) {
