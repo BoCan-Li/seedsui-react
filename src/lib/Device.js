@@ -141,17 +141,35 @@ var Device = (function () {
       if (root) root.style.minHeight = 'auto'
     }
   }
+  // 订货客户端ios加载完成
+  function dinghuoIosReady(callback) {
+    /* eslint-disable */
+    if (window.WebViewJavascriptBridge) {
+      return callback(WebViewJavascriptBridge)
+    }
+    if (window.WVJBCallbacks) {
+      return window.WVJBCallbacks.push(callback)
+    }
+    window.WVJBCallbacks = [callback]
+    var WVJBIframe = document.createElement('iframe')
+    WVJBIframe.style.display = 'none'
+    WVJBIframe.src = 'https://__bridge_loaded__'
+    document.documentElement.appendChild(WVJBIframe)
+    setTimeout(function () {
+      document.documentElement.removeChild(WVJBIframe)
+    }, 0)
+    /* eslint-enable */
+  }
   // 动态加载桥接库
   function dynamicLoadBridge(callback) {
-    if (platform !== 'weixin' && platform !== 'waiqin') {
+    if (platform !== 'weixin' && platform !== 'waiqin' && platform !== 'dinghuo') {
       if (callback) window.addEventListener('load', callback, false)
       return
     }
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.defer = 'defer'
-    if (platform === 'weixin') {
-      // 微信
+    if (platform === 'weixin') { // 微信
       script.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
       if (callback) {
         script.onload = function () {
@@ -160,8 +178,7 @@ var Device = (function () {
           })
         }
       }
-    } else if (platform === 'waiqin') {
-      // 外勤
+    } else if (platform === 'waiqin') { // 外勤
       script.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       if (callback) {
         script.onload = function () {
@@ -170,9 +187,20 @@ var Device = (function () {
           })
         }
       }
+    } else if (platform === 'dinghuo') {
+      if (os === 'ios') {
+        dinghuoIosReady(() => {
+          callback()
+        })
+      } else if (os === 'andriod') {
+        document.addEventListener('WebViewJavascriptBridgeReady', () => {
+          callback()
+        }, false)
+      } else {
+        callback()
+      }
     }
     document.body.appendChild(script)
-    
   }
   // 获取地址栏参数
   function getUrlParameter(argName, argSearch) {
