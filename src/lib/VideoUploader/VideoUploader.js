@@ -32,7 +32,6 @@ export default class ImgUploader extends Component {
     readOnly: PropTypes.bool,
 
     showCount: PropTypes.bool, // 标题显示图片张字
-    watermark: PropTypes.object, // 增加水印
    
     onChange: PropTypes.func // 照片发生变化
   }

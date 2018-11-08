@@ -56,7 +56,7 @@ import InputStar from './InputStar';
 import InputText from './InputText';
 import InputVerify from './InputVerify';
 import InputWaiqin from './InputWaiqin'; // 不常用,外勤专用
-import Verify from './Verify';
+// import Jcrop from './Jcrop'; // 不常用,裁切功能,需要引入jcrop插件
 import Legend from './Legend';
 import List from './List';
 import ListPull from './ListPull'; // 不常用
@@ -77,6 +77,7 @@ import Peg from './Peg'; // 不常用
 import Picker from './Picker';
 import PickerCity from './PickerCity';
 import PickerDate from './PickerDate';
+import Player from './Player';
 import Popover from './Popover';
 import Price from './Price';
 import Progress from './Progress';
@@ -96,24 +97,28 @@ import Timepart from './Timepart'; // 不常用
 import Titlebar from './Titlebar';
 import Toast from './Toast';
 import Tree from './Tree'; // 不常用
+import Verify from './Verify';
+import VideoUploader from './VideoUploader'; // 不常用
 import Weather from './Weather'; // 不常用
 
 // utils
 import Ajax from './Ajax.js'; // 不常用
 import Animate from './Animate.js'; // 不常用
 import ApiAxios from './ApiAxios.js';
-// import Superagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
-import BackboneRoute from './Route.js'; // 不常用
+// import ApiSuperagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
+import BackboneRoute from './BackboneRoute.js'; // 不常用
 import DB from './DB.js';
+import CanvasUtil from './CanvasUtil.js'; // 不常用
 import Clipboard from './Clipboard.js';
 import Device from './Device.js';
 import EditUtil from './EditUtil.js'; // 不常用
 import EventUtil from './EventUtil.js'; // 不常用
 import FastClick from './FastClick.js';
 import Form from './Form.js'; // 不常用
-import Fullscreen from './Fullscreen.js'; // 不常用
+import FullScreen from './FullScreen.js'; // 不常用
 import History from './History.js'; // 不常用
 import ImgLazy from './ImgLazy';
+import jsonp from './jsonp'; // 不常用
 import MediaUtil from './MediaUtil.js'; // 不常用
 import Pubsub from './Pubsub.js'; // 不常用
 import ValidateID from './ValidateID.js'; // 不常用
@@ -171,7 +176,7 @@ export {
   InputText,
   InputVerify,
   InputWaiqin, // 不常用,外勤专用
-  Verify,
+  // Jcrop, // 不常用,裁切功能,需要安装jcrop插件
   Legend, // 不常用
   List,
   ListPull,
@@ -192,6 +197,7 @@ export {
   Picker,
   PickerCity,
   PickerDate,
+  Player,
   Popover, // 不常用
   Price,
   Progress,
@@ -211,14 +217,17 @@ export {
   Titlebar,
   Toast,
   Tree,
+  Verify,
+  VideoUploader, // 不常用
   Weather, // 不常用
 
   // utils
   Ajax, // 不常用
   Animate, // 不常用
   ApiAxios,
-  // Superagent,
+  // ApiSuperagent,
   BackboneRoute, // 不常用
+  CanvasUtil,
   Clipboard,
   DB,
   Device,
@@ -226,9 +235,10 @@ export {
   EventUtil, // 不常用
   FastClick,
   Form, // 不常用
-  Fullscreen, // 不常用
+  FullScreen, // 不常用
   History, // 不常用
   ImgLazy,
+  jsonp, // 不常用
   MediaUtil, // 不常用
   Pubsub, // 不常用
   ValidateID, // 不常用

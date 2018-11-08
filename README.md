@@ -152,6 +152,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Picker](#picker) 滚动选择弹框
 - [PickerCity](#pickercity) 城市选择弹框
 - [PickerDate](#pickerdate) 日期选择弹框
+- [Player](#player) 视频播放器
 - [Popover](#popover) 箭头弹框
 - [Price](#price) 价格
 - [Progress](#progress) 进度条
@@ -171,6 +172,8 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Titlebar](#titlebar) 标题栏
 - [Toast](#toast) 提示弹框
 - [Tree](#tree) 树结构
+- [Verify](#verify) 验证码文本框
+- [VideoUploader](#videouploader) 视频上传
 - [Weather](#weather) 天气
 
 ## Actionsheet
@@ -1696,6 +1699,8 @@ const list = [
 
 
 
+
+
 ## IndexBar
 [索引栏](#https://unpkg.com/seedsui-react/src/lib/IndexBar/IndexBar.js)
 , IndexBar组件默认fixed定位, 并在父组件中寻找data-indexbar-name属性的元素, 与indexs对应, 滑动或点击切换时, 修改父组件的scrollTop, 以达到滚动的效果
@@ -2183,56 +2188,6 @@ onValiChange = (error, value, data) => {
 
 
 
-## Verify
-[验证码文本框](#https://unpkg.com/seedsui-react/src/lib/Verify/Verify.js)
-, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
-### 属性
-```javascript
-<Verify
-  autoSent={是否自动发送 bool, 默认无}
-  url={请求url string, 默认'/login/sendLoginSmsVerifyCode.action'}
-  params={请求参数 object, 默认无}
-  syncData={值改变 func(
-      '错误信息',
-      'value',
-      {
-        result: object,
-        status: 'send_fail | send_ok | sent_ok | sent_fail',
-        op: 'click | input | timeover'
-      }
-    )
-  }
-  beforeSent={点击发送 func() => bool, 默认无} // 如果返回字符串,将弹出信息,并不发短信
-  sentDisabled={是否禁用发送验证码 bool, 默认无}
-  sentSecond={秒数 bool, 默认60}
-  sentCaption={发送按钮文字 bool, 默认'发送验证码'}
-  maxLength={长度限制 string | number, 默认6}
-  placeholder={占位符 string, 默认'验证码'}
-  {...others}
-/>
-```
-### 示例
-```javascript
-import Verify from 'seedsui-react/lib/Verify';
-
-const VerifyStyle = {
-  backgroundColor: 'white',
-  padding: '0 12px',
-  borderRadius: '4px'
-}
-
-onValiChange = (error, value, data) => {
-  if (data.op === 'input') {
-    this.setState({
-      verifyCode: value
-    })
-  }
-}
-
-<Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
-```
-[返回目录](#component)
-
 
 
 ## Legend
@@ -2295,6 +2250,9 @@ onSubmit = () => {
 <Jcrop src={srcData} onChange={this.onChange} style={{width: '300px'}}/>
 ```
 [返回目录](#component)
+
+
+
 
 
 ## List
@@ -3084,6 +3042,44 @@ onClickMask = () => {
 
 
 
+
+
+## Player
+[视频播放器](#https://unpkg.com/seedsui-react/src/lib/Player/Player.js)
+
+### 属性
+```javascript
+<Player
+  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
+  className={视频容器className string, 默认无, 基础'player-thumbnail'}
+  style={视频容器style object, 默认无}
+  children={视频容器内子元素 node, 默认无}
+
+  src={视频播放地址 string, 默认无, 基础'player-thumbnail'}
+  onClick={点击视频 func(s), 默认无} // 设置此属性后,默认点击预览将会被此事件代替
+  {...others} // video标签的属性,例如poster
+/>
+```
+### 示例
+```javascript
+import Player from 'seedsui-react/lib/Player';
+
+onClickVideo = (args) => {
+  Bridge.previewVideo({src: args.src});
+}
+
+<Player
+  args={{src: ''}}
+  src={''}
+  onClick={this.onClickVideo}
+/>
+```
+[返回目录](#component)
+
+
+
+
+
 ## Popover
 [箭头弹框](#https://unpkg.com/seedsui-react/src/lib/Popover/Popover.js)
 ### 属性
@@ -3833,6 +3829,115 @@ onSubmit = () => {
 ```
 [返回目录](#component)
 
+
+
+
+
+
+## Verify
+[验证码文本框](#https://unpkg.com/seedsui-react/src/lib/Verify/Verify.js)
+, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+### 属性
+```javascript
+<Verify
+  autoSent={是否自动发送 bool, 默认无}
+  url={请求url string, 默认'/login/sendLoginSmsVerifyCode.action'}
+  params={请求参数 object, 默认无}
+  syncData={值改变 func(
+      '错误信息',
+      'value',
+      {
+        result: object,
+        status: 'send_fail | send_ok | sent_ok | sent_fail',
+        op: 'click | input | timeover'
+      }
+    )
+  }
+  beforeSent={点击发送 func() => bool, 默认无} // 如果返回字符串,将弹出信息,并不发短信
+  sentDisabled={是否禁用发送验证码 bool, 默认无}
+  sentSecond={秒数 bool, 默认60}
+  sentCaption={发送按钮文字 bool, 默认'发送验证码'}
+  maxLength={长度限制 string | number, 默认6}
+  placeholder={占位符 string, 默认'验证码'}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Verify from 'seedsui-react/lib/Verify';
+
+const VerifyStyle = {
+  backgroundColor: 'white',
+  padding: '0 12px',
+  borderRadius: '4px'
+}
+
+onValiChange = (error, value, data) => {
+  if (data.op === 'input') {
+    this.setState({
+      verifyCode: value
+    })
+  }
+}
+
+<Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
+```
+[返回目录](#component)
+
+
+
+## VideoUploader
+[视频上传](#https://unpkg.com/seedsui-react/src/lib/VideoUploader/VideoUploader.js)
+### 属性
+```javascript
+<VideoUploader
+  className={容器className string, 默认无}
+  style={容器style object, 默认无}
+
+  caption={标题文字 node, 默认无}
+  captionStyle={标题style object, 默认无}
+  captionClassName={标题className string, 默认无}
+  list={内容列表 array, 默认[], 格式如下:}
+  // [{
+  //   src: '',
+  //   thumb: ''
+  // }]
+  enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
+  max={最大选择数 number, 默认5}
+  sourceType={上传类型 array, 默认['album', 'camera']}
+  sizeType={压缩 array, 默认['compressed']} // ['original', 'compressed']
+
+  showUpload={是否显示上传按钮 bool, 默认false}
+  showDelete={是否显示删除按钮 bool, 默认false}
+  readOnly={是否只读 bool, 默认false}
+
+  showCount={标题是否显示上传个数 bool, 默认false}
+   
+  onChange={视频发生变化 func(list, {op: 'chooseSuccess|uploadsSuccess|deleteSuccess'})}
+  onChooseSuccess={视频选择完成 func(list)}
+  onUploadsSuccess={视频上传完成 func(list)}
+  onDeleteSuccess={视频删除完成 func(list)}
+/>
+```
+### 示例
+```javascript
+import Bridge from 'seedsui-react/lib/Bridge';
+import VideoUploader from 'seedsui-react/lib/VideoUploader';
+
+onClickVideo = (args) => {
+  Bridge.previewVideo({src: args.src});
+}
+
+<VideoUploader
+  caption="拍摄视频"
+  list={[
+  {
+    src: detail.video_url,
+    onClick: this.onClickVideo
+  }
+]}/>
+```
+[返回目录](#component)
 
 
 

@@ -3,10 +3,27 @@
  * 利用backbone的路由语法，建立极简，适用于手机浏览器的路由
  * 增加了*号路由，等于backbone的defaultAction
  */
+
+// 路由监听示例
+// BackboneRoute.init({
+//   'module1': function(){
+//       console.log(1);
+//   },
+//   'module2/:name/:age': function(){
+//       console.log(2, arguments);
+//   },
+//   'module3(/:name)(/:age)': function(){
+//       console.log('3', arguments);
+//   },
+//   '*': function(){
+//       console.log(404);
+//   }
+// });
+
 /* eslint-disable */
 (function (root) {
 
-  var Route = root.Route = {
+  var Route = root.BackboneRoute = {
     init: function (map) {
       var defaultAction = map['*'];
       if (defaultAction) {
@@ -86,4 +103,4 @@
 
 })(window);
 /* eslint-enable */
-export default window.Route;
+export default window.BackboneRoute;
