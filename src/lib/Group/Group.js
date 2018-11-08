@@ -8,6 +8,9 @@ export default class Group extends Component {
     children: PropTypes.node,
     onClick: PropTypes.func
   }
+  static defaultProps = {
+    className: 'border-tb'
+  }
   constructor(props) {
     super(props);
   }

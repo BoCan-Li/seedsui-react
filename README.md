@@ -197,7 +197,7 @@ import Chat from 'seedsui-react/lib/Chat';
   groupClassName={组className string, 默认无, 基础'actionsheet-group'}
 
   optionStyle={项style object, 默认无}
-  optionClassName={项className string, 默认无, 基础'actionsheet-option'}
+  optionClassName={项className string, 默认'border-b', 基础'actionsheet-option'}
 
   cancelStyle={取消按钮style object, 默认无}
   cancelClassName={取消按钮className string, 默认无, 基础'actionsheet-cancel'}
@@ -1464,7 +1464,7 @@ const products = [
 ```javascript
 <Group
   style={卡片style object, 默认无}
-  className={卡片className string, 默认无, 基础'group'}
+  className={卡片className string, 默认'border-tb', 基础'group'}
   onClick={点击 func(args)}
   {...others}
 >
@@ -3785,6 +3785,13 @@ showMsg = (msg) => {
 ### 属性
 ```javascript
 <Tree
+  // 容器
+  style={树容器style object, 默认无}
+  className={树容器className string, 默认无, 基础'tree-box'}
+  // 树
+  treeStyle={树style object, 默认无}
+  treeClassName={树className string, 默认无, 基础'tree'}
+
   checkbox={是否支持选择 bool, 默认无}
   bar={选中项聚合展现栏 string | node, 默认无}
   selected={选中项 array, 默认无} // 格式 [{id: '', name: '', parentid: ''}]

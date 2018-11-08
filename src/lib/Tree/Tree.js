@@ -4,6 +4,11 @@ import Instance from './instance.js';
 
 export default class Tree extends Component {
   static propTypes = {
+    style: PropTypes.object,
+    className: PropTypes.string,
+    treeStyle: PropTypes.object,
+    treeClassName: PropTypes.string,
+    
     checkbox: PropTypes.bool,
     bar: PropTypes.oneOfType([ // 选中栏
       PropTypes.string,
@@ -84,10 +89,11 @@ export default class Tree extends Component {
       instance
     });
   }
-  render() { 
+  render() {
+    const {style, className, treeStyle, treeClassName} = this.props;
     return (
-      <div ref={(el) => {this.$el = el}} className="tree-box">
-        <ul ref={(el) => {this.$tree = el}} className="tree"></ul>
+      <div ref={(el) => {this.$el = el}} className={`tree-box${className ? ' ' + className : ''}`} style={style}>
+        <ul ref={(el) => {this.$tree = el}} className={`tree${treeClassName ? ' ' + treeClassName : ''}`} style={treeStyle}></ul>
       </div>
     );
   }

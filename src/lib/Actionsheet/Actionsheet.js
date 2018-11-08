@@ -34,6 +34,7 @@ export default class Actionsheet extends Component {
   }
   static defaultProps = {
     cancelCaption: '取消',
+    optionClassName: 'border-b'
   }
   constructor(props) {
     super(props);
