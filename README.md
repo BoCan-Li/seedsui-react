@@ -3633,7 +3633,7 @@ import Ticket from 'seedsui-react/lib/Ticket';
 ```javascript
 <Timeline
   list={列表 array, 默认无, 格式如下:}
-  // [{content: node, icon: node(默认Dot), active: bool}]
+  // [{content: node, icon: node(默认Dot), active: bool, children: node}]
   className={容器className string, 默认无, 基础'timeline'}
   style={容器style object, 默认无}
   badgeStyle={左侧style object, 默认无}

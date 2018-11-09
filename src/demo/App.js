@@ -11,6 +11,7 @@ import VideoUploader from '../lib/VideoUploader';
 import WqVideoRecord from './WqVideoRecord';
 import WqImgUpload from './WqImgUpload';
 import Progress from '../lib/Progress';
+import Timeline from '../lib/Timeline';
 
 export default class App extends Component {
   constructor(props) {
@@ -66,6 +67,17 @@ export default class App extends Component {
         <InputDate type="date" placeholder="选日期" value="10:50:10"/>
         <WqImgUpload list={picList} onChange={this.onWqPhotoChange}/>
         <Progress percentage={200}/>
+        <Timeline list={[
+          {
+            active: true,
+            content: <div style={{paddingBottom: '10px'}}>第一个</div>,
+            children: <hr style={{paddingBottom: '10px'}}/>
+          },
+          {
+            active: false,
+            content: <div style={{paddingBottom: '10px'}}>第二个</div>
+          }
+        ]}/>
       </Container>
     </Page>
   }

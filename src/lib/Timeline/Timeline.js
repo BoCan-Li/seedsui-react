@@ -4,7 +4,7 @@ import Dot from './../Dot';
 
 export default class Timeline extends Component {
   static propTypes = {
-    list: PropTypes.array, // [{content: node, icon: node(默认Dot), active: bool}]
+    list: PropTypes.array, // [{content: node,icon: node(默认Dot), active: bool, children: node}]
     className: PropTypes.string,
     style: PropTypes.object,
     badgeStyle: PropTypes.object,
@@ -24,6 +24,7 @@ export default class Timeline extends Component {
         <div key={index} className={'timeline-case' + (item.active ? ' active' : '')}>
           <div className="timeline-badge" style={badgeStyle}>{item.icon || <Dot className={item.active ? ' active' : ''}/>}</div>
           {item.content}
+          {item.children}
         </div>
       );
     });
