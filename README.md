@@ -3158,14 +3158,22 @@ import Price from 'seedsui-react/lib/Price';
 <Progress
   className={容器className string, 默认无, 基础'progress'}
   style={容器style object, 默认无}
+
   barStyle={进度条style object, 默认无}
   barClassName={进度条className string, 默认无, 基础'progress-bar'}
+
+  captionClassName={进度条文字className string, 默认无, 基础'progress-caption'}
+  captionStyle={进度条文字style object, 默认无}
 
   percentage={百分比 number, 默认无} // 百分比与max min value, 只要一种就行了
   max={最大值 number, 默认100}
   min={最小值 number, 默认0}
-  value={值 string, 默认'0'}
+  value={值 number | string, 默认0}
   showPercentage={是否显示百分比文字 bool, 默认true} // 若为false则不显示文字
+
+  children={子元素 node, 默认无}
+
+  {...others}
 />
 ```
 ### 示例
