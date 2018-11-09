@@ -8,9 +8,9 @@ import InputWaiqin from '../lib/InputWaiqin';
 import InputCity from '../lib/InputCity';
 import InputDate from '../lib/InputDate';
 import VideoUploader from '../lib/VideoUploader';
-import Handsign from '../lib/Handsign';
 import WqVideoRecord from './WqVideoRecord';
 import WqImgUpload from './WqImgUpload';
+import Progress from '../lib/Progress';
 
 export default class App extends Component {
   constructor(props) {
@@ -65,8 +65,7 @@ export default class App extends Component {
         <InputCity placeholder="选城市" value="北京,西城区" split=","/>
         <InputDate type="date" placeholder="选日期" value="10:50:10"/>
         <WqImgUpload list={picList} onChange={this.onWqPhotoChange}/>
-        <Handsign ref={(el) => {this.$handsign = el;}} width={300} strokeStyle={this.state.color} height={300} style={{marginTop: '44px'}}/>
-        <input type="button" value="绿色" onClick={this.onChangeColor}/>
+        <Progress percentage={200}/>
       </Container>
     </Page>
   }
