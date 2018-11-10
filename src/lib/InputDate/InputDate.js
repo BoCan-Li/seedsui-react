@@ -7,6 +7,7 @@ import PickerDate from './../PickerDate';
 export default class InputDate extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
+    valueForKey: PropTypes.string,
     split: PropTypes.string,
     type: PropTypes.string, // 'date | month | time | datetime'
     min: PropTypes.string, // yyyy-MM-dd
@@ -128,10 +129,11 @@ export default class InputDate extends Component {
     return text;
   }
   render() {
-    const {split, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
+    const {valueForKey, split, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerDate
+        valueForKey={valueForKey}
         split={split}
         type={type}
         value={this.$input ? this.$input.value : this.props.value} key="pickerdate"

@@ -12,6 +12,7 @@ export default class PickerDate extends Component {
     style: PropTypes.object,
     data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
     value: PropTypes.string, // 例: 2018-02-26
+    valueForKey: PropTypes.string,
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -51,7 +52,7 @@ export default class PickerDate extends Component {
   }
   getDefault = () => {
     const {split, type, onError} = this.props;
-    var defaultValue = this.props.value;
+    var defaultValue = this.props.valueForKey || this.props.value;
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;

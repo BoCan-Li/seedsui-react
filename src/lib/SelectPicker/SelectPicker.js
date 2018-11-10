@@ -8,6 +8,7 @@ export default class SelectPicker extends Component {
     portal: PropTypes.object,
     multiple: PropTypes.bool, // 是否允许多选
     list: PropTypes.array, // [key: 'xx', value: 'xx']
+    split: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -25,6 +26,7 @@ export default class SelectPicker extends Component {
     onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
+    split: ',',
     slotClassName: 'text-center'
   }
   constructor(props) {
@@ -53,7 +55,7 @@ export default class SelectPicker extends Component {
     const selected = this.props.valueForKey || this.props.value;
     const selectedName = this.props.valueForKey ? 'key' : 'value';
     if (selected) {
-      const options = selected.split(',').map((value) => {
+      const options = selected.split(this.props.split || ',').map((value) => {
         for (var i = 0, li; li = this.props.list[i++];) { // eslint-disable-line
           if (li[selectedName] === value) {
             return li;

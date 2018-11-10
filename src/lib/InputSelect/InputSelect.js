@@ -6,14 +6,11 @@ import SelectPicker from './../SelectPicker';
 export default class InputSelect extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
     valueForKey: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
     ]),
+    split: PropTypes.string,
     list: PropTypes.array, // [{key: '', value: ''}]
     multiple: PropTypes.bool,
     pickerStyle: PropTypes.bool,
@@ -22,6 +19,7 @@ export default class InputSelect extends Component {
     onChange: PropTypes.func
   }
   static defaultProps = {
+    split: ','
   }
   constructor(props) {
     super(props);
@@ -37,7 +35,7 @@ export default class InputSelect extends Component {
     const value = options.map((item) => {
       return item.value;
     });
-    return value.join(',');
+    return value.join(this.props.split || ',');
   }
   getOptions = (options) => {
     return this.props.multiple ? options : options[0]
@@ -72,11 +70,12 @@ export default class InputSelect extends Component {
     });
   }
   render() {
-    const {valueForKey, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {valueForKey, split, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker
         list={list} valueForKey={valueForKey} value={this.$input ? this.$input.value : this.props.value} key="picker"
+        split={split}
         show={this.state.show}
         multiple={multiple}
         style={pickerStyle} className={pickerClassName}

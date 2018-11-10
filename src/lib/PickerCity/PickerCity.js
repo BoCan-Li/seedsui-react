@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import citys from './instance.data.js';
+import data from './instance.data.js';
 import Instance from './instance.js';
 
 export default class PickerCity extends Component {
   static propTypes = {
+    data: PropTypes.array,
     portal: PropTypes.object,
     split: PropTypes.string,
     type: PropTypes.string, // area | city
     className: PropTypes.string,
     style: PropTypes.object,
     value: PropTypes.string,
+    valueForKeys: PropTypes.array,
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -44,11 +46,16 @@ export default class PickerCity extends Component {
     }
   }
   setDefault = () => {
-    const defaultValues = this.getDefaults();
-    this.state.instance.setDefaults(defaultValues);
+    const {valueForKeys} = this.props;
+    if (Array.isArray(valueForKeys) && valueForKeys.length > 1) {
+      this.state.instance.setDefaultKeys(valueForKeys);
+    } else {
+      const defaultValues = this.getDefaultValues();
+      this.state.instance.setDefaultValues(defaultValues);
+    }
     this.state.instance.update();
   }
-  getDefaults = () => {
+  getDefaultValues = () => {
     // 默认值
     var defaultValue = this.props.value;
     var defaultValues = [];
@@ -59,14 +66,24 @@ export default class PickerCity extends Component {
     }
     return defaultValues;
   }
+  getDefaultKeys = () => {
+    if (Array.isArray(this.props.valueForKeys) && this.props.valueForKeys.length > 1) {
+      return this.props.valueForKeys;
+    }
+    return ['', '', ''];
+  }
   initInstance = () => {
-    var defaultValues = this.getDefaults();
+    var defaultValues = this.getDefaultValues();
+    var defaultKeys = this.getDefaultKeys();
     // render数据
     const instance = new Instance({
       mask: this.$el,
       split: this.props.split,
       viewType: this.props.type,
-      data: citys,
+      data: this.props.data || data,
+      defaultProvinceKey: defaultKeys[0] || '',
+      defaultCityKey: defaultKeys[1] || '',
+      defaultAreaKey: defaultKeys[2] || '',
       defaultProvince: defaultValues[0] || '',
       defaultCity: defaultValues[1] || '',
       defaultArea: defaultValues[2] || '',

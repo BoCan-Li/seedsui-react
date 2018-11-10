@@ -15,6 +15,10 @@ var PickerCity = function (params) {
     viewType: 'area',
     data: null,
 
+    defaultProvinceKey: '',
+    defaultCityKey: '',
+    defaultAreaKey: '',
+
     defaultProvince: '北京市',
     defaultCity: '东城区',
     defaultArea: '',
@@ -81,7 +85,7 @@ var PickerCity = function (params) {
   Method
   -------------------- */
   // 根据省市区名获得keys,返回:['320000','320100','320105'],参数:['江苏省','南京市','建邺区']
-  function getKesByValues (values) {
+  s.getKeysByValues = function(values) {
     var keys = []
     for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
       // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
@@ -109,11 +113,66 @@ var PickerCity = function (params) {
     // 如果省市区不对,则返回第一个省第一个市
     return [s.params.data[0].key, s.params.data[0].children[0].key]
   }
-  // 设置选中的省市区,不传参数则读取默认省市区
-  s.setDefaults = function (argActiveValues) {
+  // 根据省市区名获得keys,返回:['江苏省','南京市','建邺区'],参数:['320000','320100','320105']
+  s.getValuesByKeys = function (keys) {
+    var values = []
+    for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
+      // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
+      if (keys[0] && province.key === keys[0]) {
+        values.push(province.value)
+        for (var j = 0, city; city = province.children[j++];) { // eslint-disable-line
+          // 获得市
+          if (keys[1] && city.key === keys[1]) {
+            values.push(city.value)
+            if (keys[2]) {
+              for (var k = 0, area; area = city.children[k++];) { // eslint-disable-line
+                // 获得区
+                if (keys[2] && area.key === keys[2]) {
+                  values.push(area.value)
+                  return values
+                }
+              }
+            } else {
+              return values
+            }
+          }
+        }
+      }
+    }
+    // 如果省市区不对,则返回第一个省第一个市
+    return [s.params.data[0].value, s.params.data[0].children[0].value]
+  }
+  // 获取value,根据key
+  s.getValueByKey = function (key) {
+    for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
+      // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
+      if (province.key === key) return province.value
+      for (var j = 0, city; city = province.children[j++];) { // eslint-disable-line
+        // 获得市
+        if (city.key === key) return city.value
+        for (var k = 0, area; area = city.children[k++];) { // eslint-disable-line
+          // 获得区
+          if (area.key === key) return area.value
+        }
+      }
+    }
+  }
+  // 设置选中的省市区,参数:['江苏省','南京市','建邺区']
+  s.setDefaultValues = function (argActiveValues) {
     var activeValues = argActiveValues || ''
     // 设置选中的key
-    var keys = getKesByValues(activeValues)
+    var keys = s.getKeysByValues(activeValues)
+    if (keys && keys[0]) s.setActiveProvinceKey(keys[0])
+    if (keys && keys[1]) s.setActiveCityKey(keys[1])
+    if (keys && keys[2]) s.setActiveAreaKey(keys[2])
+  }
+  // 设置选中的省市区编码,参数:['320000','320100','320105']
+  s.setDefaultKeys = function (argActiveKeys) {
+    if (!Array.isArray(argActiveKeys) || argActiveKeys.length < 2) {
+      return
+    }
+    // 设置选中的key
+    var keys = argActiveKeys
     if (keys && keys[0]) s.setActiveProvinceKey(keys[0])
     if (keys && keys[1]) s.setActiveCityKey(keys[1])
     if (keys && keys[2]) s.setActiveAreaKey(keys[2])
@@ -238,7 +297,11 @@ var PickerCity = function (params) {
     initSlots()
   }
   // 设置默认选中项
-  s.setDefaults([s.params.defaultProvince, s.params.defaultCity, s.params.defaultArea])
+  if (s.params.defaultProvinceKey && s.params.defaultCityKey) {
+    s.setDefaultKeys([s.params.defaultProvinceKey, s.params.defaultCityKey, s.params.defaultAreaKey])
+  } else {
+    s.setDefaultValues([s.params.defaultProvince, s.params.defaultCity, s.params.defaultArea])
+  }
   // 添加省市区
   initSlots()
   return s

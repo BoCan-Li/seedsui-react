@@ -1789,8 +1789,10 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputCity
-  type={城市类型 string, 默认'area'} // 'area' | 'city'
+  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
+  valueForKeys={选中key array, 默认无}
   split={分隔符 string, 默认'-'}
+  type={城市类型 string, 默认'area'} // 'area' | 'city'
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
@@ -1811,6 +1813,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputDate
+  valueForKey={选中key string, 默认无}
   type={日期类型 string, 默认'date'} // 'date | month | time | datetime'
   split={分隔符 string, 默认'-'}
   pickerClassName={弹出框className string, 默认无}
@@ -1953,12 +1956,14 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 ### 属性
 ```javascript
 <InputSelect
+  valueForKey={选中key number | string, 默认无}
+  split={分隔符 string, 默认'-'}
   multiple={是否允许多选 bool, 默认false}
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
-  valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, options, args), 默认无}
+  {...others}
 />
 ```
 ### 示例
@@ -2943,7 +2948,9 @@ onClickMask = () => {
 ### 属性
 ```javascript
 <PickerCity
+  data={数据源 array, 默认内置数据源}
   portal={传送dom object, 默认document.getElementById('root')}
+  valueForKeys={选中key array, 默认无}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
   className={容器className string, 默认无, 基础'picker'}
@@ -2995,6 +3002,7 @@ onClickMask = () => {
 ### 属性
 ```javascript
 <PickerDate
+  valueForKey={选中key string, 默认无}
   portal={传送dom object, 默认document.getElementById('root')}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
