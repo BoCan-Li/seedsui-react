@@ -12,6 +12,7 @@ import WqImgUpload from './WqImgUpload';
 import Progress from '../lib/Progress';
 import Timeline from '../lib/Timeline';
 import InputSelect from '../lib/InputSelect';
+import InputCity from '../lib/InputCity';
 
 export default class App extends Component {
   constructor(props) {
@@ -21,8 +22,8 @@ export default class App extends Component {
       id: '',
       value: '',
       color: "#c72a1d",
-      date: '',
-      date_name: ''
+      city: '320000,320100,320105',
+      city_name: '中华人民共和国'
     }
   }
   componentDidMount() {
@@ -49,13 +50,11 @@ export default class App extends Component {
     })
   }
   onChange = (value, option) => {
-    console.log(value)
-    console.log(option)
     this.setState({
-      date: value,
-      date_name: option.map((item, index) => {
-        return item.value
-      }).join('-')
+      city_name: 'haha',
+      city: option.map((item, index) => {
+        return item.key
+      }).join(',')
     });
   }
   render() {
@@ -103,6 +102,11 @@ export default class App extends Component {
             value: '3呀'
           }
         ]}/>
+        <InputCity valueBindProp placeholder="选地址" split="-"
+          value={this.state.city_name}
+          valueForKey={this.state.city}
+          onChange={this.onChange}
+        />
       </Container>
     </Page>
   }

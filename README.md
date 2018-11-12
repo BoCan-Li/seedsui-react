@@ -2950,7 +2950,7 @@ onClickMask = () => {
 <PickerCity
   data={数据源 array, 默认内置数据源}
   portal={传送dom object, 默认document.getElementById('root')}
-  valueForKeys={选中key array, 默认无}
+  valueForKey={选中key string, 默认无}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
   className={容器className string, 默认无, 基础'picker'}

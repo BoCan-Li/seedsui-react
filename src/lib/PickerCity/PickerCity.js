@@ -13,7 +13,7 @@ export default class PickerCity extends Component {
     className: PropTypes.string,
     style: PropTypes.object,
     value: PropTypes.string,
-    valueForKeys: PropTypes.array,
+    valueForKey: PropTypes.string,
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -46,9 +46,9 @@ export default class PickerCity extends Component {
     }
   }
   setDefault = () => {
-    const {valueForKeys} = this.props;
-    if (Array.isArray(valueForKeys) && valueForKeys.length > 1) {
-      this.state.instance.setDefaultKeys(valueForKeys);
+    const {valueForKey, split} = this.props;
+    if (valueForKey && valueForKey.split(split).length > 1 && valueForKey.split(split).some(key => {return !isNaN(key)})) {
+      this.state.instance.setDefaultKeys(valueForKey.split(split));
     } else {
       const defaultValues = this.getDefaultValues();
       this.state.instance.setDefaultValues(defaultValues);
@@ -67,8 +67,9 @@ export default class PickerCity extends Component {
     return defaultValues;
   }
   getDefaultKeys = () => {
-    if (Array.isArray(this.props.valueForKeys) && this.props.valueForKeys.length > 1) {
-      return this.props.valueForKeys;
+    const {valueForKey, split} = this.props;
+    if (valueForKey && valueForKey.split(split).length > 1) {
+      return valueForKey.split(split);
     }
     return ['', '', ''];
   }

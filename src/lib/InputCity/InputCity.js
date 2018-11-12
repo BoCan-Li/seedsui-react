@@ -6,7 +6,7 @@ import PickerCity from './../PickerCity';
 export default class InputCity extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
-    valueForKeys: PropTypes.array,
+    valueForKey: PropTypes.string,
     split: PropTypes.string,
     type: PropTypes.string, // 'area' | 'city'
     pickerStyle: PropTypes.bool,
@@ -63,11 +63,11 @@ export default class InputCity extends Component {
     });
   }
   render() {
-    const {valueForKeys, split, type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerCity
-        valueForKeys={valueForKeys}
+        valueForKey={valueForKey}
         split={split}
         type={type}
         value={this.$input ? this.$input.value : this.props.value} key="pickercity"
