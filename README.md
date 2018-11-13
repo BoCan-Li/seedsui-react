@@ -1789,6 +1789,21 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputCity
+  data={数据源 array, 默认内置数据源}
+  dataKeyPropertyName={data数据key的属性名称 string, 默认'key'}
+  dataValuePropertyName={data数据value的属性名称 string, 默认'value'}
+  dataChildPropertyName={data数据child的属性名称 string, 默认'children'}
+  // export default [
+  //   {
+  //     "value": "北京",
+  //     "children": [
+  //       {
+  //         "value": "东城区",
+  //         "key": "110101"
+  //       }
+  //     ]
+  //   }
+  // ]
   valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
   valueForKeys={选中key array, 默认无}
   split={分隔符 string, 默认'-'}
@@ -2949,6 +2964,20 @@ onClickMask = () => {
 ```javascript
 <PickerCity
   data={数据源 array, 默认内置数据源}
+  dataKeyPropertyName={data数据key的属性名称 string, 默认'key'}
+  dataValuePropertyName={data数据value的属性名称 string, 默认'value'}
+  dataChildPropertyName={data数据child的属性名称 string, 默认'children'}
+  // export default [
+  //   {
+  //     "value": "北京",
+  //     "children": [
+  //       {
+  //         "value": "东城区",
+  //         "key": "110101"
+  //       }
+  //     ]
+  //   }
+  // ]
   portal={传送dom object, 默认document.getElementById('root')}
   valueForKey={选中key string, 默认无}
   split={分隔符 string, 默认'-'}

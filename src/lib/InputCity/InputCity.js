@@ -5,10 +5,15 @@ import PickerCity from './../PickerCity';
 
 export default class InputCity extends Component {
   static propTypes = {
+    data: PropTypes.array,
+    dataKeyPropertyName: PropTypes.string,
+    dataValuePropertyName: PropTypes.string,
+    dataChildPropertyName: PropTypes.string,
+
     valueBindProp: PropTypes.bool,
     valueForKey: PropTypes.string,
     split: PropTypes.string,
-    type: PropTypes.string, // 'area' | 'city'
+    type: PropTypes.string, // 'district' | 'city'
     pickerStyle: PropTypes.bool,
     pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
@@ -16,7 +21,7 @@ export default class InputCity extends Component {
   }
   static defaultProps = {
     split: '-',
-    type: 'area'
+    type: 'district'
   }
   constructor(props) {
     super(props);
@@ -63,10 +68,17 @@ export default class InputCity extends Component {
     });
   }
   render() {
-    const {valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {
+      data, dataKeyPropertyName, dataValuePropertyName, dataChildPropertyName,
+      valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange, ...others
+    } = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerCity
+        data={data}
+        dataChildPropertyName={dataChildPropertyName}
+        dataKeyPropertyName={dataKeyPropertyName}
+        dataValuePropertyName={dataValuePropertyName}
         valueForKey={valueForKey}
         split={split}
         type={type}

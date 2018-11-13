@@ -7,9 +7,13 @@ import Instance from './instance.js';
 export default class PickerCity extends Component {
   static propTypes = {
     data: PropTypes.array,
+    dataKeyPropertyName: PropTypes.string,
+    dataValuePropertyName: PropTypes.string,
+    dataChildPropertyName: PropTypes.string,
+
     portal: PropTypes.object,
     split: PropTypes.string,
-    type: PropTypes.string, // area | city
+    type: PropTypes.string, // district | city
     className: PropTypes.string,
     style: PropTypes.object,
     value: PropTypes.string,
@@ -20,8 +24,13 @@ export default class PickerCity extends Component {
     onClickSubmit: PropTypes.func
   }
   static defaultProps = {
+    data: null,
+    dataKeyPropertyName: 'key',
+    dataValuePropertyName: 'value',
+    dataChildPropertyName: 'children',
+
     split: '-',
-    type: 'area'
+    type: 'district'
   }
   constructor(props) {
     super(props);
@@ -39,6 +48,13 @@ export default class PickerCity extends Component {
   componentDidUpdate = (prevProps) => {
     if (this.state.instance) {
       if (this.props.show) {
+        if (this.props.data) {
+          this.state.instance.setData(this.props.data, {
+            dataChildPropertyName: this.props.dataChildPropertyName,
+            dataKeyPropertyName: this.props.dataKeyPropertyName,
+            dataValuePropertyName: this.props.dataValuePropertyName
+          });
+        }
         this.setDefault();
         this.state.instance.show();
       }
@@ -78,16 +94,20 @@ export default class PickerCity extends Component {
     var defaultKeys = this.getDefaultKeys();
     // render数据
     const instance = new Instance({
+      data: this.props.data || data,
+      dataKeyPropertyName: this.props.dataKeyPropertyName,
+      dataValuePropertyName: this.props.dataValuePropertyName,
+      dataChildPropertyName: this.props.dataChildPropertyName,
+      
       mask: this.$el,
       split: this.props.split,
       viewType: this.props.type,
-      data: this.props.data || data,
       defaultProvinceKey: defaultKeys[0] || '',
       defaultCityKey: defaultKeys[1] || '',
-      defaultAreaKey: defaultKeys[2] || '',
+      defaultDistrictKey: defaultKeys[2] || '',
       defaultProvince: defaultValues[0] || '',
       defaultCity: defaultValues[1] || '',
-      defaultArea: defaultValues[2] || '',
+      defaultDistrict: defaultValues[2] || '',
       onClickMask: (e) => {
         if (this.props.onClickMask) this.props.onClickMask(e)
       },

@@ -13,6 +13,7 @@ import Progress from '../lib/Progress';
 import Timeline from '../lib/Timeline';
 import InputSelect from '../lib/InputSelect';
 import InputCity from '../lib/InputCity';
+import cityData from './city.js';
 
 export default class App extends Component {
   constructor(props) {
@@ -22,12 +23,33 @@ export default class App extends Component {
       id: '',
       value: '',
       color: "#c72a1d",
-      city: '320000,320100,320105',
-      city_name: '中华人民共和国'
+      city: '9,88,1152',
+      city_name: '中华人民共和国',
+      data: cityData,
+      dataValuePropertyName: 'name',
+      dataKeyPropertyName: 'id',
+      dataChildPropertyName: 'child'
     }
   }
   componentDidMount() {
     Bridge.debug = true;
+    // jsonp('https://s1.mi.com/open/common/js/address_all_new.js', null, (err, data) => {
+    //   console.log(err)
+    //   console.log(data)
+    // })
+    // var script = document.createElement('script')
+    // script.type = 'text/javascript'
+    // script.defer = 'defer'
+    // script.src = 'https://s1.mi.com/open/common/js/address_all_new.js'
+    // script.onload = () => {
+    //   this.setState({
+    //     data: data, // eslint-disable-line
+    //     dataChildPropertyName: 'child',
+    //     dataKeyPropertyName: 'id',
+    //     dataValuePropertyName: 'name'
+    //   });
+    // }
+    // document.body.appendChild(script)
   }
   onWqPhotoChange = (list) => {
     console.log(list)
@@ -51,7 +73,7 @@ export default class App extends Component {
   }
   onChange = (value, option) => {
     this.setState({
-      city_name: 'haha',
+      city_name: value,
       city: option.map((item, index) => {
         return item.key
       }).join(',')
@@ -102,7 +124,8 @@ export default class App extends Component {
             value: '3呀'
           }
         ]}/>
-        <InputCity valueBindProp placeholder="选地址" split="-"
+        <InputCity valueBindProp placeholder="选地址" split=","
+          data={this.state.data} dataChildPropertyName={this.state.dataChildPropertyName} dataKeyPropertyName={this.state.dataKeyPropertyName} dataValuePropertyName={this.state.dataValuePropertyName}
           value={this.state.city_name}
           valueForKey={this.state.city}
           onChange={this.onChange}
