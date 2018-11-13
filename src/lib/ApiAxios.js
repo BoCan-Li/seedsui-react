@@ -1,3 +1,4 @@
+// require (PrototypeObject.js)
 import axios from 'axios'
 
 // 封装成Api类
