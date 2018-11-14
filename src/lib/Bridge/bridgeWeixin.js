@@ -32,6 +32,7 @@ var Bridge = {
         }
         if (!wx) { // eslint-disable-line
           if (opts.onError) opts.onError({code: 'bridgeInitFail', msg: '微信组件下载失败,如需使用本地能力,请返回重试'})
+          else BridgeBrowser.showToast('微信组件下载失败,如需使用本地能力,请返回重试', {mask: false})
           return
         }
         // 记录日志
@@ -52,21 +53,17 @@ var Bridge = {
           DB.setSession('bridge_isready', '-1')
           // Callback
           var errMsg = '微信鉴权失败,请退出重试' + JSON.stringify(res)
-          BridgeBrowser.showToast(errMsg, {mask: false})
           if (opts.onError) opts.onError({code: 'oauthFail', msg: errMsg})
+          else BridgeBrowser.showToast(errMsg, {mask: false})
         })
       } else {
-        var errMsg = response.message
-        BridgeBrowser.showToast(errMsg, {mask: false})
-        if (opts.onError) opts.onError({code: 'oauthInterfaceFail', msg: errMsg})
+        if (opts.onError) opts.onError({code: 'oauthInterfaceFail', msg: response.message})
+        else BridgeBrowser.showToast(response.message, {mask: false})
       }
     })
     .catch(err => {
-      if (opts.onError) {
-        opts.onError({code: 'oauthInterfaceFail', msg: 'getJsApiTicket微信鉴权失败,请稍后重试'})
-      } else {
-        alert('getJsApiTicket微信鉴权失败,请稍后重试')
-      }
+      if (opts.onError) opts.onError({code: 'oauthInterfaceFail', msg: 'getJsApiTicket微信鉴权失败,请稍后重试'})
+      else BridgeBrowser.showToast('getJsApiTicket微信鉴权失败,请稍后重试', {mask: false})
     })
   },
   // 关闭窗口
@@ -136,8 +133,8 @@ var Bridge = {
     setTimeout(() => {
       if (!DB.getCookie('app_location')) {
         var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
-        BridgeBrowser.showToast(errMsg, {mask: false})
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        else BridgeBrowser.showToast(errMsg, {mask: false})
       }
     }, 5000)
     // 定位
@@ -151,14 +148,14 @@ var Bridge = {
           if (params.onSuccess) params.onSuccess(res)
         } else {
           var errMsg = '定位失败,请重新进入此页面'
-          BridgeBrowser.showToast(errMsg, {mask: false})
           if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+          else BridgeBrowser.showToast(errMsg, {mask: false})
         }
       },
       fail: function () {
         var errMsg = '定位失败,请检查微信定位权限是否开启'
-        BridgeBrowser.showToast(errMsg, {mask: false})
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        else BridgeBrowser.showToast(errMsg, {mask: false})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)
@@ -221,6 +218,7 @@ var Bridge = {
       },
       fail: function (res) {
         if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res})
+        else BridgeBrowser.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)

@@ -20,7 +20,10 @@ export default class ImgUploader extends Component {
     list: PropTypes.array,
 
     enableSafe: PropTypes.bool,
-    max: PropTypes.number,
+    max: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     sourceType: PropTypes.array,
     sizeType: PropTypes.oneOfType([ // 压缩['original', 'compressed']
       PropTypes.array,

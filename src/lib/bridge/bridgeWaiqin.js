@@ -109,6 +109,7 @@ var Bridge = {
         if (params.onSuccess) params.onSuccess(res)
       } else {
         if (params.onError) params.onError({code: 'videoRecordFail', msg: '录制失败'})
+        else BridgeBrowser.showToast('录制失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -127,6 +128,7 @@ var Bridge = {
         if (params.onSuccess) params.onSuccess(res)
       } else {
         if (params.onError) params.onError({code: 'videoUploadFail', msg: '上传失败'})
+        else BridgeBrowser.showToast('上传失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -160,6 +162,7 @@ var Bridge = {
         if (params && params.onSuccess) params.onSuccess(wqRes)
       } else {
         if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败请稍后重试'})
+        else BridgeBrowser.showToast('扫码失败请稍后重试', {mask: false})
       }
     })
   },
@@ -207,6 +210,7 @@ var Bridge = {
         if (params.onSuccess) params.onSuccess(location)
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -248,7 +252,8 @@ var Bridge = {
         }
         if (params.onSuccess) params.onSuccess(location)
       } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查外勤365定位权限是否开启'})
+        else BridgeBrowser.showToast('定位失败,请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -342,11 +347,11 @@ var Bridge = {
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
-      BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
+      BridgeBrowser.showToast('请传入上传路径dir后再上传图片', {mask: false})
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      BridgeBrowser.showToast('请传入上传图片列表后再上传图片')
+      BridgeBrowser.showToast('请传入上传图片列表后再上传图片', {mask: false})
       return;
     }
     // 格式化params

@@ -1652,7 +1652,7 @@ this.state.lazy.load();
   //   thumb: ''
   // }]
   enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
-  max={最大选择数 number, 默认5}
+  max={最大选择数 string | number, 默认5}
   sourceType={上传类型 array, 默认['album', 'camera']}
   sizeType={压缩 array, 默认['compressed']} // ['original', 'compressed']
 

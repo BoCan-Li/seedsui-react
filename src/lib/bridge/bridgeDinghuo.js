@@ -213,6 +213,7 @@ var Bridge = {
         if (params.onSuccess) params.onSuccess(res)
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
     })
   },
