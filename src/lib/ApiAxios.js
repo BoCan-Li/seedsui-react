@@ -7,6 +7,9 @@ function buildParams (params) {
   return params
 }
 const Api = {
+  onError: function (error) {
+    console.warn(error)
+  },
   logOut: function () {
     console.warn('401, 您已被挤下线, 需要重新登录, 可是您未设置ApiAxios.setLogOut方法')
   },
@@ -90,12 +93,11 @@ axios.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     switch (error.response.status) {
-      case 401:
-        // 401 跳转到登录页面
-        Api.logOut(error.response.data.message)
+      case 401: // 401 跳转到登录页面
+        if (Api.logOut) Api.logOut(error.response.data.message)
         break
       default:
-        // alert(JSON.stringify(error.response))
+        if (Api.onError) Api.onError(error)
     }
   }
   return Promise.reject(error)
