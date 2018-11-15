@@ -37,7 +37,10 @@ export default class InputText extends Component {
 
     inputStyle: PropTypes.object,
     inputClassName: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     onClickInput: PropTypes.func,
