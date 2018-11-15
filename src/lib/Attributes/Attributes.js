@@ -195,7 +195,7 @@ export default class Attributes extends Component {
         let isShow = true;
         if (showValidValue && !list[i].value) isShow = false;
         if (showValidName && !list[i].name) isShow = false;
-        if (list[i].show !== undefined) isShow = list[i].show;
+        if (list[i].hasOwnProperty('show')) isShow = list[i].show;
         if (isShow) {
           attrsDOM.push(
             <div key={`row${i}`} className={this.getRowClassName()} style={rowStyle} onClick={() => {this.onClick(list[i], i);}}>
