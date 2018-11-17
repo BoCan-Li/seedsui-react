@@ -95,3 +95,67 @@ window.Array.prototype.toStringOption = function () {
     return item
   })
 }
+
+/* -----------------------------------------------------
+  树数据扁平化, 将树的children拉平, 必须有parentid
+  @return [{},{}]
+ ----------------------------------------------------- */
+window.Array.prototype.flattenTree = function () {
+  var list = this
+  if (!Array.isArray(list) || !list.length) return null
+  return _buildTreeToHorizontal(list)
+}
+function _buildTreeToHorizontal (list) { // 扁平化, 将children拉平
+  var tree = []
+  var temp = []
+  // 先将第一层节点放入栈
+  for (var i = 0; i < list.length; i++) {
+    temp.push(list[i])
+  }
+  var item
+  while (temp.length) {
+    item = temp.shift()
+    // 如果该节点有子节点，继续添加进入栈顶
+    if (item.children && item.children.length) {
+      temp = item.children.concat(temp)
+    }
+    delete item.children;
+    // delete item.parIndex;
+    tree.push(item);
+  }
+  return tree
+}
+/* -----------------------------------------------------
+  树数据深度化, 将树的parentid深度为children, 必须有id和parentid
+  @return [{id: xx, children: []}]
+ ----------------------------------------------------- */
+window.Array.prototype.deepTree = function () {
+  var list = this
+  if (!Array.isArray(list) || !list.length) return null
+  if (!list[0].hasOwnProperty('parentid')) return null
+  return _buildTreeToVertical(list)
+}
+function _buildTreeToVertical (list) { // 深度化, 将parentid转成children, 必须有id和parentid
+  var tree = []
+  var parent
+  var i = 0
+  var obj = {}
+  while (i < list.length) {
+    node = list[i++]
+    obj[node.id] = node
+    if (node.parentid && obj[node.parentid]) {
+      parent = obj[node.parentid]
+      if (parent.children) {
+        // node['parIndex'] = parent.parIndex + '.' + (parent.children.length + 1)
+        parent.children.push(node)
+      } else {
+        // node['parIndex'] = parent.parIndex + '.' + 1
+        parent.children = [node]
+      }
+    } else {
+      // node['parIndex'] = 1
+      tree.push(node)
+    }
+  }
+  return tree
+}
