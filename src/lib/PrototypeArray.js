@@ -140,6 +140,7 @@ function _buildTreeToVertical (list) { // 深度化, 将parentid转成children, 
   var parent
   var i = 0
   var obj = {}
+  var node
   while (i < list.length) {
     node = list[i++]
     obj[node.id] = node
