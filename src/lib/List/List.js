@@ -31,9 +31,9 @@ export default class List extends Component {
     onClickThumbnail: PropTypes.func,
 
     showAvatar: PropTypes.bool,
-    avatarStyle: PropTypes.object,
     avatarSrc: PropTypes.string,
     avatarClassName: PropTypes.string,
+    avatarStyle: PropTypes.object,
     avatarAfter: PropTypes.node,
     onClickAvatar: PropTypes.func,
 
@@ -115,19 +115,22 @@ export default class List extends Component {
     }
   }
   render() {
-    const { style, className,
-      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
-      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
-      showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter,
-      showAvatar, avatarSrc, avatarClassName, avatarStyle, avatarAfter,
+    const {
+      args,
+      style, className, onClick,
+      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad, onClickLicon,
+      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad, onClickRicon,
+      showThumbnail, thumbnailSrc, thumbnailClassName, thumbnailStyle, thumbnailAfter, onClickThumbnail,
+      showAvatar, avatarSrc, avatarClassName, avatarStyle, avatarAfter, onClickAvatar,
       caption, captionClassName, captionStyle,
-      rcaption, rcaptionClassName, rcaptionStyle,
+      rcaption, rcaptionClassName, rcaptionStyle, onClickRcaption,
       sndcaption, sndcaptionClassName, sndcaptionStyle,
-      containerClassName, containerStyle, containerAfter,
-      lazyLoad
+      containerClassName, containerStyle, containerAfter, onClickContainer,
+      lazyLoad,
+      ...others
     } = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+      <div ref={el => {this.$el = el;}} className={`list-li${className ? ' ' + className : ''}`} style={style} onClick={this.onClick} {...others}>
         {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
         {showThumbnail && <Icon lazyLoad={lazyLoad} src={thumbnailSrc || ''} baseClassName={`list-thumbnail${thumbnailClassName ? ' ' + thumbnailClassName : ''}`} style={thumbnailStyle} onClick={this.onClickThumbnail}>
