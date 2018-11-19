@@ -1707,6 +1707,8 @@ const list = [
 ### 属性
 ```javascript
 <IndexBar
+  overflowContainer={滚动区域 any, 默认document.body}
+  parent={DOM注入容器 any, 默认document.body}
   className={索引栏className string, 默认无, 基础'indexbar'}
   style={索引栏style object, 默认无}
   // indexs与父组件中所有data-indexbar-name元素对应即可

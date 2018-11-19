@@ -20,11 +20,15 @@ export default class App extends Component {
       data: cityData,
       dataValuePropertyName: 'name',
       dataKeyPropertyName: 'id',
-      dataChildPropertyName: 'child'
+      dataChildPropertyName: 'child',
+      $overflowContainer: null
     }
   }
   componentDidMount() {
     Bridge.debug = true;
+    this.setState({
+      $overflowContainer: this.$el ? this.$el.$el : null
+    })
     // jsonp('https://s1.mi.com/open/common/js/address_all_new.js', null, (err, data) => {
     //   console.log(err)
     //   console.log(data)
@@ -76,7 +80,7 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
-      <Container>
+      <Container ref={(el) => {this.$el = el}}>
         <ul>
           <li data-indexbar-name="A">A</li>
           <li data-indexbar-name="A">阿华</li>
@@ -130,8 +134,8 @@ export default class App extends Component {
           <li data-indexbar-name="F">福文华</li>
           <li data-indexbar-name="F">方文山</li>
         </ul>
-        <IndexBar style={{top: '44px'}}/>
       </Container>
+      <IndexBar overflowContainer={this.state.$overflowContainer} style={{top: '44px'}}/>
     </Page>
   }
 };

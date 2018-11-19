@@ -4,6 +4,8 @@ import Instance from './instance.js';
 
 export default class IndexBar extends Component {
   static propTypes = {
+    overflowContainer: PropTypes.any, // 滚动区域
+    parent: PropTypes.any, // DOM注入容器
     className: PropTypes.string,
     style: PropTypes.object,
     indexs: PropTypes.array,
@@ -17,9 +19,17 @@ export default class IndexBar extends Component {
       instance: null
     }
   }
+  componentDidUpdate = (prevProps) => {
+    if (this.props.overflowContainer !== prevProps.overflowContainer) {
+      this.state.instance.setOverflowContainer(this.props.overflowContainer);
+    }
+  }
   componentDidMount () {
-    const parent = this.$el.parentNode;
-    var instance = new Instance(parent);
+    const overflowContainer = this.$el.parentNode;
+    var instance = new Instance({
+      overflowContainer: this.props.overflowContainer || overflowContainer,
+      parent: this.props.parent || document.body
+    });
     this.setState({
       instance
     });
