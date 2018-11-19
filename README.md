@@ -158,8 +158,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Progress](#progress) 进度条
 - [Radio](#radio) 单选框
 - [RouteComment](#routecomment) 评价路由
-- [SearchBar](#searchbar) 搜索框
-- [SearchBarPointer](#searchbarpointer) 搜索指针
 - [SearchBoard](#searchboard) 搜索面板
 - [SelectPicker](#selectpicker) 选择弹框
 - [Star](#star) 星星
@@ -3318,73 +3316,6 @@ onClickSubmit = (value, item, index) => {
 
 
 
-## SearchBar
-[搜索栏](https://unpkg.com/seedsui-react/src/lib/SearchBar/SearchBar.js)
-### 属性
-```javascript
-<SearchBar
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'searchbar'}
-  placeholder={占位文字 string, 默认无}
-  value={值 string, 默认无}
-  onClear={清空 func(), 默认无}
-  onChange={值改变 func(value), 默认无}
-  onSubmit={值改变 func(value), 默认无}
-  onClickCancel={点击取消 func(e), 默认无}
-/>
-```
-### 示例
-```javascript
-import SearchBar from 'seedsui-react/lib/SearchBar';
-
-searchOrders = (value) => {
-  console.log(value)
-}
-
-<SearchBar
-  placeholder={'商品名称/单据编号'}
-  value={this.state.searchValue}
-  className="border-b"
-  onSubmit={this.searchOrders}
-  style={{marginLeft: '12px'}}
-/>
-```
-[返回目录](#component)
-
-
-
-## SearchBarPointer
-[搜索指针](https://unpkg.com/seedsui-react/src/lib/SearchBarPointer/SearchBarPointer.js)
-### 属性
-```javascript
-<SearchBarPointer
-  className={容器className string, 默认无, 基础'searchbar'}
-  style={容器style object, 默认无}
-
-  inputClassName={文本框容器className string, 默认无, 基础'searchbar-form'}
-  inputStyle={文本框容器style object, 默认无}
-  placeholder={占位符 string, 默认无}
-
-  onClick={点击容器 func(), 默认无}
-/>
-```
-### 示例
-```javascript
-import SearchBarPointer from 'seedsui-react/lib/SearchBarPointer';
-
-goSearch = () => {
-  history.push('/search');
-}
-
-<SearchBarPointer
-  onClick={this.goSearch}
-  placeholder="输入名称查找商品"
-  style={{margin: '0 12px'}}
-/>
-```
-[返回目录](#component)
-
-
 
 ## SearchBoard
 [搜索面板](https://unpkg.com/seedsui-react/src/lib/SearchBoard/SearchBoard.js)
@@ -3418,13 +3349,14 @@ searchGoods = (value) => {
   // 加载数据
 }
 
-<SearchBar
-  placeholder={'商品名称/单据编号'}
-  value={this.state.searchValue}
-  className="border-b"
-  onSubmit={this.searchGoods}
-  style={{marginLeft: '12px'}}
-/>
+<div className="flex flex-middle" style={style}>
+  <form className="flex flex-middle flex-1" onSubmit={this.searchGoods}>
+    <i className="icon icon-search size20 color-sub"></i>
+    <input type="search" ref={input => this.searchInput = input} className="searchbar-input" placeholder="商品名称/单据编号"/>
+    <i className="icon icon-rdo-close-fill size16 color-sub" onClick={this.onClear}></i>
+  </form>
+  <div style={{display: 'block', fontSize: '15px', lineHeight: '30px', paddingLeft: '10px'}} onClick={this.onClickCancel}>取消</div>
+</div>
 
 <SearchBoard
   show={goods.length === 0 && !this.state.searchValue}

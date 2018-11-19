@@ -83,8 +83,6 @@ import Price from './Price';
 import Progress from './Progress';
 import Radio from './Radio';
 import RouteComment from './RouteComment'; // 不常用
-import SearchBar from './SearchBar';
-import SearchBarPointer from './SearchBarPointer';
 import SearchBoard from './SearchBoard';
 import SelectPicker from './SelectPicker';
 import Star from './Star';
@@ -203,8 +201,6 @@ export {
   Progress,
   Radio,
   RouteComment,
-  SearchBar,
-  SearchBarPointer,
   SearchBoard,
   SelectPicker,
   Star,
