@@ -1,45 +1,23 @@
 // indexbar.less(start)
 .indexbar{
-  position:fixed;
   .flex;
   .flex-vertical;
-  top:0;
-  right:0;
-  bottom:0;
-  font-size: @indexbar-font-size;
-  font-weight:bold;
+  .setIndexbar();
   a{
     .flex;
     .flex-1;
     .flex-middle;
     .flex-center;
-    padding: 0 @6px;
-    color: @indexbar-color;
-    .setIndexBarButton();
+    .setIndexbarButton();
   }
   &.active a{
-    color: @indexbar-color-active;
+    .setIndexbarButtonActive();
   }
 }
 .indexbar-tooltip{
-  display:none;
-  position: fixed;
-  width: @80px;
-  height: @80px;
-  left: 50%;
-  top: 50%;
-  margin-left: -@40px;
-  margin-top: -@40px;
-  border-radius: @40px;
-  text-align: center;
-  line-height: @80px;
-  font-size: @35px;
-  color: #fff;
-  transition: 200ms;
-
-  background-color:@mask-bg;
+  .setIndexbarTooltip();
 }
 .indexbar.active+.indexbar-tooltip{
-  display:block;
+  .setIndexbarTooltipActive();
 }
 // indexbar.less(end)

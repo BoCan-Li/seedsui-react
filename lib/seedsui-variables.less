@@ -471,12 +471,46 @@
 @input-safe-bg2:@warn-bg;
 @input-safe-bg3:@submit-bg;
 
-// IndexBar索引栏
+// Indexbar索引栏
 @indexbar-color: @placeholder;
 @indexbar-color-active: @body-color;
 @indexbar-font-size: @font-size-sm;
-.setIndexBarButton(){
+.setIndexbar(){
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  font-size: @indexbar-font-size;
+  font-weight:bold;
+}
+.setIndexbarButton(){
+  padding: 0 @6px;
+  color: @indexbar-color;
   transform: scale(0.8);
+}
+.setIndexbarButtonActive(){
+  color: @indexbar-color-active;
+}
+.setIndexbarTooltip(){
+  display:none;
+  position: fixed;
+  width: @80px;
+  height: @80px;
+  left: 50%;
+  top: 50%;
+  margin-left: -@40px;
+  margin-top: -@40px;
+  border-radius: @40px;
+  text-align: center;
+  line-height: @80px;
+  font-size: @35px;
+  color: #fff;
+  transition: 200ms;
+
+  background-color:@mask-bg;
+}
+.setIndexbarTooltipActive(){
+  display:block;
 }
 
 // Attribute属性
