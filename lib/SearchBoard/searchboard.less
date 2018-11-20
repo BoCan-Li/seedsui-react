@@ -1,38 +1,20 @@
 // searchbar.less(start)
 .searchboard{
-  background-color: #fff;
-  position: relative;
-  padding-bottom: @10px;
+  .searchBoard();
 }
 .searchboard-caption{
-  .flex;
-  padding: @12px @12px @5px @12px;
-  box-sizing: border-box; 
+  .searchBoardCaption();
 }
 .searchboard-caption-title{
-  display: block;
-  &:extend(.flex-1);
+  .searchBoardCaptionTitle();
 }
 .searchboard-caption-ricon{
 
 }
 .searchboard-icon-trash{
-  width: @16px;
-  height: @16px;
-  font-size: @16px;
-  margin-right: @3px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  .setSearchBoardTrash();
+  .searchBoardIconTrash();
 }
 .searchboard-tag{
-  display: inline-block;
-  background: #F0F2F5;
-  border-radius: @4px;
-  font-size: @13px;
-  color: @titlebar-color;
-  padding: @2px @10px;
-  margin: @5px @12px;
+  .searchBoardTag();
 }
 // searchbar.less(end)
