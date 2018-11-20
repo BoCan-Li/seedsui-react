@@ -159,10 +159,9 @@
 	-webkit-user-select:none;
 }
 
-// 页面设置
-@body-max-width: 540px;
-
 // 设置body样式
+@animation-duration: 300ms;
+@body-max-width: 540px;
 .setBody(){
   // cursor: pointer; // 解决ios点击非点击元素时不触发click的问题
   position: relative;
@@ -194,53 +193,83 @@
   -webkit-backface-visibility:hidden;
 }
 
-// Page
-@pages-position: absolute;
-@page-min-height: 400px;
-.setPage(){
+// Pages
+// @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // ios11安全区域: 向刘海再移动49px
+@safe-bottom: constant(safe-area-inset-bottom); // ios11安全区域: 刘海留白,内容只显示在安全区域
+.setPages(){
+  display: block;
+	box-sizing: border-box;
+  overflow: hidden;
+  
   position: absolute;
-	left: 0;
-	right: 0;
-	background-color: @body-bg;
-	z-index: 1;
-  &:extend(.popup-animation all);
+  top: 0;
+	bottom: 0;
+	width:100%;
+	max-width: @body-max-width;
+  min-height: 400px;
+}
+
+// Page
+.setPage(){
+  // display: block;
+	// box-sizing: border-box;
+  // overflow: hidden;
+
+  // position: absolute;
+  // top: 0;
+	// bottom: 0;
+	// left: 0;
+	// right: 0;
+  // z-index: 1;
+  
+	// background-color: @body-bg;
+  // &:extend(.popup-animation all);
+
+  // flex布局
+  position: absolute;
+  top: 0;
+	bottom: 0;
+  left: 0;
+  right: 0;
+  .flex;
+  .flex-vertical;
 }
 
 // Header
 .setHeader(){
-  position:absolute;
-  top:0;
-  left: 0;
-  right: 0;
-  z-index:1;
-  &+.container{
-    top:@44px;
-  }
+  // position:absolute;
+  // top:0;
+  // left: 0;
+  // right: 0;
+  // z-index:1;
+  // &+.container{
+  //   top:@44px;
+  // }
 }
 
 // Container
 .setContainer(){
-  position:absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position:absolute;
+  // top: 0;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+  // overflow: auto;
+
+  // flex布局
+  .flex-1;
   overflow: auto;
 }
 
 // Footer
 .setFooter(){
-  position:absolute;
-  left: 0;
-  right: 0;
-  z-index:1;
-  bottom:0;
+  // position:absolute;
+  // left: 0;
+  // right: 0;
+  // z-index:1;
+  // bottom:0;
 }
 
-// ios11安全区域
-// @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // 向刘海再移动49px
-@safe-bottom: constant(safe-area-inset-bottom); // 刘海留白,内容只显示在安全区域
-@animation-duration: 300ms;
 
 // 基础
 @font-family:Arial,"Microsoft Yahei";
