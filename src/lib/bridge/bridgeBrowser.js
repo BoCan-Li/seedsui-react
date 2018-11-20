@@ -264,7 +264,7 @@ var Bridge = {
       return
     }
     if (params.onSuccess) params.onSuccess({
-      id: '5365268129453435373',
+      id: '6468207804099075062',
       name: '客户门店经销商1'
     })
   },
