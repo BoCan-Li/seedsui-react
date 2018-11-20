@@ -12,17 +12,12 @@
 	bottom: 0;
 	overflow: hidden;
 }
-.page{
-	position: @page-position;
-	left: 0;
-	right: 0;
-	background-color: @body-bg;
-	z-index: 1;
-	&:extend(.popup-animation all);
-}
 @supports (bottom: constant(safe-area-inset-bottom)) {
-  .pages {
-    bottom: @safe-bottom;
-  }
+	.pages {
+		bottom: @safe-bottom;
+	}
+}
+.page{
+	.setPage();
 }
 // page.less(end)
