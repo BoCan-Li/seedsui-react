@@ -161,9 +161,6 @@
 
 // 页面设置
 @body-max-width: 540px;
-@pages-position: absolute;
-@page-position: absolute;
-@page-min-height: 400px;
 
 // 设置body样式
 .setBody(){
@@ -197,6 +194,48 @@
   -webkit-backface-visibility:hidden;
 }
 
+// Page
+@pages-position: absolute;
+@page-min-height: 400px;
+.setPage(){
+  position: absolute;
+	left: 0;
+	right: 0;
+	background-color: @body-bg;
+	z-index: 1;
+  &:extend(.popup-animation all);
+}
+
+// Header
+.setHeader(){
+  position:absolute;
+  top:0;
+  left: 0;
+  right: 0;
+  z-index:1;
+  &+.container{
+    top:@44px;
+  }
+}
+
+// Container
+.setContainer(){
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+// Footer
+.setFooter(){
+  position:absolute;
+  left: 0;
+  right: 0;
+  z-index:1;
+  bottom:0;
+}
 
 // ios11安全区域
 // @safe-bottom: calc(~"constant(safe-area-inset-bottom) - 49px"); // 向刘海再移动49px
