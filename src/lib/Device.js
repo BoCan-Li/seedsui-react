@@ -35,11 +35,14 @@ var Device = (function () {
   var platform = ''
   var platformVersion = ''
   var platformMatch = null
-  if (ua.indexOf('micromessenger') > -1) {
+  if (device === 'pc') {
+    platform = 'browser'
+  } else if (ua.indexOf('wxwork') > -1) {
+    platform = 'weixinwork'
+    platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
+    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+  } else if (ua.indexOf('micromessenger') > -1) {
     platform = 'weixin'
-    if (device === 'pc') {
-      platform = 'browser'
-    }
     platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('mqqbrowser') > -1) {
@@ -169,7 +172,7 @@ var Device = (function () {
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.defer = 'defer'
-    if (platform === 'weixin') { // 微信
+    if (platform === 'weixin' || platform === 'weixinwork') { // 微信
       script.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
       if (callback) {
         script.onload = function () {
