@@ -176,9 +176,7 @@ var Device = (function () {
       script.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
       if (callback) {
         script.onload = function () {
-          document.addEventListener('WeixinJSBridgeReady', () => {
-            callback()
-          })
+          callback()
         }
       }
     } else if (platform === 'waiqin') { // 外勤
