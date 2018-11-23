@@ -5,7 +5,7 @@ import BridgeWaiqin from './bridgeWaiqin'
 import BridgeBrowser from './bridgeBrowser'
 
 var Bridge = {}
-if (Device.platform === 'weixin') {
+if (Device.platform.indexOf('weixin') !== -1) {
   Bridge = BridgeWeixin
 } else if (Device.platform === 'dinghuo') {
   Bridge = BridgeDinghuo
