@@ -4,7 +4,7 @@ import Device from './../Device.js'
 import DB from './../DB.js'
 
 var Bridge = {
-  platform: 'weixin',
+  platform: Device.platform,
   /**
    * 初始化配置
    * @opts {url: string, params: object, onSuccess: func, onError: func}

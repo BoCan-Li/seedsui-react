@@ -90,7 +90,7 @@ export default class ImgUploader extends Component {
           sourceType: imgMap[img].sourceType
         });
       }
-    } else if (Bridge.platform === 'weixin') {
+    } else if (platform === 'weixin' || platform === 'weixinwork') {
       for (let img in imgMap) {
         list.push({
           id: img,
