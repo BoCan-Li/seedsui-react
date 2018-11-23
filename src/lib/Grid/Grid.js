@@ -205,7 +205,7 @@ export default class Grid extends Component {
       {list.length > 0 && list.map((item, index) =>{
         if (!item) return null;
         return (<li onClick={(e) => {this.onClickCell(e, item, index);}} key={index} className={`grid-cell${cellClassName ? ' ' + cellClassName : ''}`} style={Object.assign({}, this.getLiStyle(), cellStyle)}>
-          <a onClick={(e) => {this.onClickIconBox(e, item, index);}} className={`grid-iconbox${iconBoxClassName ? ' ' + iconBoxClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(iconBoxStyle ? iconBoxStyle : {}, item.style ? item.style : {})}>
+          <span onClick={(e) => {this.onClickIconBox(e, item, index);}} className={`grid-iconbox${iconBoxClassName ? ' ' + iconBoxClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(iconBoxStyle ? iconBoxStyle : {}, item.style ? item.style : {})}>
             {(type !== 'video' && item.type !== 'video') && (item.iconSrc || item.iconClassName || item.thumb) &&
             <Icon
               base={item.thumb ? 'img' : 'icon'}
@@ -230,15 +230,15 @@ export default class Grid extends Component {
               style={Object.assign(iconStyle, item.iconStyle ? item.iconStyle : {})}
               onClick={item.onClick}
             />}
-          </a>
+          </span>
           {item.caption && <label className={`grid-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</label>}
           {item.sndcaption && <label className={`grid-sndcaption${sndcaptionClassName ? ' ' + sndcaptionClassName : ''}`} style={sndcaptionStyle}>{item.sndcaption}</label>}
         </li>);
       })}
       {showUpload === true && <li className={`grid-cell`} style={this.getLiStyle()}>
-        <a onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${iconBoxClassName ? ' ' + iconBoxClassName : ''}`} style={iconBoxStyle}>
+        <span onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${iconBoxClassName ? ' ' + iconBoxClassName : ''}`} style={iconBoxStyle}>
           <Icon className="grid-icon-add"/>
-        </a>
+        </span>
       </li>}
       {/* 如果有子节点，则为自定义节点 */}
       {children.length > 0 && children.map((item, index) => {
