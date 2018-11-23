@@ -167,7 +167,7 @@
   position: relative;
   max-width: @body-max-width;
   margin: 0 auto;
-	background-image: url(//res.waiqin365.com/d/dinghuo365/bodybg.jpg);
+	// background-image: url(//res.waiqin365.com/d/dinghuo365/bodybg.jpg);
 	background-size: cover;
 	background-position: center;
   background-repeat: no-repeat;
@@ -211,32 +211,29 @@
 
 // Page
 .setPage(){
+  // 绝对定布局
   // display: block;
-	// box-sizing: border-box;
-  // overflow: hidden;
-
-  // position: absolute;
-  // top: 0;
-	// bottom: 0;
-	// left: 0;
-	// right: 0;
-  // z-index: 1;
   
-	// background-color: @body-bg;
-  // &:extend(.popup-animation all);
-
   // flex布局
+  .flex;
+  .flex-vertical;
+
+  // 共用
   position: absolute;
   top: 0;
 	bottom: 0;
   left: 0;
   right: 0;
-  .flex;
-  .flex-vertical;
+  z-index: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: @body-bg;
+  &:extend(.popup-animation all);
 }
 
 // Header
 .setHeader(){
+  // 绝对定布局
   // position:absolute;
   // top:0;
   // left: 0;
@@ -249,6 +246,7 @@
 
 // Container
 .setContainer(){
+  // 绝对定布局
   // position:absolute;
   // top: 0;
   // bottom: 0;
@@ -263,6 +261,7 @@
 
 // Footer
 .setFooter(){
+  // 绝对定布局
   // position:absolute;
   // left: 0;
   // right: 0;
@@ -278,7 +277,7 @@
 
 @sub:#9e9e9e;
 @placeholder:#b6b6b6;
-@border:#E5E5E5;
+@border:#e5e5e5;
 @dpborder:#e5e5e5;
 
 @link:@primary-bg;
