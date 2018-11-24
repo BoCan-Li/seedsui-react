@@ -183,7 +183,9 @@ export default class InputText extends Component {
       value = this.correctNumber(value.toString());
     }
     // onChange
-    if (!valueBindProp) target.value = value;
+    if (type !== 'text' && type !== 'password') { // 这几个框不需要矫正,如果放开ios中文输入法会把拼音落进去
+      if (!valueBindProp) target.value = value;
+    }
     if (onChange) onChange(value, this.getArgs(e));
     // 是否显示小叉叉
     if (this.props.clear && !this.props.valueBindProp) {
