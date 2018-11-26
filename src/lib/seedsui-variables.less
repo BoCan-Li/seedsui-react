@@ -1753,6 +1753,28 @@
 @pad-background-size: cover;
 @pc-background-size: cover;
 @pc-lg-background-size: cover;
+.setCarrouselPage(){
+  // 绝对定布局
+  // position:absolute;
+  // top: 0;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+  // overflow: hidden;
+  // .carrousel-wrapper, .carrousel-slide{
+  //   height: 100%;
+  // }
+
+  // flex布局
+  position: relative;
+  .flex;
+  .flex-1;
+  overflow: hidden;
+  .carrousel-wrapper{
+    .flex;
+    .flex-1;
+  }
+}
 .setCarrouselContainer(){
   @media (min-width: 992px) {
     &:hover{
