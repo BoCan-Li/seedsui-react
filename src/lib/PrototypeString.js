@@ -66,12 +66,12 @@ window.String.prototype.toURIComponent = function () {
 window.String.prototype.fromURIComponent = function () {
   return decodeURIComponent(this)
 }
-// 地址栏编码,地址栏不允许有一些特殊字符,可用此方法规避此问题
+// 地址栏编码,地址栏不允许有一些特殊字符,例如%,可用此方法规避此问题
 window.String.prototype.encode = function () {
-  return encodeURIComponent(this.replace(/%/g, 'percent_25_percent')) // 百分号编码
+  return this.toASCII()
 }
 window.String.prototype.decode = function () {
-  return decodeURIComponent(this).replace(/percent_25_percent/g, '%') // 百分号解码
+  return this.fromASCII()
 }
 
 // 去除字符串左右两端的空格
