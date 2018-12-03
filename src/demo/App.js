@@ -76,12 +76,46 @@ export default class App extends Component {
       }).join(',')
     });
   }
+  initChart = () => {
+    var chart = Highcharts.chart('container', {
+      title: {
+        floating:true,
+        text: '已交<br/>80%'
+      },
+      plotOptions: {
+        pie: {
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          }
+        }
+      },
+      series: [{
+        type: 'pie',
+        innerSize: '80%',
+        data: [
+          {y: 45.0},
+          {y: 26.8},
+          {y: 12.8}
+        ]
+      }]
+    }, function(c) { // 图表初始化完毕后的会掉函数
+      // 环形图圆心
+      var centerY = c.series[0].center[1],
+        titleHeight = parseInt(c.title.styles.fontSize);
+      // 动态设置标题位置
+      c.setTitle({
+        y:centerY + titleHeight/2 - 10
+      });
+    });
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
+        <div id="container" style="min-width:200px;height:200px"></div>
         <InputText placeholder="haha"/>
         <InputPassword placeholder="hehe"/>
       </Container>

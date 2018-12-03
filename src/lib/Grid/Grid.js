@@ -149,6 +149,11 @@ export default class Grid extends Component {
     if (this.props.type === 'video' || item.type === 'video') {
       return;
     }
+    // 如果有点击事件,则不走预览
+    if (item.onClick) {
+      item.onClick(item, index, this.getArgs(e));
+      return;
+    }
     // 如果没有src则认为不是相册,不需要预览
     if (!item.src || item.preview === false || this.props.preview === false) {
       return;
