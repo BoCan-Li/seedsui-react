@@ -8,8 +8,7 @@ var Bridge = {}
 if (Device.platform === 'weixin') {
   Bridge = BridgeWeixin
 } else if (Device.platform === 'weixinwork') {
-  Bridge = BridgeDinghuo
-  Bridge.config()
+  Bridge = BridgeWeixin
 } else if (Device.platform === 'dinghuo') {
   Bridge = BridgeDinghuo
   Bridge.config()
