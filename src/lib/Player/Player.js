@@ -45,14 +45,15 @@ export default class Player extends Component {
   onClick = (e) => {
     if (this.props.onClick) {
       this.props.onClick(this.getArgs(e));
-      return;
-    }
-    var target = e.currentTarget.querySelector('video');
-    FullScreen.enter(target);
+    } else {
+      var target = e.currentTarget.querySelector('video');
+      FullScreen.enter(target);
 
-    setTimeout(() => {
-      target.play();
-    }, 500);
+      setTimeout(() => {
+        target.play();
+      }, 500);
+    }
+    e.stopPropagation();
   }
   getType = () => {
     const {src} = this.props;
