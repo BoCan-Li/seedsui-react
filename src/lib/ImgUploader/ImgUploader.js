@@ -170,11 +170,14 @@ export default class ImgUploader extends Component {
   }
   render() {
     const {
-      list,
       className, style,
-      caption, captionClassName, captionStyle, max, showCount,
-      showDelete
+      caption, captionStyle, captionClassName,
+      list,
+      enableSafe, max, sourceType, sizeType, showUpload, showDelete, readOnly, showCount, watermark,
+      onChange, onChooseSuccess, onUploadsSuccess, onDeleteSuccess,
+      ...others
     } = this.props;
+    
     return ([
     caption &&
       <div
@@ -195,6 +198,7 @@ export default class ImgUploader extends Component {
         wing={12}
         space={12}
         style={style}
+        {...others}
       />
     ]);
   }
