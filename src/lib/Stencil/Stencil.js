@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-export default class Dialog extends Component {
+export default class Stencil extends Component {
   static propTypes = {
     className: PropTypes.string,
     style: PropTypes.object
