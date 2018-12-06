@@ -36,7 +36,7 @@ export default class ImgUploader extends Component {
     readOnly: PropTypes.bool,
 
     showCount: PropTypes.bool, // 标题显示图片张字
-    watermark: PropTypes.object, // 增加水印
+    chooseOptions: PropTypes.object, // 选择照片参数
    
     onChange: PropTypes.func, // 照片发生变化
     onChooseSuccess: PropTypes.func, // 照片选择完成
@@ -149,14 +149,14 @@ export default class ImgUploader extends Component {
     });
   }
   chooseImg = () => {
-    const {enableSafe, max, sourceType, sizeType, watermark} = this.props;
+    const {enableSafe, max, sourceType, sizeType, chooseOptions} = this.props;
     this.state.instance.choose({
       enableSafe: enableSafe, // 安全上传,第次只能传一张
       max: max,
       currentCount: this.props.list.length,
       sourceType: sourceType,
       sizeType: sizeType,
-      watermark: watermark
+      chooseOptions: chooseOptions
     });
   }
   deleteImg = (item) => {
@@ -173,7 +173,7 @@ export default class ImgUploader extends Component {
       className, style,
       caption, captionStyle, captionClassName,
       list,
-      enableSafe, max, sourceType, sizeType, showUpload, showDelete, readOnly, showCount, watermark,
+      enableSafe, max, sourceType, sizeType, showUpload, showDelete, readOnly, showCount, chooseOptions,
       onChange, onChooseSuccess, onUploadsSuccess, onDeleteSuccess,
       ...others
     } = this.props;

@@ -543,7 +543,7 @@ var Bridge = {
         currentCount: args.currentCount || 0,
         sourceType: args.sourceType || ['album', 'camera'],
         sizeType: args.sizeType || ['original', 'compressed'],
-        watermark: args.watermark || {}
+        chooseOptions: args.chooseOptions || {}
       }
       /* watermark: {
         photoType: 'xx', // 水印名称
@@ -564,7 +564,7 @@ var Bridge = {
         success: function (res) {
           if(params.onChooseSuccess) params.onChooseSuccess(res)
         }
-      }, option.watermark))
+      }, option.chooseOptions))
     }
   }
 }

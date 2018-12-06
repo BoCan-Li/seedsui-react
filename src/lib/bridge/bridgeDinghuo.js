@@ -448,7 +448,7 @@ var Bridge = {
         currentCount: args.currentCount || 0,
         sourceType: args.sourceType || ['album', 'camera'],
         sizeType: args.sizeType || ['original', 'compressed'],
-        watermark: args.watermark || {}
+        chooseOptions: args.chooseOptions || {}
       }
       /* watermark: {
         orderNo: 'xx', // 编号
@@ -479,7 +479,7 @@ var Bridge = {
           }
           if (params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
         }
-      }, option.watermark))
+      }, option.chooseOptions))
     }
   }
 }
