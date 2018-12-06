@@ -52,10 +52,10 @@ export default class Icon extends Component {
     } = this.props;
     if (base === 'pureImg') {
       if (src && lazyLoad) {
-        return <img alt="" className={`icon-entity icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>
+        return <img alt="" className={`icon-truth icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>
       }
       if (src && !lazyLoad) {
-        return <img alt="" className={`icon-entity icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>
+        return <img alt="" className={`icon-truth icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>
       }
       return null
     }
@@ -70,10 +70,10 @@ export default class Icon extends Component {
     }
     return (
       <span ref={el => {this.$el = el;}} className={`${baseClassName}${className ? ' ' + className : ''}`} style={style} {...others}>
-        {src && base === 'icon' && lazyLoad && <span className={`icon-entity icon-full ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>}
-        {src && base === 'icon' && !lazyLoad && <span className={`icon-entity icon-full ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>}
-        {src && base === 'img' && lazyLoad && <img alt="" className={`icon-entity icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>}
-        {src && base === 'img' && !lazyLoad && <img alt="" className={`icon-entity icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>}
+        {src && base === 'icon' && lazyLoad && <span className={`icon-truth icon-full ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}></span>}
+        {src && base === 'icon' && !lazyLoad && <span className={`icon-truth icon-full ${defaultImgClassName}`} style={Object.assign({backgroundImage: `url(${src})`}, defaultImgStyle)}></span>}
+        {src && base === 'img' && lazyLoad && <img alt="" className={`icon-truth icon-img ${defaultImgClassName}`} style={defaultImgStyle} data-load-src={src}/>}
+        {src && base === 'img' && !lazyLoad && <img alt="" className={`icon-truth icon-img ${defaultImgClassName}`} style={defaultImgStyle} src={src}/>}
         {children}
         {badgeCaption && badgeCaption !== '0' && <Badge className={badgeClassName} style={badgeStyle} limit={badgeLimit} ellipsis={badgeEllipsis}>{badgeCaption}</Badge>}
         {onClickClose && <Close onClick={onClickClose} className={`${closeClassName ? ' ' + closeClassName : ''}`}/>}
