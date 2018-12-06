@@ -7,6 +7,7 @@ import Container from '../lib/Container';
 import InputText from '../lib/InputText';
 import InputPassword from '../lib/InputPassword';
 import cityData from './city.js';
+import WqImgUpload from './WqImgUpload';
 
 export default class App extends Component {
   constructor(props) {
@@ -118,6 +119,7 @@ export default class App extends Component {
         {/* <div id="container" style="min-width:200px;height:200px"></div> */}
         <InputText placeholder="haha"/>
         <InputPassword placeholder="hehe"/>
+        <WqImgUpload list={this.state.picList}/>
       </Container>
     </Page>
   }

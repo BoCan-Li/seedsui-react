@@ -36,6 +36,7 @@ export default class Grid extends Component {
     iconBoxClassName: PropTypes.string, // 图标容器Class
     iconBoxStyle: PropTypes.object, // 图标容器Style
 
+    iconBase: PropTypes.string,
     iconClassName: PropTypes.string,
     iconStyle: PropTypes.object,
     iconDefaultImgClassName: PropTypes.string,
@@ -198,7 +199,7 @@ export default class Grid extends Component {
       className, style, col, list,
       cellClassName, cellStyle,
       iconBoxClassName, iconBoxStyle,
-      iconClassName, iconStyle, iconDefaultImgClassName, iconDefaultImgStyle, lazyLoad,
+      iconBase, iconClassName, iconStyle, iconDefaultImgClassName, iconDefaultImgStyle, lazyLoad,
       iconBadgeClassName,
       closeClassName, onClickDelete,
       captionClassName, captionStyle,
@@ -214,7 +215,7 @@ export default class Grid extends Component {
           <span onClick={(e) => {this.onClickIconBox(e, item, index);}} className={`grid-iconbox${iconBoxClassName ? ' ' + iconBoxClassName : ''}${item.className ? ' ' + item.className : ''}`} style={Object.assign(iconBoxStyle ? iconBoxStyle : {}, item.style ? item.style : {})}>
             {(type !== 'video' && item.type !== 'video') && (item.iconSrc || item.iconClassName || item.thumb) &&
             <Icon
-              base={item.thumb ? 'img' : 'icon'}
+              base={iconBase ? iconBase : item.thumb ? 'img' : 'icon'}
               src={item.iconSrc ? item.iconSrc : item.thumb ? item.thumb : ''}
               lazyLoad={lazyLoad}
               onClick={(e) => {this.onClickIcon(e, item, index);}}
