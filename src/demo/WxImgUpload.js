@@ -50,10 +50,10 @@ export default class WxImgUpload extends Component {
     }
   }
   onChooseSuccess = (list) => {
-    if (this.props.onChange) this.props.onChange(this.props.list.concat(this.watermarkList(list)), this.props.args);
+    if (this.props.onChange) this.props.onChange(this.props.list.concat(list), this.props.args);
   }
   onUploadsSuccess = (list) => {
-    if (this.props.onChange) this.props.onChange(list, this.props.args);
+    if (this.props.onChange) this.props.onChange(this.watermarkList(list), this.props.args);
   }
   onUploadFail = (list) => {
     if (this.props.onChange) this.props.onChange(list, this.props.args);
