@@ -40,7 +40,9 @@ export default class ImgUploader extends Component {
    
     onChange: PropTypes.func, // 照片发生变化
     onChooseSuccess: PropTypes.func, // 照片选择完成
-    onUploadsSuccess: PropTypes.func, // 照片上传完成
+    onUploadsSuccess: PropTypes.func, // 照片全部上传完成
+    onUploadSuccess: PropTypes.func, // 照片上传完成
+    onUploadFail: PropTypes.func, // 照片上传失败
     onDeleteSuccess: PropTypes.func // 照片删除完成
   }
   static defaultProps = {
@@ -64,6 +66,7 @@ export default class ImgUploader extends Component {
       instance: new Bridge.Image({
         onChooseSuccess: this.chooseSuccess,
         onUploadsSuccess: this.uploadsSuccess,
+        onUploadSuccess: this.uploadSuccess,
         onUploadFail: this.uploadFail,
       })
     });
@@ -135,18 +138,13 @@ export default class ImgUploader extends Component {
     this.onChange(imgMap, {op: 'uploadsSuccess'});
     if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(this.convertList(imgMap));
   }
-  uploadFail = (index) => {
-    // 删除上传错误的一项
-    const list = Object.clone(this.props.list);
-    list.splice(index, 1);
-    // Callback
-    if (this.props.onChange) this.props.onChange(list);
-    // 上传失败,则重新鉴权
-    Bridge.config({
-      onError: (res) => {
-        Bridge.showToast(res.msg, {mask: false});
-      }
-    });
+  uploadSuccess = (imgMap) => {
+    this.onChange(imgMap, {op: 'uploadSuccess'});
+    if (this.props.onUploadSuccess) this.props.onUploadSuccess(this.convertList(imgMap));
+  }
+  uploadFail = (imgMap, err) => {
+    this.onChange(imgMap, {op: 'uploadFail', err: err});
+    if (this.props.onUploadFail) this.props.onUploadFail(this.convertList(imgMap), err);
   }
   chooseImg = () => {
     const {enableSafe, max, sourceType, sizeType, chooseOptions} = this.props;

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../lib/Button';
-import Bridge from '../lib/Bridge';
-import MediaUtil from '../lib/MediaUtil';
+import Button from 'seedsui-react/lib/Button';
+import Bridge from 'seedsui-react/lib/Bridge';
+import MediaUtil from 'seedsui-react/lib/MediaUtil';
 
 export default class WqVideoRecord extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.object,
     id: PropTypes.string, // 宴会id
+    vid: PropTypes.string, // 编辑,上传视频的id,如果存在说明已上传
+    vidtime: PropTypes.string, // 编辑,与vid相依存,对应上传视频时长
     onChange: PropTypes.func
   }
   static defaultProps = {
@@ -17,47 +19,12 @@ export default class WqVideoRecord extends Component {
     super(props);
     Bridge.debug = true
     this.state = {
-      recordStatus: '0',
-      recordTime: '',
+      recordStatus: props.vid ? '2' : '0',
+      recordTime: props.vidtime || '',
     }
   }
   componentDidMount = () => {
-    if (this.props.id) {
-      this.videoInfo();
-    }
-  }
-  onChange = (imgMap) => {
-    var currentList = this.convertList(imgMap);
-    // 过滤原有list中和现在list中相同的图片
-    var prevList = this.props.list.filter((item) => {
-      for (let current of currentList) {
-        if (current.id === item.id) return false;
-      }
-      return true;
-    })
-    var list = currentList.concat(prevList);
-    // Callback
-    if (this.props.onChange) this.props.onChange(list);
-  }
-  /* --------------------
-    视频录相
-  ----------------------*/
-  formatDurationWithSec = (sec) => {
-    if (sec < 0) sec = -sec
-    let sec_num = parseInt(sec, 10)
-    let hours = Math.floor(sec_num / 3600)
-    let minutes = Math.floor((sec_num - hours * 3600) / 60)
-    let seconds = sec_num - hours * 3600 - minutes * 60
-    if (hours < 10) {
-      hours = '0' + hours
-    }
-    if (minutes < 10) {
-      minutes = '0' + minutes
-    }
-    if (seconds < 10) {
-      seconds = '0' + seconds
-    }
-    return minutes + ':' + seconds
+    // if (this.props.id) this.videoInfo();
   }
   /* -----------------------------------------------------
     视频录制
@@ -68,6 +35,7 @@ export default class WqVideoRecord extends Component {
     Bridge.videoRecord({
       id: this.props.id,
       onSuccess: (res) => {
+        Bridge.showToast('录制完成,请上传', {mask: false});
         this.setState({
           recordStatus: '1',
           recordTime: MediaUtil.convertTime(res.secs)
@@ -85,6 +53,7 @@ export default class WqVideoRecord extends Component {
     Bridge.videoUpload({
       id: this.props.id,
       onSuccess: (res) => {
+        Bridge.showToast('上传成功', {mask: false});
         this.setState({
           recordStatus: '2'
         });
@@ -150,3 +119,12 @@ export default class WqVideoRecord extends Component {
     );
   }
 }
+/* 用法
+// 视频上传
+onRecordVideo = (res) => {
+  if (res.status === '2') {
+    this.onChange(res.vid, 'vid');
+  }
+}
+{detail.banquet_id && <WqVideoRecord id={'report' + detail.banquet_id} vid={detail.vid} vidtime={detail.time} style={{margin: '10px 12px 10px 16px'}} onChange={this.onRecordVideo}/>}
+*/

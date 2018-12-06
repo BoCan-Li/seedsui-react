@@ -26,8 +26,8 @@ export default class WqImgUpload extends Component {
   /* watermark = {
     caption: '', // 标题
     customerName: '', // 客户名称
-    customerLocation: '' // 门店经纬度
     submitName: '', // 签收评价提交人
+    distanceLocation: '' // 门店经纬度
     aiCheck: ''
   } */
   constructor(props) {
@@ -45,7 +45,7 @@ export default class WqImgUpload extends Component {
     const wqWatermark = watermark ? {
       photoType: watermark.caption || '',
       customerName: watermark.customerName || '',
-      cmLocation: watermark.customerLocation || '',
+      cmLocation: watermark.distanceLocation || '',
       submitName: watermark.submitName || '',
       isAiPicCheck: watermark.isAiPicCheck || ''
     } : null;
@@ -53,7 +53,7 @@ export default class WqImgUpload extends Component {
       <ImgUploader
         list={list}
         max={max}
-        watermark={wqWatermark}
+        chooseOptions={wqWatermark}
         onChooseSuccess={this.onChooseSuccess}
         onDeleteSuccess={this.onDeleteSuccess}
         caption="现场拍照"
@@ -70,3 +70,43 @@ export default class WqImgUpload extends Component {
     );
   }
 }
+/* 用法
+  // 外勤图片处理
+  getWqPicPath = (picList) => { // 设置pic_path提交服务器路径
+    const {detail} = this.props;
+    var paths = picList.map(item => {
+      // 编辑页面: 已有照片,只需要返回name就可以了
+      if (item.upload) return item.name
+      // 新增的照片则需要自己拼
+      return detail.upload_dir + '/' + item.name
+    });
+    return paths.join(',');
+  }
+  onWqPhotoChange = (photo, item) => {
+    console.log(photo, item);
+    this.onChange(photo, item);
+  }
+  uploadWqPhoto = () => {
+    const {detail, fields} = this.props;
+    // 所有图片
+    let picList = [];
+    fields.forEach((item) => {
+      if (item.type === 'pic' && !item.upload && item.currentValue && item.currentValue.length > 0) {
+        picList = picList.concat(item.currentValue);
+      }
+    });
+    // 所有localIds
+    var localIds = [];
+    localIds = picList.map(item => {
+      return item.src
+    });
+    // 离线上传
+    if (localIds.length > 0) {
+      Bridge.uploadImage({
+        dir: detail.upload_dir,
+        localIds
+      });
+    }
+  }
+  <WqImgUpload key={`pic${index}`} args={item} list={item.currentValue} max={item.max_num} sizeType={item.photowd} sourceType={item.is_realtime === '1' ? ['camera'] : ['album', 'camera']} onChange={this.onWqPhotoChange} watermark={{caption: '促销执行', customerName: detail.cm_name, aiCheck: item['allow-copy-check']}}/>
+*/

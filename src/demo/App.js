@@ -7,13 +7,14 @@ import Container from '../lib/Container';
 import InputText from '../lib/InputText';
 import InputPassword from '../lib/InputPassword';
 import cityData from './city.js';
-import WqImgUpload from './WqImgUpload';
+import WxImgUpload from './WxImgUpload';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      picList: [{upload: true, id: '43213421', thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', src: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'}],
+      // picList: [{upload: true, id: '43213421', thumb: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', src: 'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg'}],
+      picList: [],
       id: '',
       value: '',
       color: "#c72a1d",
@@ -119,7 +120,7 @@ export default class App extends Component {
         {/* <div id="container" style="min-width:200px;height:200px"></div> */}
         <InputText placeholder="haha"/>
         <InputPassword placeholder="hehe"/>
-        <WqImgUpload list={this.state.picList}/>
+        <WxImgUpload list={this.state.picList} onChange={this.onWqPhotoChange} watermark={{caption: 'aaa', submitName: 'bbb', customerName: 'ccc'}}/>
       </Container>
     </Page>
   }
