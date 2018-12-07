@@ -10,12 +10,13 @@
 	box-sizing:border-box;
 	color:@titlebar-color;
 	background-color:@titlebar-bg;
+	.setTitlebar();
 }
 // flex布局
 .titlebar.flex{
 	.titlebar-left,.titlebar-right{
 		position:relative;
-		top:0;
+		top:initial;
 		transform:none;
 	}
 }
