@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImgUploader from '../lib/ImgUploader';
+import ImgUploader from 'seedsui-react/lib/ImgUploader';
 
 export default class WqImgUpload extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ export default class WqImgUpload extends Component {
       PropTypes.number
     ]),
     onChange: PropTypes.func,
-    watermark: PropTypes.object
+    watermark: PropTypes.object,
   };
   static defaultProps = {
     list: [],
@@ -40,7 +40,11 @@ export default class WqImgUpload extends Component {
     if (this.props.onChange) this.props.onChange(list, this.props.args);
   }
   render() {
-    const {list, max, sourceType, sizeType, watermark} = this.props;
+    const {
+      args,
+      list, sourceType, sizeType, max, onChange, watermark,
+      ...others
+    } = this.props;
     // 设置水印
     const wqWatermark = watermark ? {
       photoType: watermark.caption || '',
@@ -65,48 +69,49 @@ export default class WqImgUpload extends Component {
         captionStyle={{margin: '10px 12px 0 16px'}}
         sourceType={sourceType}
         sizeType={sizeType}
-        iconBase="icon"
+        {...others}
       />
     );
   }
 }
+
 /* 用法
-  // 外勤图片处理
-  getWqPicPath = (picList) => { // 设置pic_path提交服务器路径
-    const {detail} = this.props;
-    var paths = picList.map(item => {
-      // 编辑页面: 已有照片,只需要返回name就可以了
-      if (item.upload) return item.name
-      // 新增的照片则需要自己拼
-      return detail.upload_dir + '/' + item.name
+// 外勤图片处理
+onWqPhotoChange = (list) => {
+  console.log(list);
+  this.props.setPicList(list)
+}
+getWqPicPath = (picList) => { // 设置保存服务器路径
+  var paths = picList.map(item => {
+    // 编辑页面: 已有照片,只需要返回name就可以了
+    if (item.upload) return item.name
+    // 新增的照片则需要自己拼
+    return LocalBridge.getDir('cuxiao', 'month') + '/' + item.name
+  });
+  return paths.join(',');
+}
+uploadWqPhoto = () => {
+  var dir = LocalBridge.getDir('cuxiao', 'month');
+  var localIds = [];
+  var tenantId = '';
+  // 所有图片
+  var photos = this.props.detail.picList.filter((photo) => {
+    if (photo.upload) return false;
+    return true;
+  });
+  if (!photos.length) return;
+  // 所有localIds
+  localIds = photos.map(item => {
+    return item.src
+  });
+  // 离线上传
+  if (localIds.length > 0) {
+    Bridge.uploadImage({
+      dir,
+      localIds,
+      tenantId
     });
-    return paths.join(',');
   }
-  onWqPhotoChange = (photo, item) => {
-    console.log(photo, item);
-    this.onChange(photo, item);
-  }
-  uploadWqPhoto = () => {
-    const {detail, fields} = this.props;
-    // 所有图片
-    let picList = [];
-    fields.forEach((item) => {
-      if (item.type === 'pic' && !item.upload && item.currentValue && item.currentValue.length > 0) {
-        picList = picList.concat(item.currentValue);
-      }
-    });
-    // 所有localIds
-    var localIds = [];
-    localIds = picList.map(item => {
-      return item.src
-    });
-    // 离线上传
-    if (localIds.length > 0) {
-      Bridge.uploadImage({
-        dir: detail.upload_dir,
-        localIds
-      });
-    }
-  }
-  <WqImgUpload key={`pic${index}`} args={item} list={item.currentValue} max={item.max_num} sizeType={item.photowd} sourceType={item.is_realtime === '1' ? ['camera'] : ['album', 'camera']} onChange={this.onWqPhotoChange} watermark={{caption: '促销执行', customerName: detail.cm_name, aiCheck: item['allow-copy-check']}}/>
+}
+<WqImgUpload key={`pic${index}`} args={item} list={item.currentValue} max={item.max_num} sizeType={item.photowd} sourceType={item.is_realtime === '1' ? ['camera'] : ['album', 'camera']} onChange={this.onWqPhotoChange} watermark={{caption: '促销执行', customerName: detail.cm_name, aiCheck: item['allow-copy-check']}}/>
 */
