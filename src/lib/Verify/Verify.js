@@ -72,7 +72,7 @@ export default class Verify extends Component {
       this.status = 'send_ok';
       syncData('', input.value, {result: null, status: this.status, op: 'click'});
     }
-    ApiAxios.get(url, params).then(result => {
+    ApiAxios.get(url, {data: params}).then(result => {
       if (result.code === '1') {
         this.countdown();
         if (syncData) {
