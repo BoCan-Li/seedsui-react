@@ -115,13 +115,22 @@ Object.params = function (obj, splitter, isNotEnCode) {
 } */
 
 /* -------------------
-获得类型, boolean | number | string | function | array | date | regexp | object
+获得类型, boolean | number | string | function | array | date | regexp | object | json
 ------------------- */
 Object.type = function (obj) {
   if (!obj) {
     return obj + ''
   }
-  return Object.prototype.toString.call(obj).replace('[', '').replace(']', '').split(' ')[1].toLowerCase()
+  var type = Object.prototype.toString.call(obj).replace('[', '').replace(']', '').split(' ')[1].toLowerCase();
+  if (type === 'object') {
+    var objStr = JSON.stringify(obj)
+    try {
+      JSON.parse(objStr);
+      return 'json'
+    } catch(e) {
+    }
+  }
+  return type
 }
 
 /* -------------------

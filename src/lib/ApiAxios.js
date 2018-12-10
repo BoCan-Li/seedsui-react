@@ -1,6 +1,21 @@
 // require (PrototypeObject.js)
 import axios from 'axios'
 
+// axios 默认配置
+// axios.defaults.timeout = 5000
+axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
+
+// 构建get请求参数, get请求需要把url和data拼接起来
+function buildGetUrl (url, params) {
+  if (typeof params === 'string') {
+    return url + '?' + params
+  }
+  if (Object.type(params) === 'json') {
+    return url + '?' + Object.params(params)
+  }
+  return url
+}
+
 // 封装成Api类
 const Api = {
   onError: function (error) {
@@ -15,82 +30,38 @@ const Api = {
   setBaseURL: function (baseURL) {
     axios.defaults.baseURL = baseURL
   },
-  post: function (url, params) {
+  request: function (url, params = {}) {
+    // 设置method
+    var method = params.method || 'post'
+    // 设置头
+    var head = params.head || {}
+    // 设置options
+    var options = params.options || {}
+    // 设置data
+    var data = params.data || {}
     return axios({
-      url: url,
-      method: 'post',
-      data: params
+      url: method === 'get' ? buildGetUrl(url, data) : url,
+      method: method,
+      headers: {
+        ...head
+      },
+      data: method === 'get' ? {} : data,
+      ...options
     })
+  },
+  post: function (url, params = {}) {
+    return this.request(url, Object.assign({}, params, {method: 'post'}))
   },
   get: function (url, params) {
-    return axios({
-      url: url,
-      method: 'get',
-      data: params
-    })
+    return this.request(url, Object.assign({}, params ,{method: 'get'}))
   },
-  all: function (requests) { // [{url: '', method: 'post|get', params: {}}]
+  all: function (requests) { // requests: [{url: '', params: {}}]
     const methods = requests.map((request) => {
-      if (request.method === 'post') {
-        return this.post(request.url, request.params || null)
-      } else {
-        return this.get(request.url, request.params || null)
-      }
+      return this.request(request.url, request.params)
     })
     return axios.all(methods)
   }
 }
-
-// axios 默认配置
-// axios.defaults.timeout = 5000
-axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
-
-// 构建get请求参数
-function buildGetUrl (url, params) {
-  var result = Object.params(params)
-  if (result) return url + '?' + result
-  return url
-}
-
-// 请求拦截器
-axios.interceptors.request.use(config => {
-  var conf = Object.clone(config)
-  // 设置请求数据
-  var req = {}
-  try {
-    req = JSON.parse(config.data)
-  } catch (e) {
-    req = config.data
-  }
-  if (req && req.data) {
-    conf.data = req.data
-  }
-  // 设置头
-  var head = {}
-  if (req && req.head) {
-    head = req.head
-    Object.keys(head).forEach(key => {
-      var value = head[key]
-      conf.headers[key] = value
-    })
-  }
-  // 设置options
-  var options = {}
-  if (req && req.options) {
-    options = req.options
-    Object.keys(options).forEach(key => {
-      var value = options[key]
-      conf[key] = value
-    })
-  }
-  // 设置get请求
-  if (config.method === 'get') {
-    conf.url = buildGetUrl(conf.url, conf.data)
-  }
-  return conf
-}, error => {
-  return Promise.reject(error)
-})
 
 // 响应拦截器
 axios.interceptors.response.use(response => {
