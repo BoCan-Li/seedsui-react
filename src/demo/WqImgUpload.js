@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImgUploader from 'seedsui-react/lib/ImgUploader';
 
+const Required = {
+  position: 'absolute',
+  left: '-10px',
+  top: '4px',
+  height: '10px'
+};
+
 export default class WqImgUpload extends Component {
   static propTypes = {
     args: PropTypes.any,
+    required: PropTypes.bool,
+    caption: PropTypes.node,
     list: PropTypes.array,
     sourceType: PropTypes.array,
     sizeType: PropTypes.oneOfType([ // 压缩['original', 'compressed']
@@ -20,6 +29,7 @@ export default class WqImgUpload extends Component {
     watermark: PropTypes.object,
   };
   static defaultProps = {
+    caption: '现场拍照',
     list: [],
     max: 5
   }
@@ -42,6 +52,7 @@ export default class WqImgUpload extends Component {
   render() {
     const {
       args,
+      required, caption,
       list, sourceType, sizeType, max, onChange, watermark,
       ...others
     } = this.props;
@@ -60,7 +71,7 @@ export default class WqImgUpload extends Component {
         chooseOptions={wqWatermark}
         onChooseSuccess={this.onChooseSuccess}
         onDeleteSuccess={this.onDeleteSuccess}
-        caption="现场拍照"
+        caption={required ? <span><span className="color-badge" style={Required}>*</span><span>{caption}</span></span> : <span>{caption}</span>}
         showUpload
         showDelete
         showCount
