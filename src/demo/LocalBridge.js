@@ -51,7 +51,7 @@ var LocalBridge = {
   getDir: function (module, dateType = 'date') { // report | appeal | returnbottles | reportexe
     var date = new Date();
     var year = date.getFullYear();
-    var month = date.getMonth();
+    var month = date.getMonth() + 1;
     var day = date.getDate();
     if (dateType === 'year') {
       return module + '/' + year;
