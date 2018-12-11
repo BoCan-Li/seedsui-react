@@ -271,10 +271,11 @@ var Bridge = {
             loop(++index)
           },
           fail: function () {
-            var msg = '您选择的第' + index + '张图片上传失败，稍后请重试'
+            var msg = '您选择的第' + index + '张图片上传失败, 稍后请重试'
             BridgeBrowser.showToast(msg, {mask: false})
+            var deleteItem = imgMap[img]
             delete imgMap[img]
-            if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: imgMap[img], code: 'uploadFail', msg: msg})
+            if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, code: 'uploadFail', msg: msg})
             loop(++index)
           }
         })

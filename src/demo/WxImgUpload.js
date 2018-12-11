@@ -47,7 +47,7 @@ export default class WxImgUpload extends Component {
   /* watermark = {
     caption: '', // 标题
     customerName: '', // 客户名称
-    submitName: '', // 签收评价提交人
+    submitName: '', // 提交人
     distanceLocation: '' // 计算比较的偏差位置
   } */
   constructor(props) {
@@ -59,13 +59,27 @@ export default class WxImgUpload extends Component {
       this.watermarkInit();
     }
   }
-  onChooseSuccess = (list) => {
-    if (this.props.onChange) this.props.onChange(this.props.list.concat(list), this.props.args);
+  onChooseSuccess = (currentList) => {
+    if (this.props.onChange) this.props.onChange(this.props.list.concat(currentList), this.props.args);
   }
-  onUploadsSuccess = (list) => {
-    if (this.props.onChange) this.props.onChange(this.watermarkList(list), this.props.args);
+  onUploadsSuccess = (currentList) => {
+    // 过滤原有list中和现在list中相同的图片
+    var prevList = this.props.list.filter((item) => {
+      for (let current of currentList) {
+        if (current.id === item.id) return false;
+      }
+      return true;
+    });
+    // 原图和现图拼合
+    var list = currentList.concat(prevList);
+    list = this.watermarkList(list);
+    if (this.props.onChange) this.props.onChange(list, this.props.args);
   }
-  onUploadFail = (list) => {
+  onUploadFail = (currentList, delItem) => { // delItem: {index: number, item: {serverId: '', sourceType: ''}, code: 'uploadFail', msg: string}
+    const list = this.props.list.filter((photo) => {
+      if (photo.id === delItem.item.serverId) return false
+      return true
+    });
     if (this.props.onChange) this.props.onChange(list, this.props.args);
   }
   onDeleteSuccess = (list) => {
@@ -81,6 +95,7 @@ export default class WxImgUpload extends Component {
     watermarkInfo.time = new Date().format('yyyy-MM-dd hh:mm');
     // 设置address与distance
     this.watermarkLocation(() => {
+      watermark = [];
       if (watermarkInfo.caption) watermark.push(watermarkInfo.caption)
       if (watermarkInfo.customerName) watermark.push(watermarkInfo.customerName)
       if (watermarkInfo.submitName) {

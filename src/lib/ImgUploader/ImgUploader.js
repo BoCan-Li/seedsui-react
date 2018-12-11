@@ -143,7 +143,7 @@ export default class ImgUploader extends Component {
     if (this.props.onUploadSuccess) this.props.onUploadSuccess(this.convertList(imgMap));
   }
   uploadFail = (imgMap, err) => {
-    this.onChange(imgMap, {op: 'uploadFail', err: err});
+    this.onChange(imgMap, Object.assign({op: 'uploadFail'}, err));
     if (this.props.onUploadFail) this.props.onUploadFail(this.convertList(imgMap), err);
   }
   chooseImg = () => {

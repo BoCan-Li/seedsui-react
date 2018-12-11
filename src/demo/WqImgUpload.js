@@ -36,7 +36,7 @@ export default class WqImgUpload extends Component {
   /* watermark = {
     caption: '', // 标题
     customerName: '', // 客户名称
-    submitName: '', // 签收评价提交人
+    submitName: '', // 提交人
     distanceLocation: '' // 门店经纬度
     aiCheck: ''
   } */
