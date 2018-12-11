@@ -18,7 +18,7 @@ const watermarkInfo = {
   address: '',
   distance: ''
 };
-let watermark = [];
+let watermark = {};
 
 export default class WxImgUpload extends Component {
   static propTypes = {
@@ -95,16 +95,16 @@ export default class WxImgUpload extends Component {
     watermarkInfo.time = new Date().format('yyyy-MM-dd hh:mm');
     // 设置address与distance
     this.watermarkLocation(() => {
-      watermark = [];
-      if (watermarkInfo.caption) watermark.push(watermarkInfo.caption)
-      if (watermarkInfo.customerName) watermark.push(watermarkInfo.customerName)
+      watermark = {};
+      if (watermarkInfo.caption) watermark['1'] = watermarkInfo.caption
+      if (watermarkInfo.customerName) watermark['2'] = watermarkInfo.customerName
       if (watermarkInfo.submitName) {
-        watermark.push(watermarkInfo.submitName + ' ' + watermarkInfo.time)
+        watermark['3'] = watermarkInfo.submitName + ' ' + watermarkInfo.time
       } else {
-        watermark.push(watermarkInfo.time)
+        watermark['3'] = watermarkInfo.time
       }
-      if (watermarkInfo.address) watermark.push(watermarkInfo.address)
-      if (watermarkInfo.distance) watermark.push(watermarkInfo.distance)
+      if (watermarkInfo.address) watermark['4'] = watermarkInfo.address
+      if (watermarkInfo.distance) watermark['5'] = watermarkInfo.distance
     });
   }
   watermarkLocation = (success) => {
@@ -172,7 +172,7 @@ export default class WxImgUpload extends Component {
   watermarkList = (list) => {
     if (this.props.watermark && !Object.isEmptyObject(this.props.watermark)) {
       return list.map((item) => {
-        item.watermark = watermark;
+        item.watermark = Object.values(watermark);
         return item;
       })
     } else {
@@ -207,3 +207,26 @@ export default class WxImgUpload extends Component {
     );
   }
 }
+
+/* 用法
+// 微信图片处理
+onWxPhotoChange = (list) => {
+  this.props.setPicList(list)
+}
+getWxPics = (picList) => { // 设置保存服务器路径
+  const {detail} = this.props;
+  var pics = picList.map(item => {
+    // 编辑页面: 已有照片,只需要返回name就可以了
+    if (item.upload) return {
+      value: item.name
+    }
+    // 新增的照片则需要自己拼
+    return {
+      value: detail.upload_dir + '/' + item.serverId + '.jpg',
+      serverId: item.serverId,
+      watermark: item.watermark
+    }
+  });
+  return pics;
+}
+*/
