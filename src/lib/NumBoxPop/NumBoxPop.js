@@ -5,26 +5,21 @@ import NumBox from './../NumBox';
 export default class NumBoxPop extends Component {
   static propTypes = {
     args: PropTypes.any,
+    // 容器
+    show: PropTypes.bool,
+    caption: PropTypes.string,
     // 文本框
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     // events
     onClickCancel: PropTypes.func,
     onClickSubmit: PropTypes.func,
-    show: PropTypes.bool,
-    caption: PropTypes.string,
-    // rule设置
-    min: PropTypes.number,
-    max: PropTypes.number,
-    digits: PropTypes.number,
   }
   static defaultProps = {
     show: false,
-    caption: '修改购买数量',
-    min: 0,
-    max: 99999,
-    digits: 0,
-    value: '0',
-    args: null
+    caption: '修改购买数量'
   }
   constructor(props) {
     super(props);
@@ -68,10 +63,24 @@ export default class NumBoxPop extends Component {
     if (this.props.onClickCancel) this.props.onClickCancel();
   }
   render() {
-    const {args, show, caption, min, max, digits} = this.props;
+    const {
+      args,
+      show, caption,
+      value,
+      onClickCancel, onClickSubmit,
+      ...others
+    } = this.props;
     return (
       <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
-        <NumBox ref={(el) => {this.$numbox = el}} min={min} max={max} digits={digits} changeFocus value={this.state.value} style={{margin: '0 auto'}} className="flex xl" onChange={this.onChange}/>
+        <NumBox
+          ref={(el) => {this.$numbox = el}}
+          valueBindProp
+          value={this.state.value}
+          style={{margin: '0 auto'}}
+          className="flex xl"
+          onChange={this.onChange}
+          {...others}
+        />
       </Alert>
     );
   }

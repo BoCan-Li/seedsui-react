@@ -10,13 +10,16 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      $overflowContainer: null
+      value: ''
     }
   }
   componentDidMount() {
     Bridge.debug = true;
+  }
+  onChange = (value) => {
+    // console.log(value)
     this.setState({
-      $overflowContainer: this.$el ? this.$el.parentNode : null
+      value
     })
   }
   render() {
@@ -25,7 +28,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <NumBox/>
+        <NumBox style={{width: '100%'}} value={this.state.value} min={0} max={10} digits={2} onChange={this.onChange}/>
       </Container>
     </Page>
   }

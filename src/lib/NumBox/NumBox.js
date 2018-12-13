@@ -1,20 +1,24 @@
+// require PrototypeMath.js, 用于解决加减法精度丢失的问题
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 export default class NumBox extends Component {
   static propTypes = {
     args: PropTypes.any,
-    changeFocus: PropTypes.bool, // 是否点击加減时获取焦点
+    valueBindProp: PropTypes.bool, // 值是否绑定属性
     // 容器
     style: PropTypes.object,
     className: PropTypes.string,
+    disabled: PropTypes.bool,
     // 文本框
     inputStyle: PropTypes.object,
     inputClassName: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     placeholder: PropTypes.string,
     name: PropTypes.string,
     maxLength: PropTypes.string,
-    disabled: PropTypes.bool,
     readOnly: PropTypes.bool,
     // events
     onClick: PropTypes.func,
@@ -32,10 +36,7 @@ export default class NumBox extends Component {
     min: PropTypes.number,
   }
   static defaultProps = {
-    maxLength: '12',
-    min: 0,
-    max: 99999999,
-    value: '0',
+    maxLength: '16',
     readOnly: false
   }
   constructor(props) {
@@ -43,38 +44,10 @@ export default class NumBox extends Component {
     this.state = {}
   }
   componentDidMount () {
-    this.updateDisabled();
-  }
-  // shouldComponentUpdate (nextProps) {
-  //   if(nextProps.value === this.props.value){
-  //     return false
-  //   }
-  //   return true;
-  // }
-  componentDidUpdate = () => {
-    // 如果prop的value和文本框里的值不一致
-    if (this.$input) {
-      if (this.$input.value !== this.props.value) {
-        this.$input.value = this.props.value;
-        // 更新disabled
-        this.updateDisabled();
-      }
-    }
-  }
-  updateDisabled = () => {
-    let {min, max, value} = this.props;
-    if (this.$input) value = this.$input.value;
-    if (!value) return;
-    if (value <= min) {
-      this.$minus.disabled = true;
-    } else {
-      this.$minus.disabled = false;
-    }
-    if (value >= max) {
-      this.$plus.disabled = true;
-    } else {
-      this.$plus.disabled = false;
-    }
+    const {valueBindProp} = this.props;
+    var value = this.correctNum(this.props.value);
+    if (!valueBindProp) this.$input.value = value;
+    if (this.props.onChange) this.props.onChange(value, this.getArgs());
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -90,107 +63,130 @@ export default class NumBox extends Component {
     return args;
   }
   // Methods
+  onChange = (e) => {
+    const {valueBindProp} = this.props;
+    var target = e.target;
+    var value = this.correctNum(target.value);
+    if (!valueBindProp) target.value = value;
+    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
+  };
+  // 获取焦点
   onFocus = (e) => {
-    var target = this.$input || e.target;
+    if (!e) return;
+    var target = e.target;
     var value = target.value;
-    if (!value || value === '0') {
-      // 赋值
+    if (value - 0 === 0) {
       target.value = '';
     }
   };
-  onInput = (e) => {
-    var target = e.target;
-    var value = target.value.toString();
-    // 如果value有值不为空,则矫正数值
-    if (value) {
-      value = this.correctNum(value);
-    }
-    target.value = value;
-    // 更新disabled
-    this.updateDisabled();
-  };
+  // 失去焦点
   onBlur = (e) => {
     var target = e.target;
-    var value = e.target.value;
-    if (!value) value = this.correctNum(value);
-    target.value = value;
-    // Callback
-    if (this.props.value !== value) {
-      if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-    }
-    // 更新disabled
-    this.updateDisabled();
+    var value = target.value;
+    target.value = this.correctNum(value);
   };
   // 点击减
   onClickMinus = (e) => {
-    let value = Math.Calc.subtract(this.$input.value, 1);
-    if (value < this.props.min) value = this.props.min;
-    if (value > this.props.max) value = this.props.max;
+    const {valueBindProp} = this.props;
+    let value = this.correctNum(Math.Calc.subtract(this.$input.value, 1));
+    console.log(value)
     // 赋值
-    this.$input.value = value;
+    if (!valueBindProp) this.$input.value = '' + value;
     // Callback
-    if (this.props.onChange) {
-      this.props.onChange('' + value, this.getArgs(e));
-    }
-    // 更新disabled
-    this.updateDisabled();
-    if (this.props.changeFocus) this.$input.focus();
+    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
+    this.$input.focus();
   };
   // 点击加
   onClickPlus = (e) => {
-    let value = Math.Calc.add(this.$input.value, 1);
-    if (value < this.props.min) value = this.props.min;
-    if (value > this.props.max) value = this.props.max;
+    const {valueBindProp} = this.props;
+    let value = this.correctNum(Math.Calc.add(this.$input.value, 1));
     // 赋值
-    this.$input.value = value;
+    if (!valueBindProp) this.$input.value = value;
     // Callback
-    if (this.props.onChange) {
-      this.props.onChange('' + value, this.getArgs(e));
-    }
-    // 更新disabled
-    this.updateDisabled();
-    if (this.props.changeFocus) this.$input.focus();
+    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
+    this.$input.focus();
   };
   // 矫正数字
   correctNum = (argNumstr) => {
-    if (!argNumstr || isNaN(argNumstr)) {
-      return '' + this.props.min;
+    const {max, min, digits, maxLength} = this.props;
+    if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
+      return '';
     }
-    var num = Number(argNumstr);
-    // 判断是否超出限制
-    const {max, min, digits} = this.props;
-    if (!isNaN(max) && num > max) {
+    var value = argNumstr.toString();
+    if (this.$minus) this.$minus.disabled = false;
+    if (this.$plus) this.$plus.disabled = false;
+    // 最大值
+    if (!isNaN(max) && value - max >= 0) {
+      if (this.$plus) this.$plus.disabled = true;
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
       return '' + max;
     }
-    if (!isNaN(min) && num < min) {
+    // 最小值
+    if (!isNaN(min) && value - min <= 0) {
+      if (this.$minus) this.$minus.disabled = true;
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最小不能小于' + min});
       return '' + min;
     }
-    var value = argNumstr;
-    if (digits === true) { // 不截取小数
-    } else if (!isNaN(digits)) { // 截取小数位数
-      if (String(num).indexOf('.') >= 0) {
-        var numStr = String(num);
-        value = numStr.substring(0, numStr.indexOf('.') + (Number(digits) === 0 ? 0 : digits + 1));
+    // 截取小数位数
+    if (value.indexOf('.') !== -1 && !isNaN(digits) && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
+      if (digits - 0 === 0) { // 整数
+        value = value.substring(0, value.indexOf('.'));
+      } else { // 小数
+        value = value.substring(0, value.indexOf('.') + Number(digits) + 1);
       }
-    } else { // 整数
-      value = Math.floor(num);
     }
     // 最大长度限制
-    if (this.props.maxLength && value && value.length > this.props.maxLength) {
-      value = value.slice(0, this.props.maxLength);
+    if (maxLength && value && value.length > maxLength) {
+      value = value.substring(0, maxLength);
     }
-    return '' + value;
+    return value;
   };
   // render
   getInputDOM = () => {
     const {
-      inputClassName, inputStyle, value, max, min, maxLength, placeholder, name, readOnly, onClickInput,
+      args, valueBindProp,
+      style, className, disabled,
+      inputStyle, inputClassName, value, placeholder, maxLength, readOnly,
+      onClick, onClickMinus, onClickPlus, onClickInput, onChange, onError,
+      digits, max, min,
+      ...others
     } = this.props;
-    return <input ref={(el) => {this.$input = el;}} type="number" defaultValue={value} min={min} max={max} maxLength={maxLength} readOnly={readOnly} placeholder={placeholder} name={name} onInput={this.onInput} onBlur={this.onBlur} onFocus={this.onFocus} onClick={onClickInput} className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}/>;
+    if (valueBindProp) {
+      return <input
+        ref={(el) => {this.$input = el;}}
+        type="number"
+        value={value}
+        min={min}
+        max={max}
+        readOnly={readOnly}
+        placeholder={placeholder}
+        onChange={this.onChange}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onClick={onClickInput}
+        className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`}
+        style={inputStyle}
+        {...others}
+      />;
+    }
+    return <input
+      ref={(el) => {this.$input = el;}}
+      type="number"
+      defaultValue={value}
+      min={min}
+      max={max}
+      readOnly={readOnly}
+      placeholder={placeholder}
+      onChange={this.onChange}
+      onFocus={this.onFocus}
+      onBlur={this.onBlur}
+      onClick={onClickInput}
+      className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`}
+      style={inputStyle}
+      {...others}
+    />;
   }
   render() {
     const {min, max, style, className, disabled, onClick} = this.props;

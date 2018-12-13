@@ -16,23 +16,20 @@ export default class NumBoxPopPointer extends Component {
     // numbox
     numboxClassName: PropTypes.string,
     numboxStyle: PropTypes.object,
-    value: PropTypes.string,
-    disabled: PropTypes.bool,
-    unit: PropTypes.string,
-    // events
-    onChange: PropTypes.func,
-    // rule设置
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
     min: PropTypes.number,
     max: PropTypes.number,
-    digits: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number
-    ])
+    disabled: PropTypes.bool,
+    // unit
+    unit: PropTypes.string,
+    // events
+    onChange: PropTypes.func
   };
 
   static defaultProps = {
-    min: 0,
-    max: 99999,
     numboxClassName: 'sm'
   };
 
@@ -60,13 +57,20 @@ export default class NumBoxPopPointer extends Component {
     });
   }
   render() {
-    const {className, style, numboxClassName, numboxStyle, value, min, max, digits, unit, disabled, args, onChange} = this.props;
+    const {
+      args,
+      className, style,
+      numboxClassName, numboxStyle, value, disabled, min, max,
+      unit,
+      onChange,
+      ...others
+    } = this.props;
     const {show} = this.state;
     return (
       <div style={Object.assign({position: 'relative'}, style)} className={className}>
-        <NumBox className={numboxClassName} args={args} style={numboxStyle} value={value} disabled={disabled} readOnly min={min} max={max} onChange={onChange} onClickInput={this.onClickNumBox}/>
+        <NumBox valueBindProp className={numboxClassName} args={args} style={numboxStyle} value={value} disabled={disabled} readOnly min={min} max={max} onChange={onChange} onClickInput={this.onClickNumBox}/>
         <span style={UnitStyle}>{unit || ''}</span>
-        <NumBoxPop show={show} args={args} value={this.$input ? this.$input.value : value.toString()} digits={digits} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}/>
+        <NumBoxPop show={show} args={args} value={this.$input ? this.$input.value : value.toString()} min={min} max={max} onClickCancel={this.onClickCancel} onClickSubmit={this.onClickSubmit}  {...others}/>
       </div>
     );
   }
