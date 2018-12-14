@@ -4,20 +4,19 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
-import NumBox from '../lib/NumBox';
+import NumBoxPopPointer from '../lib/NumBoxPopPointer';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      value: '1.11'
     }
   }
   componentDidMount() {
     Bridge.debug = true;
   }
   onChange = (value) => {
-    // console.log(value)
     this.setState({
       value
     })
@@ -28,7 +27,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <NumBox style={{width: '100%'}} value={this.state.value} min={0} max={10} digits={2} onChange={this.onChange}/>
+        <NumBoxPopPointer style={{width: '100%'}} value={this.state.value} min={-1} max={10} digits={2} onChange={this.onChange}/>
       </Container>
     </Page>
   }

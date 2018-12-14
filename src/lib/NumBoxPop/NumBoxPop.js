@@ -48,8 +48,7 @@ export default class NumBoxPop extends Component {
     });
   }
   onClickSubmit = (args) => {
-    const {onClickSubmit} = this.props;
-    if (onClickSubmit) onClickSubmit(this.state.value, args);
+    if (this.props.onClickSubmit) this.props.onClickSubmit(this.state.value, args);
   }
   focusValue = () => {
     this.$numbox.$input.focus();
@@ -58,9 +57,12 @@ export default class NumBoxPop extends Component {
       this.$numbox.$input.select();
     }, 100);
   }
-  onClickCancel = () => {
-    this.$numbox.$input.value = this.props.value;
-    if (this.props.onClickCancel) this.props.onClickCancel();
+  onClickCancel = (args) => {
+    const {value} = this.props;
+    this.setState({
+      value: value
+    });
+    if (this.props.onClickCancel) this.props.onClickCancel(value, args);
   }
   render() {
     const {
@@ -74,7 +76,6 @@ export default class NumBoxPop extends Component {
       <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
         <NumBox
           ref={(el) => {this.$numbox = el}}
-          valueBindProp
           value={this.state.value}
           style={{margin: '0 auto'}}
           className="flex xl"

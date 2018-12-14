@@ -2632,6 +2632,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
 ## NumBox
 [数字加减框](#https://unpkg.com/seedsui-react/src/lib/NumBox/NumBox.js)
+只有valueBindProp模式
 ### 属性
 ```javascript
 <NumBox
@@ -2643,12 +2644,16 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
   // 文本框
   inputStyle={文本框style object, 默认无}
   inputClassName={文本框className string, 默认无, 基础'numbox-input'}
-  value={值 string, 默认'0'}
+  value={值 string | number, 默认无}
+  digits={文本框截取小数 string | number, 默认无}
+  max={最大值 string | number, 默认无}
+  min={最小值 string | number, 默认无}
   placeholder={占位符 string, 默认''}
   name={文本框name string, 默认无}
-  maxLength={输入长度 string, 默认'8'}
+  maxLength={输入长度 string, 默认'16'}
   disabled={是否禁用 bool, 默认无}
   readOnly={是否只读 bool, 默认无}
+  required={是否必填 bool, 默认true} // 如果设置必填,则框内一定有值,默认为最小值或者0
   // events
   onClick={点击容器 func(e), 默认无}
   onClickMinus={点击减 func(value, args), 默认无}
@@ -2656,10 +2661,7 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
   onClickInput={点击文本框 func(e), 默认无}
   onChange={值发生变化 func(value, args), 默认无}
   onError={值发生变化 func({msg:''}), 默认无}
-  // rule设置
-  digits={文本框截取小数 string | number, 默认false}
-  max={最大值 number, 默认99999999}
-  min={最小值 number, 默认0}
+  {...others}
 />
 ```
 ### 示例
@@ -2681,7 +2683,6 @@ onChangeNum = (val, args) => {
 [返回目录](#component)
 
 
-
 ## NumBoxPop
 [数字加减弹出框](#https://unpkg.com/seedsui-react/src/lib/NumBoxPop/NumBoxPop.js)
 , 基于[NumBox 数字加减框](#numbox)组件
@@ -2689,17 +2690,15 @@ onChangeNum = (val, args) => {
 ```javascript
 <NumBoxPop
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  // 文本框
-  value={值 string, 默认'0'}
-  // events
-  onClickCancel={点击取消 func(), 默认无}
-  onClickSubmit={点击确定 func(), 默认无}
+  // 容器
   show={*显隐 bool, 默认false}
   caption={标题 string, 默认'修改购买数量'}
-  // rule设置
-  digits={文本框截取小数 string | number, 默认false}
-  max={最大值 number, 默认99999999}
-  min={最小值 number, 默认0}
+  // 文本框
+  value={值 string | number, 默认'1'}
+  // events
+  onClickCancel={点击取消 func(value, args), 默认无}
+  onClickSubmit={点击确定 func(value, args), 默认无}
+  {...others}
 />
 ```
 ### 示例
@@ -2741,15 +2740,15 @@ onClickSubmit = (count) => {
   // numbox
   numboxClassName={加减框className string, 默认无}
   numboxStyle={加减框style object, 默认无}
-  value={值 string, 默认无}
+  value={值 string | number, 默认无}
   disabled={是否禁用 bool, 默认无}
+  min={最小值 string | number, 默认0}
+  max={最大值 string | number, 默认99999999}
+  digits={文本框截取小数 string | number, 默认无}
+  // unit
   unit={单位 string, 默认无}
   // events
   onChange={点击确定时触发 func(value, args), 默认无}
-  // rule设置
-  min={最小值 number, 默认0}
-  max={最大值 number, 默认99999999}
-  digits={文本框截取小数 string | number, 默认无}
 />
 ```
 ### 示例
