@@ -7,6 +7,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
 
 // 构建get请求参数, get请求需要把url和data拼接起来
 function buildGetUrl (url, params) {
+  if (!params || Object.isEmptyObject(params)) {
+    return url
+  }
   if (typeof params === 'string') {
     return url + '?' + params
   }
@@ -32,7 +35,7 @@ const Api = {
   },
   request: function (url, params = {}) {
     // 设置method
-    var method = params.method || 'post'
+    var method = params.method === 'get' ? 'get' : 'post'
     // 设置头
     var head = params.head || {}
     // 设置options
@@ -45,7 +48,7 @@ const Api = {
       headers: {
         ...head
       },
-      data: method === 'get' ? {} : data,
+      data: method === 'get' ? null : data,
       ...options
     })
   },
