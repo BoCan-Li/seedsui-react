@@ -17,6 +17,7 @@ export default class ImgUploader extends Component {
     caption: PropTypes.node,
     captionStyle: PropTypes.object,
     captionClassName: PropTypes.string,
+    captionAfter: PropTypes.node,
     list: PropTypes.array,
 
     enableSafe: PropTypes.bool,
@@ -169,7 +170,7 @@ export default class ImgUploader extends Component {
   render() {
     const {
       className, style,
-      caption, captionStyle, captionClassName,
+      caption, captionStyle, captionClassName, captionAfter,
       list,
       enableSafe, max, sourceType, sizeType, showUpload, showDelete, readOnly, showCount, chooseOptions,
       onChange, onChooseSuccess, onUploadsSuccess, onDeleteSuccess,
@@ -182,7 +183,9 @@ export default class ImgUploader extends Component {
         key="iuCaption"
         className={`grid-title${captionClassName ? ' ' + captionClassName : ''}`}
         style={captionStyle}>
-        {caption}{showCount ? <span style={Count}>({list.length}/{max})</span> : null}
+        {caption}
+        {showCount ? <span style={Count}>({list.length}/{max})</span> : null}
+        {captionAfter}
       </div>,
       <Grid
         key="iuGrid"

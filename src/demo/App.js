@@ -5,6 +5,7 @@ import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
 import NumBoxPopPointer from '../lib/NumBoxPopPointer';
+import ImgUploader from '../lib/ImgUploader';
 
 export default class App extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class App extends Component {
       </Header>
       <Container>
         <NumBoxPopPointer style={{width: '100%'}} value={this.state.value} min={-1} max={10} digits={2} onChange={this.onChange}/>
+        <ImgUploader caption={' '} captionAfter={<h1>hh</h1>}/>
       </Container>
     </Page>
   }
