@@ -130,35 +130,37 @@ export default class InputText extends Component {
     return val;
   }
   // 数字框纠正
-  correctNumber = (value) => {
-    if (value === '') return '';
-    var num = Number(value);
-    if (isNaN(num)) return '';
-    // 判断是否超出限制
-    const {max, min, digits} = this.props;
-    if (!isNaN(max) && num > max) {
+  correctNumber = (argNumstr) => {
+    const {max, min, digits, maxLength} = this.props;
+    if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
+      return '';
+    }
+    var value = argNumstr.toString();
+    // 最大值
+    if (!isNaN(max) && value - max >= 0) {
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
       return '' + max;
     }
-    if (!isNaN(min) && num < min) {
+    // 最小值
+    if (!isNaN(min) && value - min <= 0) {
       // callback onError
       if (this.props.onError) this.props.onError({msg: '最小不能小于' + min});
       return '' + min;
     }
-    var val = value;
     // 截取小数位数
-    if (!isNaN(digits)) {
-      if (String(num).indexOf('.') >= 0) {
-        var numStr = String(num);
-        val = numStr.substring(0, numStr.indexOf('.') + (Number(digits) === 0 ? 0 : digits + 1));
+    if (value.indexOf('.') !== -1 && !isNaN(digits) && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
+      if (digits - 0 === 0) { // 整数
+        value = value.substring(0, value.indexOf('.'));
+      } else { // 小数
+        value = value.substring(0, value.indexOf('.') + Number(digits) + 1);
       }
     }
     // 最大长度限制
-    if (this.props.maxLength && val && val.length > this.props.maxLength) {
-      val = val.slice(0, this.props.maxLength);
+    if (maxLength && value && value.length > maxLength) {
+      value = value.substring(0, maxLength);
     }
-    return '' + val;
+    return Number(value);
   };
   // 自动扩充功能
   preAutoSize = () => {
@@ -179,7 +181,9 @@ export default class InputText extends Component {
       value = this.correctPhone(value);
     // 数字组件
     } else if (type === 'number') {
-      // target.validity.badInput
+      if (target.validity.badInput) {
+        value = '';
+      }
       value = this.correctNumber(value.toString());
     }
     // onChange

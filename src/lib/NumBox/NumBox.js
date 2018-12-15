@@ -72,7 +72,13 @@ export default class NumBox extends Component {
   }
   // 失去焦点
   onBlur = (e) => {
-    e.target.value = this.props.value;
+    const {required} = this.props;
+    var value = this.props.value;
+    if (value === '' && required) {
+      value = this.props.min || '0';
+      this.props.onChange(value, this.getArgs(e));
+    }
+    e.target.value = value;
   };
   // 获取焦点
   onFocus = (e) => {
@@ -93,6 +99,9 @@ export default class NumBox extends Component {
   }
   // Methods
   onChange = (e) => {
+    if (e.target.validity.badInput) {
+      e.target.value = '';
+    }
     var value = this.correctNum(e.target.value);
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
   };
