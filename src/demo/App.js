@@ -4,7 +4,7 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
-import InputDate from '../lib/InputDate';
+import InputText from '../lib/InputText';
 
 export default class App extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ export default class App extends Component {
     Bridge.debug = true;
   }
   onChange = (value) => {
+    console.log(value);
     this.setState({
       value
     })
@@ -40,14 +41,20 @@ export default class App extends Component {
       show: false
     })
   }
+  onChangeBarcode = () => {
+    this.setState({
+      value: '1234'
+    })
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputDate pickerShow={this.state.show} valueBindProp value={this.state.value} onClick={this.showPicker} onClickSubmit={this.onClickSubmit} onClickCancel={this.hidePicker} onClickMask={this.hidePicker} placeholder="xx"/>
-        <InputDate placeholder="ss"/>
+        <InputText valueBindProp clear placeholder="文本框" value={this.state.value} onChange={this.onChange}/>
+        <input type="button" value="haha" onClick={this.onChangeBarcode}></input>
+        <InputText placeholder="文本框" clear value="fdsada"/>
       </Container>
     </Page>
   }

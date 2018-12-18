@@ -54,7 +54,7 @@ export default class NumBox extends Component {
     if (required) { // 必填项,必须有值
       if (value === '') value = this.props.min || '0';
     }
-    value = this.correctNum(value);
+    value = this.correctNumber(value);
     if (this.props.onChange) this.props.onChange(value, this.getArgs());
   }
   getArgs = (e) => {
@@ -102,12 +102,12 @@ export default class NumBox extends Component {
     if (e.target.validity.badInput) {
       e.target.value = '';
     }
-    var value = this.correctNum(e.target.value);
+    var value = this.correctNumber(e.target.value);
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
   };
   // 点击减
   onClickMinus = (e) => {
-    let value = this.correctNum(Math.Calc.subtract(this.$input.value, 1));
+    let value = this.correctNumber(Math.Calc.subtract(this.$input.value, 1));
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
     if (this.props.onClickMinus) this.props.onClickMinus(value, this.getArgs(e));
@@ -115,14 +115,14 @@ export default class NumBox extends Component {
   };
   // 点击加
   onClickPlus = (e) => {
-    let value = this.correctNum(Math.Calc.add(this.$input.value, 1));
+    let value = this.correctNumber(Math.Calc.add(this.$input.value, 1));
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
     if (this.props.onClickPlus) this.props.onClickPlus(value, this.getArgs(e));
     this.$input.focus();
   };
   // 矫正数字
-  correctNum = (argNumstr) => {
+  correctNumber = (argNumstr) => {
     const {max, min, digits, maxLength} = this.props;
     if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
       return '';
@@ -152,7 +152,7 @@ export default class NumBox extends Component {
     if (maxLength && value && value.length > maxLength) {
       value = value.substring(0, maxLength);
     }
-    return Number(value);
+    return '' + Number(value);
   };
   // render
   getInputDOM = () => {

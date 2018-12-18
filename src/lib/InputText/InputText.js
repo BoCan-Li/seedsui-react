@@ -15,7 +15,6 @@ export default class InputText extends Component {
     onClick: PropTypes.func,
     // 文本框
     autoFocus: PropTypes.bool,
-    name: PropTypes.string,
     maxLength: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -81,7 +80,7 @@ export default class InputText extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clearUpdate: props.value && props.clear // 小叉叉DOM更新, !valueBindProp状态时不会更新DOM, 所以用state变态的方法触发更新DOM
+      showClear: props.value && props.clear // 用于非valueBindProp
     }
   }
   getArgs = (e) => {
@@ -160,7 +159,7 @@ export default class InputText extends Component {
     if (maxLength && value && value.length > maxLength) {
       value = value.substring(0, maxLength);
     }
-    return Number(value);
+    return '' + Number(value);
   };
   // 自动扩充功能
   preAutoSize = () => {
@@ -191,12 +190,7 @@ export default class InputText extends Component {
       if (!valueBindProp) target.value = value;
     }
     if (onChange) onChange(value, this.getArgs(e));
-    // 是否显示小叉叉
-    if (this.props.clear && !this.props.valueBindProp) {
-      this.setState({
-        clearUpdate: false
-      });
-    }
+    this.updateShowClear();
   }
   onBlur = (e) => {
     var target = e.target;
@@ -221,7 +215,7 @@ export default class InputText extends Component {
     this.$input.focus();
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = '';
-    if (this.props.clear && typeof this.props.clear !== 'boolean') this.props.clear();
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear(e);
     if (this.props.onChange) {
       this.props.onChange('', this.getArgs(e));
     }
@@ -229,13 +223,8 @@ export default class InputText extends Component {
     if (this.props.pre) {
       this.preAutoSize();
     }
-    // 是否显示小叉叉
-    if (this.props.clear && !this.props.valueBindProp) {
-      this.setState({
-        clearUpdate: false
-      });
-    }
     e.stopPropagation();
+    this.updateShowClear();
   }
   getInputDOM = () => {
     const {
@@ -247,7 +236,7 @@ export default class InputText extends Component {
       pre, // 自动伸缩文本框
       type,
       valueBindProp,
-      autoFocus, inputClassName, inputStyle, maxLength, value, placeholder, name, readOnly, disabled,
+      autoFocus, inputClassName, inputStyle, maxLength, value, placeholder, readOnly, disabled,
       ...others
     } = this.props;
     // pre类型
@@ -274,8 +263,8 @@ export default class InputText extends Component {
         }
       }
       return (<div className={`input-pre-box${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}>
-        {valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
-        {!valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
+        {valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
+        {!valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
         <pre ref={(el) => {this.$pre = el;}} style={{left: preLeft, right: preRight}}><span>{value}</span></pre>
       </div>);
     }
@@ -283,9 +272,9 @@ export default class InputText extends Component {
     if (type === 'textarea') {
       // 如果值绑定属性,则只有通过父组件的prop来改变值
       if (valueBindProp) {
-        return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+        return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
       }
-      return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+      return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
     }
     // 其它类型
     let inputType = type;
@@ -298,27 +287,42 @@ export default class InputText extends Component {
     }
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+      return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
     }
-    return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} name={name} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+    return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+  }
+  updateShowClear = () => {
+    const {clear, valueBindProp} = this.props;
+    if (valueBindProp) return;
+    let showClear = false;
+    if (clear) {
+      if (this.$input && this.$input.value) {
+        showClear = true;
+      } else {
+        showClear = false;
+      }
+    }
+    this.setState({
+      showClear: showClear
+    });
   }
   render() {
     const {
-      value,
+      value, valueBindProp,
       className, style,
       licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
       ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
       clear, clearClassName, clearStyle,
       rcaption
     } = this.props;
-    let isShowClear = this.state.clearUpdate;
-    if (!this.props.valueBindProp) {
-      if (this.$input) {
-        if (this.$input.value.length && clear) isShowClear = true;
-      }
+    // 支持valueBindProp和非valueBindProp两种模式的清空按钮控制
+    let showClear = false;
+    if (value) {
+      showClear = true;
     } else {
-      if (value && clear) isShowClear = true;
+      showClear = false;
     }
+    let isShowClear = valueBindProp ? showClear : this.state.showClear;
     return (<div className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
