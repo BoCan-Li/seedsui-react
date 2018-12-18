@@ -1811,6 +1811,11 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+  // 自定义Picker事件
+  pickerShow={控制picker的显隐 bool, 默认无}
+  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
+  onClickCancel={点击picker取消按钮 func({target}), 默认无}
+  onClickMask={点击picker遮罩 func({target}), 默认无}
   {...others}
 />
 ```
@@ -1835,6 +1840,11 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
   onError={错误 func({msg: ''}), 默认无}
+  // 自定义Picker事件
+  pickerShow={控制picker的显隐 bool, 默认无}
+  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
+  onClickCancel={点击picker取消按钮 func({target}), 默认无}
+  onClickMask={点击picker遮罩 func({target}), 默认无}
   {...others}
 />
 ```
@@ -1879,6 +1889,12 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+  // 自定义Picker事件
+  pickerShow={控制picker的显隐 bool, 默认无}
+  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
+  onClickCancel={点击picker取消按钮 func({target}), 默认无}
+  onClickMask={点击picker遮罩 func({target}), 默认无}
+  {...others}
 />
 ```
 ### 示例
@@ -1978,6 +1994,11 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
   pickerStyle={弹出框style object, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, options, args), 默认无}
+  // 自定义Picker事件
+  pickerShow={控制picker的显隐 bool, 默认无}
+  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
+  onClickCancel={点击picker取消按钮 func({target}), 默认无}
+  onClickMask={点击picker遮罩 func({target}), 默认无}
   {...others}
 />
 ```

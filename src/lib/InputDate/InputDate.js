@@ -16,15 +16,17 @@ export default class InputDate extends Component {
     pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+
+    // 自定义Picker事件
+    pickerShow: PropTypes.bool,
+    onClickSubmit: PropTypes.func,
+    onClickCancel: PropTypes.func,
+    onClickMask: PropTypes.func
   }
   static defaultProps = {
     split: '-',
-    type: 'date',
-    error: {
-      currentName: '',
-      compareName: ''
-    }
+    type: 'date'
   }
   constructor(props) {
     super(props);
@@ -43,6 +45,10 @@ export default class InputDate extends Component {
   }
   onClickSubmit = (e) => {
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
+    if (this.props.onClickSubmit) {
+      this.props.onClickSubmit(e);
+      return;
+    }
     const value = this.correctDate(e.activeText);
     if (!value) return;
     const options = e.activeOptions;
@@ -55,12 +61,20 @@ export default class InputDate extends Component {
       this.props.onChange(value, options, this.props.args);
     }
   }
-  onClickCancel = () => {
+  onClickCancel = (e) => {
+    if (this.props.onClickCancel) {
+      this.props.onClickCancel(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
   }
-  onClickMask = () => {
+  onClickMask = (e) => {
+    if (this.props.onClickMask) {
+      this.props.onClickMask(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
@@ -129,7 +143,11 @@ export default class InputDate extends Component {
     return text;
   }
   render() {
-    const {valueForKey, split, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError, ...others} = this.props;
+    const {
+      valueForKey, split, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError,
+      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      ...others
+    } = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
       <PickerDate
@@ -137,7 +155,7 @@ export default class InputDate extends Component {
         split={split}
         type={type}
         value={this.$input ? this.$input.value : this.props.value} key="pickerdate"
-        show={this.state.show}
+        show={pickerShow === undefined ? this.state.show : pickerShow}
         style={pickerStyle} className={pickerClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />

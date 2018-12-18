@@ -16,7 +16,13 @@ export default class InputSelect extends Component {
     pickerStyle: PropTypes.bool,
     pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+
+    // 自定义Picker事件
+    pickerShow: PropTypes.bool,
+    onClickSubmit: PropTypes.func,
+    onClickCancel: PropTypes.func,
+    onClickMask: PropTypes.func
   }
   static defaultProps = {
     split: ','
@@ -48,6 +54,10 @@ export default class InputSelect extends Component {
   }
   onClickSubmit = (e) => {
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
+    if (this.props.onClickSubmit) {
+      this.props.onClickSubmit(e);
+      return;
+    }
     const value = this.getValue(e.activeOptions);
     var options = this.getOptions(e.activeOptions);
     // 赋值
@@ -59,24 +69,36 @@ export default class InputSelect extends Component {
       this.props.onChange(value, options, this.props.args);
     }
   }
-  onClickCancel = () => {
+  onClickCancel = (e) => {
+    if (this.props.onClickCancel) {
+      this.props.onClickCancel(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
   }
-  onClickMask = () => {
+  onClickMask = (e) => {
+    if (this.props.onClickMask) {
+      this.props.onClickMask(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
   }
   render() {
-    const {valueForKey, split, list, multiple, pickerStyle, pickerClassName, onClick, onChange, ...others} = this.props;
+    const {
+      valueForKey, split, list, multiple, pickerStyle, pickerClassName, onClick, onChange,
+      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      ...others
+    } = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>,
       <SelectPicker
         list={list} valueForKey={valueForKey} value={this.$input ? this.$input.value : this.props.value} key="picker"
         split={split}
-        show={this.state.show}
+        show={pickerShow === undefined ? this.state.show : pickerShow}
         multiple={multiple}
         style={pickerStyle} className={pickerClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}

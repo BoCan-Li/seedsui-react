@@ -17,7 +17,13 @@ export default class InputCity extends Component {
     pickerStyle: PropTypes.bool,
     pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+
+    // 自定义Picker事件
+    pickerShow: PropTypes.bool,
+    onClickSubmit: PropTypes.func,
+    onClickCancel: PropTypes.func,
+    onClickMask: PropTypes.func
   }
   static defaultProps = {
     split: '-',
@@ -30,10 +36,6 @@ export default class InputCity extends Component {
     };
   }
   static defaultProps = {
-    error: {
-      currentName: '',
-      compareName: ''
-    }
   }
   componentDidMount () {
     this.$input = this.refs.$ComponentInputText.$input;
@@ -46,6 +48,10 @@ export default class InputCity extends Component {
   }
   onClickSubmit = (e) => {
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
+    if (this.props.onClickSubmit) {
+      this.props.onClickSubmit(e);
+      return;
+    }
     const value = e.activeText;
     const options = e.activeOptions;
     // 赋值
@@ -57,12 +63,20 @@ export default class InputCity extends Component {
       this.props.onChange(value, options, this.props.args);
     }
   }
-  onClickCancel = () => {
+  onClickCancel = (e) => {
+    if (this.props.onClickCancel) {
+      this.props.onClickCancel(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
   }
-  onClickMask = () => {
+  onClickMask = (e) => {
+    if (this.props.onClickMask) {
+      this.props.onClickMask(e);
+      return;
+    }
     this.setState({
       show: !this.state.show
     });
@@ -70,7 +84,9 @@ export default class InputCity extends Component {
   render() {
     const {
       data, dataKeyPropertyName, dataValuePropertyName, dataChildPropertyName,
-      valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange, ...others
+      valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange,
+      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      ...others
     } = this.props;
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClick}/>,
@@ -83,7 +99,7 @@ export default class InputCity extends Component {
         split={split}
         type={type}
         value={this.$input ? this.$input.value : this.props.value} key="pickercity"
-        show={this.state.show}
+        show={pickerShow === undefined ? this.state.show : pickerShow}
         style={pickerStyle} className={pickerClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
