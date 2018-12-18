@@ -307,11 +307,11 @@ var Bridge = {
     if (argParams && argParams.sizeType) {
       if (!isNaN(argParams.sizeType)) {
         pwidth = argParams.sizeType
-      } else if (JSON.stringify(argParams.sizeType) === JSON.stringify(['compressed']) || argParams.sizeType === 'compressed') {
+      } else if (argParams.sizeType.indexOf('compressed') >= 0) {
         pwidth = '750'
-        params.pwidth = pwidth
       }
     }
+    if (pwidth) params.pwidth = pwidth
     // 格式化count
     var max = 5
     if (argParams && argParams.count) {
