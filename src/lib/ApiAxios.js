@@ -80,12 +80,10 @@ axios.interceptors.response.use(response => {
   return result
 }, error => {
   if (error.response) {
-    switch (error.response.status) {
-      case 401: // 401 跳转到登录页面
-        if (Api.logOut) Api.logOut(error.response.data.message)
-        break
-      default:
-        if (Api.onError) Api.onError(error)
+    if (Api.onError) Api.onError(error)
+    if (error.response.status === 401) {
+      if (Api.logOut) Api.logOut(error.response)
+      return Promise.resolve(error.response)
     }
   }
   return Promise.reject(error)
