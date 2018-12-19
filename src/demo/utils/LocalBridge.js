@@ -2,10 +2,10 @@ import Bridge from 'seedsui-react/lib/Bridge';
 import Device from 'seedsui-react/lib/Device';
 
 var LocalBridge = {
-  _logOut: function () {
+  _logOut: function (message) {
     // 如果是订货或者外勤365,直接返回到登录页面
     if (Bridge.platform === 'dinghuo' || Bridge.platform === 'waiqin') {
-      Bridge.logOut();
+      Bridge.logOut(message || '');
       return;
     }
     window.location.replace('/#/login/')
@@ -14,11 +14,11 @@ var LocalBridge = {
     if (message) {
       Bridge.showToast(message, {
         onSuccess: () => {
-          this._logOut()
+          this._logOut(message)
         }
       })
     } else {
-      this._logOut()
+      this._logOut(message)
     }
   },
   back: function (_history, number) {
