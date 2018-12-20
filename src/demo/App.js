@@ -16,6 +16,10 @@ export default class App extends Component {
   }
   componentDidMount() {
     Bridge.debug = true;
+    Bridge.showToast('hehe', {delay: 500})
+    setTimeout(() => {
+      Bridge.showToast('hehe')
+    }, 2000);
   }
   onChange = (value) => {
     console.log(value);

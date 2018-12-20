@@ -108,11 +108,11 @@ var Toast = function (params) {
       s.icon.setAttribute('class', '')
     }
   }
-  s.setHTML = function (html) {
-    s.caption.innerHTML = html
-  }
   s.setDelay = function (delay) {
     s.params.delay = delay
+  }
+  s.setHTML = function (html) {
+    s.caption.innerHTML = html
   }
 
   s.showMask = function () {
