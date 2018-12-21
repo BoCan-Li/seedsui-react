@@ -60,6 +60,11 @@ var LocalBridge = {
     } else if (dateType === 'date') {
       return module + '/' + year + (month < 10 ? '0' + month : month) + (day < 10 ? '0' + day : day);
     }
+  },
+  // 兼容ios12输入法把页面顶上去, 不回弹的问题
+  iosInputBounceBack: function () {
+    console.log('blur');
+    document.getElementById('root').scrollIntoView();
   }
 }
 
