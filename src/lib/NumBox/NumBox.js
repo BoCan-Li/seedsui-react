@@ -82,6 +82,7 @@ export default class NumBox extends Component {
   // 获取焦点
   onFocus = (e) => {
     const {onFocus} = this.props;
+    var target = e.target;
     var value = target.value;
     if (onFocus) onFocus(value, this.getArgs(e));
   };
