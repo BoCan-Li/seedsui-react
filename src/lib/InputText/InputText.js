@@ -74,7 +74,6 @@ export default class InputText extends Component {
     value: '',
     readOnly: false,
     disabled: false,
-    digits: false,
     clearClassName: 'ricon close-icon-clear size18'
   }
   constructor(props) {
@@ -128,39 +127,6 @@ export default class InputText extends Component {
     }
     return val;
   }
-  // 数字框纠正
-  correctNumber = (argNumstr) => {
-    const {max, min, digits, maxLength} = this.props;
-    if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
-      return '';
-    }
-    var value = argNumstr.toString();
-    // 最大值
-    if (!isNaN(max) && value - max >= 0) {
-      // callback onError
-      if (this.props.onError) this.props.onError({msg: '最大不能超过' + max});
-      return '' + max;
-    }
-    // 最小值
-    if (!isNaN(min) && value - min <= 0) {
-      // callback onError
-      if (this.props.onError) this.props.onError({msg: '最小不能小于' + min});
-      return '' + min;
-    }
-    // 截取小数位数
-    if (value.indexOf('.') !== -1 && !isNaN(digits) && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
-      if (digits - 0 === 0) { // 整数
-        value = value.substring(0, value.indexOf('.'));
-      } else { // 小数
-        value = value.substring(0, value.indexOf('.') + Number(digits) + 1);
-      }
-    }
-    // 最大长度限制
-    if (maxLength && value && value.length > maxLength) {
-      value = value.substring(0, maxLength);
-    }
-    return '' + Number(value);
-  };
   // 自动扩充功能
   preAutoSize = () => {
     this.$input.style.height = this.$pre.clientHeight + 'px';
@@ -183,7 +149,7 @@ export default class InputText extends Component {
       if (target.validity.badInput) {
         value = '';
       }
-      value = this.correctNumber(value.toString());
+      value = Math.Calc.correctNumber(value, this.props);
     }
     // onChange
     if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
@@ -195,6 +161,12 @@ export default class InputText extends Component {
   onBlur = (e) => {
     var target = e.target;
     var value = target.value;
+    if (this.props.type === 'number') {
+      const {required, min, onChange} = this.props;
+      value = Math.Calc.correctNumberBlur(value, {required, min});
+      if (onChange) onChange(value, this.getArgs(e));
+      if (!this.props.valueBindProp) target.value = value;
+    }
     if (this.props.onBlur) {
       this.props.onBlur(value, this.getArgs(e));
     }

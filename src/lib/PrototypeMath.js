@@ -107,6 +107,51 @@ Math.Calc = (function () {
     })
     return n1
   }
+  // 矫正数字, 常用于输入过程中矫正, 可以为空串
+  function correctNumber (argNumstr, options) {
+    const {max, min, digits, maxLength, onError} = options
+    if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
+      return ''
+    }
+    var value = argNumstr.toString()
+    // 最大值
+    if (!isNaN(max) && value - max >= 0) {
+      // callback onError
+      if (onError) onError({msg: '最大不能超过' + max})
+      return '' + max
+    }
+    // 最小值
+    if (!isNaN(min) && value - min <= 0) {
+      // callback onError
+      if (onError) onError({msg: '最小不能小于' + min})
+      return '' + min
+    }
+    // 截取小数位数
+    if (value.indexOf('.') !== -1 && !isNaN(digits) && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
+      if (digits - 0 === 0) { // 整数
+        value = value.substring(0, value.indexOf('.'))
+      } else { // 小数
+        value = value.substring(0, value.indexOf('.') + Number(digits) + 1)
+      }
+    }
+    // 最大长度限制
+    if (maxLength && value && value.length > maxLength) {
+      value = value.substring(0, maxLength)
+    }
+    // 转成Number类型, 防止001的情况, 小数不能转, 因为有可能是1.0001的情况
+    if (value.indexOf('.') === -1) {
+      return '' + Number(value)
+    }
+    return '' + value
+  }
+  // 矫正数字, 用于输入框失去焦点
+  function correctNumberBlur (argNumstr, options) {
+    const {required, min} = options;
+    var value = argNumstr;
+    if (value.length > 0) return '' + Number(value)
+    if (required && value === '') return '' + min || '0'
+    return '' + value
+  }
   // exports
   return {
     add: add, // 解决运算中1.22+1不等于2.22的问题
@@ -114,6 +159,8 @@ Math.Calc = (function () {
     multiply: multiply,
     divide: divide,
     toFixed: toFixed,
-    toThousandth: toThousandth
+    toThousandth: toThousandth,
+    correctNumber: correctNumber,
+    correctNumberBlur: correctNumberBlur
   }
 })();

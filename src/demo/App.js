@@ -4,22 +4,18 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
-import InputText from '../lib/InputText';
+import InputNumber from '../lib/InputNumber';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
-      value: '2121'
+      value: '5.00'
     }
   }
   componentDidMount() {
     Bridge.debug = true;
-    Bridge.showToast('hehe', {delay: 500})
-    setTimeout(() => {
-      Bridge.showToast('hehe')
-    }, 2000);
   }
   onChange = (value) => {
     console.log(value);
@@ -56,9 +52,8 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputText valueBindProp clear placeholder="文本框" value={this.state.value} onChange={this.onChange}/>
-        <input type="button" value="haha" onClick={this.onChangeBarcode}></input>
-        <InputText placeholder="文本框" clear value="fdsada"/>
+        <InputNumber valueBindProp value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
+        {/* <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/> */}
       </Container>
     </Page>
   }
