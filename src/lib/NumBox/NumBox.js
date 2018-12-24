@@ -1,6 +1,9 @@
 // require PrototypeMath.js, 用于解决加减法精度丢失的问题
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Icon from './../Icon';
+import Close from './../Close';
+
 export default class NumBox extends Component {
   static propTypes = {
     args: PropTypes.any,
@@ -8,6 +11,11 @@ export default class NumBox extends Component {
     style: PropTypes.object,
     className: PropTypes.string,
     disabled: PropTypes.bool,
+    // 加减号
+    plusStyle: PropTypes.object,
+    plusClassName: PropTypes.string,
+    minusStyle: PropTypes.object,
+    minusClassName: PropTypes.string,
     // 文本框
     inputStyle: PropTypes.object,
     inputClassName: PropTypes.string,
@@ -32,6 +40,27 @@ export default class NumBox extends Component {
     maxLength: PropTypes.string,
     readOnly: PropTypes.bool,
     required: PropTypes.bool,
+    // 左右图标
+    licon: PropTypes.node,
+    liconSrc: PropTypes.string,
+    liconClassName: PropTypes.string,
+    liconStyle: PropTypes.object,
+    onClickLicon: PropTypes.func,
+    liconLazyLoad: PropTypes.bool,
+
+    ricon: PropTypes.node,
+    riconSrc: PropTypes.string,
+    riconClassName: PropTypes.string,
+    riconStyle: PropTypes.object,
+    onClickRicon: PropTypes.func,
+    riconLazyLoad: PropTypes.bool,
+    // 清除按键
+    clear: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.func
+    ]),
+    clearClassName: PropTypes.string,
+    clearStyle: PropTypes.object,
     // events
     onClick: PropTypes.func,
     onClickMinus: PropTypes.func,
@@ -45,7 +74,8 @@ export default class NumBox extends Component {
   static defaultProps = {
     required: true,
     maxLength: '16',
-    readOnly: false
+    readOnly: false,
+    clearClassName: 'ricon close-icon-clear size18'
   }
   constructor(props) {
     super(props);
@@ -82,9 +112,7 @@ export default class NumBox extends Component {
   // 获取焦点
   onFocus = (e) => {
     const {onFocus} = this.props;
-    var target = e.target;
-    var value = target.value;
-    if (onFocus) onFocus(value, this.getArgs(e));
+    if (onFocus) onFocus(this.props.value, this.getArgs(e));
   };
   // 点击文本框, 逢0清空
   onClickInput = (e) => {
@@ -105,6 +133,7 @@ export default class NumBox extends Component {
   // 点击减
   onClickMinus = (e) => {
     let value = Math.Calc.correctNumber(Math.Calc.subtract(this.$input.value, 1), this.props);
+    console.log(value)
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
     if (this.props.onClickMinus) this.props.onClickMinus(value, this.getArgs(e));
@@ -118,11 +147,59 @@ export default class NumBox extends Component {
     if (this.props.onClickPlus) this.props.onClickPlus(value, this.getArgs(e));
     this.$input.focus();
   };
+  // 点击容器
+  onClick = (e) => {
+    e.stopPropagation();
+    const {
+      clear, onClick, onClickLicon, onClickRicon,
+      // onClickInput, onClickPlus, onClickMinus
+    } = this.props;
+    if (this.props.disabled) return;
+    var target = e.target;
+    if (clear && target.classList.contains('clearicon')) {
+      this.onClear(e);
+    }
+    if (onClickLicon && target.classList.contains('licon')) {
+      onClickLicon(this.$input.value, this.getArgs(e));
+      return;
+    }
+    if (onClickRicon && target.classList.contains('ricon')) {
+      onClickLicon(this.$input.value, this.getArgs(e));
+      return;
+    }
+    if (target.classList.contains('input-text')) {
+      this.onClickInput(e);
+      return;
+    }
+    if (target.classList.contains('numbox-button-plus-flag')) {
+      this.onClickPlus(e);
+      return;
+    }
+    if (target.classList.contains('numbox-button-minus-flag')) {
+      this.onClickMinus(e);
+      return;
+    }
+    if (onClick) onClick(this.$input.value, this.getArgs(e));
+  }
+  // 点击清除
+  onClear = (e) => {
+    this.$input.focus();
+    // 赋值
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear(e);
+    if (this.props.onChange) {
+      this.props.onChange('', this.getArgs(e));
+    }
+    e.stopPropagation();
+  }
   // render
   getInputDOM = () => {
     const {
       args,
       style, className, disabled,
+      plusStyle, plusClassName, minusStyle, minusClassName,
+      licon, liconSrc, liconClassName, liconStyle, onClickLicon, liconLazyLoad,
+      ricon, riconSrc, riconClassName, riconStyle, onClickRicon, riconLazyLoad,
+      clear, clearClassName, clearStyle,
       inputStyle, inputClassName, value, placeholder, maxLength, readOnly,
       onClick, onClickMinus, onClickPlus, onClickInput, onChange, onError,
       digits, max, min,
@@ -146,12 +223,38 @@ export default class NumBox extends Component {
     />;
   }
   render() {
-    const {min, max, value, style, className, disabled, onClick} = this.props;
+    const {
+      min, max, value, style, className, disabled,
+      plusStyle, plusClassName, minusStyle, minusClassName,
+      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
+      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
+      clear, clearClassName, clearStyle,
+    } = this.props;
     return (
-      <div ref={el => {this.$el = el;}} disabled={(min >= max) || disabled} style={style} className={`numbox bordered${className ? ' ' + className : ''}`} onClick={onClick}>
-        <input ref={(el) => {this.$minus = el;}} type="button" className="numbox-button" value="-" onClick={this.onClickMinus} disabled={!isNaN(min) ? min - value >= 0 : false}/>
+      <div ref={el => {this.$el = el;}} disabled={(min >= max) || disabled} style={style} className={`numbox${className ? ' ' + className : ''}`} onClick={this.onClick}>
+        <input
+          ref={(el) => {this.$minus = el;}}
+          type="button"
+          className={`numbox-button numbox-button-minus-flag${plusClassName ? ' ' + plusClassName : ''}`}
+          style={plusStyle}
+          value="-"
+          // onClick={this.onClickMinus}
+          disabled={!isNaN(min) ? min - value >= 0 : false}
+        />
+        {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
+        {licon && licon}
         {this.getInputDOM()}
-        <input ref={(el) => {this.$plus = el;}} type="button" className="numbox-button" value="+" onClick={this.onClickPlus} disabled={!isNaN(max) ? max - value <= 0 : false}/>
+        {clear && value && <Close className={`clearicon${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle} onClick={this.onClear}/>}
+        {(riconSrc || riconClassName) && <Icon lazyLoad={riconLazyLoad} className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
+        {ricon && ricon}
+        <input
+          ref={(el) => {this.$plus = el;}}
+          type="button"
+          className={`numbox-button numbox-button-plus-flag${minusClassName ? ' ' + minusClassName : ''}`}
+          style={minusStyle} value="+"
+          // onClick={this.onClickPlus}
+          disabled={!isNaN(max) ? max - value <= 0 : false}
+        />
       </div>
     );
   }

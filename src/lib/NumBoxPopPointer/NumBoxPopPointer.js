@@ -77,7 +77,7 @@ export default class NumBoxPopPointer extends Component {
     } = this.props;
     const {show} = this.state;
     return (
-      <div style={Object.assign({position: 'relative'}, style)} className={className} {...others}>
+      <div style={Object.assign({position: 'relative'}, style)} className={className}>
         <NumBox
           args={args}
           className={numboxClassName}
@@ -101,6 +101,7 @@ export default class NumBoxPopPointer extends Component {
           digits={digits}
           onClickCancel={this.onClickCancel}
           onClickSubmit={this.onClickSubmit}
+          {...others}
         />
       </div>
     );

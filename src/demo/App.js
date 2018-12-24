@@ -4,6 +4,9 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
+import NumBox from '../lib/NumBox';
+import NumBoxPopPointer from '../lib/NumBoxPopPointer';
+import InputVerify from '../lib/InputVerify';
 import InputNumber from '../lib/InputNumber';
 
 export default class App extends Component {
@@ -18,7 +21,6 @@ export default class App extends Component {
     Bridge.debug = true;
   }
   onChange = (value) => {
-    console.log(value);
     this.setState({
       value
     })
@@ -53,7 +55,9 @@ export default class App extends Component {
       </Header>
       <Container>
         <InputNumber valueBindProp value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
-        {/* <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/> */}
+        <NumBoxPopPointer min={0} disabled={true} value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
+        <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
+        <InputVerify/>
       </Container>
     </Page>
   }

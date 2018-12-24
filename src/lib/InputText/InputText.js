@@ -5,7 +5,7 @@ import Close from './../Close';
 
 export default class InputText extends Component {
   static propTypes = {
-    type: PropTypes.string, // 类型: text, password
+    type: PropTypes.string, // 类型: text, number, phone, password
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     pre: PropTypes.bool, // 自动扩充功能
     // 容器
@@ -114,19 +114,6 @@ export default class InputText extends Component {
       if (onClick) onClick(this.$input.value, this.getArgs(e));
     }
   }
-  // 手机号码纠正
-  correctPhone = (value) => {
-    let val = value;
-    // 如果输入的不是一个正整数，则转为正整数
-    if (isNaN(value)) {
-      const result = value.match(/[0-9]{1,}/);
-      if (result) val = result[0];
-      else val = '';
-      // callback onError
-      if (this.props.onError) this.props.onError({msg: '必须要输入数字哦'});
-    }
-    return val;
-  }
   // 自动扩充功能
   preAutoSize = () => {
     this.$input.style.height = this.$pre.clientHeight + 'px';
@@ -141,16 +128,6 @@ export default class InputText extends Component {
       this.$pre.children[0].innerText = value;
       this.preAutoSize();
     }
-    // 手机组件
-    if (type === 'phone') {
-      value = this.correctPhone(value);
-    // 数字组件
-    } else if (type === 'number') {
-      if (target.validity.badInput) {
-        value = '';
-      }
-      value = Math.Calc.correctNumber(value, this.props);
-    }
     // onChange
     if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
       if (!valueBindProp) target.value = value;
@@ -161,24 +138,20 @@ export default class InputText extends Component {
   onBlur = (e) => {
     var target = e.target;
     var value = target.value;
-    if (this.props.type === 'number') {
-      const {required, min, onChange} = this.props;
-      value = Math.Calc.correctNumberBlur(value, {required, min});
-      if (onChange) onChange(value, this.getArgs(e));
-      if (!this.props.valueBindProp) target.value = value;
-    }
-    if (this.props.onBlur) {
-      this.props.onBlur(value, this.getArgs(e));
+    const {onBlur} = this.props;
+    if (onBlur) {
+      onBlur(value, this.getArgs(e));
     }
   }
   onFocus = (e) => {
     var target = e.target;
     var value = target.value;
-    if (this.props.onFocus) {
-      this.props.onFocus(value, this.getArgs(e));
+    const {onFocus, readOnly} = this.props;
+    if (onFocus) {
+      onFocus(value, this.getArgs(e));
       e.stopPropagation();
     }
-    if (this.props.readOnly) {
+    if (readOnly) {
       target.blur();
     }
   }

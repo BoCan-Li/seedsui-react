@@ -149,8 +149,22 @@ Math.Calc = (function () {
     const {required, min} = options;
     var value = argNumstr;
     if (value.length > 0) return '' + Number(value)
-    if (required && value === '') return '' + min || '0'
+    if (required && value === '') return min ? '' + min : '0'
     return '' + value
+  }
+  // 矫正手机号码, 用于输入过程中矫正
+  function correctPhone (argPhone, options) {
+    const {onError} = options;
+    let value = argPhone;
+    // 如果输入的不是一个正整数，则转为正整数
+    if (isNaN(value)) {
+      const result = value.match(/[0-9]{1,}/);
+      if (result) value = result[0];
+      else value = '';
+      // callback onError
+      if (onError) onError({msg: '必须要输入数字哦'});
+    }
+    return value;
   }
   // exports
   return {
@@ -161,6 +175,7 @@ Math.Calc = (function () {
     toFixed: toFixed,
     toThousandth: toThousandth,
     correctNumber: correctNumber,
-    correctNumberBlur: correctNumberBlur
+    correctNumberBlur: correctNumberBlur,
+    correctPhone: correctPhone
   }
 })();
