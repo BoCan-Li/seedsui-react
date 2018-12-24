@@ -54,7 +54,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <NumBoxPopPointer min={0} digits={2} max="5.00" value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/>
+        <NumBoxPopPointer min={0} digits={2} max="5.00" value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} onBlur={() => {console.log('1')}}/>
       </Container>
     </Page>
   }

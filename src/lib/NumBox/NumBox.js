@@ -104,7 +104,6 @@ export default class NumBox extends Component {
   }
   // 失去焦点
   onBlur = (e) => {
-    console.log('失去焦点');
     const {required, min, onChange, onBlur} = this.props;
     const value = Math.Calc.correctNumberBlur(this.props.value, {required, min});
     if (onChange) onChange(value, this.getArgs(e));
@@ -195,13 +194,12 @@ export default class NumBox extends Component {
   getInputDOM = () => {
     const {
       args,
-      style, className, disabled,
-      plusStyle, plusClassName, minusStyle, minusClassName,
+      style, className, disabled, onClick,
+      plusStyle, plusClassName, minusStyle, minusClassName, onClickMinus, onClickPlus,
       licon, liconSrc, liconClassName, liconStyle, onClickLicon, liconLazyLoad,
       ricon, riconSrc, riconClassName, riconStyle, onClickRicon, riconLazyLoad,
       clear, clearClassName, clearStyle,
-      inputStyle, inputClassName, value, placeholder, maxLength, readOnly,
-      onClick, onClickMinus, onClickPlus, onClickInput, onChange, onError,
+      inputStyle, inputClassName, value, placeholder, maxLength, readOnly, onClickInput, onChange, onError, onBlur, onFocus,
       digits, max, min,
       ...others
     } = this.props;
