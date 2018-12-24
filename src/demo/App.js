@@ -54,10 +54,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{borderColor: 'red'}} backCaption="返回"/>
       </Header>
       <Container>
-        <InputNumber valueBindProp value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
-        <NumBoxPopPointer min={0} disabled={true} value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
-        <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/>
-        <InputVerify/>
+        <NumBoxPopPointer min={0} value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/>
       </Container>
     </Page>
   }
