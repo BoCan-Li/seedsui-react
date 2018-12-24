@@ -160,7 +160,7 @@ export default class InputText extends Component {
     this.$input.focus();
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = '';
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear(e);
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', this.getArgs(e));
     if (this.props.onChange) {
       this.props.onChange('', this.getArgs(e));
     }

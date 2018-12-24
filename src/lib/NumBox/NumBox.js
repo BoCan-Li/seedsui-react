@@ -133,7 +133,6 @@ export default class NumBox extends Component {
   // 点击减
   onClickMinus = (e) => {
     let value = Math.Calc.correctNumber(Math.Calc.subtract(this.$input.value, 1), this.props);
-    console.log(value)
     // Callback
     if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
     if (this.props.onClickMinus) this.props.onClickMinus(value, this.getArgs(e));
@@ -185,7 +184,7 @@ export default class NumBox extends Component {
   onClear = (e) => {
     this.$input.focus();
     // 赋值
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear(e);
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', this.getArgs(e));
     if (this.props.onChange) {
       this.props.onChange('', this.getArgs(e));
     }

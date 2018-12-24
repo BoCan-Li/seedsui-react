@@ -56,7 +56,7 @@ export default class App extends Component {
       <Container>
         <InputNumber valueBindProp value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
         <NumBoxPopPointer min={0} disabled={true} value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
-        <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} clear/>
+        <NumBox value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}}/>
         <InputVerify/>
       </Container>
     </Page>

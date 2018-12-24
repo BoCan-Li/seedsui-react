@@ -1272,7 +1272,30 @@
 @numbox-height-lg: @32px;
 @numbox-width-sm: @80px;
 @numbox-height-sm: @22px;
-
+.setNumbox(){
+  &:extend(.flex-middle);
+  text-align:center;
+  background-color:white;
+  border-radius: 4px;
+  &:extend(.bordered);
+}
+.setNumboxInput(){
+}
+.setNumboxRicon(){
+  display: block;
+  margin-left: 4px;
+  color:rgba(0,0,0,.2);
+}
+.setNumboxButtonMinus(){
+  border-width:0 @1px 0 0;
+  border-style: solid;
+  border-color: @numbox-button-border;
+}
+.setNumboxButtonPlus(){
+  border-width:0 0 0 @1px;
+  border-style: solid;
+  border-color: @numbox-button-border;
+}
 // Picker选择器
 @picker-bg:#f5f5f9;
 @picker-button-color: @primary-bg;
