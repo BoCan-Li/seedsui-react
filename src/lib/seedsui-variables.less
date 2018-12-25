@@ -461,6 +461,20 @@
   background-size: cover;
 }
 
+// ImgMark
+.setImgmark(){
+  .flex;
+  .flex-center;
+  position: relative;
+  overflow: hidden;
+  background-color: #ccc;
+}
+.setImgmarkWrapper(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
 // Card卡片
 .setCard(){
   background-color:white;
@@ -752,8 +766,19 @@
   background-position: center;
   background-repeat: no-repeat;
   color: #e5e5e5;
-  font-family: 'iconfont';
-  &:extend(.icon-plus all);
+  &:after{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    content: '+';
+  }
+  // font-family: 'iconfont';
+  // &:extend(.icon-plus all);
 }
 // Legend
 .setLegend(){

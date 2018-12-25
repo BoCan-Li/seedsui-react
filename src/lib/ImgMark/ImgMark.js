@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
 
-export default class Handsign extends Component {
+export default class ImgMark extends Component {
   static propTypes = {
+    // 数据源
+    src: PropTypes.string,
+    data: PropTypes.array,
+    // canvas样式
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
     quality: PropTypes.number,
@@ -14,11 +18,9 @@ export default class Handsign extends Component {
     className: PropTypes.string
   }
   static defaultProps = {
-    strokeStyle: '#000',
+    strokeStyle: '#00ff00',
     lineWidth: 3,
-    quality: 0.92,
-    width: 300,
-    height: 300
+    quality: 0.92
   }
   constructor(props) {
     super(props);
@@ -42,6 +44,9 @@ export default class Handsign extends Component {
   componentDidMount () {
     if (this.state.instance) return;
     var instance = new Instance(this.$el, {
+      src: this.props.src,
+      data: this.props.data,
+      height: this.props.height,
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
       quality: this.props.quality
@@ -52,12 +57,15 @@ export default class Handsign extends Component {
   }
   render() {
     const {
+      src, data,
       strokeStyle, lineWidth, quality,
       width, height, style, className,
       ...others
     } = this.props;
     return (
-      <canvas ref={el => {this.$el = el;}} className={className} style={style} width={width} height={height} {...others}>Canvas画板</canvas>
+      <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height},style)} {...others}>
+        <canvas className={`imgmark-wrapper`} ref={el => {this.$el = el;}}>Canvas画板</canvas>
+      </div>
     );
   }
 }
