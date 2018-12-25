@@ -4,10 +4,8 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Container from '../lib/Container';
-import NumBox from '../lib/NumBox';
 import NumBoxPopPointer from '../lib/NumBoxPopPointer';
-import InputVerify from '../lib/InputVerify';
-import InputNumber from '../lib/InputNumber';
+import InputPhone from '../lib/InputPhone';
 
 export default class App extends Component {
   constructor(props) {
@@ -55,6 +53,7 @@ export default class App extends Component {
       </Header>
       <Container>
         <NumBoxPopPointer min={0} digits={2} max="5.00" value={this.state.value} onChange={this.onChange} className="lg" style={{width: '100%'}} onBlur={() => {console.log('1')}}/>
+        <InputPhone/>
       </Container>
     </Page>
   }

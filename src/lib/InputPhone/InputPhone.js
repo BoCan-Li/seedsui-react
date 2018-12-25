@@ -9,6 +9,6 @@ export default class InputPhone extends Component {
     this.$input = this.refs.$ComponentInputText.$input;
   }
   render() {
-    return <InputText ref="$ComponentInputText" {...this.props} type="phone" maxLength="11"/>;
+    return <InputText ref="$ComponentInputText" {...this.props} type="phone" maxLength={this.props.maxLength || 11}/>;
   }
 }

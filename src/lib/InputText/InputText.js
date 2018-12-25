@@ -122,11 +122,16 @@ export default class InputText extends Component {
   onChange = (e) => {
     var target = e.target;
     var value = target.value;
-    const {valueBindProp, type, onChange} = this.props;
+    const {maxLength, pre, valueBindProp, type, onChange} = this.props;
     // 自动扩充功能
-    if (this.props.pre) {
+    if (pre) {
       this.$pre.children[0].innerText = value;
       this.preAutoSize();
+    }
+    console.log(value)
+    // 最大长度
+    if (maxLength && value && value.length > maxLength) {
+      value = value.substring(0, maxLength)
     }
     // onChange
     if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
