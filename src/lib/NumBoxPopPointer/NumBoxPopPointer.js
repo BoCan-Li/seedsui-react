@@ -6,11 +6,11 @@ import NumBoxPop from './../NumBoxPop';
 export default class NumBoxPopPointer extends Component {
   static propTypes = {
     args: PropTypes.any,
+    containerClassName: PropTypes.string,
+    containerStyle: PropTypes.object,
+    // numbox
     className: PropTypes.string,
     style: PropTypes.object,
-    // numbox
-    numboxClassName: PropTypes.string,
-    numboxStyle: PropTypes.object,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -37,7 +37,7 @@ export default class NumBoxPopPointer extends Component {
   };
 
   static defaultProps = {
-    numboxClassName: 'sm',
+    className: 'sm',
     unitStyle: {
       fontSize: '13px',
       marginLeft: '8px'
@@ -69,19 +69,19 @@ export default class NumBoxPopPointer extends Component {
   render() {
     const {
       args,
-      className, style,
-      numboxClassName, numboxStyle, value, disabled, min, max, digits,
+      containerClassName, containerStyle,
+      className, style, value, disabled, min, max, digits,
       unitClassName, unitStyle, unit,
       onChange,
       ...others
     } = this.props;
     const {show} = this.state;
     return (
-      <div style={Object.assign({position: 'relative'}, style)} className={className}>
+      <div style={Object.assign({position: 'relative'}, containerStyle)} className={containerClassName}>
         <NumBox
           args={args}
-          className={numboxClassName}
-          style={numboxStyle}
+          className={className}
+          style={style}
           value={value}
           disabled={disabled}
           readOnly

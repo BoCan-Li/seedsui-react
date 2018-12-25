@@ -243,7 +243,7 @@ export default class Grid extends Component {
         </li>);
       })}
       {showUpload === true && <li className={`grid-cell`} style={this.getLiStyle()}>
-        <span onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-iconbox-add${iconBoxClassName ? ' ' + iconBoxClassName : ''}`} style={iconBoxStyle}>
+        <span onClick={(e) => {this.onClickAdd(e);}} className={`grid-iconbox grid-icon-add-box${iconBoxClassName ? ' ' + iconBoxClassName : ''}`} style={iconBoxStyle}>
           <Icon className="grid-icon-add"/>
         </span>
       </li>}

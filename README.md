@@ -2777,17 +2777,19 @@ onClickSubmit = (count) => {
 <NumBoxPopPointer
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   // 容器
-  style={容器style object, 默认无, 基础{position: 'relative'}}
-  className={容器className string, 默认无}
+  containerClassName={容器className string, 默认无}
+  containerStyle={容器style object, 默认无, 基础{position: 'relative'}}
   // numbox
-  numboxClassName={加减框className string, 默认无}
-  numboxStyle={加减框style object, 默认无}
+  style={numbox框style object, 默认无}
+  className={numbox框className string, 默认'sm'}
   value={值 string | number, 默认无}
-  disabled={是否禁用 bool, 默认无}
+  digits={文本框截取小数 string | number, 默认无}
   min={最小值 string | number, 默认0}
   max={最大值 string | number, 默认99999999}
-  digits={文本框截取小数 string | number, 默认无}
+  disabled={是否禁用 bool, 默认无}
   // unit
+  unitClassName={单位className string, 默认无}
+  unitStyle={numbox框style object, 默认{fontSize: '13px', marginLeft: '8px'}}
   unit={单位 string, 默认无}
   // events
   onChange={点击确定时触发 func(value, args), 默认无}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImgUploader from 'seedsui-react/lib/ImgUploader';
+import ImgUploader from '../../lib/ImgUploader';
 
 const Required = {
   position: 'absolute',

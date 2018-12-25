@@ -720,18 +720,41 @@
 @grid-caption-color: @body-color;
 @grid-sndcaption-color: @sub;
 @grid-album-cell-height: @90px;
-.setGridIconAdd(){
-  font-family: 'iconfont';
-  &:extend(.icon-plus all);
-}
-.setGridIconBox(){
-}
 .setGridCaption(){
   font-size: @font-size-sm;
 }
 .setGridSndCaption(){
 }
-
+.setGridAlbum-GridIconbox(){
+  height: @grid-album-cell-height;
+  width: 100%;
+  border:1px solid @dpborder;
+  background-color: white;
+  background-size: cover;
+  &.grid-icon-add-box{
+    border:1px dashed @border;
+  }
+}
+.setGridIconbox(){
+  .flex;
+	.flex-middlecenter;
+	position:relative;
+	box-sizing:border-box;
+	margin:0px auto;
+	background-size:cover;
+	background-position:center;
+}
+.setGridIconAdd(){
+  width: 50px;
+  height: 50px;
+  font-size: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #e5e5e5;
+  font-family: 'iconfont';
+  &:extend(.icon-plus all);
+}
 // Legend
 .setLegend(){
   .flex;
@@ -1287,11 +1310,13 @@
   color:rgba(0,0,0,.2);
 }
 .setNumboxButtonMinus(){
+  border-radius: 0;
   border-width:0 @1px 0 0;
   border-style: solid;
   border-color: @numbox-button-border;
 }
 .setNumboxButtonPlus(){
+  border-radius: 0;
   border-width:0 0 0 @1px;
   border-style: solid;
   border-color: @numbox-button-border;

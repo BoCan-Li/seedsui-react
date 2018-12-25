@@ -209,7 +209,7 @@ export default class NumBox extends Component {
       value={value}
       min={min}
       max={max}
-      disabled={readOnly}
+      readOnly={readOnly}
       placeholder={placeholder}
       onChange={this.onChange}
       onFocus={this.onFocus}
