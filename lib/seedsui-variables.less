@@ -461,6 +461,78 @@
   background-size: cover;
 }
 
+// ImgMark
+.setImgmark(){
+  position: relative;
+  overflow: hidden;
+  background-color: #F2F2F2;
+}
+.setImgmarkWrapper(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+
+@-webkit-keyframes rotateIn {
+  0% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(0);
+  }
+
+  100% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(360deg);
+  }
+}
+.setImgmarkLoading(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+.setImgmarkLoadingIcon(){
+  background-image: url(//res.waiqin365.com/d/seedsui/icon/loading.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: @24px;
+  height: @24px;
+  animation: rotateIn 1s linear infinite;
+}
+
+.setImgmarkError(){
+  .flex;
+  .flex-middle;
+  .flex-center;
+  .flex-vertical;
+  height: 100%;
+  display: none;
+  &.active{
+    .flex;
+  }
+}
+.setImgmarkErrorIcon(){
+  font-family: iconfont;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+  &:extend(.icon-pic-error all);
+  color: #D8D8D8;
+}
+.setImgmarkErrorCaption(){
+  margin-top: 4px;
+  &:extend(.font-size-sm);
+  color: #D8D8D8;
+}
 // Card卡片
 .setCard(){
   background-color:white;
@@ -752,8 +824,19 @@
   background-position: center;
   background-repeat: no-repeat;
   color: #e5e5e5;
-  font-family: 'iconfont';
-  &:extend(.icon-plus all);
+  &:after{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    content: '+';
+  }
+  // font-family: 'iconfont';
+  // &:extend(.icon-plus all);
 }
 // Legend
 .setLegend(){
