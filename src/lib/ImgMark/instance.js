@@ -3,7 +3,10 @@ var Imgmark = function (container, params) {
   Model
   ---------------------- */
   var defaults = {
+    loadingClass: 'imgmark-loading',
+    errorClass: 'imgmark-error',
     activeClass: 'active',
+
     src: '',
     data: [],
     strokeStyle: '#00ff00',
@@ -25,6 +28,8 @@ var Imgmark = function (container, params) {
     console.log('SeedsUI Error : HandSign container不存在，请检查页面中是否有此元素')
     return
   }
+  s.loadingContainer = s.container.parentNode.querySelector('.' + s.params.loadingClass) || null
+  s.errorContainer = s.container.parentNode.querySelector('.' + s.params.errorClass) || null
   s.ctx = s.container.getContext('2d')
   s.stageInfo = s.container.getBoundingClientRect()
   s.path = {
@@ -95,6 +100,7 @@ var Imgmark = function (container, params) {
       img.setAttribute("crossOrigin",'Anonymous')
       img.src = s.params.src
       img.addEventListener('load', s.onLoad, false)
+      img.addEventListener('error', s.onError, false)
     }
   }
   /* ----------------------
@@ -102,15 +108,23 @@ var Imgmark = function (container, params) {
   ---------------------- */
   s.onLoad = function (e) {
     var target = e.target
+    // 显隐
+    if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
+    if (s.errorContainer) s.errorContainer.classList.remove(s.params.activeClass)
     s.container.classList.add(s.params.activeClass)
+    // 绘图
     s.container.width = target.width
     s.container.height = target.height
-    console.log(s.params.data)
     s.draw(target, s.params.data)
     // 缩小
     var scale = s.params.height / target.height
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
     s.container.style.WebkitTransformOrigin = `0 0`
+  }
+  s.onError = function () {
+    if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
+    if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
+    s.container.classList.remove(s.params.activeClass)
   }
   // 主函数
   s.init = function () {

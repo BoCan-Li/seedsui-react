@@ -584,7 +584,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <ImgMark ref={(el) => {this.$elImgMark = el;}} height={300} src="http://172.31.3.96:3001/20180911195747712_05105130_CAMERA_21001006280.jpg" data={this.state.data} onClick={this.preview}/>
+        <ImgMark ref={(el) => {this.$elImgMark = el;}} height={300} src="http://172.31.3.96:3001/imgmark.jpg" data={this.state.data} onClick={this.preview}/>
 				<input type="button" value="全部" onClick={this.onChangeData}/>
 				<input type="button" value="切换1" onClick={this.onChangeData1}/>
 				<input type="button" value="切换2" onClick={this.onChangeData2}/>

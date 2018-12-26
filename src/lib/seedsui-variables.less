@@ -465,16 +465,28 @@
 .setImgmark(){
   position: relative;
   overflow: hidden;
-  background-color: #ccc;
+  background-color: #F2F2F2;
 }
 .setImgmarkWrapper(){
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  visibility: hidden;
+  display: none;
   &.active{
-    visibility: visible;
+    display: block;
+  }
+}
+
+@-webkit-keyframes rotateIn {
+  0% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(0);
+  }
+
+  100% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(360deg);
   }
 }
 .setImgmarkLoading(){
@@ -482,6 +494,44 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+.setImgmarkLoadingIcon(){
+  background-image: url(//res.waiqin365.com/d/seedsui/icon/loading.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: @24px;
+  height: @24px;
+  animation: rotateIn 1s linear infinite;
+}
+
+.setImgmarkError(){
+  .flex;
+  .flex-middle;
+  .flex-center;
+  .flex-vertical;
+  height: 100%;
+  display: none;
+  &.active{
+    .flex;
+  }
+}
+.setImgmarkErrorIcon(){
+  font-family: iconfont;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+  &:extend(.icon-pic-error all);
+  color: #D8D8D8;
+}
+.setImgmarkErrorCaption(){
+  margin-top: 4px;
+  &:extend(.font-size-sm);
+  color: #D8D8D8;
 }
 // Card卡片
 .setCard(){

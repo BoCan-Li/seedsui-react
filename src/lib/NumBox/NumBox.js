@@ -81,13 +81,13 @@ export default class NumBox extends Component {
     super(props);
   }
   componentDidMount () {
-    const {required} = this.props;
-    var value = this.props.value;
-    if (required) { // 必填项,必须有值
-      if (value === '') value = this.props.min || '0';
-    }
-    value = Math.Calc.correctNumber(value, this.props);
-    if (this.props.onChange) this.props.onChange(value, this.getArgs());
+    // const {required} = this.props;
+    // var value = this.props.value;
+    // if (required) { // 必填项,必须有值
+    //   if (value === '') value = this.props.min || '0';
+    // }
+    // value = Math.Calc.correctNumber(value, this.props);
+    // if (this.props.value - value !== 0 && this.props.onChange) this.props.onChange(value, this.getArgs());
   }
   getArgs = (e) => {
     var args = this.props.args;

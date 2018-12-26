@@ -71,8 +71,14 @@ export default class ImgMark extends Component {
     } = this.props;
     return (
       <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height},style)} {...others}>
-        <div className={`imgmark-loading`}>正在加载...</div>
+        <div className={`imgmark-loading active`}>
+          <div className={`imgmark-loading-icon`}></div>
+        </div>
         <canvas className={`imgmark-wrapper`} ref={el => {this.$el = el;}}>Canvas画板</canvas>
+        <div className={`imgmark-error`}>
+          <div className={`imgmark-error-icon`}></div>
+          <div className={`imgmark-error-caption`}>图片加载失败</div>
+        </div>
       </div>
     );
   }
