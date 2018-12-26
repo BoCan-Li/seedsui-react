@@ -1,4 +1,6 @@
-// Carrousel 滑动控件
+// Carrousel 滑动控件(require Device.js)
+import Device from './../Device'
+
 var Carrousel = function (container, params) {
   function getPureChildren (children, className) {
     var arr = []
@@ -190,9 +192,9 @@ var Carrousel = function (container, params) {
     } else if (s.container.style.width) {
       s.width = /(\d+)px/.exec(s.container.style.width)[1]
     } else {
-      s.width = (s.container.clientWidth ? s.container.clientWidth : window.innerWidth)
+      s.width = (s.container.clientWidth ? s.container.clientWidth : Device.screenWidth)
     }
-    s.container.width = s.width + 'px'
+    s.container.style.width = s.width + 'px'
     // Slide width
     s.slideWidth = Math.floor(s.width / s.params.slidesPerView)
 

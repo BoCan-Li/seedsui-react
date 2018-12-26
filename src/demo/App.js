@@ -26,7 +26,7 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-			<Carrousel slidesPerView={2} loop>
+			<Carrousel>
 				<div>1</div>
 				<div>2</div>
 			</Carrousel>
