@@ -463,8 +463,6 @@
 
 // ImgMark
 .setImgmark(){
-  .flex;
-  .flex-center;
   position: relative;
   overflow: hidden;
   background-color: #ccc;
@@ -473,8 +471,18 @@
   position: absolute;
   left: 50%;
   top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  &.active{
+    visibility: visible;
+  }
 }
-
+.setImgmarkLoading(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 // Card卡片
 .setCard(){
   background-color:white;

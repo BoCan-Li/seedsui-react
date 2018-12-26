@@ -32,12 +32,19 @@ export default class ImgMark extends Component {
     if (this.state.instance) {
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
         this.state.instance.setStrokeStyle(this.props.strokeStyle);
+        this.state.instance.update();
       }
       if (prevProps.lineWidth !== this.props.lineWidth) {
         this.state.instance.setLineWidth(this.props.lineWidth);
+        this.state.instance.update();
       }
       if (prevProps.quality !== this.props.quality) {
         this.state.instance.setQuality(this.props.quality);
+        this.state.instance.update();
+      }
+      if (prevProps.data !== this.props.data) {
+        this.state.instance.setData(this.props.data);
+        this.state.instance.update();
       }
     }
   }
@@ -64,6 +71,7 @@ export default class ImgMark extends Component {
     } = this.props;
     return (
       <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height},style)} {...others}>
+        <div className={`imgmark-loading`}>正在加载...</div>
         <canvas className={`imgmark-wrapper`} ref={el => {this.$el = el;}}>Canvas画板</canvas>
       </div>
     );

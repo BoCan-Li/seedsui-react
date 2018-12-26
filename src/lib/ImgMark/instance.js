@@ -3,6 +3,7 @@ var Imgmark = function (container, params) {
   Model
   ---------------------- */
   var defaults = {
+    activeClass: 'active',
     src: '',
     data: [],
     strokeStyle: '#00ff00',
@@ -24,8 +25,6 @@ var Imgmark = function (container, params) {
     console.log('SeedsUI Error : HandSign container不存在，请检查页面中是否有此元素')
     return
   }
-  s.width = s.container.width
-  s.height = s.container.height
   s.ctx = s.container.getContext('2d')
   s.stageInfo = s.container.getBoundingClientRect()
   s.path = {
@@ -37,6 +36,11 @@ var Imgmark = function (container, params) {
   /* ----------------------
   Model Method
   ---------------------- */
+  s.setData = function (data) {
+    if (data) {
+      s.params.data = data
+    }
+  }
   s.setStrokeStyle = function (strokeStyle) {
     if (strokeStyle) {
       s.params.strokeStyle = strokeStyle
@@ -60,26 +64,13 @@ var Imgmark = function (container, params) {
   /* ----------------------
   Method
   ---------------------- */
-  // 清除签名
+  // 清除
   s.clear = function () {
-    s.ctx.clearRect(0, 0, s.width, s.height)
-  }
-  // 是否画过
-  s.isDrew = function () {
-    var blank = document.createElement('canvas')
-    blank.width = s.container.width
-    blank.height = s.container.height
-    if (s.container.toDataURL() === blank.toDataURL()) return false
-    return true
+    s.ctx.clearRect(0, 0, s.container.width, s.container.height)
   }
   // 保存签名
   s.save = function () {
-    // 如果已经画过了,则返回base64,如果没有画过,则返回空
-    if (s.isDrew()) {
-      return s.container.toDataURL(s.params.suffix, s.params.quality)
-    } else {
-      return ''
-    }
+    return s.container.toDataURL(s.params.suffix, s.params.quality)
   }
   // 绘制图片
   s.draw = function (img, data) {
@@ -91,17 +82,19 @@ var Imgmark = function (container, params) {
       console.log('SeedsUI Error:ImgMark执行draw缺少img')
       return
     }
-    s.ctx.strokeStyle = s.params.strokeStyle
     s.ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height)
     for (let item of data) {
+      if (item.strokeStyle) s.ctx.strokeStyle = item.strokeStyle
+      else s.ctx.strokeStyle = s.params.strokeStyle
       s.ctx.strokeRect(item.x1, item.y1, item.x2 - item.x1, item.y2 - item.y1)
     }
   }
   s.update = function () {
     if (s.params.src) {
-      var image = new Image()
-      image.src = s.params.src
-      image.addEventListener('load', s.onLoad, false)
+      var img = new Image()
+      img.setAttribute("crossOrigin",'Anonymous')
+      img.src = s.params.src
+      img.addEventListener('load', s.onLoad, false)
     }
   }
   /* ----------------------
@@ -109,8 +102,10 @@ var Imgmark = function (container, params) {
   ---------------------- */
   s.onLoad = function (e) {
     var target = e.target
+    s.container.classList.add(s.params.activeClass)
     s.container.width = target.width
     s.container.height = target.height
+    console.log(s.params.data)
     s.draw(target, s.params.data)
     // 缩小
     var scale = s.params.height / target.height
