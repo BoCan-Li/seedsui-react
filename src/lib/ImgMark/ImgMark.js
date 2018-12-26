@@ -20,7 +20,8 @@ export default class ImgMark extends Component {
   static defaultProps = {
     strokeStyle: '#00ff00',
     lineWidth: 3,
-    quality: 0.92
+    quality: 0.92,
+    height: 300
   }
   constructor(props) {
     super(props);

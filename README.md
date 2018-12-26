@@ -110,6 +110,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Handsign](#handsign) 手写签名
 - [Header](#header) page头部
 - [Icon](#icon) 图标
+- [ImgMark](#imgmark) 图片标注
 - [ImgLazy](#imglazy) 懒人加载
 - [ImgUploader](#imguploader) 图片上传
 - [IndexBar](#imguploader) 侧边索引栏
@@ -1591,6 +1592,78 @@ import Icon from 'seedsui-react/lib/Icon';
 <Icon className="icon-edit size20"/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+## ImgMark
+[签名](#https://unpkg.com/seedsui-react/src/lib/ImgMark/ImgMark.js)
+### 属性
+```javascript
+<ImgMark
+  // 数据源
+  src={图片地址或者base64 string, 默认无}
+  data={标注数据 array, 默认无}
+  // [
+  //   {
+  //     x1: 442,
+  //     x2: 492,
+  //     y1: 79,
+  //     y2: 265,
+  //     strokeStyle: 'red' // 可选
+  //   }
+  // ]
+  // canvas样式
+  strokeStyle={标注颜色 string, 默认'#00ff00'}
+  lineWidth={标注线粗px number, 默认3}
+  quality={存储时的图片质量 number, 默认0.92}
+  width={宽度px number, 默认无} // 宽度会根据调度等比例缩放,它只会影响canvas外层容器,并不会影响canvas
+  height={高度px number, 默认300} // 不能通过style设置高度,否则canvas会错位
+  style={标注面板style object, 默认无}
+  className={标注面板className string, 默认无}
+/>
+```
+### 示例
+```javascript
+import ImgMark from 'seedsui-react/lib/ImgMark';
+
+onChangeData = () => {
+  this.setState({
+    data: result.skuList
+  })
+}
+onChangeData1 = () => {
+  this.setState({
+    data: result1.skuList
+  })
+}
+onChangeData2 = () => {
+  this.setState({
+    data: result2.skuList
+  })
+}
+preview = (e) => {
+  var url = this.$elImgMark.state.instance.save();
+  if (url) {
+    Bridge.previewImage({urls: [url], index: 0});
+  }
+}
+  
+<ImgMark
+  ref={(el) => {this.$elImgMark = el;}}
+  height={300}
+  src="http://172.31.3.96:3001/imgmark.jpg"
+  data={this.state.data}
+  onClick={this.preview}
+/>
+<input type="button" value="全部" onClick={this.onChangeData}/>
+<input type="button" value="切换1" onClick={this.onChangeData1}/>
+<input type="button" value="切换2" onClick={this.onChangeData2}/>
+```
+[返回目录](#component)
+
 
 
 
