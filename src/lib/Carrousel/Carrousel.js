@@ -66,6 +66,7 @@ export default class Carrousel extends Component {
   instance = () => {
     const instance = new Instance(this.$el, {
       height: this.props.style && this.props.style.height ? this.props.style.height : null,
+      width: this.props.style && this.props.style.width ? this.props.style.width : null,
       stopPropagation: this.props.stopPropagation,
       pagination: '.carrousel-pagination',
       autoplay: this.props.autoplay,
