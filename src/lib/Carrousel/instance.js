@@ -359,7 +359,7 @@ var Carrousel = function (container, params) {
     // x轴距离左边的像素，向左为负数，向右为正数
     var moveX = s.touches.posX - s.touches.diffX
     // 判断是否是边缘
-    if (moveX > 0 || -moveX + s.width >= s.wrapperWidth) {
+    if (moveX > 0 || Number(-moveX) + Number(s.width) >= s.wrapperWidth) {
       return
     }
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
