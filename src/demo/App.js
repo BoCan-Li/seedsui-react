@@ -26,10 +26,7 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-			<Carrousel>
-				<div>1</div>
-				<div>2</div>
-			</Carrousel>
+			<Carrousel style={{height: '500px'}} list={[{img: 'http://res.waiqin365.com/d/seedsui/carrousel/default.png'}, {img: 'http://res.waiqin365.com/d/seedsui/bi-gauge/gauge.png'}]}/>
     </Page>
   }
 };

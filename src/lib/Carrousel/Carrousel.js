@@ -9,7 +9,7 @@ export default class Carrousel extends Component {
     slideStyle: PropTypes.object, // 设置块style
     slideClassName: PropTypes.string, // 设置块className
     children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
-    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播
+    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 解决与fastclick事件冲突的问题
     loop: PropTypes.bool, // 是否循环显示
     activeIndex: PropTypes.number, // 默认选中第几块
     pagination: PropTypes.bool, // 是否显示小点点
@@ -55,12 +55,12 @@ export default class Carrousel extends Component {
     }
   }
   componentDidMount = () => {
-    if (this.props.list.length) {
+    this.instance();
+    // 轮播图片, 自适应的情况下, 高度需要计算
+    if (!(this.props.style && this.props.style.height) && this.props.list.length && this.props.delay) {
       setTimeout(() => {
-        this.instance();
+        this.state.instance.updateContainerSize();
       }, this.props.delay);
-    } else if (this.props.children) {
-      this.instance();
     }
   }
   instance = () => {
@@ -92,8 +92,11 @@ export default class Carrousel extends Component {
     }
     return (list.length > 0 ? 'carrousel-container' : 'carrousel-page') + (className ? ' ' + className : '');
   }
-  getSlideStyle = () => {
-    return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, this.props.slideStyle);
+  getSlideStyle = (item) => {
+    if (item.bg) {
+      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, this.props.slideStyle);
+    }
+    return this.props.slideStyle;
   }
   update = () => {
     // 更新为默认图片
@@ -122,16 +125,16 @@ export default class Carrousel extends Component {
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
-        return <div className={`carrousel-slide${slideClassName ? ' ' + slideClassName : '' + item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle()} key={index} data-load-src={item.bg}>
-          {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
-          {item.caption && <div className="carrousel-summary">
-            {item.iconClassName && <i className={'icon carrousel-summary-icon' + (item.iconClassName ? ' ' + item.iconClassName : '')}></i>}
-            <span className="nowrap carrousel-summary-font" style={{marginRight: '20px'}}>
-              {item.caption}
-            </span>
-          </div>}
-        </div>
-        })}
+          return <div className={`carrousel-slide${slideClassName ? ' ' + slideClassName : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
+            {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
+            {item.caption && <div className="carrousel-summary">
+              {item.iconClassName && <i className={'icon carrousel-summary-icon' + (item.iconClassName ? ' ' + item.iconClassName : '')}></i>}
+              <span className="nowrap carrousel-summary-font" style={{marginRight: '20px'}}>
+                {item.caption}
+              </span>
+            </div>}
+          </div>
+          })}
         {/* 轮播页 */}
         {list.length === 0 && children && children.map((item, index) => {
           return <div className="carrousel-slide" key={index}>{item}</div>

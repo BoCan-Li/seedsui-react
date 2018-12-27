@@ -189,7 +189,7 @@ var Carrousel = function (container, params) {
       s.width = s.params.width
     } else if (/(\d+)px/.test(s.params.width)) {
       s.width = /(\d+)px/.exec(s.params.width)[1]
-    } else if (s.container.style.width) {
+    } else if (/(\d+)px/.test(s.container.style.width)) {
       s.width = /(\d+)px/.exec(s.container.style.width)[1]
     } else {
       s.width = (s.container.clientWidth ? s.container.clientWidth : Device.screenWidth)
@@ -213,16 +213,20 @@ var Carrousel = function (container, params) {
     })
   }
   s.updateHeight = function () {
-    if (s.container.classList.contains(s.params.pageClass)) return
     if (s.params.height && !isNaN(s.params.height)) {
       s.height = s.params.height
     } else if (/(\d+)px/.test(s.params.height)) {
       s.height = /(\d+)px/.exec(s.params.height)[1]
-    } else if (s.container.style.height) {
+    } else if (/(\d+)px/.test(s.container.style.height)) {
       s.height = /(\d+)px/.exec(s.container.style.height)[1]
-    } else {
-      s.height = (s.container.clientHeight ? s.container.clientHeight : s.container.parentNode.clientHeight)
+    } else if (s.container.classList.contains(s.params.pageClass)) { // 如果没有设置高度,且是页面轮播,则高度自适应
+      s.height = null
+    } else { // 非页面轮播时,则需要计算高度
+      s.height = (s.container.clientHeight ? s.container.clientHeight : s.wrapper.clientHeight)
     }
+    if (!s.height) return
+    // Container height
+    s.container.style.height = s.height + 'px'
     // Wrapper height
     s.wrapper.style.height = s.height + 'px'
     // Slide height
