@@ -26,7 +26,13 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-			<Carrousel style={{height: '500px'}} list={[{img: 'http://res.waiqin365.com/d/seedsui/carrousel/default.png'}, {img: 'http://res.waiqin365.com/d/seedsui/bi-gauge/gauge.png'}]}/>
+      <Carrousel list={[
+        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201810/9079949586690731451.jpg'},
+        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/6921639949729265798.jpg'},
+        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/8964506760533595658.jpg'},
+        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/6695434300157512708.jpg'},
+        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201810/9079949586690731451.jpg'}
+      ]} autoplay={5000} pagination loop/>
     </Page>
   }
 };

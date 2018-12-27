@@ -483,7 +483,7 @@ var Carrousel = function (container, params) {
           moveToIndex(0)
           return
         }
-        if (-s.touches.posX + s.width >= s.wrapperWidth) {
+        if (Number(-s.touches.posX) + Number(s.width) >= Number(s.wrapperWidth)) {
           s.activeIndexTruth = s.params.slidesPerView
           // console.log('最右侧，应跳转到：'+s.activeIndexTruth)
           moveToIndex(0)
