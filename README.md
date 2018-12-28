@@ -1197,12 +1197,7 @@ import Dot from 'seedsui-react/lib/Dot';
   hasMore={状态标识 string, 默认-2} // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
 
   showNoData={是否允许暂无数据 bool, 默认false}
-  noDataClassName={暂无数据容器className string, 默认无}
-  noDataStyle={暂无数据容器style object, 默认无}
-  noDataCaption={暂无数据标题 string, 默认'暂无数据'}
-  noDataIconSrc={暂无数据图标src string, 默认无}
-  noDataIconClassName={暂无数据图标className string, 默认'notice-icon-nodata'}
-  noDataOnClick={点击暂无数据 func(e)}
+  noDataParams={404无数据时的Notive组件属性 props, 默认无}
 
   lazyLoad={是否启用懒人加载 bool, 默认false} // 每当didUpdate时会执行lazyLoadInstance.load();
 

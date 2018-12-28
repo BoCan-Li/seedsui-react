@@ -3,7 +3,8 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
-import Carrousel from '../lib/Carrousel';
+import Dragrefresh from '../lib/Dragrefresh';
+import Button from '../lib/Button';
 
 export default class App extends Component {
   constructor(props) {
@@ -26,13 +27,8 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-      <Carrousel list={[
-        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201810/9079949586690731451.jpg'},
-        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/6921639949729265798.jpg'},
-        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/8964506760533595658.jpg'},
-        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201807/6695434300157512708.jpg'},
-        {img: 'http://image-test.waiqin365.com/7101765025922582426/stdmendian/info/201810/9079949586690731451.jpg'}
-      ]} autoplay={5000} pagination loop/>
+      <Dragrefresh hasMore={404} noDataParams={{children: <Button className="md primary" style={{width: '100px', margin: '20px auto 0 auto', borderRadius: '4px'}} onClick={this.goLogin}>重新登录</Button>}}>
+      </Dragrefresh>
     </Page>
   }
 };

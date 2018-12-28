@@ -16,19 +16,13 @@ export default class Dragrefresh extends Component {
     hasMore: PropTypes.number, // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
 
     showNoData: PropTypes.bool, // 是否允许暂无数据
-    noDataClassName: PropTypes.string,
-    noDataStyle: PropTypes.object,
-    noDataCaption: PropTypes.string,
-    noDataIconSrc: PropTypes.string,
-    noDataIconClassName: PropTypes.string,
-    noDataOnClick: PropTypes.func, // 点击暂无数据
+    noDataParams: PropTypes.object,
 
     lazyLoad: PropTypes.bool,
 
     onScroll: PropTypes.func, // 滚动事件
   }
   static defaultProps = {
-    noDataIconClassName: 'notice-icon-nodata',
     showNoData: true
   }
   constructor(props) {
@@ -124,7 +118,7 @@ export default class Dragrefresh extends Component {
     }
   }
   render() {
-    const {style, className, onTopRefresh, onBottomRefresh, showNoData, noDataClassName, noDataStyle, noDataCaption, noDataIconSrc, noDataIconClassName, noDataOnClick} = this.props;
+    const {style, className, onTopRefresh, onBottomRefresh, showNoData, noDataParams} = this.props;
     return (
       <div ref={(el) => {this.$el = el;}} className={`container${className ? ' ' + className : ''}`} style={style}>
         {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
@@ -150,7 +144,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.props.hasMore === 404 && showNoData && <Notice className={noDataClassName} style={noDataStyle} caption={noDataCaption || '暂无数据'} iconSrc={noDataIconSrc} iconClassName={noDataIconClassName} onClick={noDataOnClick}/>}
+        {this.props.hasMore === 404 && showNoData && <Notice caption={'暂无数据'} iconClassName={'notice-icon-nodata'} {...noDataParams}/>}
       </div>
     );
   }
