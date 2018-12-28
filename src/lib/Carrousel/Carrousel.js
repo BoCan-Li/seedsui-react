@@ -9,7 +9,7 @@ export default class Carrousel extends Component {
     slideStyle: PropTypes.object, // 设置块style
     slideClassName: PropTypes.string, // 设置块className
     children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
-    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 解决与fastclick事件冲突的问题
+    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 设置为false解决与FastClick插件touch事件冲突的问题
     loop: PropTypes.bool, // 是否循环显示
     activeIndex: PropTypes.number, // 默认选中第几块
     pagination: PropTypes.bool, // 是否显示小点点
@@ -24,7 +24,7 @@ export default class Carrousel extends Component {
     delay: PropTypes.number, // 延迟初始化秒数
   }
   static defaultProps = {
-    stopPropagation: true,
+    stopPropagation: false, // 设置为false解决与Fastclick插件touch事件冲突的问题
     activeIndex: 0,
     page: 0,
     loop: false,

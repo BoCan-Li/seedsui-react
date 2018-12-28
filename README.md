@@ -913,7 +913,7 @@ import Card from 'seedsui-react/lib/Card';
   classNameclassName={容器className string, 默认无, 基础'carrousel-container'}
   slideStyle={单块style object, 默认无}
   slideClassName={单块className string, 默认无, 基础'carrousel-slide'}
-  stopPropagation={是否阻止点击事件的传播 bool, 默认true} // 当touch事件与fastclick插件冲突时可设为false
+  stopPropagation={是否阻止点击事件的传播 bool, 默认true} // 当touch事件与FastClick插件冲突时可设为false
   loop={是否循环显示 bool, 默认false}
   activeIndex={默认选中第几块 number, 默认0}
   pagination={是否显示小点点 bool, 默认false}
