@@ -7,33 +7,27 @@
   bottom: 0;
   color: @notice-color;
   background-color: @notice-bg;
-  z-index: 1;
+  .setNotice();
+}
+.notice-wrapper{
+  .setNoticeWrapper();
 }
 .notice-icon{
-  width:120px;
-  height:120px;
-  font-size:120px;
+  .setNoticeIcon();
 }
 .notice-icon-nodata{
-  .setNoticeNoDataIcon();
+  .setNoticeIconNoData();
 }
 .notice-icon-nonetwork{
-  .setNoticeNoNetworkIcon();
+  .setNoticeIconNoNetwork();
 }
 .notice-icon-error{
-  .setNoticeErrorIcon();
+  .setNoticeIconError();
 }
 .notice-caption{
-  margin-top: 10px;
+  .setCaption();
 }
 .notice-sndcaption{
-  margin-top: 10px;
-}
-.notice .notice-content{
-  position: absolute;
-  width: 100%;
-  top:40%;
-  transform: translateY(-50%);
-  text-align: center;
+  .setSndCaption();
 }
 // notice.less(end)

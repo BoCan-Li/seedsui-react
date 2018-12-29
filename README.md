@@ -1197,7 +1197,7 @@ import Dot from 'seedsui-react/lib/Dot';
   hasMore={状态标识 string, 默认-2} // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
 
   showNoData={是否允许暂无数据 bool, 默认false}
-  noDataParams={404无数据时的Notive组件属性 props, 默认无}
+  noDataParams={无数据时的Notive组件属性 object, 默认无}
 
   lazyLoad={是否启用懒人加载 bool, 默认false} // 每当didUpdate时会执行lazyLoadInstance.load();
 
@@ -2692,19 +2692,24 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 ### 属性
 ```javascript
 <Notice
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={显隐 bool, 默认true}
     
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'notice'}
-  onClick={点击内容区域 func(args), 默认无}
+
+  wrapperParams={样式为notice-wrapper的div容器属性 object, 默认无}
+  
   icon={图标dom node, 默认无}
-  iconSrc={图标地址 string, 默认无}
-  iconStyle={图标style object, 默认无}
-  iconClassName={图标className string, 默认无} // 'notice-icon-nodata | notice-icon-error'
+  iconParams={Icon组件属性 object, 默认无}
 
   caption={标题 string, 默认''}
+  captionParams={样式为notice-wrapper的div属性 object, 默认无}
   sndcaption={副标题 string, 默认''}
+  sndcaptionParams={样式为notice-wrapper的div属性 object, 默认无}
+
+  children={wrapper容器内子元素 node, 默认无}
+
+  {...others}
 >
 其它内容
 </Notice>
