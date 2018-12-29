@@ -2700,9 +2700,9 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
   wrapperParams={样式为notice-wrapper的div容器属性 object, 默认无}
   
   icon={图标dom node, 默认无}
-  iconParams={Icon组件属性 object, 默认无}
+  iconParams={Icon组件属性 object, 默认{className: 'notice-icon-nodata'}}
 
-  caption={标题 string, 默认''}
+  caption={标题 string, 默认'暂无数据'}
   captionParams={样式为notice-wrapper的div属性 object, 默认无}
   sndcaption={副标题 string, 默认''}
   sndcaptionParams={样式为notice-wrapper的div属性 object, 默认无}

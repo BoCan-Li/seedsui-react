@@ -23,7 +23,9 @@ export default class Notice extends Component {
   static defaultProps = {
     show: true,
     wrapperParams: {},
-    iconParams: {},
+    iconParams: {
+      className: 'notice-icon-nodata'
+    },
     caption: '暂无数据',
     captionParams: {},
     sndcaptionParams: {}
