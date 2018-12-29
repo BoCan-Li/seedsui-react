@@ -3,65 +3,52 @@ import PropTypes from 'prop-types';
 import Icon from './../Icon';
 export default class Notice extends Component {
   static propTypes = {
-    args: PropTypes.any,
     show: PropTypes.bool,
     
     className: PropTypes.string,
     style: PropTypes.object,
-    onClick: PropTypes.func, // 点击内容区域
+
+    wrapperParams: PropTypes.object,
+
     icon: PropTypes.node,
-    iconSrc: PropTypes.string,
-    iconStyle: PropTypes.object,
-    iconClassName: PropTypes.string, // notice-icon-nodata | notice-icon-error
+    iconParams: PropTypes.object,
+
     caption: PropTypes.string,
+    captionParams: PropTypes.object,
     sndcaption: PropTypes.string,
+    sndcaptionParams: PropTypes.object,
+
     children: PropTypes.node
   }
   static defaultProps = {
-    args: null,
     show: true,
-    caption: '',
-    sndcaption: ''
+    wrapperParams: {},
+    iconParams: {},
+    caption: '暂无数据',
+    captionParams: {},
+    sndcaptionParams: {}
   }
   constructor(props) {
     super(props);
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
-  onClick = (e) => {
-    if (this.props.onClick) {
-      this.props.onClick(this.getArgs(e));
-    }
-  }
   render() {
     const {
-      args,
       show,
-      className, style, onClick,
-      icon, iconSrc, iconStyle, iconClassName,
-      caption,
-      sndcaption,
+      className, style,
+      wrapperParams,
+      icon, iconParams,
+      caption, captionParams,
+      sndcaption, sndcaptionParams,
       children,
       ...others
     } = this.props;
     return (
       show ? <div ref={el => {this.$el = el;}} className={`notice${className ? ' ' + className : ''}`} style={style} {...others}>
-        <div className="notice-content" onClick={this.onClick}>
-          {(iconSrc || iconClassName) && <Icon className={`notice-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
+        <div {...wrapperParams} className={`notice-wrapper${wrapperParams.className ?  ' ' + wrapperParams.className : ''}`}>
+          {(iconParams.src || iconParams.className) && <Icon {...iconParams} className={`notice-icon${iconParams.className ? ' ' + iconParams.className : ''}`}/>}
           {icon}
-          <div className="notice-caption">{caption}</div>
-          {sndcaption && <div className="notice-sndcaption">{sndcaption}</div>}
+          {caption && <div {...captionParams} className={`notice-caption${captionParams.className ?  ' ' + captionParams.className : ''}`}>{caption}</div>}
+          {sndcaption && <div {...sndcaptionParams} className={`notice-sndcaption${sndcaptionParams.className ?  ' ' + sndcaptionParams.className : ''}`}>{sndcaption}</div>}
           {children}
         </div>
       </div> : null

@@ -26,7 +26,7 @@ export default class NoNetwork extends Component {
     const {isOnLine} = this.state;
     const {caption, sndcaption} = this.props;
     return (
-      isOnLine ? null :<Notice ref={el => {this.$el = el;}} iconClassName="icon-no-network" caption={caption} sndcaption={sndcaption}/>
+      isOnLine ? null :<Notice ref={el => {this.$el = el;}} iconParams={{className: 'icon-no-network'}} caption={caption} sndcaption={sndcaption}/>
     );
   }
 }

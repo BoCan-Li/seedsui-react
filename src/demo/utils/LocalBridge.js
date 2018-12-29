@@ -1,5 +1,5 @@
-import Bridge from 'seedsui-react/lib/Bridge';
-import Device from 'seedsui-react/lib/Device';
+import Bridge from './../../lib/Bridge';
+import Device from './../../lib/Device';
 
 var LocalBridge = {
   _logOut: function (message) {

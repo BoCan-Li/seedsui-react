@@ -17,17 +17,22 @@ export default class App extends Component {
   componentDidMount() {
     Bridge.debug = true;
   }
-  onChange = (value) => {
-    this.setState({
-      value
-    })
+  onClick = () => {
+    console.log(1)
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-      <Dragrefresh hasMore={404} noDataParams={{children: <Button className="md primary" style={{width: '100px', margin: '20px auto 0 auto', borderRadius: '4px'}} onClick={this.goLogin}>重新登录</Button>}}>
+      <Dragrefresh
+        hasMore={404}
+        noDataParams={{
+          iconParams: {className: 'notice-icon-error'},
+          onClick: this.onClick,
+          children: <Button className="md primary" style={{width: '100px', margin: '20px auto 0 auto', borderRadius: '4px'}} onClick={this.goLogin}>重新登录</Button>
+        }}
+      >
       </Dragrefresh>
     </Page>
   }

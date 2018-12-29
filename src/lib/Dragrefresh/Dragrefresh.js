@@ -144,7 +144,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.props.hasMore === 404 && showNoData && <Notice caption={'暂无数据'} iconClassName={'notice-icon-nodata'} {...noDataParams}/>}
+        {this.props.hasMore === 404 && showNoData && <Notice caption={'暂无数据'} iconParams={{className: 'notice-icon-nodata'}} {...noDataParams}/>}
       </div>
     );
   }
