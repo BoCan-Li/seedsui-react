@@ -3,7 +3,7 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
-import Notice from '../lib/Notice';
+import Timeline from '../lib/Timeline';
 
 export default class App extends Component {
   constructor(props) {
@@ -24,7 +24,16 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-      <Notice iconParams={{className: 'notice-icon-error'}}/>
+      <Timeline lineParams={{
+        style: {backgroundColor: 'red', top: '0'
+      }}}
+      dotParams={{
+        style: {backgroundColor: 'red'}
+      }} list={[
+        {
+          content: <p>第一行</p>
+        }
+      ]}/>
     </Page>
   }
 };
