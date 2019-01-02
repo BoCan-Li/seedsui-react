@@ -4,8 +4,9 @@ import Notice from 'seedsui-react/lib/Notice';
 import Button from 'seedsui-react/lib/Button';
 import LocalBridge from 'utils/LocalBridge';
 
+export default
 @withRouter
-export default class Exception extends Component {
+class Exception extends Component {
   goLogin = () => {
     LocalBridge.logOut('', this.props.history);
   }
