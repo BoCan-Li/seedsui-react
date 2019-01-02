@@ -24,16 +24,19 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-      <Timeline lineParams={{
-        style: {backgroundColor: 'red', top: '0'
-      }}}
-      dotParams={{
-        style: {backgroundColor: 'red'}
-      }} list={[
-        {
-          content: <p>第一行</p>
-        }
-      ]}/>
+      <Timeline
+        lineParams={{
+          className: 'bg-primary'
+        }}
+        dotParams={{
+          className: 'bg-primary'
+        }}
+        list={[
+          {
+            content: <p>第一行</p>
+          }
+        ]}
+      />
     </Page>
   }
 };

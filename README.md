@@ -3723,9 +3723,14 @@ import Ticket from 'seedsui-react/lib/Ticket';
   // [{content: node, icon: node(默认Dot), active: bool, children: node}]
   className={容器className string, 默认无, 基础'timeline'}
   style={容器style object, 默认无}
-  badgeStyle={左侧style object, 默认无}
-  className={左线条className string, 默认无, 基础'timeline-line'}
-  style={左线条style object, 默认无}
+
+  lineParams={div左线条属性 object, 默认无, 基础{className: 'timeline-line'}}
+
+  badgeParams={div左小球的容器 object, 默认无, 基础{className: 'timeline-badge'}}
+
+  dotParams={Dot组件小球属性 object, 默认{className: ''}}
+  
+  {...others}
 />
 ```
 ### 示例
