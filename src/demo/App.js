@@ -3,7 +3,22 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
-import Timeline from '../lib/Timeline';
+import Carrousel from '../lib/Carrousel';
+import OnOff from '../lib/OnOff';
+
+const numberStyle = {
+  'position': 'absolute',
+  'right': '10px',
+  'bottom': '10px',
+  'color': 'white',
+  'backgroundColor': 'rgba(0,0,0,.4)',
+  'width': '50px',
+  'height': '24px',
+  'borderRadius': '20px',
+  'fontSize': '12px',
+  'textAlign': 'center',
+  'lineHeight': '24px'
+}
 
 export default class App extends Component {
   constructor(props) {
@@ -24,19 +39,20 @@ export default class App extends Component {
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
-      <Timeline
-        lineParams={{
-          className: 'bg-primary'
-        }}
-        dotParams={{
-          className: 'bg-primary'
-        }}
-        list={[
-          {
-            content: <p>第一行</p>
-          }
-        ]}
-      />
+      <Carrousel style={{height: '300px'}} pagination={<div style={numberStyle}>1/2</div>} list={[
+        {
+          bg: 'http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180912160555102_21346241_CAMERA_21001007288.jpg',
+          caption: '呵呵',
+          iconParams: {style: {color: 'red'}}
+        },
+        {
+          bg: 'http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180912160555102_21346241_CAMERA_21001007288.jpg'
+        }
+      ]}/>
+      <OnOff onCaption="开" offCaption="关"/>
+      <OnOff onCaption="开" offCaption="关" checked/>
+      <OnOff/>
+      <OnOff checked/>
     </Page>
   }
 };

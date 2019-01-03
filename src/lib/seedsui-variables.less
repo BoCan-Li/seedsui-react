@@ -142,19 +142,19 @@
 	color:@placeholder;	
 }
 
-.horizontal-tb(){
+.setHorizontalTb(){
   -webkit-writing-mode:horizontal-tb;
 }
-.horizontal-bt(){
+.setHorizontalBt(){
   -webkit-writing-mode:horizontal-bt;
 }
-.vertical-rl(){
+.setVerticalRl(){
   -webkit-writing-mode:vertical-rl;
 }
-.vertical-lr(){
+.setVerticalLr(){
   -webkit-writing-mode:vertical-lr;
 }
-.noselect(){
+.setNoselect(){
   -webkit-touch-callout:none;
 	-webkit-user-select:none;
 }
@@ -797,7 +797,7 @@
 }
 .setGridSndCaption(){
 }
-.setGridAlbum-GridIconbox(){
+.setGridAlbum-gridIconbox(){
   height: @grid-album-cell-height;
   width: 100%;
   border:1px solid @dpborder;
@@ -1594,6 +1594,8 @@
 
 // OnOff开关
 .setOnOff(){
+  position: relative;
+	display: inline-block;
   height: @30px;
   width: @60px;
   border-radius: @30px;
@@ -1609,76 +1611,93 @@
   border:none;
   box-shadow: inset 0 0 0 @1px @dpborder;
 
+  // 文字
+	&:after{
+		content: attr(data-off);
+		position: absolute;
+		top:50%;
+		transform: translateY(-50%);
+    // ios风格
+    right: @11px;
+
+    // 小球风格
+    // color: @placeholder;
+
+    // ios风格
+    color:@placeholder;
+	}
+	// 圆点
+	.onoff-handle{
+		pointer-events:none;
+		position: absolute;
+		left:0;
+		top:50%;
+		border-radius: @100px;
+    transition-duration:200ms;
+    transition-property:transform, border, width;
+
+    // 小球风格
+    // width: @20px;
+    // height: @20px;
+    // transform:translate(@4px,-50%);
+    // background-color:@dpborder;
+
+    // ios风格
+    width: @26px;
+    height: @26px;
+    transform: translate(@2px,-50%);
+    background-color:white;
+    box-shadow: @2px @2px @2px rgba(0,0,0,.21);
+	}
+	&.active {
+    // 小球风格
+
+    // ios风格
+    background-color:@primary-bg;
+    box-shadow: none;
+		
+		&:after{ // 文字
+			content: attr(data-on);
+			right: auto;
+      left: @11px;
+
+      // 小球风格
+      // color: @placeholder;
+
+      // ios风格
+      color:white;
+		}
+		
+		.onoff-handle{ // 圆点
+			left:0;
+      top:50%;
+
+      // 小球风格
+      // transform: translate(@34px,-50%);
+      // background-color: @primary-bg;
+
+      // ios风格
+      transform: translate(@32px,-50%);
+      box-shadow: @2px @2px @4px rgba(0,0,0,.21);
+      background-color:white;
+		}
+  }
+  
   &.notext{ // 无文字时宽度应当小一些
     width: @50px;
+    &.active{
+      .onoff-handle{
+        // 小球风格
+        // transform: translate(@24px,-50%);
+        // ios风格
+        transform: translate(@22px,-50%);
+      }
+    }
+    &:after{
+      content:none;
+    }
   }
 }
-.setOnOffActive(){
-  // 小球风格
-
-  // ios风格
-  background-color:@primary-bg;
-	box-shadow: none;
-}
-
-.setOnOffCaption(){
-  right: @11px;
-
-  // 小球风格
-  // color: @placeholder;
-
-  // ios风格
-  color:@placeholder;
-}
-.setOnOffCaptionActive(){
-  right: auto;
-  left: @11px;
-
-  // 小球风格
-  // color: @placeholder;
-
-  // ios风格
-  color:white;
-}
-
-.setOnOffHandle(){
-  border-radius: @100px;
-  transition-duration:200ms;
-  transition-property:transform, border, width;
-
-  // 小球风格
-  // width: @20px;
-  // height: @20px;
-  // transform:translate(@4px,-50%);
-  // background-color:@dpborder;
-
-  // ios风格
-  width: @26px;
-  height: @26px;
-  transform: translate(@2px,-50%);
-  background-color:white;
-  box-shadow: @2px @2px @2px rgba(0,0,0,.21);
-}
-.setOnOffHandleActive(){
-  left:0;
-  top:50%;
-
-  // 小球风格
-  // transform: translate(@34px,-50%);
-  // background-color: @primary-bg;
-
-  // ios风格
-  transform: translate(@32px,-50%);
-  box-shadow: @2px @2px @4px rgba(0,0,0,.21);
-  background-color:white;
-}
-.setOnOffHandleActive-noText(){
-  // 小球风格
-  // transform: translate(@24px,-50%);
-  // ios风格
-  transform: translate(@22px,-50%);
-}
-
 // InputStar
 .setInputStar(){
   .flex;
@@ -1915,10 +1934,6 @@
 }
 
 // Carrousel轮播
-@phone-background-size: cover;
-@pad-background-size: cover;
-@pc-background-size: cover;
-@pc-lg-background-size: cover;
 .setCarrouselPage(){
   // 绝对定布局
   // position:absolute;
@@ -1942,6 +1957,9 @@
   }
 }
 .setCarrouselContainer(){
+  position: relative;
+  width: 100%;
+  overflow: hidden; 
   @media (min-width: 992px) {
     &:hover{
       .carrousel-prev{
@@ -1953,10 +1971,110 @@
     }
   }
 }
+.setCarrouselWrapper(){
+  position:relative;
+  width: @1122px;
+  left:0;
+  &:after{
+    display:table;
+    content:'';
+    clear: both;
+    zoom:1;
+  }
+}
+.setCarrouselSlide(){
+  position: relative;
+  float:left;
+  overflow: auto;
+  background-size:cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  // phone
+  @media (max-width: 576px) {
+    & {
+      background-size: cover;
+    }
+  }
+  // phone-lg
+  @media (min-width: 576px) {
+    & {
+      background-size: cover;
+    }
+  }
+  // pad
+  @media (min-width: 768px) {
+    & {
+      background-size: cover;
+    }
+  }
+  // pc
+  @media (min-width: 992px) {
+    & {
+      background-size: cover;
+    }
+  }
+  // pc-lg
+  @media (min-width: 1200px) {
+    & {
+      background-size: cover;
+    }
+  }
+}
+
+// Carrousel-图片
+.setCarrouselSlideImg(){
+  pointer-events: none;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+}
+// Carrousel-标题
+.setCarrouselSummary(){
+  position: absolute;
+  .flex;
+  bottom: 0;
+  width: 100%;
+  padding:@8px @10px;
+  background-color: rgba(0,0,0,.5);
+  text-overflow:nowrap;
+  box-sizing: border-box;
+  color:white;
+  text-align: left;
+}
+.setCarrouselSummaryIcon(){
+  display: block;
+  font-size: @20px;
+  width: @20px;
+  height: @20px;
+  &+.carrousel-summary-caption{
+    margin-left: @4px;
+  }
+}
+.setCarrouselSummaryCaption(){
+  display: block;
+  &:extend(.flex-1);
+}
+// Carrousel-分页
 .setCarrouselPagination(){
+  position: absolute;
+  left:0;
+  bottom:@10px;
+  width: 100%;
+  line-height: 0;
+  font-size: 0;
   text-align: center;
 }
 .setCarrouselBullet(){
+  display: inline-block;
+  opacity: 1;
+  width: @5px;
+  height: @5px;
+  border-radius: 100%;
+  margin-right:@5px;
+  line-height: @8px;
+  font-size: @12px;
+  bottom: @10px;
   width: @8px;
   height: @8px;
   background-color:#ccc;
@@ -1996,12 +2114,50 @@
 }
 // ticket票券
 @ticket-sawtooth-bg: #E86366;
-@ticket-legend-color: white;
-@ticket-legend-bg-image: linear-gradient(90deg, #E86366 1%, #FD905C 100%);
-
 @ticket-disabled-sawtooth-bg: #B9BEC5;
-@ticket-disabled-legend-color: white;
-@ticket-disabled-legend-bg-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);
+.setTicket(){
+  position: relative;
+	margin: 12px 14px;
+	height: 112px;
+	.flex;
+	background-color: #fff;
+	box-shadow: 0 @1px @2px 0 rgba(0,0,0,0.12);
+	border-radius: @2px;
+	&:after{
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: -@9px;
+		display: block;
+		background-position: 100% 35%;
+		width: @14px;
+		background-size: @28px @7px;
+		background-image: linear-gradient(-45deg,@ticket-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-135deg,@ticket-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-45deg,transparent 75%,@ticket-sawtooth-bg 75%),linear-gradient(-135deg,transparent 75%,@ticket-sawtooth-bg 75%);
+	}
+}
+.setTicketLegend(){
+  .flex;
+	.flex-middlecenter;
+	width: 100px;
+	height: 100%;
+	color: white;
+	background-image: linear-gradient(90deg, #E86366 1%, #FD905C 100%);;
+}
+.setTicketContainer(){
+  .flex-1;
+	height: 100%;
+}
+.setTicket_disabled(){
+  &:after{
+		background-image: linear-gradient(-45deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-135deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-45deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%),linear-gradient(-135deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%);
+	}
+	.ticket-legend{
+		color: white;
+		background-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);
+	}
+}
+
 
 // Weather天气
 .setWeather(){

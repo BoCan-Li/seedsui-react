@@ -6,24 +6,39 @@ export default class Carrousel extends Component {
   static propTypes = {
     style: PropTypes.object, // 设置容器Style
     className: PropTypes.string, // 设置容器className
-    slideStyle: PropTypes.object, // 设置块style
-    slideClassName: PropTypes.string, // 设置块className
-    children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
+
+    slideParams: PropTypes.object,
+
+    pagination: PropTypes.oneOfType([  // 是否显示小点点
+      PropTypes.bool,
+      PropTypes.node
+    ]),
+    paginationParams: PropTypes.object,
+
+    prevParams: PropTypes.object,
+    nextParams: PropTypes.object,
+
     stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 设置为false解决与FastClick插件touch事件冲突的问题
-    loop: PropTypes.bool, // 是否循环显示
     activeIndex: PropTypes.number, // 默认选中第几块
-    pagination: PropTypes.bool, // 是否显示小点点
+
+    loop: PropTypes.bool, // 是否循环显示
     autoplay: PropTypes.number, // 是否自动播放
     slidesPerView: PropTypes.number, // 一屏显示几块,默认1块
     defaultSrc: PropTypes.string, // 默认图片
-    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
+    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconParams: {}, caption: 'xx'}]
     enableOnChange: PropTypes.bool, // 手动调用slideTo方法是否触发onChange事件回调
     speed: PropTypes.number, // 动画过渡的速度
     onClick: PropTypes.func, // func(s, e)
     onChange: PropTypes.func,
     delay: PropTypes.number, // 延迟初始化秒数
+
+    children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
   }
   static defaultProps = {
+    slideParams: {},
+    paginationParams: {},
+    prevParams: {},
+    nextParams: {},
     stopPropagation: false, // 设置为false解决与Fastclick插件touch事件冲突的问题
     activeIndex: 0,
     page: 0,
@@ -35,7 +50,7 @@ export default class Carrousel extends Component {
     defaultSrc: '//res.waiqin365.com/d/seedsui/carrousel/default.png',
     enableOnChange: true,
     speed: 300,
-    delay: 500
+    delay: 500,
   }
   constructor(props) {
     super(props);
@@ -68,7 +83,6 @@ export default class Carrousel extends Component {
       height: this.props.style && this.props.style.height ? this.props.style.height : null,
       width: this.props.style && this.props.style.width ? this.props.style.width : null,
       stopPropagation: this.props.stopPropagation,
-      pagination: '.carrousel-pagination',
       autoplay: this.props.autoplay,
       slidesPerView: this.props.slidesPerView,
       loop: this.props.loop,
@@ -93,10 +107,11 @@ export default class Carrousel extends Component {
     return (list.length > 0 ? 'carrousel-container' : 'carrousel-page') + (className ? ' ' + className : '');
   }
   getSlideStyle = (item) => {
+    const {slideParams} = this.props;
     if (item.bg) {
-      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, this.props.slideStyle);
+      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, slideParams.style);
     }
-    return this.props.slideStyle;
+    return slideParams.style;
   }
   update = () => {
     // 更新为默认图片
@@ -115,34 +130,52 @@ export default class Carrousel extends Component {
   }
   render() {
     const {
-      style,
-      slideClassName,
-      defaultSrc, list, pagination
+      className, style,
+      slideParams,
+      pagination, paginationParams,
+      prevParams, nextParams,
+      stopPropagation,
+      activeIndex,
+
+      loop,
+      autoplay,
+      slidesPerView,
+      defaultSrc,
+      list,
+      enableOnChange,
+      speed,
+      onClick,
+      onChange,
+      delay,
+
+      children,
+      ...others
     } = this.props;
-    const children = React.Children.toArray(this.props.children);
+    const childrenArr = React.Children.toArray(children);
     return (
-      <div ref={el => {this.$el = el}} className={this.getCarrouselClassName()} style={style}>
+      <div ref={el => {this.$el = el}} className={this.getCarrouselClassName()} style={style} {...others}>
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
-          return <div className={`carrousel-slide${slideClassName ? ' ' + slideClassName : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
+          return <div className={`carrousel-slide${slideParams.className ? ' ' + slideParams.className : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
             {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
             {item.caption && <div className="carrousel-summary">
-              {item.iconClassName && <i className={'icon carrousel-summary-icon' + (item.iconClassName ? ' ' + item.iconClassName : '')}></i>}
-              <span className="nowrap carrousel-summary-font" style={{marginRight: '20px'}}>
+              {item.iconParams && item.iconParams.className && <i {...item.iconParams} className={`icon carrousel-summary-icon${item.iconParams.className ? ' ' + item.iconParams.className : ''}`}></i>}
+              <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>
                 {item.caption}
               </span>
             </div>}
           </div>
           })}
         {/* 轮播页 */}
-        {list.length === 0 && children && children.map((item, index) => {
+        {list.length === 0 && childrenArr && childrenArr.map((item, index) => {
           return <div className="carrousel-slide" key={index}>{item}</div>
         })}
       </div>
-      {pagination && <div className="carrousel-pagination"></div>}
-      {list.length > 1 && <div className="carrousel-prev"></div>}
-      {list.length > 1 && <div className="carrousel-next"></div>}
+      {pagination === true && <div {...paginationParams} className={`carrousel-pagination${paginationParams.className ? ' ' + paginationParams.className : ''}`}></div>}
+      {pagination && pagination !== true && pagination}
+      {list.length > 1 && <div {...prevParams} className={`carrousel-prev${prevParams.className ? ' ' + prevParams.className : ''}`}></div>}
+      {list.length > 1 && <div {...nextParams} className={`carrousel-next${nextParams.className ? ' ' + nextParams.className : ''}`}></div>}
       </div>
     );
   }

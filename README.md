@@ -910,21 +910,29 @@ import Card from 'seedsui-react/lib/Card';
 ```javascript
 <Carrousel
   style={容器style object, 默认无}
-  classNameclassName={容器className string, 默认无, 基础'carrousel-container'}
-  slideStyle={单块style object, 默认无}
-  slideClassName={单块className string, 默认无, 基础'carrousel-slide'}
+  className={容器className string, 默认无, 基础:list模式下为'carrousel-container'|page模式下为'carrousel-page'}
+  
+  slideParams={div左线条属性 object, 默认无, 基础{className: 'carrousel-slide'}}
+
+  pagination={是否显示小点点 bool | node, 默认false} // 传node为自定义分页
+  paginationParams={div小点点容器属性 object, 默认无, 基础{className: 'carrousel-pagination'}}
+
   stopPropagation={是否阻止点击事件的传播 bool, 默认false} // 当touch事件与FastClick插件冲突时可设为false
   loop={是否循环显示 bool, 默认false}
   activeIndex={默认选中第几块 number, 默认0}
-  pagination={是否显示小点点 bool, 默认false}
+  
   autoplay={自动播放毫秒数 number, 默认0} // 设置大于0的数值才会触发自动播放
   slidesPerView={一屏显示几块 number, 默认1}
   defaultSrc={默认图片 string, 默认'//res.waiqin365.com/d/seedsui/carrousel/default.png'}
-  list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconClassName: 'xx', caption: 'xx'}]
+  list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconParams: {}, caption: 'xx'}]
   speed={动画过渡的速度 number, 默认300}
   enableOnChange={手动调用slideTo方法是否触发onChange事件回调 bool, 默认true}
   onChange={轮播时事件回调 func()}
   onClick={点击块 func(item, index, s, e)}
+  
+  children={wrapper容器内子元素 node, 默认无}
+
+  {...others}
 >
 <div>轮播页时, 用此div, 轮播图则使用list属性</div>
 </Carrousel>
