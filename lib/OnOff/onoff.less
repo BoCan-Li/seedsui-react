@@ -1,46 +1,5 @@
 // onoff.less(start)
 .onoff {
-	position: relative;
-	display: inline-block;
 	.setOnOff();
-	// 文字
-	&:after{
-		content: attr(data-off);
-		position: absolute;
-		top:50%;
-		transform: translateY(-50%);
-		.setOnOffCaption();
-	}
-	// 圆点
-	.onoff-handle{
-		pointer-events:none;
-		position: absolute;
-		left:0;
-		top:50%;
-		.setOnOffHandle();
-	}
-	&.active {
-		.setOnOffActive();
-		// 文字
-		&:after{
-			content: attr(data-on);
-			.setOnOffCaptionActive();
-		}
-		// 圆点
-		.onoff-handle{
-			.setOnOffHandleActive();
-		}
-	}
-}
-// 开关控件toggle-无文字
-.notext.onoff{
-	&.active{
-		.onoff-handle{
-			.setOnOffHandleActive-noText();
-		}
-	}
-	&:after{
-		content:none;
-	}
 }
 // onoff.less(end)
