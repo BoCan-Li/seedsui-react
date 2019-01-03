@@ -91,6 +91,8 @@ var Imgmark = function (container, params) {
     for (let item of data) {
       if (item.strokeStyle) s.ctx.strokeStyle = item.strokeStyle
       else s.ctx.strokeStyle = s.params.strokeStyle
+      if (item.lineWidth) s.ctx.lineWidth = item.lineWidth
+      else s.ctx.lineWidth = s.params.lineWidth
       s.ctx.strokeRect(item.x1, item.y1, item.x2 - item.x1, item.y2 - item.y1)
     }
   }
