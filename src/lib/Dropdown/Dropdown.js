@@ -107,9 +107,39 @@ export default class Dropdown extends Component {
     if (this.props.onChange) this.props.onChange(tabbar);
   }
   render() {
-    const DOM = [<Tabbar key="tabbar" ref={el => {this.$tabbar = el}} exceptOnClickActive={false} list={this.state.tabbar} onClick={this.onClickTab} activeIndex={this.state.tabbarActiveIndex} className="tabbar-dropdown tabbar-tiled border-b"/>];
-    DOM.push(<Dialog key="dialog" portal={this.props.portal} onClickMask={this.onClickMask} animation="slideDown" style={{width: '100%'}} maskStyle={{top: this.state.top + 'px'}} show={this.state.dialogShow}>
-      <MenuTiled list={this.state.menus} activeId={this.state.activeMenuId} onClick={this.onClickMenu}/>
+    const {
+      portal,
+      top,
+      disabled,
+      onChange,
+      list,
+      ...others
+    } = this.props;
+    const DOM = [<Tabbar
+      key="tabbar"
+      disabled={disabled}
+      ref={el => {this.$tabbar = el}}
+      exceptOnClickActive={false}
+      list={this.state.tabbar}
+      onClick={this.onClickTab}
+      activeIndex={this.state.tabbarActiveIndex}
+      className="tabbar-dropdown tabbar-tiled border-b"
+      {...others}
+    />];
+    DOM.push(<Dialog
+      key="dialog"
+      portal={this.props.portal}
+      onClickMask={this.onClickMask}
+      animation="slideDown"
+      style={{width: '100%'}}
+      maskStyle={{top: this.state.top + 'px'}}
+      show={this.state.dialogShow}
+    >
+      <MenuTiled
+        list={this.state.menus}
+        activeId={this.state.activeMenuId}
+        onClick={this.onClickMenu}
+      />
     </Dialog>);
     return DOM;
   }

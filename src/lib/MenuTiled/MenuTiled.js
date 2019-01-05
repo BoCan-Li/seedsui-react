@@ -26,7 +26,7 @@ export default class MenuTiled extends Component {
     }
   }
   shouldComponentUpdate = (nextProps) => {
-    if (this.props.list.length === nextProps.list.length) {
+    if (!nextProps.list || !this.props.list || this.props.list.length === nextProps.list.length) {
       return false;
     }
     return true;
