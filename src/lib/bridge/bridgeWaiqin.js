@@ -36,10 +36,10 @@ var Bridge = {
   ----------------------------------------------------- */
   /* // 文件是否存在
   isExistsFile({
-    "fileName": "ss.txt",
-    "size": 200
-  }，(result) => {
-  // 返回{{"isExists":"","filePath":"","fileName":""}，isExists:'0'不存在，'1'存在
+    fileName: 'ss.txt',
+    size: 200
+  }，(result) => { // result => {isExists: '', filePath: '', fileName: ''}，isExists:'0'不存在，'1'存在
+  
   })
   */
   isExistsFile: function (params, callback) {
@@ -49,12 +49,12 @@ var Bridge = {
   },
   /* // 附件下载
   downloadFile({
-    "id": "id",
-    "fileName": "ss.txt",
-    "downloadUrl": "http://...",
-    "size": 200
-  }，(result) => {
-  // 返回{{"code":"","filePath":"","message":""}，code:'0'失败，'1'成功，message失败原因
+    id: '',
+    fileName: src.substring(src.lastIndexOf('/') + 1, src.length), // 必填
+    downloadUrl: "http://...", // 必填
+    size: 200 // 必填
+  }，(result) => { // result => {{flag:'', filePath: '', msg: ''}, flag:'0'失败，'1'成功，msg失败原因
+  
   }) */
   downloadFile: function (params, callback) {
     wq.wqio.downloadFile((result) => { // eslint-disable-line
@@ -62,15 +62,26 @@ var Bridge = {
     }, params ? JSON.stringify(params) : null)
   },
   /* // 附件打开
-  openFile（{
-    "filePath": ""
-  }，(result) => {
-  // 返回{{"code":"","message":""}，code:'0'失败，'1'成功，message失败原因
+  openFile({
+    filePath: ''
+  }，(result) => { // result => {flag:'',msg:''} flag:'0'失败，'1'成功, msg失败原因
+  
   }） */
   openFile: function (params, callback) {
     wq.wqio.openFile((result) => { // eslint-disable-line
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null)
+  },
+  /* // 附件转为base64
+  toBase64({
+    path: ['', '']
+  }，(result) => { // result => [{path:'',name:'',src:'base64'}]
+  
+  }） */
+  toBase64: function (params, callback) {
+    wq.wqphoto.wqUrlToBase64((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, params ? JSON.stringify(params) : null);
   },
   /* -----------------------------------------------------
     视频播放
