@@ -128,7 +128,6 @@ export default class InputText extends Component {
       this.$pre.children[0].innerText = value;
       this.preAutoSize();
     }
-    console.log(value)
     // 最大长度
     if (maxLength && value && value.length > maxLength) {
       value = value.substring(0, maxLength)

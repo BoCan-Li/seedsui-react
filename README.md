@@ -3269,16 +3269,16 @@ onClickVideo = (args) => {
 import Popover from 'seedsui-react/lib/Popover';
 
 this.state = {
-  show: false
+  showMenu: false
 }
 
-onHide = () => {
+hideMenu = () => {
   this.setState({
-    show: false
+    showMenu: false
   })
 }
 
-<Popover show={this.state.show} className="top-left" style={{left: '10px', top: '44px'}} onClickMask={this.onHide}>
+<Popover show={this.state.showMenu} className="top-left" style={{left: '10px', top: '44px'}} onClickMask={this.hideMenu}>
   <List caption="本月" className="border-b"/>
   <List caption="上月" className="border-b"/>
   <List caption="自定义时间"/>
