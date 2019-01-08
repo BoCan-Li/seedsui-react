@@ -106,7 +106,7 @@ export default class InputText extends Component {
     } else if (target.classList.contains('licon')) {
       if (onClickLicon) onClickLicon(this.$input.value, this.getArgs(e));
     } else if (target.classList.contains('ricon')) {
-      if (onClickRicon) onClickLicon(this.$input.value, this.getArgs(e));
+      if (onClickRicon) onClickRicon(this.$input.value, this.getArgs(e));
     } else if (target.classList.contains('input-text')) {
       if (onClick) onClick(this.$input.value, this.getArgs(e));
       if (onClickInput) onClickInput(this.$input.value, this.getArgs(e));
