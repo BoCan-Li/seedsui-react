@@ -29,6 +29,10 @@ var Bridge = {
   logOut: function () {
     console.log('logOut方法仅在app上工作')
   },
+  // 获取APP信息
+  getApp: function () {
+    console.log('logOut方法仅在外勤app上工作')
+  },
   // 视频播放
   previewVideo: function (params = {}) {
     var target = document.getElementById('seedsui_preview_video')

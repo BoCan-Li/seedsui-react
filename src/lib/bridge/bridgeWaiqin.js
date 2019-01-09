@@ -31,6 +31,15 @@ var Bridge = {
       if (callback) callback(result)
     }, null, params ? JSON.stringify(params) : null)
   },
+  /*
+  * 获取APP信息
+  * params: {operation: 'AllInfo'}
+  * */
+  getApp: function (callback, params = {operation: 'AllInfo'}) {
+    wq.wqapp.getApp((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, null, JSON.stringify(params))
+  },
   /* -----------------------------------------------------
     文件操作
   ----------------------------------------------------- */
