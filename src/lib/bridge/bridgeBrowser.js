@@ -32,7 +32,37 @@ var Bridge = {
   // 获取APP信息
   getApp: function (callback) {
     if (callback) callback({})
-    console.log('logOut方法仅在外勤app上工作')
+    console.log('getApp方法仅在外勤app上工作')
+  },
+  // 文件是否存在
+  isExistsFile: function (params = {}, callback) {
+    if (callback) callback({isExists: '0'})
+    console.log('isExistsFile方法仅在外勤app上工作')
+  },
+  // 附件下载
+  downloadFile: function (params = {}, callback) {
+    if (callback) callback({flag: '1', filePath: params.fileName || ''})
+    console.log('downloadFile方法仅在外勤app上工作')
+  },
+  // 附件打开
+  openFile: function (params = {}, callback) {
+    if (callback) callback({flag: '1'})
+    console.log('openFile方法仅在外勤app上工作')
+  },
+  // 外勤附件转为base64
+  wqUrlToBase64: function (params = {}, callback) {
+    var path = []
+    if (params.path && params.path.length) {
+      path = params.path.map(function (src) {
+        return {
+          path: src,
+          name: src.substring(src.lastIndexOf('/') + 1, src.length),
+          src: src
+        }
+      })
+    }
+    if (callback) callback(path)
+    console.log('wqUrlToBase64方法仅在外勤app上工作')
   },
   // 视频播放
   previewVideo: function (params = {}) {

@@ -106,7 +106,7 @@ export default class NumBox extends Component {
   onBlur = (e) => {
     const {required, min, onChange, onBlur} = this.props;
     const value = Math.Calc.correctNumberBlur(this.props.value, {required, min});
-    if (onChange) onChange(value, this.getArgs(e));
+    if (onChange && '' + value !== '' + this.props.value) onChange(value, this.getArgs(e));
     if (onBlur) onBlur(value, this.getArgs(e));
   };
   // 获取焦点

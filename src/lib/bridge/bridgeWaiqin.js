@@ -73,7 +73,7 @@ var Bridge = {
   /* // 附件打开
   openFile({
     filePath: ''
-  }，(result) => { // result => {flag:'',msg:''} flag:'0'失败，'1'成功, msg失败原因
+  }，(result) => { // result => {flag:'', msg:''} flag:'0'失败, '1'成功, msg失败原因
   
   }） */
   openFile: function (params, callback) {
@@ -82,12 +82,13 @@ var Bridge = {
     }, params ? JSON.stringify(params) : null)
   },
   /* // 附件转为base64
-  toBase64({
-    path: ['', '']
-  }，(result) => { // result => [{path:'',name:'',src:'base64'}]
+  wqUrlToBase64({
+    path: ['', ''],
+    destroy: '1' // '0'转完后删除, '1'转完后不删除
+  }, (result) => { // result => [{path:'', name:'', src:'base64'}]
   
   }） */
-  toBase64: function (params, callback) {
+  wqUrlToBase64: function (params, callback) {
     wq.wqphoto.wqUrlToBase64((result) => { // eslint-disable-line
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null);

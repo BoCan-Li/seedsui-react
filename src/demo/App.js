@@ -5,6 +5,7 @@ import Titlebar from '../lib/Titlebar';
 import Bridge from '../lib/Bridge';
 import Carrousel from '../lib/Carrousel';
 import OnOff from '../lib/OnOff';
+import NumBox from '../lib/NumBox';
 
 const numberStyle = {
   'position': 'absolute',
@@ -34,6 +35,9 @@ export default class App extends Component {
   onClick = () => {
     console.log(1)
   }
+  onChagne = (value) => {
+    console.log(value);
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
@@ -53,6 +57,7 @@ export default class App extends Component {
       <OnOff onCaption="开" offCaption="关" checked/>
       <OnOff/>
       <OnOff checked/>
+      <NumBox onChange={this.onChagne} value={1}/>
     </Page>
   }
 };

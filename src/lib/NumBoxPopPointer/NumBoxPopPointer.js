@@ -88,6 +88,7 @@ export default class NumBoxPopPointer extends Component {
           min={min}
           max={max}
           digits={digits}
+          onChange={onChange}
           onClickInput={this.onClickNumBox}
         />
         <span style={unitStyle} className={unitClassName}>{unit || ''}</span>
