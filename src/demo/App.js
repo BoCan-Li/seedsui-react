@@ -6,6 +6,7 @@ import Bridge from '../lib/Bridge';
 import Carrousel from '../lib/Carrousel';
 import OnOff from '../lib/OnOff';
 import NumBox from '../lib/NumBox';
+import InputCity from '../lib/InputCity';
 
 const numberStyle = {
   'position': 'absolute',
@@ -58,6 +59,7 @@ export default class App extends Component {
       <OnOff/>
       <OnOff checked/>
       <NumBox onChange={this.onChagne} value={1}/>
+      <InputCity/>
     </Page>
   }
 };
