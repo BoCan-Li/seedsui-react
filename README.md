@@ -1910,6 +1910,9 @@ const result2 = {
 	}]
 };
 
+this.state = {
+  data: []
+};
 
 onChangeData = () => {
   this.setState({
