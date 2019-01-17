@@ -27,7 +27,10 @@ export default class Tree extends Component {
     buttonDelSrc: PropTypes.string,
     onClickDel: PropTypes.func,
 
-    onClickLastChild: PropTypes.func
+    onClickLastChild: PropTypes.func,
+
+    onClick: PropTypes.func,
+    onData: PropTypes.func
   }
   static defaultProps = {
     list: []
@@ -68,10 +71,13 @@ export default class Tree extends Component {
   }
   componentDidMount = () => {
     if (this.state.instance) return;
-    const {checkbox, bar,
-          buttonAddHTML, buttonAddClassName, buttonAddSrc, onClickAdd,
-          buttonDelHTML, buttonDelClassName, buttonDelSrc, onClickDel,
-          onClickLastChild} = this.props;
+    const {
+      checkbox, bar,
+      buttonAddHTML, buttonAddClassName, buttonAddSrc, onClickAdd,
+      buttonDelHTML, buttonDelClassName, buttonDelSrc, onClickDel,
+      onClickLastChild,
+      onData
+    } = this.props;
     const instance = new Instance(this.$tree, {
       checkbox,
       bar,
@@ -84,10 +90,44 @@ export default class Tree extends Component {
       buttonDelSrc,
       onClickDel,
       onClickLastChild, // 没有子节点
+      onClick: this.onClick,
+      onData: onData
     });
     this.setState({
       instance
     });
+  }
+  onClick = (s) => {
+    const {list, selected} = this.props;
+    // item
+    const id = s.targetLine.getAttribute('data-id');
+    let item = list.filter(option => {
+      if (option.id === id) return true;
+      return false;
+    });
+    if (item && item.length > 0) {
+      item = item[0];
+    }
+    // isActived
+    let isActived = selected ? selected.filter((option) => {
+      if (option.id === id) return true;
+      return false;
+    }) : null;
+    if (isActived && isActived.length > 0) {
+      isActived = true;
+    } else {
+      isActived = false;
+    }
+    // extandStatus
+    const extandStatus = s.targetLine.classList.contains('extand');
+    // childrenCount
+    let childrenCount = 0;
+    const ul = s.targetLine.nextElementSibling;
+    if (ul && ul.tagName === 'UL') {
+      childrenCount = ul.children.length;
+    }
+    
+    if (this.props.onClick) this.props.onClick(s, item, isActived, extandStatus, childrenCount);
   }
   render() {
     const {style, className, treeStyle, treeClassName} = this.props;
