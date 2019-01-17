@@ -20,7 +20,7 @@ var MenuTree = function (container, params) {
   }
   /* 参数data: [{
     id: '',
-    caption: '',
+    name: '',
     active: false,
     children
   }] */
@@ -45,13 +45,14 @@ var MenuTree = function (container, params) {
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
       var li = document.createElement('li')
       var html = '<div data-index="' + i + '" ' + s.params.itemAttr + '=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.activeId ? ' active' : '') + '" id="ID-MenuTree' + option.id +'">' +
-      '<p class="menutree-tag-font">' + option.caption + '</p>' +
+      '<p class="menutree-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutree-more"></i>' : '') +
-      '</div><ul></ul>'
+      '</div>'
       li.innerHTML = html
       ulContainer.appendChild(li)
-      var ul = s.container.querySelector('#ID-MenuTree' + option.id).nextElementSibling
       if (option.children && option.children.length > 0) {
+        var ul = document.createElement('ul')
+        li.appendChild(ul)
         s.initData(option.children, ul)
       }
     }

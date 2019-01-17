@@ -13,7 +13,7 @@ export default class MenuTiled extends Component {
   }
   /* list: [{
     id: '',
-    caption: '',
+    name: '',
     active: false,
     children
   }] */

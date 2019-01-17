@@ -2906,7 +2906,40 @@ const menus = [
 onClickMenu = (item, isActived, extandStatus, childrenCount) => {
   console.log(item, isActived, extandStatus, childrenCount);
 }
-<MenuTiled list={menus} activeId={activeMenuId} onClick={this.onClickMenu}/>
+// const menus = [
+// 	{
+// 		id: '1',
+// 		name: '测试数据1',
+// 		children: [
+// 			{
+//         id: 'a',
+//         name: '测试数据1-a'
+//       },
+//       {
+//         id: 'b',
+//         name: '测试数据1-b',
+//         children: [
+//           {
+//             id: 'I',
+//             name: '测试数据1-b-I'
+//           },
+//           {
+//             id: 'II',
+//             name: '测试数据1-b-II'
+//           }
+//         ]
+//       }
+// 		]
+// 	}
+// ];
+const menus = [
+  {id: '1', name: '测试数据1', parentid: '-1'},
+  {id: 'a', name: '测试数据1-a', parentid: '1'},
+  {id: 'b', name: '测试数据1-b', parentid: '1'},
+  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
+];
+<MenuTiled  list={menus.deepTree()} activeId={activeMenuId} onClick={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
@@ -2951,7 +2984,40 @@ const Container = {
   top: '0',
   bottom: '0'
 };
-<MenuTree ref="$menutree" list={list} activeId={activeId} onClick={this.onClickMenu} style={Container}/>
+// const menus = [
+  // 	{
+  // 		id: '1',
+  // 		name: '测试数据1',
+  // 		children: [
+  // 			{
+  //         id: 'a',
+  //         name: '测试数据1-a'
+  //       },
+  //       {
+  //         id: 'b',
+  //         name: '测试数据1-b',
+  //         children: [
+  //           {
+  //             id: 'I',
+  //             name: '测试数据1-b-I'
+  //           },
+  //           {
+  //             id: 'II',
+  //             name: '测试数据1-b-II'
+  //           }
+  //         ]
+  //       }
+  // 		]
+  // 	}
+  // ];
+  const menus = [
+    {id: '1', name: '测试数据1', parentid: '-1'},
+    {id: 'a', name: '测试数据1-a', parentid: '1'},
+    {id: 'b', name: '测试数据1-b', parentid: '1'},
+    {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+    {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
+  ];
+<MenuTree ref="$menutree" list={menus.deepTree()} activeId={activeId} onClick={this.onClickMenu} style={Container}/>
 ```
 [返回目录](#component)
 

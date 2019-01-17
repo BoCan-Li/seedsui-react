@@ -21,7 +21,7 @@ var MenuTiled = function (container, params) {
   }
   /* 参数data: [{
     id: '',
-    caption: '',
+    name: '',
     active: false,
     children
   }] */
@@ -49,7 +49,7 @@ var MenuTiled = function (container, params) {
     var html = ''
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
       html += '<div data-index="' + i + '" data-item=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.activeId ? ' active' : '') + '">' +
-      '<p class="menutiled-tag-font">' + option.caption + '</p>' +
+      '<p class="menutiled-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutiled-more"></i>' : '<i class="menutiled-select"></i>') +
       '</div>'
     }
