@@ -149,14 +149,15 @@ var Tree = function (container, params) {
       }
 
       // 生成完整的html
-      var html = '<div class="' + s.params.lineClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div><ul></ul>'
+      var html = '<div class="' + s.params.lineClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
       if (s.selected[option.id]) {
-        html = '<div class="' + s.params.lineClass + ' ' + s.params.activeClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div><ul></ul>'
+        html = '<div class="' + s.params.lineClass + ' ' + s.params.activeClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
       }
       li.innerHTML = html
-
+      var ul = document.createElement('ul')
+      li.appendChild(ul)
       ulContainer.appendChild(li)
-      var ul = s.container.querySelector('[' + s.params.idAttr + '="' + option.id + '"]').nextElementSibling
+      // var ul = s.container.querySelector('[' + s.params.idAttr + '="' + option.id + '"]').nextElementSibling
       s.initData(option.id, ul)
     }
     /* eslint-enable */
@@ -297,7 +298,7 @@ var Tree = function (container, params) {
     }
     s.hideBar()
   }
-  s.removeAllExtand = function () {
+  s.collapseAll = function () {
     var extands = s.container.querySelectorAll('.' + s.params.extandClass)
     /* eslint-disable */
     for (var i = 0, ex; ex = extands[i++];) {
@@ -305,7 +306,7 @@ var Tree = function (container, params) {
     }
     /* eslint-enable */
   }
-  s.addAllExtand = function () {
+  s.extandAll = function () {
     var extands = s.container.querySelectorAll('.' + s.params.lineClass)
     /* eslint-disable */
     for (var i = 0, ex; ex = extands[i++];) {
@@ -356,7 +357,7 @@ var Tree = function (container, params) {
 
   s.reset = function () {
     s.removeAllSelected()
-    s.removeAllExtand()
+    s.collapseAll()
   }
   /* ------------------
     Events
@@ -444,9 +445,13 @@ var Tree = function (container, params) {
 
       // Callback onClickLastChild(点击底层)
       if ((!s.targetLine.nextElementSibling || !s.targetLine.nextElementSibling.hasChildNodes()) && s.params.onClickLastChild) s.params.onClickLastChild(s)
+      // Callback onClick
+      if (s.params.onClick) s.params.onClick(s)
+    } else {
+      // Callback onClick
+      if (s.params.onClick) s.params.onClick(s)
     }
-    // Callback onClick
-    if (s.params.onClick) s.params.onClick(s)
+    e.stopPropagation()
   }
   // 点击添加按钮
   s.onClickBtnAdd = function (e) {

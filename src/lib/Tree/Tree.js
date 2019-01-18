@@ -66,7 +66,6 @@ export default class Tree extends Component {
       // 开始渲染
       this.state.instance.setData(list);
       this.state.instance.update();
-      this.state.instance.addAllExtand();
     }
   }
   componentDidMount = () => {
