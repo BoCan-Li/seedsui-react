@@ -16,7 +16,7 @@ var MenuTiled = function (container, params) {
     selectedId: '', // 默认选中项的id
     /*
     callbacks
-    onClick:function(item, isActived, isExtand) // 点击项的数据,是否是选中状态,是否是展开状态
+    onClick:function(s, item, isActived, extandStatus, childrenCount) // 点击项的数据,是否是选中状态,是否是展开状态
     */
   }
   /* 参数data: [{
@@ -129,7 +129,7 @@ var MenuTiled = function (container, params) {
     // 展开状态 -1无子节点 | true展开 | false收缩
     var extandStatus = childrenCount ? isExtand : -1
     s.target = target
-    if (s.params.onClick) s.params.onClick(item, isActived, extandStatus, childrenCount)
+    if (s.params.onClick) s.params.onClick(s, item, isActived, extandStatus, childrenCount)
   }
   // 主函数
   s.init = function () {

@@ -85,7 +85,7 @@ export default class Dropdown extends Component {
       dialogShow: false
     });
   }
-  onClickMenu = (item) => {
+  onClickMenu = (e, item) => {
     if (item.children && item.children.length > 0) return;
     const tabbar = this.state.tabbar;
     const activeIndex = this.state.tabbarActiveIndex;
