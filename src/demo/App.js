@@ -4,47 +4,62 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import MenuTree from '../lib/MenuTree';
+import Dropdown from '../lib/Dropdown';
 
-const menus = [
-  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
-  {id: 'II', name: '测试数据1-b-II', parentid: 'b'},
-  {id: 'a', name: '测试数据1-a', parentid: '1'},
-  {id: 'b', name: '测试数据1-b', parentid: '1'},
-  {id: '1', name: '测试数据1', parentid: '-1'},
-];
-// const menus = [
-//   {id: '1', name: '测试数据1', parentid: '-1'},
-//   {id: '2', name: '测试数据2', parentid: '-1'},
-//   {id: '3', name: '测试数据3', parentid: '-1'},
-//   {id: 'a', name: '测试数据1-a', parentid: '1'},
-//   {id: 'b', name: '测试数据1-b', parentid: '1'},
-//   {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
-//   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
-// ];
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
-    };
+      items: [
+        {
+          id: '1',
+          name: '全部盘点',
+          data: [
+            {id: '1', name: '全部盘点'},
+            {id: '1-2', name: '部分盘点'}
+          ]
+        }, {
+          id: '2',
+          name: '分类',
+          data: [
+            {id: '2', name: '全部'},
+            {
+              id: '2-2',
+              name: '水杯',
+              children: [
+                {id: '2-2', name: '全部'},
+                {id: '2-2-2', name: '象印'},
+                {id: '2-2-3', name: '膳魔师'},
+                {id: '2-2-4', name: '虎牌'}
+              ]
+            },
+            {id: '2-3', name: '电脑'}
+          ]
+        }
+      ]
+    }
   }
   componentDidMount() {
     Bridge.debug = true;
-    console.log(menus.deepTree());
   }
-  onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
-    console.log(e, item, isActived, extandStatus, childrenCount);
+  onChangeDropdown = (tabs) => {
+    var items = Object.clone(this.state.items);
+    tabs.forEach((item, index) => {
+      items[index].id = item.id;
+      items[index].name = item.name;
+    });
+    this.setState({
+      items: items
+    })
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
-        <div id="idTreeBar" className="tree-bar"></div>
       </Header>
       <Container>
-        <MenuTree list={menus.deepTree()} onClick={this.onClickMenu}/>
+        <Dropdown portal={document.getElementById('root')} list={this.state.items} onChange={this.onChangeDropdown}/>
       </Container>
     </Page>
   }

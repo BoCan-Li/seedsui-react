@@ -20,7 +20,7 @@ export default class Dropdown extends Component {
     this.state = {
       tabbarActiveIndex: -1,
       tabbar: [],
-      activeMenuId: '',
+      menusSelectedId: '',
       menus: [],
       top: 0,
       dialogShow: false
@@ -64,7 +64,7 @@ export default class Dropdown extends Component {
   onClickTab = (item, index) => {
     // 设置弹框的数据
     this.setState({
-      activeMenuId: this.state.tabbar[index].id,
+      menusSelectedId: this.state.tabbar[index].id,
       menus: this.props.list[index].data
     });
     if (this.state.tabbarActiveIndex >= 0) {
@@ -137,7 +137,7 @@ export default class Dropdown extends Component {
     >
       <MenuTiled
         list={this.state.menus}
-        selectedId={this.state.activeMenuId}
+        selectedId={this.state.menusSelectedId}
         onClick={this.onClickMenu}
       />
     </Dialog>);

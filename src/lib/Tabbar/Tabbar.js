@@ -142,7 +142,7 @@ export default class Tabbar extends Component {
       return (<li id={item.id} data-index={index} className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, item.style || {})} key={index}>
         {liconDOM && liconDOM}
         <div className="tab-content">
-          <div className={`tab-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption}</div>
+          <div className={`tab-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{item.caption || item.name}</div>
           {item.sndcaption && <div className={`tab-sndcaption${sndCaptionClassName ? ' ' + sndCaptionClassName : ''}`} style={sndCaptionStyle}>{item.sndcaption}</div>}
         </div>
         {riconDOM && riconDOM}

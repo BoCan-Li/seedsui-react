@@ -1267,26 +1267,55 @@ loadData = (isNext) => {
   top={头部距离 number, 默认0}
   disabled={是否禁用 bool, 默认false}
   onChange={选中菜单发生变化 func([{id: '', caption: ''}])}
-  list={菜单 array, 默认无} // 格式:[{id: '', caption: '分类', data: [{id: '1',caption: '测试数据1',children:[]}]}]
+  list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
 />
 ```
 ### 示例
 ```javascript
 import Dropdown from 'seedsui-react/lib/Dropdown';
 
-onChangeDropdown = (items) => {
-  if (this.props.onChange) this.props.onChange(items)
+this.state = {
+  items: [
+    {
+      id: '1',
+      name: '全部盘点',
+      data: [
+        {id: '1', name: '全部盘点'},
+        {id: '1-2', name: '部分盘点'}
+      ]
+    }, {
+      id: '2',
+      name: '分类',
+      data: [
+        {id: '2', name: '全部'},
+        {
+          id: '2-2',
+          name: '水杯',
+          children: [
+            {id: '2-2', name: '全部'},
+            {id: '2-2-2', name: '象印'},
+            {id: '2-2-3', name: '膳魔师'},
+            {id: '2-2-4', name: '虎牌'}
+          ]
+        },
+        {id: '2-3', name: '电脑'}
+      ]
+    }
+  ]
 }
-const dropdownList = [
-  {
-    id: '', caption: '加载中...'
-  }, {
-    id: '', caption: '加载中...'
-  }, {
-    id: '', caption: '加载中...'
-  }
-]
-<Dropdown portal={this.state.$page} list={dropdownList} onChange={this.onChangeDropdown}/>
+
+onChangeDropdown = (tabs) => {
+  var items = Object.clone(this.state.items);
+  tabs.forEach((item, index) => {
+    items[index].id = item.id;
+    items[index].name = item.name;
+  });
+  this.setState({
+    items: items
+  })
+}
+
+<Dropdown portal={document.getElementById('root')} list={this.state.items} onChange={this.onChangeDropdown}/>
 ```
 [返回目录](#component)
 
