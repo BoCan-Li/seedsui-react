@@ -1,30 +1,13 @@
 // tree.less(start)
 .tree-box{
-	background-color:white;
+	.setTreeBox();
 }
 .tree{
-  box-sizing:border-box;
-  color:@tree-color;
-}
-.tree ul{
-	display:none;
-	padding-left:@10px;
-}
-.tree.extand ul{
-  display:block;
+  .setTree();
 }
 // tree-icon
-.tree-icon,.tree-button-add,.tree-button-del{
-  .flex;
-  .flex-middlecenter;
-  color:@placeholder;
-  width: 32px;
-}
-.tree-icon+.tree-icon{
-	padding-left: 0;
-}
-.tree-button-del{
-  display: none;
+.tree-icon{
+  .setTreeIcon();
 }
 .tree-button-add{
   .setTreeButtonAdd();
@@ -41,73 +24,26 @@
 
 // tree-line
 .tree-line{
-  .flex;
-	position:relative;
-	min-width: @200px;
-}
-.tree-line:active{
-	background-color:@tree-bar-bg;
-}
-.tree-line.extand+ul{
-	display:block;
+  .setTreeLine();
 }
 .tree-line.active{
-  &, &+ul{
-    color: @tree-color-active;
-  }
-  .tree-button-add, +ul .tree-button-add{
-  	display:none;
-  }
-  .tree-button-del{
-    .flex;
-  }
+  .setTreeLineActive();
 }
 // tree-avatar
 .tree-avatar{
-  .flex;
-  .flex-middlecenter;
-  width:@42px;
-  height:@42px;
-  border-radius:100%;
-  background-size: cover;
-  background-position: center;
-  background-color:@random2-bg;
-  color:white;
-  pointer-events: none;
+  .setTreeAvatar();
 }
-// tree-avatar
+// tree-title
 .tree-title{
-  .flex;
-  .flex-middle;
-  .flex-1;
-  height: @50px;
-  &:extend(.border-b);
+  .setTreeTitle();
 }
-// treebar
+// tree-bar
 .tree-bar{
-	display: block;
-	position: relative;
-	overflow-x: auto;
-  white-space: nowrap;
-  padding: @8px @4px;
-  height: @24px;
-  background-color:@border;
+	.setTreeBar();
 }
-.tree-bar.active{
-	display: block;
-}
-.tree-bar.active + .tree-box{
-  padding-top: @41px;
-}
+// tree-bar-button
 .tree-bar-button{
-  .inline-flex;
-  .flex-middle;
-  height: @24px;
-  padding: 0 @8px;
-  margin: 0 @4px;
-  font-size: @13px;
-  border-radius: @4px;
-  background-color:white;
+  .setTreeBarButton();
 }
 .tree-bar-button-del{
   .setTreeBarButtonDel();

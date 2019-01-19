@@ -1,80 +1,44 @@
 // menutree.less(start)
-.menutree{
-  background-color: @menutree-bg;
-  overflow: auto;
+// 菜单容器旁边主体容器
+.menucontainer{
+  .setMenuContainer();
 }
+// 菜单容器
+.menutree{
+  .setMenuTree();
+}
+// 菜单容器-下级容器
+.menutree-tag + ul{
+  .setSubMenuTree();
+}
+.menutree-tag.extand + ul{
+  .setSubMenuTreeExtand();
+}
+// 菜单
 .menutree-tag{
-  .flex;
-	.flex-middlecenter;
-  width: 100%;
-  min-height: @60px;
-  font-size: @14px;
-  text-align: left;
-  position: relative;
-  box-sizing: border-box;
-  padding:0 6px;
-  color: @menutree-tag-color;
-  background-color: @menutree-tag-bg;
-  // 画个底线
   .setMenuTreeTag();
 }
-.menutree-tag > * {
-  pointer-events: none;
-}
+// 菜单-选中
 .menutree-tag.active{
-  color: @menutree-tag-color-active;
-  background-color: @menutree-tag-bg-active;
+  .setMenuTreeTagActive();
 }
-// 文字
+// 菜单-文字
 .menutree-tag-font{
-  &:extend(.flex-1);
-  padding:0 2px;
-  &:extend(.nowrap2);
+  .setMenuTreeFont();
 }
-// 图标
+// 菜单-图标
 .menutree-tag-icon{
-  display: block;
-  width: 15px;
-  vertical-align: -2px;
+  .setMenuTreeIcon();
 }
-// 更多箭头
+// 菜单-更多箭头
 .menutree-more{
   .setMenuTreeMore();
 }
+// 菜单-更多箭头-展开
 .menutree-tag.extand{
   // 更多箭头
   .menutree-more{
     .setMenuTreeMoreExtand();
   }
-}
-// 下级菜单
-.menutree-tag + ul{
-  display: none;
-  .setSubMenuTreeTag();
-}
-.menutree-tag.extand + ul{
-  display: block;
-}
-
-// 样式设置
-.menutree{
-  width: 96px;
-  // 设置左侧菜单总样式,背景右边线
-  .setMenuTree();
-  .menutree-tag.active{
-    // 左侧选中块
-    .setMenuTreeTagActive();
-  }
-}
-// 右侧容器
-.menucontainer{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 96px;
-  right: 0;
-  overflow: auto;
-  box-sizing: border-box;
-  background-color: white;
 }
 // menutree.less(end)
