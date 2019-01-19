@@ -11,7 +11,7 @@ var MenuTree = function (container, params) {
     extandClass: 'extand',
     itemAttr: 'data-item',
 
-    activeId: '', // 默认选中项的id
+    selectedId: '', // 默认选中项的id
     // collapseResetChildren: true, // 收缩时, 重置子节点
     /*
     callbacks
@@ -44,7 +44,7 @@ var MenuTree = function (container, params) {
   s.initData = function (list, ulContainer) {
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
       var li = document.createElement('li')
-      var html = '<div data-index="' + i + '" ' + s.params.itemAttr + '=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.activeId ? ' active' : '') + '" id="ID-MenuTree' + option.id +'">' +
+      var html = '<div data-index="' + i + '" ' + s.params.itemAttr + '=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '" id="ID-MenuTree' + option.id +'">' +
       '<p class="menutree-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutree-more"></i>' : '') +
       '</div>'
@@ -63,8 +63,8 @@ var MenuTree = function (container, params) {
   Method
   ------------------ */
   // 设置选中项
-  s.setActiveId = function (id) {
-    s.params.activeId = id
+  s.setSelectedId = function (id) {
+    s.params.selectedId = id
   }
   // 重新设置数据
   s.setData = function (data) {
@@ -180,7 +180,8 @@ var MenuTree = function (container, params) {
     var childrenCount = item.children && item.children.length ? item.children.length : 0
     // 展开状态 -1无子节点 | true展开 | false收缩
     var extandStatus = childrenCount ? !isExtand : -1;
-    if (s.params.onClick) s.params.onClick(item, isActived, extandStatus, childrenCount)
+    s.target = target
+    if (s.params.onClick) s.params.onClick(s, item, isActived, extandStatus, childrenCount)
   }
   // 主函数
   s.init = function () {

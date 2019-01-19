@@ -10,7 +10,7 @@ export default class Dropdown extends Component {
     top: PropTypes.number,
     disabled: PropTypes.bool,
     onChange: PropTypes.func,
-    list: PropTypes.array // [{caption: '分类', data: [{id: '1',caption: '测试数据1',children:[]}]}]
+    list: PropTypes.array // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
   }
   static defaultProps = {
     list: []
@@ -53,7 +53,7 @@ export default class Dropdown extends Component {
     for (let item of this.props.list) {
       tabbar.push({
         id: item.id,
-        caption: item.caption,
+        name: item.name,
         riconClassName: 'shape-triangle-down'
       });
     };
@@ -92,11 +92,11 @@ export default class Dropdown extends Component {
     // 如果选中的标题是全部,则显示原始标题,例如:点击分类,选择全部,则应当显示分类
     if (item.id === this.props.list[activeIndex].id) {
       tabbar[activeIndex].id = this.props.list[activeIndex].id;
-      tabbar[activeIndex].caption = this.props.list[activeIndex].caption;
+      tabbar[activeIndex].name = this.props.list[activeIndex].name;
     // 设置选中的标题显示在tabbar上
     } else {
       tabbar[activeIndex].id = item.id;
-      tabbar[activeIndex].caption = item.caption;
+      tabbar[activeIndex].name = item.name;
     }
     this.setState({
       tabbar: tabbar,
@@ -137,7 +137,7 @@ export default class Dropdown extends Component {
     >
       <MenuTiled
         list={this.state.menus}
-        activeId={this.state.activeMenuId}
+        selectedId={this.state.activeMenuId}
         onClick={this.onClickMenu}
       />
     </Dialog>);

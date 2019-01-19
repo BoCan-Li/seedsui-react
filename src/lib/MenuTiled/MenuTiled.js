@@ -6,7 +6,7 @@ export default class MenuTiled extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
-    activeId: PropTypes.string, // 默认选中项的id
+    selectedId: PropTypes.string, // 默认选中项的id
     onClick: PropTypes.func,
 
     list: PropTypes.array
@@ -32,15 +32,15 @@ export default class MenuTiled extends Component {
     return true;
   }
   componentDidUpdate = (prevProps) => {
-    this.state.instance.setActiveId(this.props.activeId)
+    this.state.instance.setSelectedId(this.props.selectedId)
     this.state.instance.setData(this.props.list)
   }
   componentDidMount = () => {
-    const {list, activeId} = this.props;
+    const {list, selectedId} = this.props;
     if (this.state.instance) return;
     const instance = new Instance(this.$el, {
       data: list,
-      activeId,
+      selectedId,
       onClick: this.props.onClick
     });
     this.setState({
@@ -48,7 +48,7 @@ export default class MenuTiled extends Component {
     });
   }
   render() {
-    const {className, activeId, onClick, list, ...others} = this.props;
+    const {className, selectedId, onClick, list, ...others} = this.props;
     return (
       <div ref={el => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} {...others}>
       </div>

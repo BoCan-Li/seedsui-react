@@ -5,7 +5,7 @@ import Instance from './instance.js';
 export default class MenuTree extends Component {
   static propTypes = {
     className: PropTypes.string,
-    activeId: PropTypes.string, // 默认选中项的id
+    selectedId: PropTypes.string, // 默认选中项的id
     onClick: PropTypes.func,
 
     list: PropTypes.array
@@ -31,15 +31,15 @@ export default class MenuTree extends Component {
     return true;
   }
   componentDidUpdate = (prevProps) => {
-    this.state.instance.setActiveId(this.props.activeId)
+    this.state.instance.setSelectedId(this.props.selectedId)
     this.state.instance.setData(this.props.list)
   }
   componentDidMount = () => {
-    const {list, activeId} = this.props;
+    const {list, selectedId} = this.props;
     if (this.state.instance) return;
     const instance = new Instance(this.$el, {
       data: list,
-      activeId,
+      selectedId,
       onClick: this.props.onClick // (item, isActive, isExtand: -1无子节点 | true展开 | false收缩, childrenCount))
     });
     this.setState({
@@ -47,7 +47,7 @@ export default class MenuTree extends Component {
     });
   }
   render() {
-    const {className, activeId, onClick, list, ...others} = this.props;
+    const {className, selectedId, onClick, list, ...others} = this.props;
     return (
       <ul ref={el => {this.$el = el;}} className={`menutree${className ? ' ' + className : ''}`} {...others}>
       </ul>

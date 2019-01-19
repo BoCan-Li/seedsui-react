@@ -2886,26 +2886,13 @@ const list = [
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'marquee'}
   list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
-  activeId={默认选中项的id string, 默认无}
-  onClick={点击 func(item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
+  selectedId={默认选中项的id string, 默认无}
+  onClick={点击 func(s, item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
 ```javascript
 import MenuTiled from 'seedsui-react/lib/MenuTiled';
-const activeMenuId = '';
-const menus = [
-  {
-    id: '1',
-    caption: '测试数据1',
-    children: [
-      {id: 'a', caption: '测试数据1-a'}
-    ]
-  }
-];
-onClickMenu = (item, isActived, extandStatus, childrenCount) => {
-  console.log(item, isActived, extandStatus, childrenCount);
-}
 // const menus = [
 // 	{
 // 		id: '1',
@@ -2939,7 +2926,12 @@ const menus = [
   {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
-<MenuTiled  list={menus.deepTree()} activeId={activeMenuId} onClick={this.onClickMenu}/>
+
+onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
+  console.log(e, item, isActived, extandStatus, childrenCount);
+}
+
+<MenuTiled  list={menus.deepTree()} selectedId={'b'} onClick={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
@@ -2959,14 +2951,13 @@ const menus = [
     active: false,
     children
   }] */
-  activeId={默认选中项的id string, 默认无}
-  onClick={点击 func(item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
+  selectedId={默认选中项的id string, 默认无}
+  onClick={点击 func(s, item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
 ```javascript
 import MenuTree from 'seedsui-react/lib/MenuTree';
-const activeId = '';
 const list = [
   {
     id: '1',
@@ -2976,14 +2967,9 @@ const list = [
     ]
   }
 ];
-onClickMenu = (item, isActived, extandStatus, childrenCount) => {
-  console.log(item, isActived, extandStatus, childrenCount);
+onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
+  console.log(e, item, isActived, extandStatus, childrenCount);
 }
-const Container = {
-  position: 'absolute',
-  top: '0',
-  bottom: '0'
-};
 // const menus = [
   // 	{
   // 		id: '1',
@@ -3017,7 +3003,7 @@ const Container = {
     {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
     {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
   ];
-<MenuTree ref="$menutree" list={menus.deepTree()} activeId={activeId} onClick={this.onClickMenu} style={Container}/>
+<MenuTree ref="$menutree" list={menus.deepTree()} selectedId={'b'} onClick={this.onClickMenu} style={Container}/>
 ```
 [返回目录](#component)
 

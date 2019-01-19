@@ -13,7 +13,7 @@ var MenuTiled = function (container, params) {
     activeClass: 'active',
     extandClass: 'extand',
 
-    activeId: '', // 默认选中项的id
+    selectedId: '', // 默认选中项的id
     /*
     callbacks
     onClick:function(item, isActived, isExtand) // 点击项的数据,是否是选中状态,是否是展开状态
@@ -48,7 +48,7 @@ var MenuTiled = function (container, params) {
     slot.setAttribute('class', hasSlot ? s.params.slotSubClass : s.params.slotClass)
     var html = ''
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
-      html += '<div data-index="' + i + '" data-item=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.activeId ? ' active' : '') + '">' +
+      html += '<div data-index="' + i + '" data-item=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
       '<p class="menutiled-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutiled-more"></i>' : '<i class="menutiled-select"></i>') +
       '</div>'
@@ -62,8 +62,8 @@ var MenuTiled = function (container, params) {
   Method
   ------------------ */
   // 设置选中项
-  s.setActiveId = function (id) {
-    s.params.activeId = id
+  s.setSelectedId = function (id) {
+    s.params.selectedId = id
   }
   // 重新设置数据
   s.setData = function (data) {
@@ -128,6 +128,7 @@ var MenuTiled = function (container, params) {
     var childrenCount = item.children && item.children.length ? item.children.length : 0
     // 展开状态 -1无子节点 | true展开 | false收缩
     var extandStatus = childrenCount ? isExtand : -1
+    s.target = target
     if (s.params.onClick) s.params.onClick(item, isActived, extandStatus, childrenCount)
   }
   // 主函数
