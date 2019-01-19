@@ -1,9 +1,13 @@
 // menutree.less(start)
-// 容器
+// 菜单容器旁边主体容器
+.menucontainer{
+  .setMenuContainer();
+}
+// 菜单容器
 .menutree{
   .setMenuTree();
 }
-// 容器-下级容器
+// 菜单容器-下级容器
 .menutree-tag + ul{
   .setSubMenuTree();
 }
@@ -36,19 +40,5 @@
   .menutree-more{
     .setMenuTreeMoreExtand();
   }
-}
-
-// 样式设置
-
-// 右侧容器
-.menucontainer{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 96px;
-  right: 0;
-  overflow: auto;
-  box-sizing: border-box;
-  background-color: white;
 }
 // menutree.less(end)
