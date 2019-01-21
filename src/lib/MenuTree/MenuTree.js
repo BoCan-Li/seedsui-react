@@ -25,7 +25,7 @@ export default class MenuTree extends Component {
     }
   }
   componentDidUpdate = () => {
-    if (this.props.list && this.list.length) {
+    if (this.props.list && this.props.list.length) {
       this.state.instance.setSelectedId(this.props.selectedId)
       this.state.instance.setData(this.props.list)
     }

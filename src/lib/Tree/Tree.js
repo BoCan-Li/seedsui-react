@@ -42,7 +42,7 @@ export default class Tree extends Component {
     };
   }
   componentDidUpdate = () => {
-    if (this.props.list && this.list.length) {
+    if (this.props.list && this.props.list.length) {
       const {selected, list} = this.props;
       // 设置已选中
       if(Array.isArray(selected) && selected.length) {
