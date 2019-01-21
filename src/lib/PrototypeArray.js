@@ -117,6 +117,10 @@ function _buildTreeToFlatten (list) { // 扁平化, 将children拉平
     var item = temp.shift()
     // 此项children合并到temp
     if (item.children && item.children.length) {
+      // 添加parentid
+      for (var c = 0; c < item.children.length; c++) {
+        item.children[c].parentid = item.id
+      }
       temp = item.children.concat(temp)
     }
     // 删除此项children
@@ -168,13 +172,13 @@ window.Array.prototype.deepTree = function () {
         item.children = children
       }
       for (var i = 0, child; child = children[i++];) { // eslint-disable-line
-        _buildTreeToDeep(child, children)
+        _buildTreeToDeep(child)
       }
     }
   }
   var trees = getRoots()
   for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
-    _buildTreeToDeep(tree, list)
+    _buildTreeToDeep(tree)
   }
   return trees
 }
