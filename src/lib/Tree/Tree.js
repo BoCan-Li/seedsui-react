@@ -41,22 +41,9 @@ export default class Tree extends Component {
       instance: null
     };
   }
-  shouldComponentUpdate = (nextProps) => {
-    if (!nextProps.list.length) {
-      return false;
-    }
-    if (this.props.list.length !== nextProps.list.length) {
-      return true;
-    }
-    if (!this.$tree.children.length) {
-      return true;
-    }
-    return false;
-  }
   componentDidUpdate = () => {
-    const {selected, list} = this.props;
-    //渲染
-    if (list.length) {
+    if (this.props.list && this.list.length) {
+      const {selected, list} = this.props;
       // 设置已选中
       if(Array.isArray(selected) && selected.length) {
         for (var opt of selected) {

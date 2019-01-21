@@ -25,15 +25,11 @@ export default class MenuTiled extends Component {
       instance: null
     }
   }
-  shouldComponentUpdate = (nextProps) => {
-    if (!nextProps.list || !this.props.list || this.props.list.length === nextProps.list.length) {
-      return false;
-    }
-    return true;
-  }
   componentDidUpdate = (prevProps) => {
-    this.state.instance.setSelectedId(this.props.selectedId)
-    this.state.instance.setData(this.props.list)
+    if (this.props.list && this.list.length) {
+      this.state.instance.setSelectedId(this.props.selectedId)
+      this.state.instance.setData(this.props.list)
+    }
   }
   componentDidMount = () => {
     const {list, selectedId} = this.props;

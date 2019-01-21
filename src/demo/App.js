@@ -4,6 +4,7 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
+import MenuTree from '../lib/MenuTree';
 
 const menus = [
 	{
@@ -46,6 +47,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
+        <MenuTree list={menus}/>
       </Container>
     </Page>
   }

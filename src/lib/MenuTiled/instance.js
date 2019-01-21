@@ -133,7 +133,7 @@ var MenuTiled = function (container, params) {
   }
   // 主函数
   s.init = function () {
-    s.initData(s.params.data, s.container)
+    if (s.params.data && s.params.data.length) s.initData(s.params.data, s.container)
     s.attach()
   }
   s.init()
