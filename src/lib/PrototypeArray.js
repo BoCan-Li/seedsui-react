@@ -131,11 +131,10 @@ function _buildTreeToFlatten (list) { // 扁平化, 将children拉平
   return tree
 }
 /* -----------------------------------------------------
-  树数据深度化, 将树的parentid深度为children, 必须有id和parentid
-  @return [{id: xx, children: []}]
+  树数据工具
  ----------------------------------------------------- */
-// 取出顶层数据
-window.Array.prototype.getTreeRoots = function () {
+// 取出平数据的顶层数据
+window.Array.prototype.getFlattenTreeRoots = function () {
   var list = this
   var roots = []
   var objList = {}
@@ -150,8 +149,8 @@ window.Array.prototype.getTreeRoots = function () {
   return roots
 }
 
-// 根据id, 取出children
-window.Array.prototype.getTreeChildren = function (id) {
+// 根据id, 取出平数据的children
+window.Array.prototype.getFlattenTreeChildren = function (id) {
   var list = this
   var children = []
   for (var i = 0, child; child = list[i++];) { // eslint-disable-line
@@ -162,6 +161,36 @@ window.Array.prototype.getTreeChildren = function (id) {
   return children
 }
 
+// 根据id, 取出深度数据的node
+window.Array.prototype.getDeepTreeNode = function (id) {
+  var list = Object.clone(this)
+  var temp = [] // 用于存储children
+  // 先将第一层节点放入temp
+  for (var i = 0; i < list.length; i++) {
+    temp.push(list[i])
+  }
+  while (temp.length) {
+    // 取出一项, 并移除此项
+    var item = temp.shift()
+    if (item.id === id) return item
+    // 此项children合并到temp
+    if (item.children && item.children.length) {
+      // 添加parentid
+      for (var c = 0; c < item.children.length; c++) {
+        item.children[c].parentid = item.id
+      }
+      temp = item.children.concat(temp)
+    }
+    // 删除此项children
+    delete item.children
+  }
+  return {}
+}
+
+/* -----------------------------------------------------
+  树数据深度化, 将树的parentid深度为children, 必须有id和parentid
+  @return [{id: xx, children: []}]
+ ----------------------------------------------------- */
 window.Array.prototype.deepTree = function () {
   var list = this
   if (!Array.isArray(list) || !list.length) return null
@@ -169,7 +198,7 @@ window.Array.prototype.deepTree = function () {
 
   // 深度化, 修改trees
   function _buildTreeToDeep (item) {
-    var children = list.getTreeChildren(item.id)
+    var children = list.getFlattenTreeChildren(item.id)
     if (children && children.length) {
       if (item.children) {
         item.children.push(children)
@@ -181,7 +210,7 @@ window.Array.prototype.deepTree = function () {
       }
     }
   }
-  var trees = list.getTreeRoots()
+  var trees = list.getFlattenTreeRoots()
   for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
     _buildTreeToDeep(tree)
   }

@@ -27,12 +27,9 @@ export default class Calendar extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    };
   }
   componentDidMount () {
-    if (this.state.instance) return
+    if (this.instance) return
     const {type, showTitleDay, showTitleWeek, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onError} = this.props;
     var instance = new Instance(this.$el, {
       viewType: type,
@@ -47,9 +44,7 @@ export default class Calendar extends Component {
       onChange: onChange,
       onError: onError
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     return (

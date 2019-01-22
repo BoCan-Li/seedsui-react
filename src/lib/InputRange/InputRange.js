@@ -34,16 +34,10 @@ export default class InputRange extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null,
-      onChange: this.onChange
-    }
   }
   componentDidMount () {
     const instance = new Instance(this.$el);
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   getArgs = (e) => {
     var args = this.props.args;

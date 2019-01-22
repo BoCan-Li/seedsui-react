@@ -54,16 +54,13 @@ export default class Carrousel extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidUpdate = (prevProps) => {
-    if (this.state.instance && this.state.instance.activeIndex !== this.props.activeIndex) {
-      this.state.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
+    if (this.instance && this.instance.activeIndex !== this.props.activeIndex) {
+      this.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
     }
     if (this.props.stopPropagation !== prevProps.stopPropagation) {
-      this.state.instance.setParams({stopPropagation: this.props.stopPropagation});
+      this.instance.setParams({stopPropagation: this.props.stopPropagation});
     }
     if (!this.props.list.equals(prevProps.list)) {
       this.update();
@@ -74,7 +71,7 @@ export default class Carrousel extends Component {
     // 轮播图片, 自适应的情况下, 高度需要计算
     if (!(this.props.style && this.props.style.height) && this.props.list.length && this.props.delay) {
       setTimeout(() => {
-        this.state.instance.updateContainerSize();
+        this.instance.updateContainerSize();
       }, this.props.delay);
     }
   }
@@ -89,9 +86,7 @@ export default class Carrousel extends Component {
       onClick: this.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   onClick = (s, e) => {
     const index = s.activeIndex;
@@ -126,7 +121,7 @@ export default class Carrousel extends Component {
       }
     }
     // 更新Carrousel
-    if (this.state.instance) this.state.instance.update();
+    if (this.instance) this.instance.update();
   }
   render() {
     const {

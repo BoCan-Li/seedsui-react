@@ -47,8 +47,8 @@ export default class WqCustomerType extends Component {
   componentWillUnmount() {
   }
   onSubmit = () => {
-    let customerSelected = this.$customerTree.state.instance.selected;
-    let supplierSelected = this.$supplierTree.state.instance.selected;
+    let customerSelected = this.$customerTree.instance.selected;
+    let supplierSelected = this.$supplierTree.instance.selected;
     let selected = {};
     selected = Object.assign(customerSelected, supplierSelected)
     const {syncData} = this.props;

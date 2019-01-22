@@ -15,13 +15,10 @@ export default class IndexBar extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidUpdate = (prevProps) => {
     if (this.props.overflowContainer !== prevProps.overflowContainer) {
-      this.state.instance.setOverflowContainer(this.props.overflowContainer);
+      this.instance.setOverflowContainer(this.props.overflowContainer);
     }
   }
   componentDidMount () {
@@ -30,9 +27,7 @@ export default class IndexBar extends Component {
       overflowContainer: this.props.overflowContainer || overflowContainer,
       parent: this.props.parent || document.body
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const {indexs, className, style} = this.props;

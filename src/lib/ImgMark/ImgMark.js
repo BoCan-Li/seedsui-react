@@ -27,36 +27,33 @@ export default class ImgMark extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    };
   }
   componentDidUpdate (prevProps) {
-    if (this.state.instance) {
+    if (this.instance) {
       if (prevProps.drawBg !== this.props.drawBg) {
-        this.state.instance.setDrawBg(this.props.drawBg);
-        this.state.instance.update();
+        this.instance.setDrawBg(this.props.drawBg);
+        this.instance.update();
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
-        this.state.instance.setStrokeStyle(this.props.strokeStyle);
-        this.state.instance.update();
+        this.instance.setStrokeStyle(this.props.strokeStyle);
+        this.instance.update();
       }
       if (prevProps.lineWidth !== this.props.lineWidth) {
-        this.state.instance.setLineWidth(this.props.lineWidth);
-        this.state.instance.update();
+        this.instance.setLineWidth(this.props.lineWidth);
+        this.instance.update();
       }
       if (prevProps.quality !== this.props.quality) {
-        this.state.instance.setQuality(this.props.quality);
-        this.state.instance.update();
+        this.instance.setQuality(this.props.quality);
+        this.instance.update();
       }
       if (prevProps.data !== this.props.data) {
-        this.state.instance.setData(this.props.data);
-        this.state.instance.update();
+        this.instance.setData(this.props.data);
+        this.instance.update();
       }
     }
   }
   componentDidMount () {
-    if (this.state.instance) return;
+    if (this.instance) return;
     var instance = new Instance(this.$el, {
       src: this.props.src,
       data: this.props.data,
@@ -66,9 +63,7 @@ export default class ImgMark extends Component {
       lineWidth: this.props.lineWidth,
       quality: this.props.quality
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const {

@@ -2916,7 +2916,7 @@ const list = [
   className={容器className string, 默认无, 基础'marquee'}
   list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
   selectedId={默认选中项的id string, 默认无}
-  onClick={点击 func(s, item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
+  onClick={点击 func(s, item, isActived, isExtand: true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
@@ -2981,7 +2981,7 @@ onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
     children
   }] */
   selectedId={默认选中项的id string, 默认无}
-  onClick={点击 func(s, item, isActived, extandStatus: -1无子节点 | true展开 | false收缩, childrenCount), 默认无}
+  onClick={点击 func(s, item, isActived, isExtand: true展开 | false收缩, childrenCount), 默认无}
 />
 ```
 ### 示例
@@ -2996,8 +2996,8 @@ const list = [
     ]
   }
 ];
-onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
-  console.log(e, item, isActived, extandStatus, childrenCount);
+onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
+  console.log(e, item, isActived, isExtand, childrenCount);
 }
 // const menus = [
   // 	{

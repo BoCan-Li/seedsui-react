@@ -57,19 +57,14 @@ export default class ImgUploader extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
     // 初始化图片组件
-    this.setState({
-      instance: new Bridge.Image({
-        onChooseSuccess: this.chooseSuccess,
-        onUploadsSuccess: this.uploadsSuccess,
-        onUploadSuccess: this.uploadSuccess,
-        onUploadFail: this.uploadFail,
-      })
+    this.instance = new Bridge.Image({
+      onChooseSuccess: this.chooseSuccess,
+      onUploadsSuccess: this.uploadsSuccess,
+      onUploadSuccess: this.uploadSuccess,
+      onUploadFail: this.uploadFail,
     });
   }
   convertList = (imgMap) => {
@@ -149,7 +144,7 @@ export default class ImgUploader extends Component {
   }
   chooseImg = () => {
     const {enableSafe, max, sourceType, sizeType, chooseOptions} = this.props;
-    this.state.instance.choose({
+    this.instance.choose({
       enableSafe: enableSafe, // 安全上传,第次只能传一张
       max: max,
       currentCount: this.props.list.length,

@@ -21,9 +21,6 @@ export default class Timepart extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidUpdate (prevProps) {
     if (this.props.times && prevProps.times.length !== this.props.times.length) {
@@ -91,25 +88,22 @@ export default class Timepart extends Component {
       onClickWhite: (s) => {
       }
     });
-    this.setState({
-      instance
-    }, () => {
-      this.update();
-    });
+    this.instance = instance;
+    this.update();
   }
   update = () => {
     if (!this.props.times) return;
     for (let i = 0, time; time = this.props.times[i++];) { // eslint-disable-line
       if (time.className && time.startTime && time.endTime) {
-        this.state.instance.addProgress(time.startTime, time.endTime, time.className, time.data || null, time.cover || false);
+        this.instance.addProgress(time.startTime, time.endTime, time.className, time.data || null, time.cover || false);
       }
     }
     // onChange
     this.onChange();
   }
   onChange = () => {
-    const times = this.state.instance.getTimes();
-    const part = this.state.instance.container.querySelector('.timepart-part.active');
+    const times = this.instance.getTimes();
+    const part = this.instance.container.querySelector('.timepart-part.active');
     if (part) {
       times.push({
         className: part.className.replace('timepart-part ', ''),

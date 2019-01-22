@@ -101,7 +101,7 @@ export default class WqCustomerArea extends Component {
     if (!this.props.multiple) this.onSubmit();
   }
   onSubmit = () => {
-    let selected = this.$listTree.state.instance.selected;
+    let selected = this.$listTree.instance.selected;
     if (selected && !Object.isEmptyObject(selected)) {
       selected = Object.values(selected);
     }

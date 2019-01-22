@@ -27,7 +27,6 @@ export default class PagePull extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {}
   }
   componentDidMount = () => {
     const instance = new Instance(this.$el, {
@@ -36,9 +35,7 @@ export default class PagePull extends Component {
       onShowedLeft: this.props.onShowedLeft,
       onShowedRight: this.props.onShowedRight
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const {

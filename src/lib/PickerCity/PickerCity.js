@@ -34,9 +34,6 @@ export default class PickerCity extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
     this.initInstance()
@@ -46,30 +43,30 @@ export default class PickerCity extends Component {
     return true;
   }
   componentDidUpdate = (prevProps) => {
-    if (this.state.instance) {
+    if (this.instance) {
       if (this.props.show) {
         if (this.props.data) {
-          this.state.instance.setData(this.props.data, {
+          this.instance.setData(this.props.data, {
             dataChildPropertyName: this.props.dataChildPropertyName,
             dataKeyPropertyName: this.props.dataKeyPropertyName,
             dataValuePropertyName: this.props.dataValuePropertyName
           });
         }
         this.setDefault();
-        this.state.instance.show();
+        this.instance.show();
       }
-      else this.state.instance.hide()
+      else this.instance.hide()
     }
   }
   setDefault = () => {
     const {valueForKey, split} = this.props;
     if (valueForKey && valueForKey.split(split).length > 1 && valueForKey.split(split).some(key => {return !isNaN(key)})) {
-      this.state.instance.setDefaultKeys(valueForKey.split(split));
+      this.instance.setDefaultKeys(valueForKey.split(split));
     } else {
       const defaultValues = this.getDefaultValues();
-      this.state.instance.setDefaultValues(defaultValues);
+      this.instance.setDefaultValues(defaultValues);
     }
-    this.state.instance.update();
+    this.instance.update();
   }
   getDefaultValues = () => {
     // 默认值
@@ -127,9 +124,7 @@ export default class PickerCity extends Component {
         instance.show();
       },10);
     }
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const {className, style} = this.props;

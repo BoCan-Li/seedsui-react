@@ -27,10 +27,6 @@ export default class Dragrefresh extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null,
-      lazyLoadInstance: null
-    };
   }
   componentDidMount = () => {
     this.init();
@@ -47,34 +43,31 @@ export default class Dragrefresh extends Component {
       onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
       onBottomComplete: this.props.onBottomComplete ? this.props.onBottomComplete : null, // 底部完成
     });
-    this.setState({
-      instance
-    }, () => {
-      // 懒人加载
-      if (this.props.lazyLoad) {
-        this.setLazyLoad();
-      }
-    });
+    this.instance = instance;
+    // 懒人加载
+    if (this.props.lazyLoad) {
+      this.setLazyLoad();
+    }
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.hasMore === this.props.hasMore) return;
     // 懒加载
     if (this.props.lazyLoad) {
-      if (!this.state.lazyLoadInstance) {
+      if (!this.lazyLoadInstance) {
         this.setLazyLoad();
       } else {
-        this.state.lazyLoadInstance.load();
+        this.lazyLoadInstance.load();
       }
     }
     if (this.props.hasMore === 404) {
       console.log('dragrefresh:解除touch事件，暂无数据');
-      this.state.instance.detach();
+      this.instance.detach();
     } else if (prevProps.hasMore === 404 && this.props.hasMore !== 404) {
       /* this.setState({
         noData: false
       }); */
       console.log('dragrefresh:绑定touch事件，有数据');
-      this.state.instance.attach();
+      this.instance.attach();
     }
     console.log('dragrefresh:DidUpdate, hasMore:' + this.props.hasMore);
     this.setPagination();
@@ -84,13 +77,11 @@ export default class Dragrefresh extends Component {
       overflowContainer: this.$el
     });
     imglazy.load();
-    this.setState({
-      lazyLoadInstance: imglazy
-    });
+    this.lazyLoadInstance = imglazy;
   }
   setPagination = () => {
     // 如果还没有初始化完成,则会再轮询调用一下
-    if(!this.state.instance) {
+    if(!this.instance) {
       setTimeout(() => {
         this.setPagination();
       }, 100);
@@ -98,20 +89,20 @@ export default class Dragrefresh extends Component {
     }
     if (this.props.hasMore === 1) { // 头部完成
       console.log('dragrefresh:头部完成');
-      this.state.instance.setPagination(false, false);
+      this.instance.setPagination(false, false);
     } else if (this.props.hasMore === 2) { // 底部完成
       console.log('dragrefresh:底部完成');
-      this.state.instance.setPagination(true, false);
+      this.instance.setPagination(true, false);
     } else if (this.props.hasMore === 0) { // 没有更多数据
       console.log('dragrefresh:没有更多数据');
-      this.state.instance.setPagination(true, true);
+      this.instance.setPagination(true, true);
     } else if (this.props.hasMore === -1) {
       console.log('dragrefresh:网络错误');
-      this.state.instance.setPagination(true, true, true);
+      this.instance.setPagination(true, true, true);
     } else if (this.props.hasMore === 404) {
       // if (this.state.noData === true) return;
       console.log('dragrefresh:没有一条数据');
-      this.state.instance.setPagination(true, true);
+      this.instance.setPagination(true, true);
       /* this.setState({
         noData: true
       }); */

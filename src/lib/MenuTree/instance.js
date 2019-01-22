@@ -9,7 +9,6 @@ var MenuTree = function (container, params) {
     tagClass: 'menutree-tag',
     activeClass: 'active',
     extandClass: 'extand',
-    itemAttr: 'data-item',
 
     selectedId: '', // 默认选中项的id
     // collapseResetChildren: true, // 收缩时, 重置子节点
@@ -44,7 +43,7 @@ var MenuTree = function (container, params) {
   s.initData = function (list, ulContainer) {
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
       var li = document.createElement('li')
-      var html = '<div data-index="' + i + '" ' + s.params.itemAttr + '=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '" id="ID-MenuTree' + option.id +'">' +
+      var html = '<div data-index="' + i + '" data-id="' + option.id + '" class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
       '<p class="menutree-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutree-more"></i>' : '') +
       '</div>'
@@ -68,6 +67,7 @@ var MenuTree = function (container, params) {
   }
   // 重新设置数据
   s.setData = function (data) {
+    if (!data || !data.length) return
     s.params.data = data
     s.container.innerHTML = ''
     s.initData(data, s.container)
@@ -145,9 +145,16 @@ var MenuTree = function (container, params) {
   // 点击树
   s.onClick = function (e) {
     var target = e.target
+    s.target = target
+    s.targetLine = target
     if (!target.classList.contains(s.params.tagClass)) return
+    // isActived
     var isActived = target.classList.contains(s.params.activeClass)
+    // isExtand
     var isExtand = target.classList.contains(s.params.extandClass)
+    // item
+    const id = target.getAttribute('data-id');
+    let item = s.params.data.getDeepTreeNode(id);
     // 如果已经展开,则收缩
     if (isExtand) {
       target.classList.remove(s.params.extandClass)
@@ -174,19 +181,15 @@ var MenuTree = function (container, params) {
       target.classList.add(s.params.extandClass)
       target.classList.add(s.params.activeClass)
     }
-    // 返回item
-    var item = target.getAttribute('data-item') ? JSON.parse(target.getAttribute('data-item')) : null
-    // 子节点个数
-    var childrenCount = item.children && item.children.length ? item.children.length : 0
-    // 展开状态 -1无子节点 | true展开 | false收缩
-    var extandStatus = childrenCount ? !isExtand : -1;
-    s.target = target
-    if (s.params.onClick) s.params.onClick(s, item, isActived, extandStatus, childrenCount)
+
+    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtand)
   }
   // 主函数
   s.init = function () {
-    if (s.params.data && s.params.data.length) s.initData(s.params.data, s.container)
-    s.updateActive()
+    if (s.params.data && s.params.data.length) {
+      if (s.params.data && s.params.data.length) s.initData(s.params.data, s.container)
+      s.updateActive()
+    }
     s.attach()
   }
   s.init()

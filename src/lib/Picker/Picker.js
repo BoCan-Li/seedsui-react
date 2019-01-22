@@ -28,9 +28,6 @@ export default class Picker extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
     this.initInstance()
@@ -39,13 +36,13 @@ export default class Picker extends Component {
     if (nextProps.show === this.props.show) return false;
     return true;
   }
-  componentDidUpdate = (prevProps) => {
-    if (this.state.instance) {
+  componentDidUpdate = () => {
+    if (this.instance) {
       if (this.props.show) {
         this.setDefault();
-        this.state.instance.show();
+        this.instance.show();
       }
-      else this.state.instance.hide()
+      else this.instance.hide()
     } else {
       if (this.props.list.length > 0) {
         this.initInstance();
@@ -59,8 +56,8 @@ export default class Picker extends Component {
       const defaultOpt = this.getDefaults();
       if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
     }
-    this.state.instance.clearSlots();
-    this.state.instance.addSlot(list, key || '', this.props.slotClassName); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
+    this.instance.clearSlots();
+    this.instance.addSlot(list, key || '', this.props.slotClassName); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
   }
   getDefaults = () => {
     const {list, value} = this.props;
@@ -72,7 +69,7 @@ export default class Picker extends Component {
   }
   initInstance = () => {
     const {list} = this.props;
-    if (!list || list.length === 0 || this.state.instance) return;
+    if (!list || list.length === 0 || this.instance) return;
     // render数据
     const instance = new Instance({
       mask: this.$el,
@@ -98,9 +95,7 @@ export default class Picker extends Component {
     if (this.props.show && instance) {
       instance.show()
     }
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const {className, style} = this.props;

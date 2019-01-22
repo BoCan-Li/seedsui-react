@@ -16,7 +16,7 @@ var MenuTiled = function (container, params) {
     selectedId: '', // 默认选中项的id
     /*
     callbacks
-    onClick:function(s, item, isActived, extandStatus, childrenCount) // 点击项的数据,是否是选中状态,是否是展开状态
+    onClick:function(s, item, isActived, isExtand) // 点击项的数据,是否是选中状态,是否是展开状态
     */
   }
   /* 参数data: [{
@@ -43,12 +43,13 @@ var MenuTiled = function (container, params) {
     return
   }
   s.initData = function (list, container) {
+    if (!list || !list.length) return
     var hasSlot = container.querySelector('.' + s.params.slotClass)
     var slot = document.createElement('div')
     slot.setAttribute('class', hasSlot ? s.params.slotSubClass : s.params.slotClass)
     var html = ''
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
-      html += '<div data-index="' + i + '" data-item=\'' + JSON.stringify(option) + '\' class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
+      html += '<div data-index="' + i + '" data-id="' + option.id + '" class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
       '<p class="menutiled-tag-font">' + option.name + '</p>' +
       (option.children && option.children.length > 0 ? '<i class="menutiled-more"></i>' : '<i class="menutiled-select"></i>') +
       '</div>'
@@ -67,9 +68,10 @@ var MenuTiled = function (container, params) {
   }
   // 重新设置数据
   s.setData = function (data) {
+    if (!data || !data.length) return
     s.params.data = data
     s.container.innerHTML = ''
-    s.initData(data, s.container)
+    s.initData(s.params.data, s.container)
   }
 
   /* ------------------
@@ -94,11 +96,16 @@ var MenuTiled = function (container, params) {
   // 点击树
   s.onClick = function (e) {
     var target = e.target
+    s.target = target
+    s.targetLine = target
     if (!target.classList.contains(s.params.tagClass)) return
-    var isActived = target.classList.contains(s.params.activeClass)
+    // isActived
+    var isActived = s.target.classList.contains('active')
+    // isExtand
     var isExtand = target.classList.contains(s.params.extandClass)
-    // 点击行的数据
-    var item = target.getAttribute('data-item') ? JSON.parse(target.getAttribute('data-item')) : null
+    // item
+    const id = target.getAttribute('data-id');
+    let item = s.params.data.getDeepTreeNode(id);
     // 如果已经展开,则收缩
     if (isExtand) {
       // target.classList.remove(s.params.extandClass)
@@ -124,16 +131,14 @@ var MenuTiled = function (container, params) {
         s.initData(item.children, s.container)
       }
     }
-    // 子节点个数
-    var childrenCount = item.children && item.children.length ? item.children.length : 0
-    // 展开状态 -1无子节点 | true展开 | false收缩
-    var extandStatus = childrenCount ? isExtand : -1
-    s.target = target
-    if (s.params.onClick) s.params.onClick(s, item, isActived, extandStatus, childrenCount)
+    
+    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtand)
   }
   // 主函数
   s.init = function () {
-    if (s.params.data && s.params.data.length) s.initData(s.params.data, s.container)
+    if (s.params.data && s.params.data.length) {
+      if (s.params.data && s.params.data.length) s.initData(s.params.data, s.container)
+    }
     s.attach()
   }
   s.init()

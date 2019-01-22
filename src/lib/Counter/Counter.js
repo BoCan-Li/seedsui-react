@@ -27,13 +27,11 @@ export default class Counter extends Component {
     if (this.props.autoplay) {
       instance.play();
     }
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   play = () => {
-    if (this.state.instance) {
-      this.state.instance.play();
+    if (this.instance) {
+      this.instance.play();
     }
   }
   render() {

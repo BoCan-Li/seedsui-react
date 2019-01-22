@@ -1,3 +1,4 @@
+// require PrototypeArray.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
@@ -37,26 +38,28 @@ export default class Tree extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    };
   }
   componentDidUpdate = () => {
     if (this.props.list && this.props.list.length) {
-      const {selected, list} = this.props;
+      const {selected} = this.props;
+      var list = Object.clone(this.props.list);
+      if (JSON.stringify(list).indexOf('"children"') !== -1) {
+        list = list.flattenTree()
+      }
       // 设置已选中
       if(Array.isArray(selected) && selected.length) {
         for (var opt of selected) {
-          this.state.instance.addSelected(opt)
+          this.instance.addSelected(opt)
         }
       }
+      console.log(list)
       // 开始渲染
-      this.state.instance.setData(list);
-      this.state.instance.update();
+      this.instance.setData(list);
+      this.instance.update();
     }
   }
   componentDidMount = () => {
-    if (this.state.instance) return;
+    if (this.instance) return;
     const {
       checkbox, bar,
       buttonAddHTML, buttonAddClassName, buttonAddSrc, onClickAdd,
@@ -64,7 +67,13 @@ export default class Tree extends Component {
       onClickLastChild,
       onData
     } = this.props;
+    // 更新数据
+    var list = Object.clone(this.props.list);
+    if (JSON.stringify(list).indexOf('"children"') !== -1) {
+      list = list.flattenTree()
+    }
     const instance = new Instance(this.$tree, {
+      data: list,
       checkbox,
       bar,
       buttonAddHTML,
@@ -79,12 +88,15 @@ export default class Tree extends Component {
       onClick: this.onClick,
       onData: onData
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
+    this.instance.update();
   }
   onClick = (s) => {
-    const {list, selected} = this.props;
+    const {selected} = this.props;
+    var list = Object.clone(this.props.list);
+    if (JSON.stringify(list).indexOf('"children"') !== -1) {
+      list = list.flattenTree()
+    }
     // item
     const id = s.targetLine.getAttribute('data-id');
     let item = list.filter(option => {
@@ -104,16 +116,17 @@ export default class Tree extends Component {
     } else {
       isActived = false;
     }
-    // extandStatus
-    const extandStatus = s.targetLine.classList.contains('extand');
     // childrenCount
     let childrenCount = 0;
     const ul = s.targetLine.nextElementSibling;
     if (ul && ul.tagName === 'UL') {
       childrenCount = ul.children.length;
     }
+    // isExtand
+    const isExtand = s.targetLine.classList.contains('extand');
     
-    if (this.props.onClick) this.props.onClick(s, item, isActived, extandStatus, childrenCount);
+    
+    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtand, childrenCount);
   }
   render() {
     const {style, className, treeStyle, treeClassName} = this.props;

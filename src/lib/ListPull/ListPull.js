@@ -16,9 +16,6 @@ export default class ListPull extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount() {
     var instance = new Instance(this.$el, {
@@ -40,9 +37,7 @@ export default class ListPull extends Component {
       onShowedLeft: this.props.onShowedLeft,
       onShowedRight: this.props.onShowedRight
     });
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   render() {
     const { list, style, className } = this.props;

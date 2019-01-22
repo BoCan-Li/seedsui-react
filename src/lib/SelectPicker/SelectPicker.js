@@ -31,9 +31,6 @@ export default class SelectPicker extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
     this.initInstance();
@@ -43,12 +40,12 @@ export default class SelectPicker extends Component {
     return true;
   }
   componentDidUpdate = (prevProps) => {
-    if (this.state.instance) {
+    if (this.instance) {
       if (this.props.show) {
         this.setDefaults();
-        this.state.instance.show();
+        this.instance.show();
       }
-      else this.state.instance.hide()
+      else this.instance.hide()
     }
   }
   setDefaults = () => {
@@ -66,13 +63,13 @@ export default class SelectPicker extends Component {
           value: value
         };
       });
-      this.state.instance.setActiveOptions(options);
+      this.instance.setActiveOptions(options);
     } else {
-      this.state.instance.setActiveOptions([]);
+      this.instance.setActiveOptions([]);
     }
   }
   initInstance = () => {
-    if (this.state.instance) return;
+    if (this.instance) return;
     // render数据
     const instance = new Instance({
       multiple: this.props.multiple || false,
@@ -94,14 +91,11 @@ export default class SelectPicker extends Component {
       onHid: (e) => {
       }
     });
-    this.setState({
-      instance
-    }, () => {
-      this.setDefaults();
-      if (this.props.show && instance) {
-        instance.show()
-      }
-    });
+    this.instance = instance;
+    this.setDefaults();
+    if (this.props.show && instance) {
+      instance.show()
+    }
   }
   render() {
     const {list, multiple, className, style} = this.props;

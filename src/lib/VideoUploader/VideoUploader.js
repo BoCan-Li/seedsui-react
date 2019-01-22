@@ -46,9 +46,6 @@ export default class ImgUploader extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
   }

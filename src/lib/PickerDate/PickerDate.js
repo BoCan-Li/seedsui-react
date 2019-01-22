@@ -25,9 +25,6 @@ export default class PickerDate extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidMount = () => {
     this.initInstance()
@@ -36,19 +33,19 @@ export default class PickerDate extends Component {
     if (nextProps.show === this.props.show) return false;
     return true;
   }
-  componentDidUpdate = (prevProps) => {
-    if (this.state.instance) {
+  componentDidUpdate = () => {
+    if (this.instance) {
       if (this.props.show) {
         this.setDefault();
-        this.state.instance.show();
+        this.instance.show();
       }
-      else this.state.instance.hide()
+      else this.instance.hide()
     }
   }
   setDefault = () => {
     const def = this.getDefault();
-    this.state.instance.setDefaults(def);
-    this.state.instance.update();
+    this.instance.setDefaults(def);
+    this.instance.update();
   }
   getDefault = () => {
     const {split, type, onError} = this.props;
@@ -210,9 +207,7 @@ export default class PickerDate extends Component {
         instance.show();
       },10);
     }
-    this.setState({
-      instance
-    })
+    this.instance = instance;
   }
   render() {
     const {className, style} = this.props;

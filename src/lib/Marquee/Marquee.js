@@ -27,9 +27,6 @@ export default class Marquee extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: null
-    }
   }
   componentDidUpdate = (prevProps) => {
     if (!this.props.list.equals(prevProps.list)) {
@@ -37,14 +34,14 @@ export default class Marquee extends Component {
     }
   }
   componentDidMount = () => {
-    if (this.state.instance || this.props.list.length === 0) return;
+    if (this.instance || this.props.list.length === 0) return;
     this.init();
   }
   update = () => {
-    this.state.instance.setStart(0);
-    this.state.instance.setEnd(this.props.step * (this.props.list.length - 1));
-    this.state.instance.update();
-    this.state.instance.play();
+    this.instance.setStart(0);
+    this.instance.setEnd(this.props.step * (this.props.list.length - 1));
+    this.instance.update();
+    this.instance.play();
   }
   init = () => {
     const {list, step, duration, delay, direction, loop} = this.props;
@@ -58,9 +55,7 @@ export default class Marquee extends Component {
       loop
     });
     instance.play();
-    this.setState({
-      instance
-    });
+    this.instance = instance;
   }
   onClick = (item, index) => {
     if (this.props.onClick) this.props.onClick(item, index);

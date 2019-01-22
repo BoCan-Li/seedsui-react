@@ -163,7 +163,7 @@ var Tree = function (container, params) {
     /* eslint-enable */
   }
   s.update = function () {
-    if (!s.params.data) {
+    if (!s.params.data || !s.params.data.length) {
       console.log('SeedsUI Warn：未找到Tree的Data数据，可在初始化时传入data参数，或者通过setData方法设置数据')
       return
     }
@@ -181,6 +181,7 @@ var Tree = function (container, params) {
     Method
     ------------------ */
   s.setData = function (data) {
+    console.log(data)
     _data = s.params.data = data
   }
   // 添加数据
