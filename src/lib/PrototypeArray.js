@@ -134,37 +134,42 @@ function _buildTreeToFlatten (list) { // 扁平化, 将children拉平
   树数据深度化, 将树的parentid深度为children, 必须有id和parentid
   @return [{id: xx, children: []}]
  ----------------------------------------------------- */
+// 取出顶层数据
+window.Array.prototype.getTreeRoots = function () {
+  var list = this
+  var roots = []
+  var objList = {}
+  // 转成键值对数据
+  list.forEach(function (item) {
+    objList[item.id] = item
+  })
+  // 取出顶层数据
+  list.forEach(function (item) {
+    if (!objList[item.parentid]) roots.push(item)
+  })
+  return roots
+}
+
+// 根据id, 取出children
+window.Array.prototype.getTreeChildren = function (id) {
+  var list = this
+  var children = []
+  for (var i = 0, child; child = list[i++];) { // eslint-disable-line
+    if (id && child.parentid === id.toString()) {
+      children.push(child)
+    }
+  }
+  return children
+}
+
 window.Array.prototype.deepTree = function () {
   var list = this
   if (!Array.isArray(list) || !list.length) return null
   if (!list[0].hasOwnProperty('parentid')) return null
-  // 取出顶层数据
-  function getRoots () {
-    var roots = []
-    var objList = {}
-    // 转成键值对数据
-    list.forEach(function (item) {
-      objList[item.id] = item
-    })
-    // 取出顶层数据
-    list.forEach(function (item) {
-      if (!objList[item.parentid]) roots.push(item)
-    })
-    return roots
-  }
-  // 根据id, 取出children
-  function getChildren (id) {
-    var children = []
-    for (var i = 0, child; child = list[i++];) { // eslint-disable-line
-      if (id && child.parentid === id.toString()) {
-        children.push(child)
-      }
-    }
-    return children
-  }
+
   // 深度化, 修改trees
   function _buildTreeToDeep (item) {
-    var children = getChildren(item.id)
+    var children = list.getTreeChildren(item.id)
     if (children && children.length) {
       if (item.children) {
         item.children.push(children)
@@ -176,7 +181,7 @@ window.Array.prototype.deepTree = function () {
       }
     }
   }
-  var trees = getRoots()
+  var trees = list.getTreeRoots()
   for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
     _buildTreeToDeep(tree)
   }

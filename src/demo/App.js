@@ -7,30 +7,11 @@ import Bridge from '../lib/Bridge';
 import MenuTree from '../lib/MenuTree';
 
 const menus = [
-	{
-		id: '1',
-		name: '测试数据1',
-		children: [
-			{
-        id: 'a',
-        name: '测试数据1-a'
-      },
-      {
-        id: 'b',
-        name: '测试数据1-b',
-        children: [
-          {
-            id: 'I',
-            name: '测试数据1-b-I'
-          },
-          {
-            id: 'II',
-            name: '测试数据1-b-II'
-          }
-        ]
-      }
-		]
-	}
+  {id: '1', name: '测试数据1', parentid: '-1'},
+  {id: 'a', name: '测试数据1-a', parentid: '1'},
+  {id: 'b', name: '测试数据1-b', parentid: '1'},
+  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
 export default class App extends Component {
@@ -39,7 +20,7 @@ export default class App extends Component {
   }
   componentDidMount() {
     Bridge.debug = true;
-    console.log(menus.flattenTree())
+    console.log(menus.deepTree())
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
