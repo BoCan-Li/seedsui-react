@@ -1,4 +1,4 @@
-// Tree 树结构
+// Tree 树结构 (require PrototypeArray.js)
 var Tree = function (container, params) {
   function getElementByParent (parent, selector) {
     return (typeof selector === 'string' && selector !== '') ? parent.querySelector(selector) : selector
@@ -80,82 +80,81 @@ var Tree = function (container, params) {
   // Selected
   s.selected = {}
   var _data = s.params.data
-  s.getChildren = function (id) {
-    var children = []
-    for (var i = 0, child; child = _data[i++];) { // eslint-disable-line
-      if (id && child.parentid === id.toString()) {
-        children.push(child)
-      }
+  s.buildOption = function (option) {
+    // 拷贝option，方便传入回调中而不影响原option
+    var copyOption = Object.create(option)
+    // line的data-xxx属性html
+    var lineDataHTML = ''
+    for (var n in option) {
+      lineDataHTML += 'data-' + n + '="' + option[n] + '" '
     }
-    return children
+
+    // tree-icon和tree-title的html
+    copyOption.html = '<div class="' + s.params.iconClass + '">' +
+      '<i class="' + s.params.arrowClass + '"></i>' +
+      '</div>' +
+      '<div class="' + s.params.titleClass + '">' + option.name + '</div>'
+    // Callback onData
+    if (s.params.onData) s.params.onData(copyOption)
+
+    var li = document.createElement('li')
+
+    // tree-btnadd
+    var btnHTML = ''
+    var addBtnHTML = ''
+    var delBtnHTML = ''
+    if (s.params.checkbox) {
+      // if (!s.selected[option.id]) {
+        // 添加按钮
+        if (s.params.buttonAddHTML) {
+          addBtnHTML = s.params.buttonAddHTML
+        } else if (s.params.buttonAddSrc) {
+          addBtnHTML = '<span class="' + s.params.buttonAddClass + '" style="background-image:url(' + s.params.buttonAddSrc + ')"></span>'
+        } else {
+          addBtnHTML = '<span class="' + s.params.buttonAddClass + '"></span>'
+        }
+        // 删除按钮
+        if (s.params.buttonDelHTML) {
+          delBtnHTML = s.params.buttonDelHTML
+        } else if (s.params.buttonDelSrc) {
+          delBtnHTML = '<span class="' + s.params.buttonDelClass + '" style="background-image:url(' + s.params.buttonDelSrc + ')"></span>'
+        } else {
+          delBtnHTML = '<span class="' + s.params.buttonDelClass + '"></span>'
+        }
+        // 如果html没有添加和删除样式,则默认增加添加和删除样式,用于后续的点击操作识别
+        if (addBtnHTML && !addBtnHTML.hasClass(s.params.buttonAddClass)) addBtnHTML.addClass(s.params.buttonAddClass)
+        if (delBtnHTML && !delBtnHTML.hasClass(s.params.buttonDelClass)) delBtnHTML.addClass(s.params.buttonDelClass)
+        // 合成html
+        btnHTML = addBtnHTML + delBtnHTML;
+      // }
+    }
+
+    // 父级和当前都被选中,则移除当前选中项
+    if (s.isSelected(option.id, option.parentid) === 2) {
+      s.removeSelected(option.id)
+    }
+
+    // 生成完整的html
+    var html = '<div class="' + s.params.lineClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
+    if (s.selected[option.id]) {
+      html = '<div class="' + s.params.lineClass + ' ' + s.params.activeClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
+    }
+    li.innerHTML = html
+    
+    return li
   }
   s.initData = function (id, ulContainer) { // 指定的部门id，根节点为-1
-    var children = s.getChildren(id)
-    for (var i = 0, option; option = children[i++];) { // eslint-disable-line
-      // 拷贝option，方便传入回调中而不影响原option
-      var copyOption = Object.create(option)
-      // line的data-xxx属性html
-      var lineDataHTML = ''
-      for (var n in option) {
-        lineDataHTML += 'data-' + n + '="' + option[n] + '" '
+    var children = _data.getFlattenTreeChildren(id)
+    if (children && children.length) { // 子节点
+      for (var i = 0, option; option = children[i++];) { // eslint-disable-line
+        var li = s.buildOption(option)
+        // 在li项里再增加一个ul用于承载子节点
+        var ul = document.createElement('ul')
+        li.appendChild(ul)
+        // 把li项放入容器
+        ulContainer.appendChild(li)
+        s.initData(option.id, ul)
       }
-
-      // tree-icon和tree-title的html
-      copyOption.html = '<div class="' + s.params.iconClass + '">' +
-        '<i class="' + s.params.arrowClass + '"></i>' +
-        '</div>' +
-        '<div class="' + s.params.titleClass + '">' + option.name + '</div>'
-      // Callback onData
-      if (s.params.onData) s.params.onData(copyOption)
-
-      var li = document.createElement('li')
-
-      // tree-btnadd
-      var btnHTML = ''
-      var addBtnHTML = ''
-      var delBtnHTML = ''
-      if (s.params.checkbox) {
-        // if (!s.selected[option.id]) {
-          // 添加按钮
-          if (s.params.buttonAddHTML) {
-            addBtnHTML = s.params.buttonAddHTML
-          } else if (s.params.buttonAddSrc) {
-            addBtnHTML = '<span class="' + s.params.buttonAddClass + '" style="background-image:url(' + s.params.buttonAddSrc + ')"></span>'
-          } else {
-            addBtnHTML = '<span class="' + s.params.buttonAddClass + '"></span>'
-          }
-          // 删除按钮
-          if (s.params.buttonDelHTML) {
-            delBtnHTML = s.params.buttonDelHTML
-          } else if (s.params.buttonDelSrc) {
-            delBtnHTML = '<span class="' + s.params.buttonDelClass + '" style="background-image:url(' + s.params.buttonDelSrc + ')"></span>'
-          } else {
-            delBtnHTML = '<span class="' + s.params.buttonDelClass + '"></span>'
-          }
-          // 如果html没有添加和删除样式,则默认增加添加和删除样式,用于后续的点击操作识别
-          if (addBtnHTML && !addBtnHTML.hasClass(s.params.buttonAddClass)) addBtnHTML.addClass(s.params.buttonAddClass)
-          if (delBtnHTML && !delBtnHTML.hasClass(s.params.buttonDelClass)) delBtnHTML.addClass(s.params.buttonDelClass)
-          // 合成html
-          btnHTML = addBtnHTML + delBtnHTML;
-        // }
-      }
-
-      // 父级和当前都被选中,则移除当前选中项
-      if (s.isSelected(option.id, option.parentid) === 2) {
-        s.removeSelected(option.id)
-      }
-
-      // 生成完整的html
-      var html = '<div class="' + s.params.lineClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
-      if (s.selected[option.id]) {
-        html = '<div class="' + s.params.lineClass + ' ' + s.params.activeClass + '" ' + lineDataHTML + '>' + copyOption.html + btnHTML + '</div>'
-      }
-      li.innerHTML = html
-      var ul = document.createElement('ul')
-      li.appendChild(ul)
-      ulContainer.appendChild(li)
-      // var ul = s.container.querySelector('[' + s.params.idAttr + '="' + option.id + '"]').nextElementSibling
-      s.initData(option.id, ul)
     }
   }
   s.update = function () {
@@ -170,7 +169,12 @@ var Tree = function (container, params) {
     s.updateBar()
 
     s.container.innerHTML = ''
-    s.initData(-1, s.container)// 根节点
+    s.initData(-1, s.container) // 根节点
+    // var trees = _data.getFlattenTreeRoots()
+    // console.log(trees)
+    // for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
+    //   s.initData(tree.id, s.container)
+    // }
   }
   // s.update()
   /* ------------------
@@ -187,13 +191,11 @@ var Tree = function (container, params) {
   // 获得数据
   s.getDataByTarget = function (target) {
     var opts = {}
-    /* eslint-disable */
-    for (var i = 0, att; att = target.attributes[i++];) {
+    for (var i = 0, att; att = target.attributes[i++];) { // eslint-disable-line
       if (att.nodeName.indexOf('data-') !== -1) {
         opts[att.nodeName.substring(5)] = att.nodeValue
       }
     }
-    /* eslint-enable */
     return opts
   }
   // 获得所有父节点

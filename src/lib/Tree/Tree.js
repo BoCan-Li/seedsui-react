@@ -98,13 +98,7 @@ export default class Tree extends Component {
     }
     // item
     const id = s.targetLine.getAttribute('data-id');
-    let item = list.filter(option => {
-      if (option.id === id) return true;
-      return false;
-    });
-    if (item && item.length > 0) {
-      item = item[0];
-    }
+    let item = list.getFlattenTreeNode(id);
     // isActived
     let isActived = selected ? selected.filter((option) => {
       if (option.id === id) return true;
