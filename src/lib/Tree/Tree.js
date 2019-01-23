@@ -52,7 +52,6 @@ export default class Tree extends Component {
           this.instance.addSelected(opt)
         }
       }
-      console.log(list)
       // 开始渲染
       this.instance.setData(list);
       this.instance.update();
@@ -122,11 +121,11 @@ export default class Tree extends Component {
     if (ul && ul.tagName === 'UL') {
       childrenCount = ul.children.length;
     }
-    // isExtand
-    const isExtand = s.targetLine.classList.contains('extand');
+    // isExtend
+    const isExtend = s.targetLine.classList.contains('extend');
     
     
-    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtand, childrenCount);
+    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
   }
   render() {
     const {style, className, treeStyle, treeClassName} = this.props;

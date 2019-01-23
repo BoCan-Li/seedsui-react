@@ -1534,7 +1534,7 @@ import Group from 'seedsui-react/lib/Group';
 import Handsign from 'seedsui-react/lib/Handsign';
 
 save = () => {
-  const sign_pic = this.$handsign.state.instance.save();
+  const sign_pic = this.$handsign.instance.save();
   if (!sign_pic) {
     Bridge.showToast('请先签名!', {mask: false})
     return;
@@ -1959,7 +1959,7 @@ onChangeData2 = () => {
   })
 }
 preview = (e) => {
-  var url = this.$elImgMark.state.instance.save();
+  var url = this.$elImgMark.instance.save();
   if (url) {
     Bridge.previewImage({urls: [url], index: 0});
   }
@@ -2956,8 +2956,8 @@ const menus = [
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
-onClickMenu = (e, item, isActived, extandStatus, childrenCount) => {
-  console.log(e, item, isActived, extandStatus, childrenCount);
+onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
+  console.log(e, item, isActived, isExtand, childrenCount);
 }
 
 <MenuTiled  list={menus.deepTree()} selectedId={'b'} onClick={this.onClickMenu}/>
@@ -4276,7 +4276,7 @@ showMsg = (msg) => {
 
   onClickLastChild={点击底层节点 func(s), 默认无}
 
-  onClick={点击节点 func(e, item, isActived, extandStatus, childrenCount), 默认无}
+  onClick={点击节点 func(e, item, isActived, isExtand, childrenCount), 默认无}
   onData={数据加载时,可修改dom func(option), 默认无}
 />
 ```
@@ -4567,22 +4567,26 @@ var userList2 = [
   }
 ];
 
+// 展开全部
+onExtend = () => {
+  this.$tree.instance.extendAll();
+}
+// 展开全部
+onCollapse = () => {
+  this.$tree.instance.collapseAll();
+}
 // 异步加载的方法, 点击Title, 去请求数据
-onAsync = (e, item, isActived, extandStatus, childrenCount) => {
-  console.log(e);
-  if (!extandStatus) return;
-  if (e.target.classList.contains("tree-btnadd")) return;
-  if (e.target.classList.contains("tree-btndel")) return;
-  if (e.targetLine.hasData) {
-    return;
-  }
+onAsync = (e, item, isActived, isExtend, childrenCount) => {
+  if (!isExtend || e.targetLine.hasData) return;
   var ul = e.targetLine.nextElementSibling;
   if (item.id === "56a81fea-03f4-41e1-a521-ea14513a65c6") { // 加载业务产品部
-    this.$tree.state.instance.addData(userList1, item.id, ul);
+    console.log('加载业务产品部');
+    this.$tree.instance.addData(userList1, item.id, ul);
     e.targetLine.hasData = true;
   }
   if (item.id === "96a2835b-a1b2-4556-bf68-cb0038042b57") { // 加载移动平台产品线
-    this.$tree.state.instance.addData(userList2, item.id, ul);
+    console.log('加载移动平台产品线');
+    this.$tree.instance.addData(userList2, item.id, ul);
     e.targetLine.hasData = true;
   }
 }
@@ -4602,7 +4606,7 @@ onData = (option) => {
 }
 // 查看选中信息
 onSubmit = () => {
-  let selected = this.$tree.state.instance.selected;
+  let selected = this.$tree.instance.selected;
   console.log(selected);
 }
 
@@ -4617,6 +4621,8 @@ onSubmit = () => {
   bar="#idTreeBar"
 />
 <input type="button" className="button lg" value="查看选中" onClick={this.onSubmit}/>
+<input type="button" className="button lg" value="展开全部" onClick={this.onExtend}/>
+<input type="button" className="button lg" value="收缩全部" onClick={this.onCollapse}/>
 ```
 [返回目录](#component)
 

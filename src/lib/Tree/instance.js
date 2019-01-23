@@ -15,7 +15,7 @@ var Tree = function (container, params) {
     barOptionClass: 'tree-bar-button',
     barButtonDelClass: 'tree-bar-button-del',
 
-    extandClass: 'extand',
+    extendClass: 'extend',
     activeClass: 'active',
 
     treeClass: 'tree',
@@ -82,19 +82,16 @@ var Tree = function (container, params) {
   var _data = s.params.data
   s.getChildren = function (id) {
     var children = []
-    /* eslint-disable */
-    for (var i = 0, child; child = _data[i++];) {
+    for (var i = 0, child; child = _data[i++];) { // eslint-disable-line
       if (id && child.parentid === id.toString()) {
         children.push(child)
       }
     }
-    /* eslint-enable */
     return children
   }
   s.initData = function (id, ulContainer) { // 指定的部门id，根节点为-1
-    var group = s.getChildren(id)
-    /* eslint-disable */
-    for (var i = 0, option; option = group[i++];) {
+    var children = s.getChildren(id)
+    for (var i = 0, option; option = children[i++];) { // eslint-disable-line
       // 拷贝option，方便传入回调中而不影响原option
       var copyOption = Object.create(option)
       // line的data-xxx属性html
@@ -160,7 +157,6 @@ var Tree = function (container, params) {
       // var ul = s.container.querySelector('[' + s.params.idAttr + '="' + option.id + '"]').nextElementSibling
       s.initData(option.id, ul)
     }
-    /* eslint-enable */
   }
   s.update = function () {
     if (!s.params.data || !s.params.data.length) {
@@ -181,7 +177,6 @@ var Tree = function (container, params) {
     Method
     ------------------ */
   s.setData = function (data) {
-    console.log(data)
     _data = s.params.data = data
   }
   // 添加数据
@@ -300,20 +295,16 @@ var Tree = function (container, params) {
     s.hideBar()
   }
   s.collapseAll = function () {
-    var extands = s.container.querySelectorAll('.' + s.params.extandClass)
-    /* eslint-disable */
-    for (var i = 0, ex; ex = extands[i++];) {
-      ex.classList.remove(s.params.extandClass)
+    var elements = s.container.querySelectorAll('.' + s.params.extendClass)
+    for (var i = 0, el; el = elements[i++];) { // eslint-disable-line
+      el.classList.remove(s.params.extendClass)
     }
-    /* eslint-enable */
   }
-  s.extandAll = function () {
-    var extands = s.container.querySelectorAll('.' + s.params.lineClass)
-    /* eslint-disable */
-    for (var i = 0, ex; ex = extands[i++];) {
-      ex.classList.add(s.params.extandClass)
+  s.extendAll = function () {
+    var elements = s.container.querySelectorAll('.' + s.params.lineClass)
+    for (var i = 0, el; el = elements[i++];) { // eslint-disable-line
+      el.classList.add(s.params.extendClass)
     }
-    /* eslint-enable */
   }
   s.addSelected = function (opts) {
     if (!opts.id || !opts.name || !opts.parentid) {
@@ -434,7 +425,7 @@ var Tree = function (container, params) {
       s.onClickBtnDel(e)
     } else if (s.targetLine) { // 点击其它元素,但s.targetLine存在的情况下
       // 展开与收缩
-      s.targetLine.classList.toggle(s.params.extandClass)
+      s.targetLine.classList.toggle(s.params.extendClass)
       var lines = s.targetLine.nextElementSibling.querySelectorAll('li > .' + s.params.lineClass)
       /* eslint-disable */
       for (var i = 0, line; line = lines[i++];) {

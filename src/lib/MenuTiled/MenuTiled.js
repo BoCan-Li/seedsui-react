@@ -46,11 +46,11 @@ export default class MenuTiled extends Component {
     });
     this.instance = instance;
   }
-  onClick = (s, item, isActived, isExtand) => {
+  onClick = (s, item, isActived, isExtend) => {
     // childrenCount
     var childrenCount = item.children && item.children.length ? item.children.length : 0;
 
-    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtand, childrenCount);
+    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
   }
   render() {
     const {className, selectedId, onClick, list, ...others} = this.props;

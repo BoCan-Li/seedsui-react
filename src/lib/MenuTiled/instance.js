@@ -11,12 +11,12 @@ var MenuTiled = function (container, params) {
     tagClass: 'menutiled-tag',
     moreClass: 'menutiled-more',
     activeClass: 'active',
-    extandClass: 'extand',
+    extendClass: 'extend',
 
     selectedId: '', // 默认选中项的id
     /*
     callbacks
-    onClick:function(s, item, isActived, isExtand) // 点击项的数据,是否是选中状态,是否是展开状态
+    onClick:function(s, item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
     */
   }
   /* 参数data: [{
@@ -101,14 +101,14 @@ var MenuTiled = function (container, params) {
     if (!target.classList.contains(s.params.tagClass)) return
     // isActived
     var isActived = s.target.classList.contains('active')
-    // isExtand
-    var isExtand = target.classList.contains(s.params.extandClass)
+    // isExtend
+    var isExtend = target.classList.contains(s.params.extendClass)
     // item
     const id = target.getAttribute('data-id');
     let item = s.params.data.getDeepTreeNode(id);
     // 如果已经展开,则收缩
-    if (isExtand) {
-      // target.classList.remove(s.params.extandClass)
+    if (isExtend) {
+      // target.classList.remove(s.params.extendClass)
     // 如果没有展开,则展开并选中,有下级则新建下级节点
     } else {
       // 移除下级节点
@@ -119,12 +119,12 @@ var MenuTiled = function (container, params) {
       var tags = slot.children
       for (var i = 0, tag; tag = tags[i++];) { // eslint-disable-line
         if (tag) {
-          tag.classList.remove(s.params.extandClass)
+          tag.classList.remove(s.params.extendClass)
           tag.classList.remove(s.params.activeClass)
         }
       }
       // 添加当前节点为选中项和展开项
-      target.classList.add(s.params.extandClass)
+      target.classList.add(s.params.extendClass)
       target.classList.add(s.params.activeClass)
       // 如果有下级则新建下级节点
       if (item.children && item.children.length > 0) {
@@ -132,7 +132,7 @@ var MenuTiled = function (container, params) {
       }
     }
     
-    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtand)
+    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtend)
   }
   // 主函数
   s.init = function () {

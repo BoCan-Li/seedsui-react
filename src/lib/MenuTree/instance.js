@@ -8,13 +8,13 @@ var MenuTree = function (container, params) {
     data: null,
     tagClass: 'menutree-tag',
     activeClass: 'active',
-    extandClass: 'extand',
+    extendClass: 'extend',
 
     selectedId: '', // 默认选中项的id
     // collapseResetChildren: true, // 收缩时, 重置子节点
     /*
     callbacks
-    onClick:function(item, isActived, isExtand) // 点击项的数据,是否是选中状态,是否是展开状态
+    onClick:function(item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
     */
   }
   /* 参数data: [{
@@ -87,7 +87,7 @@ var MenuTree = function (container, params) {
   }
   s.setActive = function (target) {
     target.classList.add(s.params.activeClass)
-    target.classList.add(s.params.extandClass)
+    target.classList.add(s.params.extendClass)
     if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.previousElementSibling) {
       var tag = target.parentNode.parentNode.previousElementSibling
       s.setActive(tag)
@@ -150,19 +150,19 @@ var MenuTree = function (container, params) {
     if (!target.classList.contains(s.params.tagClass)) return
     // isActived
     var isActived = target.classList.contains(s.params.activeClass)
-    // isExtand
-    var isExtand = target.classList.contains(s.params.extandClass)
+    // isExtend
+    var isExtend = target.classList.contains(s.params.extendClass)
     // item
     const id = target.getAttribute('data-id');
     let item = s.params.data.getDeepTreeNode(id);
     // 如果已经展开,则收缩
-    if (isExtand) {
-      target.classList.remove(s.params.extandClass)
+    if (isExtend) {
+      target.classList.remove(s.params.extendClass)
       // 收缩时, 重置子节点
       // if (s.params.collapseResetChildren) {
         // var tags = target.nextElementSibling.querySelectorAll('.' + s.params.tagClass)
         // for (var i = 0, subtag; subtag = tags[i++];) { // eslint-disable-line
-        //   subtag.classList.remove(s.params.extandClass)
+        //   subtag.classList.remove(s.params.extendClass)
         //   subtag.classList.remove(s.params.activeClass)
         // }
       // }
@@ -173,16 +173,16 @@ var MenuTree = function (container, params) {
       for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
         // var tag = li.querySelector('.' + s.params.tagClass)
         if (tag) {
-          tag.classList.remove(s.params.extandClass)
+          tag.classList.remove(s.params.extendClass)
           tag.classList.remove(s.params.activeClass)
         }
       }
       // 添加当前节点为选中项和展开项
-      target.classList.add(s.params.extandClass)
+      target.classList.add(s.params.extendClass)
       target.classList.add(s.params.activeClass)
     }
 
-    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtand)
+    if (s.params.onClick) s.params.onClick(s, item, isActived, isExtend)
   }
   // 主函数
   s.init = function () {
