@@ -2960,7 +2960,7 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
   console.log(e, item, isActived, isExtand, childrenCount);
 }
 
-<MenuTiled  list={menus.deepTree()} selectedId={'b'} onClick={this.onClickMenu}/>
+<MenuTiled list={menus} selectedId={'b'} onClick={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
@@ -2987,18 +2987,7 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
 ### 示例
 ```javascript
 import MenuTree from 'seedsui-react/lib/MenuTree';
-const list = [
-  {
-    id: '1',
-    caption: '测试数据1',
-    children: [
-      {id: 'a', caption: '测试数据1-a'}
-    ]
-  }
-];
-onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
-  console.log(e, item, isActived, isExtand, childrenCount);
-}
+
 // const menus = [
   // 	{
   // 		id: '1',
@@ -3025,14 +3014,17 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
   // 		]
   // 	}
   // ];
-  const menus = [
-    {id: '1', name: '测试数据1', parentid: '-1'},
-    {id: 'a', name: '测试数据1-a', parentid: '1'},
-    {id: 'b', name: '测试数据1-b', parentid: '1'},
-    {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
-    {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
-  ];
-<MenuTree ref="$menutree" list={menus.deepTree()} selectedId={'b'} onClick={this.onClickMenu} style={Container}/>
+const menus = [
+  {id: '1', name: '测试数据1', parentid: '-1'},
+  {id: 'a', name: '测试数据1-a', parentid: '1'},
+  {id: 'b', name: '测试数据1-b', parentid: '1'},
+  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
+];
+onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
+  console.log(e, item, isActived, isExtand, childrenCount);
+}
+<MenuTree ref="$menutree" list={menus} selectedId={'b'} onClick={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
