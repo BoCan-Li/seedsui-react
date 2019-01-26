@@ -39,8 +39,8 @@ export default class Tree extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidUpdate = () => {
-    if (this.props.list && this.props.list.length) {
+  componentDidUpdate = (prevProps) => {
+    if (this.props.list && this.props.list.length && JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
       const {selected} = this.props;
       var list = Object.clone(this.props.list);
       if (JSON.stringify(list).indexOf('"children"') !== -1) {

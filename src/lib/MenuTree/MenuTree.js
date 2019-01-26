@@ -22,8 +22,8 @@ export default class MenuTree extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidUpdate = () => {
-    if (this.props.list && this.props.list.length) {
+  componentDidUpdate = (prevProps) => {
+    if (this.props.list && this.props.list.length && JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
       this.instance.setSelectedId(this.props.selectedId)
       var list = Object.clone(this.props.list);
       if (JSON.stringify(list).indexOf('"children"') === -1) {

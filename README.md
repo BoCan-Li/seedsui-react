@@ -2988,43 +2988,33 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
 ```javascript
 import MenuTree from 'seedsui-react/lib/MenuTree';
 
-// const menus = [
-  // 	{
-  // 		id: '1',
-  // 		name: '测试数据1',
-  // 		children: [
-  // 			{
-  //         id: 'a',
-  //         name: '测试数据1-a'
-  //       },
-  //       {
-  //         id: 'b',
-  //         name: '测试数据1-b',
-  //         children: [
-  //           {
-  //             id: 'I',
-  //             name: '测试数据1-b-I'
-  //           },
-  //           {
-  //             id: 'II',
-  //             name: '测试数据1-b-II'
-  //           }
-  //         ]
-  //       }
-  // 		]
-  // 	}
-  // ];
 const menus = [
+  {id: '2', name: '测试数据2', parentid: '-1'},
   {id: '1', name: '测试数据1', parentid: '-1'},
   {id: 'a', name: '测试数据1-a', parentid: '1'},
   {id: 'b', name: '测试数据1-b', parentid: '1'},
   {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
-onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
-  console.log(e, item, isActived, isExtand, childrenCount);
+
+this.state = {
+  selectedId: '2'
 }
-<MenuTree ref="$menutree" list={menus} selectedId={'b'} onClick={this.onClickMenu}/>
+
+onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
+  console.log(e);
+  console.log(item);
+  console.log('激活:' + isActived);
+  console.log('展开:' + isExtand);
+  console.log('子项:' + childrenCount);
+  if (!isActived) {
+    this.setState({
+      selectedId: item.id
+    });
+  }
+}
+
+<MenuTree ref="$menutree" list={menus} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
