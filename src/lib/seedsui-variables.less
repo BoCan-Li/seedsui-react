@@ -1807,9 +1807,67 @@
   background-image: url(//res.waiqin365.com/d/seedsui/dragrefresh/pull.png);
 };
 
+
+
 // Emoji表情控件
-@emoji-bg: #f0f0f0;
-@emoji-input-bg: white;
+@emoji-bg: #ffffff;
+@emoji-edit-bg: #f7f7f7;
+.setEmojiMask(){
+  transition-duration: 0ms;
+	z-index:2;	
+}
+.setEmoji(){
+  position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: @emoji-bg;
+}
+// 编辑区
+.setEmojiEdit(){
+  .flex;
+  .border-b;
+  background-color: @emoji-edit-bg;
+  padding: 6px 0px 6px 12px;
+}
+.setEmojiEditInput(){
+  .flex-1;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #cecece;
+}
+.setEmojiEditIcon(){
+  font-family: 'iconfont';
+  border-right: 1px solid #cecece;
+  width: 48px;
+  color: #808080;
+  &:extend(.icon-rdo-emoji all);
+  &.active{
+    &:extend(.icon-rdo-keyboard all);
+  }
+}
+.setEmojiEditSubmit(){
+  width: 60px;
+  height: 30px;
+  border: 0;
+  color: @primary-bg;
+}
+// 表情区
+.setEmojiCarrousel(){
+  .carrousel-pagination{
+    bottom: 16px;
+  }
+  .bullet{
+    background-color: #eaeaea;
+    &+.bullet{
+      margin-left: 15px;
+    }
+    &.active{
+      background-color: #979797;
+    }
+  }
+}
+
+
 
 
 // SearchBoard搜索面板控件
@@ -2337,13 +2395,15 @@
   width: @5px;
   height: @5px;
   border-radius: 100%;
-  margin-right:@5px;
   line-height: @8px;
   font-size: @12px;
   bottom: @10px;
   width: @8px;
   height: @8px;
   background-color:#ccc;
+  &+.bullet{
+    margin-left:@5px;
+  }
 }
 .setCarrouselBulletActive(){
   background-color:@primary-bg;

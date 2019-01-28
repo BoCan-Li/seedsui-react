@@ -1,22 +1,26 @@
 // emoji.less(start)
 .emoji-mask{
-	transition-duration: 0ms;
-	z-index:2;	
+	.setEmojiMask();
 }
 .emoji{
-	position: absolute;
-	top: 0;
-	width: 100%;
-	background-color: @emoji-bg;
+	.setEmoji();
 }
-.emoji-input{
-	padding: 6px 0px 6px 12px;
-	background-color: @emoji-input-bg;
+// 编辑区
+.emoji-edit{
+	.setEmojiEdit();
 }
-.emoji-button{
-	padding: 0 12px;
-	height: 30px;
-	border:0;
+.emoji-edit-input{
+	.setEmojiEditInput();
+}
+.emoji-edit-submit{
+	.setEmojiEditSubmit();
+}
+.emoji-edit-icon{
+	.setEmojiEditIcon();
+}
+// 表情区
+.emoji-carrousel{
+	.setEmojiCarrousel();
 }
 [data-emoji]{
 	display:inline-block;

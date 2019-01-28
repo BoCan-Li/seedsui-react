@@ -34,9 +34,7 @@ export default class Emoji extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {
-      instance: Instance
-    };
+    this.instance = Instance;
   }
   componentDidUpdate = (prevProps) => {
     if (prevProps.show !== this.props.show && this.props.show === true && this.$inputPre) {
@@ -44,7 +42,7 @@ export default class Emoji extends Component {
     }
   }
   componentDidMount = () => {
-    Instance.init(this.$inputPre.$input);
+    this.instance.init(this.$inputPre.$input);
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -97,6 +95,20 @@ export default class Emoji extends Component {
       </div>
     });
   }
+  onFocus = () => {
+    this.$icon.classList.remove('active');
+    this.$carrousel.$el.style.display = 'none';
+  }
+  toggleFace = (e) => {
+    const carrouselEl = this.$carrousel.$el;
+    if (carrouselEl.style.display === 'none') {
+      carrouselEl.style.display = 'block';
+      e.currentTarget.classList.add('active');
+    } else {
+      carrouselEl.style.display = 'none';
+      e.currentTarget.classList.remove('active');
+    }
+  }
   render() {
     const {
       value,
@@ -108,18 +120,22 @@ export default class Emoji extends Component {
     return createPortal(
       <div ref={el => {this.$el = el;}} className={`mask emoji-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={maskStyle} onClick={this.onClickMask}>
         <div className={`emoji${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={style} onClick={this.onClick}>
-          <Carrousel pagination className="carrousel-container" style={{height: '186px'}}>
+          <div className="emoji-edit">
+            <InputPre
+              ref={(el) => {this.$inputPre = el;}}
+              className="emoji-edit-input" inputStyle={{padding: '4px 8px'}}
+              valueBindProp
+              value={value}
+              onChange={onChange}
+              onFocus={this.onFocus}
+              placeholder={placeholder}
+            />
+            <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`} onClick={this.toggleFace}></i>
+            <Button className="emoji-edit-submit" disabled={!value} onClick={this.onClickSubmit}>提交</Button>
+          </div>
+          <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{height: '186px', display: 'none'}}>
             {this.getFaceDOM()}
           </Carrousel>
-          <InputPre
-            ref={(el) => {this.$inputPre = el;}}
-            className="emoji-input" inputClassName="basketline" inputStyle={{padding: '4px 8px'}}
-            valueBindProp
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            rcaption={<Button className="link outline emoji-button" disabled={!value} onClick={this.onClickSubmit}>提交</Button>}
-          />
         </div>
       </div>,
       this.props.portal || document.getElementById('root')
