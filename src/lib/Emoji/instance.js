@@ -137,8 +137,8 @@ var Emoji = function (params) {
 		s.cursorOffset = s.cursorOffset + emojiName.length
 		s.textarea.value = valueBefore + valueInsert + valueAfter
 		// 设置光杆位置
-		s.textarea.focus()
-		this.setCaretPosition(s.textarea, s.cursorOffset)
+		// s.textarea.focus()
+		// this.setCaretPosition(s.textarea, s.cursorOffset)
 		return s.textarea.value;
 	}
 	// 删除表情文字
@@ -164,8 +164,8 @@ var Emoji = function (params) {
 		s.cursorOffset = valueBefore.length
 		s.textarea.value = valueBefore + valueAfter
 		// 设置光杆位置
-		s.textarea.focus()
-		this.setCaretPosition(s.textarea, s.cursorOffset)
+		// s.textarea.focus()
+		// this.setCaretPosition(s.textarea, s.cursorOffset)
 		return s.textarea.value;
 	}
 	// 设置光标位置
@@ -189,11 +189,11 @@ var Emoji = function (params) {
   Controller
   -------------------- */
   s.events = function (detach) {
-    var target = s.mask
     var action = detach ? 'removeEventListener' : 'addEventListener'
-		target[action]('click', s.onClick, false)
+		s.mask[action]('click', s.onClick, false)
 		// 获取焦点时, 隐藏表情
 		s.textarea[action]('focus', s.onFocus, false)
+		s.textarea[action]('blur', s.onBlur, false)
 		// 获得光标位置
 		document[action]('selectionchange', s.onSelectionChange, false)
 		s.textarea[action]('input', s.onInput, false)
@@ -232,7 +232,17 @@ var Emoji = function (params) {
 	// 获取焦点时, 隐藏表情
 	s.onFocus = function () {
     s.icon.classList.remove('active')
-    s.carrousel.style.display = 'none'
+		s.carrousel.style.display = 'none'
+		// 兼容ios12输入法把页面顶上去, 不回弹的问题
+		s.textarea.scrollIntoView()
+	}
+	// 获取焦点时, 隐藏表情
+	s.onBlur = function () {
+		// 兼容ios12输入法把页面顶上去, 不回弹的问题
+		// s.mask.scrollIntoView()
+		setTimeout(() => {
+			document.getElementById('root').scrollIntoView()
+		}, 100);
 	}
 	// 获得光标位置
 	s.onSelectionChange = function (e) {
