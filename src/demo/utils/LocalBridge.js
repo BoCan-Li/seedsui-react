@@ -63,8 +63,10 @@ var LocalBridge = {
   },
   // 兼容ios12输入法把页面顶上去, 不回弹的问题
   iosInputBounceBack: function () {
-    console.log('blur');
     document.getElementById('root').scrollIntoView();
+  },
+  iosInputBounceBackByElement: function (e) {
+    e.target.scrollIntoView();
   }
 }
 

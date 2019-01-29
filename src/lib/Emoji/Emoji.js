@@ -32,6 +32,7 @@ export default class Emoji extends Component {
     onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
+    autoFocus: false,
     data: data,
     placeholder: '说点什么吧...',
     isClickMaskHide: false
@@ -45,6 +46,7 @@ export default class Emoji extends Component {
     }
   }
   componentDidMount = () => {
+    if (this.props.autoFocus && this.$inputPre) this.$inputPre.$input.focus();
     if (this.instance) return
     var instance = new Instance({
       data: this.props.data,
@@ -83,12 +85,14 @@ export default class Emoji extends Component {
   // 表情
   getFaceDOM = () => {
     const {data} = this.props;
-    // 将icons分页
+    // icons分页变量
     const icons = [];
     let page = 0;
     let index = 0;
+    let count = 23;
+    // icons分页
     for (let name in data) {
-      if (index !== 0 && index % 24 === 0) {
+      if (index !== 0 && index % count === 0) {
         page++;
       }
       if (!icons[page]) icons[page] = [];
@@ -99,8 +103,9 @@ export default class Emoji extends Component {
     return icons.map((icon, i) => {
       return <div key={`page${i}`} className={`emoji-carrousel-slide`}>
         {icon.map((item, index) => {
-          return <a key={`face${index}`} data-emoji={item.value} alt={item.key}>&nbsp;</a>
+          return <a key={`face${index}`} className={`emoji-face`} data-emoji={item.value} title={item.key}>&nbsp;</a>
         })}
+        <a className={`emoji-face-delete`}>&nbsp;</a>
       </div>
     });
   }

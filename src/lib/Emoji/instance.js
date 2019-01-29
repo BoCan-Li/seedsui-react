@@ -16,7 +16,12 @@ var Emoji = function (params) {
 
 		textareaClass: 'emoji-edit-input',
 		
-		iconClass: 'emoji-edit-icon',
+		iconClass: 'emoji-edit-icon', // 展开和收缩按钮
+
+		faceClass: 'emoji-face', // 表情
+		faceNameAttr: 'title',
+		faceIdAttr: 'data-emoji',
+		deleteClass: 'emoji-face-delete', // 删除表情按钮
 
 		carrouselClass: 'emoji-carrousel'
 		/*
@@ -114,7 +119,7 @@ var Emoji = function (params) {
 		var parseStr = str
 		while (emojiExpr.exec(str)) {
 			if (s.params.data[RegExp.$1]) {
-				parseStr = parseStr.replace(RegExp.$1, '<span data-emoji=' + s.params.data[RegExp.$1] + '></span>')
+				parseStr = parseStr.replace(RegExp.$1, '<span ' + s.params.faceIdAttr + '=' + s.params.data[RegExp.$1] + '></span>')
 			}
 		}
 		return parseStr
@@ -131,6 +136,33 @@ var Emoji = function (params) {
 		var valueInsert = emojiName
 		s.cursorOffset = s.cursorOffset + emojiName.length
 		s.textarea.value = valueBefore + valueInsert + valueAfter
+		// 设置光杆位置
+		s.textarea.focus()
+		this.setCaretPosition(s.textarea, s.cursorOffset)
+		return s.textarea.value;
+	}
+	// 删除表情文字
+	s.deleteFace = function () {
+		// 设置value
+		var value = s.textarea.value
+		var valueBefore = value.substr(0, s.cursorOffset)
+		var valueAfter = value.substr(s.cursorOffset, value.length)
+		var isDeleted = false
+		if (!valueBefore) return value
+		// 匹配光标前的最后一个表情
+		for (var face in s.params.data) {
+			if (valueBefore.lastIndexOf(face) !== -1 && valueBefore.lastIndexOf(face) === valueBefore.length - face.length){
+				valueBefore = valueBefore.substring(0, valueBefore.lastIndexOf(face))
+				isDeleted = true
+				break
+			}
+		}
+		// 如果没有匹配到表情, 则删除最后一个字符
+		if (!isDeleted) {
+			valueBefore = valueBefore.substring(0, valueBefore.length - 1)
+		}
+		s.cursorOffset = valueBefore.length
+		s.textarea.value = valueBefore + valueAfter
 		// 设置光杆位置
 		s.textarea.focus()
 		this.setCaretPosition(s.textarea, s.cursorOffset)
@@ -153,19 +185,6 @@ var Emoji = function (params) {
       }
     }
 	}
-	s.init = function (elInput) {
-		s.textarea = elInput
-		document.onselectionchange = (e) => {
-			if (Object.prototype.toString.call(e.target.activeElement) === '[object HTMLTextAreaElement]') {
-				// 获得光标位置
-				s.cursorOffset = s.textarea.selectionStart;
-			}
-		}
-		s.textarea.addEventListener('input', (e) => {
-			// 获得光标位置
-			s.cursorOffset = e.target.selectionStart
-		}, false)
-	}
   /* --------------------
   Controller
   -------------------- */
@@ -175,6 +194,9 @@ var Emoji = function (params) {
 		target[action]('click', s.onClick, false)
 		// 获取焦点时, 隐藏表情
 		s.textarea[action]('focus', s.onFocus, false)
+		// 获得光标位置
+		document[action]('selectionchange', s.onSelectionChange, false)
+		s.textarea[action]('input', s.onInput, false)
   }
   s.attach = function () {
     s.events()
@@ -184,8 +206,8 @@ var Emoji = function (params) {
 	}
 	s.onClick = function (e) {
 		var target = e.target;
-    if (target.getAttribute('data-emoji')) { // 点击表情
-      var value = s.insertFace(target.getAttribute('alt'))
+    if (target.classList.contains(s.params.faceClass)) { // 点击表情
+      var value = s.insertFace(target.getAttribute(s.params.faceNameAttr))
 			if (s.params.onChange) s.params.onChange(value, s)
 		} else if (target.classList.contains(s.params.iconClass)) { // 点击展开收缩图标
 			if (s.carrousel.style.display === 'none') {
@@ -194,6 +216,7 @@ var Emoji = function (params) {
 			} else {
 				s.carrousel.style.display = 'none'
 				s.icon.classList.remove('active')
+				s.textarea.focus()
 			}
 		} else if (target.classList.contains(s.params.maskClass)) { // 点击遮罩
 			if (s.params.onClickMask) s.params.onClickMask(s, e)
@@ -201,14 +224,25 @@ var Emoji = function (params) {
 		} else if (target.classList.contains(s.params.submitClass)) { // 点击提交
 			if (s.params.onClickSubmit) s.params.onClickSubmit(s.textarea.value, s, e)
       if (s.params.isClickMaskHide) s.hide()
+		} else if (target.classList.contains(s.params.deleteClass)) { // 点击删除
+			s.deleteFace()
 		}
 		e.stopPropagation()
 	}
 	// 获取焦点时, 隐藏表情
-	s.onFocus = () => {
+	s.onFocus = function () {
     s.icon.classList.remove('active')
     s.carrousel.style.display = 'none'
-  }
+	}
+	// 获得光标位置
+	s.onSelectionChange = function (e) {
+		if (Object.prototype.toString.call(e.target.activeElement) === '[object HTMLTextAreaElement]') {
+			s.cursorOffset = s.textarea.selectionStart
+		}
+	}
+	s.onInput = function (e) {
+		s.cursorOffset = e.target.selectionStart
+	}
   /* --------------------
   Init
   -------------------- */

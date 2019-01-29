@@ -1329,7 +1329,7 @@ onChangeDropdown = (tabs) => {
 <Emoji
   portal={弹出框传送至dom object, 默认document.getElementById('root')}
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  show={*显隐 bool, 默认false}
+  autoFocus={自动获取焦点 bool, 默认false}
 
   value={值 string, 默认''}
   placeholder={占位文字 string, 默认''}
