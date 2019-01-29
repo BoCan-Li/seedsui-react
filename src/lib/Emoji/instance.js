@@ -1,142 +1,143 @@
 // Emoji 表情管理
-var Emoji = {
-	// 图标对应表
-	icons: {
-		'[微笑]': '[weixiao]',
-		'[难过]': '[nanguo]',
-		'[色]': '[se]',
-		'[发呆]': '[fadai]',
-		'[酷]': '[cool]',
-		'[大哭]': '[daku]',
-		'[害羞]': '[haixiu]',
+var Emoji = function (params) {
+  /* --------------------
+  Model
+  -------------------- */
+  var defaults = {
+		data: null,
 
-		'[闭嘴]': '[bizui]',
-		'[睡觉]': '[shuijiao]',
-		'[哭]': '[ku]',
-		'[流汗]': '[liuhan]',
-		'[发怒]': '[fanu]',
-		'[眨眼]': '[zhayan]',
-		'[龇牙]': '[ziya]',
+		mask: null,
+		maskClass: 'emoji-mask',
+		maskActiveClass: 'active',
+		isClickMaskHide: true,
+		
+		containerClass: 'emoji',
+		containerActiveClass: 'active',
 
-		'[惊讶]': '[jingya]',
-		'[傲慢]': '[aoman]',
-		'[得意]': '[deyi]',
-		'[可怜]': '[kelian]',
-		'[拜拜]': '[baibai]',
-		'[开心]': '[kaixin]',
-		'[呕吐]': '[outu]',
-		'[奋斗]': '[fendou]',
-		'[坏笑]': '[huaixiao]',
-		'[尴尬]': '[ganga]',
-		'[惊吓]': '[jingxia]',
-		'[打哈欠]': '[dahaqian]',
-		'[白眼]': '[baiyan]',
-		'[鄙视]': '[bishi]',
+		textareaClass: 'emoji-edit-input',
+		
+		iconClass: 'emoji-edit-icon',
 
-		'[抽烟]': '[chouyan]',
-		'[敲头]': '[qiaotou]',
-		'[亲亲]': '[qingqing]',
-		'[恭喜]': '[gongxi]',
-		'[奸笑]': '[jianxiao]',
-		'[骂人]': '[maren]',
-		'[糗]': '[qiu]',
+		carrouselClass: 'emoji-carrousel'
+		/*
+    callbacks
+		onChange:function(value, s, e)
+		onClickMask: function(s, e)
+		onClickSubmit: function(value, s, e)
+    */
+  }
+  params = params || {}
+  for (var def in defaults) {
+    if (params[def] === undefined) {
+      params[def] = defaults[def]
+    }
+	}
+	
+	// Emoji
+	var s = this
+	
+	// Params
+	s.params = params
 
-		'[伤心]': '[shangxin]',
-		'[受委屈]': '[shouweiqu]',
-		'[偷笑]': '[touxiao]',
-		'[挖鼻孔]': '[wabikong]',
-		'[委屈]': '[weiqu]',
-		'[问]': '[wen]',
-		'[擦汗]': '[cahan]',
-		'[左哼哼]': '[zuohengheng]',
-		'[右哼哼]': '[youhengheng]',
-		'[晕]': '[yun]',
-		'[大笑]': '[daxiao]',
-		'[吓]': '[xia]',
-		'[困]': '[kun]',
-		'[嘘]': '[xu]',
+	// Mask
+  s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+  if (!s.mask) {
+    console.log('SeedsUI Error：未找到Emoji的mask元素，请检查传入参数是否正确')
+    return
+	}
+	
+  // Container
+  s.container = s.mask.querySelector('.' + s.params.containerClass)
+  if (!s.container) {
+    console.log('SeedsUI Error：未找到Emoji的container元素，请检查传入参数是否正确')
+    return
+	}
 
-		'[加油]': '[jiayou]',
-		'[强]': '[qiang]',
-		'[我爱你]': '[iloveyou]',
-		'[差劲]': '[chajin]',
-		'[No]': '[no]',
-		'[Ok]': '[ok]',
-		'[弱]': '[ruo]',
+	// Textarea
+	s.textarea = s.mask.querySelector('.' + s.params.textareaClass + ' textarea')
+	if (!s.textarea) {
+    console.log('SeedsUI Error：未找到Emoji的textarea元素，请检查传入参数是否正确')
+    return
+	}
+	if (s.textarea.tagName !== 'TEXTAREA') {
+		console.log('SeedsUI Error：Emoji的textarea元素必须为一个textarea')
+    return
+	}
 
-		'[抱拳]': '[baoquan]',
-		'[握手]': '[woshou]',
-		'[Yeah]': '[yeah]',
-		'[来]': '[lai]',
-		'[猪头]': '[zhutou]',
-		'[心]': '[xin]',
-		'[心碎]': '[xinsui]',
-		'[抱抱]': '[baobao]',
-		'[红唇]': '[hongchun]',
-		'[菜刀]': '[caidao]',
-		'[太阳]': '[taiyang]',
-		'[夜晚]': '[yewan]',
-		'[花谢了]': '[huaxiele]',
+	// Icon
+	s.icon = s.mask.querySelector('.' + s.params.iconClass)
+	if (!s.textarea) {
+    console.log('SeedsUI Error：未找到Emoji的icon元素，请检查传入参数是否正确')
+    return
+	}
 
-		'[蛋糕]': '[dangao]',
-		'[咖啡]': '[kafei]',
-		'[足球]': '[zuqiu]',
-		'[骷髅]': '[kulou]',
-		'[西瓜]': '[xigua]',
-		'[炸弹]': '[zhadan]',
-		'[篮球]': '[lanqiu]',
-
-		'[礼物]': '[liwu]',
-		'[大便]': '[dabian]',
-		'[玫瑰]': '[meigui]',
-		'[米饭]': '[mifan]',
-		'[瓢虫]': '[piaochong]',
-		'[啤酒]': '[pijiu]',
-		'[闪电]': '[shandian]',
-	},
+	// Carrousel
+	s.carrousel = s.mask.querySelector('.' + s.params.carrouselClass)
+	if (!s.textarea) {
+    console.log('SeedsUI Error：未找到Emoji的carrousel元素，请检查传入参数是否正确')
+    return
+	}
+  /* --------------------
+  Method
+	-------------------- */
+	// 设置数据
+  s.setData = function (data) {
+    s.params.data = data
+	}
+	// 显隐
+	s.showMask = function () {
+    s.mask.classList.add(s.params.maskActiveClass)
+  }
+  s.hideMask = function () {
+    s.mask.classList.remove(s.params.maskActiveClass)
+  }
+  s.destroyMask = function () {
+    s.mask.parentNode.removeChild(s.mask)
+  }
+  s.showContainer = function () {
+    s.container.classList.add(s.params.containerActiveClass)
+  }
+  s.hideContainer = function () {
+    s.container.classList.remove(s.params.containerActiveClass)
+  }
+	s.show = function () {
+		s.showMask()
+		s.showContainer()
+	}
+	s.hide = function () {
+		s.hideMask()
+		s.hideContainer()
+	}
 	// 将文件转成图片
-	parse: function (str) {
+	s.parse = function (str) {
 		var emojiExpr = /(\[[\u4E00-\u9FA5]*\])/gm
 		var parseStr = str
 		while (emojiExpr.exec(str)) {
-			if (this.icons[RegExp.$1]) {
-				parseStr = parseStr.replace(RegExp.$1, '<span data-emoji=' + this.icons[RegExp.$1] + '></span>')
+			if (s.params.data[RegExp.$1]) {
+				parseStr = parseStr.replace(RegExp.$1, '<span data-emoji=' + s.params.data[RegExp.$1] + '></span>')
 			}
 		}
 		return parseStr
-	},
+	}
 	// 监听位置
-	cursorOffset: 0,
-	$input: null,
-	init: function (elInput) {
-		this.$input = elInput
-		document.onselectionchange = (e) => {
-			if (Object.prototype.toString.call(e.target.activeElement) === '[object HTMLTextAreaElement]') {
-				// 获得光标位置
-				this.cursorOffset = this.$input.selectionStart;
-			}
-		}
-		this.$input.addEventListener('input', (e) => {
-			// 获得光标位置
-			this.cursorOffset = e.target.selectionStart
-		}, false)
-	},
+	s.cursorOffset = 0
+
 	// 插入表情文字
-	insertFace : function (emojiName) {
+	s.insertFace = function (emojiName) {
 		// 设置value
-		var value = this.$input.value
-		var valueBefore = value.substr(0, this.cursorOffset)
-		var valueAfter = value.substr(this.cursorOffset, value.length)
+		var value = s.textarea.value
+		var valueBefore = value.substr(0, s.cursorOffset)
+		var valueAfter = value.substr(s.cursorOffset, value.length)
 		var valueInsert = emojiName
-		this.cursorOffset = this.cursorOffset + emojiName.length
-		this.$input.value = valueBefore + valueInsert + valueAfter
+		s.cursorOffset = s.cursorOffset + emojiName.length
+		s.textarea.value = valueBefore + valueInsert + valueAfter
 		// 设置光杆位置
-		this.$input.focus()
-		this.setCaretPosition(this.$input, this.cursorOffset)
-		return this.$input.value;
-	},
+		s.textarea.focus()
+		this.setCaretPosition(s.textarea, s.cursorOffset)
+		return s.textarea.value;
+	}
 	// 设置光标位置
-  setCaretPosition: function (elem, caretPos) {
+  s.setCaretPosition = function (elem, caretPos) {
     if (elem !== null) {
       if (elem.createTextRange) {
         var range = elem.createTextRange()
@@ -151,6 +152,70 @@ var Emoji = {
         }
       }
     }
+	}
+	s.init = function (elInput) {
+		s.textarea = elInput
+		document.onselectionchange = (e) => {
+			if (Object.prototype.toString.call(e.target.activeElement) === '[object HTMLTextAreaElement]') {
+				// 获得光标位置
+				s.cursorOffset = s.textarea.selectionStart;
+			}
+		}
+		s.textarea.addEventListener('input', (e) => {
+			// 获得光标位置
+			s.cursorOffset = e.target.selectionStart
+		}, false)
+	}
+  /* --------------------
+  Controller
+  -------------------- */
+  s.events = function (detach) {
+    var target = s.mask
+    var action = detach ? 'removeEventListener' : 'addEventListener'
+		target[action]('click', s.onClick, false)
+		// 获取焦点时, 隐藏表情
+		s.textarea[action]('focus', s.onFocus, false)
   }
+  s.attach = function () {
+    s.events()
+  }
+  s.detach = function () {
+    s.events(false)
+	}
+	s.onClick = function (e) {
+		var target = e.target;
+    if (target.getAttribute('data-emoji')) { // 点击表情
+      var value = s.insertFace(target.getAttribute('alt'))
+			if (s.params.onChange) s.params.onChange(value, s)
+		} else if (target.classList.contains(s.params.iconClass)) { // 点击展开收缩图标
+			if (s.carrousel.style.display === 'none') {
+				s.carrousel.style.display = 'block'
+				s.icon.classList.add('active')
+			} else {
+				s.carrousel.style.display = 'none'
+				s.icon.classList.remove('active')
+			}
+		} else if (target.classList.contains(s.params.maskClass)) { // 点击遮罩
+			if (s.params.onClickMask) s.params.onClickMask(s, e)
+      if (s.params.isClickMaskHide) s.hide()
+		} else if (target.classList.contains(s.params.submitClass)) { // 点击提交
+			if (s.params.onClickSubmit) s.params.onClickSubmit(s.textarea.value, s, e)
+      if (s.params.isClickMaskHide) s.hide()
+		}
+		e.stopPropagation()
+	}
+	// 获取焦点时, 隐藏表情
+	s.onFocus = () => {
+    s.icon.classList.remove('active')
+    s.carrousel.style.display = 'none'
+  }
+  /* --------------------
+  Init
+  -------------------- */
+  s.init = function () {
+    s.attach()
+  }
+  s.init()
 }
+
 export default Emoji

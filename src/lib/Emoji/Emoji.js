@@ -5,12 +5,16 @@ import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
 import Button from './../Button';
 import Instance from './instance.js';
+import data from './instance.data.js';
 
 export default class Emoji extends Component {
   static propTypes = {
+    data: PropTypes.object,
+
     portal: PropTypes.object,
     args: PropTypes.any,
-    show: PropTypes.bool,
+
+    autoFocus: PropTypes.bool,
 
     value: PropTypes.string,
     placeholder: PropTypes.string,
@@ -28,21 +32,32 @@ export default class Emoji extends Component {
     onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
-    args: null,
-    placeholder: '请输入',
+    data: data,
+    placeholder: '说点什么吧...',
     isClickMaskHide: false
   }
   constructor(props) {
     super(props);
-    this.instance = Instance;
   }
   componentDidUpdate = (prevProps) => {
-    if (prevProps.show !== this.props.show && this.props.show === true && this.$inputPre) {
+    if (prevProps.autoFocus !== this.props.autoFocus && this.props.autoFocus === true && this.$inputPre) {
       this.$inputPre.$input.focus();
     }
   }
   componentDidMount = () => {
-    this.instance.init(this.$inputPre.$input);
+    if (this.instance) return
+    var instance = new Instance({
+      data: this.props.data,
+
+      mask: this.$el,
+      isClickMaskHide: this.props.isClickMaskHide,
+      onClickMask: this.onClickMask,
+
+      onClickSubmit: this.onClickSubmit,
+
+      onChange: this.props.onChange
+    });
+    this.instance = instance;
   }
   getArgs = (e) => {
     var args = this.props.args;
@@ -57,69 +72,59 @@ export default class Emoji extends Component {
     }
     return args;
   }
-  onClickMask = (e) => {
+  // 遮罩
+  onClickMask = (s, e) => {
     if (this.props.onClickMask) this.props.onClickMask(this.getArgs(e));
-    e.stopPropagation();
   }
-  onClickSubmit = (e) => {
-    if (this.props.onClickSubmit) this.props.onClickSubmit(this.props.value, this.getArgs(e));
+  // 提交按钮
+  onClickSubmit = (value, s, e) => {
+    if (this.props.onClickSubmit) this.props.onClickSubmit(value, this.getArgs(e));
   }
-  onClick = (e) => {
-    const target = e.target;
-    // 点击表情
-    if (target.getAttribute('data-emoji')) {
-      const value = Instance.insertFace(target.getAttribute('alt'));
-      if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-    }
-    e.stopPropagation();
-  }
+  // 表情
   getFaceDOM = () => {
+    const {data} = this.props;
     // 将icons分页
     const icons = [];
     let page = 0;
     let index = 0;
-    for (let name in Instance.icons) {
-      if (index !== 0 && index % 21 === 0) {
+    for (let name in data) {
+      if (index !== 0 && index % 24 === 0) {
         page++;
       }
       if (!icons[page]) icons[page] = [];
-      icons[page].push({key: name, value: Instance.icons[name]});
+      icons[page].push({key: name, value: data[name]});
       index++;
     }
     // 生成DOM
     return icons.map((icon, i) => {
-      return <div key={`page${i}`}>
+      return <div key={`page${i}`} className={`emoji-carrousel-slide`}>
         {icon.map((item, index) => {
           return <a key={`face${index}`} data-emoji={item.value} alt={item.key}>&nbsp;</a>
         })}
       </div>
     });
   }
-  onFocus = () => {
-    this.$icon.classList.remove('active');
-    this.$carrousel.$el.style.display = 'none';
-  }
-  toggleFace = (e) => {
-    const carrouselEl = this.$carrousel.$el;
-    if (carrouselEl.style.display === 'none') {
-      carrouselEl.style.display = 'block';
-      e.currentTarget.classList.add('active');
-    } else {
-      carrouselEl.style.display = 'none';
-      e.currentTarget.classList.remove('active');
-    }
-  }
+  
   render() {
     const {
+      portal,
+      args,
+      autoFocus,
       value,
-      show, placeholder,
-      maskClassName, maskStyle,
-      className, style,
-      onChange
+      placeholder,
+      isClickMaskHide,
+      onClickMask,
+      maskClassName,
+      maskStyle,
+      className,
+      style,
+      onChange,
+      onClickSubmit,
+      ...others
     } = this.props;
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`mask emoji-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={maskStyle} onClick={this.onClickMask}>
-        <div className={`emoji${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={style} onClick={this.onClick}>
+      <div ref={el => {this.$el = el;}} className={`mask emoji-mask active${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
+        <div ref={el => {this.$container = el;}} className={`emoji active${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
           <div className="emoji-edit">
             <InputPre
               ref={(el) => {this.$inputPre = el;}}
@@ -127,10 +132,10 @@ export default class Emoji extends Component {
               valueBindProp
               value={value}
               onChange={onChange}
-              onFocus={this.onFocus}
               placeholder={placeholder}
+              {...others}
             />
-            <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`} onClick={this.toggleFace}></i>
+            <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
             <Button className="emoji-edit-submit" disabled={!value} onClick={this.onClickSubmit}>提交</Button>
           </div>
           <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{height: '186px', display: 'none'}}>

@@ -10,8 +10,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
-      showEmoji: true
+      value: ''
     }
   }
   componentDidMount() {
@@ -29,7 +28,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <Emoji show={this.state.showEmoji} onChange={this.onChange} value={value}/>
+        <Emoji onChange={this.onChange} value={value}/>
       </Container>
     </Page>
   }
