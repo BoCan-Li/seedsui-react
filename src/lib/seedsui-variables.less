@@ -538,9 +538,8 @@
 }
 // 预览
 .setImgmarkPreview(){
-  .flex;
-  .flex-middle;
   visibility:hidden;
+  overflow: hidden;
 	opacity:0;
 	transition-property:opacity;
 	transition-duration:@animation-duration;
@@ -561,7 +560,21 @@
 	}
 }
 .setImgmarkPreviewContainer(){
-
+  .flex;
+  .flex-middle;
+  
+  position: absolute;
+  width: 100%;
+  touch-action: none;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transform-origin: left top;
+  transition: transform 333ms cubic-bezier(0.4, 0, 0.22, 1);
+}
+.setImgmarkPreviewWrapper(){
+  position: relative;
 }
 .setImgmarkPreviewLayer(){
   position: absolute;

@@ -19,6 +19,7 @@ var Imgmark = function (container, params) {
     previewClass: 'imgmark-preview',
     previewActiveClass: 'active',
     previewContainerClass: 'imgmark-preview-container',
+    previewWrapperClass: 'imgmark-preview-wrapper',
     previewLayerClass: 'imgmark-preview-layer',
   }
   params = params || {}
@@ -87,6 +88,7 @@ var Imgmark = function (container, params) {
   // 创建预览层
   s.previewMask = null
   s.previewContainer = null
+  s.previewWrapper = null
   s.previewImg = null
   s.createPreview = function (img, layers) {
     if (!s.previewMask) {
@@ -96,26 +98,29 @@ var Imgmark = function (container, params) {
       s.previewContainer = document.createElement('div')
       s.previewContainer.setAttribute('class', s.params.previewContainerClass)
 
+      s.previewWrapper = document.createElement('div')
+      s.previewWrapper.setAttribute('class', s.params.previewWrapperClass)
+
       s.previewMask.addEventListener('click', s.closePreview, false)
 
+      s.previewContainer.appendChild(s.previewWrapper)
+      s.previewMask.appendChild(s.previewContainer)
       document.body.append(s.previewMask)
     } else {
-      s.previewContainer.innerHTML = ''
+      s.previewWrapper.innerHTML = ''
     }
     // 构建图片
     s.previewImg = img
 
-    s.previewContainer.appendChild(s.previewImg)
+    s.previewWrapper.appendChild(s.previewImg)
     if (layers && layers.length) {
       var layersHTML = ''
       for (var layer of layers) {
         layersHTML += '<div class="'+ s.params.previewLayerClass +'" style="background-image:url(' + layer + ')"></div>'
-        // layerDiv.style.backgroundImage = 'url(' + layer + ')'
-        // s.previewContainer.appendChild(layerDiv)
       }
-      s.previewContainer.innerHTML = s.previewContainer.innerHTML + layersHTML
+      s.previewWrapper.innerHTML = s.previewWrapper.innerHTML + layersHTML
     }
-    s.previewMask.appendChild(s.previewContainer)
+    
   }
 
   s.hash = ''
