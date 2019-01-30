@@ -8,7 +8,7 @@ var Imgmark = function (container, params) {
     activeClass: 'active',
 
     src: '',
-    drawBg: true, // 是否连同背景一起绘制到canvas上
+    drawSrc: true, // 是否连同背景一起绘制到canvas上
     data: [],
     strokeStyle: '#00ff00',
     lineWidth: 3,
@@ -67,9 +67,9 @@ var Imgmark = function (container, params) {
       s.params.quality = quality
     }
   }
-  s.setDrawBg = function (drawBg) {
-    if (drawBg) {
-      s.params.drawBg = drawBg
+  s.setDrawBg = function (drawSrc) {
+    if (drawSrc) {
+      s.params.drawSrc = drawSrc
     }
   }
   /* ----------------------
@@ -84,7 +84,7 @@ var Imgmark = function (container, params) {
     return s.container.toDataURL(s.params.suffix, s.params.quality)
   }
   // 绘制图片
-  s.draw = function (img, data, drawBg) {
+  s.draw = function (img, data, drawSrc) {
     if (!img) {
       console.log('SeedsUI Error:ImgMark执行draw缺少img')
       return
@@ -93,7 +93,9 @@ var Imgmark = function (container, params) {
       console.log('SeedsUI Error:ImgMark执行draw缺少img')
       return
     }
-    if (drawBg) s.ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height)
+    if (drawSrc) {
+      s.ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height)
+    }
     for (let item of data) {
       if (item.strokeStyle) s.ctx.strokeStyle = item.strokeStyle
       else s.ctx.strokeStyle = s.params.strokeStyle
@@ -105,7 +107,6 @@ var Imgmark = function (container, params) {
   s.update = function () {
     if (s.params.src) {
       var img = new Image()
-      img.setAttribute("crossOrigin",'Anonymous')
       img.src = s.params.src
       img.addEventListener('load', s.onLoad, false)
       img.addEventListener('error', s.onError, false)
@@ -123,7 +124,7 @@ var Imgmark = function (container, params) {
     // 绘图
     s.container.width = target.width
     s.container.height = target.height
-    s.draw(target, s.params.data, s.params.drawBg)
+    s.draw(target, s.params.data, s.params.drawSrc)
     // 缩小
     var scale = s.params.height / target.height
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`

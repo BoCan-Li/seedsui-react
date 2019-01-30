@@ -1343,6 +1343,9 @@ onChangeDropdown = (tabs) => {
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'emoji'}
 
+  icon={图标dom node, 默认无}
+  iconParams={Icon组件属性 object, 默认{className: 'notice-icon-nodata'}}
+  
   onChange={值变化 func(value, args)}
   onSubmit={提交 func(value, args)}
 />
@@ -1351,7 +1354,27 @@ onChangeDropdown = (tabs) => {
 ```javascript
 import Emoji from 'seedsui-react/lib/Emoji';
 
-<Emoji show={this.state.showEmoji}/>
+this.state = {
+  showEmoji: true,
+  value: ''
+}
+
+onChange = (value) => {
+  this.setState({
+    value: value
+  })
+}
+
+toggleEmoji = () => {
+  this.setState((prevState) => {
+    return {
+      showEmoji: !prevState.showEmoji
+    }
+  })
+}
+
+{this.state.showEmoji && <Emoji autoFocus onChange={this.onChange} value={value}/>}
+<input type="button" value="显隐" onClick={this.toggleEmoji}/>
 ```
 [返回目录](#component)
 

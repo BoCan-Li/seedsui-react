@@ -1811,7 +1811,7 @@
 
 // Emoji表情控件
 @emoji-bg: #ffffff;
-@emoji-edit-bg: #f7f7f7;
+@emoji-edit-bg: #f0f1f1;
 .setEmojiMask(){
   transition-duration: 0ms;
 	z-index:2;	
@@ -1825,15 +1825,21 @@
 // 编辑区
 .setEmojiEdit(){
   .flex;
+  .flex-middle;
   .border-b;
   background-color: @emoji-edit-bg;
-  padding: 6px 0px 6px 12px;
+  padding: 8px 0px 8px 12px;
 }
 .setEmojiEditInput(){
   .flex-1;
   background-color: white;
   border-radius: 4px;
-  border: 1px solid #cecece;
+  border: 1px solid #e5e5e5;
+  padding: 6px;
+
+  textarea[disabled] {
+    opacity:1;
+  }
 }
 .setEmojiEditIcon(){
   font-family: 'iconfont';

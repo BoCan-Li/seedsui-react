@@ -7,7 +7,7 @@ export default class ImgMark extends Component {
     // 数据源
     src: PropTypes.string,
     data: PropTypes.array,
-    drawBg: PropTypes.bool, // 是否绘制背景
+    drawSrc: PropTypes.bool, // 是否绘制背景
     // canvas样式
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
@@ -19,7 +19,7 @@ export default class ImgMark extends Component {
     className: PropTypes.string
   }
   static defaultProps = {
-    drawBg: true,
+    drawSrc: false,
     strokeStyle: '#00ff00',
     lineWidth: 3,
     quality: 0.92,
@@ -30,8 +30,8 @@ export default class ImgMark extends Component {
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
-      if (prevProps.drawBg !== this.props.drawBg) {
-        this.instance.setDrawBg(this.props.drawBg);
+      if (prevProps.drawSrc !== this.props.drawSrc) {
+        this.instance.setDrawBg(this.props.drawSrc);
         this.instance.update();
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
@@ -57,7 +57,7 @@ export default class ImgMark extends Component {
     var instance = new Instance(this.$el, {
       src: this.props.src,
       data: this.props.data,
-      drawBg: this.props.drawBg,
+      drawSrc: this.props.drawSrc,
       height: this.props.height,
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
@@ -67,21 +67,21 @@ export default class ImgMark extends Component {
   }
   render() {
     const {
-      src, data, drawBg,
+      src, data, drawSrc,
       strokeStyle, lineWidth, quality,
       width, height, style, className,
       ...others
     } = this.props;
-    let drawBgStyle = {};
-    if (!drawBg) {
-      drawBgStyle = {backgroundImage: `url(${src})`};
+    let drawSrcStyle = {};
+    if (!drawSrc) {
+      drawSrcStyle = {backgroundImage: `url(${src})`};
     }
     return (
       <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height}, style)} {...others}>
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>
-        <canvas ref={el => {this.$el = el;}} className={`imgmark-wrapper`} style={drawBgStyle}>
+        <canvas ref={el => {this.$el = el;}} className={`imgmark-wrapper`} style={drawSrcStyle}>
           Canvas画板
         </canvas>
         <div className={`imgmark-error`}>

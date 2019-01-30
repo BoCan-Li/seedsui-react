@@ -4,6 +4,7 @@ import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
 import Button from './../Button';
+import Icon from './../Icon';
 import Instance from './instance.js';
 import data from './instance.data.js';
 
@@ -28,6 +29,9 @@ export default class Emoji extends Component {
     className: PropTypes.string,
     style: PropTypes.object,
 
+    licon: PropTypes.node,
+    liconParams: PropTypes.object,
+
     onChange: PropTypes.func,
     onClickSubmit: PropTypes.func,
   }
@@ -35,7 +39,8 @@ export default class Emoji extends Component {
     autoFocus: false,
     data: data,
     placeholder: '说点什么吧...',
-    isClickMaskHide: false
+    isClickMaskHide: false,
+    liconParams: {}
   }
   constructor(props) {
     super(props);
@@ -123,6 +128,8 @@ export default class Emoji extends Component {
       maskStyle,
       className,
       style,
+      licon,
+      liconParams,
       onChange,
       onClickSubmit,
       ...others
@@ -130,10 +137,13 @@ export default class Emoji extends Component {
     return createPortal(
       <div ref={el => {this.$el = el;}} className={`mask emoji-mask active${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
         <div ref={el => {this.$container = el;}} className={`emoji active${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+          {(liconParams.src || liconParams.className) && <Icon {...liconParams}/>}
+          {licon}
           <div className="emoji-edit">
             <InputPre
               ref={(el) => {this.$inputPre = el;}}
-              className="emoji-edit-input" inputStyle={{padding: '4px 8px'}}
+              className="emoji-edit-input"
+              inputStyle={{padding: '0'}}
               valueBindProp
               value={value}
               onChange={onChange}
