@@ -480,7 +480,7 @@
     display: block;
   }
 }
-
+// 加载中
 @-webkit-keyframes rotateIn {
   0% {
     -webkit-transform-origin: center center;
@@ -511,7 +511,7 @@
   height: @24px;
   animation: rotateIn 1s linear infinite;
 }
-
+// 加载错误
 .setImgmarkError(){
   .flex;
   .flex-middle;
@@ -535,6 +535,43 @@
   margin-top: 4px;
   &:extend(.font-size-sm);
   color: #D8D8D8;
+}
+// 预览
+.setImgmarkPreview(){
+  .flex;
+  .flex-middle;
+  visibility:hidden;
+	opacity:0;
+	transition-property:opacity;
+	transition-duration:@animation-duration;
+
+  position: absolute;
+  overflow: hidden;
+	z-index:10;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	z-index: 502;
+
+	background-color: #000;
+	&.active{
+		visibility:visible;
+		opacity:1;
+	}
+}
+.setImgmarkPreviewContainer(){
+
+}
+.setImgmarkPreviewLayer(){
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 // Card卡片
 .setCard(){

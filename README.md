@@ -1373,7 +1373,7 @@ toggleEmoji = () => {
   })
 }
 
-{this.state.showEmoji && <Emoji autoFocus onChange={this.onChange} value={value}/>}
+{this.state.showEmoji && <Emoji autoFocus onChange={this.onChange} value={this.state.value}/>}
 <input type="button" value="显隐" onClick={this.toggleEmoji}/>
 ```
 [返回目录](#component)
@@ -1670,7 +1670,7 @@ import Icon from 'seedsui-react/lib/Icon';
   //     strokeStyle: 'red' // 可选
   //   }
   // ]
-  drawBg={是否连同背景一起绘制到canvas上 bool, 默认true}
+  drawSrc={是否连同背景一起绘制到canvas上 bool, 默认true}
   // canvas样式
   strokeStyle={标注颜色 string, 默认'#00ff00'}
   lineWidth={标注线粗px number, 默认3}
@@ -1679,6 +1679,8 @@ import Icon from 'seedsui-react/lib/Icon';
   height={高度px number, 默认300} // 不能通过style设置高度,否则canvas会错位
   style={标注面板style object, 默认无}
   className={标注面板className string, 默认无}
+
+  preview={是否预览 bool, 默认true}
 />
 ```
 ### 示例
@@ -1981,19 +1983,12 @@ onChangeData2 = () => {
     data: result2.skuList
   })
 }
-preview = (e) => {
-  var url = this.$elImgMark.instance.save();
-  if (url) {
-    Bridge.previewImage({urls: [url], index: 0});
-  }
-}
   
 <ImgMark
   ref={(el) => {this.$elImgMark = el;}}
   height={300}
   src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" // 示例中,图片跨域请用cross插件解决
   data={this.state.data}
-  onClick={this.preview}
 />
 <input type="button" value="全部" onClick={this.onChangeData}/>
 <input type="button" value="切换1" onClick={this.onChangeData1}/>

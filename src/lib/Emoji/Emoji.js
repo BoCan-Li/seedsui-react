@@ -117,6 +117,7 @@ export default class Emoji extends Component {
   
   render() {
     const {
+      data,
       portal,
       args,
       autoFocus,

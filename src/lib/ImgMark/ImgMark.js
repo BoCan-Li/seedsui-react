@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
+import Bridge from './../Bridge';
 
 export default class ImgMark extends Component {
   static propTypes = {
@@ -16,14 +17,19 @@ export default class ImgMark extends Component {
     width: PropTypes.number, // 宽度
     height: PropTypes.number, // 高度
     style: PropTypes.object,
-    className: PropTypes.string
+    className: PropTypes.string,
+
+    onClick: PropTypes.func,
+
+    preview: PropTypes.bool, // 是否预览
   }
   static defaultProps = {
     drawSrc: false,
     strokeStyle: '#00ff00',
     lineWidth: 3,
     quality: 0.92,
-    height: 300
+    height: 300,
+    preview: true
   }
   constructor(props) {
     super(props);
@@ -65,11 +71,26 @@ export default class ImgMark extends Component {
     });
     this.instance = instance;
   }
+  onClick = () => {
+    if (this.props.preview) {
+      if (this.props.drawSrc) { // 如果绘制背景, 则可以调用客户端自带的预览
+        var url = this.instance.save();
+        if (url) {
+          Bridge.previewImage({urls: [url], index: 0});
+        }
+      } else { // 非绘制背景, 则需要弹出框来显示
+        var layer = this.instance.save()
+        this.instance.preview(this.props.src, {layers: [layer]});
+      }
+    }
+  }
   render() {
     const {
       src, data, drawSrc,
       strokeStyle, lineWidth, quality,
       width, height, style, className,
+      onClick,
+      preview,
       ...others
     } = this.props;
     let drawSrcStyle = {};
@@ -77,7 +98,7 @@ export default class ImgMark extends Component {
       drawSrcStyle = {backgroundImage: `url(${src})`};
     }
     return (
-      <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height}, style)} {...others}>
+      <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height}, style)} onClick={this.onClick} {...others}>
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>

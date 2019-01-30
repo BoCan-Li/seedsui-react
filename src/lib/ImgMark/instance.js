@@ -14,7 +14,12 @@ var Imgmark = function (container, params) {
     lineWidth: 3,
 
     suffix: 'image/png',
-    quality: 0.92
+    quality: 0.92,
+
+    previewClass: 'imgmark-preview',
+    previewActiveClass: 'active',
+    previewContainerClass: 'imgmark-preview-container',
+    previewLayerClass: 'imgmark-preview-layer',
   }
   params = params || {}
   for (var def in defaults) {
@@ -79,9 +84,97 @@ var Imgmark = function (container, params) {
   s.clear = function () {
     s.ctx.clearRect(0, 0, s.container.width, s.container.height)
   }
+  // 创建预览层
+  s.previewMask = null
+  s.previewContainer = null
+  s.previewImg = null
+  s.createPreview = function (img, layers) {
+    if (!s.previewMask) {
+      s.previewMask = document.createElement('div')
+      s.previewMask.setAttribute('class', s.params.previewClass)
+
+      s.previewContainer = document.createElement('div')
+      s.previewContainer.setAttribute('class', s.params.previewContainerClass)
+
+      s.previewMask.addEventListener('click', s.closePreview, false)
+
+      document.body.append(s.previewMask)
+    } else {
+      s.previewContainer.innerHTML = ''
+    }
+    // 构建图片
+    s.previewImg = img
+
+    s.previewContainer.appendChild(s.previewImg)
+    if (layers && layers.length) {
+      var layersHTML = ''
+      for (var layer of layers) {
+        layersHTML += '<div class="'+ s.params.previewLayerClass +'" style="background-image:url(' + layer + ')"></div>'
+        // layerDiv.style.backgroundImage = 'url(' + layer + ')'
+        // s.previewContainer.appendChild(layerDiv)
+      }
+      s.previewContainer.innerHTML = s.previewContainer.innerHTML + layersHTML
+    }
+    s.previewMask.appendChild(s.previewContainer)
+  }
+
+  s.hash = ''
+  s.addHash = function () {
+    if (window.location.href.indexOf('#') !== -1) {
+      if (s.hash && window.location.href.indexOf(s.hash) !== -1) {
+
+      } else {
+        s.hash = '#' + window.location.href.split('#')[1] + '&preview'
+      }
+      window.history.pushState({
+        href: s.hash
+      }, document.title, s.hash)
+    } else {
+      s.hash = '#&preview'
+      window.history.pushState({
+        href: s.hash
+      }, document.title, s.hash)
+    }
+  }
+  s.removeHash = function () {
+    if (window.location.href.indexOf(s.hash) !== -1) {
+      window.history.go(-1)
+    }
+  }
+  // 关闭预览
+  s.closePreview = function () {
+    // 删除hash
+    s.removeHash()
+    s.previewMask.classList.remove(s.params.previewActiveClass)
+  }
+  // 预览
+  s.preview = function (src, options) {
+    var img = new Image()
+    img.src = src
+    img.addEventListener('load', function () {
+      if (img.width > img.height) { // 宽图
+        img.style.height = '100%'
+      } else { // 高图
+        img.style.width = '100%'
+      }
+      s.createPreview(img, options && options.layers ? options.layers : '')
+      s.previewMask.classList.add(s.params.previewActiveClass)
+      // 增加hash
+      s.addHash()
+      if (options && options.onSuccess) options.onSuccess()
+    }, false)
+    img.addEventListener('error', function () {
+      if (options && options.onError) options.onError('图片加载失败')
+    }, false)
+  }
   // 保存图片为base64
   s.save = function () {
-    return s.container.toDataURL(s.params.suffix, s.params.quality)
+    try {
+      return s.container.toDataURL(s.params.suffix, s.params.quality)
+    } catch (error) {
+      console.error(error)
+      return null
+    }
   }
   // 绘制图片
   s.draw = function (img, data, drawSrc) {
