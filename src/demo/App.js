@@ -316,7 +316,7 @@ export default class App extends Component {
       </Header>
       <Container>
         <ImgMark
-          ref={(el) => {this.$elImgMark = el;}}
+					watermark="//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png"
           height={300}
           src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" // 示例中,图片跨域请用cross插件解决
           data={this.state.data}

@@ -8,19 +8,13 @@ var Imgmark = function (container, params) {
     activeClass: 'active',
 
     src: '',
-    drawSrc: true, // 是否连同背景一起绘制到canvas上
+    isDrawSrc: true, // 是否连同背景一起绘制到canvas上
     data: [],
     strokeStyle: '#00ff00',
     lineWidth: 3,
 
     suffix: 'image/png',
-    quality: 0.92,
-
-    previewClass: 'imgmark-preview',
-    previewActiveClass: 'active',
-    previewContainerClass: 'imgmark-preview-container',
-    previewWrapperClass: 'imgmark-preview-wrapper',
-    previewLayerClass: 'imgmark-preview-layer',
+    quality: 0.92
   }
   params = params || {}
   for (var def in defaults) {
@@ -73,9 +67,9 @@ var Imgmark = function (container, params) {
       s.params.quality = quality
     }
   }
-  s.setDrawBg = function (drawSrc) {
-    if (drawSrc) {
-      s.params.drawSrc = drawSrc
+  s.setDrawBg = function (isDrawSrc) {
+    if (isDrawSrc) {
+      s.params.isDrawSrc = isDrawSrc
     }
   }
   /* ----------------------
@@ -84,93 +78,6 @@ var Imgmark = function (container, params) {
   // 清除
   s.clear = function () {
     s.ctx.clearRect(0, 0, s.container.width, s.container.height)
-  }
-  // 创建预览层
-  s.previewMask = null
-  s.previewContainer = null
-  s.previewWrapper = null
-  s.previewImg = null
-  s.createPreview = function (img, layers) {
-    if (!s.previewMask) {
-      s.previewMask = document.createElement('div')
-      s.previewMask.setAttribute('class', s.params.previewClass)
-
-      s.previewContainer = document.createElement('div')
-      s.previewContainer.setAttribute('class', s.params.previewContainerClass)
-
-      s.previewWrapper = document.createElement('div')
-      s.previewWrapper.setAttribute('class', s.params.previewWrapperClass)
-
-      s.previewMask.addEventListener('click', s.closePreview, false)
-
-      s.previewContainer.appendChild(s.previewWrapper)
-      s.previewMask.appendChild(s.previewContainer)
-      document.body.append(s.previewMask)
-    } else {
-      s.previewWrapper.innerHTML = ''
-    }
-    // 构建图片
-    s.previewImg = img
-
-    s.previewWrapper.appendChild(s.previewImg)
-    if (layers && layers.length) {
-      var layersHTML = ''
-      for (var layer of layers) {
-        layersHTML += '<div class="'+ s.params.previewLayerClass +'" style="background-image:url(' + layer + ')"></div>'
-      }
-      s.previewWrapper.innerHTML = s.previewWrapper.innerHTML + layersHTML
-    }
-    
-  }
-
-  s.hash = ''
-  s.addHash = function () {
-    if (window.location.href.indexOf('#') !== -1) {
-      if (s.hash && window.location.href.indexOf(s.hash) !== -1) {
-
-      } else {
-        s.hash = '#' + window.location.href.split('#')[1] + '&preview'
-      }
-      window.history.pushState({
-        href: s.hash
-      }, document.title, s.hash)
-    } else {
-      s.hash = '#&preview'
-      window.history.pushState({
-        href: s.hash
-      }, document.title, s.hash)
-    }
-  }
-  s.removeHash = function () {
-    if (window.location.href.indexOf(s.hash) !== -1) {
-      window.history.go(-1)
-    }
-  }
-  // 关闭预览
-  s.closePreview = function () {
-    // 删除hash
-    s.removeHash()
-    s.previewMask.classList.remove(s.params.previewActiveClass)
-  }
-  // 预览
-  s.preview = function (src, options) {
-    var img = new Image()
-    img.src = src
-    img.addEventListener('load', function () {
-      if (img.width > img.height) { // 宽图
-        img.style.height = '100%'
-      } else { // 高图
-        img.style.width = '100%'
-      }
-      s.createPreview(img, options && options.layers ? options.layers : '')
-      s.previewMask.classList.add(s.params.previewActiveClass)
-      // 增加hash
-      s.addHash()
-      if (options && options.onSuccess) options.onSuccess()
-    }, false)
-    img.addEventListener('error', function () {
-      if (options && options.onError) options.onError('图片加载失败')
-    }, false)
   }
   // 保存图片为base64
   s.save = function () {
@@ -182,7 +89,7 @@ var Imgmark = function (container, params) {
     }
   }
   // 绘制图片
-  s.draw = function (img, data, drawSrc) {
+  s.draw = function (img, data, isDrawSrc) {
     if (!img) {
       console.log('SeedsUI Error:ImgMark执行draw缺少img')
       return
@@ -191,7 +98,7 @@ var Imgmark = function (container, params) {
       console.log('SeedsUI Error:ImgMark执行draw缺少img')
       return
     }
-    if (drawSrc) {
+    if (isDrawSrc) {
       s.ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height)
     }
     for (let item of data) {
@@ -222,7 +129,7 @@ var Imgmark = function (container, params) {
     // 绘图
     s.container.width = target.width
     s.container.height = target.height
-    s.draw(target, s.params.data, s.params.drawSrc)
+    s.draw(target, s.params.data, s.params.isDrawSrc)
     // 缩小
     var scale = s.params.height / target.height
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`

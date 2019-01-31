@@ -7,9 +7,10 @@ import BridgeBrowser from './../Bridge/bridgeBrowser';
 export default class ImgMark extends Component {
   static propTypes = {
     // 数据源
-    src: PropTypes.string,
     data: PropTypes.array,
-    drawSrc: PropTypes.bool, // 是否绘制背景
+    src: PropTypes.string,
+    isDrawSrc: PropTypes.bool, // 是否绘制背景
+    watermark: PropTypes.string,
     // canvas样式
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
@@ -23,9 +24,11 @@ export default class ImgMark extends Component {
     onClick: PropTypes.func,
 
     preview: PropTypes.bool, // 是否预览
+
+    children: PropTypes.node
   }
   static defaultProps = {
-    drawSrc: false,
+    isDrawSrc: false,
     strokeStyle: '#00ff00',
     lineWidth: 3,
     quality: 0.92,
@@ -37,8 +40,8 @@ export default class ImgMark extends Component {
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
-      if (prevProps.drawSrc !== this.props.drawSrc) {
-        this.instance.setDrawBg(this.props.drawSrc);
+      if (prevProps.isDrawSrc !== this.props.isDrawSrc) {
+        this.instance.setDrawBg(this.props.isDrawSrc);
         this.instance.update();
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
@@ -64,7 +67,7 @@ export default class ImgMark extends Component {
     var instance = new Instance(this.$el, {
       src: this.props.src,
       data: this.props.data,
-      drawSrc: this.props.drawSrc,
+      isDrawSrc: this.props.isDrawSrc,
       height: this.props.height,
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
@@ -74,43 +77,51 @@ export default class ImgMark extends Component {
   }
   onClick = () => {
     if (this.props.preview) {
-      if (this.props.drawSrc) { // 如果绘制背景, 则可以调用客户端自带的预览
-        var url = this.instance.save();
-        if (url) {
-          Bridge.previewImage({urls: [url], index: 0});
+      var layer = ''
+      if (this.props.isDrawSrc) { // 如果绘制背景, 则可以调用客户端自带的预览
+        layer = this.instance.save();
+        if (layer) {
+          Bridge.previewImage({urls: [layer], index: 0});
         }
       } else { // 非绘制背景, 则需要弹出框来显示
-        var layer = this.instance.save();
-        var previewHTML = `<div class="imgmark-preview-layer" style="background-image:url(${layer})"></div>`;
+        layer = this.instance.save();
+        var previewHTML = `<div class="preview-layer" style="background-image:url(${layer})"></div>`;
+        if (this.props.watermark) { // 水印
+          previewHTML += `<div class="preview-layer" style="background-image:url(${this.props.watermark});background-repeat: repeat; background-size:auto;"></div>`;
+        }
         BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML});
       }
     }
+    if (this.props.onClick) this.props.onClick(layer)
   }
   render() {
     const {
-      src, data, drawSrc,
+      data, src, isDrawSrc, watermark,
       strokeStyle, lineWidth, quality,
       width, height, style, className,
       onClick,
       preview,
+      children,
       ...others
     } = this.props;
-    let drawSrcStyle = {};
-    if (!drawSrc) {
-      drawSrcStyle = {backgroundImage: `url(${src})`};
+    let isDrawSrcStyle = {};
+    if (!isDrawSrc) {
+      isDrawSrcStyle = {backgroundImage: `url(${src})`};
     }
     return (
       <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height}, style)} onClick={this.onClick} {...others}>
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>
-        <canvas ref={el => {this.$el = el;}} className={`imgmark-wrapper`} style={drawSrcStyle}>
+        <canvas ref={el => {this.$el = el;}} className={`imgmark-wrapper`} style={isDrawSrcStyle}>
           Canvas画板
         </canvas>
         <div className={`imgmark-error`}>
           <div className={`imgmark-error-icon`}></div>
           <div className={`imgmark-error-caption`}>图片加载失败</div>
         </div>
+        {/* 内容 */}
+        {children}
       </div>
     );
   }
