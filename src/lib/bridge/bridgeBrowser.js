@@ -5,6 +5,7 @@ import EventUtil from './../EventUtil';
 import Toast from './../Toast/instance.js';
 import Alert from './../Alert/instance.js';
 import Loading from './../Loading/instance.js';
+import Preview from './../Preview/instance.js';
 import MediaUtil from './../MediaUtil';
 import FullScreen from './../FullScreen';
 
@@ -148,8 +149,37 @@ var Bridge = {
     }, 1000)
   },
   // 图片预览
-  previewImage: function (params) {
-    console.log('previewImage方法在浏览器上无法运行')
+  // @params {urls:'需要预览的图片http链接列表',index:'图片索引',layerHTML:'图片上方的浮层', onSuccess:正确回调, onError:错误回调}
+  preview: null,
+  previewImage: function (params = {}) {
+    if (!params.urls || !params.urls.length) {
+      if (params.onError) params.onError('urls参数不正确, 无法预览')
+      else this.showToast('urls参数不正确, 无法预览', {mask: false})
+      return
+    }
+    var src = params.urls[params.index || 0]
+    if (!src) {
+      if (params.onError) params.onError('index参数不正确, 无法预览')
+      else this.showToast('index参数不正确, 无法预览', {mask: false})
+      return
+    }
+    var layerHTML = params.layerHTML || ''
+    if (!this.preview) {
+      this.preview = new Preview({
+        src: src,
+        layerHTML: layerHTML,
+        onSuccess: function (s) {
+          s.show()
+          if (params.onSuccess) params.onSuccess(s)
+        },
+        onError: params.onError
+      })
+    } else {
+      this.preview.setSrc(src)
+      this.preview.setLayerHTML(layerHTML)
+      this.preview.update()
+      this.preview.show()
+    }
   },
   /* -----------------------------------------------------
     视频插件

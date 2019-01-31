@@ -32,7 +32,7 @@ var Imgmark = function (container, params) {
   s.params = params
   s.container = typeof container === 'string' ? document.querySelector(container) : container
   if (!s.container) {
-    console.log('SeedsUI Error : HandSign container不存在，请检查页面中是否有此元素')
+    console.log('SeedsUI Error : ImgMark container不存在，请检查页面中是否有此元素')
     return
   }
   s.loadingContainer = s.container.parentNode.querySelector('.' + s.params.loadingClass) || null

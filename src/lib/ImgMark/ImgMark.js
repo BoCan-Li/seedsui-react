@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import Bridge from './../Bridge';
+import BridgeBrowser from './../Bridge/bridgeBrowser';
 
 export default class ImgMark extends Component {
   static propTypes = {
@@ -79,8 +80,9 @@ export default class ImgMark extends Component {
           Bridge.previewImage({urls: [url], index: 0});
         }
       } else { // 非绘制背景, 则需要弹出框来显示
-        var layer = this.instance.save()
-        this.instance.preview(this.props.src, {layers: [layer]});
+        var layer = this.instance.save();
+        var previewHTML = `<div class="imgmark-preview-layer" style="background-image:url(${layer})"></div>`;
+        BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML});
       }
     }
   }
