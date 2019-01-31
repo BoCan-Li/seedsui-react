@@ -1,3 +1,5 @@
+import PinchZoom from './pinch-zoom.js'
+
 var Preview = function (params) {
   /* ----------------------
   Model
@@ -12,6 +14,9 @@ var Preview = function (params) {
     mask: null,
     maskClass: 'preview-mask',
     maskActiveClass: 'active',
+
+    headerClass: 'preview-header',
+    headerBackClass: 'preview-header-back',
 
     containerClass: 'preview-container',
 
@@ -60,41 +65,47 @@ var Preview = function (params) {
   }
   // 创建预览层
   s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+  s.header = null
+  s.headerBack = null
   s.container = null
-  s.wrapper = null
   s.img = null
   s.createPreview = function (img, layerHTML) {
     if (!s.mask) {
       s.mask = document.createElement('div')
-      s.mask.setAttribute('class', s.params.maskClass)
+      s.mask.setAttribute('class', 'needsclick ' + s.params.maskClass)
+
+      s.header = document.createElement('div')
+      s.header.setAttribute('class', s.params.headerClass)
+
+      s.headerBack = document.createElement('div')
+      s.headerBack.setAttribute('class', s.params.headerBackClass)
+      s.headerBack.addEventListener('click', s.onClickBack, false)
+
+      s.header.appendChild(s.headerBack)
 
       s.container = document.createElement('div')
       s.container.setAttribute('class', s.params.containerClass)
 
-      s.wrapper = document.createElement('div')
-      s.wrapper.setAttribute('class', s.params.wrapperClass)
-
-      s.mask.addEventListener('click', s.closePreview, false)
-
-      s.container.appendChild(s.wrapper)
+      s.mask.appendChild(s.header)
       s.mask.appendChild(s.container)
       document.body.append(s.mask)
     } else {
       s.container = s.mask.querySelector('.' + s.params.containerClass)
-      s.wrapper = s.mask.querySelector('.' + s.params.wrapperClass)
 
-      s.wrapper.innerHTML = ''
+      s.container.innerHTML = ''
     }
 
     // 构建图片
     s.img = img
-    s.wrapper.appendChild(s.img)
+    s.container.appendChild(s.img)
 
     // 构建浮层
-    s.wrapper.innerHTML = s.wrapper.innerHTML + layerHTML
+    s.container.innerHTML = s.container.innerHTML + layerHTML
   }
   // 路径是否合法, true为有效, false为无效
   s.validSrc = null
+  // 缩放类PinchZoom
+  s.PinchZoom = null
   // 更新
   s.update = function () {
     if (!s.params.src) {
@@ -111,6 +122,16 @@ var Preview = function (params) {
       }
       s.createPreview(img, s.params.layerHTML)
       s.validSrc = true // 图片地址有效
+      // PinchZoom
+      if (!s.PinchZoom) {
+        s.PinchZoom = new PinchZoom(s.container, {})
+        // 解决PinchZoom刚进入时白底的bug
+        setTimeout(() => {
+          s.container.style.backgroundColor = '#000'
+        }, 100)
+      } else {
+        s.PinchZoom.update()
+      }
       // Callback
       if (s.params.onSuccess) s.params.onSuccess(s)
     }, false)
@@ -195,6 +216,9 @@ var Preview = function (params) {
     } else { // 应当显示
       s.showMask()
     }
+  }
+  s.onClickBack = function () {
+    s.hide()
   }
   // 主函数
   s.init = function () {

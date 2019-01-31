@@ -551,35 +551,46 @@
 	transition-duration:@animation-duration;
 
   position: absolute;
-  overflow: hidden;
 	z-index:10;
 	left:0;
 	right:0;
 	top:0;
 	bottom:0;
-	z-index: 502;
+	// z-index: 502;
 
 	background-color: #000;
 	&.active{
 		visibility:visible;
 		opacity:1;
-	}
+  }
+  .pinch-zoom-container{
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #000;
+  }
 }
-.setPreviewContainer(){
-  .flex;
-  .flex-middle;
-  
-  position: absolute;
-  width: 100%;
-  touch-action: none;
+// 头
+.setPreviewHeader(){
+  position:absolute;
+  top:0;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
-  transform-origin: left top;
-  transition: transform 333ms cubic-bezier(0.4, 0, 0.22, 1);
+  z-index:1;
+  background-color: rgba(0,0,0,.2);
+  height: 44px;
+  .flex;
+  .flex-middle;
 }
-.setPreviewWrapper(){
+.setPreviewHeaderBack(){
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+  &:extend(.shape-arrow-left all);
+  border-color: white;
+}
+// 主体
+.setPreviewContainer(){
   position: relative;
 }
 .setPreviewLayer(){

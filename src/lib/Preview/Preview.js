@@ -52,10 +52,11 @@ export default class Preview extends Component {
       return null;
     }
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`preview-mask`} {...others}>
-        <div className={`preview-container`}>
-          <div className={`preview-wrapper`}></div>
+      <div ref={(el) => {this.$el = el}} className={`preview-mask needsclick`} {...others}>
+        <div className={`preview-header`}>
+          <div className={`preview-header-left`}></div>
         </div>
+        <div className={`preview-container`}></div>
       </div>,
       portal || document.getElementById('root')
     );

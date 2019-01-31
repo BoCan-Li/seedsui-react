@@ -39,7 +39,7 @@ export default class Carrousel extends Component {
     paginationParams: {},
     prevParams: {},
     nextParams: {},
-    stopPropagation: false, // 设置为false解决与Fastclick插件touch事件冲突的问题
+    stopPropagation: false, // 设置为false解决与FastClick插件touch事件冲突的问题
     activeIndex: 0,
     page: 0,
     loop: false,
