@@ -22,7 +22,7 @@ var Preview = function (params) {
     /*
     Callbacks:
     onSuccess: function(Preview)
-    onError: function(Preview, msg)
+    onError: function(Preview)
     onShowSuccess: function(Preview)
     onShowError: function(Preview)
     */

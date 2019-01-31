@@ -15,6 +15,12 @@ var Imgmark = function (container, params) {
 
     suffix: 'image/png',
     quality: 0.92
+
+    /*
+    Callbacks:
+    onSuccess: function(Imgmark)
+    onError: function(Imgmark)
+    */
   }
   params = params || {}
   for (var def in defaults) {
@@ -67,9 +73,19 @@ var Imgmark = function (container, params) {
       s.params.quality = quality
     }
   }
-  s.setDrawBg = function (isDrawSrc) {
+  s.setIsDrawSrc = function (isDrawSrc) {
     if (isDrawSrc) {
       s.params.isDrawSrc = isDrawSrc
+    }
+  }
+  s.setOnSuccess = function (onSuccess) {
+    if (onSuccess) {
+      s.params.onSuccess = onSuccess
+    }
+  }
+  s.setOnError = function (onError) {
+    if (onError) {
+      s.params.onError = onError
     }
   }
   /* ----------------------
@@ -134,11 +150,15 @@ var Imgmark = function (container, params) {
     var scale = s.params.height / target.height
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
     s.container.style.WebkitTransformOrigin = `0 0`
+    // Callback
+    if (s.params.onSuccess) s.params.onSuccess(s)
   }
   s.onError = function () {
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.container.classList.remove(s.params.activeClass)
+    // Callback
+    if (s.params.onError) s.params.onError(s)
   }
   // 主函数
   s.init = function () {

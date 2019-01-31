@@ -41,7 +41,7 @@ export default class ImgMark extends Component {
   componentDidUpdate (prevProps) {
     if (this.instance) {
       if (prevProps.isDrawSrc !== this.props.isDrawSrc) {
-        this.instance.setDrawBg(this.props.isDrawSrc);
+        this.instance.setIsDrawSrc(this.props.isDrawSrc);
         this.instance.update();
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
@@ -71,19 +71,32 @@ export default class ImgMark extends Component {
       height: this.props.height,
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
-      quality: this.props.quality
+      quality: this.props.quality,
+      onError: this.onError,
+      onSuccess: this.onSuccess
     });
     this.instance = instance;
   }
+  validSrc = false
+  onError = () => {
+    this.validSrc = false
+  }
+  onSuccess = () => {
+    this.validSrc = true
+  }
   onClick = () => {
+    var layer = '' // 绘制的base64编码
     if (this.props.preview) {
-      var layer = ''
-      if (this.props.isDrawSrc) { // 如果绘制背景, 则可以调用客户端自带的预览
+      if (!this.validSrc) {
+        Bridge.showToast('图片加载失败, 或未加载完成, 无法预览', {mask: false});
+        return;
+      }
+      if (this.props.isDrawSrc) { // 绘制背景
         layer = this.instance.save();
         if (layer) {
           Bridge.previewImage({urls: [layer], index: 0});
         }
-      } else { // 非绘制背景, 则需要弹出框来显示
+      } else { // 不绘制背景
         layer = this.instance.save();
         var previewHTML = `<div class="preview-layer" style="background-image:url(${layer})"></div>`;
         if (this.props.watermark) { // 水印

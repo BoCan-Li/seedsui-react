@@ -169,8 +169,8 @@ var Bridge = {
         onSuccess: function (s) {
           s.show()
         },
-        onError: function (s, msg) {
-          Bridge.showToast(msg, {mask: false})
+        onError: function () {
+          Bridge.showToast('图片地址无效', {mask: false})
         }
       })
     } else {
