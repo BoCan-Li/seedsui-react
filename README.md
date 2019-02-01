@@ -3647,6 +3647,7 @@ Preview预览组件, 为了解决需要预览图片上方加浮动层的问题, 
 <Preview
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
+  showHeader={是否显示操作头 bool, 默认false}
 
   src={图片地址 string, 默认无}
   layerHTML={图片上方浮层 string, 默认无}

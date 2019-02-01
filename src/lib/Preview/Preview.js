@@ -7,6 +7,7 @@ export default class Preview extends Component {
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool,
+    showHeader: PropTypes.bool,
     
     src: PropTypes.string,
     layerHTML: PropTypes.string,
@@ -14,7 +15,8 @@ export default class Preview extends Component {
     onClickBack: PropTypes.func
   }
   static defaultProps = {
-    show: false
+    show: false,
+    showHeader: false
   }
   constructor(props) {
     super(props);
@@ -35,6 +37,7 @@ export default class Preview extends Component {
     if (this.instance) return;
     var instance = new Instance({
       mask: this.$el,
+      showHeader: this.props.showHeader,
       src: this.props.src,
       layerHTML: this.props.layerHTML,
       onClickBack: this.props.onClickBack,
