@@ -480,7 +480,7 @@
     display: block;
   }
 }
-
+// 加载中
 @-webkit-keyframes rotateIn {
   0% {
     -webkit-transform-origin: center center;
@@ -511,7 +511,7 @@
   height: @24px;
   animation: rotateIn 1s linear infinite;
 }
-
+// 加载错误
 .setImgmarkError(){
   .flex;
   .flex-middle;
@@ -536,6 +536,80 @@
   &:extend(.font-size-sm);
   color: #D8D8D8;
 }
+
+
+
+
+
+
+// Preview预览
+.setPreviewMask(){
+  visibility:hidden;
+  overflow: hidden;
+	opacity:0;
+	transition-property:opacity;
+	transition-duration:@animation-duration;
+
+  position: absolute;
+	z-index:10;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	// z-index: 502;
+
+	background-color: #000;
+	&.active{
+		visibility:visible;
+		opacity:1;
+  }
+  .pinch-zoom-container{
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #000;
+  }
+}
+// 头
+.setPreviewHeader(){
+  position:absolute;
+  top:0;
+  left: 0;
+  right: 0;
+  z-index:1;
+  background-color: rgba(0,0,0,.2);
+  height: 44px;
+  .flex;
+  .flex-middle;
+}
+.setPreviewHeaderBack(){
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+  &:extend(.shape-arrow-left all);
+  border-color: white;
+}
+// 主体
+.setPreviewContainer(){
+  position: relative;
+}
+.setPreviewLayer(){
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+
+
+
+
+
 // Card卡片
 .setCard(){
   background-color:white;
@@ -1807,9 +1881,379 @@
   background-image: url(//res.waiqin365.com/d/seedsui/dragrefresh/pull.png);
 };
 
+
+
 // Emoji表情控件
-@emoji-bg: #f0f0f0;
-@emoji-input-bg: white;
+@emoji-bg: #ffffff;
+@emoji-edit-bg: #f0f1f1;
+.setEmojiMask(){
+  transition-duration: 0ms;
+	z-index:2;	
+}
+.setEmoji(){
+  position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: @emoji-bg;
+}
+// 编辑区
+.setEmojiEdit(){
+  .flex;
+  .flex-middle;
+  .border-b;
+  background-color: @emoji-edit-bg;
+  padding: 8px 0px 8px 12px;
+}
+.setEmojiEditInput(){
+  .flex-1;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  padding: 6px;
+
+  textarea[disabled] {
+    opacity:1;
+  }
+}
+.setEmojiEditIcon(){
+  font-family: 'iconfont';
+  border-right: 1px solid #cecece;
+  width: 48px;
+  color: #808080;
+  &:extend(.icon-rdo-emoji all);
+  &.active{
+    &:extend(.icon-rdo-keyboard all);
+  }
+}
+.setEmojiEditSubmit(){
+  width: 60px;
+  height: 30px;
+  border: 0;
+  color: @primary-bg;
+}
+// 表情滚动区
+.setEmojiCarrousel(){
+  height: 200px;
+  .carrousel-pagination{
+    bottom: 16px;
+  }
+  .bullet{
+    width: 5px;
+    height: 5px;
+    background-color: #eaeaea;
+    &+.bullet{
+      margin-left: 15px;
+    }
+    &.active{
+      background-color: #979797;
+    }
+  }
+}
+.setEmojiCarrouselSlide(){
+  margin: 12px;
+}
+// 表情区
+.setEmojiFace(){
+  display:inline-block;
+	width:12.5%;
+	height: 24px;
+	margin: 12px 0;
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center center;
+  vertical-align: middle;
+}
+.setEmojiFaceDelete(){
+  .setEmojiFace();
+  text-align: center;
+  line-height: 28px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAgVBMVEUAAACnp6empqapqanZ2dm1tbWnp6fU1NTKysqqqqqmpqalpaWlpaWnp6enp6fCwsKvr6+mpqanp6empqalpaWmpqakpKSkpKSmpqalpaX////6+vqjo6ODg4Pr6+uxsbH09PTn5+eRkZGOjo7v7++1tbXk5OTe3t6Hh4e4uLioqKiJZd0mAAAAG3RSTlMA8+gw/vSu/Pn0l4lpGQv29ODWu597Wkw/JwGd9I2eAAAA7klEQVRIx+2VyRKCQAxEGUDcAPc1gIADov//geLBSgyFVJ+1b1T1g4TJdJy/HMebuUmf3MDr+OdmnFGfrG9C5Z+Ncvomaz6/ES61X8sPpP9oLA3IusIfmZoGlbA/Xo8JAoIFQcBuRBBwmOYQcDIFCVmSyrtAvPKlo0ov/FCUTa2B82ZCUo+UieKapjcNzFXDWdkS7L/rkvbcsCTe/ko37RkeUEWwXwCRyyUqImO/ALbcsCYa9gvA9JxY+/pXWSBQEeEl4U3jvxU4OD5ofDTw4cPHG79A+BXFQwCPGTzI4KiEwxiOe3ihoCsLXoq/qSc9gJ/bMuGIfAAAAABJRU5ErkJggg==');
+}
+
+.setEmojiSrc(){
+  [data-emoji="[jie]"]{ // 饥饿
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_25.png);
+  }
+  [data-emoji="[jiong]"]{ // 囧
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_18.png);
+  }
+  [data-emoji="[liuhan]"]{ // 流汗
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_28.png);
+  }
+  [data-emoji="[kuangzao]"]{ // 狂燥
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_36.png);
+  }
+  [data-emoji="[shuai]"]{ // 衰
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_37.png);
+  }
+  [data-emoji="[dao]"]{ // 刀
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_72.png);
+  }
+  [data-emoji="[aoman]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_24.png);
+  }
+  [data-emoji="[baibai]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_40.png);
+  }
+  [data-emoji="[baiyan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_23.png);
+  }
+  [data-emoji="[baobao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_79.png);
+  }
+  [data-emoji="[baoquan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_84.png);
+  }
+  [data-emoji="[bishi]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_49.png);
+  }
+  [data-emoji="[bizui]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_8.png);
+  }
+  [data-emoji="[cahan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_41.png);
+  }
+  [data-emoji="[caidao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_56.png);
+  }
+  [data-emoji="[chajin]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_87.png);
+  }
+  [data-emoji="[chouyan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_30.png);
+  }
+  [data-emoji="[cool]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_5.png);
+  }
+  [data-emoji="[dabian]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_75.png);
+  }
+  [data-emoji="[dahaqian]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_48.png);
+  }
+  [data-emoji="[dangao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_69.png);
+  }
+  [data-emoji="[daxiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_29.png);
+  }
+  [data-emoji="[deyi]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_17.png);
+  }
+  [data-emoji="[ku]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_10.png);
+  }
+  [data-emoji="[fadai]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_4.png);
+  }
+  [data-emoji="[fendou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_31.png);
+  }
+  [data-emoji="[ganga]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_11.png);
+  }
+  [data-emoji="[gongxi]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_43.png);
+  }
+  [data-emoji="[haixiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_7.png);
+  }
+  [data-emoji="[hanruyuxia]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/hanruyuxia.png);
+  }
+  [data-emoji="[hongchun]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_66.png);
+  }
+  [data-emoji="[huaixiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_45.png);
+  }
+  [data-emoji="[huaxiele]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_65.png);
+  }
+  [data-emoji="[iloveyou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_88.png);
+  }
+  [data-emoji="[jianxiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_52.png);
+  }
+  [data-emoji="[jiayou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_86.png);
+  }
+  [data-emoji="[jingxia]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_27.png);
+  }
+  [data-emoji="[kafei]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_61.png);
+  }
+  [data-emoji="[kaixin]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_22.png);
+  }
+  [data-emoji="[kelian]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_55.png);
+  }
+  [data-emoji="[daku]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_6.png);
+  }
+  [data-emoji="[kulou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_38.png);
+  }
+  [data-emoji="[kun]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_26.png);
+  }
+  [data-emoji="[lai]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_85.png);
+  }
+  [data-emoji="[lanqiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_59.png);
+  }
+  [data-emoji="[liuhan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_11.png);
+  }
+  [data-emoji="[liwu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_78.png);
+  }
+  [data-emoji="[maren]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_32.png);
+  }
+  [data-emoji="[meigui]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_64.png);
+  }
+  [data-emoji="[mifan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_62.png);
+  }
+  [data-emoji="[nanguo]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_16.png);
+  }
+  [data-emoji="[no]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_89.png);
+  }
+  [data-emoji="[ok]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_90.png);
+  }
+  [data-emoji="[outu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_20.png);
+  }
+  [data-emoji="[piaochong]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_74.png);
+  }
+  [data-emoji="[pijiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_58.png);
+  }
+  [data-emoji="[qiang]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_80.png);
+  }
+  [data-emoji="[qiaotou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_39.png);
+  }
+  [data-emoji="[qingqing]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_53.png);
+  }
+  [data-emoji="[qiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_44.png);
+  }
+  [data-emoji="[ruo]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_81.png);
+  }
+  [data-emoji="[se]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_3.png);
+  }
+  [data-emoji="[shandian]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_70.png);
+  }
+  [data-emoji="[shouweiqu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_50.png);
+  }
+  [data-emoji="[shuijiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_9.png);
+  }
+  [data-emoji="[taiyang]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_77.png);
+  }
+  [data-emoji="[touxiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_21.png);
+  }
+  [data-emoji="[jingya]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_15.png);
+  }
+  [data-emoji="[wabikong]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_42.png);
+  }
+  [data-emoji="[weiqu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_51.png);
+  }
+  [data-emoji="[weixiao]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_1.png);
+  }
+  [data-emoji="[piezui]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_2.png);
+  }
+  [data-emoji="[wen]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_33.png);
+  }
+  [data-emoji="[woshou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_82.png);
+  }
+  [data-emoji="[xia]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_54.png);
+  }
+  [data-emoji="[xigua]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_57.png);
+  }
+  [data-emoji="[xin]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_67.png);
+  }
+  [data-emoji="[xinsui]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_68.png);
+  }
+  [data-emoji="[xu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_34.png);
+  }
+  [data-emoji="[yeah]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_83.png);
+  }
+  [data-emoji="[yewan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_76.png);
+  }
+  [data-emoji="[youhengheng]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_47.png);
+  }
+  [data-emoji="[yun]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_35.png);
+  }
+  [data-emoji="[zhadan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_71.png);
+  }
+  [data-emoji="[zhayan]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_13.png);
+  }
+  [data-emoji="[fanu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_12.png);
+  }
+  [data-emoji="[zhuakuang]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_19.png);
+  }
+  [data-emoji="[zhutou]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_63.png);
+  }
+  [data-emoji="[ziya]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_14.png);
+  }
+  [data-emoji="[zuohengheng]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_46.png);
+  }
+  [data-emoji="[zuqiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_73.png);
+  }
+  [data-emoji="[pingpangqiu]"]{
+    background-image:url(//res.waiqin365.com/d/common_mobile/images/emotion/im_ee_60.png);
+  }
+}
+
+
+
 
 
 // SearchBoard搜索面板控件
@@ -2337,13 +2781,15 @@
   width: @5px;
   height: @5px;
   border-radius: 100%;
-  margin-right:@5px;
   line-height: @8px;
   font-size: @12px;
   bottom: @10px;
   width: @8px;
   height: @8px;
   background-color:#ccc;
+  &+.bullet{
+    margin-left:@5px;
+  }
 }
 .setCarrouselBulletActive(){
   background-color:@primary-bg;
