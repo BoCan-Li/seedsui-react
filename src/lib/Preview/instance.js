@@ -27,6 +27,7 @@ var Preview = function (params) {
 
     /*
     Callbacks:
+    onClickBack: function(Preview)
     onSuccess: function(Preview)
     onError: function(Preview)
     onShowSuccess: function(Preview)
@@ -73,7 +74,7 @@ var Preview = function (params) {
   s.createPreview = function (img, layerHTML) {
     if (!s.mask) {
       s.mask = document.createElement('div')
-      s.mask.setAttribute('class', 'needsclick ' + s.params.maskClass)
+      s.mask.setAttribute('class', s.params.maskClass)
 
       s.header = document.createElement('div')
       s.header.setAttribute('class', s.params.headerClass)
@@ -91,6 +92,9 @@ var Preview = function (params) {
       s.mask.appendChild(s.container)
       document.body.append(s.mask)
     } else {
+      s.header = s.mask.querySelector('.' + s.params.headerClass)
+      s.headerBack = s.mask.querySelector('.' + s.params.headerBackClass)
+      s.headerBack.addEventListener('click', s.onClickBack, false)
       s.container = s.mask.querySelector('.' + s.params.containerClass)
 
       s.container.innerHTML = ''
@@ -225,7 +229,8 @@ var Preview = function (params) {
     }
   }
   s.onClickBack = function () {
-    s.hide()
+    if (s.params.onClickBack) s.params.onClickBack(s)
+    else s.hide()
   }
   // 主函数
   s.init = function () {

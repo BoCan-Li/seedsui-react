@@ -62,18 +62,21 @@ export default class Dropdown extends Component {
     });
   }
   onClickTab = (item, index) => {
-    // 设置弹框的数据
-    this.setState({
-      menusSelectedId: this.state.tabbar[index].id,
-      menus: this.props.list[index].data
-    });
     if (this.state.tabbarActiveIndex >= 0) {
       this.setState({
+        // 设置弹框的数据
+        menusSelectedId: this.state.tabbar[index].id,
+        menus: this.props.list[index].data,
+        // 隐藏弹框
         tabbarActiveIndex: -1,
         dialogShow: false
       });
     } else {
       this.setState({
+        // 设置弹框的数据
+        menusSelectedId: this.state.tabbar[index].id,
+        menus: this.props.list[index].data,
+        // 显示弹框
         tabbarActiveIndex: index,
         dialogShow: true
       });

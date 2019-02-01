@@ -9,9 +9,9 @@ export default class ImgMark extends Component {
     // 数据源
     data: PropTypes.array,
     src: PropTypes.string,
+    // canvas样式
     isDrawSrc: PropTypes.bool, // 是否绘制背景
     watermark: PropTypes.string,
-    // canvas样式
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
     quality: PropTypes.number,

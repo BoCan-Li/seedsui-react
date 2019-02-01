@@ -1275,34 +1275,8 @@ loadData = (isNext) => {
 import Dropdown from 'seedsui-react/lib/Dropdown';
 
 this.state = {
-  items: [
-    {
-      id: '1',
-      name: '全部盘点',
-      data: [
-        {id: '1', name: '全部盘点'},
-        {id: '1-2', name: '部分盘点'}
-      ]
-    }, {
-      id: '2',
-      name: '分类',
-      data: [
-        {id: '2', name: '全部'},
-        {
-          id: '2-2',
-          name: '水杯',
-          children: [
-            {id: '2-2', name: '全部'},
-            {id: '2-2-2', name: '象印'},
-            {id: '2-2-3', name: '膳魔师'},
-            {id: '2-2-4', name: '虎牌'}
-          ]
-        },
-        {id: '2-3', name: '电脑'}
-      ]
-    }
-  ]
-}
+  items: [{"id":"","name":"分类","data":[{"id":"","name":"全部","children":[]},{"id":"7938034417512813758","name":"饮料","children":[{"id":"4622400720177680517","name":"碳酸饮料"},{"id":"5800049423243362222","name":"茶饮料"},{"id":"5789432343240798823","name":"功能饮料"},{"id":"6413548566139705252","name":"饮用水"},{"id":"6936207795217715766","name":"中草药饮料"},{"id":"8746408135758103957","name":"蛋白质饮料"},{"id":"7268945622944992066","name":"果味饮料"},{"id":"9138462844675316911","name":"咖啡"}]},{"id":"7746459719734369628","name":"零食","children":[{"id":"9134066222295231258","name":"蜜饯果干"},{"id":"5394487194098598325","name":"坚果炒货"},{"id":"9070533848545878912","name":"早餐面包"},{"id":"5240328190253910837","name":"糖巧果冻"}]}]},{"id":"","name":"品牌","data":[{"id":"","name":"全部"},{"id":"其他","name":"其他"},{"id":"美汁源","name":"美汁源"},{"id":"可口","name":"可口"},{"id":"宏宝莱","name":"宏宝莱"},{"id":"康师傅","name":"康师傅"},{"id":"百事","name":"百事"},{"id":"卫岗","name":"卫岗"},{"id":"蒙牛","name":"蒙牛"},{"id":"伊利","name":"伊利"},{"id":"三只松鼠","name":"三只松鼠"}]},{"id":"","name":"筛选","data":[{"id":"","name":"全部"},{"id":"new","name":"新品"},{"id":"importance","name":"重点"}]}]
+};
 
 onChangeDropdown = (tabs) => {
   var items = Object.clone(this.state.items);
@@ -1315,7 +1289,9 @@ onChangeDropdown = (tabs) => {
   })
 }
 
-<Dropdown portal={document.getElementById('root')} list={this.state.items} onChange={this.onChangeDropdown}/>
+<Header>
+  <Dropdown list={this.state.items} onChange={this.onChangeDropdown}/>
+</Header>
 ```
 [返回目录](#component)
 
@@ -1670,8 +1646,9 @@ import Icon from 'seedsui-react/lib/Icon';
   //     strokeStyle: 'red' // 可选
   //   }
   // ]
-  drawSrc={是否连同背景一起绘制到canvas上 bool, 默认true}
   // canvas样式
+  isDrawSrc={是否连同背景一起绘制到canvas上 bool, 默认true}
+  watermark={预览水印 string, 默认无}
   strokeStyle={标注颜色 string, 默认'#00ff00'}
   lineWidth={标注线粗px number, 默认3}
   quality={存储时的图片质量 number, 默认0.92}
@@ -1985,7 +1962,7 @@ onChangeData2 = () => {
 }
   
 <ImgMark
-  ref={(el) => {this.$elImgMark = el;}}
+  watermark="//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png"
   height={300}
   src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" // 示例中,图片跨域请用cross插件解决
   data={this.state.data}
@@ -3648,6 +3625,66 @@ hideMenu = () => {
 </Popover>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+## Preview
+[提示弹框](#https://unpkg.com/seedsui-react/src/lib/Preview/Preview.js)
+### 建议
+Preview预览组件, 为了解决需要预览图片上方加浮动层的问题, 一般预览建议直接使用Api直接调用:
+* Bridge.previewImage({urls: [src], layerHTML: `<div class="preview-layer" style="background-image:url(${layer})"></div>`})代替
+
+详见[Bridge 桥接库](#bridge) 桥接库
+### 属性
+```javascript
+<Preview
+  portal={传送dom object, 默认document.getElementById('root')}
+  show={*显隐 bool, 默认false}
+
+  src={图片地址 string, 默认无}
+  layerHTML={图片上方浮层 string, 默认无}
+
+  onClickBack={点击返回按钮 func(), 默认无}
+/>
+```
+### 示例
+```javascript
+import Preview from 'seedsui-react/lib/Preview';
+
+this.state = {
+  showPreview: false,
+  previewSrc: 'http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg',
+}
+
+onPreview = () => {
+  this.setState((prevState) => {
+    return {
+      showPreview: !prevState.showPreview
+    }
+  });
+}
+
+<input type="button" value="显示" onClick={this.onPreview}/>
+<Preview
+  show={this.state.showPreview}
+  src={this.state.previewSrc}
+  layerHTML={`<div class="preview-layer" style="background-image:url(//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png)"></div>`}
+  onClickBack={this.onPreview}
+/>
+```
+[返回目录](#component)
+
+
+
+
+
 
 
 

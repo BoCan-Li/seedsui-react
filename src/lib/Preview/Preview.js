@@ -6,10 +6,12 @@ import Instance from './instance.js';
 export default class Preview extends Component {
   static propTypes = {
     portal: PropTypes.object,
+    show: PropTypes.bool,
     
     src: PropTypes.string,
     layerHTML: PropTypes.string,
-    show: PropTypes.bool
+
+    onClickBack: PropTypes.func
   }
   static defaultProps = {
     show: false
@@ -19,11 +21,8 @@ export default class Preview extends Component {
   }
   componentDidUpdate (prevProps) {
     if (!this.instance) return false;
-    if (this.props.src !== prevProps.src) {
+    if (this.props.src !== prevProps.src || this.props.layerHTML !== prevProps.layerHTML) {
       this.instance.setSrc(this.props.src)
-      this.instance.update()
-    }
-    if (this.props.layerHTML !== prevProps.layerHTML) {
       this.instance.setLayerHTML(this.props.layerHTML)
       this.instance.update()
     }
@@ -37,24 +36,26 @@ export default class Preview extends Component {
     var instance = new Instance({
       mask: this.$el,
       src: this.props.src,
-      layerHTML: this.props.layerHTML
+      layerHTML: this.props.layerHTML,
+      onClickBack: this.props.onClickBack
     });
     this.instance = instance;
   }
   render() {
     const {
       portal,
-      src, layerHTML,
       show,
+      src, layerHTML,
+      onClickBack,
       ...others
     } = this.props;
     if (!src) {
       return null;
     }
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`preview-mask needsclick`} {...others}>
+      <div ref={(el) => {this.$el = el}} className={`preview-mask`} {...others}>
         <div className={`preview-header`}>
-          <div className={`preview-header-left`}></div>
+          <div className={`preview-header-back`}></div>
         </div>
         <div className={`preview-container`}></div>
       </div>,
