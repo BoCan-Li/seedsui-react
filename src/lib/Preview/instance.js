@@ -8,7 +8,8 @@ var Preview = function (params) {
     src: '', // 图片地址
     layerHTML: '',
 
-    hash: '&preview',
+    hash: 's_preview',
+    hashReplace: /(isFromApp=\w+)&?/, // 需要被替换的字符, 因为此地址字段会影响preview返回
     route: true,
 
     mask: null,
@@ -148,22 +149,28 @@ var Preview = function (params) {
   // 路由控制
   s.addHash = function () {
     if (!s.params.route) return
-    var hash = ''
-    if (window.location.href.indexOf('#') !== -1) {
-      if (window.location.href.indexOf(s.params.hash) !== -1) {
-        // 路由表示, 应当已经处于展现状态了
-      } else {
-        hash = '#' + window.location.href.split('#')[1] + s.params.hash
-        window.history.pushState({
-          href: hash
-        }, document.title, hash)
+    var href = window.location.href
+    if (href.indexOf(s.params.hash) !== -1) return
+    
+    if (href.indexOf('#') !== -1) { // 有#号, 拼#后面
+      if (s.params.hashReplace.test(href)) { // 如果有isFromApp, 则替换为空 (没有#号则不能替换,否则在真机上会闪屏刷新)
+        href = href.replace(RegExp.$1, '')
       }
-    } else {
-      hash = '#' + s.params.hash
-      window.history.pushState({
-        href: hash
-      }, document.title, hash)
+      href = href + (href.indexOf('?') !== -1 ? '&' : '?') + s.params.hash
+    } else { // 没有#号, 增加#+hash
+      href = href + '#' + s.params.hash
     }
+    window.location.href = href
+
+    // var hash = ''
+    // if (href.indexOf('#') !== -1) { // 有#号, 拼#后面
+    //   hash = '#' + href.split('#')[1] + s.params.hash
+    // } else { // 没有#号, 增加#+hash
+    //   hash = '#' + s.params.hash
+    // }
+    // window.history.pushState({
+    //   href: hash
+    // }, document.title, hash)
   }
   s.removeHash = function () {
     if (!s.params.route) return

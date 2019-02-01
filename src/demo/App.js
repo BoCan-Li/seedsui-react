@@ -291,6 +291,7 @@ export default class App extends Component {
     };
   }
   componentDidMount() {
+		alert(1)
     Bridge.debug = true;
   }
   
