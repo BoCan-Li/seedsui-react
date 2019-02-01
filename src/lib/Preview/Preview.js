@@ -37,7 +37,8 @@ export default class Preview extends Component {
       mask: this.$el,
       src: this.props.src,
       layerHTML: this.props.layerHTML,
-      onClickBack: this.props.onClickBack
+      onClickBack: this.props.onClickBack,
+      onClick: this.props.onClickBack
     });
     this.instance = instance;
   }

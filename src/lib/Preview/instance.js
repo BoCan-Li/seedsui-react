@@ -16,6 +16,7 @@ var Preview = function (params) {
     maskClass: 'preview-mask',
     maskActiveClass: 'active',
 
+    showHeader: false,
     headerClass: 'preview-header',
     headerBackClass: 'preview-header-back',
 
@@ -25,8 +26,10 @@ var Preview = function (params) {
 
     layerClass: 'preview-layer',
 
+    clickDelay: 300
     /*
     Callbacks:
+    onClick: function(Preview)
     onClickBack: function(Preview)
     onSuccess: function(Preview)
     onError: function(Preview)
@@ -87,6 +90,7 @@ var Preview = function (params) {
 
       s.container = document.createElement('div')
       s.container.setAttribute('class', s.params.containerClass)
+      s.container.addEventListener('click', s.onClick, false)
 
       s.mask.appendChild(s.header)
       s.mask.appendChild(s.container)
@@ -95,10 +99,13 @@ var Preview = function (params) {
       s.header = s.mask.querySelector('.' + s.params.headerClass)
       s.headerBack = s.mask.querySelector('.' + s.params.headerBackClass)
       s.headerBack.addEventListener('click', s.onClickBack, false)
+
       s.container = s.mask.querySelector('.' + s.params.containerClass)
+      s.container.addEventListener('click', s.onClick, false)
 
       s.container.innerHTML = ''
     }
+    if (s.params.showHeader === false) s.header.style.display = 'none'
 
     // 构建图片
     s.img = img
@@ -128,15 +135,46 @@ var Preview = function (params) {
       s.createPreview(img, s.params.layerHTML)
       s.validSrc = true // 图片地址有效
       // PinchZoom
-      if (!s.PinchZoom) {
-        s.PinchZoom = new PinchZoom(s.container, {})
-        // 解决PinchZoom刚进入时白底的bug
-        setTimeout(() => {
-          s.container.style.backgroundColor = '#000'
-        }, 100)
-      } else {
-        s.PinchZoom.update()
-      }
+      s.PinchZoom = new PinchZoom(s.container, {
+        onZoomUpdate: function () {
+          if (s.clickTimeout) {
+            window.clearTimeout(s.clickTimeout)
+            s.clickTimeout = null
+          }
+        },
+        onDragUpdate: function () {
+          if (s.clickTimeout) {
+            window.clearTimeout(s.clickTimeout)
+            s.clickTimeout = null
+          }
+        }
+      })
+      // 解决PinchZoom刚进入时白底的bug
+      setTimeout(() => {
+        s.container.style.backgroundColor = '#000'
+      }, 100)
+      // if (!s.PinchZoom) {
+      //   s.PinchZoom = new PinchZoom(s.container, {
+      //     onZoomUpdate: function () {
+      //       if (s.clickTimeout) {
+      //         window.clearTimeout(s.clickTimeout)
+      //         s.clickTimeout = null
+      //       }
+      //     },
+      //     onDragUpdate: function () {
+      //       if (s.clickTimeout) {
+      //         window.clearTimeout(s.clickTimeout)
+      //         s.clickTimeout = null
+      //       }
+      //     }
+      //   })
+      //   // 解决PinchZoom刚进入时白底的bug
+      //   setTimeout(() => {
+      //     s.container.style.backgroundColor = '#000'
+      //   }, 100)
+      // } else {
+      //   s.PinchZoom.update()
+      // }
       // Callback
       if (s.params.onSuccess) s.params.onSuccess(s)
     }, false)
@@ -227,6 +265,17 @@ var Preview = function (params) {
     } else { // 应当显示
       s.showMask()
     }
+  }
+  s.clickTimeout = null
+  s.onClick = function () {
+    if (s.clickTimeout) {
+      window.clearTimeout(s.clickTimeout)
+      s.clickTimeout = null
+    }
+    s.clickTimeout = window.setTimeout(function () {
+      if (s.params.onClick) s.params.onClick(s)
+      else s.hide()
+    }, s.params.clickDelay)
   }
   s.onClickBack = function () {
     if (s.params.onClickBack) s.params.onClickBack(s)
