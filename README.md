@@ -3148,7 +3148,7 @@ onChangeNum = (val, args) => {
 
 ## NumBoxPop
 [数字加减弹出框](#https://unpkg.com/seedsui-react/src/lib/NumBoxPop/NumBoxPop.js)
-, 基于[NumBox 数字加减框](#numbox)组件
+, 基于[NumBox 数字加减框](#numbox)组件, others是NumBox的属性
 ### 属性
 ```javascript
 <NumBoxPop
@@ -3161,6 +3161,7 @@ onChangeNum = (val, args) => {
   // events
   onClickCancel={点击取消 func(value, args), 默认无}
   onClickSubmit={点击确定 func(value, args), 默认无}
+  // numbox属性
   {...others}
 />
 ```
@@ -3193,6 +3194,7 @@ onClickSubmit = (count) => {
 ## NumBoxPopPointer
 [数字加减指针](#https://unpkg.com/seedsui-react/src/lib/NumBoxPopPointer/NumBoxPopPointer.js)
 , 基于[NumBoxPop 数字加减弹出框](#numboxpop)组件
+, 且基于[NumBox 数字加减框](#numbox)组件, others是NumBox的属性
 ### 属性
 ```javascript
 <NumBoxPopPointer
@@ -3200,7 +3202,7 @@ onClickSubmit = (count) => {
   // 容器
   containerClassName={容器className string, 默认无}
   containerStyle={容器style object, 默认无, 基础{position: 'relative'}}
-  // numbox
+  // pointer的numbox
   style={numbox框style object, 默认无}
   className={numbox框className string, 默认'sm'}
   value={值 string | number, 默认无}
@@ -3208,12 +3210,14 @@ onClickSubmit = (count) => {
   min={最小值 string | number, 默认0}
   max={最大值 string | number, 默认99999999}
   disabled={是否禁用 bool, 默认无}
-  // unit
+  // pointer的unit
   unitClassName={单位className string, 默认无}
   unitStyle={numbox框style object, 默认{fontSize: '13px', marginLeft: '8px'}}
   unit={单位 string, 默认无}
   // events
   onChange={点击确定时触发 func(value, args), 默认无}
+  // 弹出numbox属性
+  {...others}
 />
 ```
 ### 示例
