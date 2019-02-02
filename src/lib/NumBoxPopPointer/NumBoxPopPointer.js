@@ -53,6 +53,12 @@ export default class NumBoxPopPointer extends Component {
   onClickCancel = () => {
     this.setState({show: false});
   }
+  onClickPlus = (value, args) => {
+    if (this.props.onChange) this.props.onChange(value, args);
+  }
+  onClickMinus = (value, args) => {
+    if (this.props.onChange) this.props.onChange(value, args);
+  }
   onClickSubmit = (value, args) => {
     // Callback
     if (this.props.onChange) this.props.onChange(value, args);
@@ -89,6 +95,8 @@ export default class NumBoxPopPointer extends Component {
           max={max}
           digits={digits}
           onClickInput={this.onClickNumBox}
+          onClickPlus={this.onClickPlus}
+          onClickMinus={this.onClickMinus}
         />
         <span style={unitStyle} className={unitClassName}>{unit || ''}</span>
         <NumBoxPop
