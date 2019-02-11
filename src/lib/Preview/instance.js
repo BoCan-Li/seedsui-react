@@ -90,18 +90,19 @@ var Preview = function (params) {
 
       s.container = document.createElement('div')
       s.container.setAttribute('class', s.params.containerClass)
-      s.container.addEventListener('click', s.onClick, false)
 
       s.mask.appendChild(s.header)
       s.mask.appendChild(s.container)
-      document.body.append(s.mask)
+      s.mask.addEventListener('click', s.onClick, false)
+      document.body.appendChild(s.mask)
     } else {
+      s.mask.addEventListener('click', s.onClick, false)
+
       s.header = s.mask.querySelector('.' + s.params.headerClass)
       s.headerBack = s.mask.querySelector('.' + s.params.headerBackClass)
       s.headerBack.addEventListener('click', s.onClickBack, false)
 
       s.container = s.mask.querySelector('.' + s.params.containerClass)
-      s.container.addEventListener('click', s.onClick, false)
 
       s.container.innerHTML = ''
     }
@@ -114,6 +115,15 @@ var Preview = function (params) {
     // 构建浮层
     s.container.innerHTML = s.container.innerHTML + layerHTML
   }
+  // 删除预览层
+  s.removePreview = function () {
+    if (s.mask) document.body.removeChild(s.mask)
+    s.mask = null
+    s.header = null
+    s.headerBack = null
+    s.container = null
+    s.img = null
+  }
   // 路径是否合法, true为有效, false为无效
   s.validSrc = null
   // 缩放类PinchZoom
@@ -124,6 +134,7 @@ var Preview = function (params) {
       s.validSrc = false // 图片地址无效
       return
     }
+    s.removePreview()
     var img = new Image()
     img.src = s.params.src
     img.addEventListener('load', function () {
@@ -149,10 +160,8 @@ var Preview = function (params) {
           }
         }
       })
-      // 解决PinchZoom刚进入时白底的bug
-      setTimeout(() => {
-        s.container.style.backgroundColor = '#000'
-      }, 100)
+
+      // 因为PinchZoom update方法并不会重置尺寸, 因此每次都需要重新new, 如果后期PinchZoom提供reset方法时则可以使用reset方法重置, 并且无须再次s.createPreview
       // if (!s.PinchZoom) {
       //   s.PinchZoom = new PinchZoom(s.container, {
       //     onZoomUpdate: function () {
@@ -168,13 +177,14 @@ var Preview = function (params) {
       //       }
       //     }
       //   })
-      //   // 解决PinchZoom刚进入时白底的bug
-      //   setTimeout(() => {
-      //     s.container.style.backgroundColor = '#000'
-      //   }, 100)
       // } else {
       //   s.PinchZoom.update()
       // }
+
+      // 解决PinchZoom刚进入时白底的bug
+      setTimeout(() => {
+        s.container.style.backgroundColor = '#000'
+      }, 100)
       // Callback
       if (s.params.onSuccess) s.params.onSuccess(s)
     }, false)
@@ -203,16 +213,6 @@ var Preview = function (params) {
       href = href + '#' + s.params.hash
     }
     window.location.href = href
-
-    // var hash = ''
-    // if (href.indexOf('#') !== -1) { // 有#号, 拼#后面
-    //   hash = '#' + href.split('#')[1] + s.params.hash
-    // } else { // 没有#号, 增加#+hash
-    //   hash = '#' + s.params.hash
-    // }
-    // window.history.pushState({
-    //   href: hash
-    // }, document.title, hash)
   }
   s.removeHash = function () {
     if (!s.params.route) return
