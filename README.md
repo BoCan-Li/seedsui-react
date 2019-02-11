@@ -4310,12 +4310,12 @@ showMsg = (msg) => {
   buttonAddHTML={添加按钮 string, 默认无}
   buttonAddClassName={添加按钮className string, 默认无}
   buttonAddSrc={添加按钮src string, 默认无}
-  onClickAdd={点击添加按钮 func(s), 默认无}
+  onClickAdd={点击添加按钮 func({id:'', name: '', parentid: ''}, s), 默认无}
 
   buttonDelHTML={添加按钮 string, 默认无}
   buttonDelClassName={添加按钮className string, 默认无}
   buttonDelSrc={添加按钮src string, 默认无}
-  onClickDel={点击添加按钮 func(s), 默认无}
+  onClickDel={点击添加按钮 func({id:'', name: '', parentid: ''}, s), 默认无}
 
   onClickLastChild={点击底层节点 func(s), 默认无}
 

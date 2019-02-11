@@ -346,6 +346,13 @@ export default class App extends Component {
   onCancel = () => {
     this.$tree.instance.removeAllSelected();
   }
+  onClickAdd = (opts) => {
+    console.log(opts)
+  }
+  onClickDel = (opts) => {
+    this.$tree.instance.removeAllSelected();
+    this.$tree.instance.addSelected(opts);
+  }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
       <Header>
@@ -360,6 +367,8 @@ export default class App extends Component {
           checkbox
           onClick={this.onAsync}
           onData={this.onData}
+          onClickAdd={this.onClickAdd}
+          onClickDel={this.onClickDel}
           selected={[{id: '13ed5bf3-1b91-4fca-9303-ee8071b32154', name: '内勤组', parentid: 'b93d94c6-7e30-4caf-89eb-188bef40b3ba'}]}
           bar="#idTreeBar"
         />

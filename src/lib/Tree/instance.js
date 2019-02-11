@@ -41,6 +41,7 @@ var Tree = function (container, params) {
     onClick:function(Tree)
     onClickLastChild:function(Tree)
     onClickAdd: function(option)
+    onClickDel: function(option)
     onData:function(option)
     */
   }
@@ -295,7 +296,7 @@ var Tree = function (container, params) {
     for (var id in s.selected) {
       s.removeSelected(id)
     }
-    s.hideBar()
+    if (s.bar) s.hideBar()
   }
   s.collapseAll = function () {
     var elements = s.container.querySelectorAll('.' + s.params.extendClass)
@@ -340,9 +341,6 @@ var Tree = function (container, params) {
 
     // s.selected中添加选中
     s.selected[opts.id] = opts
-
-    // 回调
-    if (s.params.onClickAdd) s.params.onClickAdd(opts)
   }
   // 显示选中项
   s.showBar = function () {
@@ -472,6 +470,8 @@ var Tree = function (container, params) {
     var opts = s.getDataByTarget(elLine)
     // 添加到s.selected
     s.addSelected(opts)
+    // Callback onClickAdd
+    if (s.params.onClickAdd) s.params.onClickAdd(opts, s)
   }
   // 点击bar
   s.onClickBar = function (e) {
@@ -485,11 +485,14 @@ var Tree = function (container, params) {
     s.target = e.target
     // 选中选中项
     var id = s.option.getAttribute(s.params.idAttr)
+    var opts = s.selected[id]
     s.removeSelected(id)
     // 如果为空，则隐藏选中容器
     if (s.isEmptyJson(s.selected)) {
       if (s.bar) s.hideBar()
     }
+    // Callback onClickDel
+    if (s.params.onClickDel) s.params.onClickDel(opts, s)
   }
 
   // 主函数
