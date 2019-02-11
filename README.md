@@ -4301,6 +4301,7 @@ showMsg = (msg) => {
   treeStyle={树style object, 默认无}
   treeClassName={树className string, 默认无, 基础'tree'}
 
+  multiple={是否需要多选 bool, 默认true} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
   bar={选中项聚合展现栏 string | node, 默认无}
   selected={选中项 array, 默认无} // 格式 [{id: '', name: '', parentid: ''}]
@@ -4656,6 +4657,7 @@ onSubmit = () => {
 <Tree
   ref={(el) => {this.$tree = el}}
   list={groupList}
+  multiple={false}
   checkbox
   onClick={this.onAsync}
   onData={this.onData}

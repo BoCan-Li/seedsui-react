@@ -10,7 +10,8 @@ export default class Tree extends Component {
     treeStyle: PropTypes.object,
     treeClassName: PropTypes.string,
     
-    checkbox: PropTypes.bool,
+    multiple: PropTypes.bool, // 是否需要多选
+    checkbox: PropTypes.bool, // 是否可选
     bar: PropTypes.oneOfType([ // 选中栏
       PropTypes.string,
       PropTypes.node
@@ -34,6 +35,7 @@ export default class Tree extends Component {
     onData: PropTypes.func
   }
   static defaultProps = {
+    multiple: true,
     list: []
   }
   constructor(props) {
@@ -60,7 +62,7 @@ export default class Tree extends Component {
   componentDidMount = () => {
     if (this.instance) return;
     const {
-      checkbox, bar,
+      multiple, checkbox, bar,
       buttonAddHTML, buttonAddClassName, buttonAddSrc, onClickAdd,
       buttonDelHTML, buttonDelClassName, buttonDelSrc, onClickDel,
       onClickLastChild,
@@ -73,6 +75,7 @@ export default class Tree extends Component {
     }
     const instance = new Instance(this.$tree, {
       data: list,
+      multiple,
       checkbox,
       bar,
       buttonAddHTML,
@@ -88,6 +91,13 @@ export default class Tree extends Component {
       onData: onData
     });
     this.instance = instance;
+    // 设置已选中
+    const {selected} = this.props;
+    if(Array.isArray(selected) && selected.length) {
+      for (var opt of selected) {
+        this.instance.addSelected(opt)
+      }
+    }
     this.instance.update();
   }
   onClick = (s) => {
