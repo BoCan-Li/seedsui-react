@@ -97,8 +97,9 @@ window.Array.prototype.toStringOption = function () {
 }
 
 /* -----------------------------------------------------
-  树数据扁平化, 将树的children拉平, 必须有parentid
-  @return [{},{}]
+  树数据扁平化, 将树的children拉平
+  @格式 [{id: '', name: '', children: {}}]
+  @return [{id: '', name: '', parentid: ''}, {id: '', name: '', parentid: ''}]
  ----------------------------------------------------- */
 window.Array.prototype.flattenTree = function () {
   var list = this
@@ -130,10 +131,8 @@ function _buildTreeToFlatten (list) { // 扁平化, 将children拉平
   }
   return tree
 }
-/* -----------------------------------------------------
-  树数据工具
- ----------------------------------------------------- */
-// 取出平数据的顶层数据
+
+// 取出无父节点的顶层数据, 即[{id: '', name: '', parentid: '-1' 或没有parentid}]
 window.Array.prototype.getFlattenTreeRoots = function () {
   var list = this
   var roots = []
@@ -149,7 +148,7 @@ window.Array.prototype.getFlattenTreeRoots = function () {
   return roots
 }
 
-// 根据id, 取出平数据的children
+// 根据id, 取出此id的下级节点数据, 即[{id: '', name: '', parentid: ''}]
 window.Array.prototype.getFlattenTreeChildren = function (id) {
   var list = this
   var children = []
@@ -161,7 +160,23 @@ window.Array.prototype.getFlattenTreeChildren = function (id) {
   return children
 }
 
-// 根据id, 取出深度数据的node
+// 根据id, 取出此id的后代节点数据, 即[{id: '', name: '', parentid: ''}]
+window.Array.prototype.getFlattenTreeDescendants = function (id) {
+  var list = this
+  var descendants = []
+  function buildChildren (list, id) {
+    for (var i = 0, item; item = list[i++];) { // eslint-disable-line
+      if (id && item.parentid === id.toString()) {
+        descendants.push(item)
+        buildChildren(list, item.id)
+      }
+    }
+  }
+  buildChildren(list, id)
+  return descendants
+}
+
+// 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
 window.Array.prototype.getFlattenTreeNode = function (id) {
   var list = this
   var item = list.filter(function (option) {
@@ -174,35 +189,11 @@ window.Array.prototype.getFlattenTreeNode = function (id) {
   return item
 }
 
-// 根据id, 取出深度数据的node
-window.Array.prototype.getDeepTreeNode = function (id) {
-  var list = Object.clone(this)
-  var temp = [] // 用于存储children
-  // 先将第一层节点放入temp
-  for (var i = 0; i < list.length; i++) {
-    temp.push(list[i])
-  }
-  while (temp.length) {
-    // 取出一项, 并移除此项
-    var item = temp.shift()
-    if (item.id === id) return item
-    // 此项children合并到temp
-    if (item.children && item.children.length) {
-      // 添加parentid
-      for (var c = 0; c < item.children.length; c++) {
-        item.children[c].parentid = item.id
-      }
-      temp = item.children.concat(temp)
-    }
-    // 删除此项children
-    delete item.children
-  }
-  return {}
-}
 
 /* -----------------------------------------------------
   树数据深度化, 将树的parentid深度为children, 必须有id和parentid
-  @return [{id: xx, children: []}]
+  @格式 [{id: '', name: '', parentid: ''}, {id: '', name: '', parentid: ''}]
+  @return [{id: '', name: '', children: {}}]
  ----------------------------------------------------- */
 window.Array.prototype.deepTree = function () {
   var list = this
@@ -228,4 +219,30 @@ window.Array.prototype.deepTree = function () {
     _buildTreeToDeep(tree)
   }
   return trees
+}
+
+// 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
+window.Array.prototype.getDeepTreeNode = function (id) {
+  var list = Object.clone(this)
+  var temp = [] // 用于存储children
+  // 先将第一层节点放入temp
+  for (var i = 0; i < list.length; i++) {
+    temp.push(list[i])
+  }
+  while (temp.length) {
+    // 取出一项, 并移除此项
+    var item = temp.shift()
+    if (item.id === id) return item
+    // 此项children合并到temp
+    if (item.children && item.children.length) {
+      // 添加parentid
+      for (var c = 0; c < item.children.length; c++) {
+        item.children[c].parentid = item.id
+      }
+      temp = item.children.concat(temp)
+    }
+    // 删除此项children
+    delete item.children
+  }
+  return {}
 }
