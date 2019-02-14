@@ -13,9 +13,9 @@ export default class Notice extends Component {
     icon: PropTypes.node,
     iconParams: PropTypes.object,
 
-    caption: PropTypes.string,
+    caption: PropTypes.node,
     captionParams: PropTypes.object,
-    sndcaption: PropTypes.string,
+    sndcaption: PropTypes.node,
     sndcaptionParams: PropTypes.object,
 
     children: PropTypes.node

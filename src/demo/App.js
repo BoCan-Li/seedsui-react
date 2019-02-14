@@ -5,6 +5,7 @@ import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
 import NumBoxPopPointer from '../lib/NumBoxPopPointer';
+import Notice from '../lib/Notice';
 
 export default class App extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class App extends Component {
           unit={'/箱'}
           onChange={this.onChangeCount}
         />
+        <Notice caption={<div>hhhh</div>}/>
       </Container>
     </Page>
   }
