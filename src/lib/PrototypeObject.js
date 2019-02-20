@@ -133,6 +133,7 @@ Object.type = function (obj) {
   return type
 }
 
+
 /* -------------------
 字符类型
 ------------------- */
@@ -306,4 +307,24 @@ Object.equals = function (object1, object2) { // 用window.Object.prototype.equa
   }
   // 如果一切顺利,返回true
   return true
+}
+
+/* -------------------
+SeedsUI组件: 获取参数
+@params e => 事件对象
+@params parameters => 其它参数, '$event'字符串将用e代替后返回
+@return 若无parameters,将返回e; 若有parameters,将parameters中的'$event'替换成e后返回
+------------------- */
+Object.getArgs = function (e, parameters) {
+  var args = parameters ? Object.clone(parameters) : parameters
+  if (args !== undefined) {
+    if (typeof args === 'string' && args === '$event') {
+      args = e
+    } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
+      args[args.indexOf('$event')] = e
+    }
+  } else {
+    args = e
+  }
+  return args
 }

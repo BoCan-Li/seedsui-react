@@ -87,32 +87,19 @@ export default class NumBox extends Component {
     //   if (value === '') value = this.props.min || '0';
     // }
     // value = Math.Calc.correctNumber(value, this.props);
-    // if (this.props.value - value !== 0 && this.props.onChange) this.props.onChange(value, this.getArgs());
-  }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
+    // if (this.props.value - value !== 0 && this.props.onChange) this.props.onChange(value);
   }
   // 失去焦点
   onBlur = (e) => {
     const {required, min, onChange, onBlur} = this.props;
     const value = Math.Calc.correctNumberBlur(this.props.value, {required, min});
-    if (onChange && '' + value !== '' + this.props.value) onChange(value, this.getArgs(e));
-    if (onBlur) onBlur(value, this.getArgs(e));
+    if (onChange && '' + value !== '' + this.props.value) onChange(value, Object.getArgs(e, this.props.args));
+    if (onBlur) onBlur(value, Object.getArgs(e, this.props.args));
   };
   // 获取焦点
   onFocus = (e) => {
     const {onFocus} = this.props;
-    if (onFocus) onFocus(this.props.value, this.getArgs(e));
+    if (onFocus) onFocus(this.props.value, Object.getArgs(e, this.props.args));
   };
   // 点击文本框, 逢0清空
   onClickInput = (e) => {
@@ -120,7 +107,7 @@ export default class NumBox extends Component {
     if (value - 0 === 0) {
       e.target.value = '';
     }
-    if (this.props.onClickInput) this.props.onClickInput(value, this.getArgs(e));
+    if (this.props.onClickInput) this.props.onClickInput(value, Object.getArgs(e, this.props.args));
   }
   // Methods
   onChange = (e) => {
@@ -128,22 +115,22 @@ export default class NumBox extends Component {
       e.target.value = '';
     }
     var value = Math.Calc.correctNumber(e.target.value, this.props);
-    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
+    if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
   };
   // 点击减
   onClickMinus = (e) => {
     let value = Math.Calc.correctNumber(Math.Calc.subtract(this.$input.value, 1), this.props);
     // Callback
-    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-    if (this.props.onClickMinus) this.props.onClickMinus(value, this.getArgs(e));
+    if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
+    if (this.props.onClickMinus) this.props.onClickMinus(value, Object.getArgs(e, this.props.args));
     this.$input.focus();
   };
   // 点击加
   onClickPlus = (e) => {
     let value = Math.Calc.correctNumber(Math.Calc.add(this.$input.value, 1), this.props);
     // Callback
-    if (this.props.onChange) this.props.onChange(value, this.getArgs(e));
-    if (this.props.onClickPlus) this.props.onClickPlus(value, this.getArgs(e));
+    if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
+    if (this.props.onClickPlus) this.props.onClickPlus(value, Object.getArgs(e, this.props.args));
     this.$input.focus();
   };
   // 点击容器
@@ -159,11 +146,11 @@ export default class NumBox extends Component {
       this.onClear(e);
     }
     if (onClickLicon && target.classList.contains('licon')) {
-      onClickLicon(this.$input.value, this.getArgs(e));
+      onClickLicon(this.$input.value, Object.getArgs(e, this.props.args));
       return;
     }
     if (onClickRicon && target.classList.contains('ricon')) {
-      onClickLicon(this.$input.value, this.getArgs(e));
+      onClickLicon(this.$input.value, Object.getArgs(e, this.props.args));
       return;
     }
     if (target.classList.contains('numbox-input')) {
@@ -178,15 +165,15 @@ export default class NumBox extends Component {
       this.onClickMinus(e);
       return;
     }
-    if (onClick) onClick(this.$input.value, this.getArgs(e));
+    if (onClick) onClick(this.$input.value, Object.getArgs(e, this.props.args));
   }
   // 点击清除
   onClear = (e) => {
     this.$input.focus();
     // 赋值
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', this.getArgs(e));
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', Object.getArgs(e, this.props.args));
     if (this.props.onChange) {
-      this.props.onChange('', this.getArgs(e));
+      this.props.onChange('', Object.getArgs(e, this.props.args));
     }
     e.stopPropagation();
   }

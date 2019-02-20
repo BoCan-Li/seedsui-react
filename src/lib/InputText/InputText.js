@@ -82,19 +82,7 @@ export default class InputText extends Component {
       showClear: props.value && props.clear // 用于非valueBindProp
     }
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
+  
   // 点击容器
   onClick = (e) => {
     e.stopPropagation();
@@ -104,14 +92,14 @@ export default class InputText extends Component {
     if (target.classList.contains('clearicon')) {
       this.onClear(e);
     } else if (target.classList.contains('licon')) {
-      if (onClickLicon) onClickLicon(this.$input.value, this.getArgs(e));
+      if (onClickLicon) onClickLicon(this.$input.value, Object.getArgs(e, this.props.args));
     } else if (target.classList.contains('ricon')) {
-      if (onClickRicon) onClickRicon(this.$input.value, this.getArgs(e));
+      if (onClickRicon) onClickRicon(this.$input.value, Object.getArgs(e, this.props.args));
     } else if (target.classList.contains('input-text')) {
-      if (onClick) onClick(this.$input.value, this.getArgs(e));
-      if (onClickInput) onClickInput(this.$input.value, this.getArgs(e));
+      if (onClick) onClick(this.$input.value, Object.getArgs(e, this.props.args));
+      if (onClickInput) onClickInput(this.$input.value, Object.getArgs(e, this.props.args));
     } else {
-      if (onClick) onClick(this.$input.value, this.getArgs(e));
+      if (onClick) onClick(this.$input.value, Object.getArgs(e, this.props.args));
     }
   }
   // 自动扩充功能
@@ -136,7 +124,7 @@ export default class InputText extends Component {
     if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
       if (!valueBindProp) target.value = value;
     }
-    if (onChange) onChange(value, this.getArgs(e));
+    if (onChange) onChange(value, Object.getArgs(e, this.props.args));
     this.updateShowClear();
   }
   onBlur = (e) => {
@@ -144,7 +132,7 @@ export default class InputText extends Component {
     var value = target.value;
     const {onBlur} = this.props;
     if (onBlur) {
-      onBlur(value, this.getArgs(e));
+      onBlur(value, Object.getArgs(e, this.props.args));
     }
   }
   onFocus = (e) => {
@@ -152,7 +140,7 @@ export default class InputText extends Component {
     var value = target.value;
     const {onFocus, readOnly} = this.props;
     if (onFocus) {
-      onFocus(value, this.getArgs(e));
+      onFocus(value, Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
     if (readOnly) {
@@ -164,9 +152,9 @@ export default class InputText extends Component {
     this.$input.focus();
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = '';
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', this.getArgs(e));
+    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', Object.getArgs(e, this.props.args));
     if (this.props.onChange) {
-      this.props.onChange('', this.getArgs(e));
+      this.props.onChange('', Object.getArgs(e, this.props.args));
     }
     // 自动扩充功能
     if (this.props.pre) {

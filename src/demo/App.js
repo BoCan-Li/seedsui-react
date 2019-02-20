@@ -4,8 +4,7 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import NumBoxPopPointer from '../lib/NumBoxPopPointer';
-import Notice from '../lib/Notice';
+import InputNumber from '../lib/InputNumber';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,9 +13,14 @@ export default class App extends Component {
   componentDidMount() {
 		Bridge.debug = true;
   }
-  onChangeCount = (value, args) => {
+  changePlanPdPrice = (value, [e, count]) => {
+    if (value < 0) {
+      e.target.value = 0
+      value = 0
+    }
     console.log(value)
-    console.log(args)
+    console.log(e.target)
+    console.log(count)
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -24,14 +28,15 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <NumBoxPopPointer
-          args={'1'}
-          min={1}
-          value={'3'}
-          unit={'/箱'}
-          onChange={this.onChangeCount}
-        />
-        <Notice caption={<div>hhhh</div>}/>
+          <InputNumber
+            className="bordered bg-white"
+            style={{marginTop: '4px'}}
+            inputClassName="SID-FeeApplyExecDetail-Store-Amount"
+            args={['$event', '5']}
+            value={'1'}
+            onChange={this.changePlanPdPrice}
+            inputStyle={{padding: '4px'}}
+          />
       </Container>
     </Page>
   }

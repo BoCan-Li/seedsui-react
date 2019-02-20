@@ -66,51 +66,38 @@ export default class List extends Component {
     super(props);
     this.state = {}
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onClick = (e) => {
     const {onClick, onClickLicon, onClickRicon, onClickRcaption} = this.props;
     const classList = e.target.classList;
     if (classList.contains('licon') && onClickLicon) {
-      onClickLicon(this.getArgs(e));
+      onClickLicon(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     } else if (classList.contains('ricon') && onClickRicon) {
-      onClickRicon(this.getArgs(e));
+      onClickRicon(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     } else if (classList.contains('list-rcaption') && onClickRcaption) {
-      onClickRcaption(this.getArgs(e));
+      onClickRcaption(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     } else if (onClick){
-      onClick(this.getArgs(e));
+      onClick(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickContainer = (e) => {
     if (this.props.onClickContainer) {
-      this.props.onClickContainer(this.getArgs(e));
+      this.props.onClickContainer(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickThumbnail = (e) => {
     if (this.props.onClickThumbnail) {
-      this.props.onClickThumbnail(this.getArgs(e));
+      this.props.onClickThumbnail(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickAvatar = (e) => {
     if (this.props.onClickAvatar) {
-      this.props.onClickAvatar(this.getArgs(e));
+      this.props.onClickAvatar(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }

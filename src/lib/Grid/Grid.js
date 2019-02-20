@@ -122,28 +122,15 @@ export default class Grid extends Component {
   getUlStyle = () => {
     return this.getSpaceStyle().ulStyle;
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onClickIcon = (e, item, index) => {
     if (this.props.onClickIcon) {
-      this.props.onClickIcon(item, index, this.getArgs(e));
+      this.props.onClickIcon(item, index, Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickIconBox = (e, item, index) => {
     if (this.props.onClickIconBox) {
-      this.props.onClickIconBox(item, index, this.getArgs(e));
+      this.props.onClickIconBox(item, index, Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
     // 如果是视频则自带预览功能,不需要预览
@@ -152,7 +139,7 @@ export default class Grid extends Component {
     }
     // 如果有点击事件,则不走预览
     if (item.onClick) {
-      item.onClick(item, index, this.getArgs(e));
+      item.onClick(item, index, Object.getArgs(e, this.props.args));
       e.stopPropagation();
       return;
     }
@@ -177,19 +164,19 @@ export default class Grid extends Component {
   onClickCell = (e, item, index) => {
     // onClickCell
     if (this.props.onClickCell) {
-      this.props.onClickCell(item, index, this.getArgs(e));
+      this.props.onClickCell(item, index, Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickDelete = (e, item, index) => {
     if (this.props.onClickDelete) {
-      this.props.onClickDelete(item, index, this.getArgs(e));
+      this.props.onClickDelete(item, index, Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }
   onClickAdd = (e) => {
     if (this.props.onClickAdd) {
-      this.props.onClickAdd(this.getArgs(e));
+      this.props.onClickAdd(Object.getArgs(e, this.props.args));
       e.stopPropagation();
     }
   }

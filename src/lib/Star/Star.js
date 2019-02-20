@@ -13,22 +13,9 @@ export default class Star extends Component {
   constructor(props) {
     super(props);
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onClick = (e) => {
     if (this.props.onClick) {
-      this.props.onClick(this.getArgs(e));
+      this.props.onClick(Object.getArgs(e, this.props.args));
     }
   }
   render() {

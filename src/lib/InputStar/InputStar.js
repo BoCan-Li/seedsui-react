@@ -24,19 +24,6 @@ export default class InputStar extends Component {
   constructor(props) {
     super(props);
   }
-  getArgs = (e) => {
-    var args = this.props.args;
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e;
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e;
-      }
-    } else {
-      args = e;
-    }
-    return args;
-  }
   onChange (e, argNum) {
     const {min, onChange, onError} = this.props;
     let num = argNum;
@@ -47,7 +34,7 @@ export default class InputStar extends Component {
         num = min;
       }
     }
-    if (onChange) onChange(num, this.getArgs(e));
+    if (onChange) onChange(num, Object.getArgs(e, this.props.args));
   }
   render() {
     const {max, min, value, className, style} = this.props;
