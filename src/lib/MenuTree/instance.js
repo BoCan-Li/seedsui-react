@@ -67,9 +67,12 @@ var MenuTree = function (container, params) {
   }
   // 重新设置数据
   s.setData = function (data) {
-    if (!data || !data.length) return
     s.params.data = data
     s.container.innerHTML = ''
+    if (!data || !data.length) {
+      return
+    }
+    
     s.initData(data, s.container)
     s.updateActive()
   }

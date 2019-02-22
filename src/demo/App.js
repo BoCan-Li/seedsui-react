@@ -4,23 +4,39 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import InputNumber from '../lib/InputNumber';
+import MenuTiled from '../lib/MenuTiled';
+
+
+const mockmenus = [
+  {id: '2', name: '测试数据2', parentid: '-1'},
+  {id: '1', name: '测试数据1', parentid: '-1'},
+  {id: 'a', name: '测试数据1-a', parentid: '1'},
+  {id: 'b', name: '测试数据1-b', parentid: '1'},
+  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
+];
+
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedId: '1',
+      menus: mockmenus
+    }
   }
   componentDidMount() {
-		Bridge.debug = true;
+    Bridge.debug = true;
   }
-  changePlanPdPrice = (value, [e, count]) => {
-    if (value < 0) {
-      e.target.value = 0
-      value = 0
-    }
-    console.log(value)
-    console.log(e.target)
-    console.log(count)
+  clearMenus = () => {
+    this.setState({
+      menus: []
+    });
+  }
+  addMenus = () => {
+    this.setState({
+      menus: mockmenus
+    });
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -28,15 +44,9 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-          <InputNumber
-            className="bordered bg-white"
-            style={{marginTop: '4px'}}
-            inputClassName="SID-FeeApplyExecDetail-Store-Amount"
-            args={['$event', '5']}
-            value={'1'}
-            onChange={this.changePlanPdPrice}
-            inputStyle={{padding: '4px'}}
-          />
+        <MenuTiled ref="$menutree" list={this.state.menus} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
+        <input type="button" value="置空" onClick={this.clearMenus}/>
+        <input type="button" value="显示" onClick={this.addMenus}/>
       </Container>
     </Page>
   }

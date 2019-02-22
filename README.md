@@ -2983,7 +2983,7 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
 ```javascript
 import MenuTree from 'seedsui-react/lib/MenuTree';
 
-const menus = [
+const mockData = [
   {id: '2', name: '测试数据2', parentid: '-1'},
   {id: '1', name: '测试数据1', parentid: '-1'},
   {id: 'a', name: '测试数据1-a', parentid: '1'},
@@ -2993,23 +2993,24 @@ const menus = [
 ];
 
 this.state = {
-  selectedId: '2'
+  selectedId: '2',
+  data: mockData
 }
 
-onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
-  console.log(e);
-  console.log(item);
-  console.log('激活:' + isActived);
-  console.log('展开:' + isExtand);
-  console.log('子项:' + childrenCount);
-  if (!isActived) {
-    this.setState({
-      selectedId: item.id
-    });
-  }
+clearData = () => {
+  this.setState({
+    data: []
+  });
+}
+addData = () => {
+  this.setState({
+    data: mockData
+  });
 }
 
-<MenuTree ref="$menutree" list={menus} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
+<MenuTree ref="$menutree" list={this.state.data} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
+<input type="button" value="置空" onClick={this.clearData}/>
+<input type="button" value="显示" onClick={this.addData}/>
 ```
 [返回目录](#component)
 

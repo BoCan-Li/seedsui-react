@@ -24,13 +24,17 @@ export default class MenuTiled extends Component {
     super(props);
   }
   componentDidUpdate = (prevProps) => {
-    if (this.props.list && this.props.list.length && JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
-      this.instance.setSelectedId(this.props.selectedId)
-      var list = Object.clone(this.props.list);
-      if (JSON.stringify(list).indexOf('"children"') === -1) {
-        list = list.deepTree()
+    if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
+      if (this.props.list && this.props.list.length) {
+        this.instance.setSelectedId(this.props.selectedId)
+        var list = Object.clone(this.props.list);
+        if (JSON.stringify(list).indexOf('"children"') === -1) {
+          list = list.deepTree()
+        }
+        this.instance.setData(list)
+      } else {
+        this.instance.setData([])
       }
-      this.instance.setData(list)
     }
   }
   componentDidMount = () => {

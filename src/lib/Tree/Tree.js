@@ -42,21 +42,26 @@ export default class Tree extends Component {
     super(props);
   }
   componentDidUpdate = (prevProps) => {
-    if (this.props.list && this.props.list.length && JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
-      const {selected} = this.props;
-      var list = Object.clone(this.props.list);
-      if (JSON.stringify(list).indexOf('"children"') !== -1) {
-        list = list.flattenTree()
-      }
-      // 设置已选中
-      if(Array.isArray(selected) && selected.length) {
-        for (var opt of selected) {
-          this.instance.addSelected(opt)
+    if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
+      if (this.props.list && this.props.list.length) {
+        const {selected} = this.props;
+        var list = Object.clone(this.props.list);
+        if (JSON.stringify(list).indexOf('"children"') !== -1) {
+          list = list.flattenTree()
         }
+        // 设置已选中
+        if(Array.isArray(selected) && selected.length) {
+          for (var opt of selected) {
+            this.instance.addSelected(opt)
+          }
+        }
+        // 开始渲染
+        this.instance.setData(list);
+        this.instance.update();
+      } else {
+        this.instance.setData([]);
+        this.instance.update();
       }
-      // 开始渲染
-      this.instance.setData(list);
-      this.instance.update();
     }
   }
   componentDidMount = () => {
