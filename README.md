@@ -1331,7 +1331,7 @@ onChangeDropdown = (tabs) => {
 import Emoji from 'seedsui-react/lib/Emoji';
 
 this.state = {
-  showEmoji: true,
+  showEmoji: false,
   value: ''
 }
 
@@ -1349,7 +1349,13 @@ toggleEmoji = () => {
   })
 }
 
-{this.state.showEmoji && <Emoji autoFocus onChange={this.onChange} value={this.state.value}/>}
+<Emoji
+  autoFocus
+  show={this.state.showEmoji}
+  onChange={this.onChange}
+  value={this.state.value}
+  onClickMask={this.toggleEmoji}
+/>
 <input type="button" value="显隐" onClick={this.toggleEmoji}/>
 ```
 [返回目录](#component)

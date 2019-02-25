@@ -4,39 +4,30 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import MenuTiled from '../lib/MenuTiled';
-
-
-const mockmenus = [
-  {id: '2', name: '测试数据2', parentid: '-1'},
-  {id: '1', name: '测试数据1', parentid: '-1'},
-  {id: 'a', name: '测试数据1-a', parentid: '1'},
-  {id: 'b', name: '测试数据1-b', parentid: '1'},
-  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
-  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
-];
-
+import Emoji from '../lib/Emoji';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedId: '1',
-      menus: mockmenus
+      showEmoji: false,
+      value: ''
     }
   }
   componentDidMount() {
     Bridge.debug = true;
   }
-  clearMenus = () => {
+  onChange = (value) => {
     this.setState({
-      menus: []
-    });
+      value: value
+    })
   }
-  addMenus = () => {
-    this.setState({
-      menus: mockmenus
-    });
+  toggleEmoji = () => {
+    this.setState((prevState) => {
+      return {
+        showEmoji: !prevState.showEmoji
+      }
+    })
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -44,9 +35,14 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <MenuTiled ref="$menutree" list={this.state.menus} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
-        <input type="button" value="置空" onClick={this.clearMenus}/>
-        <input type="button" value="显示" onClick={this.addMenus}/>
+        <Emoji
+          autoFocus
+          show={this.state.showEmoji}
+          onChange={this.onChange}
+          value={this.state.value}
+          onClickMask={this.toggleEmoji}
+        />
+        <input type="button" value="显隐" onClick={this.toggleEmoji}/>
       </Container>
     </Page>
   }

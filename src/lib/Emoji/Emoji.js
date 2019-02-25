@@ -10,6 +10,7 @@ import data from './instance.data.js';
 
 export default class Emoji extends Component {
   static propTypes = {
+    show: PropTypes.bool,
     data: PropTypes.object,
 
     portal: PropTypes.object,
@@ -46,7 +47,8 @@ export default class Emoji extends Component {
     super(props);
   }
   componentDidUpdate = (prevProps) => {
-    if (prevProps.autoFocus !== this.props.autoFocus && this.props.autoFocus === true && this.$inputPre) {
+    // 自动获取焦点
+    if (this.props.autoFocus && prevProps.show !== this.props.show && this.props.show === true && this.$inputPre) {
       this.$inputPre.$input.focus();
     }
   }
@@ -104,6 +106,7 @@ export default class Emoji extends Component {
   
   render() {
     const {
+      show,
       data,
       portal,
       args,
@@ -123,7 +126,7 @@ export default class Emoji extends Component {
       ...others
     } = this.props;
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`mask emoji-mask active${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
+      <div ref={el => {this.$el = el;}} className={`mask emoji-mask${show ? ' active' : ''}${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
         <div ref={el => {this.$container = el;}} className={`emoji active${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
           {(liconParams.src || liconParams.className) && <Icon {...liconParams}/>}
           {licon}
