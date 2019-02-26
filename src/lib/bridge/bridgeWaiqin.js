@@ -507,6 +507,26 @@ var Bridge = {
   closeWindow: function () {
     wq.wqload.wqClosePage() // eslint-disable-line
   },
+  /* -----------------------------------------------------
+    打开原生窗口
+    @params {ios: {url: '', params: {}}, android: {url: '', params: {}}}默认为打开一个webview页面
+  ----------------------------------------------------- */
+  openNativePage: function (params = {ios: {}, android: {}}) {
+    if (!params.ios.url) {
+      BridgeBrowser.showToast('ios参数url不能为空', {mask: false})
+      return
+    }
+    if (!params.android.url) {
+      BridgeBrowser.showToast('android参数url不能为空', {mask: false})
+      return
+    }
+    window.wq.wqload.wqOpenCustomerPager({
+      androidUIR: params.android.url,
+      androidParma: params.android.params,
+      IOSViewController: params.ios.url,
+      IOSParma: params.ios.params
+    })
+  },
   // 客户端默认返回控制
   back: function () {
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''

@@ -2646,25 +2646,25 @@
 // Carrousel轮播
 .setCarrouselPage(){
   // 绝对定布局
-  // position:absolute;
-  // top: 0;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  // overflow: hidden;
-  // .carrousel-wrapper, .carrousel-slide{
-  //   height: 100%;
-  // }
-
-  // flex布局
-  position: relative;
-  .flex;
-  .flex-1;
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   overflow: hidden;
-  .carrousel-wrapper{
-    .flex;
-    .flex-1;
+  .carrousel-wrapper, .carrousel-slide{
+    height: 100%;
   }
+
+  // flex布局, flex全屏, 在andriod4.4和苹果部分手机, Carrousel切换会白屏
+  // position: relative;
+  // .flex;
+  // .flex-1;
+  // overflow: hidden;
+  // .carrousel-wrapper{
+  //   .flex;
+  //   .flex-1;
+  // }
 }
 .setCarrouselContainer(){
   position: relative;
