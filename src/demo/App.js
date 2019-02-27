@@ -4,30 +4,40 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import Emoji from '../lib/Emoji';
+import Picker from '../lib/Picker';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showEmoji: false,
-      value: ''
+      pickerShow: false,
+      pickerId: '1',
+      pickerList: [{key: '1', value: '111'}, {key: '2', value: '222'}]
     }
   }
   componentDidMount() {
     Bridge.debug = true;
   }
-  onChange = (value) => {
-    this.setState({
-      value: value
-    })
+  onClickSubmit = (e) => {
+    const value = e.activeOptions[0].value;
+    console.log(value);
+    this.hidePicker();
   }
-  toggleEmoji = () => {
-    this.setState((prevState) => {
-      return {
-        showEmoji: !prevState.showEmoji
-      }
-    })
+  hidePicker = () => {
+    this.setState({
+      pickerShow: false
+    });
+  }
+  showPicker = () => {
+    this.setState({
+      pickerShow: true
+    });
+  }
+  onClick = () => {
+    this.setState({
+      pickerId: '2',
+      pickerShow: true
+    });
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -35,14 +45,15 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <Emoji
-          autoFocus
-          show={this.state.showEmoji}
-          onChange={this.onChange}
-          value={this.state.value}
-          onClickMask={this.toggleEmoji}
+        <input type="button" value="显示" onClick={this.onClick}/>
+        <Picker
+          list={this.state.pickerList}
+          valueForKey={this.state.pickerId}
+          show={this.state.pickerShow}
+          onClickSubmit={this.onClickSubmit}
+          onClickCancel={this.hidePicker}
+          onClickMask={this.hidePicker}
         />
-        <input type="button" value="显隐" onClick={this.toggleEmoji}/>
       </Container>
     </Page>
   }

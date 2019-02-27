@@ -3400,31 +3400,41 @@ import Peg from 'seedsui-react/lib/Peg';
 ```javascript
 import Picker from 'seedsui-react/lib/Picker';
 
+this.state = {
+  pickerShow: false,
+  pickerId: '1',
+  pickerList: [{key: '1', value: '111'}, {key: '2', value: '222'}]
+}
+
 onClickSubmit = (e) => {
   const value = e.activeOptions[0].value;
   console.log(value);
+  this.hidePicker();
+}
+hidePicker = () => {
   this.setState({
-    show: !this.state.show
+    pickerShow: false
   });
 }
-onClickCancel = () => {
+showPicker = () => {
   this.setState({
-    show: !this.state.show
+    pickerShow: true
   });
 }
-onClickMask = () => {
+onClick = () => {
   this.setState({
-    show: !this.state.show
+    pickerId: '2',
+    pickerShow: true
   });
 }
 
 <Picker
-  list={[{key: '1', value: '111'}, {key: '2', value: '222'}]}
-  value=""
-  show={this.state.show}
+  list={this.state.pickerList}
+  valueForKey={this.state.pickerId}
+  show={this.state.pickerShow}
   onClickSubmit={this.onClickSubmit}
-  onClickCancel={this.onClickCancel}
-  onClickMask={this.onClickMask}
+  onClickCancel={this.hidePicker}
+  onClickMask={this.hidePicker}
 />
 ```
 [返回目录](#component)
