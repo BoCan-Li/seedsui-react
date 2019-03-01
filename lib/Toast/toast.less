@@ -3,100 +3,19 @@
 .toast-propagation{
 	pointer-events:none;
 }
-//遮罩透明
 .toast-mask{
-	background-color: transparent;
-	z-index:999;
+	.setToastMask();
 }
 .toast{
-  position:absolute;
-  width:100%;
-  text-align:center;
-  pointer-events:none;
-  opacity: 0;
-
-  transition-property:transform,opacity,visibility;
-  transition-duration:150ms;
-  transition-timing-function:ease;
+  .setToast();
 }
 .toast-wrapper{
-  .inline-flex;
-  padding:@toast-wrapper-padding;
-  border-radius:@6px;
-  max-width:@toast-max-width;
-  line-height: 0;
-
-  color:@toast-bottom-color;
-  background-color:@toast-bottom-bg;
+  .setToastWrapper();
 }
 .toast-icon{
-  display:block;
-  background-size:cover;
+  .setToastIcon();
 }
 .toast-caption{
-  display:block;
-  font-size:@toast-caption-font-size;
-  line-height:@toast-caption-line-height;
-}
-// 底部类型
-.toast.bottom{
-  bottom:-@100px;
-  &.active{
-    opacity: 1;
-    transform:translate3d(0,-@150px,0);
-  }
-}
-// 头部类型
-.toast.top{
-  top:@44px;
-  &.active{
-    visibility:visible;
-    opacity: 1;
-  }
-}
-.toast.top, .toast.bottom{
-  .toast-wrapper{
-    .flex-middle;
-  }
-  .toast-icon{
-    width:@16px;
-    height:@16px;
-    font-size: @16px;
-  }
-  .toast-caption{
-    .flex-1;
-    // .nowrap;
-    // .ellipsis;
-    // height: @16px; // 上下类型的左图标为16px,所以文字也设置成16px与之匹配
-    // line-height: @16px;
-  }
-  .toast-icon + .toast-caption{
-    margin-left:@2px;
-  }
-}
-// 中间类型
-.toast.middle{
-  top: 50%;
-  transform: translateY(-50%);
-  
-  &.active{
-    visibility:visible;
-    opacity: 1;
-  }
-  .toast-wrapper{
-    .flex-vertical;
-    .flex-middle;
-  }
-  .toast-icon{
-    width:@36px;
-    height:@36px;
-    font-size: @36px;
-  }
-  .toast-caption{
-    text-align:center;
-  }
-  .toast-icon+.toast-caption{
-    margin-top: @8px;
-  }
+  .setToastCaption();
 }
 // toast.less(end)
