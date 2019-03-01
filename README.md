@@ -3630,20 +3630,49 @@ onClickVideo = (args) => {
 import Popover from 'seedsui-react/lib/Popover';
 
 this.state = {
-  showMenu: false
+  popoverStyle: {top: '44px', right: '12px'},
+  popoverClassName: 'top-left',
+  popoverShow: false
 }
 
-hideMenu = () => {
+// 更多操作
+showPopover = (e) => {
+  if (!e.target) {
+    Bridge.showToast('没有元素, 无法查看更多', {mask: false});
+    return;
+  }
+  const clientRect = e.target.getBoundingClientRect();
+  // 如果超过屏幕的的4/3, 则向上弹
+  const screenHeight = Device.screenHeight;
+  let popoverStyle = {top: Math.Calc.add(clientRect.y, 28) + 'px', left: clientRect.x + 'px'};
+  let popoverClassName = 'top-left';
+  if (clientRect.y / screenHeight > 0.75) {
+    popoverStyle = {bottom: Math.Calc.add(Math.Calc.subtract(screenHeight, clientRect.y), 6) + 'px', left: clientRect.x + 'px'};
+    popoverClassName = 'bottom-left';
+  }
   this.setState({
-    showMenu: false
+    popoverStyle: popoverStyle,
+    popoverClassName: popoverClassName,
+    popoverShow: true
+  });
+}
+hidePopover = () => {
+  this.setState({
+    popoverShow: false
   })
 }
 
-<Popover show={this.state.showMenu} className="top-left" style={{left: '10px', top: '44px'}} onClickMask={this.hideMenu}>
-  <List caption="本月" className="border-b"/>
-  <List caption="上月" className="border-b"/>
-  <List caption="自定义时间"/>
+
+<input type="button" value="显示" onClick={this.showPopover} style={{position: 'absolute', left: '50%', top: '20px'}}/>
+{/* 更多操作 */}
+<Popover show={this.state.popoverShow} className={this.state.popoverClassName} style={this.state.popoverStyle} onClickMask={this.hidePopover}>
+  操作操作<br/>
+  操作操作<br/>
+  操作操作<br/>
+  操作操作<br/>
+  操作操作
 </Popover>
+
 ```
 [返回目录](#component)
 

@@ -4,40 +4,45 @@ import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
 import Bridge from '../lib/Bridge';
-import Picker from '../lib/Picker';
+import Device from '../lib/Device';
+import Popover from '../lib/Popover';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pickerShow: false,
-      pickerId: '1',
-      pickerList: [{key: '1', value: '111'}, {key: '2', value: '222'}]
+      popoverStyle: {top: '44px', right: '12px'},
+      popoverClassName: 'top-left',
+      popoverShow: false
     }
   }
   componentDidMount() {
-    Bridge.debug = true;
   }
-  onClickSubmit = (e) => {
-    const value = e.activeOptions[0].value;
-    console.log(value);
-    this.hidePicker();
-  }
-  hidePicker = () => {
+  // 更多操作
+  showPopover = (e) => {
+    if (!e.target) {
+      Bridge.showToast('没有元素, 无法查看更多', {mask: false});
+      return;
+    }
+    const clientRect = e.target.getBoundingClientRect();
+    // 如果超过屏幕的的4/3, 则向上弹
+    const screenHeight = Device.screenHeight;
+    let popoverStyle = {top: Math.Calc.add(clientRect.y, 28) + 'px', left: clientRect.x + 'px'};
+    let popoverClassName = 'top-left';
+    if (clientRect.y / screenHeight > 0.75) {
+      popoverStyle = {bottom: Math.Calc.add(Math.Calc.subtract(screenHeight, clientRect.y), 6) + 'px', left: clientRect.x + 'px'};
+      popoverClassName = 'bottom-left';
+    }
     this.setState({
-      pickerShow: false
+      popoverStyle: popoverStyle,
+      popoverClassName: popoverClassName,
+      popoverShow: true
     });
   }
-  showPicker = () => {
+  hidePopover = () => {
     this.setState({
-      pickerShow: true
-    });
-  }
-  onClick = () => {
-    this.setState({
-      pickerId: '2',
-      pickerShow: true
-    });
+      popoverShow: false
+    })
   }
   render() {
     return <Page style={{ backgroundColor: 'white' }}>
@@ -45,16 +50,16 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <input type="button" value="显示" onClick={this.onClick}/>
-        <Picker
-          list={this.state.pickerList}
-          valueForKey={this.state.pickerId}
-          show={this.state.pickerShow}
-          onClickSubmit={this.onClickSubmit}
-          onClickCancel={this.hidePicker}
-          onClickMask={this.hidePicker}
-        />
+        <input type="button" value="显示" onClick={this.showPopover} style={{position: 'absolute', left: '50%', top: '20px'}}/>
       </Container>
+      {/* 更多操作 */}
+      <Popover show={this.state.popoverShow} className={this.state.popoverClassName} style={this.state.popoverStyle} onClickMask={this.hidePopover}>
+        操作操作<br/>
+        操作操作<br/>
+        操作操作<br/>
+        操作操作<br/>
+        操作操作
+      </Popover>
     </Page>
   }
 };
