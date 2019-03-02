@@ -1,56 +1,24 @@
 // alert.less(start)
 .alert-mask{
-  z-index:10;
-  .flex;
-  .flex-middlecenter;
+  .setAlertMask();
 }
 .alert{
-	border-style:solid;
-	border-width:0;
-
-  width: @alert-width;
-	border-radius:@6px;
-	margin: 0 auto;
-
-	background-color:white;
-	border-color:@border;
-	overflow: hidden;
-	&:extend(.popup-animation all);
-	h1{
-		text-align: center;
-		padding: @alert-caption-padding;
-		font-weight: 500;
-		font-size: @alert-caption-size;
-		color: @alert-caption-color;
-		text-align: center;
-  }
+	.setAlert();
 }
-//内容区域
+// 内容区域
 .alert-content{
-	display: block;
-	padding: @alert-content-padding;
-  line-height: 1.2em;
-	word-wrap: break-word;
+	.setAlertContent();
 }
 .alert-content-icon{
-  width: 40px;
-  height: 40px;
-  display: block;
-  margin: 10px auto 12px auto;
+  .setAlertContentIcon();
 }
 .alert-handler{
-	.flex;
-	padding-top: @1px;
-	.border-t;
+	.setAlertHandler();
 }
-.alert-cancel,.alert-submit{
-	.flex !important;
-	.flex-1;
-	border-width: 0 !important;
-	width: 100%;
-	height: @alert-button-height;
+.alert-cancel{
+	.setAlertButtonCancel();
 }
-.alert-handler a:nth-of-type(2){
-	.border-l;
+.alert-submit{
+	.setAlertButtonSubmit();
 }
 // alert.less(end)

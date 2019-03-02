@@ -1,30 +1,17 @@
 // list-pull.less(start)
 .list-pull-li{
-	position: relative;
-	overflow: hidden;
+	.setListPullLi();
 }
 .list-pull-handler{
-	position: relative;
-	z-index: 1;
-	background-color: @list-pull-bg;
-}
-.list-pull-handler *{
-	pointer-events: none;
-}
-.list-pull-left,.list-pull-right{
-	.inline-flex;
-	position: absolute;
-	height: 100%;
-	top:0;
-	z-index:0;
+	.setListPullHandler();
 }
 .list-pull-left{
-	left:0;
+	.setListPullLeft();
 }
 .list-pull-right{
-	right:0;
+	.setListPullRight();
 }
 .list-pull-button{
-	height: 100%;
+	.setListPullButton();
 }
 // list-pull.less(end)

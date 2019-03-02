@@ -1,23 +1,5 @@
 // mask.less(start)
 .mask{
-	visibility:hidden;
-	opacity:0;
-	transition-property:opacity;
-	transition-duration:@animation-duration;
-
-  position: absolute;
-  overflow: hidden;
-	z-index:10;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	z-index: 10;
-
-	background-color: @mask-bg;
-	&.active{
-		visibility:visible;
-		opacity:1;
-	}
+	.setMask();
 }
 // mask.less(end)
