@@ -60,10 +60,18 @@ export default class Picker extends Component {
     this.instance.addSlot(list, key || '', this.props.slotClassName); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
   }
   getDefaults = () => {
-    const {list, value} = this.props;
-    if (!value) return value;
+    const {list, valueForKey, value} = this.props;
+    if (!valueForKey && !value) {
+      if (list && list[0]) return list[0];
+      return [{key: '', value: ''}];
+    }
     const values = list.filter((item) => {
-      return item.value === value
+      if (valueForKey) {
+        if (valueForKey === item.key) return true
+      } else if (value) {
+        if (item.value === value) return true
+      }
+      return false
     });
     return values[0];
   }

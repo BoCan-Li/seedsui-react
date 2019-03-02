@@ -3400,10 +3400,18 @@ import Peg from 'seedsui-react/lib/Peg';
 ```javascript
 import Picker from 'seedsui-react/lib/Picker';
 
+const mockPickerList = [{
+	"key": "7004955043756964827",
+	"value": "瓶"
+}, {
+	"key": "5796844733294559575",
+	"value": "箱(=25.0000瓶)"
+}];
+
 this.state = {
   pickerShow: false,
-  pickerId: '1',
-  pickerList: [{key: '1', value: '111'}, {key: '2', value: '222'}]
+  pickerId: '',
+  pickerList: []
 }
 
 onClickSubmit = (e) => {
@@ -3423,10 +3431,13 @@ showPicker = () => {
 }
 onClick = () => {
   this.setState({
-    pickerId: '2',
+    pickerId: '5796844733294559575',
+    pickerList: mockPickerList,
     pickerShow: true
   });
 }
+
+<input type="button" value="显示" onClick={this.onClick}/>
 
 <Picker
   list={this.state.pickerList}
