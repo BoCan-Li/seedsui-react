@@ -47,7 +47,7 @@ export default class App extends Component {
     });
   }
   render() {
-    return <Page style={{ backgroundColor: 'white' }}>
+    return <Page style={{ backgroundColor: '#ccc' }}>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>

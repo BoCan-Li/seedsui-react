@@ -16,15 +16,12 @@ import FastClick from '../lib/FastClick';
 // 换click事件为tap
 if (Device.platform === 'dinghuo' || Device.platform === 'waiqin') {
   FastClick.attach(document.getElementById('root'));
+  // 适配iPhoneX, 让容器保持在安全区域内
+  Device.adapterIPhoneX();
+  // 适配差安卓, 解决在app中, 输入法上弹界面错位的问题
+  Device.adapterBadAndriod();
 }
 
-// 适配iPhoneX和andriod5.0以下的手机
-Device.adapterMobile();
-
-// 处理客户端中安卓5.0以下手机输入法上弹隐藏后,界面显示错位的问题
-if ((Device.platform === 'dinghuo' || Device.platform === 'waiqin') && Device.os === 'andriod' && Device.osVersion < '5.0') {
-  document.getElementById('root').style.position = 'fixed';
-}
 
 // 动态加载桥接库
 Device.dynamicLoadBridge(() => {
