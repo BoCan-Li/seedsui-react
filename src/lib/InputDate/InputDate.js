@@ -12,12 +12,16 @@ export default class InputDate extends Component {
     type: PropTypes.string, // 'date | month | time | datetime'
     min: PropTypes.string, // yyyy-MM-dd
     max: PropTypes.string, // yyyy-MM-dd
-    pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string,
+
     onClick: PropTypes.func,
     onChange: PropTypes.func,
     onError: PropTypes.func,
 
+    // Picker
+    pickerStyle: PropTypes.object,
+    pickerClassName: PropTypes.string,
+    pickerMaskStyle: PropTypes.object,
+    pickerMaskClassName: PropTypes.string,
     // 自定义Picker事件
     pickerShow: PropTypes.bool,
     onClickSubmit: PropTypes.func,
@@ -144,8 +148,8 @@ export default class InputDate extends Component {
   }
   render() {
     const {
-      valueForKey, split, min, max, type, pickerStyle, pickerClassName, onClick, onChange, onError,
-      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      valueForKey, split, min, max, type, onClick, onChange, onError,
+      pickerStyle, pickerClassName, pickerMaskStyle, pickerMaskClassName, pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
       ...others
     } = this.props;
     return [
@@ -157,6 +161,7 @@ export default class InputDate extends Component {
         value={this.$input ? this.$input.value : this.props.value} key="pickerdate"
         show={pickerShow === undefined ? this.state.show : pickerShow}
         style={pickerStyle} className={pickerClassName}
+        maskStyle={pickerMaskStyle} maskClassName={pickerMaskClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
     ];

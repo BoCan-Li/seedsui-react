@@ -8,11 +8,16 @@ export default class PickerDate extends Component {
     portal: PropTypes.object,
     split: PropTypes.string,
     type: PropTypes.string, // 'date','month','time','datetime'
+
+    maskClassName: PropTypes.string,
+    maskStyle: PropTypes.object,
     className: PropTypes.string,
     style: PropTypes.object,
+
     data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
     value: PropTypes.string, // 例: 2018-02-26
     valueForKey: PropTypes.string,
+    
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
     onClickCancel: PropTypes.func,
@@ -210,9 +215,9 @@ export default class PickerDate extends Component {
     this.instance = instance;
   }
   render() {
-    const {className, style} = this.props;
+    const {maskClassName, maskStyle, className, style} = this.props;
     return createPortal(
-      <div className="mask picker-mask" ref={(el) => {this.$el = el}}>
+      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
         <div className={`picker${className ? ' ' + className : ''}`} style={style}>
           <div className="picker-header">
             <a className="picker-cancel">取消</a>

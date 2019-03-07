@@ -17,8 +17,12 @@ export default class SelectPicker extends Component {
       PropTypes.string,
       PropTypes.number
     ]),
+    
+    maskClassName: PropTypes.string,
+    maskStyle: PropTypes.object,
     className: PropTypes.string,
     style: PropTypes.object,
+
     slotClassName: PropTypes.string,
     show: PropTypes.bool,
     onClickMask: PropTypes.func,
@@ -98,9 +102,9 @@ export default class SelectPicker extends Component {
     }
   }
   render() {
-    const {list, multiple, className, style} = this.props;
+    const {list, multiple, maskClassName, maskStyle, className, style} = this.props;
     return createPortal(
-      <div className="mask picker-mask" ref={(el) => {this.$el = el}}>
+      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
         <div className={`selectpicker${className ? ' ' + className : ''}`} style={style}>
           <div className="picker-header">
             <a className="picker-cancel">取消</a>

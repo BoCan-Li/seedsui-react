@@ -14,11 +14,14 @@ export default class InputCity extends Component {
     valueForKey: PropTypes.string,
     split: PropTypes.string,
     type: PropTypes.string, // 'district' | 'city'
-    pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func,
 
+    // Picker
+    pickerStyle: PropTypes.object,
+    pickerClassName: PropTypes.string,
+    pickerMaskStyle: PropTypes.object,
+    pickerMaskClassName: PropTypes.string,
     // 自定义Picker事件
     pickerShow: PropTypes.bool,
     onClickSubmit: PropTypes.func,
@@ -84,8 +87,8 @@ export default class InputCity extends Component {
   render() {
     const {
       data, dataKeyPropertyName, dataValuePropertyName, dataChildPropertyName,
-      valueForKey, split, type, pickerStyle, pickerClassName, onClick, onChange,
-      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      valueForKey, split, type, onClick, onChange,
+      pickerStyle, pickerClassName, pickerMaskStyle, pickerMaskClassName, pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
       ...others
     } = this.props;
     return [
@@ -101,6 +104,7 @@ export default class InputCity extends Component {
         value={this.$input ? this.$input.value : this.props.value} key="pickercity"
         show={pickerShow === undefined ? this.state.show : pickerShow}
         style={pickerStyle} className={pickerClassName}
+        maskStyle={pickerMaskStyle} maskClassName={pickerMaskClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
     ];

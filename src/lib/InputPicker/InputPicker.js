@@ -15,11 +15,14 @@ export default class InputPicker extends Component {
       PropTypes.number
     ]),
     list: PropTypes.array, // [{key: '', value: ''}]
-    pickerStyle: PropTypes.bool,
-    pickerClassName: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func,
 
+    // Picker
+    pickerStyle: PropTypes.object,
+    pickerClassName: PropTypes.string,
+    pickerMaskStyle: PropTypes.object,
+    pickerMaskClassName: PropTypes.string,
     // 自定义Picker事件
     pickerShow: PropTypes.bool,
     onClickSubmit: PropTypes.func,
@@ -79,8 +82,8 @@ export default class InputPicker extends Component {
   }
   render() {
     const {
-      valueForKey, list, pickerStyle, pickerClassName, onClick, onChange,
-      pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
+      valueForKey, list, onClick, onChange,
+      pickerStyle, pickerClassName, pickerMaskStyle, pickerMaskClassName, pickerShow, onClickSubmit, onClickCancel, onClickMask, // 自定义Picker事件
       ...others
     } = this.props;
     return [
@@ -89,6 +92,7 @@ export default class InputPicker extends Component {
         list={list} valueForKey={valueForKey} value={this.$input ? this.$input.value : this.props.value} key="picker"
         show={pickerShow === undefined ? this.state.show : pickerShow}
         style={pickerStyle} className={pickerClassName}
+        maskStyle={pickerMaskStyle} maskClassName={pickerMaskClassName}
         onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel} onClickMask={this.onClickMask}
       />
     ];

@@ -2167,9 +2167,16 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 
 
 
+
+
 ## IndexArea
 [多行文本框](https://unpkg.com/seedsui-react/src/lib/IndexArea/IndexArea.js)
 , 默认高度见seedsui-variable.less中@input-area-height, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+
+
+
+
 
 ## InputCity
 [城市选择框](https://unpkg.com/seedsui-react/src/lib/InputCity/InputCity.js)
@@ -2196,15 +2203,42 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   valueForKeys={选中key array, 默认无}
   split={分隔符 string, 默认'-'}
   type={城市类型 string, 默认'area'} // 'area' | 'city'
+  onChange={值改变 func(value, option, args), 默认无}
+  // Picker
+  pickerMaskClassName={弹出框遮罩className string, 默认无}
+  pickerMaskStyle={弹出框遮罩style object, 默认无}
   pickerClassName={弹出框className string, 默认无}
   pickerStyle={弹出框style object, 默认无}
-  onChange={值改变 func(value, option, args), 默认无}
   // 自定义Picker事件
   pickerShow={控制picker的显隐 bool, 默认无}
   onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
   onClickCancel={点击picker取消按钮 func({target}), 默认无}
   onClickMask={点击picker遮罩 func({target}), 默认无}
   {...others}
+/>
+```
+### 示例
+```javascript
+import InputCity from 'seedsui-react/lib/InputCity';
+
+this.state = {
+  value: ''
+}
+
+onChange = (value) => {
+  this.setState({
+    value: value
+  });
+}
+
+<InputCity
+  valueBindProp
+  value={this.state.value}
+  onChange={this.onChange}
+  placeholder="请选择"
+  className="border-b"
+  pickerMaskStyle={{zIndex: '11'}}
+  pickerMaskClassName="bg-white"
 />
 ```
 [返回目录](#component)
@@ -2224,10 +2258,13 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   valueForKey={选中key string, 默认无}
   type={日期类型 string, 默认'date'} // 'date | month | time | datetime'
   split={分隔符 string, 默认'-'}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
   onError={错误 func({msg: ''}), 默认无}
+  // Picker
+  pickerMaskClassName={弹出框遮罩className string, 默认无}
+  pickerMaskStyle={弹出框遮罩style object, 默认无}
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
   // 自定义Picker事件
   pickerShow={控制picker的显隐 bool, 默认无}
   onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
@@ -2236,7 +2273,30 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   {...others}
 />
 ```
+### 示例
+```javascript
+import InputDate from 'seedsui-react/lib/InputDate';
 
+this.state = {
+  date: ''
+}
+
+onChangeDate = (text) => {
+  this.setState({
+    date: text
+  });
+}
+
+<InputDate
+  valueBindProp
+  min={new Date().format('yyyy-MM-dd')}
+  value={this.state.date}
+  onChange={this.onChangeDate}
+  placeholder="请选择"
+  className="border-b"
+  pickerMaskStyle={{zIndex: '11'}}
+/>
+```
 
 
 ## InputLocation
@@ -2272,11 +2332,14 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputPicker
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
   valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+  // Picker
+  pickerMaskClassName={弹出框遮罩className string, 默认无}
+  pickerMaskStyle={弹出框遮罩style object, 默认无}
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
   // 自定义Picker事件
   pickerShow={控制picker的显隐 bool, 默认无}
   onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
@@ -2289,26 +2352,41 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```javascript
 import InputPicker from 'seedsui-react/lib/InputPicker';
 
-const list = [
-  {
-    key: '1',
-    value: '111'
-  },
-  {
-    key: '2',
-    value: '222'
-  },
-  {
-    key: '3',
-    value: '333'
-  }
-];
-
-onChangePicker = (value, option, args) => {
-  console.log(value, option, args);
+this.state = {
+  value: '',
+  list: [
+    {
+      key: '1',
+      value: '111'
+    },
+    {
+      key: '2',
+      value: '222'
+    },
+    {
+      key: '3',
+      value: '333'
+    }
+  ]
 }
 
-<InputPicker value="222" list={list} onChange={this.onChangePicker}/>
+onChange = (value, option, args) => {
+  console.log(value, option, args);
+  this.setState({
+    value: value
+  });
+}
+
+<InputPicker
+  list={this.state.list}
+  valueBindProp
+  value={this.state.value}
+  onChange={this.onChange}
+  placeholder="请选择"
+  className="border-b"
+  pickerMaskStyle={{zIndex: '11'}}
+  pickerMaskClassName="bg-white"
+/>
 ```
 [返回目录](#component)
 
@@ -2378,10 +2456,13 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
   valueForKey={选中key number | string, 默认无}
   split={分隔符 string, 默认'-'}
   multiple={是否允许多选 bool, 默认false}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
   list={选择列表 array, 默认无}
   onChange={值改变 func(value, options, args), 默认无}
+  // Picker
+  pickerMaskClassName={弹出框遮罩className string, 默认无}
+  pickerMaskStyle={弹出框遮罩style object, 默认无}
+  pickerClassName={弹出框className string, 默认无}
+  pickerStyle={弹出框style object, 默认无}
   // 自定义Picker事件
   pickerShow={控制picker的显隐 bool, 默认无}
   onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
@@ -2394,26 +2475,42 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 ```javascript
 import InputSelect from 'seedsui-react/lib/InputSelect';
 
-const list = [
-  {
-    key: '1',
-    value: '111'
-  },
-  {
-    key: '2',
-    value: '222'
-  },
-  {
-    key: '3',
-    value: '333'
-  }
-];
-
-onChangeSelect = (value, options, args) => {
-  console.log(value, options, args);
+this.state = {
+  value: '',
+  list: [
+    {
+      key: '1',
+      value: '111'
+    },
+    {
+      key: '2',
+      value: '222'
+    },
+    {
+      key: '3',
+      value: '333'
+    }
+  ]
 }
 
-<InputSelect value="222" list={list} onChange={this.onChangeSelect}/>
+onChange = (value, option, args) => {
+  console.log(value, option, args);
+  this.setState({
+    value: value
+  });
+}
+
+<InputSelect
+  multiple
+  list={this.state.list}
+  valueBindProp
+  value={this.state.value}
+  onChange={this.onChange}
+  placeholder="请选择"
+  className="border-b"
+  pickerMaskStyle={{zIndex: '11'}}
+  pickerMaskClassName="bg-white"
+/>
 ```
 [返回目录](#component)
 
@@ -3385,11 +3482,17 @@ import Peg from 'seedsui-react/lib/Peg';
 <Picker
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
+
   value={值 number | string, 默认无}
   valueForKey={选中key number | string, 默认无}
+
   list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'picker'}
+
   slotClassName={一槽className string, 默认'text-center'}
   onClickMask={点击遮罩 func, 默认无}
   onClickCancel={点击取消按钮 func(s), 默认无}
@@ -3478,6 +3581,9 @@ onClick = () => {
   valueForKey={选中key string, 默认无}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
   className={容器className string, 默认无, 基础'picker'}
   style={容器style object, 默认无}
   value={值 string, 默认无}
@@ -3531,6 +3637,9 @@ onClickMask = () => {
   portal={传送dom object, 默认document.getElementById('root')}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'area'} // area | city
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
   className={容器className string, 默认无, 基础'picker'}
   style={容器style object, 默认无}
   value={值 string, 默认无}
@@ -3965,6 +4074,9 @@ searchGoods = (value) => {
   value={值 number | string, 默认无}
   valueForKey={选中key number | string, 默认无}
   list={选择列表 array, 默认无} // 格式 [key: 'xx', value: 'xx']
+
+  maskStyle={遮罩style object, 默认无}
+  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
   className={容器className string, 默认无, 基础'selectpicker'}
   style={容器style object, 默认无}
   slotClassName={一槽className string, 默认'text-center'}

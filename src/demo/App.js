@@ -3,66 +3,39 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
-import Picker from '../lib/Picker';
+import InputCity from '../lib/InputCity';
 
-const mockPickerList = [{
-	"key": "7004955043756964827",
-	"value": "瓶"
-}, {
-	"key": "5796844733294559575",
-	"value": "箱(=25.0000瓶)"
-}];
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pickerShow: false,
-      pickerId: '',
-      pickerList: []
+      value: ''
     }
   }
   componentDidMount() {
   }
-  onClickSubmit = (e) => {
-    const value = e.activeOptions[0].value;
-    console.log(value);
-    this.hidePicker();
-  }
-  hidePicker = () => {
+  onChange = (value) => {
     this.setState({
-      pickerShow: false
-    });
-  }
-  showPicker = () => {
-    this.setState({
-      pickerShow: true
-    });
-  }
-  onClick = () => {
-    this.setState({
-      pickerId: '5796844733294559575',
-      pickerList: mockPickerList,
-      pickerShow: true
+      value: value
     });
   }
   render() {
-    return <Page style={{ backgroundColor: '#ccc' }}>
+    return <Page>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <input type="button" value="显示" onClick={this.onClick}/>
+        <InputCity
+          valueBindProp
+          value={this.state.value}
+          onChange={this.onChange}
+          placeholder="请选择"
+          className="border-b"
+          pickerMaskStyle={{zIndex: '11'}}
+          pickerMaskClassName="bg-white"
+        />
       </Container>
-      {/* 更多操作 */}
-      <Picker
-        list={this.state.pickerList}
-        valueForKey={this.state.pickerId}
-        show={this.state.pickerShow}
-        onClickSubmit={this.onClickSubmit}
-        onClickCancel={this.hidePicker}
-        onClickMask={this.hidePicker}
-      />
     </Page>
   }
 };

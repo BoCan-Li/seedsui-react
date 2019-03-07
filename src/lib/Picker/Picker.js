@@ -7,8 +7,12 @@ export default class Picker extends Component {
   static propTypes = {
     portal: PropTypes.object,
     list: PropTypes.array, // [{key: '', value: ''}]
+
+    maskClassName: PropTypes.string,
+    maskStyle: PropTypes.object,
     className: PropTypes.string,
     style: PropTypes.object,
+
     slotClassName: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -106,9 +110,9 @@ export default class Picker extends Component {
     this.instance = instance;
   }
   render() {
-    const {className, style} = this.props;
+    const {maskClassName, maskStyle, className, style} = this.props;
     return createPortal(
-      <div className="mask picker-mask" ref={(el) => {this.$el = el}}>
+      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
         <div className={`picker${className ? ' ' + className : ''}`} style={style}>
           <div className="picker-header">
             <a className="picker-cancel">取消</a>
