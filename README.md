@@ -2694,21 +2694,35 @@ import InputWaiqin from 'seedsui-react/lib/InputWaiqin';
 
 this.state = {
   id: '',
-  value: ''
+  name: ''
 }
 
-onValiChange = (error, value, data) => {
-  if (data.op === 'input') {
-    this.setState({
-      verifyCode: value
-    })
-  }
+onChange = (value, option) => {
+  this.setState({
+    id: option.id,
+    name: value
+  })
 }
 
-<InputWaiqin chooseType="getCustomer" valueBindProp chooseParams={{tradeType: '1'}} onChange={this.onChange} value={this.state.value} valueForKey={this.state.id} placeholder="客户单择"/>
-<InputWaiqin chooseType="getCustomerMore" chooseParams={{tradeType: '1'}} placeholder="客户多择"/>
-<InputWaiqin chooseType="getContact" placeholder="全部员工"/>
-<InputWaiqin chooseType="getContact" chooseParams={{aclType: '0'}} placeholder="下属员工"/>
+<InputWaiqin
+  valueBindProp
+  chooseType="getCustomer"
+  chooseParams={{tradeType: '1'}}
+  onChange={this.onChange}
+  value={this.state.name}
+  valueForKey={this.state.id}
+  placeholder="客户单择"
+  riconClassName="shape-arrow-right sm"
+/>
+<InputWaiqin
+  valueBindProp
+  chooseType="getContact"
+  onChange={this.onChange}
+  value={this.state.name}
+  valueForKey={this.state.id}
+  placeholder="全部员工"
+  riconClassName="shape-arrow-right sm"
+/>
 ```
 [返回目录](#component)
 
