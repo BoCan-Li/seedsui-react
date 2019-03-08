@@ -724,6 +724,20 @@
 // InputText文本框控件
 @input-text-padding: @10px 0;
 @input-text-height: @22px;
+.setInputTextBox(){
+  .flex;
+  .flex-middle;
+  .flex-1;
+}
+.setInputText(){
+  &:extend(.appearance);
+  position: relative; // 为了解决ios输入时白屏的BUG
+  box-sizing:border-box;
+  min-height:@input-text-height;
+  line-height:@input-text-height;
+  padding:@input-text-padding;
+  text-align: left;
+}
 .setInputTextLicon(){
   margin-right: 4px;
 }
