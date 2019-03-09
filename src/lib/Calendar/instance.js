@@ -1,4 +1,4 @@
-// Calendar 日历 (require dateutil.js)
+// Calendar 日历 (require PrototypeDate.js)
 var Calendar = function (container, params) {
   /* --------------------
   Model
@@ -12,6 +12,8 @@ var Calendar = function (container, params) {
     duration: '300',
     dateHeight: '40',
     verticalDrag: true, // 是否允许垂直拖动
+
+    titleFormat: 'YYYY年MM月DD日 周E 第W周', // 格式化标题
     showTitleWeek: false, // 是否显示周数
     showTitleDay: false, // 是否显示周几
     // DOM
@@ -380,21 +382,44 @@ var Calendar = function (container, params) {
   var chinaWeek = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
   s.drawHeader = function () {
     var activeDate = s.activeDate
-    var activeDay = ''
-    if (s.params.showTitleDay) {
-      activeDay = '&nbsp&nbsp周' + chinaWeek[activeDate.getDay()]
-    }
-    var activeWeek = ''
-    if (s.params.showTitleWeek) {
-      activeWeek = '&nbsp&nbsp第' + activeDate.week() + '周'
-    }
-    // 注入头部数据
+    var titleFormatStr = s.params.titleFormat
+    // 年
     var year = activeDate.getFullYear()
+    if (titleFormatStr.indexOf('YYYY') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/YYYY/gim, year)
+    }
+    if (titleFormatStr.indexOf('YY') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/YY/gim, year.substring(2, 4))
+    }
+    // 月
     var month = (activeDate.getMonth() + 1)
-    month = month < 10 ? '0' + month : month
+    if (titleFormatStr.indexOf('MM') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/MM/gim, month < 10 ? '0' + month : month)
+    }
+    if (titleFormatStr.indexOf('M') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/M/gim, month)
+    }
+    // 日
     var date = activeDate.getDate()
-    date = date < 10 ? '0' + date : date
-    s.title.innerHTML = year + '-' + month + '-' + date + activeDay + activeWeek
+    if (titleFormatStr.indexOf('DD') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/DD/gim, date < 10 ? '0' + date : date)
+    }
+    if (titleFormatStr.indexOf('D') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/D/gim, date)
+    }
+    // 周几
+    if (titleFormatStr.indexOf('E') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/E/gim, chinaWeek[activeDate.getDay()])
+    }
+    // 周数
+    var week = activeDate.week()
+    if (titleFormatStr.indexOf('WW') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/WW/gim, week < 10 ? '0' + week : week)
+    }
+    if (titleFormatStr.indexOf('W') !== -1) {
+      titleFormatStr = titleFormatStr.replace(/W/gim, week)
+    }
+    s.title.innerHTML = titleFormatStr
   }
   s.draw = function (vertical) { // vertical:上下拖动(-1上 | 1下 | 其它为非上下拖动)
     // 更新选中日期

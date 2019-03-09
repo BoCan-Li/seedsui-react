@@ -5,8 +5,7 @@ import Instance from './instance.js';
 export default class Calendar extends Component {
   static propTypes = {
     type: PropTypes.string, // week|month
-    showTitleDay: PropTypes.bool, // 是否显示周几
-    showTitleWeek: PropTypes.bool, // 是否显示周数
+    titleFormat: PropTypes.string, // 标题日期格式化 YYYY年MM月DD日 周E 第W周
     disableBeforeDate: PropTypes.object, // 禁用之前日期
     disableAfterDate: PropTypes.object, // 禁用之后日期
     verticalDrag: PropTypes.bool, // 是否允许垂直拖动
@@ -14,12 +13,12 @@ export default class Calendar extends Component {
     prevHTML: PropTypes.string, // 左箭头
     nextHTML: PropTypes.string, // 右箭头
     onChange: PropTypes.func,
+    onClick: PropTypes.func,
     onError: PropTypes.func
   }
   static defaultProps = {
     type: 'month',
-    showTitleDay: true,
-    showTitleWeek: false,
+    titleFormat: 'YYYY年MM月DD日',
     verticalDrag: true,
     defaultDate: new Date(),
     prevHTML: '&lt',
@@ -30,11 +29,11 @@ export default class Calendar extends Component {
   }
   componentDidMount () {
     if (this.instance) return
-    const {type, showTitleDay, showTitleWeek, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onError} = this.props;
+    const {type, titleFormat, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onClick, onError} = this.props;
     var instance = new Instance(this.$el, {
       viewType: type,
-      showTitleDay: showTitleDay,
-      showTitleWeek: showTitleWeek,
+      titleFormat: titleFormat,
+
       disableBeforeDate: disableBeforeDate,
       disableAfterDate: disableAfterDate,
       verticalDrag: verticalDrag,
@@ -42,6 +41,7 @@ export default class Calendar extends Component {
       prevHTML: prevHTML,
       nextHTML: nextHTML,
       onChange: onChange,
+      onClick: onClick,
       onError: onError
     });
     this.instance = instance;

@@ -532,7 +532,7 @@ window.Date.prototype.getMonthData = function () { // 获得本月日历, 返回
     if (i === 0) data[0].setTime(startDayMs)
     else data[i].setTime(data[i - 1].getTime() + this.dayMilliSecond)
 
-    // 设置当年标识isCurrent
+    // 设置当月标识isCurrent
     data[i].isCurrent = false
     if (data[i].month() === this.month()) data[i].isCurrent = true
   }
@@ -551,11 +551,11 @@ window.Date.prototype.getNextMonthData = function () { // 获得下月日历
 window.Date.prototype.getCalendarData = function () { // 获取三个月的日历数据
   var data = this.getPrevMonthData().concat(this.getMonthData()).concat(this.getNextMonthData())
   // 设置选中项与选中行
-  // 当前日期+当月第一天的周几=选中位置(由于索引是从0开始的,所以在后面要再减掉1)
+  // 今天选中位置: 当前日期(例如3.9 => 9) + 当月第一天的周几(例如3.1,周5 => 5) = 选中位置(例如14)
   var activeIndex =  this.getDate() + new Date(this).firstMonthDate().getDay()
-  // 用Math.floor(位置/7)获取行数
-  data.activeRowIndex = Math.floor(activeIndex/7)
-  // 上个月日历42天+当月位置=当前位置
+  // 今天所在行数: 选中位置(例如14) / 一周7天(例如7) = 所在行数(例如1), 由于索引从0开始的, 所以返回1行
+  data.activeRowIndex = Math.ceil(activeIndex / 7) - 1
+  // 三个月中的位置: 当月选中位置(例如14) + 上个月日历42天(例如41, 由于索引是从0开始的, 所以加上41而不是42) + = 三个月中的位置(例如55)
   data.activeIndex = activeIndex + 41
   return data
 }
