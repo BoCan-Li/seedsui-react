@@ -20,7 +20,6 @@ export default class Calendar extends Component {
     type: 'month',
     titleFormat: 'YYYY年MM月DD日',
     verticalDrag: true,
-    defaultDate: new Date(),
     prevHTML: '&lt',
     nextHTML: '&gt',
   }

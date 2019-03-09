@@ -65,7 +65,6 @@ var Calendar = function (container, params) {
   var s = this
   s.params = params
   s.params.wrapperHeight = s.params.dateHeight * 6
-  if (!s.params.defaultDate) s.params.defaultDate = new Date()
   // 禁止修改默认值
   Object.defineProperty(s.params, 'defaultDate', {
     enumerable: true,
@@ -76,9 +75,9 @@ var Calendar = function (container, params) {
   // 今天
   s.today = new Date()
   // 激活天
-  s.activeDate = new Date(s.params.defaultDate)
+  s.activeDate = new Date(s.params.defaultDate || null)
   // 选中天
-  s.selectedDate = new Date(s.params.defaultDate)
+  s.selectedDate = new Date(s.params.defaultDate || null)
   // Container
   s.container = typeof container === 'string' ? document.querySelector(container) : container
   if (!s.container) {
@@ -498,11 +497,15 @@ var Calendar = function (container, params) {
   s.showWeek = function () {
     s.slideYTo(-1)
   }
-  s.showToday = function () {
+  s.setToday = function () {
     s.activeDate.setTime(s.today.getTime())
     s.draw()
   }
-  s.reset = function () {
+  s.setDefaultDate = function () {
+    if (!s.params.defaultDate) {
+      console.log('SeedsUI Warn: 没有设置defaultDate默认时间')
+      return
+    }
     // 选中日期
     s.activeDate.setTime(s.params.defaultDate.getTime())
     // 重新绘制

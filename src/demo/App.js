@@ -27,12 +27,14 @@ export default class App extends Component {
     this.$calendar.instance.showWeek();
   }
   showToday = () => {
-    this.$calendar.instance.showToday();
+    this.$calendar.instance.setToday();
   }
-  reset = () => {
-    this.$calendar.instance.reset();
+  showReset = () => {
+    this.$calendar.instance.setDefaultDate();
   }
   render() {
+    const defaultDate = new Date()
+    defaultDate.nextMonth();
     return <Page>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
@@ -45,6 +47,7 @@ export default class App extends Component {
           disableBeforeDate={new Date()}
           onChange={this.onChangeCalendar}
           onClick={this.onClickCalendar}
+          defaultDate={defaultDate}
         />
         <a style={{margin: '8px'}} className="button lg bg-1" onClick={this.showMonth}>月</a>
         <a style={{margin: '8px'}} className="button lg bg-2" onClick={this.showWeek}>周</a>

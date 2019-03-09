@@ -847,8 +847,7 @@ import Button from 'seedsui-react/lib/Button';
 ```javascript
 <Calendar
   type={日历类型 string, 默认'month'} // week|month
-  showTitleDay={是否显示周几 bool, 默认true}
-  showTitleWeek={是否显示周数 bool, 默认false}
+  titleFormat={是否显示周数 string, 默认'YYYY年MM月DD日'} // 标题日期格式化 YYYY年MM月DD日 周E 第W周
   disableBeforeDate={禁用此前日期 date, 默认无}
   disableAfterDate={禁用此后日期 date, 默认无}
   verticalDrag={是否允许垂直拖动 bool, 默认true}
@@ -866,11 +865,11 @@ import Calendar from 'seedsui-react/lib/Calendar';
 
 onChangeCalendar = (s) => {
   // 记录滑动后切换的日期
-  console.log('滑动选中:' + s.activeDate.format('yyyy-MM-dd'))
+  console.log('滑动选中:' + s.activeDate.format('YYYY-MM-DD'))
 }
 onClickCalendar = (s) => {
   // 记录点击的选中日期, 用于滑动不切换日期用
-  console.log('点击选中:' + s.selectedDate.format('yyyy-MM-dd'))
+  console.log('点击选中:' + s.selectedDate.format('YYYY-MM-DD'))
 }
 showMonth = () => {
   this.$calendar.instance.showMonth();
@@ -879,18 +878,22 @@ showWeek = () => {
   this.$calendar.instance.showWeek();
 }
 showToday = () => {
-  this.$calendar.instance.showToday();
+  this.$calendar.instance.setToday();
 }
-reset = () => {
-  this.$calendar.instance.reset();
+showReset = () => {
+  this.$calendar.instance.setDefaultDate();
 }
 
+const defaultDate = new Date()
+defaultDate.nextMonth();
 <Calendar
   ref={el => {this.$calendar = el;}}
   type="week"
   titleFormat="YYYY年MM月DD日 周E 第W周"
+  disableBeforeDate={new Date()}
   onChange={this.onChangeCalendar}
   onClick={this.onClickCalendar}
+  defaultDate={defaultDate}
 />
 <a style={{margin: '8px'}} className="button lg bg-1" onClick={this.showMonth}>月</a>
 <a style={{margin: '8px'}} className="button lg bg-2" onClick={this.showWeek}>周</a>
