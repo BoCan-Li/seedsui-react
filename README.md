@@ -888,7 +888,7 @@ reset = () => {
 <Calendar
   ref={el => {this.$calendar = el;}}
   type="week"
-  titleFormat="YYYY年MM月DD日"
+  titleFormat="YYYY年MM月DD日 周E 第W周"
   onChange={this.onChangeCalendar}
   onClick={this.onClickCalendar}
 />

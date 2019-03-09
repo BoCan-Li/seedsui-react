@@ -481,9 +481,9 @@ window.Date.prototype.expires = function (expires) {
 /*
   * 格式化
   * */
-// 格式化日期,参数:yyyy-MM-dd hh:mm:ss WW EE
+// 格式化日期,参数:YYYY-MM-DD hh:mm:ss WW EE
 window.Date.prototype.format = function (fmtModel) {
-  var fmt = typeof fmtModel === 'string' ? fmtModel : 'yyyy-MM-dd hh:mm:ss'
+  var fmt = typeof fmtModel === 'string' ? fmtModel : 'YYYY-MM-DD hh:mm:ss'
   var year = this.getFullYear()
   var month = this.getMonth() + 1
   var date = this.getDate()
@@ -495,18 +495,18 @@ window.Date.prototype.format = function (fmtModel) {
 
   var dateJson = {
     'M+': month,
-    'd+': date,
+    'D+': date,
     'h+': hour,
     'm+': minute,
     's+': second,
     'W+': weeksCount,
     'E+': week
   }
-  if (/(y+)/.test(fmt)) { // 匹配年
+  if (/(Y+)/.test(fmt)) { // 匹配年
     fmt = fmt.replace(RegExp.$1, (year + '').substr(4 - RegExp.$1.length))
   }
   for (var k in dateJson) { // 逐个匹配
-    // '('+ k +')'=(M+)、(d+)、(h+)...
+    // '('+ k +')'=(M+)、(D+)、(h+)...
     if (new RegExp('(' + k + ')').test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (dateJson[k]) : (('00' + dateJson[k]).substr(('' + dateJson[k]).length)))
     }

@@ -14,11 +14,11 @@ export default class App extends Component {
   }
   onChangeCalendar = (s) => {
     // 记录滑动后切换的日期
-    console.log('滑动选中:' + s.activeDate.format('yyyy-MM-dd'))
+    console.log('滑动选中:' + s.activeDate.format('YYYY-MM-DD'))
   }
   onClickCalendar = (s) => {
     // 记录点击的选中日期, 用于滑动不切换日期用
-    console.log('点击选中:' + s.selectedDate.format('yyyy-MM-dd'))
+    console.log('点击选中:' + s.selectedDate.format('YYYY-MM-DD'))
   }
   showMonth = () => {
     this.$calendar.instance.showMonth();
@@ -41,7 +41,7 @@ export default class App extends Component {
         <Calendar
           ref={el => {this.$calendar = el;}}
           type="week"
-          titleFormat="YYYY年MM月DD日"
+          titleFormat="YYYY年MM月DD日 周E 第W周"
           disableBeforeDate={new Date()}
           onChange={this.onChangeCalendar}
           onClick={this.onClickCalendar}
