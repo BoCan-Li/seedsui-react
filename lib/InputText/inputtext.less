@@ -1,8 +1,6 @@
 // inputtext.less(start)
 .input-text-box{
-  .flex;
-  .flex-middle;
-  &:extend(.flex-1);
+  .setInputTextBox();
   .licon{
     .setInputTextLicon();
   }
@@ -11,16 +9,10 @@
   }
   .input-text,.input-textarea,.input-pre-box,.input-area{
     display: block;
-    &:extend(.flex-1);
+    .flex-1;
   }
 }
 .input-text{
-  &:extend(.appearance);
-  position: relative; // 为了解决ios输入时白屏的BUG
-  box-sizing:border-box;
-  min-height:@input-text-height;
-  line-height:@input-text-height;
-  padding:@input-text-padding;
-  text-align: left;
+  .setInputText();
 }
 // inputtext.less(end)
