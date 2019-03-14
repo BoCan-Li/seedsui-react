@@ -3060,6 +3060,13 @@ const data = [
 play = () => {
   this.$lotterywheel.instance.play(3);
 }
+onReset = () => {
+  this.$lotterywheel.instance.reset();
+  setTimeout(() => {
+    this.$lotterywheel.instance.play(2);
+  }, 10)
+}
+
 const containerWidth = Device.screenWidth;
 const wrapperWidth = containerWidth * 0.85;
 

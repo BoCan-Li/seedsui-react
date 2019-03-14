@@ -30,6 +30,12 @@ export default class App extends Component {
   play = () => {
     this.$lotterywheel.instance.play(3);
   }
+  onReset = () => {
+    this.$lotterywheel.instance.reset();
+    setTimeout(() => {
+      this.$lotterywheel.instance.play(2);
+    }, 10)
+  }
   render() {
     const containerWidth = Device.screenWidth;
     const wrapperWidth = containerWidth * 0.85;
@@ -43,6 +49,7 @@ export default class App extends Component {
           <img className="lotterywheel-border" src={imgBorder} alt=""/>
           <img className="lotterywheel-pointer" src={imgPointer} alt="" onClick={this.play}/>
         </div>
+        <input type="button" value="复位" onClick={this.onReset}/>
       </Container>
     </Page>
   }

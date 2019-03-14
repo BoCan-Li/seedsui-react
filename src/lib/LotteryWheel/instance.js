@@ -46,7 +46,7 @@ var LotteryWheel = function (container, params) {
   s.wrapper = null
   s.createWrapper = function () {
     s.wrapper = document.createElement('div')
-    s.wrapper.setAttribute('class', s.params.wrapperClass)
+    s.wrapper.setAttribute('class', s.params.wrapperClass + ' animated')
     s.wrapper.style.width = s.width + 'px'
     s.wrapper.style.height = s.height + 'px'
     s.canvas.parentNode.replaceChild(s.wrapper, s.canvas)
@@ -205,12 +205,18 @@ var LotteryWheel = function (container, params) {
       s.drawCanvas(s.params.data[i], i)
     }
   }
+  // 复位
+  s.reset = function () {
+    s.wrapper.classList.remove('animated')
+    s.wrapper.style.WebkitTransform = 'rotate(0deg)'
+  }
   // 转动转盘
   s.play = function (count) {
     if (!s.params.data || !s.params.data.length) return
     var baseRotate = 2160 // 转6圈, 4秒
     var rotate = count * (360 / s.params.data.length)
 
+    s.wrapper.classList.add('animated')
     s.wrapper.style.WebkitTransform = 'rotate(' + (baseRotate - rotate) + 'deg)'
   }
   // 主函数
