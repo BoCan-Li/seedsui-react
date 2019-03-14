@@ -137,6 +137,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [List](#list) 列表
 - [ListPull](#listpull) 可推动列表
 - [Loading](#loading) 加载中
+- [LotteryWheel](#lotterywheel) 奖品轮播
 - [Mark](#mark) 标记
 - [Marquee](#marquee) 跑马灯
 - [MenuTiled](#menutiled) 平铺弹出菜单
@@ -2010,6 +2011,8 @@ onChangeData2 = () => {
 
 
 
+
+
 ## ImgLazy
 [懒人加载](https://unpkg.com/seedsui-react/src/lib/ImgLazy/ImgLazy.js)
 , 主要为了解决图片过多, 造成网络阻塞的问题, 一般采用的是滚动加载, 并在页面加载完成后, 执行滚动加载方法load()
@@ -2954,6 +2957,11 @@ onClickListPull = (item, index, btn) => {
 [返回目录](#component)
 
 
+
+
+
+
+
 ## Loading
 [加载中](https://unpkg.com/seedsui-react/src/lib/Loading/Loading.js)
 ### 属性
@@ -2980,6 +2988,96 @@ import Loading from 'seedsui-react/lib/Loading';
 <Loading maskStyle={{top: '44px'}}/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## LotteryWheel
+[签名](https://unpkg.com/seedsui-react/src/lib/LotteryWheel/LotteryWheel.js)
+### 属性
+```javascript
+<LotteryWheel
+  // 数据源
+  data={转盘数据 array, 默认无} // [{text: '', icon: '', font: '', fontTop...同数据默认值}]
+  // 数据默认值
+  fontFamily={文字名称 string, 默认'Arial'}
+  fontSize={文字大小 number, 默认13}
+  fontTop={文字头部距离 number, 默认28}
+  fontFillStyle={文字填充样式 string, 默认'#ef694f'}
+
+  bgFillStyle={背景填充样式 string, 默认'#ffdf7d'}
+  bgStrokeStyle={背景边框样式 string, 默认'#fa8b6e'}
+  bgLineWidth={背景边框宽度 number, 默认1}
+
+  iconWidth={图标宽度 number, 默认42}
+  iconHeight={图标高度 number, 默认42}
+  iconTop={图标头部距离 number, 默认42}
+  // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
+  width={转盘宽度 number, 默认300}
+  height={转盘高度 number, 默认300}
+  style={转盘style object, 默认无}
+  className={转盘className string, 默认无}
+  // 间隔
+  spacing={转盘绘制的间距 number, 默认10}
+  // 保存
+  suffix={图片保存类型 string, 默认'image/png'}
+  quality={图片保存质量 number, 默认0.92}
+/>
+```
+### 示例
+```javascript
+import LotteryWheel from 'seedsui-react/lib/LotteryWheel';
+import Device from '../lib/Device';
+import imgGold from './wheel/gold.png';
+import imgGift from './wheel/gift.png';
+import imgBorder from './wheel/border.png';
+import imgPointer from './wheel/pointer.png';
+
+
+const data = [
+  {bgFillStyle: '#ffcd76', text: '大奖', icon: imgGift},
+  {text: '100积分', icon: imgGold},
+  {bgFillStyle: '#ffcd76', text: '200积分', icon: imgGold},
+  {text: '300积分', icon: imgGold},
+  {bgFillStyle: '#ffcd76', text: '400积分', icon: imgGold},
+  {text: '500积分', icon: imgGold},
+  {bgFillStyle: '#ffcd76', text: '600积分', icon: imgGold},
+  {text: '700积分', icon: imgGold}
+];
+
+play = () => {
+  this.$lotterywheel.instance.play(3);
+}
+const containerWidth = Device.screenWidth;
+const wrapperWidth = containerWidth * 0.85;
+
+<div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px'}}>
+  <LotteryWheel ref={(el) => {this.$lotterywheel = el;}} width={wrapperWidth} height={wrapperWidth} data={data}/>
+  <img className="lotterywheel-border" src={imgBorder} alt=""/>
+  <img className="lotterywheel-pointer" src={imgPointer} alt="" onClick={this.play}/>
+</div>
+```
+[返回目录](#component)
+
+
+
+
+
+
+
+
 
 
 
