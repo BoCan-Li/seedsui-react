@@ -486,75 +486,75 @@ window.Date.prototype.format = function (formatStr) {
   // 年
   var year = this.getFullYear()
   if (formatStr.indexOf('YYYY') !== -1) {
-    formatStr = formatStr.replace(/YYYY/gim, year)
+    formatStr = formatStr.replace(/YYYY/gm, year)
   }
   if (formatStr.indexOf('YY') !== -1) {
-    formatStr = formatStr.replace(/YY/gim, year.substring(2, 4))
+    formatStr = formatStr.replace(/YY/gm, year.substring(2, 4))
   }
   // 月
   var month = (this.getMonth() + 1)
   if (formatStr.indexOf('MM') !== -1) {
-    formatStr = formatStr.replace(/MM/gim, month < 10 ? '0' + month : month)
+    formatStr = formatStr.replace(/MM/gm, month < 10 ? '0' + month : month)
   }
   if (formatStr.indexOf('M') !== -1) {
-    formatStr = formatStr.replace(/M/gim, month)
+    formatStr = formatStr.replace(/M/gm, month)
   }
   // 日
   var date = this.getDate()
   if (formatStr.indexOf('DD') !== -1) {
-    formatStr = formatStr.replace(/DD/gim, date < 10 ? '0' + date : date)
+    formatStr = formatStr.replace(/DD/gm, date < 10 ? '0' + date : date)
   }
   if (formatStr.indexOf('D') !== -1) {
-    formatStr = formatStr.replace(/D/gim, date)
+    formatStr = formatStr.replace(/D/gm, date)
   }
 
   // 季度
   var quarter = Math.ceil((this.getMonth() + 1) / 3)
   if (formatStr.indexOf('Q') !== -1) {
-    formatStr = formatStr.replace(/Q/gim, quarter)
+    formatStr = formatStr.replace(/Q/gm, quarter)
   }
 
   // 周数
   var week = this.week()
   if (formatStr.indexOf('WW') !== -1) {
-    formatStr = formatStr.replace(/WW/gim, week < 10 ? '0' + week : week)
+    formatStr = formatStr.replace(/WW/gm, week < 10 ? '0' + week : week)
   }
   if (formatStr.indexOf('W') !== -1) {
-    formatStr = formatStr.replace(/W/gim, week)
+    formatStr = formatStr.replace(/W/gm, week)
   }
   // 周几
   var chinaWeek = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
   var day = this.getDay()
   if (formatStr.indexOf('EE') !== -1) {
-    formatStr = formatStr.replace(/EE/gim, chinaWeek[day])
+    formatStr = formatStr.replace(/EE/gm, chinaWeek[day])
   }
   if (formatStr.indexOf('E') !== -1) {
-    formatStr = formatStr.replace(/E/gim, day)
+    formatStr = formatStr.replace(/E/gm, day)
   }
   
   // 小时
   var hour = this.getHours()
   if (formatStr.indexOf('hh') !== -1) {
-    formatStr = formatStr.replace(/hh/gim, hour < 10 ? '0' + hour : hour)
+    formatStr = formatStr.replace(/hh/gm, hour < 10 ? '0' + hour : hour)
   }
   if (formatStr.indexOf('h') !== -1) {
-    formatStr = formatStr.replace(/h/gim, hour)
+    formatStr = formatStr.replace(/h/gm, hour)
   }
   // 分钟
   var minute = this.getMinutes()
   if (formatStr.indexOf('mm') !== -1) {
-    formatStr = formatStr.replace(/mm/gim, minute < 10 ? '0' + minute : minute)
+    formatStr = formatStr.replace(/mm/gm, minute < 10 ? '0' + minute : minute)
   }
   if (formatStr.indexOf('m') !== -1) {
-    formatStr = formatStr.replace(/m/gim, minute)
+    formatStr = formatStr.replace(/m/gm, minute)
   }
   // 秒
   var second = this.getSeconds()
   if (formatStr.indexOf('ss') !== -1) {
-    formatStr = formatStr.replace(/ss/gim, second < 10 ? '0' + second : second)
+    formatStr = formatStr.replace(/ss/gm, second < 10 ? '0' + second : second)
   }
   if (formatStr.indexOf('s') !== -1) {
-    formatStr = formatStr.replace(/s/gim, second)
+    formatStr = formatStr.replace(/s/gm, second)
   }
   return formatStr
 }

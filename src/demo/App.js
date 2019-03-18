@@ -11,6 +11,7 @@ export default class App extends Component {
     super(props);
   }
   componentDidMount() {
+    console.log(new Date().format('YYYY-MM-DD 第Q季 第WW周 周EE hh:mm:ss'))
   }
   onChangeCalendar = (s) => {
     // 记录滑动后切换的日期
