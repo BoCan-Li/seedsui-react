@@ -887,10 +887,11 @@ showReset = () => {
 
 const defaultDate = new Date()
 defaultDate.nextMonth();
+
 <Calendar
   ref={el => {this.$calendar = el;}}
   type="week"
-  titleFormat="YYYY年MM月DD日 周E 第W周"
+  titleFormat="YYYY年MM月DD日 周EE 第W周"
   disableBeforeDate={new Date()}
   onChange={this.onChangeCalendar}
   onClick={this.onClickCalendar}

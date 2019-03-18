@@ -998,6 +998,44 @@
 
 
 
+
+
+// Lotterywheel
+.setLotterywheelContainer() {
+	position: relative;
+	width: 300px;
+	height: 300px;
+	overflow: hidden;
+}
+.setLotterywheelBorder() {
+	position: absolute;
+	width: 100%;
+}
+.setLotterywheelWrapper() {
+	position: absolute;
+	top: 7.5%;
+  left: 7.5%;
+  &.animated{
+    transition: all 4000ms ease-out;
+  }
+}
+.setLotterywheelPointer() {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+  width: 90px;
+  margin-top: -54px;
+	margin-left: -45px;
+	z-index: 2;
+}
+
+
+
+
+
+
+
+
 // Mask遮罩
 .setMask(){
   visibility:hidden;
@@ -1973,7 +2011,7 @@
 @picker-header-bg:#fff;
 @picker-selected-bg:#F5F5F9;
 .setPickerMask(){
-  z-index: 100;
+  z-index: 10;
 }
 .setPicker(){
   position:absolute;

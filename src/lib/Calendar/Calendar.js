@@ -18,7 +18,6 @@ export default class Calendar extends Component {
   }
   static defaultProps = {
     type: 'month',
-    titleFormat: 'YYYY年MM月DD日',
     verticalDrag: true,
     prevHTML: '&lt',
     nextHTML: '&gt',

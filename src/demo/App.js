@@ -3,23 +3,8 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
-import LotteryWheel from '../lib/LotteryWheel';
-import Device from '../lib/Device';
-import imgGold from './wheel/gold.png';
-import imgGift from './wheel/gift.png';
-import imgBorder from './wheel/border.png';
-import imgPointer from './wheel/pointer.png';
+import Calendar from '../lib/Calendar';
 
-const data = [
-  {bgFillStyle: '#ffcd76', text: '大奖', icon: imgGift},
-  {text: '100积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '200积分', icon: imgGold},
-  {text: '300积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '400积分', icon: imgGold},
-  {text: '500积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '600积分', icon: imgGold},
-  {text: '700积分', icon: imgGold}
-];
 
 export default class App extends Component {
   constructor(props) {
@@ -27,29 +12,47 @@ export default class App extends Component {
   }
   componentDidMount() {
   }
-  play = () => {
-    this.$lotterywheel.instance.play(3);
+  onChangeCalendar = (s) => {
+    // 记录滑动后切换的日期
+    console.log('滑动选中:' + s.activeDate.format('YYYY-MM-DD'))
   }
-  onReset = () => {
-    this.$lotterywheel.instance.reset();
-    setTimeout(() => {
-      this.$lotterywheel.instance.play(2);
-    }, 10)
+  onClickCalendar = (s) => {
+    // 记录点击的选中日期, 用于滑动不切换日期用
+    console.log('点击选中:' + s.selectedDate.format('YYYY-MM-DD'))
+  }
+  showMonth = () => {
+    this.$calendar.instance.showMonth();
+  }
+  showWeek = () => {
+    this.$calendar.instance.showWeek();
+  }
+  showToday = () => {
+    this.$calendar.instance.setToday();
+  }
+  showReset = () => {
+    this.$calendar.instance.setDefaultDate();
   }
   render() {
-    const containerWidth = Device.screenWidth;
-    const wrapperWidth = containerWidth * 0.85;
+    const defaultDate = new Date()
+    defaultDate.nextMonth();
     return <Page>
       <Header>
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px'}}>
-          <LotteryWheel ref={(el) => {this.$lotterywheel = el;}} width={wrapperWidth} height={wrapperWidth} data={data}/>
-          <img className="lotterywheel-border" src={imgBorder} alt=""/>
-          <img className="lotterywheel-pointer" src={imgPointer} alt="" onClick={this.play}/>
-        </div>
-        <input type="button" value="复位" onClick={this.onReset}/>
+        <Calendar
+          ref={el => {this.$calendar = el;}}
+          type="week"
+          titleFormat="YYYY年MM月DD日"
+          disableBeforeDate={new Date()}
+          onChange={this.onChangeCalendar}
+          onClick={this.onClickCalendar}
+          defaultDate={defaultDate}
+        />
+        <a style={{margin: '8px'}} className="button lg bg-1" onClick={this.showMonth}>月</a>
+        <a style={{margin: '8px'}} className="button lg bg-2" onClick={this.showWeek}>周</a>
+        <a style={{margin: '8px'}} className="button lg bg-3" onClick={this.showToday}>今天</a>
+        <a style={{margin: '8px'}} className="button lg bg-4" onClick={this.showReset}>重置</a>
       </Container>
     </Page>
   }
