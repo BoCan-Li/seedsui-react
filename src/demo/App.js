@@ -3,7 +3,7 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
-import Calendar from '../lib/Calendar';
+import InputWaiqin from '../lib/InputWaiqin';
 
 
 export default class App extends Component {
@@ -11,27 +11,7 @@ export default class App extends Component {
     super(props);
   }
   componentDidMount() {
-    console.log(new Date().format('YYYY-MM-DD 第Q季 第WW周 周EE hh:mm:ss'))
-  }
-  onChangeCalendar = (s) => {
-    // 记录滑动后切换的日期
-    console.log('滑动选中:' + s.activeDate.format('YYYY-MM-DD'))
-  }
-  onClickCalendar = (s) => {
-    // 记录点击的选中日期, 用于滑动不切换日期用
-    console.log('点击选中:' + s.selectedDate.format('YYYY-MM-DD'))
-  }
-  showMonth = () => {
-    this.$calendar.instance.showMonth();
-  }
-  showWeek = () => {
-    this.$calendar.instance.showWeek();
-  }
-  showToday = () => {
-    this.$calendar.instance.setToday();
-  }
-  showReset = () => {
-    this.$calendar.instance.setDefaultDate();
+    console.log(new Date().format('YYYY') + 'Q' + new Date().format('Q'))
   }
   render() {
     const defaultDate = new Date()
@@ -41,19 +21,7 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <Calendar
-          ref={el => {this.$calendar = el;}}
-          type="week"
-          titleFormat="YYYY年MM月DD日"
-          disableBeforeDate={new Date()}
-          onChange={this.onChangeCalendar}
-          onClick={this.onClickCalendar}
-          defaultDate={defaultDate}
-        />
-        <a style={{margin: '8px'}} className="button lg bg-1" onClick={this.showMonth}>月</a>
-        <a style={{margin: '8px'}} className="button lg bg-2" onClick={this.showWeek}>周</a>
-        <a style={{margin: '8px'}} className="button lg bg-3" onClick={this.showToday}>今天</a>
-        <a style={{margin: '8px'}} className="button lg bg-4" onClick={this.showReset}>重置</a>
+        <InputWaiqin chooseType="getCustomer" chooseParams={{tradeType: '2'}} className="border-b" valueBindProp placeholder="请选择" riconClassName="shape-arrow-right sm" style={{paddingRight: '10px'}}/>
       </Container>
     </Page>
   }

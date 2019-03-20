@@ -3041,21 +3041,17 @@ import Loading from 'seedsui-react/lib/Loading';
 ```javascript
 import LotteryWheel from 'seedsui-react/lib/LotteryWheel';
 import Device from '../lib/Device';
-import imgGold from './wheel/gold.png';
-import imgGift from './wheel/gift.png';
-import imgBorder from './wheel/border.png';
-import imgPointer from './wheel/pointer.png';
 
 
 const data = [
-  {bgFillStyle: '#ffcd76', text: '大奖', icon: imgGift},
-  {text: '100积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '200积分', icon: imgGold},
-  {text: '300积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '400积分', icon: imgGold},
-  {text: '500积分', icon: imgGold},
-  {bgFillStyle: '#ffcd76', text: '600积分', icon: imgGold},
-  {text: '700积分', icon: imgGold}
+  {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
+  {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+  {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
 ];
 
 play = () => {
@@ -3073,8 +3069,8 @@ const wrapperWidth = containerWidth * 0.85;
 
 <div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px'}}>
   <LotteryWheel ref={(el) => {this.$lotterywheel = el;}} width={wrapperWidth} height={wrapperWidth} data={data}/>
-  <img className="lotterywheel-border" src={imgBorder} alt=""/>
-  <img className="lotterywheel-pointer" src={imgPointer} alt="" onClick={this.play}/>
+  <img className="lotterywheel-border" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/border.png'} alt=""/>
+  <img className="lotterywheel-pointer" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/pointer.png'} alt="" onClick={this.play}/>
 </div>
 ```
 [返回目录](#component)
