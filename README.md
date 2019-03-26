@@ -2657,29 +2657,7 @@ onChangeText = (value, args) => {
 ```
 
 
-## InputVerify
-[验证码文本框](https://unpkg.com/seedsui-react/src/lib/InputVerify/InputVerify.js)
-, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
-### 属性
-```javascript
-<InputVerify
-  sentCaption={发送验证码文字 string, 默认'发送验证码'}
-  sentDisabled={发送按钮是否禁用 bool, 默认无}
-  onClickSent={值改变 func(), 默认无}
-/>
-```
-### 示例
-```javascript
-import InputVerify from 'seedsui-react/lib/InputVerify';
 
-onChangeVali = (value, args) => {
-  console.log(value, args);
-}
-onClickSent = () => {
-  console.log('发送验证码');
-}
-<InputVerify clear onChange={this.onChangeVali} value={verifycode} placeholder="验证码" maxLength="6" onClickSent={this.onClickSent}/>
-```
 
 
 
@@ -4961,55 +4939,7 @@ onSubmit = () => {
 
 
 
-## Verify
-[验证码文本框](https://unpkg.com/seedsui-react/src/lib/Verify/Verify.js)
-, InputVerify组件的包装组件, 支持真实的发送验证码功能, 其它属性用法与[InputText 文本框](#inputtext) 组件一致
-### 属性
-```javascript
-<Verify
-  autoSent={是否自动发送 bool, 默认无}
-  url={请求url string, 默认'/login/sendLoginSmsVerifyCode.action'}
-  params={请求参数 object, 默认无}
-  syncData={值改变 func(
-      '错误信息',
-      'value',
-      {
-        result: object,
-        status: 'send_fail | send_ok | sent_ok | sent_fail',
-        op: 'click | input | timeover'
-      }
-    )
-  }
-  beforeSent={点击发送 func() => bool, 默认无} // 如果返回字符串,将弹出信息,并不发短信
-  sentDisabled={是否禁用发送验证码 bool, 默认无}
-  sentSecond={秒数 bool, 默认60}
-  sentCaption={发送按钮文字 bool, 默认'发送验证码'}
-  maxLength={长度限制 string | number, 默认6}
-  placeholder={占位符 string, 默认'验证码'}
-  {...others}
-/>
-```
-### 示例
-```javascript
-import Verify from 'seedsui-react/lib/Verify';
 
-const VerifyStyle = {
-  backgroundColor: 'white',
-  padding: '0 12px',
-  borderRadius: '4px'
-}
-
-onValiChange = (error, value, data) => {
-  if (data.op === 'input') {
-    this.setState({
-      verifyCode: value
-    })
-  }
-}
-
-<Verify url="/biz/esss/client/v1/statementofaccount/sendCarSaleSignPhoneNum.action" autoSent syncData={this.onValiChange} params={{mobile: ''}} className="bordered" style={VerifyStyle}/>
-```
-[返回目录](#component)
 
 
 
