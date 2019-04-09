@@ -1569,14 +1569,28 @@ import Group from 'seedsui-react/lib/Group';
 import Handsign from 'seedsui-react/lib/Handsign';
 
 save = () => {
-  const sign_pic = this.$handsign.instance.save();
-  if (!sign_pic) {
-    Bridge.showToast('请先签名!', {mask: false})
+  if (this.$handsign.instance.blank()) {
+    console.log('空白');
     return;
   }
+  if (!this.$handsign.instance.isDrew) {
+    console.log('没有画过');
+    return;
+  }
+  const sign_pic = this.$handsign.instance.save();
+  console.log(sign_pic);
+}
+clear = () => {
+  this.$handsign.instance.clear()
+}
+drawBg = () => {
+  this.$handsign.instance.drawBackgroundColor('#ff8800')
 }
 
-<Handsign ref={(el) => {this.$handsign = el;}} width={window.innerWidth} strokeStyle="#c72a1d" height={window.innerHeight - 88} style={{marginTop: '44px'}}/>
+<Handsign ref={(el) => {this.$handsign = el;}} width={300} strokeStyle="#c72a1d" height={300}/>
+<input type="button" value="绘制背景" onClick={this.drawBg}/>
+<input type="button" value="保存" onClick={this.save}/>
+<input type="button" value="清除" onClick={this.clear}/>
 ```
 [返回目录](#component)
 

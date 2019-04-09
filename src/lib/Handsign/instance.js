@@ -32,6 +32,8 @@ var Handsign = function (container, params) {
     endX: 0,
     endY: 0
   }
+  // 标识是否绘制过
+  s.isDrew = false
   /* ----------------------
   Model Method
   ---------------------- */
@@ -99,6 +101,8 @@ var Handsign = function (container, params) {
     s.path.endX = e.changedTouches[0].clientX - s.stageInfo.left
     s.path.endY = e.changedTouches[0].clientY - s.stageInfo.top
     s.ctx.stroke()
+    // 标识是否绘制过
+    s.isDrew = true
   }
   s.onTouchEnd = function (e) {
     s.container.removeEventListener('touchmove', s.preventDefault, false)
@@ -120,23 +124,20 @@ var Handsign = function (container, params) {
   // 清除签名
   s.clear = function () {
     s.ctx.clearRect(0, 0, s.width, s.height)
+    // 清除画过
+    s.isDrew = false
   }
-  // 是否画过
-  s.isDrew = function () {
+  // 是否空白
+  s.blank = function () {
     var blank = document.createElement('canvas')
     blank.width = s.container.width
     blank.height = s.container.height
-    if (s.container.toDataURL() === blank.toDataURL()) return false
-    return true
+    if (s.container.toDataURL() === blank.toDataURL()) return true
+    return false
   }
   // 保存签名
   s.save = function () {
-    // 如果已经画过了,则返回base64,如果没有画过,则返回空
-    if (s.isDrew()) {
-      return s.container.toDataURL(s.params.suffix, s.params.quality)
-    } else {
-      return ''
-    }
+    return s.container.toDataURL(s.params.suffix, s.params.quality)
   }
   // 计算top left bottom center的位置
   s.calcPosition = function (w, h, pos) {
@@ -233,6 +234,11 @@ var Handsign = function (container, params) {
     s.ctx.font = fontSize + 'px ' + fontFamily
     s.ctx.fillStyle = fontStyle
     s.ctx.fillText(text, pos.x, calcY)
+  }
+  // 绘制背景
+  s.drawBackgroundColor = function (fillStyle) {
+    s.ctx.fillStyle = fillStyle
+    s.ctx.fillRect(0, 0, s.width, s.height)
   }
   // 主函数
   s.init = function () {

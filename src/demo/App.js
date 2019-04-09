@@ -3,7 +3,7 @@ import Page from '../lib/Page';
 import Header from '../lib/Header';
 import Titlebar from '../lib/Titlebar';
 import Container from '../lib/Container';
-import InputWaiqin from '../lib/InputWaiqin';
+import Handsign from '../lib/Handsign';
 
 
 export default class App extends Component {
@@ -13,6 +13,24 @@ export default class App extends Component {
   componentDidMount() {
     console.log(new Date().format('YYYY') + 'Q' + new Date().format('Q'))
   }
+  save = () => {
+    if (!this.$handsign.instance.isDrew) {
+      console.log('没有画过');
+      return;
+    }
+    if (this.$handsign.instance.blank()) {
+      console.log('空白');
+      return;
+    }
+    const sign_pic = this.$handsign.instance.save();
+    console.log(sign_pic);
+  }
+  clear = () => {
+    this.$handsign.instance.clear()
+  }
+  drawBg = () => {
+    this.$handsign.instance.drawBackgroundColor('#ffffff')
+  }
   render() {
     const defaultDate = new Date()
     defaultDate.nextMonth();
@@ -21,7 +39,10 @@ export default class App extends Component {
         <Titlebar caption="SeedsUI" backIconStyle={{ borderColor: 'red' }} backCaption="返回" />
       </Header>
       <Container>
-        <InputWaiqin chooseType="getCustomer" chooseParams={{tradeType: '2'}} className="border-b" valueBindProp placeholder="请选择" riconClassName="shape-arrow-right sm" style={{paddingRight: '10px'}}/>
+        <Handsign suffix="image/jpeg" ref={(el) => {this.$handsign = el;}} width={300} strokeStyle="#c72a1d" height={300}/>
+        <input type="button" value="绘制背景" onClick={this.drawBg}/>
+        <input type="button" value="保存" onClick={this.save}/>
+        <input type="button" value="清除" onClick={this.clear}/>
       </Container>
     </Page>
   }
