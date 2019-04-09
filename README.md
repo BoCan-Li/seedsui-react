@@ -1557,6 +1557,7 @@ import Group from 'seedsui-react/lib/Group';
   strokeStyle={签名颜色 string, 默认'#000'}
   lineWidth={签名线粗px number, 默认3}
   quality={存储时的图片质量 number, 默认0.92}
+  suffix={图片保存类型 string, 默认'image/png'}
   width={宽度px number, 默认300} // 不能通过style设置宽度,否则canvas会错位
   height={高度px number, 默认300} // 不能通过style设置高度,否则canvas会错位
   style={签名面板style object, 默认无}
