@@ -186,13 +186,13 @@ var Handsign = function (container, params) {
     }
   }
   // 绘制图片
-  s.drawImg = function (imgSrc, opts) {
+  s.drawImg = function (imgSrc, opts = {}) {
     if (!imgSrc) {
       console.log('SeedsUI Error:手写签名drawImg缺少imgSrc')
       return
     }
-    var imgW = opts.width || 100
-    var imgH = opts.height || 100
+    var imgW = opts.width
+    var imgH = opts.height
     var imgP = opts.position || 'bottom right'
 
     var img = new Image()
@@ -212,7 +212,7 @@ var Handsign = function (container, params) {
     }
   }
   // 绘制文字
-  s.drawFont = function (text, opts) {
+  s.drawFont = function (text, opts = {}) {
     if (!text) {
       console.log('SeedsUI Error:手写签名drawFont缺少文字')
       return

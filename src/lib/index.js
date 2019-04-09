@@ -54,7 +54,6 @@ import InputSafe from './InputSafe'; // 不常用
 import InputSelect from './InputSelect';
 import InputStar from './InputStar';
 import InputText from './InputText';
-import InputVerify from './InputVerify';
 import InputWaiqin from './InputWaiqin'; // 不常用,外勤专用
 // import Jcrop from './Jcrop'; // 不常用,裁切功能,需要引入jcrop插件
 import Legend from './Legend';
@@ -95,7 +94,6 @@ import Timepart from './Timepart'; // 不常用
 import Titlebar from './Titlebar';
 import Toast from './Toast';
 import Tree from './Tree'; // 不常用
-import Verify from './Verify';
 import VideoUploader from './VideoUploader'; // 不常用
 import Weather from './Weather'; // 不常用
 
@@ -172,7 +170,6 @@ export {
   InputSelect,
   InputStar,
   InputText,
-  InputVerify,
   InputWaiqin, // 不常用,外勤专用
   // Jcrop, // 不常用,裁切功能,需要安装jcrop插件
   Legend, // 不常用
@@ -213,7 +210,6 @@ export {
   Titlebar,
   Toast,
   Tree,
-  Verify,
   VideoUploader, // 不常用
   Weather, // 不常用
 

@@ -7,6 +7,7 @@ export default class Handsign extends Component {
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
     quality: PropTypes.number,
+    suffix: PropTypes.string,
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
     width: PropTypes.number, // 宽度
     height: PropTypes.number, // 高度
@@ -34,6 +35,9 @@ export default class Handsign extends Component {
       if (prevProps.quality !== this.props.quality) {
         this.instance.setQuality(this.props.quality);
       }
+      if (prevProps.suffix !== this.props.suffix) {
+        this.instance.setSuffix(this.props.suffix);
+      }
     }
   }
   componentDidMount () {
@@ -41,7 +45,8 @@ export default class Handsign extends Component {
     var instance = new Instance(this.$el, {
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
-      quality: this.props.quality
+      quality: this.props.quality,
+      suffix: this.props.suffix
     });
     this.instance = instance;
   }
