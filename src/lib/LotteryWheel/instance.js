@@ -163,6 +163,7 @@ var LotteryWheel = function (container, params) {
   s.imgs = []
   s.initImgs = function () {
     if (!s.params.data || !s.params.data.length) return
+    s.imgs = []
     for (var i = 0; i < s.params.data.length; i++) {
       var item = s.params.data[i]
       var img = document.createElement('img')
@@ -200,7 +201,10 @@ var LotteryWheel = function (container, params) {
   // 绘制canvas
   s.draw = function () {
     if (!s.params.data || !s.params.data.length) return
+    s.reset()
     s.clear()
+    // 保存初始状态
+    s.ctx.save()
     for (var i = 0; i < s.params.data.length; i++) {
       s.drawCanvas(s.params.data[i], i)
     }
@@ -209,6 +213,8 @@ var LotteryWheel = function (container, params) {
   s.reset = function () {
     s.wrapper.classList.remove('animated')
     s.wrapper.style.WebkitTransform = 'rotate(0deg)'
+    // 还原初始状态
+    if (s.ctx) s.ctx.restore()
   }
   // 转动转盘
   s.play = function (count) {

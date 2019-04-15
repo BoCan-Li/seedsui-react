@@ -3036,32 +3036,52 @@ import LotteryWheel from 'seedsui-react/lib/LotteryWheel';
 import Device from '../lib/Device';
 
 
-const data = [
-  {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
-  {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-  {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
-];
+this.state = {
+  data: [
+    {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
+    {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+    {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
+  ]
+}
 
 play = () => {
-  this.$lotterywheel.instance.play(3);
-}
-onReset = () => {
   this.$lotterywheel.instance.reset();
   setTimeout(() => {
-    this.$lotterywheel.instance.play(2);
-  }, 10)
+    this.$lotterywheel.instance.play(3);
+  }, 10);
+  setTimeout(() => {
+    this.setState({
+      data: [
+        {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
+        {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
+      ]
+    })
+  }, 5000);
 }
 
-const containerWidth = Device.screenWidth;
+const containerWidth = Device.screenWidth - 40;
 const wrapperWidth = containerWidth * 0.85;
 
-<div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px'}}>
-  <LotteryWheel ref={(el) => {this.$lotterywheel = el;}} width={wrapperWidth} height={wrapperWidth} data={data}/>
+<div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px', overflow: 'hidden'}}>
+  <LotteryWheel
+    ref={(el) => {this.$lotterywheel = el;}}
+    width={wrapperWidth}
+    height={wrapperWidth}
+    iconWidth={containerWidth * 0.1}
+    iconHeight={containerWidth * 0.1}
+    data={this.state.data}
+  />
   <img className="lotterywheel-border" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/border.png'} alt=""/>
   <img className="lotterywheel-pointer" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/pointer.png'} alt="" onClick={this.play}/>
 </div>
@@ -3142,7 +3162,7 @@ const list = [
 
 ## MenuTiled
 [平铺弹出菜单](https://unpkg.com/seedsui-react/src/lib/MenuTiled/MenuTiled.js)
-, [Dropdown下拉菜单](#dropdown)组件的子组件
+, [MenuTiled下拉菜单](#menutiled)组件的子组件
 ### 属性
 ```javascript
 <MenuTiled

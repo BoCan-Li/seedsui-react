@@ -36,12 +36,10 @@ export default class LotteryWheel extends Component {
     super(props);
   }
   componentDidUpdate (prevProps) {
-    // if (this.instance) {
-    //   if (prevProps.data !== this.props.data) {
-    //     this.instance.data = this.props.data;
-    //     this.instance.init();
-    //   }
-    // }
+    if (JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)) {
+      this.instance.params.data = this.props.data;
+      this.instance.init();
+    }
   }
   componentDidMount () {
     if (this.instance) return;
