@@ -73,10 +73,10 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img, // 外勤客户端中,id就是name
+          name: img,
           src: imgMap[img].src,
           thumb: imgMap[img].base64,
           sourceType: imgMap[img].sourceType,
-          name: img,
           base64: imgMap[img].path
         });
       }
@@ -84,6 +84,7 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img,
+          name: img,
           src: 'LocalResource://imageid' + img,
           thumb: 'LocalResource://imageid' + img,
           sourceType: imgMap[img].sourceType
@@ -93,6 +94,7 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img,
+          name: img,
           src: img,
           thumb: img,
           sourceType: imgMap[img].sourceType,
