@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import BaiduMap from './BaiduMap';
+import BaiduMap from './../lib/BaiduMap';
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
 
@@ -35,11 +35,13 @@ class App extends Component {
     this.bmap = new BaiduMap('map');
     // 添加鼠标绘制工具监听事件，用于获取绘制结果
     if (this.bmap && this.bmap.drawingManager) {
+      this.bmap.showScale();
+      this.bmap.showNavigation();
       this.bmap.drawingManager.addEventListener('overlaycomplete', this.drawComplete);
       this.bmap.drawBoundary({
-        area: '江苏省',
-        onSuccess: (polygon) => {
-          console.log(polygon.getPath())
+        area: '江苏省南京市',
+        onSuccess: (res, polygonPoints) => {
+          this.bmap.map.setViewport(polygonPoints)
         },
         onError: (msg) => {
           alert(msg)
@@ -55,7 +57,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="pages">
         <MapContainer id="map"></MapContainer>
         <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw>
       </div>

@@ -47,9 +47,6 @@ var BaiduMap = function (id, params) {
     s.map.centerAndZoom(new BMap.Point(116.404, 39.915), 12) // 初始化地图,设置中心点坐标和地图级别
     s.map.setCurrentCity('北京') // 设置地图显示的城市 此项是必须设置的
     s.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
-    //向地图中添加比例尺控件
-    s.map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}))
-    s.map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_ZOOM}))
   }
   s.createMap()
 
@@ -72,6 +69,14 @@ var BaiduMap = function (id, params) {
   /* --------------------
   Method
   -------------------- */
+  // 显示放大缩小控件
+  s.showScale = function () {
+    s.map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}))
+  }
+  // 显示标尺控件
+  s.showNavigation = function () {
+    s.map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_ZOOM}))
+  }
   // 启用手动绘制
   s.enableManualDraw = function (type) {
     if (s.drawingManager) {
@@ -80,23 +85,39 @@ var BaiduMap = function (id, params) {
     }
   }
   // 绘制省市区域
-  s.drawBoundary = function (options = {}) { // {area: '江苏省南京市', styleOptions: {}, onSuccess: func(), onError: func()}
+  s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
     var boundary = new BMap.Boundary()
-    boundary.get(options.area, function (rs) { // 获取行政区域
-      var count = rs.boundaries.length // 行政区域的点有多少个
+    if (!options.area) {
+      options.onError && options.onError('请传入area, 例如“江苏省南京市建邺区”')
+      return
+    }
+    boundary.get(options.area, function (res) { // 获取行政区域
+      var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
         options.onError && options.onError('未能获取当前输入行政区域')
         return
       }
-      // var pointArray = [];
+      var polygonPoints = []
       for (var i = 0; i < count; i++) {
-        var polygon = new BMap.Polygon(rs.boundaries[i], options.styleOptions || s.params.styleOptions)
+        var polygon = new BMap.Polygon(res.boundaries[i], options.styleOptions || s.params.styleOptions)
         s.map.addOverlay(polygon) // 添加覆盖物
-        // pointArray = pointArray.concat(polygon.getPath())
+        polygonPoints = polygonPoints.concat(polygon.getPath())
       }
       // s.map.setViewport(pointArray) //调整视野
-      options.onSuccess && options.onSuccess(polygon)
+      options.onSuccess && options.onSuccess(res, polygonPoints)
     })
+  }
+  // 自动切换到有覆盖物的视图
+  s.autoViewport = function () {
+    var overlays = s.map.getOverlays()
+    var points = []
+    for(var i = 0; i < overlays.length; i++) {
+      var overlay = overlays[i];
+      if(overlay instanceof BMap.Polygon) {
+        points = points.concat(overlay.getPath())
+      }
+    }
+    s.map.setViewport(points)
   }
 }
 
