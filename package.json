@@ -30,7 +30,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "jcrop": "^3.0.1"
+    "jcrop": "^3.0.1",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.6",
