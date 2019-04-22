@@ -55,26 +55,25 @@ class App extends Component {
     if (this.mapUtil && this.mapUtil.drawingManager) {
       this.mapUtil.showScale();
       this.mapUtil.showNavigation();
-      this.mapUtil.drawingManager.addEventListener('overlaycomplete', this.drawComplete);
-      // this.drawRed();
-      this.drawGray();
+      this.mapUtil.drawingManager.addEventListener('overlaycomplete', this.drawBlue);
+      this.drawRed();
     }
   }
   // 绘制总区域
   drawRed = () => {
     var id = 'red-' + new Date().getTime();
-    const shape = this.mapUtil.drawBoundary({
+    this.mapUtil.drawBoundary({
       area: '江苏省南京市',
       styleOptions: redMapStyle,
-      onSuccess: (res, polygonPoints) => {
-        grayMap.set(id, polygonPoints);
-        this.mapUtil.map.setViewport(polygonPoints)
+      onSuccess: (res) => {
+        redMap.set(id, res.polygons);
+        this.mapUtil.map.setViewport(res.polygonsPath);
+        this.drawGray();
       },
       onError: (msg) => {
         alert(msg)
       }
     });
-    redMap.set(id, shape);
   }
   // 绘制禁用区域
   drawGray = () => {
@@ -82,24 +81,34 @@ class App extends Component {
     var id = 'black-' + new Date().getTime();
     const shape = this.mapUtil.drawPolygon({
       points: data,
-      styleOptions: {fillColor: '#434244', strokeColor: '#434244'},
-      onSuccess: (res, polygonPoints) => {
-        grayMap.set(id, polygonPoints);
-        this.mapUtil.map.setViewport(polygonPoints)
+      styleOptions: {fillColor: '#888', strokeColor: '#888'},
+      onSuccess: () => {
       },
       onError: (msg) => {
         alert(msg)
       }
     });
     grayMap.set(id, shape);
+  }
+  // 手动绘制可选区域
+  drawBlue = (e) => {
+    const polygon = e.overlay;
+    var id = 'blue-' + new Date().getTime();
+    const shape = this.mapUtil.drawPolygon({
+      polygon: polygon,
+      onSuccess: (res, polygonPoints) => {
+        blueMap.set(id, polygonPoints);
+      },
+      onError: (msg) => {
+        alert(msg)
+      }
+    });
+    blueMap.set(id, shape);
     this.addContextMenu(id, shape)
   }
   // 启用手动绘制
   enableManualDraw = () => {
     this.mapUtil.enableManualDraw()
-  }
-  drawComplete = (e) => {
-    console.log(JSON.stringify(e))
   }
   // 添加右键, id用于获取和删除覆盖物值班表和
   addContextMenu(id, overlay){
@@ -111,18 +120,11 @@ class App extends Component {
             if (confirm('您确定要删除吗')) {
               this.mapUtil.map.removeOverlay(overlay)
               if (blueMap.has(id)) blueMap.delete(id)
-              if (grayMap.has(id)) grayMap.delete(id)
             }
           }
         }
       ]
     })
-  }
-  onChange = (value, option, args) => {
-    console.log(value, option, args);
-    this.setState({
-      value: value
-    });
   }
   render() {
     return (

@@ -182,14 +182,15 @@ var BaiduMap = function (id, params) {
         options.onError && options.onError('未能获取当前输入行政区域')
         return
       }
-      var polygonPoints = []
+      var polygons = []
+      var polygonsPath = []
       for (var i = 0; i < count; i++) {
-        var polygon = new BMap.Polygon(res.boundaries[i], options.styleOptions || s.params.styleOptions)
-        s.map.addOverlay(polygon) // 添加覆盖物
-        polygonPoints = polygonPoints.concat(polygon.getPath())
+        polygons[i] = new BMap.Polygon(res.boundaries[i], options.styleOptions || s.params.styleOptions)
+        s.map.addOverlay(polygons[i]) // 添加覆盖物
+        polygonsPath = polygonsPath.concat(polygons[i].getPath())
       }
       // s.map.setViewport(pointArray) //调整视野
-      options.onSuccess && options.onSuccess(res, polygonPoints)
+      options.onSuccess && options.onSuccess({...res, polygons, polygonsPath})
     })
     return boundary
   }
@@ -217,7 +218,7 @@ var BaiduMap = function (id, params) {
     }
     if (polygon) {
       s.map.addOverlay(polygon) // 添加覆盖物
-      options.onSuccess && options.onSuccess(polygon, polygon.getPath())
+      options.onSuccess && options.onSuccess(polygon)
     } else {
       console.warn('drawPolygon: 请传入参数{polygon: {}}或者{points: []}')
       options.onError && options.onError('drawPolygon: 请传入参数{polygon: {}}或者{points: []}')
@@ -257,7 +258,7 @@ var BaiduMap = function (id, params) {
     var marker = new BMap.Marker(point,
       {
         icon: new BMap.Icon(
-          options.icon || 'http://172.31.3.231:6020/sysapp/areafence/images/icon-blue.png',
+          options.icon || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII=',
           new BMap.Size(16,24),
           {
             imageSize: new BMap.Size(16, 24) // 设置偏移量
