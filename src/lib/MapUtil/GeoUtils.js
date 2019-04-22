@@ -1,6 +1,6 @@
 /**
 * @fileoverview GeoUtils类提供若干几何算法，用来帮助用户判断点与矩形、
-* 圆形、多边形线、多边形面的关系,并提供计算折线长度和多边形的面积的公式。 
+* 圆形、多边形线、多边形面的关系,并提供计算折线长度和多边形的面积的公式。 从地球半径开始为百度地图，上面是自己封装的
 * 地址http://api.map.baidu.com/library/GeoUtils/1.2/docs/symbols/src/BMapLib_GeoUtils.js.html
 * 基于Baidu Map API 1.2。
 *
@@ -17,7 +17,7 @@ var GeoUtils = window.GeoUtils = GeoUtils || {};
     * @param {Polygon} newpoly 多边形对象
     * @returns {Array} 返回newpoly的新的点
     */
-  GeoUtils.addContainPoint = function (oldpoly, newpoly) {
+   GeoUtils.addContainPoint = function (oldpoly, newpoly) {
     // 开始判断oldpoly是否有点在newpoly中，并添加相应的点
     var arr = [];
     var oldpoints = oldpoly.so
@@ -539,17 +539,7 @@ var GeoUtils = window.GeoUtils = GeoUtils || {};
     const cdb = cda + abc - abd;
     return !(cda * cdb >= 0);
   }
-
-  /**
-   * 计算两点之间的距离,两点坐标必须为经纬度
-   * @param {point1} Point 点对象
-   * @param {point2} Point 点对象
-   * @returns {Number} 两点之间距离，单位为米
-   */
-  GeoUtils.getDistance = function (start, end) {
-    return Math.sqrt(Math.pow((start.lng - end.lng), 2) + Math.pow((start.lat - end.lat), 2))
-  }
-
+  
   /**
     * 地球半径
     */
