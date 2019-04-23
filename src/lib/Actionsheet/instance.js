@@ -21,8 +21,7 @@ var Actionsheet = function (params) {
     optionClass: 'actionsheet-option',
     buttonCancelClass: 'actionsheet-cancel',
     buttonCancelHTML: '取消',
-    isClickMaskHide: true,
-    data: []
+    data: [] // [{text: '', handler: func()}]
     /*
     Callbacks:
     option.handler:function(Actionsheet)
@@ -63,22 +62,21 @@ var Actionsheet = function (params) {
   s.createGroup = function () {
     var group = document.createElement('div')
     group.setAttribute('class', s.params.groupClass)
+    // Options
+    s.options = []
+    for (var [i, opt] of s.params.data.entries()) { // eslint-disable-line
+      var option = document.createElement('a')
+      option.setAttribute('class', s.params.optionClass)
+      option.setAttribute('data-index', i)
+      option.innerHTML = opt.text
+      s.options.push(option)
+      group.appendChild(option)
+    }
     return group
   }
   // Options
   s.createOptions = function (appendToEl) {
-    var options = []
-    /* eslint-disable */
-    for (var i = 0, opt; opt = s.params.data[i++];) {
-      var option = document.createElement('a')
-      option.setAttribute('class', s.params.optionClass)
-      option.innerHTML = opt.text
-      option.handler = opt.handler
-      options.push(option)
-      appendToEl.appendChild(option)
-    }
-    /* eslint-enable */
-    return options
+    
   }
   // buttonCancel
   s.createButtonCancel = function () {
@@ -109,7 +107,6 @@ var Actionsheet = function (params) {
     s.mask = s.createMask()
     s.actionsheet = s.createActionsheet()
     s.group = s.createGroup()
-    s.options = s.createOptions(s.group) // 创建项，并append到group里
     s.buttonCancel = s.createButtonCancel()
     s.actionsheet.appendChild(s.group)
     s.actionsheet.appendChild(s.buttonCancel)
@@ -117,12 +114,6 @@ var Actionsheet = function (params) {
     s.parent.appendChild(s.mask)
   }
   s.create()
-  // 设置数据
-  s.setData = function (data) {
-    s.params.data = data
-    if (s.actionsheet) s.updateData(s.actionsheet)
-    else s.createActionsheet()
-  }
 
   /* ------------------
   Method
@@ -165,29 +156,16 @@ var Actionsheet = function (params) {
     // 禁用滚动条
     if (s.overflowContainer) s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
   }
-  s.destroy = function () {
-    // 移动事件监听
-    s.detach()
-    // 移除遮罩
+  s.destroy = function () { // 销毁
     s.destroyMask()
-    // 移除弹出框
-    s.destroyActionsheet()
-  }
-  // 设置
-  s.setOnClick = function (fn) {
-    s.params.onClick = fn
-  }
-  s.setOnClickMask = function (fn) {
-    s.params.onClickMask = fn
   }
   /* ------------------
   Control
   ------------------ */
   s.events = function (detach) {
-    var touchTarget = s.actionsheet
     var action = detach ? 'removeEventListener' : 'addEventListener'
-    touchTarget[action]('click', s.onClick, false)
-    touchTarget[action]('webkitTransitionEnd', s.onTransitionEnd, false)
+    s.mask[action]('click', s.onClick, false)
+    s.actionsheet[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     // 遮罩
     s.mask[action]('click', s.onClickMask, false)
   }
@@ -199,34 +177,36 @@ var Actionsheet = function (params) {
     s.events(true)
   }
   s.onClick = function (e) {
-    s.target = e.target
+    s.event = e
     // 点击容器
     if (s.params.onClick) s.params.onClick(s)
-    // 点击项
-    var options = s.options
-    /* eslint-disable */
-    for (var i = 0, option; option = options[i++];) {
-      if (option === s.target) {
-        // Callback
-        if(option.handler instanceof Function) option.handler(s)
-        return
-      }
+    if (e.target.classList.contains(s.params.maskClass)) { // 点击遮罩
+      s.onClickMask(s)
+    } else if (e.target.classList.contains(s.params.headerCancelClass)) { // 点击确定按钮
+      s.onClickCancel(s)
+    } else if (e.target.classList.contains(s.params.optionClass)) { // 点击项
+      s.onClickOption(s)
     }
-    /* eslint-enable */
-    // 点击取消按钮
-    if (s.params.onClickCancel && s.buttonCancel === s.target) {
-      s.params.onClickCancel(s)
-      return
-    }
+
     s.hide()
   }
-
-  s.onClickMask = function (e) {
-    if (e.target === s.mask) {
-      s.target = e.target
-      if (s.params.onClickMask) s.params.onClickMask(s)
-      if (s.params.isClickMaskHide) s.hide()
+  // 点击遮罩
+  s.onClickMask = function (s) {
+    if (s.params.onClickMask) s.params.onClickMask(s)
+    else s.hide()
+  }
+  // 点击项
+  s.onClickOption = function (s) {
+    var e = s.event
+    var index = e.target.getAttribute('data-index')
+    if (!isNaN(index)) {
+      if(s.params.data[index].handler instanceof Function) option.handler(s)
     }
+  }
+  // Cancel
+  s.onClickCancel = function (s) {
+    if (s.params.onClickCancel) s.params.onClickCancel(s)
+    else s.hide()
   }
 
   s.onTransitionEnd = function (e) {

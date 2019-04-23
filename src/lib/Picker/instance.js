@@ -65,6 +65,10 @@ var Picker = function (params) {
   s.params = params
   // Dom元素
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  if (!s.overflowContainer) {
+    console.log('SeedsUI Error：未找到Picker的overflowContainer元素，请检查传入参数是否正确')
+    return
+  }
   s.picker = null
   s.mask = null
   s.header = null
@@ -167,9 +171,11 @@ var Picker = function (params) {
       s.mask.appendChild(s.picker)
       s.overflowContainer.appendChild(s.mask)
     }
-    
-    s.mask.setAttribute('onTouchStart', '') // 兼容部分机型touch事件不工作的问题
-    
+    // 兼容安卓部分机型touch事件不工作的问题
+    var andriodExp = navigator.userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)
+    if (andriodExp) {
+      if (andriodExp[1] < '5.0') s.mask.setAttribute('onTouchStart', '')
+    }
   }
   s.create()
   /* ------------------------
@@ -347,11 +353,7 @@ var Picker = function (params) {
     // 选择器事件
     s.picker[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     // 遮罩
-    s.mask[action]('click', s.onClickMask, false)
-    // 按钮
-    s.header[action]('touchmove', s.preventDefault, false)
-    s.headerSubmit[action]('click', s.onClickSubmit, false)
-    s.headerCancel[action]('click', s.onClickCancel, false)
+    s.mask[action]('click', s.onClick, false)
   }
   s.detach = function (event) {
     s.events(true)
@@ -360,24 +362,33 @@ var Picker = function (params) {
     s.events()
   }
 
-  s.preventDefault = function (e) {
-    e.preventDefault()
+  s.onClick = function (e) {
+    s.event = e
+    // 点击容器
+    if (s.params.onClick) {
+      s.params.onClick(s)
+    }
+    if (e.target.classList.contains(s.params.maskClass)) { // 点击遮罩
+      s.onClickMask(s)
+    } else if (e.target.classList.contains(s.params.headerSubmitClass)) { // 点击确定按钮
+      s.onClickSubmit(s)
+    } else if (e.target.classList.contains(s.params.headerCancelClass)) { // 点击确定按钮
+      s.onClickCancel(s)
+    }
   }
 
   // Mask
-  s.onClickMask = function (e) {
-    if (e.target !== s.mask) return
-    if (s.params.onClickMask) s.params.onClickMask(e)
+  s.onClickMask = function (s) {
+    if (s.params.onClickMask) s.params.onClickMask(s)
     else s.hide()
   }
 
   // Submit|Cancel
-  s.onClickSubmit = function (e) {
-    s.target = e.target
-    s.params.onClickSubmit(s)
+  s.onClickSubmit = function (s) {
+    if (s.params.onClickSubmit) s.params.onClickSubmit(s)
+    else s.hide()
   }
-  s.onClickCancel = function (e) {
-    s.target = e.target
+  s.onClickCancel = function (s) {
     if (s.params.onClickCancel) s.params.onClickCancel(s)
     else s.hide()
   }

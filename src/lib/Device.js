@@ -108,17 +108,6 @@ var Device = (function () {
     window.addEventListener('offline', handleOffline, false)
   }
 
-
-  // 适配andriod5.0以下的手机
-  function adapterBadAndriod(el) {
-    var root = document.getElementById('root')
-    if (el && Object.prototype.toString.call(el).indexOf('[object HTML') === 0) root = el
-    if (!root) return
-    if (Device.os === 'andriod' && Device.osVersion < '5.0') {
-      root.style.position = 'fixed' // 处理客户端中, 输入法上弹收缩后, 界面显示错位的问题
-      root.style.minHeight = 'auto' // 处理客户端中, 输入法上弹收缩后, 上面空白的问题
-    }
-  }
   // 适配刘海屏和andriod5.0以下的手机
   function adapterIPhoneX(el) {
     var root = document.getElementById('root')
@@ -173,8 +162,12 @@ var Device = (function () {
     }, 0)
     /* eslint-enable */
   }
-  // 动态加载桥接库
-  function dynamicLoadBridge(callback) {
+  /**
+    * 动态加载桥接库
+    * @param {Func} callback 加载完成回调
+    * @param {Object} options {wxUrl: '', wqUrl: ''}
+    */
+  function dynamicLoadBridge(callback, options = {}) {
     if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo') {
       if (callback) window.addEventListener('load', callback, false)
       return
@@ -183,14 +176,14 @@ var Device = (function () {
     script.type = 'text/javascript'
     script.defer = 'defer'
     if (platform === 'weixin' || platform === 'weixinwork') { // 微信
-      script.src = '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
+      script.src = options.wxUrl || '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
       if (callback) {
         script.onload = function () {
           callback()
         }
       }
     } else if (platform === 'waiqin') { // 外勤
-      script.src = '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
+      script.src = options.wqUrl || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       if (callback) {
         script.onload = function () {
           document.addEventListener('deviceready', () => {
@@ -269,7 +262,6 @@ var Device = (function () {
     ua: ua,
     orientation: window.orientation || '请在真机上测试', // 设备方向0:竖屏,90:左横屏,-90:右横屏
     adapterIPhoneX: adapterIPhoneX, // 适配iPhoneX
-    adapterBadAndriod: adapterBadAndriod, // 适配安卓5.0以下的手机
     dynamicLoadBridge: dynamicLoadBridge, // 动态加载桥接库
     getUrlParameter: getUrlParameter,
     screenWidth: getScreenWidth(),

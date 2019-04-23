@@ -49,6 +49,10 @@ var SelectPicker = function (params) {
   s.params = params
   // Dom元素
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  if (!s.overflowContainer) {
+    console.log('SeedsUI Error：未找到SelectPicker的overflowContainer元素，请检查传入参数是否正确')
+    return
+  }
   s.picker = null
   s.mask = null
   s.header = null
@@ -176,15 +180,8 @@ var SelectPicker = function (params) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
     // 选择器事件
     s.picker[action]('webkitTransitionEnd', s.onTransitionEnd, false)
-    // 遮罩
-    // s.mask[action]('touchmove', s.preventDefault, false)
-    s.mask[action]('click', s.onClickMask, false)
-    // 按钮
-    // s.header[action]('touchmove', s.preventDefault, false)
-    s.headerSubmit[action]('click', s.onClickSubmit, false)
-    s.headerCancel[action]('click', s.onClickCancel, false)
-    // 列表
-    s.wrapper[action]('click', s.onClickWrapper, false)
+    // 点击
+    s.mask[action]('click', s.onClick, false)
   }
   s.detach = function (event) {
     s.events(true)
@@ -193,24 +190,31 @@ var SelectPicker = function (params) {
     s.events()
   }
 
-  s.preventDefault = function (e) {
-    e.preventDefault()
+  s.onClick = function (e) {
+    s.event = e
+    // 点击容器
+    if (s.params.onClick) {
+      s.params.onClick(s)
+    }
+    if (e.target.classList.contains(s.params.maskClass)) { // 点击遮罩
+      s.onClickMask(s)
+    } else if (e.target.classList.contains(s.params.optionClass)) { // 点击项
+      s.onClickOption(s)
+    } else if (e.target.classList.contains(s.params.headerSubmitClass)) { // 点击确定按钮
+      s.onClickSubmit(s)
+    } else if (e.target.classList.contains(s.params.headerCancelClass)) { // 点击确定按钮
+      s.onClickCancel(s)
+    }
   }
 
   // Mask
-  s.onClickMask = function (e) {
-    if (e.target !== s.mask) return
-    if (s.params.onClickMask) s.params.onClickMask(e)
+  s.onClickMask = function (s) {
+    if (s.params.onClickMask) s.params.onClickMask(s)
     else s.hide()
   }
   // Wrapper
-  s.onClickWrapper = function (e) {
-    if (e.target.classList.contains(s.params.optionClass)) {
-      s.onClickOption(e)
-    }
-  }
-  s.onClickOption = function (e) {
-    s.target = e.target
+  s.onClickOption = function (s) {
+    var e = s.event
     var options = [].slice.call(s.picker.querySelectorAll('.' + s.params.optionClass))
     s.activeOptions = []
     // 多选
@@ -251,12 +255,11 @@ var SelectPicker = function (params) {
     if (s.params.onClickOption) s.params.onClickOption(s)
   }
   // Submit|Cancel
-  s.onClickSubmit = function (e) {
-    s.target = e.target
-    s.params.onClickSubmit(s)
+  s.onClickSubmit = function (s) {
+    if (s.params.onClickSubmit) s.params.onClickSubmit(s)
+    else s.hide()
   }
-  s.onClickCancel = function (e) {
-    s.target = e.target
+  s.onClickCancel = function (s) {
     if (s.params.onClickCancel) s.params.onClickCancel(s)
     else s.hide()
   }

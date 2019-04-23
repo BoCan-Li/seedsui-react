@@ -16,10 +16,6 @@ import FastClick from '../lib/FastClick';
 // 换click事件为tap
 if (Device.platform === 'dinghuo' || Device.platform === 'waiqin') {
   FastClick.attach(document.getElementById('root'));
-  // 适配iPhoneX, 让容器保持在安全区域内
-  Device.adapterIPhoneX();
-  // 适配差安卓, 解决在app中, 输入法上弹界面错位的问题
-  Device.adapterBadAndriod();
 }
 
 

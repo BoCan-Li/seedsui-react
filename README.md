@@ -4237,9 +4237,9 @@ searchGoods = (value) => {
   style={容器style object, 默认无}
   slotClassName={一槽className string, 默认'text-center'}
   show={*显隐 bool, 默认false}
-  onClickMask={点击遮罩 func(s), 默认无}
-  onClickCancel={点击取消按钮 func(s), 默认无}
-  onClickSubmit={点击确定按钮 func(s), 默认无}
+  onClickMask={点击遮罩 func(e), 默认无}
+  onClickCancel={点击取消按钮 func(e), 默认无}
+  onClickSubmit={点击确定按钮 func(selected), 默认无}
 />
 ```
 ### 示例

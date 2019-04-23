@@ -214,7 +214,7 @@ var Alert = function (params) {
     return args
   }
   s.onClick = function (e) {
-    s.target = e.target
+    s.event = e
 
     if (s.params.onClick) s.params.onClick(s, s.getArgs(e))
     if (e.target.className.indexOf(s.params.buttonSubmitClass) !== -1) {

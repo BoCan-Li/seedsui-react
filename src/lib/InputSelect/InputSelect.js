@@ -55,21 +55,20 @@ export default class InputSelect extends Component {
       show: !this.state.show
     });
   }
-  onClickSubmit = (e) => {
+  onClickSubmit = (selected) => {
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
     if (this.props.onClickSubmit) {
-      this.props.onClickSubmit(e);
+      this.props.onClickSubmit(selected);
       return;
     }
-    const value = this.getValue(e.activeOptions);
-    var options = this.getOptions(e.activeOptions);
+    const value = this.getValue(selected);
     // 赋值
     if (!this.props.valueBindProp) this.$input.value = value;
     this.setState({
       show: !this.state.show
     });
     if (this.props.onChange) {
-      this.props.onChange(value, options, this.props.args);
+      this.props.onChange(value, selected, this.props.args);
     }
   }
   onClickCancel = (e) => {

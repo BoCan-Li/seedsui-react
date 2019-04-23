@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import MapUtil from './../lib/MapUtil';
+import InputSelect from './../lib/InputSelect';
+
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
 
@@ -45,6 +47,23 @@ class App extends Component {
   static mapUtil = {}
   constructor(props) {
     super(props);
+    this.state = {
+      value: '',
+      list: [
+        {
+          key: '1',
+          value: '111'
+        },
+        {
+          key: '2',
+          value: '222'
+        },
+        {
+          key: '3',
+          value: '333'
+        }
+      ]
+    }
   }
   componentDidMount () {
     this.mapUtil = new MapUtil('map');
@@ -126,11 +145,28 @@ class App extends Component {
       ]
     })
   }
+  onChange = (value, option, args) => {
+    console.log(value, option, args);
+    this.setState({
+      value: value
+    });
+  }
   render() {
     return (
       <div className="pages">
-        <MapContainer id="map"></MapContainer>
-        <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw>
+        {/* <MapContainer id="map"></MapContainer>
+        <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
+        <InputSelect
+          multiple
+          list={this.state.list}
+          valueBindProp
+          value={this.state.value}
+          onChange={this.onChange}
+          placeholder="请选择"
+          className="border-b"
+          pickerMaskStyle={{zIndex: '11'}}
+          pickerMaskClassName="bg-white"
+        />
       </div>
     );
   }
