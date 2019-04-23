@@ -173,7 +173,7 @@ var Picker = function (params) {
     }
     // 兼容安卓部分机型touch事件不工作的问题
     var andriodExp = navigator.userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)
-    if (andriodExp) {
+    if (andriodExp && andriodExp[1]) {
       if (andriodExp[1] < '5.0') s.mask.setAttribute('onTouchStart', '')
     }
   }
