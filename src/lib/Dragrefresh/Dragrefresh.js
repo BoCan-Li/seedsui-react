@@ -8,10 +8,15 @@ export default class Dragrefresh extends Component {
   static propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
+
+    threshold: PropTypes.number, // 头部下拉的触发位置
+    end: PropTypes.number, // 头部下拉的结束位置
+    endRefresh: PropTypes.bool, // 滑动到指位置后自动刷新
     onTopRefresh: PropTypes.func,
     onTopComplete: PropTypes.func,
     onBottomRefresh: PropTypes.func,
     onBottomComplete: PropTypes.func,
+
     children: PropTypes.node,
     hasMore: PropTypes.number, // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
 
@@ -36,6 +41,9 @@ export default class Dragrefresh extends Component {
   init = () => {
     const {onScroll} = this.props;
     var instance = new Instance({
+      threshold: this.props.threshold,
+      end: this.props.end,
+      endRefresh: this.props.endRefresh,
       container: this.$el,
       onScroll,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页

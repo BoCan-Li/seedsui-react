@@ -8,7 +8,8 @@ var Dragrefresh = function (params) {
     duration: 150, // 头部下拉的隐藏动画时长
     threshold: 100, // 头部下拉的触发位置
     begin: 0, // 头部下拉的起始位置
-    end: 300, // 头部下拉的结束位置
+    end: 200, // 头部下拉的结束位置
+    endRefresh: true, // 滑动到指位置后自动刷新
 
     isTopPosition: 0, // 如果scrollTop小于等于isTopPosition时，则认为是到顶部了(不建议修改)
 
@@ -297,8 +298,9 @@ var Dragrefresh = function (params) {
         s.preventMove = true
       }
       s.touches.currentPosY = s.touches.posY + s.touches.diffY
-      if (s.touches.currentPosY > s.params.end) {
+      if (s.params.end && s.touches.currentPosY > s.params.end) {
         s.touches.currentPosY = s.params.end
+        if (s.params.endRefresh) s.onTouchEnd()
       }
       // 实体操作
       if (s.params.onPull) s.params.onPull(s)

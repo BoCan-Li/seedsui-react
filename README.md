@@ -1227,10 +1227,15 @@ import Dot from 'seedsui-react/lib/Dot';
 <Dragrefresh
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'dot'}
+
+  threshold={头部下拉的触发位置 number, 默认50}
+  end={头部下拉的结束位置 number, 默认200}
+  endRefresh={滑动到底后刷新 bool, 默认false}
   onTopRefresh={头部刷新 func(s)}
   onTopComplete={头部刷新完成 func(s)}
   onBottomRefresh={底部刷新 func(s)}
   onBottomComplete={底部刷新完成 func(s)}
+
   hasMore={状态标识 string, 默认-2} // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
 
   showNoData={是否允许暂无数据 bool, 默认false}
