@@ -475,25 +475,17 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
-    // 定位超时
-    if (this.locationOvertime) {
-      clearTimeout(this.locationOvertime)
-    }
-    this.locationOvertime = setTimeout(() => {
-      if (!DB.getCookie('app_location')) {
-        var errMsg = '请确认定位权限是否开启'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
-        else Bridge.showToast(errMsg, {mask: false})
-      }
-    }, params.timeout || 5000)
     // 调用定位
-    setTimeout(function () {
-      console.log('调用定位...')
+    if (this.locating) return
+    this.locating = true
+    console.log('调用定位...')
+    setTimeout(() => {
+      this.locating = false
       var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
       // 将位置信息存储到cookie中60秒
       DB.setCookie('app_location', JSON.stringify(res) , 60)
       if (params.onSuccess) params.onSuccess(res)
-    }, 500)
+    }, 2000)
   },
   // 获取当前地理位置带地图
   getLocationMap: function (params = {}) {

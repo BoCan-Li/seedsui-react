@@ -215,32 +215,22 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
-    // 定位超时
-    if (this.locationOvertime) {
-      clearTimeout(this.locationOvertime)
-    }
-    this.locationOvertime = setTimeout(() => {
-      if (!DB.getCookie('app_location')) {
-        var errMsg = '请确认订货365定位权限是否开启'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
-        else BridgeBrowser.showToast(errMsg, {mask: false})
-      }
-    }, params.timeout || 5000)
 
-    // 防止ios页面多个本地能力同时进行而使页面假死
-    if (this.locationTimeout) clearTimeout(this.locationTimeout)
-    this.locationTimeout = setTimeout(() => {
-      this.invoke('getLocation', 'gcj02', function (res) {
-        if (res && res.latitude) {
-          // 将位置信息存储到cookie中60秒
-          DB.setCookie('app_location', JSON.stringify(res) , 60)
-          if (params.onSuccess) params.onSuccess(res)
-        } else {
-          if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
-          else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
-        }
-      })
-    }, params.delay || 500)
+    // 调用定位
+    if (this.locating) return
+    this.locating = true
+    console.log('调用定位...')
+    this.invoke('getLocation', 'gcj02', (res) => {
+      this.locating = false
+      if (res && res.latitude) {
+        // 将位置信息存储到cookie中60秒
+        DB.setCookie('app_location', JSON.stringify(res) , 60)
+        if (params.onSuccess) params.onSuccess(res)
+      } else {
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
+      }
+    })
   },
   /* -----------------------------------------------------
     获取当前网络状态

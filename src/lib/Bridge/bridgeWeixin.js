@@ -69,19 +69,21 @@ var Bridge = {
       return
     }
     // 定位超时
-    if (this.locationOvertime) clearTimeout(this.locationOvertime)
+    if (this.locationOvertime) return
     this.locationOvertime = setTimeout(() => {
+      this.locationOvertime = null
       if (!DB.getCookie('app_location')) {
         var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       }
     }, params.timeout || 5000)
-    // 定位
+    // 调用定位
+    console.log('调用定位...')
     wx.getLocation({ // eslint-disable-line
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: 'gcj02',
-      success: function (res) {
+      success: (res) => {
         // 将位置信息存储到cookie中60秒
         if (res.latitude && res.latitude) {
           DB.setCookie('app_location', JSON.stringify(res) , 60)
@@ -92,15 +94,14 @@ var Bridge = {
           else BridgeBrowser.showToast(errMsg, {mask: false})
         }
       },
-      fail: function () {
+      fail: () => {
+        this.locationOvertime = null
         var errMsg = '定位失败,请检查微信定位权限是否开启'
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       },
-      cancel: function (res) {
-        if (params.onCancel) params.onCancel(res)
-      },
-      complete: function (res) {
+      complete: (res) => {
+        this.locationOvertime = null
         if (params.onComplete) params.onComplete(res)
       }
     })

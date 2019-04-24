@@ -61,6 +61,17 @@ class App extends Component {
     Bridge.debug = true
     this.mapUtil = new MapUtil('map');
     this.initMap();
+    this.foo = '0'
+    this.getLo({
+      onSuccess: function () {
+        console.log(this.foo)
+      }
+    })
+  }
+  getLo = (params) => {
+    setTimeout(() => {
+      params.onSuccess()
+    }, 1000);
   }
   // 添加鼠标绘制工具监听事件，用于获取绘制结果
   initMap = () => {
