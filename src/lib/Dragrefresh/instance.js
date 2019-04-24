@@ -9,7 +9,8 @@ var Dragrefresh = function (params) {
     threshold: 100, // 头部下拉的触发位置
     begin: 0, // 头部下拉的起始位置
     end: 200, // 头部下拉的结束位置
-    endRefresh: true, // 滑动到指位置后自动刷新
+    endRefresh: false, // 滑动到指位置后自动刷新
+    moveTimeout: 0, // 滑动超时, 解决ios手指滑动到原生tabbar上, 不触发onTouchEnd
 
     isTopPosition: 0, // 如果scrollTop小于等于isTopPosition时，则认为是到顶部了(不建议修改)
 
@@ -272,6 +273,9 @@ var Dragrefresh = function (params) {
 
     s.touches.startX = e.clientX || e.touches[0].clientX
     s.touches.startY = e.clientY || e.touches[0].clientY
+
+    // 解决ios手指滑动到原生tabbar上, 不触发onTouchEnd
+    clearTimeout(s.timeout)
   }
   // 标识头部正在拖动
   s.isOnPull = false
@@ -293,21 +297,36 @@ var Dragrefresh = function (params) {
     // 在顶部下拉
     if (s.touches.isTop && s.touches.vertical === -1) {
       if (!s.isRefreshed) return
+      // 标识头部正在拖动
+      s.isOnPull = true
+      // 上拉阻止滚动条滚动
       if (s.preventMove === false) {
+        console.log('上拉阻止滚动条滚动')
         s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = true
       }
+      // 当前下拉坐标
       s.touches.currentPosY = s.touches.posY + s.touches.diffY
-      if (s.params.end && s.touches.currentPosY > s.params.end) {
+      if (s.params.end && s.touches.currentPosY >= s.params.end) { // 头部下拉到结束位置
         s.touches.currentPosY = s.params.end
-        if (s.params.endRefresh) s.onTouchEnd()
+        if (s.params.endRefresh) s.onTouchEnd() // 头部下拉到结束位置刷新
+      } else {
+        // 实体操作
+        if (s.params.onPull) s.params.onPull(s)
       }
-      // 实体操作
-      if (s.params.onPull) s.params.onPull(s)
-      // 标识头部正在拖动
-      s.isOnPull = true
+      // 解决ios手指滑动到原生tabbar上, 不触发onTouchEnd
+      if (s.params.moveTimeout) {
+        if (s.timeout) {
+          clearTimeout(s.timeout)
+        }
+        s.timeout = setTimeout(() => {
+          console.log('滑动超时')
+          s.onTouchEnd()
+        }, s.params.moveTimeout || 1000)
+      }
     } else {
       if (s.preventMove === true) {
+        console.log('滚动移除阻止滚动条')
         s.container.removeEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
         s.preventMove = false
       }
@@ -326,6 +345,8 @@ var Dragrefresh = function (params) {
         s.hideTop()
       }
     }
+    // 解决ios手指滑动到原生tabbar上, 不触发onTouchEnd
+    clearTimeout(s.timeout)
   }
   s.onTransitionEnd = function (e) {
     if (e.target !== s.topContainer || e.propertyName === 'visibility') return

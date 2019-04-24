@@ -1231,6 +1231,7 @@ import Dot from 'seedsui-react/lib/Dot';
   threshold={头部下拉的触发位置 number, 默认50}
   end={头部下拉的结束位置 number, 默认200}
   endRefresh={滑动到底后刷新 bool, 默认false}
+  moveTimeout={滑动超时,解决ios手指滑动到原生tabbar上,不触发onTouchEnd number, 默认0}
   onTopRefresh={头部刷新 func(s)}
   onTopComplete={头部刷新完成 func(s)}
   onBottomRefresh={底部刷新 func(s)}
@@ -1252,6 +1253,14 @@ import Dot from 'seedsui-react/lib/Dot';
 ```javascript
 import Dragrefresh from 'seedsui-react/lib/Dragrefresh';
 
+this.state = {
+  hasMore: -2, // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
+  list: []
+}
+componentDidMount () {
+  this.loadData();
+}
+
 // 下拉刷新配置
 onTopRefresh = () => {
   console.log('头部刷新');
@@ -1262,29 +1271,45 @@ onBottomRefresh = () => {
   this.loadData(true);
 }
 loadData = (isNext) => {
-  // 分页
-  let page = this.props.page;
-  if (isNext) {
-    page++;
-  } else {
-    page = 1;
-  }
-  const params = {
-    page,
-    rows: this.props.rows
-  };
-  // 获得数据
-  this.props.getList(params).then((result) => {
-    if (result.code !== '1') {
-      Bridge.showToast(result.message, {mask: false});
-    }
-  }).catch((err) => {
-    Bridge.showToast('请求错误，请稍后再试', {mask: false});
+  let list = this.state.list;
+  let hasMore = -2; // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -2. 重置状态,为了后面可以更新DOM
+  this.setState({
+    hasMore: -2 // 先重置状态, 后面再会触发react更新
   });
+  setTimeout(() => {
+    let serList = [];
+    for (let i = 1; i <= 20; i++) {
+      serList.push(i);
+    }
+    if (isNext) { // 下一页
+      list = list.concat(serList);
+      hasMore = 2;
+    } else { // 第一页
+      list = serList;
+      hasMore = 1;
+    }
+    if (list.length >= 100) {
+      hasMore = 0;
+    }
+    // 更新DOM
+    this.setState({
+      list,
+      hasMore
+    });
+  }, 1000);
 }
 
-<Dragrefresh ref={(el) => {this.$elDrag = el;}} hasMore={this.props.hasMore} onTopRefresh={this.onTopRefresh} onBottomRefresh={this.onBottomRefresh}>
-内容内容
+<Dragrefresh
+  moveTimeout={1000}
+  endRefresh
+  ref={(el) => {this.$elDrag = el;}}
+  hasMore={this.state.hasMore}
+  onTopRefresh={this.onTopRefresh}
+  onBottomRefresh={this.onBottomRefresh}
+>
+  {this.state.list.map((item, index) => {
+    return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item}</div>
+  })}
 </Dragrefresh>
 ```
 [返回目录](#component)

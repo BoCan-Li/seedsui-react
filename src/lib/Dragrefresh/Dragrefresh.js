@@ -12,13 +12,14 @@ export default class Dragrefresh extends Component {
     threshold: PropTypes.number, // 头部下拉的触发位置
     end: PropTypes.number, // 头部下拉的结束位置
     endRefresh: PropTypes.bool, // 滑动到指位置后自动刷新
+    moveTimeout: PropTypes.number, // 滑动超时, 解决ios手指滑动到原生tabbar上, 不触发onTouchEnd
     onTopRefresh: PropTypes.func,
     onTopComplete: PropTypes.func,
     onBottomRefresh: PropTypes.func,
     onBottomComplete: PropTypes.func,
 
     children: PropTypes.node,
-    hasMore: PropTypes.number, // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
+    hasMore: PropTypes.number, // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
 
     showNoData: PropTypes.bool, // 是否允许暂无数据
     noDataParams: PropTypes.object,
@@ -44,6 +45,7 @@ export default class Dragrefresh extends Component {
       threshold: this.props.threshold,
       end: this.props.end,
       endRefresh: this.props.endRefresh,
+      moveTimeout: this.props.moveTimeout,
       container: this.$el,
       onScroll,
       onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
