@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import MapUtil from './../lib/MapUtil';
 import Page from './../lib/Page';
 import Header from './../lib/Header';
+import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
-import Dragrefresh from './../lib/Dragrefresh';
+import Bridge from './../lib/Bridge';
+import InputLocation from './../lib/InputLocation';
 
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
@@ -56,9 +58,9 @@ class App extends Component {
     }
   }
   componentDidMount () {
+    Bridge.debug = true
     this.mapUtil = new MapUtil('map');
     this.initMap();
-    this.loadData();
   }
   // 添加鼠标绘制工具监听事件，用于获取绘制结果
   initMap = () => {
@@ -136,63 +138,17 @@ class App extends Component {
       ]
     })
   }
-  // 下拉刷新配置
-  onTopRefresh = () => {
-    console.log('头部刷新');
-    this.loadData(false);
-  }
-  onBottomRefresh = () => {
-    console.log('底部刷新');
-    this.loadData(true);
-  }
-  loadData = (isNext) => {
-    let list = this.state.list;
-    let hasMore = -2; // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -2. 重置状态,为了后面可以更新DOM
-    this.setState({
-      hasMore: -2 // 先重置状态, 后面再会触发react更新
-    });
-    setTimeout(() => {
-      let serList = [];
-      for (let i = 1; i <= 20; i++) {
-        serList.push(i);
-      }
-      if (isNext) { // 下一页
-        list = list.concat(serList);
-        hasMore = 2;
-      } else { // 第一页
-        list = serList;
-        hasMore = 1;
-      }
-      if (list.length >= 100) {
-        hasMore = 0;
-      }
-      // 更新DOM
-      this.setState({
-        list,
-        hasMore
-      });
-    }, 1000);
-  }
   render() {
     return (
       <Page>
         <Header>
           <Titlebar caption="SeedsUI"/>
         </Header>
-        {/* <MapContainer id="map"></MapContainer>
-        <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
-        <Dragrefresh
-          moveTimeout={1000}
-          endRefresh
-          ref={(el) => {this.$elDrag = el;}}
-          hasMore={this.state.hasMore}
-          onTopRefresh={this.onTopRefresh}
-          onBottomRefresh={this.onBottomRefresh}
-        >
-          {this.state.list.map((item, index) => {
-            return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item}</div>
-          })}
-        </Dragrefresh>
+        <Container>
+          {/* <MapContainer id="map"></MapContainer>
+          <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
+          <InputLocation placeholder="定位"/>
+        </Container>
       </Page>
     );
   }

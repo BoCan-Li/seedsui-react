@@ -69,7 +69,8 @@ var Bridge = {
       return
     }
     // 定位超时
-    setTimeout(() => {
+    if (this.locationOvertime) clearTimeout(this.locationOvertime)
+    this.locationOvertime = setTimeout(() => {
       if (!DB.getCookie('app_location')) {
         var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})

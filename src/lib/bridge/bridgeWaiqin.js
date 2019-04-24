@@ -206,11 +206,33 @@ var Bridge = {
   ----------------------------------------------------- */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
+    var appLocation = DB.getCookie('app_location')
+    if (appLocation === 'undefined') {
+      DB.removeCookie('app_location')
+      appLocation = ''
+    }
+    try {
+      if (appLocation) appLocation = JSON.parse(appLocation)
+    } catch (error) {
+      appLocation = ''
+    }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
+    // 定位超时
+    if (this.locationOvertime) {
+      clearTimeout(this.locationOvertime)
+    }
+    this.locationOvertime = setTimeout(() => {
+      if (!DB.getCookie('app_location')) {
+        var errMsg = '请确认定位权限是否开启'
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        else BridgeBrowser.showToast(errMsg, {mask: false})
+      }
+    }, 5000)
+    
+    // 调用定位
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
       if (res && res.wqLatitude) {
         // 格式化为标准的返回信息
@@ -226,12 +248,12 @@ var Bridge = {
           area: res.district,
           street: res.street
         }
-        // 将位置信息存储到cookie中10秒
-        DB.setCookie('app_location', JSON.stringify(location) , 10)
+        // 将位置信息存储到cookie中60秒
+        DB.setCookie('app_location', JSON.stringify(location) , 60)
         if (params.onSuccess) params.onSuccess(location)
       } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
-        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
+        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查定位权限是否开启'})
+        else BridgeBrowser.showToast('定位失败,请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },

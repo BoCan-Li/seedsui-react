@@ -201,21 +201,46 @@ var Bridge = {
   ----------------------------------------------------- */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
-    var appLocation = DB.getCookie('app_location') || ''
+    var appLocation = DB.getCookie('app_location')
+    if (appLocation === 'undefined') {
+      DB.removeCookie('app_location')
+      appLocation = ''
+    }
+    try {
+      if (appLocation) appLocation = JSON.parse(appLocation)
+    } catch (error) {
+      appLocation = ''
+    }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(JSON.parse(appLocation))
+      if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
-    this.invoke('getLocation', 'gcj02', function (res) {
-      if (res && res.latitude) {
-        // 将位置信息存储到cookie中10秒
-        DB.setCookie('app_location', JSON.stringify(res) , 10)
-        if (params.onSuccess) params.onSuccess(res)
-      } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
-        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
+    // 定位超时
+    if (this.locationOvertime) {
+      clearTimeout(this.locationOvertime)
+    }
+    this.locationOvertime = setTimeout(() => {
+      if (!DB.getCookie('app_location')) {
+        var errMsg = '请确认订货365定位权限是否开启'
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        else BridgeBrowser.showToast(errMsg, {mask: false})
       }
-    })
+    }, 5000)
+
+    // 防止ios页面多个本地能力同时进行而使页面假死
+    if (this.locationTimeout) clearTimeout(this.locationTimeout)
+    this.locationTimeout = setTimeout(() => {
+      this.invoke('getLocation', 'gcj02', function (res) {
+        if (res && res.latitude) {
+          // 将位置信息存储到cookie中60秒
+          DB.setCookie('app_location', JSON.stringify(res) , 60)
+          if (params.onSuccess) params.onSuccess(res)
+        } else {
+          if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+          else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
+        }
+      })
+    }, 300)
   },
   /* -----------------------------------------------------
     获取当前网络状态

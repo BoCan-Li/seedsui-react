@@ -460,8 +460,39 @@ var Bridge = {
       if (params.onError) params.onError({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
       return
     }
+    // 先从cookie中读取位置信息
+    var appLocation = DB.getCookie('app_location')
+    if (appLocation === 'undefined') {
+      DB.removeCookie('app_location')
+      appLocation = ''
+    }
+    try {
+      if (appLocation) appLocation = JSON.parse(appLocation)
+    } catch (error) {
+      appLocation = ''
+    }
+    if (appLocation) {
+      if (params.onSuccess) params.onSuccess(appLocation)
+      return
+    }
+    // 定位超时
+    if (this.locationOvertime) {
+      clearTimeout(this.locationOvertime)
+    }
+    this.locationOvertime = setTimeout(() => {
+      if (!DB.getCookie('app_location')) {
+        var errMsg = '请确认定位权限是否开启'
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        else Bridge.showToast(errMsg, {mask: false})
+      }
+    }, 5000)
+    // 调用定位
     setTimeout(function () {
-      if (params.onSuccess) params.onSuccess({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'})
+      console.log('调用定位...')
+      var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
+      // 将位置信息存储到cookie中60秒
+      DB.setCookie('app_location', JSON.stringify(res) , 60)
+      if (params.onSuccess) params.onSuccess(res)
     }, 500)
   },
   // 获取当前地理位置带地图
