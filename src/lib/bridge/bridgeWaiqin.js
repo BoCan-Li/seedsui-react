@@ -230,7 +230,7 @@ var Bridge = {
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       }
-    }, 5000)
+    }, params.timeout || 5000)
     
     // 调用定位
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line

@@ -225,7 +225,7 @@ var Bridge = {
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       }
-    }, 5000)
+    }, params.timeout || 5000)
 
     // 防止ios页面多个本地能力同时进行而使页面假死
     if (this.locationTimeout) clearTimeout(this.locationTimeout)
@@ -240,7 +240,7 @@ var Bridge = {
           else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
         }
       })
-    }, 300)
+    }, params.delay || 500)
   },
   /* -----------------------------------------------------
     获取当前网络状态

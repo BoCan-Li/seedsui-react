@@ -485,7 +485,7 @@ var Bridge = {
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
         else Bridge.showToast(errMsg, {mask: false})
       }
-    }, 5000)
+    }, params.timeout || 5000)
     // 调用定位
     setTimeout(function () {
       console.log('调用定位...')
