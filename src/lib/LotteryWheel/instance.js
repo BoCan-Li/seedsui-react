@@ -169,7 +169,7 @@ var LotteryWheel = function (container, params) {
       var img = document.createElement('img')
       img.src = item.icon
       img.style.display = 'none'
-      document.body.append(img)
+      document.body.appendChild(img)
       img.addEventListener('load', s.onIconLoad, false)
       img.addEventListener('error', s.onIconError, false)
       s.imgs.push(img)
