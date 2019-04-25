@@ -6,7 +6,7 @@ import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import Bridge from './../lib/Bridge';
-import InputLocation from './../lib/InputLocation';
+import NumBox from './../lib/NumBox';
 
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
@@ -53,8 +53,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasMore: -2, // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
-      list: []
+      value: ''
     }
   }
   componentDidMount () {
@@ -149,6 +148,12 @@ class App extends Component {
       ]
     })
   }
+  onChangeNum = (val, args) => {
+    console.log(val, args)
+    this.setState({
+      value: val
+    })
+  }
   render() {
     return (
       <Page>
@@ -158,7 +163,23 @@ class App extends Component {
         <Container>
           {/* <MapContainer id="map"></MapContainer>
           <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
-          <InputLocation placeholder="定位"/>
+          <div style={{height: '600px'}}></div>
+          <NumBox
+            className="lg"
+            digits={2}
+            value={this.state.value}
+            onChange={this.onChangeNum}
+            args={['arg1', 'arg2']}
+          />
+          <br/><br/><br/><br/>
+          <NumBox
+            className="lg"
+            digits={2}
+            value={''}
+            onChange={this.onChangeNum}
+            args={['arg1', 'arg2']}
+          />
+          <br/><br/><br/><br/>
         </Container>
       </Page>
     );

@@ -3421,16 +3421,23 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 ```javascript
 import NumBox from 'seedsui-react/lib/NumBox';
 
+this.state = {
+  value: ''
+}
+
 onChangeNum = (val, args) => {
   console.log(val, args)
+  this.setState({
+    value: val
+  })
 }
 
 <NumBox
-  style={{width: '150px'}}
+  className="lg"
   digits={2}
-  value={'1'}
+  value={this.state.value}
   onChange={this.onChangeNum}
-  args={['1', '2']}
+  args={['arg1', 'arg2']}
 />
 ```
 [返回目录](#component)

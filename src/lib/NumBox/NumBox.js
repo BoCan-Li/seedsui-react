@@ -101,6 +101,28 @@ export default class NumBox extends Component {
     const {onFocus} = this.props;
     if (onFocus) onFocus(this.props.value, Object.getArgs(e, this.props.args));
   };
+  // 点击加减号清除时获取焦点
+  autoFocus = () => {
+    if (!this.props.disabled && !this.props.readOnly) {
+      this.$input.focus();
+      // 修复兼容ios12的bug
+      var iosExp = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+      if (iosExp && iosExp[1] && iosExp[1] > '12') {
+        // 兼容输入法把页面顶上去, 不回弹的问题
+        if (window.inputToggleTimeout) {
+          window.clearTimeout(window.inputToggleTimeout);
+        }
+        if (!this.$input.getAttribute('ios-bug-blur')) {
+          this.$input.setAttribute('ios-bug-blur', '1');
+          this.$input.addEventListener('blur', () => {
+            window.inputToggleTimeout = window.setTimeout(() => {
+              document.getElementById('root').scrollIntoView();
+            }, 100);
+          }, false);
+        }
+      }
+    }
+  }
   // 点击文本框, 逢0清空
   onClickInput = (e) => {
     var value = e.target.value;
@@ -123,7 +145,7 @@ export default class NumBox extends Component {
     // Callback
     if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
     if (this.props.onClickMinus) this.props.onClickMinus(value, Object.getArgs(e, this.props.args));
-    this.$input.focus();
+    this.autoFocus();
   };
   // 点击加
   onClickPlus = (e) => {
@@ -131,7 +153,7 @@ export default class NumBox extends Component {
     // Callback
     if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
     if (this.props.onClickPlus) this.props.onClickPlus(value, Object.getArgs(e, this.props.args));
-    this.$input.focus();
+    this.autoFocus();
   };
   // 点击容器
   onClick = (e) => {
@@ -169,7 +191,7 @@ export default class NumBox extends Component {
   }
   // 点击清除
   onClear = (e) => {
-    this.$input.focus();
+    this.autoFocus();
     // 赋值
     if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', Object.getArgs(e, this.props.args));
     if (this.props.onChange) {
