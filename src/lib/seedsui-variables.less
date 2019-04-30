@@ -1061,11 +1061,11 @@ body{
 
 // Mask遮罩
 .setMask(){
-  // visibility:hidden;
-  // opacity:0;
-	// transition-property:opacity;
-  // transition-duration:@animation-duration;
-  display: none;
+  visibility:hidden;
+  opacity:0;
+	transition-property:opacity;
+  transition-duration:@animation-duration;
+  // display: none; // 去掉动画
 
   position: absolute;
   overflow: hidden;
@@ -1078,9 +1078,9 @@ body{
 
 	background-color: @mask-bg;
 	&.active{
-		// visibility:visible;
-    // opacity:1;
-    display: block;
+		visibility:visible;
+    opacity:1;
+    // display: block; // 去掉动画
 	}
 }
 
