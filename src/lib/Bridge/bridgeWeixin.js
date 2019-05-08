@@ -49,9 +49,18 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     获取当前地理位置
-    @params {type: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84'}
-    @return {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    @params 
+    @return 
   ----------------------------------------------------- */
+  /**
+    * 获取当前地理位置
+    * @param {Object}
+    * params: {
+    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    * timeout {Number}: 超时, cache: 默认60秒缓存防重复定位
+    * }
+    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
@@ -86,7 +95,7 @@ var Bridge = {
       success: (res) => {
         // 将位置信息存储到cookie中60秒
         if (res.latitude && res.latitude) {
-          DB.setCookie('app_location', JSON.stringify(res) , 60)
+          if ( params.cache !== 0) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
           if (params.onSuccess) params.onSuccess(res)
         } else {
           var errMsg = '定位失败,请重新进入此页面'
