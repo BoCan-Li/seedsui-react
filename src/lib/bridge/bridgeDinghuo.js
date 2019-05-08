@@ -194,11 +194,15 @@ var Bridge = {
   scanQRCode: function (params) {
     this.invoke('scanQRCode', null, params.onSuccess)
   },
-  /* -----------------------------------------------------
-    获取当前地理位置
-    @params {type: 'wgs84'|'gcj02'订货365默认使用国测局'gcj02'}
-    @return {latitude:'纬度',longitude:'经度',speed:'速度',accuracy:'位置精度',address:'地址',country:'国',province:'省',city:'市',area:'区',street:'街道'}
-  ----------------------------------------------------- */
+  /**
+    * 获取当前地理位置
+    * @param {Object} params
+    * params: {
+    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    * timeout {Number}: 超时, cache: 默认60秒缓存防重复定位
+    * }
+    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    */
   getLocation: function (params = {}) {
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
@@ -224,7 +228,7 @@ var Bridge = {
       this.locating = false
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒
-        DB.setCookie('app_location', JSON.stringify(res) , 60)
+        if (params.cache !== 0) DB.setCookie('app_location', JSON.stringify(res) , 60)
         if (params.onSuccess) params.onSuccess(res)
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})

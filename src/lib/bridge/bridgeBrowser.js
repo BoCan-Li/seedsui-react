@@ -457,7 +457,9 @@ var Bridge = {
   getLocation: function (params = {}) {
     if (!this.debug) {
       this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
-      if (params.onError) params.onError({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
+      setTimeout(() => {
+        if (params.onError) params.onError({code:'locationFail', msg: '定位功能仅可在微信或APP中使用'})
+      }, 1000)
       return
     }
     // 先从cookie中读取位置信息

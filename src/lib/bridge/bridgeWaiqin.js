@@ -220,20 +220,14 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
-    // 定位超时
-    if (this.locationOvertime) {
-      clearTimeout(this.locationOvertime)
-    }
-    this.locationOvertime = setTimeout(() => {
-      if (!DB.getCookie('app_location')) {
-        var errMsg = '请确认定位权限是否开启'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
-        else BridgeBrowser.showToast(errMsg, {mask: false})
-      }
-    }, params.timeout || 5000)
-    
+
+    // 调用定位
+    if (this.locating) return
+    this.locating = true
+    console.log('调用定位...')
     // 调用定位
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
+      this.locating = false
       if (res && res.wqLatitude) {
         // 格式化为标准的返回信息
         var location = {
@@ -249,7 +243,7 @@ var Bridge = {
           street: res.street
         }
         // 将位置信息存储到cookie中60秒
-        DB.setCookie('app_location', JSON.stringify(location) , 60)
+        if (params.cache !== 0) DB.setCookie('app_location', JSON.stringify(location) , 60)
         if (params.onSuccess) params.onSuccess(location)
       } else {
         if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查定位权限是否开启'})
