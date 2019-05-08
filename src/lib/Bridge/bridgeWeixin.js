@@ -74,7 +74,7 @@ var Bridge = {
       this.locationOvertime = null
       if (!DB.getCookie('app_location')) {
         var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: {}})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       }
     }, params.timeout || 5000)
@@ -94,10 +94,10 @@ var Bridge = {
           else BridgeBrowser.showToast(errMsg, {mask: false})
         }
       },
-      fail: () => {
+      fail: (res) => {
         this.locationOvertime = null
         var errMsg = '定位失败,请检查微信定位权限是否开启'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+        if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       },
       complete: (res) => {
@@ -158,7 +158,7 @@ var Bridge = {
         params.onSuccess(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res, res: res})
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + JSON.stringify(res), res: res})
         else BridgeBrowser.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
@@ -242,7 +242,7 @@ var Bridge = {
           s.upload(imgMap)
         },
         fail: function (res) {
-          if (params.onChooseError) params.onChooseError({code: 'chooseFail', msg: '选择照片失败' + res, res: res})
+          if (params.onChooseError) params.onChooseError({code: 'chooseFail', msg: '选择照片失败' + JSON.stringify(res), res: res})
           else BridgeBrowser.showToast('选择照片失败', {mask: false})
         },
         cancel: function () {
