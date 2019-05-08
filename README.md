@@ -2146,15 +2146,35 @@ this.state.lazy.load();
 ```javascript
 import ImgUploader from 'seedsui-react/lib/ImgUploader';
 
-const list = [
-  {
-    id: '',
-    src: '',
-    thumb: ''
-  }
-];
+this.state = {
+  list: [
+    {
+      id: '',
+      src: '',
+      thumb: ''
+    }
+  ]
+}
 
-<ImgUploader caption="上传照片" showUpload list={list} onChange={onChangeImg}/>
+onPhotoChange = (list) => {
+  this.setState({
+    list: list
+  })
+}
+onChooseBefore = () => {
+  return new Promise((relsove) => {
+    console.log('1');
+    relsove(false);
+  });
+}
+
+<ImgUploader
+  onChooseBefore={this.onChooseBefore}
+  caption="上传照片"
+  showUpload
+  list={this.state.list}
+  onChange={this.onPhotoChange}
+/>
 ```
 [返回目录](#component)
 

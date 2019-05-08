@@ -40,7 +40,9 @@ export default class ImgUploader extends Component {
     chooseOptions: PropTypes.object, // 选择照片参数
    
     onChange: PropTypes.func, // 照片发生变化
+    onChooseBefore: PropTypes.func, // 选择照片之前校验, 返回true则继续, 返回false则停止
     onChooseSuccess: PropTypes.func, // 照片选择完成
+    onChooseError: PropTypes.func, // 照片选择错误
     onUploadsSuccess: PropTypes.func, // 照片全部上传完成
     onUploadSuccess: PropTypes.func, // 照片上传完成
     onUploadFail: PropTypes.func, // 照片上传失败
@@ -62,11 +64,13 @@ export default class ImgUploader extends Component {
     // 初始化图片组件
     this.instance = new Bridge.Image({
       onChooseSuccess: this.chooseSuccess,
+      onChooseError: this.props.onChooseError,
       onUploadsSuccess: this.uploadsSuccess,
       onUploadSuccess: this.uploadSuccess,
       onUploadFail: this.uploadFail,
     });
   }
+  // 转换成照片格式
   convertList = (imgMap) => {
     var list = [];
     if (Bridge.platform === 'waiqin') {
@@ -115,6 +119,7 @@ export default class ImgUploader extends Component {
     }
     return list;
   }
+  // 照片发生变化
   onChange = (imgMap, op) => {
     var currentList = this.convertList(imgMap);
     // 过滤原有list中和现在list中相同的图片
@@ -128,6 +133,7 @@ export default class ImgUploader extends Component {
     // Callback
     if (this.props.onChange) this.props.onChange(list, op);
   }
+  // 选择和上传回调
   chooseSuccess = (imgMap) => {
     this.onChange(imgMap, {op: 'chooseSuccess'});
     if (this.props.onChooseSuccess) this.props.onChooseSuccess(this.convertList(imgMap));
@@ -144,7 +150,13 @@ export default class ImgUploader extends Component {
     this.onChange(imgMap, Object.assign({op: 'uploadFail'}, err));
     if (this.props.onUploadFail) this.props.onUploadFail(this.convertList(imgMap), err);
   }
-  chooseImg = () => {
+  // 选择照片
+  chooseImg = async () => {
+    // 选择前校验
+    if (this.props.onChooseBefore) {
+      let allowChoose = await this.props.onChooseBefore();
+      if (!allowChoose) return;
+    }
     const {enableSafe, max, sourceType, sizeType, chooseOptions} = this.props;
     this.instance.choose({
       enableSafe: enableSafe, // 安全上传,第次只能传一张
@@ -155,6 +167,7 @@ export default class ImgUploader extends Component {
       chooseOptions: chooseOptions
     });
   }
+  // 删除照片
   deleteImg = (item) => {
     const list = this.props.list.filter((photo) => {
       if (photo.id === item.id) return false

@@ -589,7 +589,8 @@ var Bridge = {
     // 选择照片
     s.choose = function (args = {}) {
       if (!Bridge.debug) {
-        Bridge.showToast('拍照功能只能在APP或者微信中使用', {mask: false})
+        if (params.onChooseError) params.onChooseError({code: 'chooseFail', msg: '拍照功能只能在APP或者微信中使用'})
+        else Bridge.showToast('拍照功能只能在APP或者微信中使用', {mask: false})
         return
       }
       var option = {

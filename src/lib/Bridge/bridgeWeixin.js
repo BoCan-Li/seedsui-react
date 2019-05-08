@@ -90,7 +90,7 @@ var Bridge = {
           if (params.onSuccess) params.onSuccess(res)
         } else {
           var errMsg = '定位失败,请重新进入此页面'
-          if (params.onError) params.onError({code: 'locationFail', msg: errMsg})
+          if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
           else BridgeBrowser.showToast(errMsg, {mask: false})
         }
       },
@@ -158,7 +158,7 @@ var Bridge = {
         params.onSuccess(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res})
+        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + res, res: res})
         else BridgeBrowser.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
@@ -238,11 +238,12 @@ var Bridge = {
               sourceType: res.sourceType
             }
           }
-          if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
+          if (params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
           s.upload(imgMap)
         },
         fail: function (res) {
-          BridgeBrowser.showToast('选择照片失败,请检查是否开启定位权限', {mask: false})
+          if (params.onChooseError) params.onChooseError({code: 'chooseFail', msg: '选择照片失败' + res, res: res})
+          else BridgeBrowser.showToast('选择照片失败', {mask: false})
         },
         cancel: function () {
         },
@@ -278,6 +279,7 @@ var Bridge = {
             var deleteItem = imgMap[img]
             delete imgMap[img]
             if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, code: 'uploadFail', msg: msg})
+            if (index >= imgs.length - 1 && params.onUploadsSuccess) params.onUploadsSuccess(imgMap)
             loop(++index)
           }
         })
