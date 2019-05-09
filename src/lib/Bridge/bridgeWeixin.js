@@ -92,11 +92,13 @@ var Bridge = {
         }
       },
       fail: (res) => {
+        this.locating = false
         var errMsg = '定位失败,请检查微信定位权限是否开启'
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       },
       complete: (res) => {
+        this.locating = false
         if (params.onComplete) params.onComplete(res)
       }
     })
