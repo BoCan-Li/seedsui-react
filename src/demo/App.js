@@ -6,7 +6,6 @@ import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import Bridge from './../lib/Bridge';
-import NumBox from './../lib/NumBox';
 
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
@@ -60,17 +59,6 @@ class App extends Component {
     Bridge.debug = true
     this.mapUtil = new MapUtil('map');
     this.initMap();
-    this.foo = '0'
-    this.getLo({
-      onSuccess: function () {
-        console.log(this.foo)
-      }
-    })
-  }
-  getLo = (params) => {
-    setTimeout(() => {
-      params.onSuccess()
-    }, 1000);
   }
   // 添加鼠标绘制工具监听事件，用于获取绘制结果
   initMap = () => {
@@ -163,23 +151,6 @@ class App extends Component {
         <Container>
           {/* <MapContainer id="map"></MapContainer>
           <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
-          <div style={{height: '600px'}}></div>
-          <NumBox
-            className="lg"
-            digits={2}
-            value={this.state.value}
-            onChange={this.onChangeNum}
-            args={['arg1', 'arg2']}
-          />
-          <br/><br/><br/><br/>
-          <NumBox
-            className="lg"
-            digits={2}
-            value={''}
-            onChange={this.onChangeNum}
-            args={['arg1', 'arg2']}
-          />
-          <br/><br/><br/><br/>
         </Container>
       </Page>
     );

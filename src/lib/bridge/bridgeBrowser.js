@@ -453,7 +453,16 @@ var Bridge = {
   removeBackPress: function () {
     console.log('removeBackPress方法在浏览器上无法运行')
   },
-  // 获取当前地理位置
+  /**
+    * 获取当前地理位置
+    * @param {Object} params
+    * params: {
+    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    * timeout {Number}: 超时,
+    * cache {Number}: 默认60秒缓存防重复定位
+    * }
+    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    */
   getLocation: function (params = {}) {
     if (!this.debug) {
       this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
@@ -485,7 +494,7 @@ var Bridge = {
       this.locating = false
       var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
       // 将位置信息存储到cookie中60秒
-      DB.setCookie('app_location', JSON.stringify(res) , 60)
+      if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
       if (params.onSuccess) params.onSuccess(res)
     }, 2000)
   },
