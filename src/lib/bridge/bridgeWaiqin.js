@@ -192,7 +192,6 @@ var Bridge = {
     * @param {Object} params
     * params: {
     * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * timeout {Number}: 超时,
     * cache {Number}: 默认60秒缓存防重复定位
     * }
     * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}

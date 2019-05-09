@@ -52,7 +52,6 @@ var Bridge = {
     * @param {Object} params
     * params: {
     * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * timeout {Number}: 超时,
     * cache {Number}: 默认60秒缓存防重复定位
     * }
     * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
@@ -73,16 +72,6 @@ var Bridge = {
       if (params.onSuccess) params.onSuccess(appLocation)
       return
     }
-    // 定位超时
-    if (this.locationOvertime) return
-    this.locationOvertime = setTimeout(() => {
-      this.locationOvertime = null
-      if (!DB.getCookie('app_location')) {
-        var errMsg = '请确认微信定位权限是否开启,如未开启将影响图片上传功能'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: {}})
-        else BridgeBrowser.showToast(errMsg, {mask: false})
-      }
-    }, params.timeout || 5000)
     // 调用定位
     if (this.locating) return
     this.locating = true
@@ -103,13 +92,11 @@ var Bridge = {
         }
       },
       fail: (res) => {
-        this.locationOvertime = null
         var errMsg = '定位失败,请检查微信定位权限是否开启'
         if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
         else BridgeBrowser.showToast(errMsg, {mask: false})
       },
       complete: (res) => {
-        this.locationOvertime = null
         if (params.onComplete) params.onComplete(res)
       }
     })
