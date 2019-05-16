@@ -364,11 +364,12 @@ var Bridge = {
       max = argParams.count
       params.max = '' + max
     }
-    // viewId | 水印相关: photoType | customerName | submitName | cmLocation | selectItems
-    params.viewId = '' + parseInt(Math.random() * 1000, 10)
+    // viewId 临时目录,不需要
+    params.viewId = '0'
     if (argParams && argParams.viewId) {
       params.viewId = argParams.viewId;
     }
+    // 水印相关: photoType | customerName | submitName | cmLocation | selectItems
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
