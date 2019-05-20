@@ -60,6 +60,7 @@ import Legend from './Legend';
 import List from './List';
 import ListPull from './ListPull'; // 不常用
 import Loading from './Loading';
+import LotteryWheel from './LotteryWheel'; // 不常用
 import Mark from './Mark';
 import Marquee from './Marquee';
 import MenuTiled from './MenuTiled';
@@ -78,10 +79,10 @@ import PickerCity from './PickerCity';
 import PickerDate from './PickerDate';
 import Player from './Player';
 import Popover from './Popover';
+import Preview from './Preview'; // 不常用
 import Price from './Price';
 import Progress from './Progress';
 import Radio from './Radio';
-import RouteComment from './RouteComment'; // 不常用
 import SearchBoard from './SearchBoard';
 import SelectPicker from './SelectPicker';
 import Star from './Star';
@@ -176,6 +177,7 @@ export {
   List,
   ListPull,
   Loading,
+  LotteryWheel, // 不常用
   Mark,
   Marquee,
   MenuTiled, // 不常用
@@ -194,10 +196,10 @@ export {
   PickerDate,
   Player,
   Popover, // 不常用
+  Preview, // 不常用
   Price,
   Progress,
   Radio,
-  RouteComment,
   SearchBoard,
   SelectPicker,
   Star,
