@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import MapUtil from './../lib/MapUtil';
 import Page from './../lib/Page';
 import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import Bridge from './../lib/Bridge';
-import Device from './../lib/Device';
-
-// import greinerHormann from 'greiner-hormann';
-// import WqMapLib from './maplib/wqgeoutils.js';
-import LotteryWheel from './../lib/LotteryWheel';
+import MapUtil from './../lib/MapUtil';
+import GeoUtils from './../lib/MapUtil/GeoUtils.js';
+const { greinerHormann, BMap } = window
 
 const MapContainer = styled.div`
   position: absolute;
@@ -52,18 +49,6 @@ class App extends Component {
   static mapUtil = {}
   constructor(props) {
     super(props);
-    this.state = {
-      data: [
-        {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
-        {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-        {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
-      ]
-    }
   }
   componentDidMount () {
     Bridge.debug = true
@@ -117,7 +102,10 @@ class App extends Component {
     const shape = this.mapUtil.drawPolygon({
       polygon: polygon,
       onSuccess: (res, polygonPoints) => {
+        console.log('绘制完成');
         blueMap.set(id, polygonPoints);
+        // 取差差
+        this.resetFenceArea(polygon);
       },
       onError: (msg) => {
         alert(msg)
@@ -146,62 +134,84 @@ class App extends Component {
       ]
     })
   }
-  onChangeNum = (val, args) => {
-    console.log(val, args)
-    this.setState({
-      value: val
-    })
-  }
-  playing = false
-  play = () => {
-    if (this.playing) {
-      console.log('playing...');
+  // 绘制指定区域
+  resetFenceArea = (overlay) => {
+    var newlay = overlay;
+    if (GeoUtils.isSelfInter(overlay)) {
+      this.mapUtil.map.removeOverlay(overlay);
+      alert('多边形自相交');
       return;
     }
-    this.playing = true
-    this.$lotterywheel.instance.reset();
-    setTimeout(() => {
-      this.$lotterywheel.instance.play(2, () => {
-        console.log('转动完成')
-      });
-    }, 10);
-    setTimeout(() => {
-      this.playing = false
-      this.setState({
-        data: [
-          {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
-          {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
-          {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
-        ]
-      })
-    }, 5000);
+    console.log(grayMap)
+    var overlays = [...grayMap.values()];
+    for (var i = overlays.length - 1; i >= 0; i--) {
+      if (GeoUtils.isContainer(overlays[i], overlay)) {
+        this.mapUtil.map.removeOverlay(overlay);
+        alert("多边形区域相互包含")
+        return;
+      }
+      var tmppoly = GeoUtils.addContainPoint(overlays[i], newlay);
+      var tmpp = JSON.stringify(newlay.so);
+      while (JSON.stringify(tmppoly) !== tmpp) {
+        tmpp = JSON.stringify(tmppoly);
+        //需要把点转成polygon
+        var polygonlines = new BMap.Polygon(tmppoly);
+        tmppoly = GeoUtils.addContainPoint(overlays[i], polygonlines);
+      }
+
+      var tmp = JSON.stringify(tmppoly);
+      tmppoly = GeoUtils.removeContainPoint(overlays[i], tmppoly);
+      while (JSON.stringify(tmppoly) !== tmp) {
+        tmp = JSON.stringify(tmppoly)
+        tmppoly = GeoUtils.removeContainPoint(overlays[i], tmppoly);
+      }
+
+      //开始判断oldline是否有点在newline中
+      newlay = new BMap.Polygon(tmppoly);
+    }
+    overlays.push(newlay);
+    if (this.canViewAll === '0' && [...redMap.values()].length > 0) { // 红色区域取并集
+      overlays = [...redMap.values()];
+      for (i = 0; i < overlays.length; i++) {
+        var pa = [];
+        pa.push(overlays[i].so);
+        var pb = [];
+        pb.push(newlay.so);
+        var paa = new Array([]);
+
+        paa['_latlngs'] = pa;
+        var pbb = new Array([]);
+        pbb['_latlngs'] = pb;
+        tmppoly = greinerHormann.intersection(paa, pbb);
+        if (tmppoly) {
+          newlay = this.mapUtil.pointsToPolygon(tmppoly);
+        }
+      }
+    }
+    this.mapUtil.map.removeOverlay(overlay);
+    var id = 'blue-' + new Date().getTime();
+    var pg = this.mapUtil.drawPolygon({
+      points: newlay.so,
+      styleOptions: {fillColor: '#0c8eff', strokeColor: '#0c8eff'},
+      onSuccess: () => {
+      },
+      onError: (msg) => {
+        alert(msg)
+      }
+    });
+    grayMap.set(id, pg);
+    blueMap.set(id, pg);
+    this.addContextMenu(id, pg);
   }
   render() {
-    const containerWidth = Device.screenWidth - 40;
-  const wrapperWidth = containerWidth * 0.85;
     return (
       <Page>
         <Header>
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          <div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px', overflow: 'hidden'}}>
-            <LotteryWheel
-              ref={(el) => {this.$lotterywheel = el;}}
-              width={wrapperWidth}
-              height={wrapperWidth}
-              iconWidth={containerWidth * 0.1}
-              iconHeight={containerWidth * 0.1}
-              data={this.state.data}
-            />
-            <img className="lotterywheel-border" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/border.png'} alt=""/>
-            <img className="lotterywheel-pointer" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/pointer.png'} alt="" onClick={this.play}/>
-          </div>
+          <MapContainer id="map"></MapContainer>
+          <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw>
         </Container>
       </Page>
     );

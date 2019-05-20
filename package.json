@@ -30,6 +30,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "greiner-hormann": "^1.4.1",
     "jcrop": "^3.0.1",
     "styled-components": "^4.2.0"
   },

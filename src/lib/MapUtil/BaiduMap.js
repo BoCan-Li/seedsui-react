@@ -107,66 +107,14 @@ var BaiduMap = function (id, params) {
     }
     s.map.setViewport(points)
   }
-  // 绘制指定区域
-  // function resetFenceArea (overlay) {
-  //   var newlay = overlay;
-
-  //   if (WqMapLib.WqGeoUtils.isSelfInter(overlay)){
-  //       map.removeOverlay(overlay);
-  //       fh.alert('多边形自相交');
-  //       return;
-  //   }
-  //   var overlays = grayMap.values();
-  //   for (var i = overlays.length - 1; i >= 0; i --) {
-  //       if (WqMapLib.WqGeoUtils.isContainer(overlays[i],overlay)){
-  //           map.removeOverlay(overlay);
-  //           fh.alert("多边形区域相互包含")
-  //           return;
-  //       }
-  //       var tmppoly = WqMapLib.WqGeoUtils.addContainPoint(overlays[i],newlay);
-  //       var tmpp = JSON.stringify(newlay.so);
-  //       while( JSON.stringify(tmppoly) != tmpp){
-  //           tmpp = JSON.stringify(tmppoly);
-  //           //需要把点转成polygon
-  //           var polygonlines = convertPolygon(tmppoly);
-  //           tmppoly = WqMapLib.WqGeoUtils.addContainPoint(overlays[i],polygonlines);
-  //       }
-
-  //       var tmp = JSON.stringify(tmppoly);
-  //       tmppoly = WqMapLib.WqGeoUtils.removeContainPoint(overlays[i],tmppoly);
-  //       while( JSON.stringify(tmppoly) != tmp){
-  //           tmp = JSON.stringify(tmppoly)
-  //           tmppoly = WqMapLib.WqGeoUtils.removeContainPoint(overlays[i],tmppoly);
-  //       }
-
-  //       //开始判断oldline是否有点在newline中
-  //       newlay = convertPolygon(tmppoly);
-  //   }
-  //   overlays.push(newlay);
-  //   if (canViewAll == '0' && redMap.values().length > 0) { // 红色区域取并集
-  //       var overlays = redMap.values();
-  //       for (var i = 0; i < overlays.length; i++) {
-  //           var pa = [];
-  //           pa.push(overlays[i].so);
-  //           var pb = [];
-  //           pb.push(newlay.so);
-  //           var paa = new Array();
-
-  //           paa['_latlngs'] = pa;
-  //           var pbb = new Array();
-  //           pbb['_latlngs'] = pb;
-  //           var tmppoly = greinerHormann.intersection(paa, pbb);
-  //           if (tmppoly) {
-  //               newlay = pointsToPolygon(tmppoly);
-  //           }
-  //       }
-  //   }
-  //   map.removeOverlay(overlay);
-  //   var id = 'blue-' + new Date().getTime(), pg = polygon(newlay.so, '#0c8eff');
-  //   grayMap.put(id, pg);
-  //   blueMap.put(id, pg);
-  //   addContextMenu(id, pg);
-  // }
+  // 点转多边形points:[[y, x], [y, x]]
+  s.pointsToPolygon = function (points) {
+    var ps = []
+    for (var i = 0; i < points.length; i++) {
+      ps.push(new BMap.Point(points[i][1], points[i][0]))
+    }
+    return new BMap.Polygon(ps)
+  }
   // 绘制省市区域
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
     var boundary = new BMap.Boundary()
