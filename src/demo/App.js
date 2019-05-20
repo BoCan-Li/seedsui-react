@@ -6,10 +6,11 @@ import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import Bridge from './../lib/Bridge';
+import Device from './../lib/Device';
 
 // import greinerHormann from 'greiner-hormann';
 // import WqMapLib from './maplib/wqgeoutils.js';
-
+import LotteryWheel from './../lib/LotteryWheel';
 
 const MapContainer = styled.div`
   position: absolute;
@@ -52,7 +53,16 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      data: [
+        {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
+        {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+        {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
+      ]
     }
   }
   componentDidMount () {
@@ -142,15 +152,56 @@ class App extends Component {
       value: val
     })
   }
+  playing = false
+  play = () => {
+    if (this.playing) {
+      console.log('playing...');
+      return;
+    }
+    this.playing = true
+    this.$lotterywheel.instance.reset();
+    setTimeout(() => {
+      this.$lotterywheel.instance.play(2, () => {
+        console.log('转动完成')
+      });
+    }, 10);
+    setTimeout(() => {
+      this.playing = false
+      this.setState({
+        data: [
+          {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {text: '300积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {bgFillStyle: '#ffcd76', text: '大奖', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gift.png'},
+          {text: '100积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {bgFillStyle: '#ffcd76', text: '400积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {text: '500积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {bgFillStyle: '#ffcd76', text: '600积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},
+          {text: '700积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'}
+        ]
+      })
+    }, 5000);
+  }
   render() {
+    const containerWidth = Device.screenWidth - 40;
+  const wrapperWidth = containerWidth * 0.85;
     return (
       <Page>
         <Header>
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          {/* <MapContainer id="map"></MapContainer>
-          <ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw> */}
+          <div className="lotterywheel-container" style={{width: containerWidth + 'px', height: containerWidth + 'px', overflow: 'hidden'}}>
+            <LotteryWheel
+              ref={(el) => {this.$lotterywheel = el;}}
+              width={wrapperWidth}
+              height={wrapperWidth}
+              iconWidth={containerWidth * 0.1}
+              iconHeight={containerWidth * 0.1}
+              data={this.state.data}
+            />
+            <img className="lotterywheel-border" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/border.png'} alt=""/>
+            <img className="lotterywheel-pointer" src={'//res.waiqin365.com/d/dinghuo365/lotterywheel/pointer.png'} alt="" onClick={this.play}/>
+          </div>
         </Container>
       </Page>
     );

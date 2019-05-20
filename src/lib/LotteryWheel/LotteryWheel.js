@@ -19,6 +19,8 @@ export default class LotteryWheel extends Component {
     iconWidth: PropTypes.number,
     iconHeight: PropTypes.number,
     iconTop: PropTypes.number,
+
+    around: PropTypes.number, // 转动圈数, 默认转6圈
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
     width: PropTypes.number, // 宽度
     height: PropTypes.number, // 高度
@@ -60,6 +62,8 @@ export default class LotteryWheel extends Component {
       iconWidth: this.props.iconWidth,
       iconHeight: this.props.iconHeight,
       iconTop: this.props.iconTop,
+
+      around: this.props.around,
       // 保存
       suffix: this.props.suffix,
       quality: this.props.quality

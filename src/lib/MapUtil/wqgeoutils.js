@@ -9,35 +9,35 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
     WqGeoUtils.addContainPoint = function(oldpoly, newpoly) {
         //开始判断oldpoly是否有点在newpoly中，并添加相应的点
         var arr = [];
-        var oldpoints = oldpoly.so
-        var inpoly = false
+        var oldpoints = oldpoly.so;
+        var inpoly = false;
         for (var i = 0; i < oldpoints.length; i ++) {
             if (WqGeoUtils.isPointInPolygon(oldpoints[i],newpoly)) {
-                inpoly = true
+                inpoly = true;
                 break;
             }
         }
-        if ( !inpoly){
-            return newpoly.so
+        if (!inpoly){
+            return newpoly.so;
         }
 
         for (var i = 0; i < oldpoints.length; i ++) {
             if (WqGeoUtils.isPointInPolygon(oldpoints[i],newpoly)) {
                 // 有一个点在多边形内,这时候需要找到前后两个交点，然后添加点
                 //向上找到一个不在多边形内的点，
-                var innipoints = []
+                var innipoints = [];
                 var mlastindex = 0;
                 innipoints.push(oldpoints[i])
                 for ( var j= i-1;j> -oldpoints.length;j--){
                     var mlastindex = j;
-                    if ( j < 0){
+                    if (j < 0){
                         mlastindex = oldpoints.length  + j;
                     }
-                    if ( !WqGeoUtils.isPointInPolygon(oldpoints[mlastindex],newpoly)){
-                        innipoints.splice(0,0,oldpoints[mlastindex])
+                    if (!WqGeoUtils.isPointInPolygon(oldpoints[mlastindex],newpoly)){
+                        innipoints.splice(0,0,oldpoints[mlastindex]);
                         break;
                     }else{
-                        innipoints.splice(0,0,oldpoints[mlastindex])
+                        innipoints.splice(0,0,oldpoints[mlastindex]);
                     }
                 }
                 //向下找到一个不在多边形内的点，
@@ -55,8 +55,16 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                     }
                 }
 
-                var lastcrossPoint = WqGeoUtils.getCrossPoint(innipoints[0],innipoints[1],newpoly)
-                var nextcrossPoint = WqGeoUtils.getCrossPoint(innipoints[innipoints.length -2 ],innipoints[innipoints.length -1],newpoly)
+                var lastcrossPoint = WqGeoUtils.getCrossPoint(innipoints[0],innipoints[1],newpoly);
+                if (lastcrossPoint == false) {
+                    //异常
+                    return;
+                }
+                var nextcrossPoint = WqGeoUtils.getCrossPoint(innipoints[innipoints.length -2 ],innipoints[innipoints.length -1],newpoly);
+                if (nextcrossPoint == false) {
+                    //异常
+                    return;
+                }
                 innipoints.splice(0,1,lastcrossPoint)
                 innipoints.splice(innipoints.length-1,1,nextcrossPoint)
                 //已经找到所有的点，等待替换
@@ -67,16 +75,16 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                 //遍历确保第一个不在多边形之内
                 var step = tnewpoints.length
                 var sp = 0;
-                while ( sp < step){
+                while (sp < step){
                     sp ++
                     if (WqGeoUtils.isPointInPolygon(tnewpoints[0],oldpoly)){
-                        tnewpoints.push(tnewpoints[0])
+                        tnewpoints.push(tnewpoints[0]);
                         tnewpoints.splice(0, 1);
                     }else{
                         break;
                     }
                 }
-                tnewpoints.push(tnewpoints[0])
+                tnewpoints.push(tnewpoints[0]);
                 for ( var t =0;t < tnewpoints.length;t++){
                     if (!(tnewpoints[t] && tnewpoints[t+1])) {
                         continue;
@@ -102,7 +110,6 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                                 }
                                 var out = false
                                 for(var findex = t+1;findex< (tnewpoints.length-1);findex ++){
-
                                     if (!out && WqGeoUtils.isPointInPolygon(tnewpoints[findex],oldpoly)){
 
                                     }else {
@@ -120,7 +127,6 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                                 }
                                 var out = false
                                 for(var findex = t+1;findex< (tnewpoints.length-1);findex ++){
-
                                     if (!out && WqGeoUtils.isPointInPolygon(tnewpoints[findex],oldpoly,false)){
 
                                     }else {
@@ -168,19 +174,19 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                 break;
             }
         }
-        if ( !inpoly ){
+        if (!inpoly){
             //开始处理共线情况
-            var arr= newpoly
-            var ft = arr[0]
-            var lt = arr[arr.length-1]
-            arr.push(ft)
-            arr.splice(0,0,lt)
+            var arr= newpoly;
+            var ft = arr[0];
+            var lt = arr[arr.length-1];
+            arr.push(ft);
+            arr.splice(0,0,lt);
 
             var arrt = []
             for(var i=1;i<=arr.length-2;i++){
                 if ((WqGeoUtils.isPointOnPolygon(arr[i-1], oldpoly))&&(WqGeoUtils.isPointOnPolygon(arr[i+1], oldpoly))&&(WqGeoUtils.isPointOnPolygon(arr[i], oldpoly))) {
                     if ((WqGeoUtils.isPointInPolygon(WqGeoUtils.getMiddlePoint(arr[i+1],arr[i]), oldpoly))||(WqGeoUtils.isPointInPolygon(WqGeoUtils.getMiddlePoint(arr[i-1],arr[i]), oldpoly))){
-                        //{
+                        //
                     }else{
                         arrt.push(arr[i])
                     }
@@ -188,13 +194,21 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
                     arrt.push(arr[i])
                 }
             }
-
-            return arrt
+            // 去重
+            for (var i = arrt.length - 1; i > 0; i--) {
+                if (arrt[i] == arrt[i - 1]) {
+                    arrt.splice(i, 1);
+                }
+            }
+            if (arrt[arrt.length - 1] == arrt[0]) {
+                arrt.splice(0, 1);
+            }
+            return arrt;
         }
         //遍历确保第一个不在多边形之内
         var step = newpoly.length
         var sp = 0;
-        while ( sp < step){
+        while (sp < step){
             sp ++
             if (WqGeoUtils.isPointInPolygon(newpoly[0],oldpoly)){
                 newpoly.push(newpoly[0])
@@ -246,15 +260,41 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
         }
 
         //去重
-        for(var i=arr.length-1;i>0;i--){
-            if ( arr[i] == arr[i-1]){
-                arr.splice(i,1)
+        //去掉异常点
+        for (var i = arr.length - 1; i > 0; i--) {
+            if (WqGeoUtils.isNullPoint(arr[i])) {
+                arr.splice(i,1);
             }
         }
-        if (arr[arr.length -1] == arr[0]){
-            arr.splice(0,1)
+        //去重
+        for (var i = arr.length - 1; i > 0; i--) {
+            if (WqGeoUtils.isPointEqual(arr[i],arr[i-1])) {
+                arr.splice(i,1);
+            }
         }
-        return arr
+
+        if (WqGeoUtils.isPointEqual(arr[arr.length - 1],arr[0])) {
+            arr.splice(0, 1);
+        }
+        return arr;
+    }
+
+    WqGeoUtils.isNullPoint = function (point) {
+        var precision = 2e-10
+        if ((Math.abs(point.lng) < precision)&&((Math.abs(point.lat) < precision))) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    WqGeoUtils.isPointEqual = function (start,end) {
+        var precision = 2e-8
+        if ((Math.abs(start.lng - end.lng) < precision)&&((Math.abs(start.lat - end.lat) < precision))) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     WqGeoUtils.getMiddlePoint = function (start,end){
@@ -612,4 +652,22 @@ var WqMapLib = window.WqMapLib = WqMapLib || {};
     WqGeoUtils.getDistance = function(start, end) {
         return Math.sqrt(Math.pow((start.lng - end.lng), 2) + Math.pow((start.lat - end.lat), 2))
     }
+
+    /**
+     * 判断两多变形是否存在点与区域的包含关系(A的点在B的区域内或B的点在A的区域内)
+     */
+    /*WqGeoUtils.isPointInPolygonBidirectional(plyA, plyB) {
+        var [pA, pB] = [plyA.getPath(), plyB.getPath()];
+        var [a, b] = [false, false];
+        for (var i = 0; i < pA.length; i++) {
+            if (WqGeoUtils.isPointInPolygon(pA[i], plyB)) {
+                a = true;
+            }
+        }
+        a = pA.some(item => WqGeoUtils.isPointInPolygon(item, new BMap.Polygon(pB)));
+        if (!a) {
+            b = pB.some(item => WqGeoUtils.isPointInPolygon(item, new BMap.Polygon(pA)));
+        }
+        return a || b;
+    }*/
 })();

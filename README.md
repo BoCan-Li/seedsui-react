@@ -3068,6 +3068,8 @@ import Loading from 'seedsui-react/lib/Loading';
   iconWidth={图标宽度 number, 默认42}
   iconHeight={图标高度 number, 默认42}
   iconTop={图标头部距离 number, 默认42}
+
+  around={转动圈数 number, 默认6}
   // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
   width={转盘宽度 number, 默认300}
   height={转盘高度 number, 默认300}
@@ -3099,12 +3101,21 @@ this.state = {
   ]
 }
 
+playing = false
 play = () => {
+  if (this.playing) {
+    console.log('playing...');
+    return;
+  }
+  this.playing = true
   this.$lotterywheel.instance.reset();
   setTimeout(() => {
-    this.$lotterywheel.instance.play(3);
+    this.$lotterywheel.instance.play(2, () => {
+      console.log('转动完成')
+    });
   }, 10);
   setTimeout(() => {
+    this.playing = false
     this.setState({
       data: [
         {bgFillStyle: '#ffcd76', text: '200积分', icon: '//res.waiqin365.com/d/dinghuo365/lotterywheel/gold.png'},

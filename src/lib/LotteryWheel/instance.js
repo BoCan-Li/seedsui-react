@@ -20,11 +20,18 @@ var LotteryWheel = function (container, params) {
     iconWidth: 42,
     iconHeight: 42,
     iconTop: 42,
+
+    around: 6, // 转6圈
     // 创建外层容器
     wrapperClass: 'lotterywheel-wrapper',
     // 保存
     suffix: 'image/png',
     quality: 0.92
+
+    /* callbacks
+    onTransitionEnd:function (LotteryWheel) // 动画结束后回调
+    onPlayAnimationEnd:function (LotteryWheel) // 播放动画结束后回调
+      */
   }
   params = params || {}
   for (var def in defaults) {
@@ -86,6 +93,15 @@ var LotteryWheel = function (container, params) {
     // 闭合路径
     s.ctx.closePath()
   }
+  s.slotDeg = 0  // 一槽的度数
+  s.rad = 0 // 一度的弧度
+  s.slotRad = 0 // 一槽的弧度
+  // 更新一槽的弧度
+  s.updateAngle = function () {
+    s.slotDeg = 360 / s.params.data.length // 一槽的度数
+    s.rad = Math.PI / 180 // 一度的弧度
+    s.slotRad = s.rad * s.slotDeg // 一槽的弧度
+  }
   // 绘制背景-单个扇形
   s.drawCanvas = function (item, index) {
     var ratio = s.getPixelRatio()
@@ -97,27 +113,23 @@ var LotteryWheel = function (container, params) {
     s.ctx.fillStyle = item.bgFillStyle || s.params.bgFillStyle
     s.ctx.lineWidth = item.bgLineWidth || s.params.bgLineWidth
 
-    // 计算平均角度
-    var deg = 360 / s.params.data.length // 一槽的度数
-    var rad = Math.PI / 180 // 一度的弧度
-    var angle = rad * deg
-
     // 计算开始和结束角, 使开始位置从正上方开始
-    var startAngel = rad * (-90) - (angle / 2)
-    var endAngel = startAngel + angle
+    var startAngel = s.rad * (-90) - (s.slotRad / 2)
+    var endAngel = startAngel + s.slotRad
 
-    // 设置中心点与旋转弧度
+    // 设置中心点与旋转弧度, 旋转完再绘
     s.ctx.translate(xy, xy)
-    if (index !== 0) s.ctx.rotate(angle)
+    if (index === 0) s.ctx.rotate(s.slotRad / 2)
+    if (index !== 0) s.ctx.rotate(s.slotRad)
     s.ctx.translate(-xy, -xy)
+
+    // 绘制前, 保存状态, 防止绘制污染
+    // s.ctx.save()
 
     // 绘背景
     s.sector(xy, xy, r, startAngel, endAngel)
     s.ctx.stroke()
     s.ctx.fill()
-
-    // 保存状态
-    s.ctx.save()
 
     // 绘文字
     var fontSize = (item.fontSize || s.params.fontSize) * ratio
@@ -138,8 +150,8 @@ var LotteryWheel = function (container, params) {
       s.ctx.drawImage(img, xy - (imgWidth / 2), imgTop, imgWidth, imgHeight);  
     }
 
-    // 还原状态
-    s.ctx.restore()
+    // 还原绘前状态
+    // s.ctx.restore()
   }
   // 防止失真, 在高分屏上, 所以要放大2倍绘制, 再缩小2倍
   s.update = function () {
@@ -154,6 +166,8 @@ var LotteryWheel = function (container, params) {
     // 缩小2倍
     s.canvas.style.WebkitTransform = 'scale(' + 1 / ratio + ')'
     s.canvas.style.WebkitTransformOrigin = 'left top'
+    // 更新一槽的弧度
+    s.updateAngle()
   }
   s.update()
   /* ----------------------
@@ -196,6 +210,30 @@ var LotteryWheel = function (container, params) {
     s.imgsCompleteDraw()
   }
   /* ----------------------
+  Events
+  ---------------------- */
+  s.events = function (detach) {
+    var action = detach ? 'removeEventListener' : 'addEventListener'
+    if (s.wrapper) s.wrapper[action]('webkitTransitionEnd', s.onTransitionEnd, false)
+  }
+  s.detach = function (event) {
+    s.events(true)
+  }
+  s.attach = function (event) {
+    s.events()
+  }
+  s.onTransitionEnd = function (e) {
+    s.event = e
+    // 动画转动完成回调
+    if (s.params.onTransitionEnd) s.params.onTransitionEnd(s)
+    // 转盘部分转动完成回调
+    var target = e.target
+    if (target.classList.contains(s.params.wrapperClass)) {
+      s.playing = false
+      if (s.params.onPlayAnimationEnd) s.params.onPlayAnimationEnd(s)
+    }
+  }
+  /* ----------------------
   Main
   ---------------------- */
   // 绘制canvas
@@ -211,23 +249,33 @@ var LotteryWheel = function (container, params) {
   }
   // 复位
   s.reset = function () {
+    // 更新一槽的弧度
+    s.updateAngle()
+    // 去除动画, 旋转角度复位
     s.wrapper.classList.remove('animated')
     s.wrapper.style.WebkitTransform = 'rotate(0deg)'
     // 还原初始状态
     if (s.ctx) s.ctx.restore()
   }
   // 转动转盘
-  s.play = function (count) {
+  s.playing = false
+  s.play = function (count, onPlayAnimationEnd) {
+    if (s.playing) return
+    s.playing = true
     if (!s.params.data || !s.params.data.length) return
-    var baseRotate = 2160 // 转6圈, 4秒
-    var rotate = count * (360 / s.params.data.length)
+    var baseRotate = (s.params.around || 6) * 360 // 转固定几圈, 并指向奖品的正中间
+    var rotate = (count + 1) * s.slotDeg - (s.slotDeg / 2)
 
     s.wrapper.classList.add('animated')
     s.wrapper.style.WebkitTransform = 'rotate(' + (baseRotate - rotate) + 'deg)'
+
+    // Callback
+    if (onPlayAnimationEnd) s.params.onPlayAnimationEnd = onPlayAnimationEnd
   }
   // 主函数
   s.init = function () {
     s.initImgs()
+    s.attach()
   }
 
   s.init()
