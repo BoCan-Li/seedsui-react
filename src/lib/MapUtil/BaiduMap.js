@@ -80,6 +80,23 @@ var BaiduMap = function (id, params) {
   /* --------------------
   Method
   -------------------- */
+  // 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
+  s.formatPoints = function (points) {
+    if (!points || !Array.isArray(points)) return []
+    if (JSON.stringify(points).indexOf('lng') !== -1) return points
+    if (!Array.isArray(points[0]) || !points[0][0] || !points[0][1]) return []
+    return points.map(function (point) {
+      var lng = point[0]
+      var lat = point[1]
+      if (point[0] < point[1]) {
+        lng = point[1]
+        lat = point[0]
+      }
+      return {
+        lng,lat
+      }
+    })
+  }
   // 显示放大缩小控件
   s.showScale = function () {
     s.map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}))
@@ -89,6 +106,18 @@ var BaiduMap = function (id, params) {
     s.map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_ZOOM}))
   }
   // 启用手动绘制
+  // 设置当前的绘制模式，参数DrawingType，为5个可选常量: 
+  // BMAP_DRAWING_MARKER 画点 
+  // BMAP_DRAWING_CIRCLE 画圆 
+  // BMAP_DRAWING_POLYLINE 画线 
+  // BMAP_DRAWING_POLYGON 画多边形 
+  // BMAP_DRAWING_RECTANGLE 画矩形
+  // circlecomplete(overlay) {Circle} 绘制圆完成后，派发的事件接口
+  // markercomplete(overlay) {Marker} 绘制点完成后，派发的事件接口
+  // overlaycomplete(e) {Event Object} 鼠标绘制完成后，派发总事件的接口
+  // polygoncomplete(overlay) {Polygon} 绘制多边形完成后，派发的事件接口
+  // polylinecomplete(overlay) {Polyline} 绘制线完成后，派发的事件接口
+  // rectanglecomplete(overlay) {Polygon} 绘制矩形完成后，派发的事件接口
   s.enableManualDraw = function (type) {
     if (s.drawingManager) {
       s.drawingManager.open()
@@ -108,10 +137,11 @@ var BaiduMap = function (id, params) {
     s.map.setViewport(points)
   }
   // 点转多边形points:[[y, x], [y, x]]
-  s.pointsToPolygon = function (points) {
+  s.pointsToPolygon = function (argPoints) {
+    var points = s.formatPoints(argPoints);
     var ps = []
-    for (var i = 0; i < points.length; i++) {
-      ps.push(new BMap.Point(points[i][1], points[i][0]))
+    for (var point of points) {
+      ps.push(new BMap.Point(point.lng, point.lat))
     }
     return new BMap.Polygon(ps)
   }
@@ -162,7 +192,7 @@ var BaiduMap = function (id, params) {
         if (options.styleOptions.fillOpacity) polygon.setFillOpacity(options.styleOptions.fillOpacity)
       }
     } else if (Array.isArray(options.points) && options.points.length) {
-      polygon = new BMap.Polygon(options.points, options.styleOptions || s.params.styleOptions)
+      polygon = new BMap.Polygon(s.formatPoints(options.points), options.styleOptions || s.params.styleOptions)
     }
     if (polygon) {
       s.map.addOverlay(polygon) // 添加覆盖物

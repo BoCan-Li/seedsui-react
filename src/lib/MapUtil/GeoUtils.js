@@ -7,166 +7,166 @@ const { BMap } = window
 var GeoUtils = {};
 (function () {
   /**
-    * 计算两个多边形相交并添加点
+    * 计算两个多边形相交并添加点, 使用greinerHormann.intersection代替
     * @param {Polygon} oldpoly 多边形对象
     * @param {Polygon} newpoly 多边形对象
     * @returns {Array} 返回newpoly的新的点
     */
-  GeoUtils.addContainPoint = function (oldpoly, newpoly) {
-    // 开始判断oldpoly是否有点在newpoly中，并添加相应的点
-    var arr = [];
-    var oldpoints = oldpoly.so;
-    var inpoly = false;
-    for (var i = 0; i < oldpoints.length; i++) {
-      if (GeoUtils.isPointInPolygon(oldpoints[i], newpoly)) {
-        inpoly = true;
-        break;
-      }
-    }
-    if (!inpoly) {
-      return newpoly.so;
-    }
+  // GeoUtils.addContainPoint = function (oldpoly, newpoly) {
+  //   // 开始判断oldpoly是否有点在newpoly中，并添加相应的点
+  //   var arr = [];
+  //   var oldpoints = oldpoly.so;
+  //   var inpoly = false;
+  //   for (var i = 0; i < oldpoints.length; i++) {
+  //     if (GeoUtils.isPointInPolygon(oldpoints[i], newpoly.so)) {
+  //       inpoly = true;
+  //       break;
+  //     }
+  //   }
+  //   if (!inpoly) {
+  //     return newpoly.so;
+  //   }
 
-    for (i = 0; i < oldpoints.length; i++) {
-      if (GeoUtils.isPointInPolygon(oldpoints[i], newpoly)) {
-        // 有一个点在多边形内,这时候需要找到前后两个交点，然后添加点
-        //向上找到一个不在多边形内的点，
-        var innipoints = [];
-        var mlastindex = 0;
-        innipoints.push(oldpoints[i])
-        for (var j = i - 1; j > -oldpoints.length; j--) {
-          mlastindex = j;
-          if (j < 0) {
-            mlastindex = oldpoints.length + j;
-          }
-          if (!GeoUtils.isPointInPolygon(oldpoints[mlastindex], newpoly)) {
-            innipoints.splice(0, 0, oldpoints[mlastindex]);
-            break;
-          } else {
-            innipoints.splice(0, 0, oldpoints[mlastindex]);
-          }
-        }
-        //向下找到一个不在多边形内的点，
-        var mnextindex = 0;
-        for (j = i + 1; j < (i + oldpoints.length); j++) {
-          mnextindex = j;
-          if (j >= oldpoints.length) {
-            mnextindex = j - oldpoints.length;
-          }
-          if (!GeoUtils.isPointInPolygon(oldpoints[mnextindex], newpoly)) {
-            innipoints.push(oldpoints[mnextindex])
-            break;
-          } else {
-            innipoints.push(oldpoints[mnextindex])
-          }
-        }
+  //   for (i = 0; i < oldpoints.length; i++) {
+  //     if (GeoUtils.isPointInPolygon(oldpoints[i], newpoly.so)) {
+  //       // 有一个点在多边形内,这时候需要找到前后两个交点，然后添加点
+  //       //向上找到一个不在多边形内的点，
+  //       var innipoints = [];
+  //       var mlastindex = 0;
+  //       innipoints.push(oldpoints[i])
+  //       for (var j = i - 1; j > -oldpoints.length; j--) {
+  //         mlastindex = j;
+  //         if (j < 0) {
+  //           mlastindex = oldpoints.length + j;
+  //         }
+  //         if (!GeoUtils.isPointInPolygon(oldpoints[mlastindex], newpoly.so)) {
+  //           innipoints.splice(0, 0, oldpoints[mlastindex]);
+  //           break;
+  //         } else {
+  //           innipoints.splice(0, 0, oldpoints[mlastindex]);
+  //         }
+  //       }
+  //       //向下找到一个不在多边形内的点，
+  //       var mnextindex = 0;
+  //       for (j = i + 1; j < (i + oldpoints.length); j++) {
+  //         mnextindex = j;
+  //         if (j >= oldpoints.length) {
+  //           mnextindex = j - oldpoints.length;
+  //         }
+  //         if (!GeoUtils.isPointInPolygon(oldpoints[mnextindex], newpoly.so)) {
+  //           innipoints.push(oldpoints[mnextindex])
+  //           break;
+  //         } else {
+  //           innipoints.push(oldpoints[mnextindex])
+  //         }
+  //       }
 
-        var lastcrossPoint = GeoUtils.getCrossPoint(innipoints[0], innipoints[1], newpoly);
-        if (lastcrossPoint === false) {
-          //异常
-          return;
-        }
-        var nextcrossPoint = GeoUtils.getCrossPoint(innipoints[innipoints.length - 2], innipoints[innipoints.length - 1], newpoly);
-        if (nextcrossPoint === false) {
-          //异常
-          return;
-        }
-        innipoints.splice(0, 1, lastcrossPoint)
-        innipoints.splice(innipoints.length - 1, 1, nextcrossPoint)
-        //已经找到所有的点，等待替换
-        var tnewpoints = []
-        for (var t = 0; t < newpoly.so.length; t++) {
-          tnewpoints.push(newpoly.so[t])
-        }
-        //遍历确保第一个不在多边形之内
-        var step = tnewpoints.length
-        var sp = 0;
-        while (sp < step) {
-          sp++
-          if (GeoUtils.isPointInPolygon(tnewpoints[0], oldpoly)) {
-            tnewpoints.push(tnewpoints[0]);
-            tnewpoints.splice(0, 1);
-          } else {
-            break;
-          }
-        }
-        tnewpoints.push(tnewpoints[0]);
-        for (t = 0; t < tnewpoints.length; t++) {
-          if (!(tnewpoints[t] && tnewpoints[t + 1])) {
-            continue;
-          }
-          var crossPoint = GeoUtils.onSegment(tnewpoints[t], tnewpoints[t + 1], innipoints[0]);
-          if (crossPoint) {
-            //找到第一个交点，判断那个点在之外
-            if (GeoUtils.isPointInPolygon(tnewpoints[t], oldpoly)) {//第一个点在多边形内
-              if (GeoUtils.isPointInPolygon(tnewpoints[t + 1], oldpoly)) {//第二个点也在多边形内，不可能
+  //       var lastcrossPoint = GeoUtils.getCrossPoint(innipoints[0], innipoints[1], newpoly);
+  //       if (lastcrossPoint === false) {
+  //         //异常
+  //         return;
+  //       }
+  //       var nextcrossPoint = GeoUtils.getCrossPoint(innipoints[innipoints.length - 2], innipoints[innipoints.length - 1], newpoly);
+  //       if (nextcrossPoint === false) {
+  //         //异常
+  //         return;
+  //       }
+  //       innipoints.splice(0, 1, lastcrossPoint)
+  //       innipoints.splice(innipoints.length - 1, 1, nextcrossPoint)
+  //       //已经找到所有的点，等待替换
+  //       var tnewpoints = []
+  //       for (var t = 0; t < newpoly.so.length; t++) {
+  //         tnewpoints.push(newpoly.so[t])
+  //       }
+  //       //遍历确保第一个不在多边形之内
+  //       var step = tnewpoints.length
+  //       var sp = 0;
+  //       while (sp < step) {
+  //         sp++
+  //         if (GeoUtils.isPointInPolygon(tnewpoints[0], oldpoly.so)) {
+  //           tnewpoints.push(tnewpoints[0]);
+  //           tnewpoints.splice(0, 1);
+  //         } else {
+  //           break;
+  //         }
+  //       }
+  //       tnewpoints.push(tnewpoints[0]);
+  //       for (t = 0; t < tnewpoints.length; t++) {
+  //         if (!(tnewpoints[t] && tnewpoints[t + 1])) {
+  //           continue;
+  //         }
+  //         var crossPoint = GeoUtils.onSegment(tnewpoints[t], tnewpoints[t + 1], innipoints[0]);
+  //         if (crossPoint) {
+  //           //找到第一个交点，判断那个点在之外
+  //           if (GeoUtils.isPointInPolygon(tnewpoints[t], oldpoly.so)) {//第一个点在多边形内
+  //             if (GeoUtils.isPointInPolygon(tnewpoints[t + 1], oldpoly.so)) {//第二个点也在多边形内，不可能
 
-              } else {//第一个在多边形内，第二个在多边形外
-                //反方向添加数据
-                //添加数据之前需要把在多边形内的点先删掉
-                for (var tp = arr.length - 1; tp >= 0; tp--) {
-                  if (GeoUtils.isPointInPolygon(arr[tp], oldpoly)) {
-                    arr.splice(tp, 1)
-                  } else {
-                    break;
-                  }
-                }
-                for (tp = innipoints.length - 1; tp >= 0; tp--) {
-                  arr.push(innipoints[tp])
-                }
-                var out = false
-                for (var findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
-                  if (!out && GeoUtils.isPointInPolygon(tnewpoints[findex], oldpoly)) {
+  //             } else {//第一个在多边形内，第二个在多边形外
+  //               //反方向添加数据
+  //               //添加数据之前需要把在多边形内的点先删掉
+  //               for (var tp = arr.length - 1; tp >= 0; tp--) {
+  //                 if (GeoUtils.isPointInPolygon(arr[tp], oldpoly.so)) {
+  //                   arr.splice(tp, 1)
+  //                 } else {
+  //                   break;
+  //                 }
+  //               }
+  //               for (tp = innipoints.length - 1; tp >= 0; tp--) {
+  //                 arr.push(innipoints[tp])
+  //               }
+  //               var out = false
+  //               for (var findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
+  //                 if (!out && GeoUtils.isPointInPolygon(tnewpoints[findex], oldpoly.so)) {
 
-                  } else {
-                    out = true
-                    arr.push(tnewpoints[findex])
-                  }
-                }
-                break;
-              }
-            } else {
-              if (GeoUtils.isPointInPolygon(tnewpoints[t + 1], oldpoly)) {//第一个点在多边形外，第二个在多边形内
-                arr.push(tnewpoints[t])
-                for (tp = 0; tp < innipoints.length; tp++) {
-                  arr.push(innipoints[tp])
-                }
-                out = false
-                for (findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
-                  if (!out && GeoUtils.isPointInPolygon(tnewpoints[findex], oldpoly, false)) {
+  //                 } else {
+  //                   out = true
+  //                   arr.push(tnewpoints[findex])
+  //                 }
+  //               }
+  //               break;
+  //             }
+  //           } else {
+  //             if (GeoUtils.isPointInPolygon(tnewpoints[t + 1], oldpoly.so)) {//第一个点在多边形外，第二个在多边形内
+  //               arr.push(tnewpoints[t])
+  //               for (tp = 0; tp < innipoints.length; tp++) {
+  //                 arr.push(innipoints[tp])
+  //               }
+  //               out = false
+  //               for (findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
+  //                 if (!out && GeoUtils.isPointInPolygon(tnewpoints[findex], oldpoly.so, false)) {
 
-                  } else {
-                    out = true
-                    arr.push(tnewpoints[findex])
-                  }
-                }
-                break;
-              } else { //两个都在多边形外
-                arr.push(tnewpoints[t])
-                if (GeoUtils.getDistance(tnewpoints[t], innipoints[0]) < GeoUtils.getDistance(tnewpoints[t], innipoints[innipoints.length - 1])) {
-                  for (tp = 0; tp < innipoints.length; tp++) {
-                    arr.push(innipoints[tp])
-                  }
-                } else {
-                  for (tp = innipoints.length - 1; tp >= 0; tp--) {
-                    arr.push(innipoints[tp])
-                  }
-                }
-                for (findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
-                  arr.push(tnewpoints[findex])
-                }
-                break;
-              }
-            }
-          } else {
-            arr.push(tnewpoints[t])
-          }
-        }
-        break;
-      }
-    }
-    return arr
-  }
+  //                 } else {
+  //                   out = true
+  //                   arr.push(tnewpoints[findex])
+  //                 }
+  //               }
+  //               break;
+  //             } else { //两个都在多边形外
+  //               arr.push(tnewpoints[t])
+  //               if (GeoUtils.getDistance(tnewpoints[t], innipoints[0]) < GeoUtils.getDistance(tnewpoints[t], innipoints[innipoints.length - 1])) {
+  //                 for (tp = 0; tp < innipoints.length; tp++) {
+  //                   arr.push(innipoints[tp])
+  //                 }
+  //               } else {
+  //                 for (tp = innipoints.length - 1; tp >= 0; tp--) {
+  //                   arr.push(innipoints[tp])
+  //                 }
+  //               }
+  //               for (findex = t + 1; findex < (tnewpoints.length - 1); findex++) {
+  //                 arr.push(tnewpoints[findex])
+  //               }
+  //               break;
+  //             }
+  //           }
+  //         } else {
+  //           arr.push(tnewpoints[t])
+  //         }
+  //       }
+  //       break;
+  //     }
+  //   }
+  //   return arr
+  // }
 
   /**
     * 是否是不合法的经纬度
@@ -205,38 +205,6 @@ var GeoUtils = {};
     */
   GeoUtils.getMiddlePoint = function (start, end) {
     return new BMap.Point((start.lng + end.lng) / 2, (start.lat + end.lat) / 2)
-  }
-
-  /**
-    * 判断两个多边形是否相交
-    * @param {Polygon} oldpoly 多边形对象
-    * @param {Polygon} newpoly 多边形对象
-    * @returns {Boolean}
-    */
-  GeoUtils.isContainer = function (oldpoly, newpoly) {
-    var container = 0
-    for (var i = 0; i < newpoly.so.length; i++) {
-      if (GeoUtils.isPointInPolygon(newpoly.so[i], oldpoly)) {
-        container++
-      } else {
-        break
-      }
-    }
-    if (container === newpoly.so.length) {
-      return true
-    }
-    container = 0
-    for (i = 0; i < oldpoly.so.length; i++) {
-      if (GeoUtils.isPointInPolygon(oldpoly.so[i], newpoly)) {
-        container++
-      } else {
-        break
-      }
-    }
-    if (container === oldpoly.so.length) {
-      return true
-    }
-    return false
   }
 
   /**
@@ -400,7 +368,7 @@ var GeoUtils = {};
   
 
   /**
-    * 计算两个多边形相交并去掉一个点
+    * 计算两个多边形相交并去掉一个点, 使用
     * @param {Polygon} oldpoly 多边形对象
     * @param {Polygon} newpoly 多边形对象
     * @returns {Array} 返回newpoly的新的点
@@ -624,7 +592,60 @@ var GeoUtils = {};
 
   
 
-  
+  /**
+    * 判断点是否多边形内
+    * @param {Point} point 点对象
+    * @param {Array<Point>} points 多边形的点
+    * @returns {Boolean} 点在多边形内返回true,否则返回false
+    */
+  GeoUtils.isPointInPolygon = function (argPoint = {}, argPoints = []) {
+    if (!argPoint.lng || !argPoint.lat || !Array.isArray(argPoints)) {
+      return false
+    }
+    var point = [argPoint.lng, argPoint.lat];
+    var vs = [];
+    for (var po of argPoints) {
+      if (!po.lng || !po.lat) return false;
+      vs.push([po.lng, po.lat]);
+    }
+    // 以下代码来自
+    // https://github.com/substack/point-in-polygon
+
+    var x = point[0], y = point[1];
+
+    var inside = false;
+    for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+      var xi = vs[i][0], yi = vs[i][1];
+      var xj = vs[j][0], yj = vs[j][1];
+
+      var intersect = ((yi > y) !== (yj > y))
+        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+
+    return inside;
+  }
+
+  /**
+    * 判断两个多边形是否包含
+    * @param {Array<Point>} points 多边形的点
+    * @param {Array<Point>} points 多边形的点
+    * @returns {Boolean}
+    */
+   GeoUtils.contains = function (insidePoints, outsidePoints) {
+    var contains = 0
+    for (var i = 0; i < insidePoints.length; i++) {
+      if (GeoUtils.isPointInPolygon(insidePoints[i], outsidePoints)) {
+        contains++
+      } else {
+        break
+      }
+    }
+    if (contains === insidePoints.length) {
+      return true
+    }
+    return false
+  }
 
   
   /* eslint-disable */
@@ -724,92 +745,92 @@ var GeoUtils = {};
     return false;
   }
 
-  /**
-    * 判断点是否多边形内
-    * @param {Point} point 点对象
-    * @param {Polyline} polygon 多边形对象
-    * @returns {Boolean} 点在多边形内返回true,否则返回false
-    */
-  GeoUtils.isPointInPolygon = function (point, polygon) {
-    //检查类型
-    if (!(point instanceof BMap.Point) ||
-      !(polygon instanceof BMap.Polygon)) {
-      return false;
-    }
+  // /**
+  //   * 判断点是否多边形内
+  //   * @param {Point} point 点对象
+  //   * @param {Polyline} polygon 多边形对象
+  //   * @returns {Boolean} 点在多边形内返回true,否则返回false
+  //   */
+  // GeoUtils.isPointInPolygon = function (point, polygon) {
+  //   //检查类型
+  //   if (!(point instanceof BMap.Point) ||
+  //     !(polygon instanceof BMap.Polygon)) {
+  //     return false;
+  //   }
 
-    //首先判断点是否在多边形的外包矩形内，如果在，则进一步判断，否则返回false
-    var polygonBounds = polygon.getBounds();
-    if (!this.isPointInRect(point, polygonBounds)) {
-      return false;
-    }
+  //   //首先判断点是否在多边形的外包矩形内，如果在，则进一步判断，否则返回false
+  //   var polygonBounds = polygon.getBounds();
+  //   if (!this.isPointInRect(point, polygonBounds)) {
+  //     return false;
+  //   }
 
-    var pts = polygon.getPath();//获取多边形点
+  //   var pts = polygon.getPath();//获取多边形点
 
-    //下述代码来源：http://paulbourke.net/geometry/insidepoly/，进行了部分修改
-    //基本思想是利用射线法，计算射线与多边形各边的交点，如果是偶数，则点在多边形外，否则
-    //在多边形内。还会考虑一些特殊情况，如点在多边形顶点上，点在多边形边上等特殊情况。
+  //   //下述代码来源：http://paulbourke.net/geometry/insidepoly/，进行了部分修改
+  //   //基本思想是利用射线法，计算射线与多边形各边的交点，如果是偶数，则点在多边形外，否则
+  //   //在多边形内。还会考虑一些特殊情况，如点在多边形顶点上，点在多边形边上等特殊情况。
 
-    var N = pts.length;
-    var boundOrVertex = true; //如果点位于多边形的顶点或边上，也算做点在多边形内，直接返回true
-    var intersectCount = 0;//cross points count of x 
-    var precision = 2e-10; //浮点类型计算时候与0比较时候的容差
-    var p1, p2;//neighbour bound vertices
-    var p = point; //测试点
+  //   var N = pts.length;
+  //   var boundOrVertex = false; //如果点位于多边形的顶点或边上，也算做点在多边形内，直接返回true
+  //   var intersectCount = 0;//cross points count of x 
+  //   var precision = 2e-10; //浮点类型计算时候与0比较时候的容差
+  //   var p1, p2;//neighbour bound vertices
+  //   var p = point; //测试点
 
-    p1 = pts[0];//left vertex        
-    for (var i = 1; i <= N; ++i) {//check all rays            
-      if (p.equals(p1)) {
-        return boundOrVertex;//p is an vertex
-      }
+  //   p1 = pts[0];//left vertex        
+  //   for (var i = 1; i <= N; ++i) {//check all rays            
+  //     if (p.equals(p1)) {
+  //       return boundOrVertex;//p is an vertex
+  //     }
 
-      p2 = pts[i % N];//right vertex            
-      if (p.lat < Math.min(p1.lat, p2.lat) || p.lat > Math.max(p1.lat, p2.lat)) {//ray is outside of our interests                
-        p1 = p2;
-        continue;//next ray left point
-      }
+  //     p2 = pts[i % N];//right vertex            
+  //     if (p.lat < Math.min(p1.lat, p2.lat) || p.lat > Math.max(p1.lat, p2.lat)) {//ray is outside of our interests                
+  //       p1 = p2;
+  //       continue;//next ray left point
+  //     }
 
-      if (p.lat > Math.min(p1.lat, p2.lat) && p.lat < Math.max(p1.lat, p2.lat)) {//ray is crossing over by the algorithm (common part of)
-        if (p.lng <= Math.max(p1.lng, p2.lng)) {//x is before of ray                    
-          if (p1.lat == p2.lat && p.lng >= Math.min(p1.lng, p2.lng)) {//overlies on a horizontal ray
-            return boundOrVertex;
-          }
+  //     if (p.lat > Math.min(p1.lat, p2.lat) && p.lat < Math.max(p1.lat, p2.lat)) {//ray is crossing over by the algorithm (common part of)
+  //       if (p.lng <= Math.max(p1.lng, p2.lng)) {//x is before of ray                    
+  //         if (p1.lat == p2.lat && p.lng >= Math.min(p1.lng, p2.lng)) {//overlies on a horizontal ray
+  //           return boundOrVertex;
+  //         }
 
-          if (p1.lng == p2.lng) {//ray is vertical                        
-            if (p1.lng == p.lng) {//overlies on a vertical ray
-              return boundOrVertex;
-            } else {//before ray
-              ++intersectCount;
-            }
-          } else {//cross point on the left side                        
-            var xinters = (p.lat - p1.lat) * (p2.lng - p1.lng) / (p2.lat - p1.lat) + p1.lng;//cross point of lng                        
-            if (Math.abs(p.lng - xinters) < precision) {//overlies on a ray
-              return boundOrVertex;
-            }
+  //         if (p1.lng == p2.lng) {//ray is vertical                        
+  //           if (p1.lng == p.lng) {//overlies on a vertical ray
+  //             return boundOrVertex;
+  //           } else {//before ray
+  //             ++intersectCount;
+  //           }
+  //         } else {//cross point on the left side                        
+  //           var xinters = (p.lat - p1.lat) * (p2.lng - p1.lng) / (p2.lat - p1.lat) + p1.lng;//cross point of lng                        
+  //           if (Math.abs(p.lng - xinters) < precision) {//overlies on a ray
+  //             return boundOrVertex;
+  //           }
 
-            if (p.lng < xinters) {//before ray
-              ++intersectCount;
-            }
-          }
-        }
-      } else {//special case when ray is crossing through the vertex                
-        if (p.lat == p2.lat && p.lng <= p2.lng) {//p crossing over p2                    
-          var p3 = pts[(i + 1) % N]; //next vertex                    
-          if (p.lat >= Math.min(p1.lat, p3.lat) && p.lat <= Math.max(p1.lat, p3.lat)) {//p.lat lies between p1.lat & p3.lat
-            ++intersectCount;
-          } else {
-            intersectCount += 2;
-          }
-        }
-      }
-      p1 = p2;//next ray left point
-    }
+  //           if (p.lng < xinters) {//before ray
+  //             ++intersectCount;
+  //           }
+  //         }
+  //       }
+  //     } else {//special case when ray is crossing through the vertex                
+  //       if (p.lat == p2.lat && p.lng <= p2.lng) {//p crossing over p2                    
+  //         var p3 = pts[(i + 1) % N]; //next vertex                    
+  //         if (p.lat >= Math.min(p1.lat, p3.lat) && p.lat <= Math.max(p1.lat, p3.lat)) {//p.lat lies between p1.lat & p3.lat
+  //           ++intersectCount;
+  //         } else {
+  //           intersectCount += 2;
+  //         }
+  //       }
+  //     }
+  //     p1 = p2;//next ray left point
+  //   }
 
-    if (intersectCount % 2 == 0) {//偶数在多边形外
-      return false;
-    } else { //奇数在多边形内
-      return true;
-    }
-  }
+  //   if (intersectCount % 2 == 0) {//偶数在多边形外
+  //     return false;
+  //   } else { //奇数在多边形内
+  //     return true;
+  //   }
+  // }
 
   /**
     * 将度转化为弧度
