@@ -8,7 +8,7 @@ import Bridge from './../lib/Bridge';
 import MapUtil from './../lib/MapUtil';
 import GeoUtils from './../lib/MapUtil/GeoUtils.js';
 const { BMap } = window
-var greinerHormann = require('greiner-hormann');
+var greinerHormann = require('polygon-clipping');
 
 const MapContainer = styled.div`
   position: absolute;
@@ -150,18 +150,20 @@ class App extends Component {
   }
   // 灰色区域区差集
   grayMerge = (overlay) => {
+    console.log(overlay.so)
     // 与灰色区域取差集
     var polygons = [];
-    for (var grayOverlay of Object.values(grayMap)) {
+    for (let grayOverlay of Object.values(grayMap)) {
       if (GeoUtils.contains(overlay.so, grayOverlay.so) || GeoUtils.contains(grayOverlay.so, overlay.so)) {
         return '多边形区域相互包含';
       }
       // 裁切
       var source = overlay.so.map((point) => {return [point.lng, point.lat]});
       var clip = grayOverlay.so.map((point) => {return [point.lng, point.lat]});
-      var arr = greinerHormann.diff(source, clip);
-      if (arr.length) {
-        var polygon = this.mapUtil.pointsToPolygon(arr[0]);
+      var arr = greinerHormann.difference([source], [clip]);
+      if (arr && arr.length && arr[0] && arr[0][0]) {
+        console.log(arr[0][0])
+        var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
         polygons.push(polygon);
       }
     }
@@ -173,15 +175,16 @@ class App extends Component {
     var polygons = [];
     for (var redOverlays of Object.values(redMap)) {
       for (var redOverlay of redOverlays) {
-        console.log(redOverlay)
         // 裁切
         var source = overlay.so.map((point) => {return [point.lng, point.lat]});
         var clip = redOverlay.so.map((point) => {return [point.lng, point.lat]});
-        console.log(clip);
-        var arr = greinerHormann.intersection(source, clip);
+        var arr = greinerHormann.intersection([source], [clip]);
+        console.log('红色裁切:' + source);
         console.log(arr);
-        if (arr.length) {
-          var polygon = this.mapUtil.pointsToPolygon(arr[0]);
+        if (arr && arr.length && arr[0] && arr[0][0]) {
+          console.log(arr[0][0])
+          var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
+          console.log(polygon)
           polygons.push(polygon);
           return polygons;
         }
@@ -199,7 +202,7 @@ class App extends Component {
       return;
     }
     // 灰色区域合并
-    let polygons = this.grayMerge(overlay);
+    let polygons = this.grayMerge(overlay) || [];
     if (typeof polygons === 'string') {
       alert(polygons)
       this.mapUtil.map.removeOverlay(overlay);
@@ -207,16 +210,21 @@ class App extends Component {
       return
     }
     // 红色区域合并
-    polygons = this.redMerge(overlay);
-    if (typeof polygons === 'string') {
-      alert(polygons)
-      this.mapUtil.map.removeOverlay(overlay);
-      delete blueMap[id]
-      return
+    for (let polygon of (polygons.length ? polygons : [overlay])) {
+      let current = this.redMerge(polygon);
+      if (current) polygons = polygons.concat(current);
     }
-    console.log(polygons)
     if (!polygons.length) return;
-    this.mapUtil.drawPolygon({polygon: polygons[0]});
+
+    console.log('结果:');
+    console.log(polygons);
+    this.mapUtil.map.removeOverlay(overlay);
+    for (let polygon of polygons) {
+      console.log('绘制:');
+      console.log(polygon);
+      this.mapUtil.drawPolygon({polygon: polygon});
+    }
+
     // overlays.push(newlay);
     // if (this.canViewAll === '0' && [...redMap.values()].length > 0) { // 红色区域取并集
     //   overlays = [...redMap.values()];

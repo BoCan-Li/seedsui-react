@@ -177,20 +177,19 @@ var BaiduMap = function (id, params) {
     var polygon = null
     if (options.polygon && Object.keys(options.polygon) && Object.keys(options.polygon).length) {
       polygon = options.polygon
-      if (options.styleOptions) {
-        // 设置多边型的边线颜色，参数为合法的CSS颜色值
-        if (options.styleOptions.strokeColor) polygon.setStrokeColor(options.styleOptions.strokeColor)
-        // 设置多边形边线的宽度，取值为大于等于1的整数
-        if (options.styleOptions.strokeWeight) polygon.setStrokeWeight(options.styleOptions.strokeWeight)
-        // 设置圆形的边线透明度，取值范围0 - 1
-        if (options.styleOptions.strokeOpacity) polygon.setStrokeOpacity(options.styleOptions.strokeOpacity)
-        // 设置圆形边线样式为实线或虚线，取值solid或dashed
-        if (options.styleOptions.strokeStyle) polygon.setStrokeStyle(options.styleOptions.strokeStyle)
-        // 设置矢量图标的填充颜色。支持颜色常量字符串、十六进制、RGB、RGBA等格式
-        if (options.styleOptions.fillColor) polygon.setFillColor(options.styleOptions.fillColor)
-        // 设置矢量图标填充透明度,opacity范围0~1
-        if (options.styleOptions.fillOpacity) polygon.setFillOpacity(options.styleOptions.fillOpacity)
-      }
+      if (!options.styleOptions) options.styleOptions = {}
+      // 设置多边型的边线颜色，参数为合法的CSS颜色值
+      polygon.setStrokeColor(options.styleOptions.strokeColor || s.params.styleOptions.strokeColor)
+      // 设置多边形边线的宽度，取值为大于等于1的整数
+      polygon.setStrokeWeight(options.styleOptions.strokeWeight || s.params.styleOptions.strokeWeight)
+      // 设置圆形的边线透明度，取值范围0 - 1
+      polygon.setStrokeOpacity(options.styleOptions.strokeOpacity || s.params.styleOptions.strokeOpacity)
+      // 设置圆形边线样式为实线或虚线，取值solid或dashed
+      polygon.setStrokeStyle(options.styleOptions.strokeStyle || s.params.styleOptions.strokeStyle)
+      // 设置矢量图标的填充颜色。支持颜色常量字符串、十六进制、RGB、RGBA等格式
+      polygon.setFillColor(options.styleOptions.fillColor || s.params.styleOptions.fillColor)
+      // 设置矢量图标填充透明度,opacity范围0~1
+      polygon.setFillOpacity(options.styleOptions.fillOpacity || s.params.styleOptions.fillOpacity)
     } else if (Array.isArray(options.points) && options.points.length) {
       polygon = new BMap.Polygon(s.formatPoints(options.points), options.styleOptions || s.params.styleOptions)
     }
