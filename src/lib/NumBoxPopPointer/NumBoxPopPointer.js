@@ -99,9 +99,8 @@ export default class NumBoxPopPointer extends Component {
           onClickMinus={this.onClickMinus}
         />
         <span style={unitStyle} className={unitClassName}>{unit || ''}</span>
-        <NumBoxPop
+        {show && <NumBoxPop
           args={args}
-          show={show}
           value={value}
           min={min}
           max={max}
@@ -109,7 +108,7 @@ export default class NumBoxPopPointer extends Component {
           onClickCancel={this.onClickCancel}
           onClickSubmit={this.onClickSubmit}
           {...others}
-        />
+        />}
       </div>
     );
   }

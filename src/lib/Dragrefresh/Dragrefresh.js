@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Notice from './../Notice';
 import Instance from './instance.pull.js';
 import ImgLazy from './../ImgLazy';
@@ -34,11 +34,16 @@ export default class Dragrefresh extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount = () => {
+  componentDidMount () {
     this.init();
-    console.log('dragrefresh:DidMount, hasMore:' + this.props.hasMore);
-    this.setPagination();
+    this.setPagination(undefined, this.props.hasMore);
   }
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.hasMore === this.props.hasMore) return;
+    // 刷新完成则设置刷新
+    this.setPagination(prevProps.hasMore, this.props.hasMore);
+  }
+  // 实例化
   init = () => {
     const {onScroll} = this.props;
     var instance = new Instance({
@@ -48,104 +53,138 @@ export default class Dragrefresh extends Component {
       moveTimeout: this.props.moveTimeout,
       container: this.$el,
       onScroll,
-      onTopRefresh: this.props.onTopRefresh ? this.props.onTopRefresh : null, // 头部刷新,加载第一页
-      onTopComplete: this.props.onTopComplete ? this.props.onTopComplete : null, // 头部完成
-      onBottomRefresh: this.props.onBottomRefresh ? this.props.onBottomRefresh : null, // 底部刷新,加载下一页
-      onBottomComplete: this.props.onBottomComplete ? this.props.onBottomComplete : null, // 底部完成
+      onTopRefresh: this.onTopRefresh, // 头部刷新,加载第一页
+      onBottomRefresh: this.onBottomRefresh, // 底部刷新,加载下一页
+      // 构建实体
+      topContainer: this.$elTopBox,
+      // 实体交互
+      duration: 150,
+      onPull: (e) => {
+        var topContainer = e.topContainer;
+        topContainer.style.height = e.touches.currentPosY + 'px'
+        var topIcon = topContainer.querySelector('.df-pull-icon');
+        var topCaption = topContainer.querySelector('.df-pull-caption');
+        if (!e.isLoading) {
+          if (e.touches.currentPosY >= e.params.threshold) {
+            if (topIcon) topIcon.classList.add('df-pull-icon-down')
+            if (topCaption) topCaption.innerHTML = '释放立即刷新'
+          } else {
+            if (topIcon) topIcon.classList.remove('df-pull-icon-down')
+            if (topCaption) topCaption.innerHTML = '下拉可以刷新'
+          }
+        }
+      },
+      onShowTop: (e) => {
+        var topContainer = e.topContainer;
+        var topIcon = topContainer.querySelector('.df-pull-icon');
+        var topCaption = topContainer.querySelector('.df-pull-caption');
+        topContainer.style.height = e.params.threshold + 'px';
+        if (topIcon) topIcon.classList.remove('df-pull-icon-down')
+        if (topIcon) topIcon.classList.add('df-pull-icon-loading')
+        if (topCaption) topCaption.innerHTML = '正在刷新...'
+      },
+      onHideTop: (e) => {
+        var topContainer = e.topContainer;
+        topContainer.style.height = '0';
+      },
+      onTopHid: (e) => {
+        var topContainer = e.topContainer;
+        var topIcon = topContainer.querySelector('.df-pull-icon');
+        if (topIcon) topIcon.classList.remove('df-pull-icon-down')
+        if (topIcon) topIcon.classList.remove('df-pull-icon-loading')
+      }
     });
     this.instance = instance;
-    // 懒人加载
-    if (this.props.lazyLoad) {
-      this.setLazyLoad();
+  }
+  // 头部刷新
+  onTopRefresh = () => {
+    this.props.onTopRefresh();
+  }
+  // 底部刷新
+  onBottomRefresh = () => {
+    const {hasMore} = this.props;
+    if (hasMore !== 0 && hasMore !== -1 && hasMore !== 404) {
+      this.props.onBottomRefresh();
+    } else {
+      if (this.instance) this.instance.isLoading = false // 暂无数据时, 设置为可刷新
     }
   }
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.hasMore === this.props.hasMore) return;
-    // 懒加载
-    if (this.props.lazyLoad) {
-      if (!this.lazyLoadInstance) {
-        this.setLazyLoad();
+  // 懒人加载
+  lazyLoad = () => {
+    if (!this.$el) return;
+    if (this.timeout) window.clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      if (this.lazy) {
+        this.lazy.load();
       } else {
-        this.lazyLoadInstance.load();
+        this.lazy = new ImgLazy({
+          overflowContainer: this.$el
+        });
+        this.lazy.load();
       }
-    }
-    if (this.props.hasMore === 404) {
-      console.log('dragrefresh:解除touch事件，暂无数据');
-      this.instance.detach();
-    } else if (prevProps.hasMore === 404 && this.props.hasMore !== 404) {
-      /* this.setState({
-        noData: false
-      }); */
-      console.log('dragrefresh:绑定touch事件，有数据');
-      this.instance.attach();
-    }
-    console.log('dragrefresh:DidUpdate, hasMore:' + this.props.hasMore);
-    this.setPagination();
+    }, 500);
   }
-  setLazyLoad = () => {
-    var imglazy = new ImgLazy({
-      overflowContainer: this.$el
-    });
-    imglazy.load();
-    this.lazyLoadInstance = imglazy;
-  }
-  setPagination = () => {
+  // 控制刷新
+  setPagination = (prevHasMore, hasMore) => {
     // 如果还没有初始化完成,则会再轮询调用一下
     if(!this.instance) {
       setTimeout(() => {
-        this.setPagination();
+        this.setPagination(prevHasMore, hasMore);
       }, 100);
       return;
     }
-    if (this.props.hasMore === 1) { // 头部完成
-      console.log('dragrefresh:头部完成');
-      this.instance.setPagination(false, false);
-    } else if (this.props.hasMore === 2) { // 底部完成
-      console.log('dragrefresh:底部完成');
-      this.instance.setPagination(true, false);
-    } else if (this.props.hasMore === 0) { // 没有更多数据
-      console.log('dragrefresh:没有更多数据');
-      this.instance.setPagination(true, true);
-    } else if (this.props.hasMore === -1) {
-      console.log('dragrefresh:网络错误');
-      this.instance.setPagination(true, true, true);
-    } else if (this.props.hasMore === 404) {
-      // if (this.state.noData === true) return;
-      console.log('dragrefresh:没有一条数据');
-      this.instance.setPagination(true, true);
-      /* this.setState({
-        noData: true
-      }); */
+    console.log(`hasMore: 由${prevHasMore}变成${hasMore}`)
+    // 无数据时不允许触发刷新
+    if (hasMore === 404) {
+      this.instance.detach();
+    } else if (prevHasMore === 404 && hasMore !== 404) {
+      this.instance.attach();
     }
+    // 刷新完成, 需收起头
+    if (hasMore !== -2) {
+      this.instance.hideTop();
+    }
+    // 设置为可刷新
+    this.instance.isLoading = false;
+    // 刷新完成, 还有数据
+    if (hasMore === 1) {
+      // 如果还有数据，并且如果没有滚动条，则继续加载
+      if (!this.instance.hasScroll()) {
+        console.log('还有数据,但没有滚动条,继续加载...')
+        this.instance.bottomRefresh()
+      }
+    }
+    // 懒加载
+    if (this.props.lazyLoad) this.lazyLoad();
   }
   render() {
-    const {style, className, onTopRefresh, onBottomRefresh, showNoData, noDataParams} = this.props;
+    const {style, className, onTopRefresh, onBottomRefresh, showNoData, hasMore, noDataParams} = this.props;
     return (
       <div ref={(el) => {this.$el = el;}} className={`container${className ? ' ' + className : ''}`} style={style}>
-        {onTopRefresh && <div className="SID-Dragrefresh-TopContainer df-pull" style={{transitionDuration: '150ms', height: '0px'}}>
+        {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
             <div className="df-pull-caption">下拉可以刷新</div>
           </div>
         </div>}
         {this.props.children}
-        {onBottomRefresh && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
-          {this.props.hasMore !== -3 && <div className="df-pull-box">
+        {onBottomRefresh && (hasMore === 1 || hasMore === -2) && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
+          <div className="df-pull-box">
             <div className="df-pull-icon df-pull-icon-loading"></div>
             <div className="df-pull-caption">正在加载...</div>
-          </div>}
+          </div>
         </div>}
-        {onBottomRefresh && <div className="SID-Dragrefresh-NoDataContainer df-pull hide" style={{height: '50px'}}>
+        {onBottomRefresh && hasMore === 0 && <div className="SID-Dragrefresh-NoDataContainer df-pull" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-caption">没有更多数据了</div>
           </div>
         </div>}
-        {onBottomRefresh && <div className="SID-Dragrefresh-ErrorContainer df-pull hide" style={{height: '50px'}}>
+        {onBottomRefresh && hasMore === -1 && <div className="SID-Dragrefresh-ErrorContainer df-pull" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-caption">加载失败，请稍后再试</div>
           </div>
         </div>}
-        {this.props.hasMore === 404 && showNoData && <Notice caption={'暂无数据'} iconParams={{className: 'notice-icon-nodata'}} {...noDataParams}/>}
+        {hasMore === 404 && showNoData && <Notice caption={'暂无数据'} iconParams={{className: 'notice-icon-nodata'}} {...noDataParams}/>}
       </div>
     );
   }

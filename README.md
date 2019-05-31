@@ -1237,7 +1237,7 @@ import Dot from 'seedsui-react/lib/Dot';
   onBottomRefresh={底部刷新 func(s)}
   onBottomComplete={底部刷新完成 func(s)}
 
-  hasMore={状态标识 string, 默认-2} // 1头部完成 | 2底部完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈 | -3空闲但不展现底部转圈
+  hasMore={状态标识 string, 默认-2} // 1刷新完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈
 
   showNoData={是否允许暂无数据 bool, 默认false}
   noDataParams={无数据时的Notive组件属性 object, 默认无}

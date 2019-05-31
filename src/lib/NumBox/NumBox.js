@@ -40,6 +40,9 @@ export default class NumBox extends Component {
     maxLength: PropTypes.string,
     readOnly: PropTypes.bool,
     required: PropTypes.bool,
+    // 自动获取焦点
+    autoFocus: PropTypes.bool,
+    autoSelect: PropTypes.bool,
     // 左右图标
     licon: PropTypes.node,
     liconSrc: PropTypes.string,
@@ -81,45 +84,48 @@ export default class NumBox extends Component {
     super(props);
   }
   componentDidMount () {
-    // const {required} = this.props;
-    // var value = this.props.value;
-    // if (required) { // 必填项,必须有值
-    //   if (value === '') value = this.props.min || '0';
-    // }
-    // value = Math.Calc.correctNumber(value, this.props);
-    // if (this.props.value - value !== 0 && this.props.onChange) this.props.onChange(value);
+    if (this.props.autoFocus) {
+      this.autoFocus();
+    }
   }
   // 失去焦点
   onBlur = (e) => {
-    const {required, min, onChange, onBlur} = this.props;
+    const {readOnly, disabled, required, min, onChange, onBlur} = this.props;
+    if (readOnly || disabled) {
+      return;
+    }
     const value = Math.Calc.correctNumberBlur(this.props.value, {required, min});
     if (onChange && '' + value !== '' + this.props.value) onChange(value, Object.getArgs(e, this.props.args));
     if (onBlur) onBlur(value, Object.getArgs(e, this.props.args));
   };
   // 获取焦点
   onFocus = (e) => {
-    const {onFocus} = this.props;
+    const {readOnly, disabled, onFocus} = this.props;
+    if (readOnly || disabled) {
+      e.target.blur();
+      return;
+    }
     if (onFocus) onFocus(this.props.value, Object.getArgs(e, this.props.args));
   };
   // 点击加减号清除时获取焦点
   autoFocus = () => {
-    if (!this.props.disabled && !this.props.readOnly) {
-      this.$input.focus();
-      // 修复兼容ios12的bug
-      var iosExp = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
-      if (iosExp && iosExp[1] && iosExp[1] > '12') {
-        // 兼容输入法把页面顶上去, 不回弹的问题
-        if (window.inputToggleTimeout) {
-          window.clearTimeout(window.inputToggleTimeout);
-        }
-        if (!this.$input.getAttribute('ios-bug-blur')) {
-          this.$input.setAttribute('ios-bug-blur', '1');
-          this.$input.addEventListener('blur', () => {
-            window.inputToggleTimeout = window.setTimeout(() => {
-              document.getElementById('root').scrollIntoView();
-            }, 100);
-          }, false);
-        }
+    if (this.props.disabled || this.props.readOnly || !this.$input) return;
+    this.$input.focus();
+    if (this.props.autoSelect) this.$input.select();
+    // 修复兼容ios12的bug, 与全局的回弹并不冲突, 这里主要解决点击加减号时获取焦点, 不回弹的问题
+    var iosExp = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+    if (iosExp && iosExp[1] && iosExp[1] > '12') {
+      // 兼容输入法把页面顶上去, 不回弹的问题
+      if (window.inputToggleTimeout) {
+        window.clearTimeout(window.inputToggleTimeout);
+      }
+      if (!this.$input.getAttribute('ios-bug-blur')) {
+        this.$input.setAttribute('ios-bug-blur', '1');
+        this.$input.addEventListener('blur', () => {
+          window.inputToggleTimeout = window.setTimeout(() => {
+            document.getElementById('root').scrollIntoView();
+          }, 100);
+        }, false);
       }
     }
   }
@@ -131,7 +137,7 @@ export default class NumBox extends Component {
     }
     if (this.props.onClickInput) this.props.onClickInput(value, Object.getArgs(e, this.props.args));
   }
-  // Methods
+  // 修改值
   onChange = (e) => {
     if (e.target.validity.badInput) {
       e.target.value = '';
@@ -159,8 +165,7 @@ export default class NumBox extends Component {
   onClick = (e) => {
     e.stopPropagation();
     const {
-      clear, onClick, onClickLicon, onClickRicon,
-      // onClickInput, onClickPlus, onClickMinus
+      clear, onClick, onClickLicon, onClickRicon
     } = this.props;
     if (this.props.disabled) return;
     var target = e.target;
@@ -210,6 +215,7 @@ export default class NumBox extends Component {
       clear, clearClassName, clearStyle,
       inputStyle, inputClassName, value, placeholder, maxLength, readOnly, onClickInput, onChange, onError, onBlur, onFocus,
       digits, max, min,
+      autoFocus, autoSelect,
       ...others
     } = this.props;
     return <input
@@ -218,12 +224,12 @@ export default class NumBox extends Component {
       value={value}
       min={min}
       max={max}
+      disabled={disabled}
       readOnly={readOnly}
       placeholder={placeholder}
       onChange={this.onChange}
       onFocus={this.onFocus}
       onBlur={this.onBlur}
-      // onClick={this.onClickInput}
       className={`numbox-input${inputClassName ? ' ' + inputClassName : ''}`}
       style={inputStyle}
       {...others}
@@ -245,7 +251,6 @@ export default class NumBox extends Component {
           className={`numbox-button numbox-button-minus-flag${plusClassName ? ' ' + plusClassName : ''}`}
           style={plusStyle}
           value="-"
-          // onClick={this.onClickMinus}
           disabled={!isNaN(min) ? min - value >= 0 : false}
         />
         {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
@@ -259,7 +264,6 @@ export default class NumBox extends Component {
           type="button"
           className={`numbox-button numbox-button-plus-flag${minusClassName ? ' ' + minusClassName : ''}`}
           style={minusStyle} value="+"
-          // onClick={this.onClickPlus}
           disabled={!isNaN(max) ? max - value <= 0 : false}
         />
       </div>

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Alert from './../Alert';
 import NumBox from './../NumBox';
+
 export default class NumBoxPop extends Component {
   static propTypes = {
     args: PropTypes.any,
     // 容器
-    show: PropTypes.bool,
     caption: PropTypes.string,
     // 文本框
     value: PropTypes.oneOfType([
@@ -18,28 +18,12 @@ export default class NumBoxPop extends Component {
     onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
-    show: false,
     caption: '修改购买数量'
   }
   constructor(props) {
     super(props);
     this.state = {
       value: props.value || '1'
-    }
-  }
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.show !== this.props.show) {
-      this.setState({
-        show: this.props.show
-      });
-      // 当此组件显示时,重新注入值
-      if (this.props.show === true) {
-        this.setState({
-          value: this.props.value
-        }, () => {
-          this.focusValue();
-        });
-      }
     }
   }
   onChange = (value) => {
@@ -49,13 +33,6 @@ export default class NumBoxPop extends Component {
   }
   onClickSubmit = (args) => {
     if (this.props.onClickSubmit) this.props.onClickSubmit(this.state.value, args);
-  }
-  focusValue = () => {
-    this.$numbox.$input.focus();
-    setTimeout(() => {
-      this.$numbox.onFocus();
-      this.$numbox.$input.select();
-    }, 100);
   }
   onClickCancel = (args) => {
     const {value} = this.props;
@@ -67,19 +44,21 @@ export default class NumBoxPop extends Component {
   render() {
     const {
       args,
-      show, caption,
+      caption,
       value,
       onClickCancel, onClickSubmit,
       ...others
     } = this.props;
     return (
-      <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show={show} onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
+      <Alert args={args} ref={el => {this.$el = el;}} duration={0} caption={caption} show onClickSubmit={this.onClickSubmit} onClickCancel={this.onClickCancel}>
         <NumBox
           ref={(el) => {this.$numbox = el}}
           value={this.state.value}
           style={{margin: '0 auto'}}
           className="flex xl"
           onChange={this.onChange}
+          autoFocus
+          autoSelect
           {...others}
         />
       </Alert>
