@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Notice from './../Notice';
-import Instance from './instance.pull.js';
+import Instance from './instance.js';
 import ImgLazy from './../ImgLazy';
 
 export default class Dragrefresh extends Component {
