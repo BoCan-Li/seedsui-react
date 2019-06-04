@@ -42,7 +42,7 @@ export default class ImgUploader extends Component {
     onChange: PropTypes.func, // 照片发生变化
     onChooseBefore: PropTypes.func, // 选择照片之前校验, 返回true则继续, 返回false则停止
     onChooseSuccess: PropTypes.func, // 照片选择完成
-    onChooseError: PropTypes.func, // 照片选择错误
+    onChooseFail: PropTypes.func, // 照片选择错误
     onUploadsSuccess: PropTypes.func, // 照片全部上传完成
     onUploadSuccess: PropTypes.func, // 照片上传完成
     onUploadFail: PropTypes.func, // 照片上传失败
@@ -64,7 +64,7 @@ export default class ImgUploader extends Component {
     // 初始化图片组件
     this.instance = new Bridge.Image({
       onChooseSuccess: this.chooseSuccess,
-      onChooseError: this.props.onChooseError,
+      onChooseFail: this.props.onChooseFail,
       onUploadsSuccess: this.uploadsSuccess,
       onUploadSuccess: this.uploadSuccess,
       onUploadFail: this.uploadFail,

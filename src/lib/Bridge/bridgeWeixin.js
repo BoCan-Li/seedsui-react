@@ -18,14 +18,14 @@ var Bridge = {
       window.history.go(-1);
     } else if (isFromApp === 'confirm') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide()
           window.history.go(-1)
         }
       });
     } else if (isFromApp === 'confirm-close') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide()
           window.history.go(-1)
         }
@@ -69,7 +69,7 @@ var Bridge = {
       appLocation = ''
     }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(appLocation)
+      if (params.success) params.success(appLocation)
       return
     }
     // 调用定位
@@ -84,18 +84,16 @@ var Bridge = {
         // 将位置信息存储到cookie中60秒
         if (res.latitude && res.latitude) {
           if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
-          if (params.onSuccess) params.onSuccess(res)
+          if (params.success) params.success(res)
         } else {
-          var errMsg = '定位失败,请重新进入此页面'
-          if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
-          else BridgeBrowser.showToast(errMsg, {mask: false})
+          if (params.fail) params.fail(res)
+          else BridgeBrowser.showToast('没有获取到经纬度', {mask: false})
         }
       },
       fail: (res) => {
         this.locating = false
-        var errMsg = '定位失败,请检查微信定位权限是否开启'
-        if (params.onError) params.onError({code: 'locationFail', msg: errMsg, res: res})
-        else BridgeBrowser.showToast(errMsg, {mask: false})
+        if (params.fail) params.fail(res)
+        else BridgeBrowser.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
       },
       complete: (res) => {
         this.locating = false
@@ -113,7 +111,7 @@ var Bridge = {
       scanType: params.scanType || ['qrCode', 'barCode'],
       desc: 'scanQRCode desc',
       success: function (res) {
-        if (!params.onSuccess) return;
+        if (!params.success) return;
         var wxRes = res
         // 如果没有设置needResult,则清除前缀
         if (isNaN(params.needResult)) {
@@ -152,10 +150,10 @@ var Bridge = {
           }
         }
         // 回调
-        params.onSuccess(wxRes)
+        params.success(wxRes)
       },
       fail: function (res) {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败,请退出重试' + JSON.stringify(res), res: res})
+        if (params.fail) params.fail(res)
         else BridgeBrowser.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
@@ -239,7 +237,7 @@ var Bridge = {
           s.upload(imgMap)
         },
         fail: function (res) {
-          if (params.onChooseError) params.onChooseError({code: 'chooseFail', msg: '选择照片失败' + JSON.stringify(res), res: res})
+          if (params.onChooseFail) params.onChooseFail(res)
           else BridgeBrowser.showToast('选择照片失败', {mask: false})
         },
         cancel: function () {
@@ -275,7 +273,7 @@ var Bridge = {
             BridgeBrowser.showToast(msg, {mask: false})
             var deleteItem = imgMap[img]
             delete imgMap[img]
-            if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, code: 'uploadFail', msg: msg})
+            if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, errMsg: `uploadImage:${msg}`})
             if (index >= imgs.length - 1 && params.onUploadsSuccess) params.onUploadsSuccess(imgMap)
             loop(++index)
           }

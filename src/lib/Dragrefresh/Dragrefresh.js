@@ -102,6 +102,7 @@ export default class Dragrefresh extends Component {
   }
   // 底部刷新
   onBottomRefresh = () => {
+    if (!this.props.onBottomRefresh) return;
     const {hasMore} = this.props;
     if (hasMore !== 0 && hasMore !== -1 && hasMore !== 404) {
       this.props.onBottomRefresh();

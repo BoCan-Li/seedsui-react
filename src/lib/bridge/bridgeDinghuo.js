@@ -141,6 +141,15 @@ var Bridge = {
   slopenpay: function (params, callback) {
     this.invoke('slopenpay', params, callback)
   },
+  /**
+    * 支付宝支付
+    * @param {Object} params
+    * @param {Function} callback
+    * @callback(result) {Object} {code: "0", message: "支付成功"}|{code: "-1", message: "支付失败"}|{code: "-1", message: "数据解析异常"}
+    */
+  alipay: function (params, callback) {
+    this.invoke('alipay', params, callback)
+  },
   /* -----------------------------------------------------
     打开新的窗口
     @params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
@@ -192,7 +201,7 @@ var Bridge = {
     @return {resultStr:''}
   ----------------------------------------------------- */
   scanQRCode: function (params) {
-    this.invoke('scanQRCode', null, params.onSuccess)
+    this.invoke('scanQRCode', null, params.success)
   },
   /**
     * 获取当前地理位置
@@ -216,7 +225,7 @@ var Bridge = {
       appLocation = ''
     }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(appLocation)
+      if (params.success) params.success(appLocation)
       return
     }
 
@@ -229,9 +238,9 @@ var Bridge = {
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
-        if (params.onSuccess) params.onSuccess(res)
+        if (params.success) params.success(res)
       } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查订货365定位权限是否开启'})
+        if (params.fail) params.fail({errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启'})
         else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
     })
@@ -356,7 +365,7 @@ var Bridge = {
       DB.setStore('dinghuo_img_domain', decodeURIComponent(imgDomain));
     } else {
       console.log('图片域名未定义');
-      return {code: 'imgDomainFail', msg: '图片域名未定义'};
+      return {code: 'imgDomainFail', errMsg: 'setSystemParameter:图片域名未定义'};
     }
     // 设置uid
     DB.setStore('dinghuo_uid', data.uid || '');
@@ -370,7 +379,7 @@ var Bridge = {
       DB.setStore('dinghuo_selected_supplier', data.selectedSupplier);
     } else {
       console.log('没有供货商');
-      return {code: 'selectedSupplierFail', msg: '请选择供货商'};
+      return {code: 'selectedSupplierFail', errMsg: 'setSystemParameter:请选择供货商'};
     }
   },
   // 更新系统参数
@@ -415,14 +424,14 @@ var Bridge = {
       }
     } else if (isFromApp === 'confirm') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide();
           window.history.go(-1);
         }
       });
     } else if (isFromApp === 'confirm-close') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide();
           self.closeWindow();
         }

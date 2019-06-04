@@ -127,9 +127,9 @@ var Bridge = {
     }
     wq.wqjnc.videoRecord((res) => { // eslint-disable-line
       if (res.result === '1'){
-        if (params.onSuccess) params.onSuccess(res)
+        if (params.success) params.success(res)
       } else {
-        if (params.onError) params.onError({code: 'videoRecordFail', msg: '录制失败'})
+        if (params.fail) params.fail({errMsg: 'videoRecord:录制失败'})
         else BridgeBrowser.showToast('录制失败', {mask: false})
       }
     }, JSON.stringify(params))
@@ -146,9 +146,9 @@ var Bridge = {
     }
     wq.wqjnc.videoUpload((res) => { // eslint-disable-line
       if (res.result === '1'){
-        if (params.onSuccess) params.onSuccess(res)
+        if (params.success) params.success(res)
       } else {
-        if (params.onError) params.onError({code: 'videoUploadFail', msg: '上传失败'})
+        if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
         else BridgeBrowser.showToast('上传失败', {mask: false})
       }
     }, JSON.stringify(params))
@@ -165,9 +165,9 @@ var Bridge = {
     }
     wq.wqjnc.videoInfo((res) => { // eslint-disable-line
       if (res.result === '1') {
-        if (params.onSuccess) params.onSuccess(res)
+        if (params.success) params.success(res)
       } else {
-        if (params.onError) params.onError({code: 'videoInfoFail', msg: '未查到此视频信息'})
+        if (params.fail) params.fail({errMsg: 'videoInfo:未查到此视频信息'})
       }
     }, JSON.stringify(params))
   },
@@ -180,9 +180,9 @@ var Bridge = {
       if (res && res.qrCode) {
         var wqRes = res
         wqRes.resultStr = res.qrCode
-        if (params && params.onSuccess) params.onSuccess(wqRes)
+        if (params && params.success) params.success(wqRes)
       } else {
-        if (params.onError) params.onError({code: 'qrcodeFail', msg: '扫码失败请稍后重试'})
+        if (params.fail) params.fail({errMsg: 'scanQRCode:扫码失败请稍后重试'})
         else BridgeBrowser.showToast('扫码失败请稍后重试', {mask: false})
       }
     })
@@ -226,7 +226,7 @@ var Bridge = {
       appLocation = ''
     }
     if (appLocation) {
-      if (params.onSuccess) params.onSuccess(appLocation)
+      if (params.success) params.success(appLocation)
       return
     }
 
@@ -253,9 +253,9 @@ var Bridge = {
         }
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(location) , params.cache || 60)
-        if (params.onSuccess) params.onSuccess(location)
+        if (params.success) params.success(location)
       } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查定位权限是否开启'})
+        if (params.fail) params.fail({errMsg: 'getLocation:定位失败,请检查定位权限是否开启'})
         else BridgeBrowser.showToast('定位失败,请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
@@ -296,9 +296,9 @@ var Bridge = {
           street: res.street,
           locationLie: res.mokelocation
         }
-        if (params.onSuccess) params.onSuccess(location)
+        if (params.success) params.success(location)
       } else {
-        if (params.onError) params.onError({code: 'locationFail', msg: '定位失败,请检查外勤365定位权限是否开启'})
+        if (params.fail) params.fail({errMsg: 'getLocationMap:定位失败,请检查外勤365定位权限是否开启'})
         else BridgeBrowser.showToast('定位失败,请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
@@ -437,16 +437,16 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     人员插件
-    @params {onSuccess: fn}
+    @params {success: fn}
   ----------------------------------------------------- */
-  getContactMore: function (params = {}) { // {selectedIds: 'id,id', aclType: '0只能看到下属 不传或者其他的参数为全部人员,默认为空', onSuccess([{id: '', name: ''}])}
+  getContactMore: function (params = {}) { // {selectedIds: 'id,id', aclType: '0只能看到下属 不传或者其他的参数为全部人员,默认为空', success([{id: '', name: ''}])}
     wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   getContact: function (params = {}) {
     wq.wqcontact.getContact((args) => { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
@@ -460,47 +460,47 @@ var Bridge = {
     如果客户是经销商，则选择上级经销商(（业代：销售订单(又称分销订单)选供货商）)。
     【6】获取当前人所属的经销商的上级经销商
   ----------------------------------------------------- */
-  getCustomerMore: function (params = {}) { // {isonline: '1.在线0.离线', selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', onSuccess([{id: '', name: ''}])}
+  getCustomerMore: function (params = {}) { // {isonline: '1.在线0.离线', selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', success([{id: '', name: ''}])}
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)));
   },
   getCustomer: function (params = {}) {
     wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)))
   },
-  getCustomerType: function (params = {}) { // {id: 'id', name: 'name', onSuccess({id: '', name: ''})}
+  getCustomerType: function (params = {}) { // {id: 'id', name: 'name', success({id: '', name: ''})}
     wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
-  getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', onSuccess([{id: '', name: ''}])}
+  getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
     if (Device.platformVersion < '6.2.2') {
       BridgeBrowser.showToast('此功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   getCustomerArea: function (params = {}) {
     wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
     部门插件
-    @params: {selectedIds: '',onSuccess: fn}
+    @params: {selectedIds: '',success: fn}
   ----------------------------------------------------- */
-  getDepartmentMore: function (params = {}) { // {selectedIds: 'id,id', onSuccess([{id: '', name: ''}])}
+  getDepartmentMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
     wq.wqdepartment.getDepartmentMore(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params));
   },
   getDepartment: function (params = {}) {
     wq.wqdepartment.getDepartment(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
@@ -520,7 +520,7 @@ var Bridge = {
   ----------------------------------------------------- */
   getGoods: function (params = {}) {
     wq.wqproduct.wqSelectSingleProduct(function (args) { // eslint-disable-line
-      if (params.onSuccess) params.onSuccess(args)
+      if (params.success) params.success(args)
     }, JSON.stringify(params));
   },
   /* -----------------------------------------------------
@@ -571,14 +571,14 @@ var Bridge = {
       }
     } else if (isFromApp === 'confirm') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide();
           window.history.go(-1)
         }
       });
     } else if (isFromApp === 'confirm-close') {
       BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        onSuccess: (e) => {
+        success: (e) => {
           e.hide();
           Bridge.closeWindow()
         }
