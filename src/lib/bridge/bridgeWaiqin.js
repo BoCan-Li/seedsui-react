@@ -232,6 +232,30 @@ var Bridge = {
     if (verExp && verExp[1]) return verExp[1].trim();
     return '';
   },
+  // 返回首页
+  goHome: function () {
+    window.history.go(-1)
+  },
+  // 退出到登陆页面
+  logOut: function (msg) {
+    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
+  },
+  // 打开新的窗口
+  openWindow: function (params, callback) {
+    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
+  },
+  // 关闭当前窗
+  closeWindow: function () {
+    wq.wqload.wqClosePage() // eslint-disable-line
+  },
+  // 客户端返回绑定
+  addBackPress: function (callback) {
+    document.addEventListener('backbutton', callback || this.back, false) // eslint-disable-line
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function (callback) {
+    document.removeEventListener('backbutton', callback || this.back, false) // eslint-disable-line
+  },
   /**
   * 基础功能:end
   */
@@ -245,11 +269,6 @@ var Bridge = {
       this.addBackPress()
       DB.setSession('bridge_isready', '1')
     })
-  },
-  
-  // 退出到登陆页面
-  logOut: function (msg) {
-    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
   },
   /*
   * 商联支付
@@ -753,17 +772,6 @@ var Bridge = {
     }, JSON.stringify(params));
   },
   /* -----------------------------------------------------
-    打开新的窗口
-    @params {url:'', title: ''}默认为打开一个webview页面
-  ----------------------------------------------------- */
-  openWindow: function (params, callback) {
-    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
-  },
-  // 关闭当前窗
-  closeWindow: function () {
-    wq.wqload.wqClosePage() // eslint-disable-line
-  },
-  /* -----------------------------------------------------
     打开原生窗口
     @params {ios: {url: '', params: {}}, android: {url: '', params: {}}}默认为打开一个webview页面
   ----------------------------------------------------- */
@@ -782,14 +790,6 @@ var Bridge = {
       IOSViewController: params.ios.url,
       IOSParma: params.ios.params
     })
-  },
-  // 客户端返回绑定
-  addBackPress: function (callback) {
-    document.addEventListener('backbutton', callback || this.back, false) // eslint-disable-line
-  },
-  // 客户端移除返回绑定
-  removeBackPress: function (callback) {
-    document.removeEventListener('backbutton', callback || this.back, false) // eslint-disable-line
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({

@@ -236,6 +236,40 @@ var Bridge = {
     if (verExp && verExp[1]) return verExp[1].trim();
     return '';
   },
+  // 去首页
+  goHome: function (callback) {
+    this.invoke('goHome', null, callback)
+  },
+  // 退出到登陆页面
+  logOut: function () {
+    this.invoke('logOut');
+  },
+  // 打开新的窗口
+  openWindow: function (params, callback) {
+    this.invoke('openWindow', params, callback)
+  },
+  // 关闭当前窗
+  closeWindow: function (callback) {
+    this.invoke('closeWindow', null, callback)
+  },
+  // 客户端添加返回绑定
+  addBackPress: function (callback) {
+    try {
+      this.setBackEnable(true);
+      window.addEventListener('onBackPress', callback || this.back);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function (callback) {
+    try {
+      this.setBackEnable(false);
+      window.removeEventListener('onBackPress', callback || this.back);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   /**
    * 基础功能:end
    */
@@ -369,17 +403,6 @@ var Bridge = {
     */
   alipay: function (params, callback) {
     this.invoke('alipay', params, callback)
-  },
-  /* -----------------------------------------------------
-    打开新的窗口
-    @params: {url:''}默认为打开一个webview页面，如果打开原生页面需要加前缀：nyNative://
-  ----------------------------------------------------- */
-  openWindow: function (params, callback) {
-    this.invoke('openWindow', params, callback)
-  },
-  // 关闭当前窗
-  closeWindow: function (callback) {
-    this.invoke('closeWindow', null, callback)
   },
   /* -----------------------------------------------------
     文件操作
@@ -553,10 +576,6 @@ var Bridge = {
   onMenuShareTimeline: function () {
 
   },
-  // 退出到登陆页面
-  logOut: function () {
-    this.invoke('logOut');
-  },
   // 获取登陆信息
   loginInfo: function (callback) {
     this.invoke('getLoginInfo', null, callback);
@@ -622,28 +641,8 @@ var Bridge = {
   changeBadgeNum: function (count) {
     this.invoke('setBadgeNum', {key: count});
   },
-  // 去首页
-  goHome: function (callback) {
-    this.invoke('goHome', null, callback)
-  },
-  // 客户端添加返回绑定
-  addBackPress: function (callback) {
-    try {
-      this.setBackEnable(true);
-      window.addEventListener('onBackPress', callback || this.back);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  // 客户端移除返回绑定
-  removeBackPress: function (callback) {
-    try {
-      this.setBackEnable(false);
-      window.removeEventListener('onBackPress', callback || this.back);
-    } catch (error) {
-      console.log(error);
-    }
-  },
+  
+  
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
     onChooseSuccess: function (imgMap) {},

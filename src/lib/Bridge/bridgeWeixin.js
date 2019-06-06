@@ -221,17 +221,17 @@ var Bridge = {
   getAppVersion: function () {
     return window.navigator.appVersion
   },
-  /**
-   * 基础功能:end
-   */
-
-  /**
-   * 定制功能
-   */
-  platform: Device.platform,
   // 返回首页
   goHome: function () {
     window.history.go(-1)
+  },
+  // 退出到登陆页面
+  logOut: function logOut() {
+    console.log('logOut方法仅在app上工作');
+  },
+  // 打开新的窗口
+  openWindow: function (params = {}) {
+    if (params.url) window.location.href = params.url
   },
   // 关闭窗口
   closeWindow: function () {
@@ -258,6 +258,14 @@ var Bridge = {
       })
     }
   },
+  /**
+   * 基础功能:end
+   */
+
+  /**
+   * 定制功能
+   */
+  platform: Device.platform,
   /**
     * 获取当前地理位置
     * @param {Object} params
