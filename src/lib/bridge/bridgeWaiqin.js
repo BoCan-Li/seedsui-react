@@ -217,6 +217,21 @@ var Bridge = {
       window.history.go(-1)
     }
   },
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    const ua = navigator.userAgent;
+    var verExp = ua.match(/WqAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
+    if (verExp && verExp[1]) return verExp[1].trim();
+    return '';
+  },
   /**
   * 基础功能:end
   */
@@ -231,13 +246,7 @@ var Bridge = {
       DB.setSession('bridge_isready', '1')
     })
   },
-  // 获得版本信息
-  getAppVersion: function () {
-    const ua = navigator.userAgent;
-    var verExp = ua.match(/WqAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
-    if (verExp && verExp[1]) return verExp[1].trim();
-    return '';
-  },
+  
   // 退出到登陆页面
   logOut: function (msg) {
     wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
@@ -775,12 +784,12 @@ var Bridge = {
     })
   },
   // 客户端返回绑定
-  addBackPress: function () {
-    document.addEventListener('backbutton', this.back, false) // eslint-disable-line
+  addBackPress: function (callback) {
+    document.addEventListener('backbutton', callback || this.back, false) // eslint-disable-line
   },
   // 客户端移除返回绑定
-  removeBackPress: function () {
-    document.removeEventListener('backbutton', this.back, false) // eslint-disable-line
+  removeBackPress: function (callback) {
+    document.removeEventListener('backbutton', callback || this.back, false) // eslint-disable-line
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({

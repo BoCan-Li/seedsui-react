@@ -209,6 +209,18 @@ var Bridge = {
       window.history.go(-1)
     }
   },
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    return window.navigator.appVersion
+  },
   /**
    * 基础功能:end
    */
@@ -226,10 +238,14 @@ var Bridge = {
     wx.closeWindow() // eslint-disable-line
   },
   // 客户端返回绑定
-  addBackPress: function () {
+  addBackPress: function (callback) {
     if (wx.onHistoryBack) { // eslint-disable-line
       wx.onHistoryBack(() => { // eslint-disable-line
-        Bridge.back()
+        if (callback) {
+          callback()
+        } else {
+          Bridge.back()
+        }
         return false
       })
     }

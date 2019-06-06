@@ -220,6 +220,18 @@ var Bridge = {
       window.history.go(-1)
     }
   },
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    return window.navigator.appVersion
+  },
   /**
    * 基础功能:end
    */
@@ -238,49 +250,6 @@ var Bridge = {
     DB.setSession('bridge_isready', '1')
     if (params.success) params.success()
   },
-  // 获得版本信息
-  getAppVersion: function () {
-    return window.navigator.appVersion
-  },
-  // 退出到登陆页面
-  logOut: function () {
-    console.log('logOut方法仅在app上工作')
-  },
-  // 获取APP信息
-  getApp: function (callback) {
-    if (callback) callback({})
-    console.log('getApp方法仅在外勤app上工作')
-  },
-  // 文件是否存在
-  isExistsFile: function (params = {}, callback) {
-    if (callback) callback({isExists: '0'})
-    console.log('isExistsFile方法仅在外勤app上工作')
-  },
-  // 附件下载
-  downloadFile: function (params = {}, callback) {
-    if (callback) callback({flag: '1', filePath: params.fileName || ''})
-    console.log('downloadFile方法仅在外勤app上工作')
-  },
-  // 附件打开
-  openFile: function (params = {}, callback) {
-    if (callback) callback({flag: '1'})
-    console.log('openFile方法仅在外勤app上工作')
-  },
-  // 外勤附件转为base64
-  wqUrlToBase64: function (params = {}, callback) {
-    var path = []
-    if (params.path && params.path.length) {
-      path = params.path.map(function (src) {
-        return {
-          path: src,
-          name: src.substring(src.lastIndexOf('/') + 1, src.length),
-          src: src
-        }
-      })
-    }
-    if (callback) callback(path)
-    console.log('wqUrlToBase64方法仅在外勤app上工作')
-  },
   // 视频播放
   previewVideo: function (params = {}) {
     var target = document.getElementById('seedsui_preview_video')
@@ -295,39 +264,6 @@ var Bridge = {
       setTimeout(() => {
         target.play()
       }, 500)
-    }
-  },
-  // 视频录制, 外勤app
-  videoRecord: function (params = {}) {
-    if (!this.debug) {
-      this.showToast('视频录制功能仅可在外勤APP中使用', {mask: false})
-      return
-    }
-    var res = {result: '1', ID: '1234', secs: '2'}
-    if (params.success) {
-      params.success(res)
-    }
-  },
-  // 视频上传, 外勤app
-  videoUpload: function (params = {}) {
-    if (!this.debug) {
-      this.showToast('视频上传功能仅可在外勤APP中使用', {mask: false})
-      return
-    }
-    var res = {result: '1', ID: '1234', secs: '2', vid: '123456'}
-    if (params.success) {
-      params.success(res)
-    }
-  },
-  // 视频是否已经录制过了, 外勤app
-  videoInfo: function (params = {}) {
-    if (!this.debug) {
-      this.showToast('视频功能仅可在外勤APP中使用', {mask: false})
-      return
-    }
-    var res = {result: '1', ID: '1234', secs: '2', hasVideo: '1', hasUpload: '0'}
-    if (params.success) {
-      params.success(res)
     }
   },
   /* -----------------------------------------------------
@@ -398,7 +334,7 @@ var Bridge = {
   /* -----------------------------------------------------
     视频插件
   ----------------------------------------------------- */
-  // 录像
+  // debug:录像
   chooseVideo: function (params = {}) {
     console.log('chooseVideo方法在浏览器上无法运行')
     var res = {
@@ -627,14 +563,6 @@ var Bridge = {
   // 回到主页
   goHome: function () {
     window.history.go(-1)
-  },
-  // 判断是否是主页
-  isHomePage: function (callback, rule) {
-    if (rule && window.location.href.indexOf(rule) >= 0) {
-      callback(true)
-      return
-    }
-    callback(false)
   },
   // 客户端返回绑定
   addBackPress: function () {
