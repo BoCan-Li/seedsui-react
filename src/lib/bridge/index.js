@@ -1,20 +1,23 @@
 import Device from './../Device'
+import BridgeBrowser from './bridgeBrowser'
+import BridgeWeixin from './bridgeWeixin'
+import BridgeDinghuo from './bridgeDinghuo'
+import BridgeWaiqin from './bridgeWaiqin'
+
 
 var Bridge = {}
 if (Device.platform === 'weixin') {
-  Bridge = require('./bridgeWeixin')
+  Bridge = BridgeWeixin
 } else if (Device.platform === 'weixinwork') {
-  Bridge = require('./bridgeWeixin')
+  Bridge = BridgeWeixin
 } else if (Device.platform === 'dinghuo') {
-  Bridge = require('./bridgeDinghuo')
+  Bridge = BridgeDinghuo
   Bridge.config()
 } else if (Device.platform === 'waiqin') {
-  Bridge = require('./bridgeWaiqin')
+  Bridge = BridgeWaiqin
   Bridge.config()
 } else {
-  Bridge = require('./bridgeBrowser')
+  Bridge = BridgeBrowser
 }
-if (Bridge.default) Bridge = Bridge.default
-if (Bridge.config) Bridge.config()
 
 export default Bridge

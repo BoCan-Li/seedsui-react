@@ -219,8 +219,6 @@ var Bridge = {
     } else {
       window.history.go(-1)
     }
-    // 更新系统参数, 订货客户端需要不断更新系统参数
-    if (Bridge.updateSystemParameter) Bridge.updateSystemParameter()
   },
   /**
    * 基础功能:end
