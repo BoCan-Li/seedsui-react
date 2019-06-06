@@ -59,7 +59,7 @@ export default class Weather extends Component {
     if (this.props.location && prevProps.location !== this.props.location) {
       Bridge.getWeather({
         location: this.props.location,
-        onSuccess: (results) => {
+        success: (results) => {
           this.setState({
             detail: results[0]
           })
@@ -74,7 +74,7 @@ export default class Weather extends Component {
     if (this.props.location) {
       Bridge.getWeather({
         location: this.props.location,
-        onSuccess: (results) => {
+        success: (results) => {
           this.setState({
             detail: results[0]
           })

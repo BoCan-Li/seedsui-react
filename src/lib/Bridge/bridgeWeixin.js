@@ -1,13 +1,188 @@
-import BridgeBrowser from './bridgeBrowser.js'
-import Device from './../Device.js'
-import DB from './../DB.js'
+import jsonp from './../jsonp';
+import DB from './../DB';
+import Device from './../Device';
+import EventUtil from './../EventUtil';
+import Toast from './../Toast/instance.js';
+import Alert from './../Alert/instance.js';
+import Loading from './../Loading/instance.js';
 
 var Bridge = {
-  platform: Device.platform,
-  
-  // 关闭窗口
-  closeWindow: function () {
-    wx.closeWindow() // eslint-disable-line
+  /**
+    * 基础功能:start
+    */
+  debug: false,
+  // 打印日志, 参数: el绑定点击5次的元素, log日志文字, 结果：显示日志信息
+  logger: function (el) {
+    // 监听触发的元素,点击十次显示
+    var subscribeEl = el || document.body
+    // 日志盒子
+    var logBox = document.createElement('div')
+    logBox.setAttribute('style', 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0, 0, 0, 0.85);color:white;')
+    
+    var logClose = document.createElement('div')
+    logClose.setAttribute('style', 'height:44px;line-height:44px;text-align:center;background:rgba(200,50,50,1);')
+    logClose.innerHTML = '关闭'
+    logClose.addEventListener('click', function () {
+      document.body.removeChild(logBox)
+    }, false)
+    var logContent = document.createElement('div')
+    logContent.setAttribute('style', 'position:absolute;top:44px;left:0;right:0;bottom:0;padding:10px;overflow:auto;')
+    logBox.appendChild(logClose)
+    logBox.appendChild(logContent)
+    logBox.addEventListener('click', stopPropagationHandler, false)
+    function stopPropagationHandler(e) {
+      e.stopPropagation()
+    }
+    if (subscribeEl.getAttribute('data-multipleclick')) return;
+    EventUtil.addHandler(subscribeEl, 'multipleclick', function() {
+      logContent.innerHTML = DB.getSession('app_logger') || '无日志'
+      document.body.appendChild(logBox)
+    })
+    subscribeEl.setAttribute('data-multipleclick', '1')
+  },
+  // 拨打电话
+  tel: function (number) {
+    if (Device.device === 'pc') {
+      this.showToast('此功能仅可在微信或APP中使用')
+      return
+    }
+    if (isNaN(number)) return
+    window.location.href = 'tel:' + number
+  },
+  // 弹出toast
+  toast: null,
+  showToast: function (msg, params = {}) {
+    if (!msg) return
+    if (!this.toast) {
+      // 提示错误
+      this.toast = new Toast({
+        parent: document.body,
+        maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
+        toastClass: 'toast ' + (params.position ? params.position : 'middle'),
+        icon: params.icon || '',
+        html: msg,
+        delay: params.delay || 2000
+      });
+    } else {
+      this.toast.setHTML(msg)
+      this.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
+      this.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
+      this.toast.setIcon(params.icon || '')
+      this.toast.setDelay(params.delay || 2000)
+    }
+    this.toast.show()
+    if (params.success) {
+      setTimeout(() => {
+        params.success()
+      }, params.delay ? Math.round(params.delay / 2) : 1000)
+    }
+  },
+  // 弹出loading
+  loading: null,
+  showLoading: function (params = {}) {
+    if (!this.loading) {
+      this.loading = new Loading({
+        caption: params.caption || '正在加载...',
+        type: params.type,
+        icon: params.icon || '',
+        maskCss: params.css || null
+      });
+    } else {
+      if (params.caption) this.loading.setCaption(params.caption)
+      if (params.type) this.loading.setType(params.type)
+      if (params.css) this.loading.setMaskCss(params.css)
+      if (params.icon) this.toast.setIcon(params.icon || '')
+      if (params.mask) this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
+    }
+    this.loading.show()
+  },
+  hideLoading: function () {
+    if (!this.loading) {
+      this.toast.showToast('请先showLoading才能hideLoading')
+    } else {
+      this.loading.hide()
+    }
+  },
+  // 弹出Alert
+  alert: null,
+  showAlert: function (msg, params = {}) {
+    if (!this.alert) {
+      this.alert = new Alert({
+        caption: params.caption || '',
+        html: msg,
+        onClickSubmit: function (e) {
+          if (params.success) params.success(e)
+          else e.hide()
+        }
+      });
+    } else {
+      if (params.caption) this.alert.setCaption(params.caption)
+      this.alert.setHTML(msg)
+    }
+    this.alert.show()
+  },
+  // 弹出Confirm
+  confirm: null,
+  showConfirm: function (msg, params = {}) {
+    if (!this.confirm) {
+      this.confirm = new Alert({
+        caption: params.caption || '',
+        html: msg,
+        onClickSubmit: function (e) {
+          if (params.success) params.success(e)
+        },
+        onClickCancel: function(e) {
+          if (params.fail) params.fail(e)
+          else e.hide()
+        },
+      })
+    } else {
+      if (params.caption) this.confirm.setCaption(params.caption)
+      if (params.success) this.confirm.setOnClickSubmit(params.success)
+      if (params.fail) this.confirm.setOnClickCancel(params.fail)
+      this.confirm.setHTML(msg)
+    }
+    this.confirm.show()
+  },
+  /**
+    * 百度地图:获取当前位置名称,只支持gcj02
+    * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
+    * @returns {Object} {address:'地址全称'}
+    */
+  getAddress: function (params = {}) {
+    var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试' + err})
+      } else {
+        var addrs = {}
+        if (data.result && data.result.formatted_address) {
+          addrs.address = data.result.formatted_address
+          if (params.success) params.success(addrs)
+        } else {
+          if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试'})
+        }
+      }
+    })
+  },
+  /**
+    * 百度地图:获得天气
+    * @param {Object} params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', success: fn, fail: fn}
+    * @returns {Object} 天气信息results
+    */
+  getWeather: function (params = {}) {
+    var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试' + err})
+      } else {
+        if (data.results && data.results.length) {
+          if (params.success) params.success(data.results)
+        } else {
+          if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试'})
+        }
+      }
+    })
   },
   // 客户端默认返回控制
   back: function () {
@@ -17,14 +192,14 @@ var Bridge = {
     } else if (isFromApp === 'home') {
       window.history.go(-1);
     } else if (isFromApp === 'confirm') {
-      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
         success: (e) => {
           e.hide()
           window.history.go(-1)
         }
       });
     } else if (isFromApp === 'confirm-close') {
-      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
+      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
         success: (e) => {
           e.hide()
           window.history.go(-1)
@@ -34,18 +209,38 @@ var Bridge = {
       window.history.go(-1)
     }
   },
+  /**
+   * 基础功能:end
+   */
+
+  /**
+   * 定制功能
+   */
+  platform: Device.platform,
+  // 返回首页
+  goHome: function () {
+    window.history.go(-1)
+  },
+  // 关闭窗口
+  closeWindow: function () {
+    wx.closeWindow() // eslint-disable-line
+  },
   // 客户端返回绑定
   addBackPress: function () {
-    if (wx.onHistoryBack) wx.onHistoryBack(function () { // eslint-disable-line
-      this.back()
-      return false
-    })
+    if (wx.onHistoryBack) { // eslint-disable-line
+      wx.onHistoryBack(() => { // eslint-disable-line
+        Bridge.back()
+        return false
+      })
+    }
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    if (wx.onHistoryBack) wx.onHistoryBack(function () { // eslint-disable-line
-      return true
-    })
+    if (wx.onHistoryBack) { // eslint-disable-line
+      wx.onHistoryBack(() => { // eslint-disable-line
+        return true
+      })
+    }
   },
   /**
     * 获取当前地理位置
@@ -87,13 +282,13 @@ var Bridge = {
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)
-          else BridgeBrowser.showToast('没有获取到经纬度', {mask: false})
+          else Bridge.showToast('没有获取到经纬度', {mask: false})
         }
       },
       fail: (res) => {
         this.locating = false
         if (params.fail) params.fail(res)
-        else BridgeBrowser.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
+        else Bridge.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
       },
       complete: (res) => {
         this.locating = false
@@ -154,7 +349,7 @@ var Bridge = {
       },
       fail: function (res) {
         if (params.fail) params.fail(res)
-        else BridgeBrowser.showToast('扫码失败,请退出重试', {mask: false})
+        else Bridge.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
         if (params.onCancel) params.onCancel(res)
@@ -216,7 +411,7 @@ var Bridge = {
       var count = option.max - option.currentCount
       if (count <= 0) {
         msg = '最多只能传' + option.max + '张照片'
-        BridgeBrowser.showToast(msg)
+        Bridge.showToast(msg)
         return
       }
       // 如果设置了安全上传,则每次只允许上传一张
@@ -238,7 +433,7 @@ var Bridge = {
         },
         fail: function (res) {
           if (params.onChooseFail) params.onChooseFail(res)
-          else BridgeBrowser.showToast('选择照片失败', {mask: false})
+          else Bridge.showToast('选择照片失败', {mask: false})
         },
         cancel: function () {
         },
@@ -270,7 +465,7 @@ var Bridge = {
           },
           fail: function () {
             var msg = '您选择的第' + index + '张图片上传失败, 稍后请重试'
-            BridgeBrowser.showToast(msg, {mask: false})
+            Bridge.showToast(msg, {mask: false})
             var deleteItem = imgMap[img]
             delete imgMap[img]
             if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, errMsg: `uploadImage:${msg}`})
@@ -284,4 +479,4 @@ var Bridge = {
   }
 }
 
-export default Object.assign({}, BridgeBrowser, Bridge)
+export default Bridge

@@ -29,7 +29,7 @@ export default class InputLocation extends Component {
     }
     Bridge.getLocation({
       type: 'gcj02',
-      onSuccess: (data) => {
+      success: (data) => {
         // 客户端中不需要再getAddress
         if (data.address) {
           // 赋值
@@ -40,26 +40,26 @@ export default class InputLocation extends Component {
         Bridge.getAddress({ // 只支持gcj02
           latitude: data.latitude,
           longitude: data.longitude,
-          onSuccess: (addrs) => {
+          success: (addrs) => {
             // 赋值
             if (!valueBindProp) this.$input.value = addrs.address;
             if (onChange) onChange(addrs.address, data, args);
           },
-          onError: (err) => {
+          fail: (res) => {
             // 赋值
             if (!valueBindProp) this.$input.value = '';
             if (onChange) onChange('', data, args)
             // 提示获取地址失败
-            Bridge.showToast(err.msg, {mask: false});
+            Bridge.showToast(res.errMsg, {mask: false});
           }
         });
       },
-      onError: (err) => {
+      fail: (res) => {
         // 赋值
         if (!valueBindProp) this.$input.value = '';
         if (onChange) onChange('', null, args)
         // 提示定位失败
-        Bridge.showToast(err.msg, {mask: false});
+        Bridge.showToast(res.errMsg, {mask: false});
       }
     });
   }

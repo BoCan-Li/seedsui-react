@@ -57,7 +57,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -69,7 +69,7 @@ export default class InputWaiqin extends Component {
       Bridge.getCustomerMore({
         selectedIds: this.$input.getAttribute('data-selected-id') || '',
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             let id = [];
             let name = [];
@@ -88,7 +88,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -101,7 +101,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -113,7 +113,7 @@ export default class InputWaiqin extends Component {
       Bridge.getCustomerAreaMore({
         selectedIds: this.$input.getAttribute('data-selected-id') || '',
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             let id = [];
             let name = [];
@@ -132,7 +132,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -144,7 +144,7 @@ export default class InputWaiqin extends Component {
       Bridge.getDepartmentMore({
         selectedIds: this.$input.getAttribute('data-selected-id') || '',
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             let id = [];
             let name = [];
@@ -163,7 +163,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -175,7 +175,7 @@ export default class InputWaiqin extends Component {
       Bridge.getContactMore({
         selectedIds: this.$input.getAttribute('data-selected-id') || '',
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             let id = [];
             let name = [];
@@ -194,7 +194,7 @@ export default class InputWaiqin extends Component {
         id: this.$input.getAttribute('data-selected-id') || '',
         name: value,
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.name;
             this.$input.setAttribute('data-selected-id', options.id);
@@ -206,7 +206,7 @@ export default class InputWaiqin extends Component {
       Bridge.getLocationMap({
         latlng: this.$input.getAttribute('data-selected-id') || '',
         ...chooseParams,
-        onSuccess: (options) => {
+        success: (options) => {
           if (!valueBindProp) {
             this.$input.value = options.address;
             this.$input.setAttribute('data-selected-id', options.latitude + ',' + options.longitude);

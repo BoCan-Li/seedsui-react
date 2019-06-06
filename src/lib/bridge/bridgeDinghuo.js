@@ -1,8 +1,231 @@
-import BridgeBrowser from './bridgeBrowser.js';
-import Device from './../Device.js';
-import DB from './../DB.js';
+import jsonp from './../jsonp';
+import DB from './../DB';
+import Device from './../Device';
+import EventUtil from './../EventUtil';
+import Toast from './../Toast/instance.js';
+import Alert from './../Alert/instance.js';
+import Loading from './../Loading/instance.js';
 
 var Bridge = {
+  /**
+  * 基础功能:start
+  */
+  debug: false,
+  // 打印日志, 参数: el绑定点击5次的元素, log日志文字, 结果：显示日志信息
+  logger: function (el) {
+    // 监听触发的元素,点击十次显示
+    var subscribeEl = el || document.body
+    // 日志盒子
+    var logBox = document.createElement('div')
+    logBox.setAttribute('style', 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0, 0, 0, 0.85);color:white;')
+    
+    var logClose = document.createElement('div')
+    logClose.setAttribute('style', 'height:44px;line-height:44px;text-align:center;background:rgba(200,50,50,1);')
+    logClose.innerHTML = '关闭'
+    logClose.addEventListener('click', function () {
+      document.body.removeChild(logBox)
+    }, false)
+    var logContent = document.createElement('div')
+    logContent.setAttribute('style', 'position:absolute;top:44px;left:0;right:0;bottom:0;padding:10px;overflow:auto;')
+    logBox.appendChild(logClose)
+    logBox.appendChild(logContent)
+    logBox.addEventListener('click', stopPropagationHandler, false)
+    function stopPropagationHandler(e) {
+      e.stopPropagation()
+    }
+    if (subscribeEl.getAttribute('data-multipleclick')) return;
+    EventUtil.addHandler(subscribeEl, 'multipleclick', function() {
+      logContent.innerHTML = DB.getSession('app_logger') || '无日志'
+      document.body.appendChild(logBox)
+    })
+    subscribeEl.setAttribute('data-multipleclick', '1')
+  },
+  // 拨打电话
+  tel: function (number) {
+    if (Device.device === 'pc') {
+      this.showToast('此功能仅可在微信或APP中使用')
+      return
+    }
+    if (isNaN(number)) return
+    window.location.href = 'tel:' + number
+  },
+  // 弹出toast
+  toast: null,
+  showToast: function (msg, params = {}) {
+    if (!msg) return
+    if (!this.toast) {
+      // 提示错误
+      this.toast = new Toast({
+        parent: document.body,
+        maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
+        toastClass: 'toast ' + (params.position ? params.position : 'middle'),
+        icon: params.icon || '',
+        html: msg,
+        delay: params.delay || 2000
+      });
+    } else {
+      this.toast.setHTML(msg)
+      this.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
+      this.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
+      this.toast.setIcon(params.icon || '')
+      this.toast.setDelay(params.delay || 2000)
+    }
+    this.toast.show()
+    if (params.success) {
+      setTimeout(() => {
+        params.success()
+      }, params.delay ? Math.round(params.delay / 2) : 1000)
+    }
+  },
+  // 弹出loading
+  loading: null,
+  showLoading: function (params = {}) {
+    if (!this.loading) {
+      this.loading = new Loading({
+        caption: params.caption || '正在加载...',
+        type: params.type,
+        icon: params.icon || '',
+        maskCss: params.css || null
+      });
+    } else {
+      if (params.caption) this.loading.setCaption(params.caption)
+      if (params.type) this.loading.setType(params.type)
+      if (params.css) this.loading.setMaskCss(params.css)
+      if (params.icon) this.toast.setIcon(params.icon || '')
+      if (params.mask) this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
+    }
+    this.loading.show()
+  },
+  hideLoading: function () {
+    if (!this.loading) {
+      this.toast.showToast('请先showLoading才能hideLoading')
+    } else {
+      this.loading.hide()
+    }
+  },
+  // 弹出Alert
+  alert: null,
+  showAlert: function (msg, params = {}) {
+    if (!this.alert) {
+      this.alert = new Alert({
+        caption: params.caption || '',
+        html: msg,
+        onClickSubmit: function (e) {
+          if (params.success) params.success(e)
+          else e.hide()
+        }
+      });
+    } else {
+      if (params.caption) this.alert.setCaption(params.caption)
+      this.alert.setHTML(msg)
+    }
+    this.alert.show()
+  },
+  // 弹出Confirm
+  confirm: null,
+  showConfirm: function (msg, params = {}) {
+    if (!this.confirm) {
+      this.confirm = new Alert({
+        caption: params.caption || '',
+        html: msg,
+        onClickSubmit: function (e) {
+          if (params.success) params.success(e)
+        },
+        onClickCancel: function(e) {
+          if (params.fail) params.fail(e)
+          else e.hide()
+        },
+      })
+    } else {
+      if (params.caption) this.confirm.setCaption(params.caption)
+      if (params.success) this.confirm.setOnClickSubmit(params.success)
+      if (params.fail) this.confirm.setOnClickCancel(params.fail)
+      this.confirm.setHTML(msg)
+    }
+    this.confirm.show()
+  },
+  /**
+    * 百度地图:获取当前位置名称,只支持gcj02
+    * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
+    * @returns {Object} {address:'地址全称'}
+    */
+  getAddress: function (params = {}) {
+    var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试' + err})
+      } else {
+        var addrs = {}
+        if (data.result && data.result.formatted_address) {
+          addrs.address = data.result.formatted_address
+          if (params.success) params.success(addrs)
+        } else {
+          if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试'})
+        }
+      }
+    })
+  },
+  /**
+    * 百度地图:获得天气
+    * @param {Object} params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', success: fn, fail: fn}
+    * @returns {Object} 天气信息results
+    */
+  getWeather: function (params = {}) {
+    var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
+    jsonp(url, null, (err, data) => {
+      if (err) {
+        if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试' + err})
+      } else {
+        if (data.results && data.results.length) {
+          if (params.success) params.success(data.results)
+        } else {
+          if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试'})
+        }
+      }
+    })
+  },
+  // 客户端默认返回控制
+  back: function () {
+    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    if (isFromApp === '1') {
+      try {
+        Bridge.closeWindow();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'home') {
+      try {
+        Bridge.goHome();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'confirm') {
+      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
+        success: (e) => {
+          e.hide()
+          window.history.go(-1)
+        }
+      });
+    } else if (isFromApp === 'confirm-close') {
+      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
+        success: (e) => {
+          e.hide()
+          Bridge.closeWindow()
+        }
+      });
+    } else {
+      window.history.go(-1)
+    }
+    // 更新系统参数, 订货客户端需要不断更新系统参数
+    if (Bridge.updateSystemParameter) Bridge.updateSystemParameter()
+  },
+  /**
+   * 基础功能:end
+   */
+ 
+  /**
+   * 定制功能
+   */
   platform: 'dinghuo',
   config: function () {
     // 更新系统参数
@@ -241,7 +464,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启'})
-        else BridgeBrowser.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
+        else Bridge.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
     })
   },
@@ -266,11 +489,11 @@ var Bridge = {
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
-      BridgeBrowser.showToast('请传入上传路径dir后再上传图片')
+      Bridge.showToast('请传入上传路径dir后再上传图片')
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      BridgeBrowser.showToast('请传入上传图片列表后再上传图片')
+      Bridge.showToast('请传入上传图片列表后再上传图片')
       return;
     }
     // 格式化params
@@ -406,42 +629,6 @@ var Bridge = {
   goHome: function (callback) {
     this.invoke('goHome', null, callback)
   },
-  // 返回按键处理
-  back: function () {
-    var self = Bridge
-    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
-    if (isFromApp === '1') {
-      try {
-        self.closeWindow();
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isFromApp === 'home') {
-      try {
-        self.goHome();
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isFromApp === 'confirm') {
-      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        success: (e) => {
-          e.hide();
-          window.history.go(-1);
-        }
-      });
-    } else if (isFromApp === 'confirm-close') {
-      BridgeBrowser.showConfirm('您确定要离开此页面吗?', {
-        success: (e) => {
-          e.hide();
-          self.closeWindow();
-        }
-      });
-    } else {
-      window.history.go(-1)
-    }
-    // 更新系统参数
-    self.updateSystemParameter()
-  },
   // 客户端添加返回绑定
   addBackPress: function (fn) {
     try {
@@ -488,7 +675,7 @@ var Bridge = {
       var count = option.max - option.currentCount
       if (count <= 0) {
         msg = '最多只能传' + option.max + '张照片'
-        BridgeBrowser.showToast(msg)
+        Bridge.showToast(msg)
         return
       }
       // 如果设置了安全上传,则每次只允许上传一张
@@ -512,4 +699,4 @@ var Bridge = {
   }
 }
 
-export default Object.assign({}, BridgeBrowser, Bridge)
+export default Bridge

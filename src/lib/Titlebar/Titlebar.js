@@ -43,44 +43,7 @@ export default class Titlebar extends Component {
       return;
     }
     // 否则走默认的返回
-    const isFromApp = Device.getUrlParameter('isFromApp', location.search) || '';
-    if (isFromApp === '1') {
-      try {
-        Bridge.closeWindow();
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isFromApp === 'home') {
-      try {
-        Bridge.goHome();
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isFromApp === 'confirm') {
-      try {
-        Bridge.showConfirm('您确定要离开此页面吗?', {
-          onSuccess: (e) => {
-            e.hide();
-            window.history.go(-1);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (isFromApp === 'confirm-close') {
-      try {
-        Bridge.showConfirm('您确定要离开此页面吗?', {
-          onSuccess: (e) => {
-            e.hide();
-            Bridge.closeWindow();
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      history.back();
-    }
+    Bridge.back();
   }
   getButtonsDOM = (arr) => {
     return arr.map((item, index) => {
