@@ -55,6 +55,9 @@ class App extends Component {
     Bridge.debug = true
     this.mapUtil = new MapUtil('map');
     this.initMap();
+    setTimeout(() => {
+      Bridge.back();
+    }, 1000);
   }
   // 添加鼠标绘制工具监听事件，用于获取绘制结果
   initMap = () => {

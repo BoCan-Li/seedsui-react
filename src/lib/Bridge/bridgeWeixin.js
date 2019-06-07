@@ -1,7 +1,6 @@
 import jsonp from './../jsonp';
 import DB from './../DB';
 import Device from './../Device';
-import EventUtil from './../EventUtil';
 import Toast from './../Toast/instance.js';
 import Alert from './../Alert/instance.js';
 import Loading from './../Loading/instance.js';
@@ -11,35 +10,6 @@ var Bridge = {
     * 基础功能:start
     */
   debug: false,
-  // 打印日志, 参数: el绑定点击5次的元素, log日志文字, 结果：显示日志信息
-  logger: function (el) {
-    // 监听触发的元素,点击十次显示
-    var subscribeEl = el || document.body
-    // 日志盒子
-    var logBox = document.createElement('div')
-    logBox.setAttribute('style', 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0, 0, 0, 0.85);color:white;')
-    
-    var logClose = document.createElement('div')
-    logClose.setAttribute('style', 'height:44px;line-height:44px;text-align:center;background:rgba(200,50,50,1);')
-    logClose.innerHTML = '关闭'
-    logClose.addEventListener('click', function () {
-      document.body.removeChild(logBox)
-    }, false)
-    var logContent = document.createElement('div')
-    logContent.setAttribute('style', 'position:absolute;top:44px;left:0;right:0;bottom:0;padding:10px;overflow:auto;')
-    logBox.appendChild(logClose)
-    logBox.appendChild(logContent)
-    logBox.addEventListener('click', stopPropagationHandler, false)
-    function stopPropagationHandler(e) {
-      e.stopPropagation()
-    }
-    if (subscribeEl.getAttribute('data-multipleclick')) return;
-    EventUtil.addHandler(subscribeEl, 'multipleclick', function() {
-      logContent.innerHTML = DB.getSession('app_logger') || '无日志'
-      document.body.appendChild(logBox)
-    })
-    subscribeEl.setAttribute('data-multipleclick', '1')
-  },
   // 拨打电话
   tel: function (number) {
     if (Device.device === 'pc') {
@@ -185,28 +155,42 @@ var Bridge = {
     })
   },
   // 客户端默认返回控制
-  back: function () {
+  back: function (argHistory, argBackLvl) {
+    // 返回操作对象与返回层级
+    var _history = window.history
+    if (argHistory) _history = argHistory
+    var _backLvl = argBackLvl || -1;
+    
+    // 返回类型
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
-    if (isFromApp === '1') {
-      window.history.go(-1);
-    } else if (isFromApp === 'home') {
-      window.history.go(-1);
-    } else if (isFromApp === 'confirm') {
+    if (isFromApp === '1') { // 关闭当前页面
+      try {
+        Bridge.closeWindow();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'home') { // 返回首页
+      try {
+        Bridge.goHome();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (isFromApp === 'confirm') { // 提示后返回上一页
       Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
         success: (e) => {
           e.hide()
-          window.history.go(-1)
+          _history.go(_backLvl)
         }
       });
-    } else if (isFromApp === 'confirm-close') {
+    } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
       Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
         success: (e) => {
           e.hide()
-          window.history.go(-1)
+          Bridge.closeWindow()
         }
       });
-    } else {
-      window.history.go(-1)
+    } else { // 返加上一页
+      _history.go(_backLvl)
     }
   },
   // 判断是否是主页
