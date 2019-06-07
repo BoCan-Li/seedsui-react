@@ -162,21 +162,21 @@ var Bridge = {
     // 返回操作对象与返回层级
     var _history = window.history
     if (argHistory) _history = argHistory
-    var _backLvl = argBackLvl || -1;
+    var _backLvl = argBackLvl || -1
     
     // 返回类型
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
     if (isFromApp === '1') { // 关闭当前页面
       try {
-        Bridge.closeWindow();
+        Bridge.closeWindow()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     } else if (isFromApp === 'home') { // 返回首页
       try {
-        Bridge.goHome();
+        Bridge.goHome()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     } else if (isFromApp === 'confirm') { // 提示后返回上一页
       Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
