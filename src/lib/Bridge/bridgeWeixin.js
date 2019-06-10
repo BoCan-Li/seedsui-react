@@ -300,7 +300,7 @@ var Bridge = {
       },
       complete: (res) => {
         this.locating = false
-        if (params.onComplete) params.onComplete(res)
+        if (params.complete) params.complete(res)
       }
     })
   },
@@ -363,7 +363,7 @@ var Bridge = {
         if (params.onCancel) params.onCancel(res)
       },
       complete: function (res) {
-        if (params.onComplete) params.onComplete(res)
+        if (params.complete) params.complete(res)
       }
     })
   },
