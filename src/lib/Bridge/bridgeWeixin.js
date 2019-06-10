@@ -360,7 +360,7 @@ var Bridge = {
         else Bridge.showToast('扫码失败,请退出重试', {mask: false})
       },
       cancel: function (res) {
-        if (params.onCancel) params.onCancel(res)
+        if (params.cancel) params.cancel(res)
       },
       complete: function (res) {
         if (params.complete) params.complete(res)
