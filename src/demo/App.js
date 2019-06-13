@@ -83,6 +83,18 @@ class App extends Component {
         alert(msg)
       }
     });
+    this.mapUtil.drawBoundary({
+      area: '江苏省镇江市',
+      styleOptions: redMapStyle,
+      onSuccess: (res) => {
+        redMap[id] = res.polygons;
+        this.mapUtil.map.setViewport(res.polygonsPath);
+        this.drawGray();
+      },
+      onError: (msg) => {
+        alert(msg)
+      }
+    });
   }
   // 绘制禁用区域
   drawGray = () => {
