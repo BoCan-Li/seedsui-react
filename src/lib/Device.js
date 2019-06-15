@@ -176,7 +176,7 @@ var Device = (function () {
     script.type = 'text/javascript'
     script.defer = 'defer'
     if (platform === 'weixin' || platform === 'weixinwork') { // 微信
-      script.src = options.wxUrl || '//res.wx.qq.com/open/js/jweixin-1.3.2.js'
+      script.src = options.wxUrl || '//res.wx.qq.com/open/js/jweixin-1.4.0.js'
       if (callback) {
         script.onload = function () {
           callback()

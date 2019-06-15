@@ -136,7 +136,7 @@ var BaiduMap = function (id, params) {
     }
     s.map.setViewport(points)
   }
-  // 点转多边形points:[[y, x], [y, x]]
+  // 点转多边形points:[[lng, lat], [lng, lat]]
   s.pointsToPolygon = function (argPoints) {
     var points = s.formatPoints(argPoints);
     var ps = []
@@ -144,6 +144,15 @@ var BaiduMap = function (id, params) {
       ps.push(new BMap.Point(point.lng, point.lat))
     }
     return new BMap.Polygon(ps)
+  }
+  // 点转多边形points:[[ [lng, lat], [lng, lat] ], [ [lng, lat], [lng, lat] ]]
+  s.pointsToPolygons = function (argPointss) {
+    let polygons = []
+    for (let i = 0; i < argPointss.length; i++) {
+      let polygon = s.pointsToPolygon(argPointss[i])
+      polygons.push(polygon)
+    }
+    return polygons
   }
   // 绘制省市区域
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
@@ -201,6 +210,14 @@ var BaiduMap = function (id, params) {
       options.onError && options.onError('drawPolygon: 请传入参数{polygon: {}}或者{points: []}')
     }
     return polygon
+  }
+  // 绘制多边形
+  s.drawPolygons = function (options = []){ // [{polygon: Object, points: [], styleOptions: {}}]
+    let polygons = []
+    for (let option of options) {
+      polygons.push(s.drawPolygon(option))
+    }
+    return polygons
   }
   // 绘制Label
   s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}

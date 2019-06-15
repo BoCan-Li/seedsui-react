@@ -43,7 +43,6 @@ const redMapStyle = {
 }
 
 var redMap = {}
-var grayMap = {}
 var blueMap = {}
 
 class App extends Component {
@@ -55,9 +54,6 @@ class App extends Component {
     Bridge.debug = true
     this.mapUtil = new MapUtil('map');
     this.initMap();
-    setTimeout(() => {
-      Bridge.back();
-    }, 1000);
   }
   // 添加鼠标绘制工具监听事件，用于获取绘制结果
   initMap = () => {
@@ -70,14 +66,12 @@ class App extends Component {
   }
   // 绘制总区域
   drawRed = () => {
-    var id = 'red-' + new Date().getTime();
     this.mapUtil.drawBoundary({
       area: '江苏省南京市',
       styleOptions: redMapStyle,
       onSuccess: (res) => {
-        redMap[id] = res.polygons;
+        redMap['red-nanjing'] = res.polygons;
         this.mapUtil.map.setViewport(res.polygonsPath);
-        this.drawGray();
       },
       onError: (msg) => {
         alert(msg)
@@ -87,43 +81,13 @@ class App extends Component {
       area: '江苏省镇江市',
       styleOptions: redMapStyle,
       onSuccess: (res) => {
-        redMap[id] = res.polygons;
+        redMap['red-zhengjiang'] = res.polygons;
         this.mapUtil.map.setViewport(res.polygonsPath);
-        this.drawGray();
       },
       onError: (msg) => {
         alert(msg)
       }
     });
-  }
-  // 绘制禁用区域
-  drawGray = () => {
-    const data = [
-      {lng: 118.911769, lat: 31.99776},
-      {lng: 118.700201, lat: 31.99776},
-      {lng: 118.697901, lat: 31.860468},
-      {lng: 118.90947, lat: 31.856542},
-      {lng: 118.911769, lat: 31.99776},
-      {lng: 118.700201, lat: 31.99776}
-    ];
-    var id = 'black-' + new Date().getTime();
-    const shape = this.mapUtil.drawPolygon({
-      points: data,
-      styleOptions: {fillColor: '#888', strokeColor: '#888'},
-      onSuccess: () => {
-      },
-      onError: (msg) => {
-        alert(msg)
-      }
-    });
-    grayMap[id] = shape
-    // test
-    var point = new BMap.Point(118.794487, 31.950711);
-    this.mapUtil.drawMarker({
-      point: point
-    });
-
-    console.log(GeoUtils.isPointInPolygon(point, shape.so))
   }
   // 手动绘制可选区域
   drawBlue = (e) => {
@@ -131,10 +95,45 @@ class App extends Component {
     var id = 'blue-' + new Date().getTime();
     const shape = this.mapUtil.drawPolygon({
       polygon: polygon,
-      onSuccess: (res, polygonPoints) => {
-        blueMap[id] = polygonPoints
-        // 取差差
-        this.resetFenceArea(id, polygon);
+      onSuccess: () => {
+        // 判断多边形是否合法
+        if (GeoUtils.isSelfInter(polygon)) {
+          this.mapUtil.map.removeOverlay(polygon);
+          alert('多边形自相交');
+          return;
+        }
+        this.mapUtil.map.removeOverlay(polygon);
+        // 添加到map中
+        console.log('添加到blueMap中');
+        console.log(polygon);
+        blueMap[id] = polygon;
+        // 绘制的坐标点
+        var source = polygon.so.map((point) => {return [point.lng, point.lat]});
+        console.log('绘制的坐标点');
+        console.log(source);
+        let pointss = this.redMerge([source]);
+        console.log('取与红色区域的交集');
+        console.log(pointss);
+        // 绘制交集
+        for (let points of pointss) {
+          var polygons = this.mapUtil.pointsToPolygons(points);
+          polygons = polygons.map((polygon) => {
+            return {
+              polygon: polygon,
+            }
+          });
+          console.log('多边形');
+          console.log(polygons);
+          this.mapUtil.drawPolygons(polygons);
+        }
+
+        // if (points && points.length && points[0] && points[0][0]) {
+        //   console.log(arr[0][0])
+        //   var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
+        //   console.log(polygon)
+        //   polygons.push(polygon);
+        //   return polygons;
+        // }
       },
       onError: (msg) => {
         alert(msg)
@@ -163,116 +162,19 @@ class App extends Component {
       ]
     })
   }
-  // 灰色区域区差集
-  grayMerge = (overlay) => {
-    console.log(overlay.so)
-    // 与灰色区域取差集
-    var polygons = [];
-    for (let grayOverlay of Object.values(grayMap)) {
-      if (GeoUtils.contains(overlay.so, grayOverlay.so) || GeoUtils.contains(grayOverlay.so, overlay.so)) {
-        return '多边形区域相互包含';
-      }
-      // 裁切
-      var source = overlay.so.map((point) => {return [point.lng, point.lat]});
-      var clip = grayOverlay.so.map((point) => {return [point.lng, point.lat]});
-      var arr = greinerHormann.difference([source], [clip]);
-      if (arr && arr.length && arr[0] && arr[0][0]) {
-        console.log(arr[0][0])
-        var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
-        polygons.push(polygon);
-      }
-    }
-    return polygons;
-  }
   // 红色区域取交集
-  redMerge = (overlay) => {
+  redMerge = (source) => {
     // 与灰色区域取差集
     var polygons = [];
     for (var redOverlays of Object.values(redMap)) {
       for (var redOverlay of redOverlays) {
-        // 裁切
-        var source = overlay.so.map((point) => {return [point.lng, point.lat]});
+        // 必须分开裁切, 一次性裁切会报错
         var clip = redOverlay.so.map((point) => {return [point.lng, point.lat]});
-        var arr = greinerHormann.intersection([source], [clip]);
-        console.log('红色裁切:' + source);
-        console.log(arr);
-        if (arr && arr.length && arr[0] && arr[0][0]) {
-          console.log(arr[0][0])
-          var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
-          console.log(polygon)
-          polygons.push(polygon);
-          return polygons;
-        }
+        var result = greinerHormann.intersection(source, [clip]);
+        if (result && result.length) polygons.push(result[0]);
       }
     }
     return polygons;
-  }
-  // 绘制指定区域
-  resetFenceArea = (id, overlay) => {
-    console.log(overlay)
-    if (GeoUtils.isSelfInter(overlay)) {
-      this.mapUtil.map.removeOverlay(overlay);
-      delete blueMap[id];
-      alert('多边形自相交');
-      return;
-    }
-    // 灰色区域合并
-    let polygons = this.grayMerge(overlay) || [];
-    if (typeof polygons === 'string') {
-      alert(polygons)
-      this.mapUtil.map.removeOverlay(overlay);
-      delete blueMap[id]
-      return
-    }
-    // 红色区域合并
-    for (let polygon of (polygons.length ? polygons : [overlay])) {
-      let current = this.redMerge(polygon);
-      if (current) polygons = polygons.concat(current);
-    }
-    if (!polygons.length) return;
-
-    console.log('结果:');
-    console.log(polygons);
-    this.mapUtil.map.removeOverlay(overlay);
-    for (let polygon of polygons) {
-      console.log('绘制:');
-      console.log(polygon);
-      this.mapUtil.drawPolygon({polygon: polygon});
-    }
-
-    // overlays.push(newlay);
-    // if (this.canViewAll === '0' && [...redMap.values()].length > 0) { // 红色区域取并集
-    //   overlays = [...redMap.values()];
-    //   for (i = 0; i < overlays.length; i++) {
-    //     var pa = [];
-    //     pa.push(overlays[i].so);
-    //     var pb = [];
-    //     pb.push(newlay.so);
-    //     var paa = new Array([]);
-
-    //     paa['_latlngs'] = pa;
-    //     var pbb = new Array([]);
-    //     pbb['_latlngs'] = pb;
-    //     tmppoly = greinerHormann.intersection(paa, pbb);
-    //     if (tmppoly) {
-    //       newlay = this.mapUtil.pointsToPolygon(tmppoly);
-    //     }
-    //   }
-    // }
-    // this.mapUtil.map.removeOverlay(overlay);
-    // var id = 'blue-' + new Date().getTime();
-    // var pg = this.mapUtil.drawPolygon({
-    //   points: newlay.so,
-    //   styleOptions: {fillColor: '#0c8eff', strokeColor: '#0c8eff'},
-    //   onSuccess: () => {
-    //   },
-    //   onError: (msg) => {
-    //     alert(msg)
-    //   }
-    // });
-    // grayMap[id] = pg;
-    // blueMap[id] = pg;
-    // this.addContextMenu(id, pg);
   }
   render() {
     return (
