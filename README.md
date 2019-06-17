@@ -176,6 +176,11 @@ import Chat from 'seedsui-react/lib/Chat';
 - [VideoUploader](#videouploader) 视频上传
 - [Weather](#weather) 天气
 
+# Utils
+- [MapUtil](#maputil) 地图工具
+- [GeoUtil](#geoutil) 地理工具
+
+
 ## Actionsheet
 [卡片框](https://unpkg.com/seedsui-react/src/lib/Actionsheet/Actionsheet.js)
 ### 属性
@@ -5120,3 +5125,225 @@ import Weather from 'seedsui-react/lib/Weather';
 <Weather location="上海市"/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+## MapUtil
+[地图工具](https://unpkg.com/seedsui-react/src/lib/MapUtil/BaiduMap.js)
+### 方法
+
+### 示例
+```javascript
+import MapUtil from './../lib/MapUtil';
+import GeoUtil from './../lib/GeoUtil.js';
+var greinerHormann = require('polygon-clipping');
+
+
+const MapContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`
+
+const ButtonDraw = styled.div`
+  position: absolute;
+  width: 92px;
+  height: 32px;
+  line-height: 32px;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+  border-radius: 2px;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px 0px;
+  cursor: pointer;
+  background: #fff;
+`
+
+const redMapStyle = {
+  strokeColor: '#f53e2d',
+  strokeWeight: 1,
+  strokeOpacity: 0.8,
+  strokeStyle: 'solid',
+  fillColor: '#f53e2d',
+  fillOpacity: 0.6
+}
+
+var redMap = {}
+var blueMap = {}
+
+
+
+componentDidMount () {
+  Bridge.debug = true
+  this.mapUtil = new MapUtil('map');
+  this.initMap();
+}
+
+// 添加鼠标绘制工具监听事件，用于获取绘制结果
+initMap = () => {
+  if (this.mapUtil && this.mapUtil.drawingManager) {
+    this.mapUtil.showScale();
+    this.mapUtil.showNavigation();
+    this.mapUtil.drawingManager.addEventListener('overlaycomplete', this.drawBlue);
+    this.drawRed();
+  }
+}
+// 绘制总区域
+drawRed = () => {
+  this.mapUtil.drawBoundary({
+    area: '江苏省南京市',
+    styleOptions: redMapStyle,
+    onSuccess: (res) => {
+      redMap['red-nanjing'] = res.polygons;
+      this.mapUtil.map.setViewport(res.polygonsPath);
+    },
+    onError: (msg) => {
+      alert(msg)
+    }
+  });
+  this.mapUtil.drawBoundary({
+    area: '江苏省镇江市',
+    styleOptions: redMapStyle,
+    onSuccess: (res) => {
+      redMap['red-zhengjiang'] = res.polygons;
+      this.mapUtil.map.setViewport(res.polygonsPath);
+    },
+    onError: (msg) => {
+      alert(msg)
+    }
+  });
+}
+// 手动绘制可选区域
+drawBlue = (e) => {
+  const polygon = e.overlay;
+  var id = 'blue-' + new Date().getTime();
+  const shape = this.mapUtil.drawPolygon({
+    polygon: polygon,
+    onSuccess: () => {
+      // 判断多边形是否合法
+      if (GeoUtil.isRegularPolygon(
+          polygon.so.map(point => {
+            return [point.lat, point.lng]
+          })
+        )
+      ) {
+        this.mapUtil.map.removeOverlay(polygon);
+        alert('不是一个标准的多边形');
+        return;
+      }
+      this.mapUtil.map.removeOverlay(polygon);
+      // 添加到map中
+      console.log('添加到blueMap中');
+      console.log(polygon);
+      blueMap[id] = polygon;
+      // 绘制的坐标点
+      var source = polygon.so.map((point) => {return [point.lng, point.lat]});
+      console.log('绘制的坐标点');
+      console.log(source);
+      let pointss = this.redMerge([source]);
+      console.log('取与红色区域的交集');
+      console.log(pointss);
+      // 绘制交集
+      for (let points of pointss) {
+        var polygons = this.mapUtil.pointsToPolygons(points);
+        polygons = polygons.map((polygon) => {
+          return {
+            polygon: polygon,
+          }
+        });
+        console.log('多边形');
+        console.log(polygons);
+        this.mapUtil.drawPolygons(polygons);
+      }
+
+      // if (points && points.length && points[0] && points[0][0]) {
+      //   console.log(arr[0][0])
+      //   var polygon = this.mapUtil.pointsToPolygon(arr[0][0]);
+      //   console.log(polygon)
+      //   polygons.push(polygon);
+      //   return polygons;
+      // }
+    },
+    onError: (msg) => {
+      alert(msg)
+    }
+  });
+  blueMap[id] = shape
+  this.addContextMenu(id, shape)
+}
+// 启用手动绘制
+enableManualDraw = () => {
+  this.mapUtil.enableManualDraw()
+}
+// 添加右键, id用于获取和删除覆盖物值班表和
+addContextMenu(id, overlay){
+  this.mapUtil.addContextMenu(overlay, {
+      menus: [
+      {
+        text: '删除',
+        handler: () => {
+          if (confirm('您确定要删除吗')) {
+            this.mapUtil.map.removeOverlay(overlay)
+            if (blueMap.has(id)) blueMap.delete(id)
+          }
+        }
+      }
+    ]
+  })
+}
+// 红色区域取交集
+redMerge = (source) => {
+  // 与灰色区域取差集
+  var polygons = [];
+  for (var redOverlays of Object.values(redMap)) {
+    for (var redOverlay of redOverlays) {
+      // 必须分开裁切, 一次性裁切会报错
+      var clip = redOverlay.so.map((point) => {return [point.lng, point.lat]});
+      var result = greinerHormann.intersection(source, [clip]);
+      if (result && result.length) polygons.push(result[0]);
+    }
+  }
+  return polygons;
+}
+
+
+<MapContainer id="map"></MapContainer>
+<ButtonDraw onClick={this.enableManualDraw}>划分区域</ButtonDraw>
+```
+[返回目录](#utils)
+
+
+
+
+
+
+## GeoUtil
+[地理工具](https://unpkg.com/seedsui-react/src/lib/GeoUtil.js)
+
+### 多边形转线
+
+
+| 方法 | 返回值 | 说明 |
+| --- | --- | --- |
+| polygonToLines | <code>Line&lt;Array&gt;</code> | 多边形 
+
+<br/>
+
+| 参数 | 参数类型 | 说明 |
+| --- | --- | --- |
+| polygon | <code>Number</code> | 多边形 |
+| isRegular | <code>Boolean</code> | 是否要求是一个标准的多边形, 如果传true, 则返回集合会加上首尾互连
+
+
+### 示例
+```javascript
+var lines = GeoUtils.polygonToLines([[1,0], [2, 0], [3, 0]], true)
+console.log(lines)
+```
+[返回目录](#utils)
