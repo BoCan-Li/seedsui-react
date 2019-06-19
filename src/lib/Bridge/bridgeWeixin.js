@@ -397,9 +397,9 @@ var Bridge = {
   },
   /* 封装图片控件,使用示例见ImgUploader组件
   bridge.Image({
-    onChooseSuccess: function (imgMap) {},
-    onUploadSuccess:function(imgMap,res) // 单张上传成功
-    onUploadFail:function(index, item) // 单张上传失败
+    onChooseSuccess: function (imgMap, res) {},
+    onUploadSuccess:function(imgMap, res) // 单张上传成功
+    onUploadFail:function(imgMap, {id, index, item, errMsg}) // 单张上传失败
     onUploadsSuccess:function(imgMap) // 全部上传成功
   })
   */
@@ -472,11 +472,8 @@ var Bridge = {
             loop(++index)
           },
           fail: function () {
-            var msg = '您选择的第' + index + '张图片上传失败, 稍后请重试'
-            Bridge.showToast(msg, {mask: false})
             var deleteItem = imgMap[img]
-            delete imgMap[img]
-            if (params.onUploadFail) params.onUploadFail(imgMap, {index: index, item: deleteItem, errMsg: `uploadImage:${msg}`})
+            if (params.onUploadFail) params.onUploadFail(imgMap, {id: img, index: index, item: deleteItem, errMsg: `uploadImage:${msg}`})
             if (index >= imgs.length - 1 && params.onUploadsSuccess) params.onUploadsSuccess(imgMap)
             loop(++index)
           }

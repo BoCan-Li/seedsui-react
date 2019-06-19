@@ -1,3 +1,4 @@
+// require PrototypeObject.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Bridge from './../Bridge';
@@ -39,14 +40,16 @@ export default class ImgUploader extends Component {
     showCount: PropTypes.bool, // 标题显示图片张字
     chooseOptions: PropTypes.object, // 选择照片参数
    
+    onDeleteSuccess: PropTypes.func, // 照片删除完成
     onChange: PropTypes.func, // 照片发生变化
     onChooseBefore: PropTypes.func, // 选择照片之前校验, 返回true则继续, 返回false则停止
     onChooseSuccess: PropTypes.func, // 照片选择完成
+    // 以下回调,只有微信有
     onChooseFail: PropTypes.func, // 照片选择错误
     onUploadsSuccess: PropTypes.func, // 照片全部上传完成
     onUploadSuccess: PropTypes.func, // 照片上传完成
-    onUploadFail: PropTypes.func, // 照片上传失败
-    onDeleteSuccess: PropTypes.func // 照片删除完成
+    onUploadFail: PropTypes.func // 照片上传失败
+    
   }
   static defaultProps = {
     enableSafe: false, // 安全上传,第次只能传一张
@@ -64,6 +67,7 @@ export default class ImgUploader extends Component {
     // 初始化图片组件
     this.instance = new Bridge.Image({
       onChooseSuccess: this.chooseSuccess,
+      // 以下回调,只有微信有
       onChooseFail: this.props.onChooseFail,
       onUploadsSuccess: this.uploadsSuccess,
       onUploadSuccess: this.uploadSuccess,
@@ -77,7 +81,7 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img, // 外勤客户端中,id就是name
-          name: img,
+          name: img, // 外勤客户端用于上传到服务器dir+name拼接时使用
           src: imgMap[img].src,
           thumb: imgMap[img].base64,
           sourceType: imgMap[img].sourceType,
@@ -109,7 +113,7 @@ export default class ImgUploader extends Component {
       for (let img in imgMap) {
         list.push({
           id: img,
-          name: img, // 外勤客户端用于上传到服务器dir+name拼接时使用
+          name: img,
           src: img,
           thumb: img,
           sourceType: imgMap[img].sourceType,
@@ -119,36 +123,57 @@ export default class ImgUploader extends Component {
     }
     return list;
   }
-  // 照片发生变化
-  onChange = (imgMap, op) => {
-    var currentList = this.convertList(imgMap);
-    // 过滤原有list中和现在list中相同的图片
-    var prevList = this.props.list.filter((item) => {
-      for (let current of currentList) {
-        if (current.id === item.id) return false;
+  // 微信: 过滤上传失败的图片
+  filterUploadFail = (imgMap) => {
+    // 为已选列表加入serverId
+    let list = this.props.list.map((item) => {
+      if (imgMap[item.id]) {
+        item.serverId = imgMap[item.id].serverId;
       }
-      return true;
-    })
-    var list = currentList.concat(prevList);
-    // Callback
-    if (this.props.onChange) this.props.onChange(list, op);
+      return item;
+    });
+    // 过滤上传失败的图片
+    let failIndexs = [];
+    list = list.filter((item, index) => {
+      if (item.serverId) return true;
+      failIndexs.push(index + 1);
+      return false;
+    });
+    if (failIndexs && failIndexs.length) {
+      Bridge.showToast('您选择的第' + failIndexs.join(',') + '张图片上传失败, 请重新拍照上传', {mask: false});
+    }
+    return list;
   }
-  // 选择和上传回调
-  chooseSuccess = (imgMap) => {
-    this.onChange(imgMap, {op: 'chooseSuccess'});
-    if (this.props.onChooseSuccess) this.props.onChooseSuccess(this.convertList(imgMap));
+  // 图片选择完成
+  chooseSuccess = (imgMap, res) => {
+    // 拼接所有图片
+    const list = this.props.list.concat(this.convertList(imgMap));
+    if (this.props.onChooseSuccess) this.props.onChooseSuccess(list, res);
+    if (this.props.onChange) this.props.onChange(list, res);
   }
+  // 微信: 图片全部上传成功
   uploadsSuccess = (imgMap) => {
-    this.onChange(imgMap, {op: 'uploadsSuccess'});
-    if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(this.convertList(imgMap));
+    // 过滤掉上传失败的图片
+    let list = this.filterUploadFail(imgMap);
+    // Callback
+    if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(list);
+    if (this.props.onChange) this.props.onChange(list);
   }
-  uploadSuccess = (imgMap) => {
-    this.onChange(imgMap, {op: 'uploadSuccess'});
-    if (this.props.onUploadSuccess) this.props.onUploadSuccess(this.convertList(imgMap));
+  // 微信: 单个图片上传成功
+  uploadSuccess = (imgMap, res) => {
+    if (this.props.onUploadSuccess) {
+      // 过滤掉上传失败的图片
+      let list = this.filterUploadFail(imgMap);
+      this.props.onUploadSuccess(list, res);
+    }
   }
-  uploadFail = (imgMap, err) => {
-    this.onChange(imgMap, Object.assign({op: 'uploadFail'}, err));
-    if (this.props.onUploadFail) this.props.onUploadFail(this.convertList(imgMap), err);
+  // 微信: 单个图片上传失败, 这里并没有删除上传失败的图片, 是因为全部上传完成后会走onUploadsSuccess, 由uploadsSuccess统一删除
+  uploadFail = (imgMap, res) => { // imgMap, {id, index, item, errMsg}
+    if (this.props.onUploadFail) {
+      // 过滤掉上传失败的图片
+      let list = this.filterUploadFail(imgMap);
+      this.props.onUploadFail(list, res);
+    }
   }
   // 选择照片
   chooseImg = async () => {
@@ -174,7 +199,7 @@ export default class ImgUploader extends Component {
       return true
     });
     // Callback
-    if (this.props.onChange) this.props.onChange(list, {op: 'deleteSuccess'});
+    if (this.props.onChange) this.props.onChange(list);
     if (this.props.onDeleteSuccess) this.props.onDeleteSuccess(list);
   }
   render() {
