@@ -142,7 +142,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Marquee](#marquee) 跑马灯
 - [MenuTiled](#menutiled) 平铺弹出菜单
 - [MenuTree](#menutree) 侧边树形菜单
-- [NoNetwork](#nonetwork) 无网络
 - [Notice](#notice) 公告
 - [NumBox](#numbox) 数字加减框
 - [NumBoxPop](#numboxpop) 数字加减弹出框
@@ -3341,23 +3340,7 @@ addData = () => {
 
 
 
-## NoNetwork
-[无网络](https://unpkg.com/seedsui-react/src/lib/NoNetwork/NoNetwork.js)
-, 基于[Notice 通知公告](#notice)组件, 自动检测网络状态, 无网络时自动显示
-### 属性
-```javascript
-<NoNetwork
-  caption={标题 string, 默认'网络状态不佳'}
-  sndcaption={副标题 string, 默认'请尝试开关飞行模式后再试'}
-/>
-```
-### 示例
-```javascript
-import NoNetwork from 'seedsui-react/lib/NoNetwork';
 
-<NoNetwork/>
-```
-[返回目录](#component)
 
 
 
@@ -3390,11 +3373,15 @@ import NoNetwork from 'seedsui-react/lib/NoNetwork';
 ```
 ### 示例
 ```javascript
-import NoNetwork from 'seedsui-react/lib/NoNetwork';
+import Notice from 'seedsui-react/lib/Notice';
 
 <Notice iconClassName="icon-no-network" caption="网络状态不佳" sndcaption="请尝试开关飞行模式后再试"/>
 ```
 [返回目录](#component)
+
+
+
+
 
 
 

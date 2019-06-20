@@ -38,6 +38,7 @@ export default class ImgUploader extends Component {
     readOnly: PropTypes.bool,
 
     showCount: PropTypes.bool, // 标题显示图片张字
+    chooseRepeat: PropTypes.bool, // 是否允许重复选择照片
     chooseOptions: PropTypes.object, // 选择照片参数
    
     onDeleteSuccess: PropTypes.func, // 照片删除完成
