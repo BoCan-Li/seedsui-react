@@ -155,7 +155,6 @@ export default class ImgUploader extends Component {
   uploadsSuccess = (imgMap) => {
     // 过滤掉上传失败的图片
     let list = this.filterUploadFail(imgMap);
-    console.log(list)
     // Callback
     if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(list);
     if (this.props.onChange) this.props.onChange(list);
