@@ -295,7 +295,7 @@ var Bridge = {
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
-        serverId: '1237378768e7q8e7r8qwesafdasdfasdfaxss111'
+        serverId: new Date().getTime()
       }
       if (params.success) params.success(res)
       // if (params.fail) params.fail(res)
@@ -648,7 +648,9 @@ var Bridge = {
         max: args.max || 5,
         currentCount: args.currentCount || 0,
         sourceType: args.sourceType || ['album', 'camera'],
-        sizeType: args.sizeType || ['original', 'compressed']
+        sizeType: args.sizeType || ['original', 'compressed'],
+        chooseOptions: args.chooseOptions || {},
+        localIds: args.localIds || [] // 去重处理
       }
       var count = option.max - option.currentCount
       if (count <= 0) {
@@ -658,16 +660,18 @@ var Bridge = {
       }
       // 如果设置了安全上传,则每次只允许上传一张
       if (option.enableSafe) count = 1
-      Bridge.chooseImage({
+      Bridge.chooseImage(Object.assign({
         count: count, // 默认5
         sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
         success: function (res) {
           var imgMap = {}
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
-            imgMap[localId] = {
-              serverId: '',
-              sourceType: res.sourceType
+            if (option.localIds.indexOf(localId) === -1) {
+              imgMap[localId] = {
+                serverId: '',
+                sourceType: res.sourceType
+              }
             }
           }
           if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
@@ -680,7 +684,7 @@ var Bridge = {
         },
         complete: function () {
         }
-      })
+      }, option.chooseOptions))
     }
     // 上传照片
     s.upload = function (imgMap) {

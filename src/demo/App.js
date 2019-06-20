@@ -17,7 +17,7 @@ class App extends Component {
           id: '',
           src: '',
           thumb: '',
-          serverId: '41234'
+          serverId: ''
         }
       ]
     }
@@ -50,6 +50,7 @@ class App extends Component {
             showDelete
             list={this.state.list}
             onChange={this.onPhotoChange}
+            chooseRepeat
           />
         </Container>
       </Page>

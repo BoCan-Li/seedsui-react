@@ -127,7 +127,7 @@ export default class ImgUploader extends Component {
   filterUploadFail = (imgMap) => {
     // 为已选列表加入serverId
     let list = this.props.list.map((item) => {
-      if (imgMap[item.id]) {
+      if (imgMap[item.id] && !item.serverId) {
         item.serverId = imgMap[item.id].serverId;
       }
       return item;
@@ -155,6 +155,7 @@ export default class ImgUploader extends Component {
   uploadsSuccess = (imgMap) => {
     // 过滤掉上传失败的图片
     let list = this.filterUploadFail(imgMap);
+    console.log(list)
     // Callback
     if (this.props.onUploadsSuccess) this.props.onUploadsSuccess(list);
     if (this.props.onChange) this.props.onChange(list);
@@ -182,13 +183,21 @@ export default class ImgUploader extends Component {
       let allowChoose = await this.props.onChooseBefore();
       if (!allowChoose) return;
     }
-    const {enableSafe, max, sourceType, sizeType, chooseOptions} = this.props;
+    const {list, enableSafe, max, sourceType, sizeType, chooseOptions, chooseRepeat} = this.props;
+    // 是否允许选择重复照片
+    let localIds = [];
+    if (!chooseRepeat) {
+      localIds = list.map((item) => {
+        return item.id;
+      });
+    }
     this.instance.choose({
       enableSafe: enableSafe, // 安全上传,第次只能传一张
       max: max,
       currentCount: this.props.list.length,
       sourceType: sourceType,
       sizeType: sizeType,
+      localIds: localIds, // 已选照片, 只有微信生效
       chooseOptions: chooseOptions
     });
   }

@@ -414,7 +414,8 @@ var Bridge = {
         currentCount: args.currentCount || 0,
         sourceType: args.sourceType || ['album', 'camera'],
         sizeType: args.sizeType || ['original', 'compressed'],
-        chooseOptions: args.chooseOptions || {}
+        chooseOptions: args.chooseOptions || {},
+        localIds: args.localIds || [] // 去重处理
       }
       var count = option.max - option.currentCount
       if (count <= 0) {
@@ -431,9 +432,11 @@ var Bridge = {
         success: function (res) {
           var imgMap = {}
           for(var i = 0, localId; localId = res.localIds[i++];){ // eslint-disable-line
-            imgMap[localId] = {
-              serverId: '',
-              sourceType: res.sourceType
+            if (option.localIds.indexOf(localId) === -1) {
+              imgMap[localId] = {
+                serverId: '',
+                sourceType: res.sourceType
+              }
             }
           }
           if (params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
