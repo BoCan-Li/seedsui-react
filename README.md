@@ -2107,7 +2107,6 @@ this.state.lazy.load();
 <ImgUploader
   className={容器className string, 默认无}
   style={容器style object, 默认无}
-
   caption={标题文字 node, 默认无}
   captionStyle={标题style object, 默认无}
   captionClassName={标题className string, 默认无}
@@ -2117,6 +2116,7 @@ this.state.lazy.load();
   //   src: '',
   //   thumb: ''
   // }]
+
   enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
   max={最大选择数 string | number, 默认5}
   sourceType={上传类型 array, 默认['album', 'camera']}
@@ -2127,23 +2127,19 @@ this.state.lazy.load();
   readOnly={是否只读 bool, 默认false}
 
   showCount={标题是否显示上传个数 bool, 默认false}
-  watermark={增加水印 object, 默认无, 格式如下:} // 订货和外勤客户端专用
-  /* 订货: {
-    orderNo: 'xx', // 编号
-    submitName: 'xx', // 提交人
-    customerName: 'xx', // 客户
-    cmLocation: '118.730515, 31.982473', // 位置算偏差
-    isWaterMark: '1', // 是否启用水印
-  } */
-  /* 外勤: {
-    photoType: 'xx', // 水印名称
-    customerName: 'xx', // 客户名
-  } */
-   
-  onChange={照片发生变化 func(list, {op: 'chooseSuccess|uploadsSuccess|deleteSuccess'})}
-  onChooseSuccess={照片选择完成 func(list)}
-  onUploadsSuccess={照片上传完成 func(list)}
+  chooseRepeat={是否允许重复选择照片 bool, 默认false}
+  chooseOptions={选择照片参数 object, 默认空}
+
   onDeleteSuccess={照片删除完成 func(list)}
+  onChange={照片发生变化 func(list, res)}
+  onChooseBefore={选择前校验 await func()}
+  onChooseSuccess={照片选择完成 func(list, res)}
+
+  // 以下回调,只有微信有
+  onChooseFail={照片选择错误 func(res)}
+  onUploadsSuccess={照片全部上传完成 func(list)}
+  onUploadSuccess={照片上传完成 func(list, res)}
+  onUploadFail={照片上传失败 func(list, {id, index, item, errMsg})}
 />
 ```
 ### 示例
