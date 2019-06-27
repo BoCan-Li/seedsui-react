@@ -588,11 +588,10 @@ var Bridge = {
       max = argParams.count
       params.max = '' + max
     }
-    // viewId 临时目录,不需要随机数
-    params.viewId = '0'
+    // viewId 临时目录,不能重复
+    params.viewId = '' + new Date().getTime()
     if (argParams && argParams.viewId) {
       params.viewId = argParams.viewId;
-      // params.viewId = '' + parseInt(Math.random() * 1000, 10)
     }
     // 水印相关: photoType | customerName | submitName | cmLocation | selectItems
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
