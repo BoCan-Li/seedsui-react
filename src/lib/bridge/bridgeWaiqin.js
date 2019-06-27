@@ -596,18 +596,25 @@ var Bridge = {
     // 水印相关: photoType | customerName | submitName | cmLocation | selectItems
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
+        // 格式化返回结果
+        var res = {
+          sourceType: operation === '0' ? 'camera' : 'album',
+          errMsg: 'chooseImage:ok',
+          localIds: []
+        }
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
         var imgMap = {}
         for (var i = 0, item; item = result[i++];) { // eslint-disable-line
           imgMap[item.name] = {
             serverId: '',
             name: item.name,
-            sourceType: operation === '0' ? 'camera' : 'album',
+            sourceType: res.sourceType,
             base64: item.path,
             src: item.src
           }
+          res.localIds.push(item.name)
         }
-        argParams.success(imgMap)
+        argParams.success(res, imgMap)
       }
     }, null, JSON.stringify(params))
   },
@@ -800,8 +807,8 @@ var Bridge = {
         count: count, // 默认5
         sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
         sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
-        success: function (res) {
-          if(params.onChooseSuccess) params.onChooseSuccess(res)
+        success: function (res, imgMap) {
+          if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
         }
       }, option.chooseOptions))
     }
