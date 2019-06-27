@@ -600,6 +600,7 @@ var Bridge = {
         var res = {
           sourceType: operation === '0' ? 'camera' : 'album',
           errMsg: 'chooseImage:ok',
+          results: result,
           localIds: []
         }
         // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
