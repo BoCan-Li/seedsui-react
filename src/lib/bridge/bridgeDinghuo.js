@@ -207,8 +207,8 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    const ua = navigator.userAgent;
-    var verExp = ua.match(/DinghuoAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
+    const ua = navigator.userAgent.toLowerCase();
+    var verExp = ua.match(/dinghuoappversion\/.{0,}(\d+\.\d+\.\d+)/);
     if (verExp && verExp[1]) return verExp[1].trim();
     return '';
   },
