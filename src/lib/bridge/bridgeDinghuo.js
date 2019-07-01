@@ -364,13 +364,6 @@ var Bridge = {
       }
     }
   },
-  /* -----------------------------------------------------
-    商联支付
-    @params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
-  ----------------------------------------------------- */
-  slopenpay: function (params, callback) {
-    this.invoke('slopenpay', params, callback)
-  },
   /**
     * 支付宝支付
     * @param {Object} params
@@ -379,6 +372,36 @@ var Bridge = {
     */
   alipay: function (params, callback) {
     this.invoke('alipay', params, callback)
+  },
+  /**
+    * 商联支付
+    * @param {Object} params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
+    * @param {Function} callback 回调
+    */
+   slopenpay: function (params, callback) {
+    this.invoke('slopenpay', params, callback)
+  },
+  /**
+    * 修改原生标题
+    * @param {Object} params {title: '自定义标题'}
+    * @param {Function} callback 回调
+    */
+  setTitle: function (params, callback) {
+    this.invoke('setTitle', params, callback);
+  },
+  /**
+    * 分享文本
+    * @param {Object} params
+    * {
+    * title: '标题(仅ios支持)',
+    * desc: '副标题(仅ios支持)',
+    * link: '链接(仅ios支持)',
+    * text: '文本(安卓只支持发送文本)',
+    * }
+    * @param {Function} callback 回调
+    */
+   shareText: function (params, callback) {
+    this.invoke('shareText', params, callback);
   },
   /* -----------------------------------------------------
     文件操作
