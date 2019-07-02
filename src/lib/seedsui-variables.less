@@ -1616,16 +1616,6 @@ body{
 
 
 // Alert框
-@alert-width: @270px;
-@alert-caption-size: @font-size-md;
-@alert-caption-color: #333;
-@alert-caption-padding: @15px @12px 0 @12px;
-@alert-content-padding: @15px @12px @15px @12px;
-
-@alert-handler-size: @font-size-md;
-@alert-button-color: #333;
-@alert-button-height: 40px;
-
 .setAlertMask(){
   &.active{
     z-index:10;
@@ -1637,7 +1627,7 @@ body{
   border-style:solid;
 	border-width:0;
 
-  width: @alert-width;
+  width: @270px;
 	border-radius:@6px;
 	margin: 0 auto;
 
@@ -1647,19 +1637,21 @@ body{
 	&:extend(.popup-animation all);
 	h1{
 		text-align: center;
-		padding: @alert-caption-padding;
+		padding: @15px @12px 0 @12px;
 		font-weight: 500;
-		font-size: @alert-caption-size;
-		color: @alert-caption-color;
+		font-size: @font-size-md;
+		color: #333;
 		text-align: center;
   }
 }
 // 内容区域
 .setAlertContent(){
   display: block;
-	padding: @alert-content-padding;
+	padding: @15px @12px @15px @12px;
   line-height: 1.2em;
-	word-wrap: break-word;
+  word-wrap: break-word;
+  max-height: 70%;
+  overflow: auto;
 }
 .setAlertContentIcon(){
   width: 40px;
@@ -1681,14 +1673,14 @@ body{
 	.flex-1;
 	border-width: 0 !important;
 	width: 100%;
-	height: @alert-button-height;
+	height: 40px;
 }
 .setAlertButtonCancel(){
   .flex !important;
 	.flex-1;
 	border-width: 0 !important;
 	width: 100%;
-	height: @alert-button-height;
+	height: 40px;
 }
 
 
