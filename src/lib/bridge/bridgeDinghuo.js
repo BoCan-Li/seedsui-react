@@ -400,14 +400,14 @@ var Bridge = {
     * }
     * @param {Function} callback 回调
     */
-   shareText: function (params, callback) {
+  shareText: function (params, callback) {
     this.invoke('shareText', params, callback);
   },
   /**
     * 获取订货包名
     * @param {Function} callback({result: 'cn.com.wq.ordergoods'}), ios包名cn.com.wq.ordergoods, andriod包名com.waiqin365.dhcloud
     */
-   getIdentification: function (callback) {
+  getIdentification: function (callback) {
     this.invoke('getIdentification', null, callback);
   },
   /* -----------------------------------------------------
