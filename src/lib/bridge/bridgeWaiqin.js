@@ -260,10 +260,22 @@ var Bridge = {
       DB.setSession('bridge_isready', '1')
     })
   },
-  /*
-  * 商联支付
-  * params: {appKey:'', dealerCode:'', orderId:'', payAmount:''}
-  * */
+  /**
+    * 支付宝支付
+    * @param {Object} params
+    * @param {Function} callback
+    * @callback(result) {Object} {code: "0", message: "支付成功"}|{code: "-1", message: "支付失败"}|{code: "-1", message: "数据解析异常"}
+    */
+  alipay: function (params, callback) {
+    wq.wqpay.alipay((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, null, params ? JSON.stringify(params) : null)
+  },
+  /**
+    * 商联支付
+    * @param {Object} params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
+    * @param {Function} callback 回调
+    */
   slopenpay: function (params, callback) {
     wq.wqpay.slopenpay((result) => { // eslint-disable-line
       if (callback) callback(result)

@@ -392,7 +392,7 @@ var Bridge = {
     * @param {Object} params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
     * @param {Function} callback 回调
     */
-   slopenpay: function (params, callback) {
+  slopenpay: function (params, callback) {
     this.invoke('slopenpay', params, callback)
   },
   /**
