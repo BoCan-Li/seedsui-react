@@ -4,9 +4,6 @@ var Alert = function (params) {
   Model
   -------------------- */
   var defaults = {
-    mask: null,
-    parent: document.body, // 创建于哪个元素下
-    overflowContainer: document.body,
     overflowContainerActiveClass: 'overflow-hidden',
 
     maskClass: 'mask alert-mask',
@@ -46,6 +43,21 @@ var Alert = function (params) {
   }
   var s = this
   s.params = params
+  // Params
+  s.params.mask = null
+  if (params.mask) {
+    s.params.mask = params.mask
+  }
+  
+  s.params.parent = document.body // 创建于哪个元素下
+  if (params.parent) {
+    s.params.parent = params.parent
+  }
+  
+  s.params.overflowContainer = document.body
+  if (params.overflowContainer) {
+    s.params.overflowContainer = params.overflowContainer
+  }
   // Parent | OverflowContainer
   s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
@@ -104,6 +116,33 @@ var Alert = function (params) {
     s.mask.appendChild(s.alert)
     s.parent.appendChild(s.mask)
   }
+  s.updateDOM = function () {
+    if (s.alert) {
+      s.alert.setAttribute('class', s.params.alertClass)
+      s.alert.setAttribute(s.params.animationAttr, s.params.animation)
+    }
+
+    if (s.html) {
+      s.html.setAttribute('class', s.params.contentClass)
+      s.html.innerHTML = s.params.html
+    }
+
+    if (s.caption && s.params.caption) s.caption.innerHTML = s.params.caption
+
+    if (s.buttonBox) {
+      s.buttonBox.setAttribute('class', s.params.handlerClass)
+    }
+
+    if (s.buttonSubmit) {
+      s.buttonSubmit.innerHTML = s.params.buttonSubmitHTML
+      s.buttonSubmit.setAttribute('class', s.params.buttonSubmitClass)
+    }
+    
+    if (s.buttonCancel) {
+      s.buttonCancel.innerHTML = s.params.buttonCancelHTML
+      s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
+    }
+  }
   s.update = function () {
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask) {
@@ -160,6 +199,11 @@ var Alert = function (params) {
   }
   s.destroy = function () {
     s.destroyMask()
+  }
+  // 重置数据
+  s.reset = function () {
+    s.params = defaults
+    s.updateDOM()
   }
   // 动态设置
   s.setHTML = function (html) {

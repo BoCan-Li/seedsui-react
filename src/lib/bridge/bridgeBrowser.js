@@ -81,6 +81,7 @@ var Bridge = {
   showAlert: function (msg, params = {}) {
     if (!this.alert) {
       this.alert = new Alert({
+        ...params,
         caption: params.caption || '',
         html: msg,
         onClickSubmit: function (e) {
@@ -89,8 +90,14 @@ var Bridge = {
         }
       });
     } else {
-      if (params.caption) this.alert.setCaption(params.caption)
-      this.alert.setHTML(msg)
+      if (params) {
+        this.alert.reset()
+        for (let n in params) {
+          this.alert.params[n] = params[n]
+        }
+        if (params.caption) this.alert.setCaption(params.caption)
+        this.alert.setHTML(msg)
+      }
     }
     this.alert.show()
   },
@@ -99,6 +106,7 @@ var Bridge = {
   showConfirm: function (msg, params = {}) {
     if (!this.confirm) {
       this.confirm = new Alert({
+        ...params,
         caption: params.caption || '',
         html: msg,
         onClickSubmit: function (e) {
@@ -107,12 +115,18 @@ var Bridge = {
         onClickCancel: function(e) {
           if (params.fail) params.fail(e)
           else e.hide()
-        },
+        }
       })
     } else {
-      if (params.caption) this.confirm.setCaption(params.caption)
-      if (params.success) this.confirm.setOnClickSubmit(params.success)
-      if (params.fail) this.confirm.setOnClickCancel(params.fail)
+      if (params) {
+        this.confirm.reset()
+        for (let n in params) {
+          this.confirm.params[n] = params[n]
+        }
+        if (params.caption) this.confirm.setCaption(params.caption)
+        if (params.success) this.confirm.setOnClickSubmit(params.success)
+        if (params.fail) this.confirm.setOnClickCancel(params.fail)
+      }
       this.confirm.setHTML(msg)
     }
     this.confirm.show()

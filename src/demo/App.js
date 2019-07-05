@@ -24,6 +24,30 @@ class App extends Component {
   }
   componentDidMount () {
     Bridge.debug = true;
+    this.showAlert();
+    setTimeout(() => {
+      Bridge.showAlert('确定吗?', {
+        success: (e) => {
+          e.hide();
+        },
+        fail: (e) => {
+          e.hide();
+        }
+      })
+    }, 2000);
+  }
+  showAlert = () => {
+    Bridge.showAlert('确定吗?', {
+      success: (e) => {
+        e.hide();
+      },
+      fail: (e) => {
+        e.hide();
+      },
+      buttonSubmitClass: 'alert-submit button color-primary',
+      buttonSubmitHTML: '哈哈',
+      buttonCancelHTML: '呵呵'
+    })
   }
   onPhotoChange = (list) => {
     this.setState({
