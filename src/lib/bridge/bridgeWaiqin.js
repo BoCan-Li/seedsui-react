@@ -79,7 +79,6 @@ var Bridge = {
     if (!this.alert) {
       this.alert = new Alert({
         ...params,
-        caption: params.caption || '',
         html: msg,
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
@@ -92,7 +91,7 @@ var Bridge = {
         for (let n in params) {
           this.alert.params[n] = params[n]
         }
-        if (params.caption) this.alert.setCaption(params.caption)
+        this.confirm.updateDOM()
         this.alert.setHTML(msg)
       }
     }
@@ -104,7 +103,6 @@ var Bridge = {
     if (!this.confirm) {
       this.confirm = new Alert({
         ...params,
-        caption: params.caption || '',
         html: msg,
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
@@ -120,7 +118,7 @@ var Bridge = {
         for (let n in params) {
           this.confirm.params[n] = params[n]
         }
-        if (params.caption) this.confirm.setCaption(params.caption)
+        this.confirm.updateDOM()
         if (params.success) this.confirm.setOnClickSubmit(params.success)
         if (params.fail) this.confirm.setOnClickCancel(params.fail)
       }
@@ -203,6 +201,8 @@ var Bridge = {
           Bridge.closeWindow()
         }
       });
+    } else if (isFromApp === 'custom') {
+      console.log('自定义')
     } else { // 返加上一页
       _history.go(_backLvl)
     }
