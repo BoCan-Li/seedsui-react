@@ -380,7 +380,7 @@ var Bridge = {
   },
   /**
     * 支付宝支付
-    * @param {Object} params
+    * @param {Object} params {orderInfo: ''}
     * @param {Function} callback
     * @callback(result) {Object} {code: "0", message: "支付成功"}|{code: "-1", message: "支付失败"}|{code: "-1", message: "数据解析异常"}
     */
