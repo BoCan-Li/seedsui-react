@@ -94,7 +94,7 @@ var Bridge = {
         for (let n in params) {
           this.alert.params[n] = params[n]
         }
-        this.confirm.updateDOM()
+        this.alert.updateDOM()
         this.alert.setHTML(msg)
       }
     }
