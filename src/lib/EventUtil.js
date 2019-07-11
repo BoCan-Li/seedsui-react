@@ -3,7 +3,7 @@ import DB from './DB'
 //  EventUtil 事件函数
 var EventUtil = (function () {
   // 多次点击事件, multipleclick
-  var _listenMultipleClickEvent = function (element, type, handler, isDetach) {
+  var _listenMultipleClickEvent = function (element, type, handler, isDetach, params) {
     function attach () {
       element.addEventListener('click', multipleclickHandler, false)
     }
@@ -17,8 +17,8 @@ var EventUtil = (function () {
     } else {
       attach()
     }
-    var allcount = 10 // 点击多少次触发
-    var space = 5000 // 点击间隔秒数
+    var allcount = params && params.count ? params.count : 10 // 点击多少次触发
+    var space = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
     function multipleclickHandler (e) {
       // 次数
       var counter = DB.getSession('onMultipleClick_counter') || 0
@@ -194,10 +194,10 @@ var EventUtil = (function () {
     }
   }
   return {
-    addHandler: function (element, type, handler) {
+    addHandler: function (element, type, handler, params) { // params用于多次点击时控制次数与时长
       // 自定义事件 multipleclick
       if (type === 'multipleclick') {
-        _listenMultipleClickEvent(element, type, handler)
+        _listenMultipleClickEvent(element, type, handler, false, params) // params: {count: 10, timeout: 5000}
         return
       }
       // touch兼容PC事件
