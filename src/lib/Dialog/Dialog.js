@@ -50,10 +50,12 @@ export default class Dialog extends Component {
   }
   render() {
     const {
+      portal, args,
+      maskClassName, maskStyle, isClickMaskHide, onClickMask, onShowed, onHid,
       duration, show,
-      maskClassName, maskStyle,
       className, style, animation,
-      children
+      children,
+      ...others
     } = this.props;
     let transformOrigin = 'middle';
     switch (animation) {
@@ -79,7 +81,7 @@ export default class Dialog extends Component {
         transformOrigin = 'middle';
     }
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClickMask}>
+      <div ref={el => {this.$el = el;}} className={`mask dialog-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClickMask} {...others}>
         <div className={`dialog${transformOrigin ? ' ' + transformOrigin : ''}${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation={animation} onClick={this.onClickDialog}>
           {children && children}
         </div>
