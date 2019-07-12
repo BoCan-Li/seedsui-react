@@ -1186,6 +1186,7 @@ onClick = () => {
 
   className={容器className string, 默认无, 基础'container'}
   style={容器style object, 默认无}
+  {...others}
 >
 </Dialog>
 ```
