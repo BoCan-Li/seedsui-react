@@ -23,42 +23,12 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    Bridge.debug = true;
-    this.showAlert();
-    setTimeout(() => {
-      Bridge.showAlert('确定吗?', {
-        success: (e) => {
-          e.hide();
-        },
-        fail: (e) => {
-          e.hide();
-        }
+    if (Bridge.onHistoryBack) {
+      Bridge.onHistoryBack(() => {
+        Bridge.showAlert('呵呵');
+        return false;
       })
-    }, 2000);
-  }
-  showAlert = () => {
-    Bridge.showAlert('确定吗?', {
-      success: (e) => {
-        e.hide();
-      },
-      fail: (e) => {
-        e.hide();
-      },
-      buttonSubmitClass: 'alert-submit button color-primary',
-      buttonSubmitHTML: '哈哈',
-      buttonCancelHTML: '呵呵'
-    })
-  }
-  onPhotoChange = (list) => {
-    this.setState({
-      list: list
-    })
-  }
-  onChooseBefore = () => {
-    return new Promise((relsove) => {
-      console.log('1');
-      relsove(true);
-    });
+    }
   }
   render() {
     return (

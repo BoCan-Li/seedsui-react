@@ -247,6 +247,8 @@ var Bridge = {
     try {
       this.setBackEnable(true);
       window.addEventListener('onBackPress', callback || this.back);
+      // ios客户端返回按钮绑定(ios不支持onBackPress)
+      this.addIosBackPress(callback)
     } catch (error) {
       console.log(error);
     }
@@ -402,6 +404,22 @@ var Bridge = {
     */
   setTitle: function (params, callback) {
     this.invoke('setTitle', params, callback);
+  },
+  /**
+    * ios绑定左上角返回按钮
+    * @param {Object} params {title: '自定义标题'}
+    * @param {Function} callback 回调
+    */
+  onHistoryBack: function (callback) {
+    this.invoke('onHistoryBack', null, callback);
+  },
+  // ios客户端返回按钮绑定, ios不支持addBackPress
+  addIosBackPress: function (callback) {
+    this.onHistoryBack(() => {
+      if (callback) callback()
+      else if (this.back) this.back()
+      this.addIosBackPress(callback)
+    })
   },
   /**
     * 分享文本
