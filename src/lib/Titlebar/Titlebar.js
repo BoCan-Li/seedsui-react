@@ -8,8 +8,9 @@ export default class Titlebar extends Component {
   static propTypes = {
     className: PropTypes.string,
     
-    showUrlTitle: PropTypes.bool, // 标题是否显示url中的title
+    showUrlTitle: PropTypes.bool, // 标题是否显示url中的titlebar
     caption: PropTypes.node,
+    // 以下三个属性, 只有caption为string类型或者显示地址栏标题时才有用
     captionClassName: PropTypes.string,
     captionStyle: PropTypes.object,
     onClickCaption: PropTypes.func,
@@ -68,7 +69,7 @@ export default class Titlebar extends Component {
     });
   }
   render() {
-    const {
+    let {
       className,
       showUrlTitle,
       caption, captionClassName, captionStyle, children, onClickCaption,
@@ -82,19 +83,20 @@ export default class Titlebar extends Component {
     if (Array.isArray(rButtons)) {
       rButtonsDOM = this.getButtonsDOM(rButtons);
     }
-    // 设置标题显示url中的title,则默认优先显示title
-    let title = caption;
-    if (showUrlTitle) {
-      title = Device.getUrlParameter('titlebar', location.search) || caption;
-      title = decodeURIComponent(title);
+    // 设置显示标题
+    let title = Device.getUrlParameter('titlebar', location.search);
+    if (showUrlTitle && title) {
+      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{decodeURIComponent(title)}</h1>;
+    } else if (typeof caption === 'string') {
+      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>
     }
-    const captionDOM = children ? children : (<h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{title}</h1>);
     return (
       <div className={`titlebar${className ? ' ' + className : ''}`} {...others}>
         <div className="titlebar-left">
           {lButtonsDOM}
         </div>
-        {captionDOM}
+        {caption}
+        {children}
         <div className="titlebar-right">
           {rButtonsDOM}
         </div>
