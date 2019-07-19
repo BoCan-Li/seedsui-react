@@ -59,7 +59,7 @@ var EventUtil = (function () {
     * @param {Function} handler 句柄, handler(e)
     * @param {Boolean} isDetach 是否移除绑定事件
     */
-  var _listenTouchEvent = function (element, type, handler, isDetach) {
+  var _touchEvent = function (element, type, handler, isDetach) {
     var params = {
       threshold: 0
     }
@@ -167,7 +167,7 @@ var EventUtil = (function () {
     * @param {Function} handler 句柄, handler(e)
     * @param {Boolean} isDetach 是否移除绑定事件
     */
-  var _listenShakeEvent = function (element, type, handler, isDetach) {
+  var _shakeEvent = function (element, type, handler, isDetach) {
     var threshold = 3000 // 晃动速度
     var lastUpdate = 0 // 设置最后更新时间，用于对比
     var curShakeX = 0
@@ -197,10 +197,6 @@ var EventUtil = (function () {
       }
     }
     function attach () {
-      if (!window.DeviceMotionEvent) {
-        alert('您好，你目前所用的设备好像不支持重力感应哦！')
-        return
-      }
       window.addEventListener('devicemotion', deviceMotionHandler, false)
     }
     function detach () {
@@ -234,14 +230,18 @@ var EventUtil = (function () {
       } else {
         // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
         if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
-          _listenTouchEvent(element, type, handler)
+          _touchEvent(element, type, handler)
           return
         }
-        // 自定义事件 shake
-        if (type === 'shake') {
-          _listenShakeEvent(element, type, handler)
-          return
+      }
+      // 重力感应事件
+      if (type === 'shake') {
+        if (window.DeviceMotionEvent) {
+          _shakeEvent(element, 'shake', handler)
+        } else {
+          console.warn('此设备不支持重力感应')
         }
+        return
       }
       // 系统事件
       if (element.addEventListener) {
@@ -269,14 +269,18 @@ var EventUtil = (function () {
       } else {
         // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
         if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
-          _listenTouchEvent(element, type, handler, true)
+          _touchEvent(element, type, handler, true)
           return
         }
-        // 自定义事件 shake
-        if (type === 'shake') {
-          _listenShakeEvent(element, type, handler, true)
-          return
+      }
+      // 重力感应事件
+      if (type === 'shake') {
+        if (window.DeviceMotionEvent) {
+          _shakeEvent(element, 'shake', handler, true)
+        } else {
+          console.warn('此设备不支持重力感应')
         }
+        return
       }
       // 系统事件
       if (element.removeEventListener) {
