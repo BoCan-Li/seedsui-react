@@ -24,8 +24,7 @@ class App extends Component {
     const target = document.getElementById('vconsoleHandler');
     EventUtil.addHandler(target, 'countclick', (e) => {
       console.log('count:' + e.count + ',code:' + e.code);
-    }, {count: 3, timeout: 1000})
-    EventUtil.removeHandler(target, 'countclick')
+    })
   }
   render() {
     return (

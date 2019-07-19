@@ -57,7 +57,7 @@ var EventUtil = (function () {
     * @param {DOM} element 目标元素
     * @param {String} type 事件名称, 此函数处理tap | swipeleft | swiperight | swipedown | swipeup事件
     * @param {Function} handler 句柄, handler(e)
-    * @param {Boolean} isDetach 是否移除绑定事件
+    * @param {Boolean} isDetach 是否移除绑定事件, 此为一函数对多type, 所以不允许移除事件, 只能移除句柄
     */
   var _touchEvent = function (element, type, handler, isDetach) {
     var params = {
@@ -167,40 +167,41 @@ var EventUtil = (function () {
     * @param {Function} handler 句柄, handler(e)
     * @param {Boolean} isDetach 是否移除绑定事件
     */
-  var _shakeEvent = function (element, type, handler, isDetach) {
-    var threshold = 3000 // 晃动速度
-    var lastUpdate = 0 // 设置最后更新时间，用于对比
-    var curShakeX = 0
-    var curShakeY = 0
-    var curShakeZ = 0
-    var lastShakeX = 0
-    var lastShakeY = 0
-    var lastShakeZ = 0
-    function deviceMotionHandler (e) {
-      var acceleration = e.accelerationIncludingGravity // 获得重力加速
-      var curTime = new Date().getTime()// 获得当前时间戳
-      if ((curTime - lastUpdate) > 100) {
-        var diffTime = curTime - lastUpdate // 时间差
-        lastUpdate = curTime
-        curShakeX = acceleration.x // x轴加速度
-        curShakeY = acceleration.y // y轴加速度
-        curShakeZ = acceleration.z // z轴加速度
-        var speed = Math.abs(curShakeX + curShakeY + curShakeZ - lastShakeX - lastShakeY - lastShakeZ) / diffTime * 10000
-        if (speed > threshold) {
-          var ev = e
-          ev.speed = speed
-          handler(ev)
-        }
-        lastShakeX = curShakeX
-        lastShakeY = curShakeY
-        lastShakeZ = curShakeZ
+  var _shake_handler = null
+  var _shake_threshold = 3000 // 晃动速度
+  var _shake_lastUpdate = 0 // 设置最后更新时间, 用于对比
+  var _shake_curShakeX = 0
+  var _shake_curShakeY = 0
+  var _shake_curShakeZ = 0
+  var _shake_lastShakeX = 0
+  var _shake_lastShakeY = 0
+  var _shake_lastShakeZ = 0
+  var _shakeEventHandler = function (e) {
+    var acceleration = e.accelerationIncludingGravity // 获得重力加速
+    var curTime = new Date().getTime()// 获得当前时间戳
+    if ((curTime - _shake_lastUpdate) > 100) {
+      var diffTime = curTime - _shake_lastUpdate // 时间差
+      _shake_lastUpdate = curTime
+      _shake_curShakeX = acceleration.x // x轴加速度
+      _shake_curShakeY = acceleration.y // y轴加速度
+      _shake_curShakeZ = acceleration.z // z轴加速度
+      var speed = Math.abs(_shake_curShakeX + _shake_curShakeY + _shake_curShakeZ - _shake_lastShakeX - _shake_lastShakeY - _shake_lastShakeZ) / diffTime * 10000
+      if (speed > _shake_threshold) {
+        e.speed = speed
+        if (_shake_handler) _shake_handler(e)
       }
+      _shake_lastShakeX = _shake_curShakeX
+      _shake_lastShakeY = _shake_curShakeY
+      _shake_lastShakeZ = _shake_curShakeZ
     }
+  }
+  var _shakeEvent = function (element, type, handler, isDetach) {
+    _shake_handler = handler
     function attach () {
-      window.addEventListener('devicemotion', deviceMotionHandler, false)
+      window.addEventListener('devicemotion', _shakeEventHandler, false)
     }
     function detach () {
-      window.removeEventListener('devicemotion', deviceMotionHandler, false);
+      window.removeEventListener('devicemotion', _shakeEventHandler, false);
     }
     // 添加或移除事件
     if (isDetach) {
