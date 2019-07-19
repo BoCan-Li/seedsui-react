@@ -1,47 +1,64 @@
 //  EventUtil 事件函数
 var EventUtil = (function () {
-  // 多次点击事件, countclick
-  var _listenCountClickEvent = function (element, type, handler, isDetach, params) {
+  /**
+    * 多次点击事件
+    * @param {DOM} element 目标元素
+    * @param {String} type 事件名称, 此处固定为'countclick'
+    * @param {Function} handler 句柄, handler({code(1成功0失败): '1'或'0', count(点击次数): Number, ...e})
+    * @param {Boolean} isDetach 是否移除绑定事件
+    * @param {Object} params 定义配置, 配置为: {count(点击次数): Number, timeout(超时时长): Number}
+    */
+  var _countClickEventHandler = function (e) {
+    // 解析参数
+    var target = e.currentTarget
+    // 次数自增
+    target.prevCount += 1
+    e.count = target.prevCount
+    e.code = '0'
+
+    // 当第一次点击时记录时间
+    if (target.prevCount === 1) {
+      target.prevTime = new Date().getTime()
+    }
+
+    // 当次数满足条件时
+    if (target.prevCount >= target.count) {
+      // 如果时间也满足条件, 则通过
+      if (new Date().getTime() - target.prevTime <= target.timeout) {
+        e.code = '1'
+      }
+      target.prevCount = 0
+    }
+
+    target.handler(e)
+  }
+  var _countClickEvent = function (element, type, handler, isDetach, params) {
+    // 构建参数
+    element.prevCount = 0
+    element.prevTime = new Date().getTime()
+    element.count = params && params.count ? params.count : 10 // 点击多少次触发
+    element.timeout = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
+    element.handler = handler
+    // 添加或移除事件
     function attach () {
-      element.addEventListener('click', countclickHandler, false)
+      element.addEventListener('click', _countClickEventHandler, false)
     }
     function detach () {
-      element.removeEventListener('click', countclickHandler, false)
+      element.removeEventListener('click', _countClickEventHandler, false)
     }
-    // 添加或移除事件
     if (isDetach) {
       detach()
     } else {
       attach()
     }
-    var prevCount = 0
-    var prevTime = new Date().getTime()
-    var count = params && params.count ? params.count : 10 // 点击多少次触发
-    var timeout = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
-    function countclickHandler (e) {
-      // 次数自增
-      prevCount += 1
-      e.count = prevCount
-      e.code = '0'
-
-      // 当第一次点击时记录时间
-      if (prevCount === 1) {
-        prevTime = new Date().getTime()
-      }
-
-      // 当次数满足条件时
-      if (prevCount >= count) {
-        // 如果时间也满足条件, 则通过
-        if (new Date().getTime() - prevTime <= timeout) {
-          e.code = '1'
-        }
-        prevCount = 0
-      }
-
-      handler(e)
-    }
   }
-  // 滑动事件,tap | swipeleft | swiperight | swipedown | swipeup
+  /**
+    * 触摸事件
+    * @param {DOM} element 目标元素
+    * @param {String} type 事件名称, 此函数处理tap | swipeleft | swiperight | swipedown | swipeup事件
+    * @param {Function} handler 句柄, handler(e)
+    * @param {Boolean} isDetach 是否移除绑定事件
+    */
   var _listenTouchEvent = function (element, type, handler, isDetach) {
     var params = {
       threshold: 0
@@ -143,7 +160,13 @@ var EventUtil = (function () {
       attach()
     }
   }
-  // 摇动事件, shake
+  /**
+    * 摇动事件
+    * @param {DOM} element 无
+    * @param {String} type 事件名称, 此函数处理shake事件
+    * @param {Function} handler 句柄, handler(e)
+    * @param {Boolean} isDetach 是否移除绑定事件
+    */
   var _listenShakeEvent = function (element, type, handler, isDetach) {
     var threshold = 3000 // 晃动速度
     var lastUpdate = 0 // 设置最后更新时间，用于对比
@@ -190,11 +213,14 @@ var EventUtil = (function () {
       attach()
     }
   }
+  /**
+    * 返回
+    */
   return {
     addHandler: function (element, type, handler, params) { // params用于多次点击时控制次数与时长
       // 自定义事件 countclick
       if (type === 'countclick') {
-        _listenCountClickEvent(element, type, handler, false, params) // params: {count: 10, timeout: 5000}
+        _countClickEvent(element, 'countclick', handler, false, params) // params: {count: 10, timeout: 5000}
         return
       }
       // touch兼容PC事件
@@ -229,7 +255,7 @@ var EventUtil = (function () {
     removeHandler: function (element, type, handler) {
       // 自定义事件 countclick
       if (type === 'countclick') {
-        _listenCountClickEvent(element, type, handler, true)
+        _countClickEvent(element, 'countclick', null, true)
         return
       }
       // touch兼容PC事件
