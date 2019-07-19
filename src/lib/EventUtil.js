@@ -1,15 +1,12 @@
-import DB from './DB'
-
 //  EventUtil 事件函数
 var EventUtil = (function () {
-  // 多次点击事件, multipleclick
-  var _listenMultipleClickEvent = function (element, type, handler, isDetach, params) {
+  // 多次点击事件, countclick
+  var _listenCountClickEvent = function (element, type, handler, isDetach, params) {
     function attach () {
-      element.addEventListener('click', multipleclickHandler, false)
+      element.addEventListener('click', countclickHandler, false)
     }
     function detach () {
-      console.log('移除click')
-      element.removeEventListener('click', multipleclickHandler, false);
+      element.removeEventListener('click', countclickHandler, false)
     }
     // 添加或移除事件
     if (isDetach) {
@@ -17,31 +14,31 @@ var EventUtil = (function () {
     } else {
       attach()
     }
-    var allcount = params && params.count ? params.count : 10 // 点击多少次触发
-    var space = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
-    function multipleclickHandler (e) {
-      // 次数
-      var counter = DB.getSession('onMultipleClick_counter') || 0
-      if (counter === 0) {
-        DB.setSession('onMultipleClick_time', new Date().getTime())
-      }
-      // 时间
-      var time = DB.getSession('onMultipleClick_time')
+    var prevCount = 0
+    var prevTime = new Date().getTime()
+    var count = params && params.count ? params.count : 10 // 点击多少次触发
+    var timeout = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
+    function countclickHandler (e) {
+      // 次数自增
+      prevCount += 1
+      e.count = prevCount
+      e.code = '0'
 
-      // 设置次数
-      counter += 1
-      DB.setSession('onMultipleClick_counter', counter)
-      // 到达设定次数
-      if (counter === allcount) {
-        // 点击小于间隔秒钟有效
-        if ((new Date().getTime() - time) < space) {
-          handler(e)
-          DB.setSession('onMultipleClick_counter', 0)
-        } else {
-          DB.setSession('onMultipleClick_counter', 0)
-          return
-        }
+      // 当第一次点击时记录时间
+      if (prevCount === 1) {
+        prevTime = new Date().getTime()
       }
+
+      // 当次数满足条件时
+      if (prevCount >= count) {
+        // 如果时间也满足条件, 则通过
+        if (new Date().getTime() - prevTime <= timeout) {
+          e.code = '1'
+        }
+        prevCount = 0
+      }
+
+      handler(e)
     }
   }
   // 滑动事件,tap | swipeleft | swiperight | swipedown | swipeup
@@ -195,9 +192,9 @@ var EventUtil = (function () {
   }
   return {
     addHandler: function (element, type, handler, params) { // params用于多次点击时控制次数与时长
-      // 自定义事件 multipleclick
-      if (type === 'multipleclick') {
-        _listenMultipleClickEvent(element, type, handler, false, params) // params: {count: 10, timeout: 5000}
+      // 自定义事件 countclick
+      if (type === 'countclick') {
+        _listenCountClickEvent(element, type, handler, false, params) // params: {count: 10, timeout: 5000}
         return
       }
       // touch兼容PC事件
@@ -230,9 +227,9 @@ var EventUtil = (function () {
       }
     },
     removeHandler: function (element, type, handler) {
-      // 自定义事件 multipleclick
-      if (type === 'multipleclick') {
-        _listenMultipleClickEvent(element, type, handler, true)
+      // 自定义事件 countclick
+      if (type === 'countclick') {
+        _listenCountClickEvent(element, type, handler, true)
         return
       }
       // touch兼容PC事件

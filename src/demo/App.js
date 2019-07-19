@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import Bridge from './../lib/Bridge';
 import Page from './../lib/Page';
 import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import ImgUploader from './../lib/ImgUploader';
-
+import EventUtil from './../lib/EventUtil';
 
 class App extends Component {
-  static mapUtil = {}
   constructor(props) {
     super(props);
     this.state = {
@@ -23,12 +21,13 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    if (Bridge.onHistoryBack) {
-      Bridge.onHistoryBack(() => {
-        Bridge.showAlert('呵呵');
-        return false;
-      })
-    }
+    const target = document.getElementById('vconsoleHandler');
+    EventUtil.addHandler(target, 'countclick', (e) => {
+      console.log('count:' + e.count + ',code:' + e.code);
+    })
+    EventUtil.removeHandler(target, 'countclick', (e) => {
+      console.log('count:' + e.count + ',code:' + e.code);
+    })
   }
   render() {
     return (
