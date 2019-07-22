@@ -1160,19 +1160,39 @@ body{
   color: @sub;
 }
 
+
+
+
+
+
+
+
+
+
+
+
 // Titlebar
+// Titlebar容器
 .setTitlebar(){
-  // 主标题
-  position:relative;
   .flex;
   .flex-middle;
+  position:relative;
 	min-height:@44px;
 	padding: @6px 0;
 	box-sizing:border-box;
 	color: #1A1A1A;
   background-color:#fff;
-
-  // 左右对齐
+}
+// Titlebar容器(自动拉伸类型)
+.setTitlebarFlex(){
+  .titlebar-left,.titlebar-right{
+    position:relative;
+    top:initial;
+    transform:none;
+  }
+}
+// 左右按钮容器
+.setLeftRight(){
   .titlebar-left,.titlebar-right{
     position:absolute;
     top:50%;
@@ -1189,14 +1209,6 @@ body{
   }
   .titlebar-right{
     right:0;
-  }
-  // 自动拉伸类型标题
-  &.flex{
-    .titlebar-left,.titlebar-right{
-      position:relative;
-      top:initial;
-      transform:none;
-    }
   }
 }
 // 标题
@@ -1219,6 +1231,15 @@ body{
     border-color: #1A1A1A;
   }
 }
+
+
+
+
+
+
+
+
+
 
 // Tabbar
 .setTabCaption(){
@@ -1822,7 +1843,8 @@ body{
 	width:15%;
 	height:@30px;
 	.flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
 
 	color:@placeholder;
 }
