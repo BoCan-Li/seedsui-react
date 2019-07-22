@@ -4,7 +4,6 @@ import Header from './../lib/Header';
 import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
 import ImgUploader from './../lib/ImgUploader';
-import EventUtil from './../lib/EventUtil';
 
 class App extends Component {
   constructor(props) {
@@ -21,10 +20,6 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    const target = document.getElementById('vconsoleHandler');
-    EventUtil.addHandler(target, 'countclick', (e) => {
-      console.log('count:' + e.count + ',code:' + e.code);
-    })
   }
   render() {
     return (
