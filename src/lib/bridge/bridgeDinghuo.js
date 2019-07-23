@@ -206,8 +206,6 @@ var Bridge = {
     } else { // 返加上一页
       _history.go(_backLvl)
     }
-    // 更新系统参数, 订货客户端需要不断更新系统参数
-    if (Bridge.updateSystemParameter) Bridge.updateSystemParameter()
   },
   // 判断是否是主页
   isHomePage: function (callback) {
@@ -271,8 +269,6 @@ var Bridge = {
    */
   platform: 'dinghuo',
   config: function () {
-    // 更新系统参数
-    this.updateSystemParameter()
     // 返回物理按键绑定
     this.addBackPress()
     DB.setSession('bridge_isready', '1')
@@ -636,27 +632,27 @@ var Bridge = {
     // 设置系统参数
     if (data.sysParms) DB.setStore('dinghuo_sysparams', data.sysParms)
     // 设置图片主域名
-    let imgDomain = data.image_url ? data.image_url.clearProtocol() : '';
+    let imgDomain = data.image_url ? data.image_url.clearProtocol() : ''
     if (imgDomain && imgDomain.length - 1 !== imgDomain.lastIndexOf('/')) {
-      imgDomain = imgDomain + '/';
-      DB.setStore('dinghuo_img_domain', decodeURIComponent(imgDomain));
+      imgDomain = imgDomain + '/'
+      DB.setStore('dinghuo_img_domain', decodeURIComponent(imgDomain))
     } else {
-      console.log('图片域名未定义');
-      return {code: 'imgDomainFail', errMsg: 'setSystemParameter:图片域名未定义'};
+      console.log('图片域名未定义')
+      return {errMsg: 'setSystemParameter:图片域名未定义'}
     }
     // 设置uid
-    DB.setStore('dinghuo_uid', data.uid || '');
+    DB.setStore('dinghuo_uid', data.uid || '')
     // 设置手机号
-    DB.setStore('dinghuo_mobile', data.mobile || '');
+    DB.setStore('dinghuo_mobile', data.mobile || '')
     // 设置appId和openId
-    if (data.openId) DB.setStore('app_openId', data.openId || '');
-    if (data.appId) DB.setStore('app_appId', data.appId || '');
+    if (data.openId) DB.setStore('app_openId', data.openId || '')
+    if (data.appId) DB.setStore('app_appId', data.appId || '')
     // 设置选中的供货商
     if (data.selectedSupplier && typeof data.selectedSupplier === 'object') {
-      DB.setStore('dinghuo_selected_supplier', data.selectedSupplier);
+      DB.setStore('dinghuo_selected_supplier', data.selectedSupplier)
     } else {
-      console.log('没有供货商');
-      return {code: 'selectedSupplierFail', errMsg: 'setSystemParameter:请选择供货商'};
+      console.log('没有供货商')
+      return {errMsg: 'setSystemParameter:请选择供货商'}
     }
   },
   // 更新系统参数
