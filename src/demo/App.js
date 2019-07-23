@@ -1,59 +1,78 @@
 import React, { Component } from 'react';
 import Page from './../lib/Page';
 import Header from './../lib/Header';
-import Container from './../lib/Container';
 import Titlebar from './../lib/Titlebar';
-import Calendar from './../lib/Calendar';
+import Dragrefresh from './../lib/Dragrefresh';
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      hasMore: -2, // hasMore: 0.无更多数据 1.数据加载完成 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
+      list: []
+    }
   }
   componentDidMount () {
+    this.loadData();
   }
-  onChangeCalendar = (s) => {
-    // 记录滑动后切换的日期
-    console.log('滑动选中:' + s.activeDate.format('YYYY-MM-DD'))
+  // 下拉刷新配置
+  onTopRefresh = () => {
+    console.log('头部刷新');
+    this.loadData(false);
   }
-  onClickCalendar = (s) => {
-    // 记录点击的选中日期, 用于滑动不切换日期用
-    console.log('点击选中:' + s.selectedDate.format('YYYY-MM-DD'))
+  onBottomRefresh = () => {
+    console.log('底部刷新');
+    this.loadData(true);
   }
-  showMonth = () => {
-    this.$calendar.instance.showMonth();
+  loadData = () => {
+    let list = this.state.list;
+    let hasMore = -2; // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -2. 重置状态,为了后面可以更新DOM
+    this.setState({
+      hasMore: -2 // 先重置状态, 后面再会触发react更新
+    });
+    setTimeout(() => {
+      let serList = [];
+      for (let i = 1; i <= 20; i++) {
+        serList.push(i);
+      }
+      // 拼接数据
+      list = list.concat(serList);
+      hasMore = 404;
+      // 如果数据大于100, 则完成加载
+      if (list.length >= 100) {
+        hasMore = 0;
+      }
+      // 更新DOM
+      this.setState({
+        list,
+        hasMore
+      });
+    }, 1000);
   }
-  showWeek = () => {
-    this.$calendar.instance.showWeek();
-  }
-  showToday = () => {
-    this.$calendar.instance.setToday();
-  }
-  showReset = () => {
-    this.$calendar.instance.setDefaultDate();
+  onScroll = (e) => {
+    console.log(e.currentTarget.scrollTop);
   }
   render() {
-    const defaultDate = new Date()
-defaultDate.nextMonth();
     return (
       <Page>
         <Header>
           <Titlebar caption="SeedsUI"/>
         </Header>
-        <Container>
-        <Calendar
-  ref={el => {this.$calendar = el;}}
-  type="week"
-  titleFormat="YYYY年MM月DD日 周EE 第W周"
-  disableBeforeDate={new Date()}
-  onChange={this.onChangeCalendar}
-  onClick={this.onClickCalendar}
-  defaultDate={defaultDate}
-/>
-<a style={{margin: '8px'}} className="button lg bg-1" onClick={this.showMonth}>月</a>
-<a style={{margin: '8px'}} className="button lg bg-2" onClick={this.showWeek}>周</a>
-<a style={{margin: '8px'}} className="button lg bg-3" onClick={this.showToday}>今天</a>
-<a style={{margin: '8px'}} className="button lg bg-4" onClick={this.showReset}>重置</a>
-        </Container>
+        <Dragrefresh
+          showNoData={false}
+          moveTimeout={1000}
+          ref={(el) => {this.$elDrag = el;}}
+          hasMore={this.state.hasMore}
+          onTopRefresh={this.onTopRefresh}
+          onBottomRefresh={this.onBottomRefresh}
+          bottomErrorCaption="点击重新加载"
+          onClickBottomError={this.onBottomRefresh}
+          onScroll={this.onScroll}
+        >
+          {this.state.list.map((item, index) => {
+            return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item}</div>
+          })}
+        </Dragrefresh>
       </Page>
     );
   }

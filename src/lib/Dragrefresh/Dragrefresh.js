@@ -19,7 +19,7 @@ export default class Dragrefresh extends Component {
     onBottomComplete: PropTypes.func,
 
     children: PropTypes.node,
-    hasMore: PropTypes.number, // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
+    hasMore: PropTypes.number, // hasMore: 0.无更多数据 1.数据加载完成 404.一条数据都没有 -1. 加载错误 -2. 重置状态,为了后面可以更新DOM
 
     showNoData: PropTypes.bool, // 是否允许暂无数据
     noDataParams: PropTypes.object,
@@ -27,9 +27,20 @@ export default class Dragrefresh extends Component {
     lazyLoad: PropTypes.bool,
 
     onScroll: PropTypes.func, // 滚动事件
+
+    // 底部加载中
+    bottomLoadingCaption: PropTypes.string,
+    // 底部加载完成
+    bottomNoDataCaption: PropTypes.string,
+    // 底部加载错误
+    bottomErrorCaption: PropTypes.string,
+    onClickBottomError: PropTypes.func,
   }
   static defaultProps = {
-    showNoData: true
+    showNoData: true,
+    bottomLoadingCaption: '正在加载...',
+    bottomNoDataCaption: '没有更多数据了',
+    bottomErrorCaption: '加载失败, 请稍后再试'
   }
   constructor(props) {
     super(props);
@@ -136,9 +147,9 @@ export default class Dragrefresh extends Component {
     }
     console.log(`hasMore: 由${prevHasMore}变成${hasMore}`)
     // 无数据时不允许触发刷新
-    if (hasMore === 404) {
+    if (this.props.showNoData && hasMore === 404) {
       this.instance.detach();
-    } else if (prevHasMore === 404 && hasMore !== 404) {
+    } else if (this.props.showNoData && prevHasMore === 404 && hasMore !== 404) {
       this.instance.attach();
     }
     // 刷新完成, 需收起头
@@ -159,7 +170,12 @@ export default class Dragrefresh extends Component {
     if (this.props.lazyLoad) this.lazyLoad();
   }
   render() {
-    const {style, className, onTopRefresh, onBottomRefresh, showNoData, hasMore, noDataParams} = this.props;
+    const {
+      style, className,
+      onTopRefresh, onBottomRefresh, showNoData, hasMore,
+      noDataParams,
+      bottomLoadingCaption, bottomNoDataCaption, bottomErrorCaption, onClickBottomError
+    } = this.props;
     return (
       <div ref={(el) => {this.$el = el;}} className={`container${className ? ' ' + className : ''}`} style={style}>
         {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
@@ -172,17 +188,17 @@ export default class Dragrefresh extends Component {
         {onBottomRefresh && (hasMore === 1 || hasMore === -2) && <div className="SID-Dragrefresh-BottomContainer df-pull" style={{height: '50px'}}>
           <div className="df-pull-box">
             <div className="df-pull-icon df-pull-icon-loading"></div>
-            <div className="df-pull-caption">正在加载...</div>
+            <div className="df-pull-caption">{bottomLoadingCaption}</div>
           </div>
         </div>}
         {onBottomRefresh && hasMore === 0 && <div className="SID-Dragrefresh-NoDataContainer df-pull" style={{height: '50px'}}>
           <div className="df-pull-box">
-            <div className="df-pull-caption">没有更多数据了</div>
+            <div className="df-pull-caption">{bottomNoDataCaption}</div>
           </div>
         </div>}
-        {onBottomRefresh && hasMore === -1 && <div className="SID-Dragrefresh-ErrorContainer df-pull" style={{height: '50px'}}>
+        {onBottomRefresh && hasMore === -1 && <div className="SID-Dragrefresh-ErrorContainer df-pull" style={{height: '50px'}} onClick={onClickBottomError}>
           <div className="df-pull-box">
-            <div className="df-pull-caption">加载失败，请稍后再试</div>
+            <div className="df-pull-caption">{bottomErrorCaption}</div>
           </div>
         </div>}
         {hasMore === 404 && showNoData && <Notice caption={'暂无数据'} {...noDataParams}/>}

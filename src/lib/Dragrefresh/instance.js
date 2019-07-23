@@ -15,7 +15,6 @@ var Dragrefresh = function (params) {
     isTopPosition: 0, // 如果scrollTop小于等于isTopPosition时，则认为是到顶部了(不建议修改)
 
     topContainer: null, // 头部容器
-    errorContainerClass: 'SID-Dragrefresh-ErrorContainer', // 错误容器的class
 
     /* callbacks
     onScroll: function(e) // 滚动
@@ -30,8 +29,6 @@ var Dragrefresh = function (params) {
     onTopRefresh:function(s)// 头部刷新
 
     onBottomRefresh:function(s)// 底部刷新
-
-    onClickError:function(s)//点击错误容器
      */
   }
   params = params || {}
@@ -137,17 +134,12 @@ var Dragrefresh = function (params) {
       // 头部动画监听
       s.topContainer[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     }
-    // 底部刷新
-    if (s.params.onBottomRefresh) {
-      // 绑定底部事件，区分一般容器和body
-      if (touchTarget === document.body) {
-        touchTarget = window
-      }
-      touchTarget[action]('scroll', s.onScroll, false)
+    
+    // 绑定底部事件，区分一般容器和body
+    if (touchTarget === document.body) {
+      touchTarget = window
     }
-    // 点击错误面板
-    var errorContainer = s.container.querySelector('.' + s.params.errorContainerClass)
-    if (errorContainer) errorContainer[action]('click', s.onClickError, false)
+    touchTarget[action]('scroll', s.onScroll, false)
   }
   // attach、detach事件
   s.attach = function () {
@@ -281,27 +273,18 @@ var Dragrefresh = function (params) {
       if (s.params.onTopShowed) s.params.onTopShowed(s)
     }
   }
-  s.isNoData = false
   s.getScrollTop = function (e) {
     var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
     return scrollTop
   }
   s.onScroll = function (e) {
     if (s.params.onScroll) s.params.onScroll(e)
+    if (!s.params.onBottomRefresh) return
     var clientHeight = s.container.clientHeight // || window.innerHeight
     var scrollHeight = s.container.scrollHeight
     var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
     // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
     if (scrollTop + clientHeight >= scrollHeight - 2) {
-      s.bottomRefresh()
-    }
-  }
-  s.onClickError = function (e) {
-    if (s.params.onClickError) {
-      s.params.onClickError(s)
-    } else {
-      s.isNoData = false
-      // 底部刷新
       s.bottomRefresh()
     }
   }

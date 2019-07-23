@@ -1242,7 +1242,7 @@ import Dot from 'seedsui-react/lib/Dot';
   onBottomRefresh={底部刷新 func(s)}
   onBottomComplete={底部刷新完成 func(s)}
 
-  hasMore={状态标识 string, 默认-2} // 1刷新完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈
+  hasMore={状态标识 number, 默认-2} // 1刷新完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈
 
   showNoData={是否允许暂无数据 bool, 默认false}
   noDataParams={无数据时的Notive组件属性 object, 默认无}
@@ -1250,6 +1250,11 @@ import Dot from 'seedsui-react/lib/Dot';
   lazyLoad={是否启用懒人加载 bool, 默认false} // 每当didUpdate时会执行lazyLoadInstance.load();
 
   onScroll={滚动事件 func(e)}
+
+  bottomLoadingCaption={底部加载中 string, 默认'正在加载...'}
+  bottomNoDataCaption={底部加载完成 string, 默认'没有更多数据了'}
+  bottomErrorCaption={底部加载错误 string, 默认'加载失败, 请稍后再试'}
+  onClickBottomError={点击底部加载错误区域 func, 默认无}
 >
 内容
 </Dragrefresh>
@@ -1259,7 +1264,7 @@ import Dot from 'seedsui-react/lib/Dot';
 import Dragrefresh from 'seedsui-react/lib/Dragrefresh';
 
 this.state = {
-  hasMore: -2, // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
+  hasMore: -2, // hasMore: 0.无更多数据 1.数据加载完成 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
   list: []
 }
 componentDidMount () {
@@ -1275,9 +1280,9 @@ onBottomRefresh = () => {
   console.log('底部刷新');
   this.loadData(true);
 }
-loadData = (isNext) => {
+loadData = () => {
   let list = this.state.list;
-  let hasMore = -2; // hasMore: 0.无更多数据, 1.头部刷新完成, 2.底部刷新完成, 404.一条数据都没有, -2. 重置状态,为了后面可以更新DOM
+  let hasMore = -2; // hasMore: 0.无更多数据 1.数据加载完成 404.一条数据都没有, -1. 加载错误, -2. 重置状态,为了后面可以更新DOM
   this.setState({
     hasMore: -2 // 先重置状态, 后面再会触发react更新
   });
@@ -1286,13 +1291,10 @@ loadData = (isNext) => {
     for (let i = 1; i <= 20; i++) {
       serList.push(i);
     }
-    if (isNext) { // 下一页
-      list = list.concat(serList);
-      hasMore = 2;
-    } else { // 第一页
-      list = serList;
-      hasMore = 1;
-    }
+    // 拼接数据
+    list = list.concat(serList);
+    hasMore = 1;
+    // 如果数据大于100, 则完成加载
     if (list.length >= 100) {
       hasMore = 0;
     }
@@ -1311,6 +1313,9 @@ loadData = (isNext) => {
   hasMore={this.state.hasMore}
   onTopRefresh={this.onTopRefresh}
   onBottomRefresh={this.onBottomRefresh}
+  bottomErrorCaption="加载失败, 点击重新加载"
+  onClickBottomError={this.onBottomRefresh}
+  noDataParams={{onClick: this.onTopRefresh, caption: '暂无数据, 点击重新加载'}}
 >
   {this.state.list.map((item, index) => {
     return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item}</div>
