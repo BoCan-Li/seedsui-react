@@ -224,7 +224,8 @@ body{
   top: 0;
   right: 0;
 	bottom: 0;
-	left: 0;
+  left: 0;
+  z-index:0;
 }
 
 // Page
@@ -1112,7 +1113,8 @@ body{
 }
 .setGridIconbox(){
   .flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
 	position:relative;
 	box-sizing:border-box;
 	margin:0px auto;
@@ -1694,7 +1696,8 @@ body{
   &.active{
     z-index:10;
     .flex;
-    .flex-middlecenter;
+    .flex-middle;
+    .flex-center;
   }
 }
 .setAlert(){
@@ -2383,7 +2386,8 @@ body{
 .setPopover-li(){
   position: relative;
 	.flex;
-  .flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   height: 46px;
   &:last-child{
     border-width: 0;
@@ -3092,7 +3096,8 @@ body{
 // Tree-icon
 .setTreeIcon(){
   .flex;
-  .flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   color:@placeholder;
   padding: 0 12px;
   &+.tree-icon{
@@ -3101,7 +3106,8 @@ body{
 }
 .setTreeButtonAdd(){
   .flex;
-  .flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   color:@placeholder;
   width: 32px;
 
@@ -3113,7 +3119,8 @@ body{
 }
 .setTreeButtonDel(){
   display: none;
-  .flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   color:@placeholder;
   width: 32px;
 
@@ -3149,7 +3156,8 @@ body{
 // Tree-avatar
 .setTreeAvatar(){
   .flex;
-  .flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   width:@42px;
   height:@42px;
   border-radius:100%;
@@ -3249,7 +3257,8 @@ body{
 // 菜单
 .setMenuTreeTag(){
   .flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   width: 100%;
   min-height: @60px;
   font-size: @14px;
@@ -3348,7 +3357,8 @@ body{
 // 菜单
 .setMenuTiledTag(){
   .flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
   min-height: @menutiled-tag-height;
   text-align: left;
   position: relative;
@@ -3625,7 +3635,8 @@ body{
 }
 .setTicketLegend(){
   .flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
 	width: 100px;
 	height: 100%;
 	color: white;
