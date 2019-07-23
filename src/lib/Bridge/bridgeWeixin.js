@@ -326,12 +326,12 @@ var Bridge = {
     wx.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],
-      desc: 'scanQRCode desc',
+      desc: params.desc || '二维码／条码',
       success: function (res) {
         if (!params.success) return;
         var wxRes = res
-        // 如果没有设置needResult,则清除前缀
-        if (isNaN(params.needResult)) {
+        // 如果没有设置prefix为false或者空,则清除前缀
+        if (!params.prefix) {
           if (res.resultStr.indexOf('QR,') >= 0) {
             wxRes.resultStr = res.resultStr.substring('QR,'.length)
           } else if (res.resultStr.indexOf('EAN_13,') >= 0) {
