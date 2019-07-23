@@ -1160,12 +1160,86 @@ body{
   color: @sub;
 }
 
+
+
+
+
+
+
+
+
+
+
+
 // Titlebar
-@titlebar-bg:#fff;
-@titlebar-color:#1A1A1A;
+// Titlebar容器
 .setTitlebar(){
-  
+  .flex;
+  .flex-middle;
+  position:relative;
+	min-height:@44px;
+	padding: @6px 0;
+	box-sizing:border-box;
+	color: #1A1A1A;
+  background-color:#fff;
 }
+// Titlebar容器(自动拉伸类型)
+.setTitlebarFlex(){
+  .titlebar-left,.titlebar-right{
+    position:relative;
+    top:initial;
+    transform:none;
+  }
+}
+// 左右按钮容器
+.setLeftRight(){
+  .titlebar-left,.titlebar-right{
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    z-index:1;
+    .flex;
+  }
+  .titlebar-left{
+    left:0;
+    // 有左右的标题需要留有间距
+    &+.titlebar-caption{
+      margin: 0 @80px;
+    }
+  }
+  .titlebar-right{
+    right:0;
+  }
+}
+// 标题
+.setTitlebarCaption(){
+  position:relative;
+  font-size: @font-size-lg;
+	font-weight: normal;
+	&:extend(.flex-1);
+}
+// 按钮
+.setTitlebarButton(){
+  position:relative;
+  margin: 0 8px;
+  padding: 0 4px;
+  &+.titlebar-button{
+    margin-left:0px;
+  }
+  // titlebar上的箭头图标
+  .shape-arrow-left{
+    border-color: #1A1A1A;
+  }
+}
+
+
+
+
+
+
+
+
+
 
 // Tabbar
 .setTabCaption(){
@@ -1769,7 +1843,8 @@ body{
 	width:15%;
 	height:@30px;
 	.flex;
-	.flex-middlecenter;
+  .flex-middle;
+  .flex-center;
 
 	color:@placeholder;
 }
@@ -2988,7 +3063,7 @@ body{
   background: #F0F2F5;
   border-radius: @4px;
   font-size: @13px;
-  color: @titlebar-color;
+  color: #1A1A1A;
   padding: @2px @10px;
   margin: @5px @12px;
 }
@@ -3054,7 +3129,7 @@ body{
 	position:relative;
   min-width: @200px;
   &:active{
-    background-color:@titlebar-bg;
+    background-color:#fff;
   }
   &.extend + ul{
     display: block;

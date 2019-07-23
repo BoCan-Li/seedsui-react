@@ -1,57 +1,21 @@
 // titlebar.less(start)
-.titlebar,.titlebar-button,.titlebar-caption{
-	position:relative;
-}
 .titlebar{
-	.flex;
-  .flex-middle;
-	min-height:@44px;
-	padding: @6px 0;
-	box-sizing:border-box;
-	color:@titlebar-color;
-	background-color:@titlebar-bg;
 	.setTitlebar();
 }
-// flex布局
-.titlebar.flex{
-	.titlebar-left,.titlebar-right{
-		position:relative;
-		top:initial;
-		transform:none;
-	}
-}
-// 左右对齐
-.titlebar-left,.titlebar-right{
-	position:absolute;
-	top:50%;
-	transform: translateY(-50%);
-	z-index:1;
-	.flex;
-}
-.titlebar-left{
-	left:0;
-}
-.titlebar-right{
-	right:0;
+.titlebar-flex{
+	.setTitlebarFlex();
 }
 
 //标题
 .titlebar-caption{
-	font-size: @font-size-lg;
-	font-weight: normal;
-	&:extend(.flex-1);
+	.setTitlebarCaption();
 }
-.titlebar-left+.titlebar-caption{
-	margin: 0 @80px;
-}
+
+// 左右按钮容器
+.setLeftRight();
 
 // 按钮
 .titlebar-button{
-	margin: 0 8px;
-	padding: 0 4px;
-}
-
-.titlebar-button+.titlebar-button{
-	margin-left:0px;
+	.setTitlebarButton();
 }
 // titlebar.less(end)
