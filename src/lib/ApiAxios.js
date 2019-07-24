@@ -24,12 +24,6 @@ const Api = {
   onError: function (error) {
     console.warn(error)
   },
-  logOut: function () {
-    console.warn('401, 您已被挤下线, 需要重新登录, 可是您未设置ApiAxios.setLogOut方法')
-  },
-  setLogOut: function (fn) {
-    this.logOut = fn
-  },
   setBaseURL: function (baseURL) {
     axios.defaults.baseURL = baseURL
   },
@@ -79,13 +73,7 @@ axios.interceptors.response.use(response => {
   }
   return result
 }, error => {
-  if (error.response) {
-    if (Api.onError) Api.onError(error)
-    if (error.response.status === 401) {
-      if (Api.logOut) Api.logOut(error.response)
-      return Promise.resolve(error.response)
-    }
-  }
+  if (Api.onError) Api.onError(error)
   return Promise.reject(error)
 })
 

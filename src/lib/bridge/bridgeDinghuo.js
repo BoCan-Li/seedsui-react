@@ -624,53 +624,6 @@ var Bridge = {
   systemParameter (callback) {
     this.invoke('getSystemParameter', null, callback)
   },
-  /* -----------------------------------------------------
-  设置系统参数
-  @params {appId: '', openId: '', image_url: '', mobile: '', selectedSupplier: object, sysParms: object}
-  ----------------------------------------------------- */
-  setSystemParameter: function (data) {
-    // 设置系统参数
-    if (data.sysParms) DB.setStore('dinghuo_sysparams', data.sysParms)
-    // 设置图片主域名
-    let imgDomain = data.image_url ? data.image_url.clearProtocol() : ''
-    if (imgDomain && imgDomain.length - 1 !== imgDomain.lastIndexOf('/')) {
-      imgDomain = imgDomain + '/'
-      DB.setStore('dinghuo_img_domain', decodeURIComponent(imgDomain))
-    } else {
-      console.log('图片域名未定义')
-      return {errMsg: 'setSystemParameter:图片域名未定义'}
-    }
-    // 设置uid
-    DB.setStore('dinghuo_uid', data.uid || '')
-    // 设置手机号
-    DB.setStore('dinghuo_mobile', data.mobile || '')
-    // 设置appId和openId
-    if (data.openId) DB.setStore('app_openId', data.openId || '')
-    if (data.appId) DB.setStore('app_appId', data.appId || '')
-    // 设置选中的供货商
-    if (data.selectedSupplier && typeof data.selectedSupplier === 'object') {
-      DB.setStore('dinghuo_selected_supplier', data.selectedSupplier)
-    } else {
-      console.log('没有供货商')
-      return {errMsg: 'setSystemParameter:请选择供货商'}
-    }
-  },
-  // 更新系统参数
-  updateSystemParameter: function (callback) {
-    // 更新系统参数
-    this.loginInfo((loginData) => {
-      this.systemParameter((sysData) => {
-        const data = {}
-        data.image_url = loginData.image_url
-        data.uid = loginData.uid
-        data.mobile = loginData.mobile
-        data.selectedSupplier = loginData.selectedSupplier
-        data.sysParms = sysData
-        this.setSystemParameter(data)
-        if (callback) callback()
-      });
-    });
-  },
   // 修改原生角标
   changeBadgeNum: function (count) {
     this.invoke('setBadgeNum', {key: count});
