@@ -79,6 +79,11 @@ import Chat from 'seedsui-react/lib/Chat';
 @import "components.less";
 ```
 
+
+# 国际化
+[下载国际化文件](https://unpkg.com/seedsui-react/lib/lang.js), 修改window._seeds_lang对象即可
+
+
 # Component
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
