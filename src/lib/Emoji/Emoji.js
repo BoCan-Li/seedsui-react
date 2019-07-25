@@ -8,7 +8,7 @@ import Icon from './../Icon';
 import Instance from './instance.js';
 import data from './instance.data.js';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Emoji extends Component {
   static propTypes = {
@@ -45,10 +45,10 @@ export default class Emoji extends Component {
   static defaultProps = {
     autoFocus: false,
     data: data,
-    placeholder: _['say_something'] || '说点什么吧...',
+    placeholder: window._seeds_lang['say_something'] || '说点什么吧...',
     isClickMaskHide: false,
     liconParams: {},
-    submitCaption: _['submit'] || '提交',
+    submitCaption: window._seeds_lang['submit'] || '提交',
   }
   constructor(props) {
     super(props);

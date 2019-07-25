@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class SelectPicker extends Component {
   static propTypes = {
@@ -101,8 +101,8 @@ export default class SelectPicker extends Component {
       <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={maskStyle} ref={(el) => {this.$el = el}} onClick={this.onClick}>
         <div className={`selectpicker${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={style}>
           <div className="picker-header">
-            <a className="picker-cancel">{_['cancel'] || '取消'}</a>
-            <a className={`picker-submit${multiple ? '' : ' disabled'}`}>{_['finish'] || '完成'}</a>
+            <a className="picker-cancel">{window._seeds_lang['cancel'] || '取消'}</a>
+            <a className={`picker-submit${multiple ? '' : ' disabled'}`}>{window._seeds_lang['finish'] || '完成'}</a>
           </div>
           <div className="selectpicker-wrapper">
             {list && list.length && list.map((item, index) => {

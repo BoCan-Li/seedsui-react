@@ -3,6 +3,7 @@ import Page from './../lib/Page';
 import Header from './../lib/Header';
 import Titlebar from './../lib/Titlebar';
 import Dragrefresh from './../lib/Dragrefresh';
+import Bridge from './../lib/Bridge';
 
 class App extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class App extends Component {
   }
   componentDidMount () {
     this.loadData();
+    Bridge.tel('1234');
   }
   // 下拉刷新配置
   onTopRefresh = () => {

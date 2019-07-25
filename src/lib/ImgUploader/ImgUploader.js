@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Bridge from './../Bridge';
 import Grid from './../Grid';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 const Count = {
   fontSize: '12px',
@@ -143,7 +143,7 @@ export default class ImgUploader extends Component {
       return false;
     });
     if (failIndexs && failIndexs.length) {
-      Bridge.showToast(`${_['the'] || '第'}${failIndexs.join(',')}${_['th_image_failed_to_upload'] || '张图片上传失败'}, ${_['re-photo_upload'] || '请重新拍照上传'}`, {mask: false});
+      Bridge.showToast(`${window._seeds_lang['the'] || '第'}${failIndexs.join(',')}${window._seeds_lang['th_image_failed_to_upload'] || '张图片上传失败'}, ${window._seeds_lang['re-photo_upload'] || '请重新拍照上传'}`, {mask: false});
     }
     return list;
   }

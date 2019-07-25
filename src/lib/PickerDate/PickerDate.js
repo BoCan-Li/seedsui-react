@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class PickerDate extends Component {
   static propTypes = {
@@ -72,7 +72,7 @@ export default class PickerDate extends Component {
     if (type === 'date') {
       // 如果不是合法的日期格式
       if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
-        if (onError) onError(`${_['hint_invalid_date'] || '无效的日期格式'}`);
+        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}`);
       } else {
         let dateValues = defaultValue.split(this.props.split)
         defaultYear = dateValues[0]
@@ -82,7 +82,7 @@ export default class PickerDate extends Component {
     } else if (type === 'month') {
       // 如果不是合法的日期格式
       if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
-        if (onError) onError(`${_['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`);
+        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`);
       } else {
         let monthValues = defaultValue.split(this.props.split)
         defaultYear = monthValues[0]
@@ -91,7 +91,7 @@ export default class PickerDate extends Component {
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
       if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}\\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
-        if (onError) onError(`${_['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`);
+        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`);
       } else {
         let values = defaultValue.split(' ')
         let dateValues = values[0].split(this.props.split)
@@ -105,7 +105,7 @@ export default class PickerDate extends Component {
     } else if (type === 'time') {
       // 如果不是合法的日期格式
       if (!defaultValue || !new RegExp(`^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
-        if (onError) onError(`${_['hint_invalid_date'] || '无效的日期格式'}, hh:mm`);
+        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, hh:mm`);
       } else {
         let timeValues = defaultValue.split(':')
         defaultHour = timeValues[0]
@@ -132,7 +132,7 @@ export default class PickerDate extends Component {
         yearsData = this.props.data.year.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (_['unit_year'] || '年')
+            'value': '' + n + (window._seeds_lang['unit_year'] || '年')
           }
         })
       }
@@ -140,7 +140,7 @@ export default class PickerDate extends Component {
         monthsData = this.props.data.month.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (_['unit_month'] || '月')
+            'value': '' + n + (window._seeds_lang['unit_month'] || '月')
           }
         })
       }
@@ -148,7 +148,7 @@ export default class PickerDate extends Component {
         daysData = this.props.data.day.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (_['unit_date'] || '日')
+            'value': '' + n + (window._seeds_lang['unit_date'] || '日')
           }
         })
       }
@@ -156,7 +156,7 @@ export default class PickerDate extends Component {
         hoursData = this.props.data.hour.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (_['unit_hour'] || '时')
+            'value': '' + n + (window._seeds_lang['unit_hour'] || '时')
           }
         })
       }
@@ -164,7 +164,7 @@ export default class PickerDate extends Component {
         minutesData = this.props.data.minute.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (_['unit_minute'] || '分')
+            'value': '' + n + (window._seeds_lang['unit_minute'] || '分')
           }
         })
       }
@@ -222,8 +222,8 @@ export default class PickerDate extends Component {
       <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
         <div className={`picker${className ? ' ' + className : ''}`} style={style}>
           <div className="picker-header">
-            <a className="picker-cancel">{_['cancel'] || '取消'}</a>
-            <a className="picker-submit">{_['finish'] || '完成'}</a>
+            <a className="picker-cancel">{window._seeds_lang['cancel'] || '取消'}</a>
+            <a className="picker-submit">{window._seeds_lang['finish'] || '完成'}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">

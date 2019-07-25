@@ -1,7 +1,7 @@
 import PinchZoom from './pinch-zoom.js'
 
 var Preview = function (params) {
-  const _ = window._seedsLang || {} // 国际化数据
+  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* ----------------------
   Model
   ---------------------- */
@@ -239,7 +239,7 @@ var Preview = function (params) {
       s.addHash() // 增加hash
       s.showMask()
     } else {
-      if (s.params.onShowError) s.params.onShowError(s, _['hint_image_failed_to_load'] || '图片加载失败')
+      if (s.params.onShowError) s.params.onShowError(s, window._seeds_lang['hint_image_failed_to_load'] || '图片加载失败')
     }
   }
   /* --------------------

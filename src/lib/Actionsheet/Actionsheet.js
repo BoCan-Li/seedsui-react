@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Actionsheet extends Component {
   static propTypes = {
@@ -35,7 +35,7 @@ export default class Actionsheet extends Component {
     onClick: PropTypes.func
   }
   static defaultProps = {
-    cancelCaption: _['cancel'] || '取消',
+    cancelCaption: window._seeds_lang['cancel'] || '取消',
     optionClassName: 'border-b'
   }
   constructor(props) {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Star from './../Star';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputStar extends Component {
   static propTypes = {
@@ -31,7 +31,7 @@ export default class InputStar extends Component {
     let num = argNum;
     if (num < min) {
       if (onError) {
-        onError(`${_['hint_cannot_be_less_than'] || '不能小于'}${min}${_['star'] || '颗星'}`);
+        onError(`${window._seeds_lang['hint_cannot_be_less_than'] || '不能小于'}${min}${window._seeds_lang['star'] || '颗星'}`);
       } else {
         num = min;
       }

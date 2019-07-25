@@ -1,6 +1,6 @@
 // Picker 滚动选择器
 var Picker = function (params) {
-  const _ = window._seedsLang || {} // 国际化数据
+  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* ------------------------
   Model
   ------------------------ */
@@ -22,9 +22,9 @@ var Picker = function (params) {
 
     headerClass: 'picker-header',
     headerSubmitClass: 'picker-submit',
-    headerSubmitText: _['finish'] || '完成',
+    headerSubmitText: window._seeds_lang['finish'] || '完成',
     headerCancelClass: 'picker-cancel',
-    headerCancelText: _['cancel'] || '取消',
+    headerCancelText: window._seeds_lang['cancel'] || '取消',
 
     wrapperClass: 'picker-wrapper',
 

@@ -1,4 +1,4 @@
-window._seedsLang = {
+window._seeds_lang = {
   'cancel': '取消',
   'ok': '确定',
   'finish': '完成',

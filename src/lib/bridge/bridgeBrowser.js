@@ -8,7 +8,7 @@ import Preview from './../Preview/instance.js';
 import MediaUtil from './../MediaUtil';
 import FullScreen from './../FullScreen';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 var Bridge = {
   /**
@@ -18,7 +18,7 @@ var Bridge = {
   // 拨打电话
   tel: function (number) {
     if (Device.device === 'pc') {
-      this.showToast(_['hint_only_mobile'] || '此功能仅可在手机中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_mobile'] || '此功能仅可在手机中使用', {mask: false})
       return
     }
     if (isNaN(number)) return
@@ -57,7 +57,7 @@ var Bridge = {
   showLoading: function (params = {}) {
     if (!this.loading) {
       this.loading = new Loading({
-        caption: params.caption || (_['loading'] || '正在加载...'),
+        caption: params.caption || (window._seeds_lang['loading'] || '正在加载...'),
         type: params.type,
         icon: params.icon || '',
         maskCss: params.css || null
@@ -73,7 +73,7 @@ var Bridge = {
   },
   hideLoading: function () {
     if (!this.loading) {
-      this.toast.showToast(_['hint_hideloading_after_showloading'] || 'showLoading后才能hideLoading')
+      this.toast.showToast(window._seeds_lang['hint_hideloading_after_showloading'] || 'showLoading后才能hideLoading')
     } else {
       this.loading.hide()
     }
@@ -140,14 +140,14 @@ var Bridge = {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}` + err})
+        if (params.fail) params.fail({errMsg: `getAddress:${window._seeds_lang['hint_address_failed'] || '获取地址失败, 请稍后重试'}` + err})
       } else {
         var addrs = {}
         if (data.result && data.result.formatted_address) {
           addrs.address = data.result.formatted_address
           if (params.success) params.success(addrs)
         } else {
-          if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}`})
+          if (params.fail) params.fail({errMsg: `getAddress:${window._seeds_lang['hint_address_failed'] || '获取地址失败, 请稍后重试'}`})
         }
       }
     })
@@ -161,12 +161,12 @@ var Bridge = {
     var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getWeather:${_['hint_weather_failed'] || '获取天气失败, 请稍后重试'}` + err})
+        if (params.fail) params.fail({errMsg: `getWeather:${window._seeds_lang['hint_weather_failed'] || '获取天气失败, 请稍后重试'}` + err})
       } else {
         if (data.results && data.results.length) {
           if (params.success) params.success(data.results)
         } else {
-          if (params.fail) params.fail({errMsg: `getWeather:${_['hint_weather_failed'] || '获取天气失败, 请稍后重试'}`})
+          if (params.fail) params.fail({errMsg: `getWeather:${window._seeds_lang['hint_weather_failed'] || '获取天气失败, 请稍后重试'}`})
         }
       }
     })
@@ -193,14 +193,14 @@ var Bridge = {
         console.log(error)
       }
     } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      Bridge.showConfirm(Bridge.confirmCaption || (_['confirm_quit_page'] || '您确定要离开此页面吗?'), {
+      Bridge.showConfirm(Bridge.confirmCaption || (window._seeds_lang['confirm_quit_page'] || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           _history.go(_backLvl)
         }
       });
     } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      Bridge.showConfirm(Bridge.confirmCaption || (_['confirm_quit_page'] || '您确定要离开此页面吗?'), {
+      Bridge.showConfirm(Bridge.confirmCaption || (window._seeds_lang['confirm_quit_page'] || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           Bridge.closeWindow()
@@ -288,7 +288,7 @@ var Bridge = {
   // 拍照、本地选图
   chooseImage: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     var res = {
@@ -301,13 +301,13 @@ var Bridge = {
   // 上传图片
   uploadImage: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     this.showLoading()
     setTimeout(() => {
       this.hideLoading()
-      this.showToast(_['uploaded_completed'] || '上传完成', {mask: false})
+      this.showToast(window._seeds_lang['uploaded_completed'] || '上传完成', {mask: false})
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
@@ -322,12 +322,12 @@ var Bridge = {
   preview: null,
   previewImage: function (params = {}) {
     if (!params.urls || !params.urls.length) {
-      Bridge.showToast(`urls${_['wrong_parameter'] || '参数不正确'}, ${_['cannot_preview'] || '无法预览'}`, {mask: false})
+      Bridge.showToast(`urls${window._seeds_lang['wrong_parameter'] || '参数不正确'}, ${window._seeds_lang['cannot_preview'] || '无法预览'}`, {mask: false})
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      Bridge.showToast(`index${_['wrong_parameter'] || '参数不正确'}, ${_['cannot_preview'] || '无法预览'}`, {mask: false})
+      Bridge.showToast(`index${window._seeds_lang['wrong_parameter'] || '参数不正确'}, ${window._seeds_lang['cannot_preview'] || '无法预览'}`, {mask: false})
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -339,7 +339,7 @@ var Bridge = {
           s.show()
         },
         onError: function () {
-          Bridge.showToast(`${_['invalid_image_src'] || '图片地址无效'}`, {mask: false})
+          Bridge.showToast(`${window._seeds_lang['invalid_image_src'] || '图片地址无效'}`, {mask: false})
         }
       })
     } else {
@@ -370,7 +370,7 @@ var Bridge = {
   ----------------------------------------------------- */
   getContactMore: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success([
@@ -386,7 +386,7 @@ var Bridge = {
   },
   getContact: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -477,7 +477,7 @@ var Bridge = {
   customerMoreLen: 1,
   getCustomerMore: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     const result = []
@@ -492,7 +492,7 @@ var Bridge = {
   },
   getCustomer: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -502,7 +502,7 @@ var Bridge = {
   },
   getCustomerType: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -512,7 +512,7 @@ var Bridge = {
   },
   getCustomerAreaMore: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success([
@@ -528,7 +528,7 @@ var Bridge = {
   },
   getCustomerArea: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -538,11 +538,11 @@ var Bridge = {
   },
   // 部门插件
   getDepartmentMore: function (params) {
-    this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+    this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
   },
   getDepartment: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     params.success({
@@ -553,7 +553,7 @@ var Bridge = {
   // 单选商品
   getGoods: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -618,8 +618,8 @@ var Bridge = {
   // 获取当前地理位置带地图
   getLocationMap: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_wqapp'] || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `getLocationMap:${_['hint_only_wqapp'] || '此功能仅可在微信或APP中使用'}`})
+      this.showToast(window._seeds_lang['hint_only_wqapp'] || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `getLocationMap:${window._seeds_lang['hint_only_wqapp'] || '此功能仅可在微信或APP中使用'}`})
       return
     }
     setTimeout(function () {
@@ -633,8 +633,8 @@ var Bridge = {
   ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
     if (!this.debug) {
-      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `scanQRCode:${_['hint_scan_failed'] || '扫码失败'}, ${_['hint_try_again_later'] || '请稍后重试'}`})
+      this.showToast(window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `scanQRCode:${window._seeds_lang['hint_scan_failed'] || '扫码失败'}, ${window._seeds_lang['hint_try_again_later'] || '请稍后重试'}`})
       return
     }
     setTimeout(function () {
@@ -655,8 +655,8 @@ var Bridge = {
     // 选择照片
     s.choose = function (args = {}) {
       if (!Bridge.debug) {
-        if (params.onChooseFail) params.onChooseFail({errMsg: `chooseImage:${_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用'}`})
-        else Bridge.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
+        if (params.onChooseFail) params.onChooseFail({errMsg: `chooseImage:${window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用'}`})
+        else Bridge.showToast(window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
         return
       }
       var option = {
@@ -670,7 +670,7 @@ var Bridge = {
       }
       var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = (_['hint_max_upload'] || '最多只能传') + option.max + (_['photos'] || '张照片')
+        msg = (window._seeds_lang['hint_max_upload'] || '最多只能传') + option.max + (window._seeds_lang['photos'] || '张照片')
         Bridge.showToast(msg)
         return
       }
@@ -694,7 +694,7 @@ var Bridge = {
           s.upload(imgMap)
         },
         fail: function (res) {
-          Bridge.showToast(_['hint_choose_image_failed'] || '选择图片失败, 请稍后再试', {mask: false})
+          Bridge.showToast(window._seeds_lang['hint_choose_image_failed'] || '选择图片失败, 请稍后再试', {mask: false})
         },
         cancel: function () {
         },

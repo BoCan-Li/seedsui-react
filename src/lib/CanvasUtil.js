@@ -1,6 +1,6 @@
 // CanvasUtil canvas操作
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 var CanvasUtil = {
   cropImg: function (opts = {}) {
@@ -12,17 +12,17 @@ var CanvasUtil = {
       return errMsg
     }
     if (isNaN(opts.y)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${_['method'] || '方法'}y${_['wrong_parameter'] || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${window._seeds_lang['method'] || '方法'}y${window._seeds_lang['wrong_parameter'] || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.width)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${_['method'] || '方法'}width${_['wrong_parameter'] || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${window._seeds_lang['method'] || '方法'}width${window._seeds_lang['wrong_parameter'] || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.height)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${_['method'] || '方法'}width${_['wrong_parameter'] || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${window._seeds_lang['method'] || '方法'}width${window._seeds_lang['wrong_parameter'] || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputLocation extends Component {
   static propTypes = {
@@ -13,7 +13,7 @@ export default class InputLocation extends Component {
     onChange: PropTypes.func
   }
   static defaultProps = {
-    locationingText: _['positioning'] || '定位中...'
+    locationingText: window._seeds_lang['positioning'] || '定位中...'
   }
   constructor(props) {
     super(props);

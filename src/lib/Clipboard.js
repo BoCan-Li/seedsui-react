@@ -1,6 +1,6 @@
 // Clipboard 剪贴板
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 var Clipboard = {
   // 选择元素的内容
@@ -60,9 +60,9 @@ var Clipboard = {
     }
   
     if (success) {
-      if (params && params.onSuccess) params.onSuccess(params.successMsg || (_['copied_to_the_clipboard'] || '复制到剪贴板成功'))
+      if (params && params.onSuccess) params.onSuccess(params.successMsg || (window._seeds_lang['copied_to_the_clipboard'] || '复制到剪贴板成功'))
     } else {
-      if (params && params.onError) params.onError(params.errorMsg || (_['unable_to_access_clipboard'] || '当前设备不允许访问剪贴板'))
+      if (params && params.onError) params.onError(params.errorMsg || (window._seeds_lang['unable_to_access_clipboard'] || '当前设备不允许访问剪贴板'))
     }
   }
 }

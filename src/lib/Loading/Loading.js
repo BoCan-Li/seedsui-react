@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Loading extends Component {
   static propTypes = {
@@ -20,7 +20,7 @@ export default class Loading extends Component {
     caption: PropTypes.string
   }
   static defaultProps = {
-    caption: _['loading'] || '正在加载...',
+    caption: window._seeds_lang['loading'] || '正在加载...',
     type: 'floating'
   }
   constructor(props) {

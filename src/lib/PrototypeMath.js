@@ -1,4 +1,4 @@
-const _ = window._seedsLang || {} // 国际化数据
+if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 /* -------------------
 解决加减乘除精度
 ------------------- */
@@ -118,13 +118,13 @@ Math.Calc = (function () {
     // 最大值
     if (!isNaN(max) && value - max > 0) {
       // callback onError
-      if (onError) onError({msg: _['hint_cannot_be_greater_than'] || '不能大于' + max})
+      if (onError) onError({msg: window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于' + max})
       return '' + max
     }
     // 最小值
     if (!isNaN(min) && value - min < 0) {
       // callback onError
-      if (onError) onError({msg: _['hint_cannot_be_less_than'] || '不能小于' + min})
+      if (onError) onError({msg: window._seeds_lang['hint_cannot_be_less_than'] || '不能小于' + min})
       return '' + min
     }
     // 截取小数位数
@@ -163,7 +163,7 @@ Math.Calc = (function () {
       if (result) value = result[0];
       else value = '';
       // callback onError
-      if (onError) onError({msg: _['hint_must_number'] || '必须要输入数字哦'});
+      if (onError) onError({msg: window._seeds_lang['hint_must_number'] || '必须要输入数字哦'});
     }
     return value;
   }
