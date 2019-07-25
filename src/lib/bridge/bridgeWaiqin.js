@@ -158,12 +158,12 @@ var Bridge = {
     var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试' + err})
+        if (params.fail) params.fail({errMsg: `getWeather:${_['hint_weather_failed'] || '获取天气失败, 请稍后重试'}` + err})
       } else {
         if (data.results && data.results.length) {
           if (params.success) params.success(data.results)
         } else {
-          if (params.fail) params.fail({errMsg: 'getWeather:获取天气失败,请稍后重试'})
+          if (params.fail) params.fail({errMsg: `getWeather:${_['hint_weather_failed'] || '获取天气失败, 请稍后重试'}`})
         }
       }
     })
@@ -190,14 +190,14 @@ var Bridge = {
         console.log(error)
       }
     } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
+      Bridge.showConfirm(Bridge.confirmCaption || (_['confirm_quit_page'] || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           _history.go(_backLvl)
         }
       });
     } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      Bridge.showConfirm(Bridge.confirmCaption || '您确定要离开此页面吗?', {
+      Bridge.showConfirm(Bridge.confirmCaption || (_['confirm_quit_page'] || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           Bridge.closeWindow()
@@ -654,7 +654,7 @@ var Bridge = {
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
-      Bridge.showToast('请传入上传路径dir后再上传图片', {mask: false})
+      Bridge.showToast(_['hint_upload_image_must_dir'] || '没有上传目录dir, 无法上传', {mask: false})
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {

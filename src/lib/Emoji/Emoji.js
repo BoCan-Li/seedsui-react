@@ -45,7 +45,7 @@ export default class Emoji extends Component {
   static defaultProps = {
     autoFocus: false,
     data: data,
-    placeholder: '说点什么吧...',
+    placeholder: _['say_something'] || '说点什么吧...',
     isClickMaskHide: false,
     liconParams: {},
     submitCaption: _['submit'] || '提交',

@@ -41,8 +41,8 @@ export default class Dragrefresh extends Component {
   static defaultProps = {
     showNoData: true,
     bottomLoadingCaption: (_['loading'] || '正在加载...'),
-    bottomNoDataCaption: '没有更多数据了',
-    bottomErrorCaption: '加载失败, 请稍后再试'
+    bottomNoDataCaption: (_['no_more_data'] || '没有更多数据了'),
+    bottomErrorCaption: (_['refreshing_failed'] || '加载失败, 请稍后再试')
   }
   constructor(props) {
     super(props);
@@ -80,10 +80,10 @@ export default class Dragrefresh extends Component {
         if (!e.isLoading) {
           if (e.touches.currentPosY >= e.params.threshold) {
             if (topIcon) topIcon.classList.add('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = '释放立即刷新'
+            if (topCaption) topCaption.innerHTML = _['release'] || '释放立即刷新'
           } else {
             if (topIcon) topIcon.classList.remove('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = '下拉可以刷新'
+            if (topCaption) topCaption.innerHTML = _['pull_down'] || '下拉可以刷新'
           }
         }
       },
@@ -94,7 +94,7 @@ export default class Dragrefresh extends Component {
         topContainer.style.height = e.params.threshold + 'px';
         if (topIcon) topIcon.classList.remove('df-pull-icon-down')
         if (topIcon) topIcon.classList.add('df-pull-icon-loading')
-        if (topCaption) topCaption.innerHTML = '正在刷新...'
+        if (topCaption) topCaption.innerHTML = _['refreshing'] || '正在刷新...'
       },
       onHideTop: (e) => {
         var topContainer = e.topContainer;
@@ -183,7 +183,7 @@ export default class Dragrefresh extends Component {
         {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
-            <div className="df-pull-caption">下拉可以刷新</div>
+            <div className="df-pull-caption">{_['pull_down'] || '下拉可以刷新'}</div>
           </div>
         </div>}
         {this.props.children}

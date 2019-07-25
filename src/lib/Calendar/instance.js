@@ -14,7 +14,7 @@ var Calendar = function (container, params) {
     dateHeight: '40',
     verticalDrag: true, // 是否允许垂直拖动
 
-    titleFormat: 'YYYY-MM-DD', // 格式化标题, YYYY年MM月DD日 周EE 第W周
+    titleFormat: 'YYYY-MM-DD', // 格式化标题, YYYY-MM-DD 第Q季 第WW周 周EE
     showTitleWeek: false, // 是否显示周数
     showTitleDay: false, // 是否显示周几
     // DOM
@@ -385,7 +385,7 @@ var Calendar = function (container, params) {
     if (titleFormatStr) {
       s.title.innerHTML = activeDate.format(titleFormatStr)
     } else {
-      activeDate.format('YYYY-MM-DD 第Q季 第WW周 周EE')
+      activeDate.format('YYYY-MM-DD')
     }
   }
   s.draw = function (vertical) { // vertical:上下拖动(-1上 | 1下 | 其它为非上下拖动)

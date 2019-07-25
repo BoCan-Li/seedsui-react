@@ -159,15 +159,15 @@ var BaiduMap = function (id, params) {
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
     var boundary = new BMap.Boundary()
     if (!options.area) {
-      console.warn('请传入area, 例如“江苏省南京市建邺区”')
-      options.onError && options.onError('请传入area, 例如“江苏省南京市建邺区”')
+      console.warn(`${_['pass_in'] || '请传入'}area, ${_['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
+      options.onError && options.onError(`${_['pass_in'] || '请传入'}area, ${_['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
       return
     }
     boundary.get(options.area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(_['hint_pass_in_correct_parameters'] || '请传入正确的参数area')
-        options.onError && options.onError(_['hint_pass_in_correct_parameters'] || '请传入正确的参数area')
+        console.warn(`${_['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`)
+        options.onError && options.onError(`${_['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`)
         return
       }
       var polygons = []
@@ -207,8 +207,8 @@ var BaiduMap = function (id, params) {
       s.map.addOverlay(polygon) // 添加覆盖物
       options.onSuccess && options.onSuccess(polygon)
     } else {
-      console.warn('drawPolygon: 请传入参数{polygon: {}}或者{points: []}')
-      options.onError && options.onError('drawPolygon: 请传入参数{polygon: {}}或者{points: []}')
+      console.warn(`drawPolygon: ${_['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${_['or'] || '或者'}{points: []}`)
+      options.onError && options.onError(`drawPolygon: ${_['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${_['or'] || '或者'}{points: []}`)
     }
     return polygon
   }
@@ -223,8 +223,8 @@ var BaiduMap = function (id, params) {
   // 绘制Label
   s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}
     if (!options.point) {
-      console.warn('drawLabel: 请传入参数{point: }')
-      options.onError && options.onError('drawLabel: 请传入参数{point: }')
+      console.warn(`drawLabel: ${_['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      options.onError && options.onError(`drawLabel: ${_['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
       return
     }
     var opts = {
@@ -240,13 +240,13 @@ var BaiduMap = function (id, params) {
   // 绘制标记
   s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, styleOptions: {}}
     if (!options.point) {
-      console.warn('drawMarker: 请传入参数{point: }')
-      options.onError && options.onError('drawMarker: 请传入参数{point: }')
+      console.warn(`drawMarker: ${_['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      options.onError && options.onError(`drawMarker: ${_['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
       return
     }
     if (!options.point.lng || !options.point.lat) {
-      console.warn('drawMarker: 请传入正确的参数{point: {lng: ,lat: }}')
-      options.onError && options.onError('drawMarker: 请传入正确的参数{point: {lng: ,lat: }}')
+      console.warn(`drawMarker: ${_['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`)
+      options.onError && options.onError(`drawMarker: ${_['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`)
       return
     }
     var point = new BMap.Point(options.point.lng, options.point.lat)
@@ -271,18 +271,18 @@ var BaiduMap = function (id, params) {
   // 添加右键菜单
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
-      console.warn('addContextMenu: 请传入overlay')
-      options.onError && options.onError('addContextMenu: 请传入overlay')
+      console.warn(`addContextMenu: ${_['hint_pass_in_parameters'] || '请传入参数'}overlay`)
+      options.onError && options.onError(`addContextMenu: ${_['hint_pass_in_parameters'] || '请传入参数'}overlay`)
       return
     }
     if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn('addContextMenu: 请传入参数{menus: [{text: \'\', handler: func()}]}')
-      options.onError && options.onError('addContextMenu: 请传入参数{menus: [{text: \'\', handler: func()}]}')
+      console.warn(`addContextMenu: ${_['hint_pass_in_parameters'] || '请传入参数'}pass_in_parameters'] || '请传入参数'}{menus: [{text: \'\', handler: func()}]}`)
+      options.onError && options.onError(`addContextMenu: ${_['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: \'\', handler: func()}]}`)
       return
     }
     var markerMenu = new BMap.ContextMenu()
     for (let [index, opt] of options.menus.entries()) {
-      markerMenu.addItem(new BMap.MenuItem(opt.text || '菜单', function () {
+      markerMenu.addItem(new BMap.MenuItem(opt.text || (_['menu'] || '菜单'), function () {
         opt.handler(opt, index)
       }))
     }
