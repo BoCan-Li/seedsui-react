@@ -1,5 +1,6 @@
 // Alert 提示框
 var Alert = function (params) {
+  const _ = window._seedsLang || {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
@@ -22,8 +23,8 @@ var Alert = function (params) {
 
     caption: '',
     html: '',
-    buttonSubmitHTML: '确定',
-    buttonCancelHTML: '取消',
+    buttonSubmitHTML: _['ok'] || '确定',
+    buttonCancelHTML: _['cancel'] || '取消',
 
     isClickMaskHide: false,
     args: null

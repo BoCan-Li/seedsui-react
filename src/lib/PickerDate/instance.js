@@ -1,4 +1,7 @@
-import Picker from './../Picker/instance.js'
+import Picker from './../Picker/instance.js';
+
+const _ = window._seedsLang || {} // 国际化数据
+
 var PickerDate = function (params) {
   // 参数改写
   var onDateClickSubmit = params.onClickSubmit
@@ -36,11 +39,11 @@ var PickerDate = function (params) {
     minYear: nowDate.getFullYear() - 10, // 1950
     maxYear: nowDate.getFullYear() + 10, // 2050
 
-    yyUnit: '年',
-    MMUnit: '月',
-    ddUnit: '日',
-    hhUnit: '时',
-    mmUnit: '分',
+    yyUnit: _['unit_year'] || '年',
+    MMUnit: _['unit_month'] || '月',
+    ddUnit: _['unit_date'] || '日',
+    hhUnit: _['unit_hour'] || '时',
+    mmUnit: _['unit_minute'] || '分',
 
     onClickSubmit: function (e) {
       e.activeText = getActiveText(e.activeOptions)

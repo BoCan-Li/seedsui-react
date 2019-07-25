@@ -1,5 +1,6 @@
 // SelectPicker 滚动选择器
 var SelectPicker = function (params) {
+  const _ = window._seedsLang || {} // 国际化数据
   /* ------------------------
   Model
   ------------------------ */
@@ -19,9 +20,9 @@ var SelectPicker = function (params) {
 
     headerClass: 'picker-header',
     headerSubmitClass: 'picker-submit',
-    headerSubmitText: '完成',
+    headerSubmitText: _['finish'] || '完成',
     headerCancelClass: 'picker-cancel',
-    headerCancelText: '取消',
+    headerCancelText: _['cancel'] || '取消',
 
     wrapperClass: 'selectpicker-wrapper',
     optionClass: 'selectpicker-option',

@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerDate from './../PickerDate';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class InputDate extends Component {
   static propTypes = {
     valueBindProp: PropTypes.bool,
     valueForKey: PropTypes.string,
     split: PropTypes.string,
     type: PropTypes.string, // 'date | month | time | datetime'
-    min: PropTypes.string, // yyyy-MM-dd
-    max: PropTypes.string, // yyyy-MM-dd
+    min: PropTypes.string, // YYYY-MM-DD
+    max: PropTypes.string, // YYYY-MM-DD
 
     onClick: PropTypes.func,
     onChange: PropTypes.func,
@@ -93,25 +95,25 @@ export default class InputDate extends Component {
     if (min && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(min) || /^[0-9]{2}:[0-9]{2}$/.test(min))) {
       if (type === 'date' && selectDate.compareDate(min.toDate()) === -1) {
         if (onError) {
-          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
       } else if (type === 'month' && selectDate.compareMonth(min.toDate()) === -1) {
         if (onError) {
-          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
       } else if (type === 'time' && selectDate.compareTime(min.toDate()) === -1) {
         if (onError) {
-          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
       } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate()) === -1) {
         if (onError) {
-          onError({msg: '不能小于' + min, select: text, min: min, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, current: current, ...error});
           return false;
         }
         text = min;
@@ -120,25 +122,25 @@ export default class InputDate extends Component {
     if (max && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(max) || /^[0-9]{2}:[0-9]{2}$/.test(max))) {
       if (type === 'date' && selectDate.compareDate(max.toDate()) === 1) {
         if (onError) {
-          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
       } else if (type === 'month' && selectDate.compareMonth(max.toDate()) === 1) {
         if (onError) {
-          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
       } else if (type === 'time' && selectDate.compareTime(max.toDate()) === 1) {
         if (onError) {
-          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;
       } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate()) === 1) {
         if (onError) {
-          onError({msg: '不能大于' + max, select: text, max: max, current: current, ...error});
+          onError({msg: (_['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, current: current, ...error});
           return false;
         }
         text = max;

@@ -1,5 +1,6 @@
 // BaiduMap 百度地图使用库
 var BaiduMap = function (id, params) {
+  const _ = window._seedsLang || {} // 国际化数据
   if (!document.querySelector('#' + id)) {
     console.log('SeedsUI Error：未找到BaiduMap的DOM对象，请检查id是否存在')
     return
@@ -165,8 +166,8 @@ var BaiduMap = function (id, params) {
     boundary.get(options.area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn('未能获取当前输入行政区域')
-        options.onError && options.onError('未能获取当前输入行政区域')
+        console.warn(_['hint_pass_in_correct_parameters'] || '请传入正确的参数area')
+        options.onError && options.onError(_['hint_pass_in_correct_parameters'] || '请传入正确的参数area')
         return
       }
       var polygons = []

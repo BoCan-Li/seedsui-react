@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import {createPortal} from 'react-dom'
-import Instance from './instance.js'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {createPortal} from 'react-dom';
+import Instance from './instance.js';
+
+const _ = window._seedsLang || {} // 国际化数据
 
 export default class Picker extends Component {
   static propTypes = {
@@ -115,8 +117,8 @@ export default class Picker extends Component {
       <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
         <div className={`picker${className ? ' ' + className : ''}`} style={style}>
           <div className="picker-header">
-            <a className="picker-cancel">取消</a>
-            <a className="picker-submit">完成</a>
+            <a className="picker-cancel">{_['cancel'] || '取消'}</a>
+            <a className="picker-submit">{_['finish'] || '完成'}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">

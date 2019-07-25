@@ -4,6 +4,8 @@ import Instance from './instance.js';
 import Bridge from './../Bridge';
 import BridgeBrowser from './../Bridge/bridgeBrowser';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class ImgMark extends Component {
   static propTypes = {
     // 数据源
@@ -88,7 +90,7 @@ export default class ImgMark extends Component {
     var layer = '' // 绘制的base64编码
     if (this.props.preview) {
       if (!this.validSrc) {
-        Bridge.showToast('图片加载失败, 或未加载完成, 无法预览', {mask: false});
+        Bridge.showToast(`${_['hint_image_failed_to_load'] || '图片加载失败'}, ${_['cannot_preview'] || '无法预览'}`, {mask: false});
         return;
       }
       if (this.props.isDrawSrc) { // 绘制背景
@@ -131,7 +133,7 @@ export default class ImgMark extends Component {
         </canvas>
         <div className={`imgmark-error`}>
           <div className={`imgmark-error-icon`}></div>
-          <div className={`imgmark-error-caption`}>图片加载失败</div>
+          <div className={`imgmark-error-caption`}>{_['hint_image_failed_to_load'] || '图片加载失败'}</div>
         </div>
         {/* 内容 */}
         {children}

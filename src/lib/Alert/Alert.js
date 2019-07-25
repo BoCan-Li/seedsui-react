@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Icon from './../Icon';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class Alert extends Component {
   static propTypes = {
     portal: PropTypes.object,
@@ -43,8 +45,8 @@ export default class Alert extends Component {
     onClickCancel: PropTypes.func,
   }
   static defaultProps = {
-    submitCaption: '确定',
-    cancelCaption: '取消',
+    submitCaption: _['ok'] || '确定',
+    cancelCaption: _['cancel'] || '取消',
   }
   constructor(props) {
     super(props);

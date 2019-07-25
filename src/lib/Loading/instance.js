@@ -1,5 +1,6 @@
 // Loading 进度条
 var Loading = function (params) {
+  const _ = window._seedsLang || {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
@@ -17,7 +18,7 @@ var Loading = function (params) {
     type: 'floating', // floating流光 | filling填料环 | custom自定义
     iconClass: 'loading-custom-icon',
     icon: '', // 传入icon的class
-    caption: '正在加载...'
+    caption: _['loading'] || '正在加载...'
   }
   params = params || {}
   for (var def in defaults) {

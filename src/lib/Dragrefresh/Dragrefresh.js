@@ -4,6 +4,8 @@ import Notice from './../Notice';
 import Instance from './instance.js';
 import ImgLazy from './../ImgLazy';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class Dragrefresh extends Component {
   static propTypes = {
     style: PropTypes.object,
@@ -38,7 +40,7 @@ export default class Dragrefresh extends Component {
   }
   static defaultProps = {
     showNoData: true,
-    bottomLoadingCaption: '正在加载...',
+    bottomLoadingCaption: (_['loading'] || '正在加载...'),
     bottomNoDataCaption: '没有更多数据了',
     bottomErrorCaption: '加载失败, 请稍后再试'
   }

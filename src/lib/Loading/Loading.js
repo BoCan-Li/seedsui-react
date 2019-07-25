@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class Loading extends Component {
   static propTypes = {
     portal: PropTypes.object, // 传送至DOM
@@ -18,7 +20,7 @@ export default class Loading extends Component {
     caption: PropTypes.string
   }
   static defaultProps = {
-    caption: '正在加载...',
+    caption: _['loading'] || '正在加载...',
     type: 'floating'
   }
   constructor(props) {

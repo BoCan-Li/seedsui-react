@@ -8,6 +8,8 @@ import Icon from './../Icon';
 import Instance from './instance.js';
 import data from './instance.data.js';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 export default class Emoji extends Component {
   static propTypes = {
     show: PropTypes.bool,
@@ -34,6 +36,10 @@ export default class Emoji extends Component {
     liconParams: PropTypes.object,
 
     onChange: PropTypes.func,
+
+    submitStyle: PropTypes.object,
+    submitClassName: PropTypes.string,
+    submitCaption: PropTypes.node,
     onClickSubmit: PropTypes.func,
   }
   static defaultProps = {
@@ -41,7 +47,8 @@ export default class Emoji extends Component {
     data: data,
     placeholder: '说点什么吧...',
     isClickMaskHide: false,
-    liconParams: {}
+    liconParams: {},
+    submitCaption: _['submit'] || '提交',
   }
   constructor(props) {
     super(props);
@@ -122,7 +129,7 @@ export default class Emoji extends Component {
       licon,
       liconParams,
       onChange,
-      onClickSubmit,
+      submitCaption,submitStyle, submitClassName, onClickSubmit,
       ...others
     } = this.props;
     return createPortal(
@@ -142,7 +149,7 @@ export default class Emoji extends Component {
               {...others}
             />
             <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
-            <Button className="emoji-edit-submit" disabled={!value} onClick={this.onClickSubmit}>提交</Button>
+            <Button className={`emoji-edit-submit${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} disabled={!value} onClick={this.onClickSubmit}>{submitCaption}</Button>
           </div>
           <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{display: 'none'}}>
             {this.getFaceDOM()}

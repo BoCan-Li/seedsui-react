@@ -1,5 +1,6 @@
 // Calendar 日历 (require PrototypeDate.js)
 var Calendar = function (container, params) {
+  const _ = window._seedsLang || {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
@@ -13,7 +14,7 @@ var Calendar = function (container, params) {
     dateHeight: '40',
     verticalDrag: true, // 是否允许垂直拖动
 
-    titleFormat: 'YYYY年MM月DD日 周EE 第W周', // 格式化标题
+    titleFormat: 'YYYY-MM-DD', // 格式化标题, YYYY年MM月DD日 周EE 第W周
     showTitleWeek: false, // 是否显示周数
     showTitleDay: false, // 是否显示周几
     // DOM

@@ -8,6 +8,8 @@ import Preview from './../Preview/instance.js';
 import MediaUtil from './../MediaUtil';
 import FullScreen from './../FullScreen';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 var Bridge = {
   /**
   * 基础功能:start
@@ -16,7 +18,7 @@ var Bridge = {
   // 拨打电话
   tel: function (number) {
     if (Device.device === 'pc') {
-      this.showToast('此功能仅可在微信或APP中使用')
+      this.showToast(_['hint_only_mobile'] || '此功能仅可在手机中使用', {mask: false})
       return
     }
     if (isNaN(number)) return
@@ -55,7 +57,7 @@ var Bridge = {
   showLoading: function (params = {}) {
     if (!this.loading) {
       this.loading = new Loading({
-        caption: params.caption || '正在加载...',
+        caption: params.caption || (_['loading'] || '正在加载...'),
         type: params.type,
         icon: params.icon || '',
         maskCss: params.css || null
@@ -71,7 +73,7 @@ var Bridge = {
   },
   hideLoading: function () {
     if (!this.loading) {
-      this.toast.showToast('请先showLoading才能hideLoading')
+      this.toast.showToast(_['hint_hideloading_after_showloading'] || 'showLoading后才能hideLoading')
     } else {
       this.loading.hide()
     }
@@ -138,14 +140,14 @@ var Bridge = {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试' + err})
+        if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}` + err})
       } else {
         var addrs = {}
         if (data.result && data.result.formatted_address) {
           addrs.address = data.result.formatted_address
           if (params.success) params.success(addrs)
         } else {
-          if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试'})
+          if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}`})
         }
       }
     })
@@ -286,7 +288,7 @@ var Bridge = {
   // 拍照、本地选图
   chooseImage: function (params = {}) {
     if (!this.debug) {
-      this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     var res = {
@@ -299,13 +301,13 @@ var Bridge = {
   // 上传图片
   uploadImage: function (params = {}) {
     if (!this.debug) {
-      this.showToast('此功能仅可在微信或APP中使用', {mask: false})
+      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     this.showLoading()
     setTimeout(() => {
       this.hideLoading()
-      this.showToast('上传完成', {mask: false})
+      this.showToast(_['uploaded_completed'] || '上传完成', {mask: false})
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
@@ -320,12 +322,12 @@ var Bridge = {
   preview: null,
   previewImage: function (params = {}) {
     if (!params.urls || !params.urls.length) {
-      Bridge.showToast('urls参数不正确, 无法预览', {mask: false})
+      Bridge.showToast(`urls${_['wrong_parameter'] || '参数不正确'}, ${_['cannot_preview'] || '无法预览'}`, {mask: false})
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      Bridge.showToast('index参数不正确, 无法预览', {mask: false})
+      Bridge.showToast(`index${_['wrong_parameter'] || '参数不正确'}, ${_['cannot_preview'] || '无法预览'}`, {mask: false})
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -337,7 +339,7 @@ var Bridge = {
           s.show()
         },
         onError: function () {
-          Bridge.showToast('图片地址无效', {mask: false})
+          Bridge.showToast(`${_['invalid_image_src'] || '图片地址无效'}`, {mask: false})
         }
       })
     } else {
@@ -616,8 +618,8 @@ var Bridge = {
   // 获取当前地理位置带地图
   getLocationMap: function (params = {}) {
     if (!this.debug) {
-      this.showToast('带地图定位功能仅可在外勤APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: 'getLocationMap:带地图定位功能仅可在外勤APP中使用'})
+      this.showToast(_['hint_only_app'] || '此功能仅可在外勤APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `getLocationMap:${_['hint_only_app'] || '此功能仅可在外勤APP中使用'}`})
       return
     }
     setTimeout(function () {
@@ -631,8 +633,8 @@ var Bridge = {
   ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
     if (!this.debug) {
-      this.showToast('扫码功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: 'scanQRCode:扫码失败'})
+      this.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `scanQRCode:${_['hint_scan_failed'] || '扫码失败'}, ${_['hint_try_again_later'] || '请稍后重试'}`})
       return
     }
     setTimeout(function () {
@@ -653,8 +655,8 @@ var Bridge = {
     // 选择照片
     s.choose = function (args = {}) {
       if (!Bridge.debug) {
-        if (params.onChooseFail) params.onChooseFail({errMsg: 'chooseImage:拍照功能只能在APP或者微信中使用'})
-        else Bridge.showToast('拍照功能只能在APP或者微信中使用', {mask: false})
+        if (params.onChooseFail) params.onChooseFail({errMsg: `chooseImage:${_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用'}`})
+        else Bridge.showToast(_['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
         return
       }
       var option = {
@@ -668,7 +670,7 @@ var Bridge = {
       }
       var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = '最多只能传' + option.max + '张照片'
+        msg = (_['hint_max_upload'] || '最多只能传') + option.max + (_['photos'] || '张照片')
         Bridge.showToast(msg)
         return
       }

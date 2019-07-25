@@ -1,5 +1,6 @@
 // Actionsheet
 var Actionsheet = function (params) {
+  const _ = window._seedsLang || {} // 国际化数据
   /* ------------------
   Model
   ------------------ */
@@ -20,7 +21,7 @@ var Actionsheet = function (params) {
     groupClass: 'actionsheet-group',
     optionClass: 'actionsheet-option',
     buttonCancelClass: 'actionsheet-cancel',
-    buttonCancelHTML: '取消',
+    buttonCancelHTML: _['cancel'] || '取消',
     data: [] // [{text: '', handler: func()}]
     /*
     Callbacks:

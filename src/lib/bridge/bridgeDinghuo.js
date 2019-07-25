@@ -5,6 +5,8 @@ import Toast from './../Toast/instance.js';
 import Alert from './../Alert/instance.js';
 import Loading from './../Loading/instance.js';
 
+const _ = window._seedsLang || {} // 国际化数据
+
 var Bridge = {
   /**
   * 基础功能:start
@@ -13,7 +15,7 @@ var Bridge = {
   // 拨打电话
   tel: function (number) {
     if (Device.device === 'pc') {
-      this.showToast('此功能仅可在微信或APP中使用')
+      this.showToast(_['hint_only_mobile'] || '此功能仅可在手机中使用')
       return
     }
     if (isNaN(number)) return
@@ -52,7 +54,7 @@ var Bridge = {
   showLoading: function (params = {}) {
     if (!this.loading) {
       this.loading = new Loading({
-        caption: params.caption || '正在加载...',
+        caption: params.caption || (_['loading'] || '正在加载...'),
         type: params.type,
         icon: params.icon || '',
         maskCss: params.css || null
@@ -68,7 +70,7 @@ var Bridge = {
   },
   hideLoading: function () {
     if (!this.loading) {
-      this.toast.showToast('请先showLoading才能hideLoading')
+      this.toast.showToast(_['hint_hideloading_after_showloading'] || 'showLoading后才能hideLoading')
     } else {
       this.loading.hide()
     }
@@ -135,14 +137,14 @@ var Bridge = {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试' + err})
+        if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}` + err})
       } else {
         var addrs = {}
         if (data.result && data.result.formatted_address) {
           addrs.address = data.result.formatted_address
           if (params.success) params.success(addrs)
         } else {
-          if (params.fail) params.fail({errMsg: 'getAddress:获取位置名称失败,请稍后重试'})
+          if (params.fail) params.fail({errMsg: `getAddress:${_['hint_address_failed'] || '获取地址失败, 请稍后重试'}`})
         }
       }
     })
@@ -657,7 +659,7 @@ var Bridge = {
       } */
       var count = option.max - option.currentCount
       if (count <= 0) {
-        msg = '最多只能传' + option.max + '张照片'
+        msg = (_['hint_max_upload'] || '最多只能传') + option.max + (_['photos'] || '张照片')
         Bridge.showToast(msg)
         return
       }
