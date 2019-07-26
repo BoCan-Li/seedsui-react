@@ -582,9 +582,9 @@ var Bridge = {
     */
   getLocation: function (params = {}) {
     if (!this.debug) {
-      this.showToast('定位功能仅可在微信或APP中使用', {mask: false})
+      this.showToast(window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用', {mask: false})
       setTimeout(() => {
-        if (params.fail) params.fail({errMsg: 'getLocation:定位功能仅可在微信或APP中使用'})
+        if (params.fail) params.fail({errMsg: `getLocation:${window._seeds_lang['hint_only_app_and_wx'] || '此功能仅可在微信或APP中使用'}`})
       }, 1000)
       return
     }
