@@ -37,6 +37,7 @@ import Group from './Group';
 import Handsign from './Handsign'; // 不常用
 import Header from './Header';
 import Icon from './Icon';
+import ImgMark from './ImgMark';
 import ImgUploader from './ImgUploader';
 import IndexBar from './IndexBar';
 import InputArea from './InputArea';
@@ -54,7 +55,6 @@ import InputSafe from './InputSafe'; // 不常用
 import InputSelect from './InputSelect';
 import InputStar from './InputStar';
 import InputText from './InputText';
-import InputWaiqin from './InputWaiqin'; // 不常用,外勤专用
 // import Jcrop from './Jcrop'; // 不常用,裁切功能,需要引入jcrop插件
 import Legend from './Legend';
 import List from './List';
@@ -153,6 +153,7 @@ export {
   Handsign, // 不常用
   Header,
   Icon,
+  ImgMark, // 不常用
   ImgUploader,
   IndexBar, // 不常用
   InputArea,
@@ -170,7 +171,6 @@ export {
   InputSelect,
   InputStar,
   InputText,
-  InputWaiqin, // 不常用,外勤专用
   // Jcrop, // 不常用,裁切功能,需要安装jcrop插件
   Legend, // 不常用
   List,

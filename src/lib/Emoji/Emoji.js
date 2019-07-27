@@ -33,7 +33,6 @@ export default class Emoji extends Component {
     style: PropTypes.object,
 
     licon: PropTypes.node,
-    liconParams: PropTypes.object,
 
     onChange: PropTypes.func,
 
@@ -47,7 +46,6 @@ export default class Emoji extends Component {
     data: data,
     placeholder: window._seeds_lang['say_something'] || '说点什么吧...',
     isClickMaskHide: false,
-    liconParams: {},
     submitCaption: window._seeds_lang['submit'] || '提交',
   }
   constructor(props) {
@@ -127,7 +125,6 @@ export default class Emoji extends Component {
       className,
       style,
       licon,
-      liconParams,
       onChange,
       submitCaption,submitStyle, submitClassName, onClickSubmit,
       ...others
@@ -135,7 +132,6 @@ export default class Emoji extends Component {
     return createPortal(
       <div ref={el => {this.$el = el;}} className={`mask emoji-mask${show ? ' active' : ''}${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
         <div ref={el => {this.$container = el;}} className={`emoji active${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
-          {(liconParams.src || liconParams.className) && <Icon {...liconParams}/>}
           {licon}
           <div className="emoji-edit">
             <InputPre

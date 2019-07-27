@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Icon from './../Icon';
 import Close from './../Close';
 
 export default class InputText extends Component {
@@ -47,18 +46,9 @@ export default class InputText extends Component {
     onFocus: PropTypes.func,
     // 左右图标
     licon: PropTypes.node,
-    liconSrc: PropTypes.string,
-    liconClassName: PropTypes.string,
-    liconStyle: PropTypes.object,
-    onClickLicon: PropTypes.func,
-    liconLazyLoad: PropTypes.bool,
-
+    onClickLicon: PropTypes.func, // 点击样式包含licon触发
     ricon: PropTypes.node,
-    riconSrc: PropTypes.string,
-    riconClassName: PropTypes.string,
-    riconStyle: PropTypes.object,
-    onClickRicon: PropTypes.func,
-    riconLazyLoad: PropTypes.bool,
+    onClickRicon: PropTypes.func, // 点击样式包含ricon触发
     // 清除按键
     clear: PropTypes.oneOfType([
       PropTypes.bool,
@@ -166,8 +156,8 @@ export default class InputText extends Component {
   getInputDOM = () => {
     const {
       args, style, className, onClick, max, min, digits, onChange, onClickInput, onBlur, onFocus,
-      licon, liconSrc, liconClassName, liconStyle, onClickLicon, liconLazyLoad,
-      ricon, riconSrc, riconClassName, riconStyle, onClickRicon, riconLazyLoad,
+      licon, onClickLicon,
+      ricon, onClickRicon,
       clear, clearClassName, clearStyle,
       rcaption, // 为others不多属性
       pre, // 自动伸缩文本框
@@ -247,8 +237,8 @@ export default class InputText extends Component {
     const {
       value, valueBindProp,
       className, style,
-      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
-      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
+      licon,
+      ricon,
       clear, clearClassName, clearStyle,
       rcaption
     } = this.props;
@@ -261,11 +251,9 @@ export default class InputText extends Component {
     }
     let isShowClear = valueBindProp ? showClear : this.state.showClear;
     return (<div className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
-        {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
         {this.getInputDOM()}
         {clear && <Close className={`clearicon ${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle}/>}
-        {(riconSrc || riconClassName) && <Icon lazyLoad={riconLazyLoad} className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
         {ricon && ricon}
         {rcaption && rcaption}
       </div>);

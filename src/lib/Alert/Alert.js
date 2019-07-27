@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Icon from './../Icon';
 
 if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
@@ -82,7 +81,7 @@ export default class Alert extends Component {
         <div className={`alert${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation="zoom">
           {caption && <h1 className={captionClassName} style={captionStyle}>{caption}</h1>}
           <div className={`alert-content${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
-            {(iconSrc || iconClassName) && <Icon className={`alert-content-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
+            {(iconSrc || iconClassName) && <i className={`icon alert-content-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
             {icon}
             {/* 内容 */}
             {children}

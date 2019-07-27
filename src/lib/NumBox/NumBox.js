@@ -45,18 +45,9 @@ export default class NumBox extends Component {
     autoSelect: PropTypes.bool,
     // 左右图标
     licon: PropTypes.node,
-    liconSrc: PropTypes.string,
-    liconClassName: PropTypes.string,
-    liconStyle: PropTypes.object,
     onClickLicon: PropTypes.func,
-    liconLazyLoad: PropTypes.bool,
-
     ricon: PropTypes.node,
-    riconSrc: PropTypes.string,
-    riconClassName: PropTypes.string,
-    riconStyle: PropTypes.object,
     onClickRicon: PropTypes.func,
-    riconLazyLoad: PropTypes.bool,
     // 清除按键
     clear: PropTypes.oneOfType([
       PropTypes.bool,
@@ -210,8 +201,8 @@ export default class NumBox extends Component {
       args,
       style, className, disabled, onClick,
       plusStyle, plusClassName, minusStyle, minusClassName, onClickMinus, onClickPlus,
-      licon, liconSrc, liconClassName, liconStyle, onClickLicon, liconLazyLoad,
-      ricon, riconSrc, riconClassName, riconStyle, onClickRicon, riconLazyLoad,
+      licon, onClickLicon,
+      ricon, onClickRicon,
       clear, clearClassName, clearStyle,
       inputStyle, inputClassName, value, placeholder, maxLength, readOnly, onClickInput, onChange, onError, onBlur, onFocus,
       digits, max, min,
@@ -239,8 +230,8 @@ export default class NumBox extends Component {
     const {
       min, max, value, style, className, disabled,
       plusStyle, plusClassName, minusStyle, minusClassName,
-      licon, liconSrc, liconClassName, liconStyle, liconLazyLoad,
-      ricon, riconSrc, riconClassName, riconStyle, riconLazyLoad,
+      licon,
+      ricon,
       clear, clearClassName, clearStyle,
     } = this.props;
     return (
@@ -253,11 +244,9 @@ export default class NumBox extends Component {
           value="-"
           disabled={!isNaN(min) ? min - value >= 0 : false}
         />
-        {(liconSrc || liconClassName) && <Icon lazyLoad={liconLazyLoad} className={`licon${liconClassName ? ' ' + liconClassName : ''}`} src={liconSrc} style={liconStyle}/>}
         {licon && licon}
         {this.getInputDOM()}
         {clear && value && <Close className={`clearicon${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle} onClick={this.onClear}/>}
-        {(riconSrc || riconClassName) && <Icon lazyLoad={riconLazyLoad} className={`ricon size16${riconClassName ? ' ' + riconClassName : ''}`} src={riconSrc} style={riconStyle}/>}
         {ricon && ricon}
         <input
           ref={(el) => {this.$plus = el;}}

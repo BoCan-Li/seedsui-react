@@ -1394,7 +1394,6 @@ onChangeDropdown = (tabs) => {
   className={容器className string, 默认无, 基础'emoji'}
 
   icon={图标dom node, 默认无}
-  iconParams={Icon组件属性 object, 默认{className: 'notice-icon-nodata'}}
   
   onChange={值变化 func(value, args)}
   onSubmit={提交 func(value, args)}
@@ -1472,100 +1471,6 @@ import Container from 'seedsui-react/lib/Container';
 [返回目录](#component)
 
 
-
-
-## Grid
-[栅格](https://unpkg.com/seedsui-react/src/lib/Grid/Grid.js)
-### 属性
-```javascript
-<Grid
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  type={类型 string, 默认无} // video和空
-  preview={是否预览 bool, 默认true}
-  lazyLoad={是否启用懒人加载 bool, 默认false}
-  className={容器className string, 默认无, 基础'grid'}
-  style={容器style object, 默认无}
-  space={上下间距 number, 默认12}
-  wing={左右间距 number, 默认12}
-  col={一行列数 string | number, 默认3}
-  showUpload={是否显示上传按钮 bool, 默认false}
-  list={单元格 array, 默认[], 格式见下方示例}
-  /* list: [{
-    type: '',
-    iconClassName: '',
-    iconStyle: {},
-    iconSrc: '',
-    type: 'video | image(默认)',
-    preview: true | false, // 是否支持预览,默认true
-    thumb: '', // 缩略图
-    src: '', // 预览地址
-    caption: '',
-    onClick: function() {},
-    iconBadgeCaption: ''
-  }] */
-  cellClassName={单元格className string, 默认无, 基础'grid-cell'}
-  cellStyle={单元格style object, 默认无}
-
-  caption={标题文字 node, 默认无}
-  captionStyle={标题style object, 默认无}
-  captionClassName={标题className string, 默认无}
-
-  sndcaption={副标题文字 node, 默认无}
-  sndcaptionStyle={副标题style object, 默认无}
-  sndcaptionClassName={副标题className string, 默认无}
-
-  iconBoxStyle={图标容器style object, 默认无}
-  iconBoxClassName={图标容器className string, 默认无, 基础'grid-iconbox'}
-
-  iconClassName={图标className string, 默认无}
-  iconStyle={图标style object, 默认无}
-  iconDefaultImgClassName={懒人加载默认图标className string, 默认无}
-  iconDefaultImgStyle={懒人加载默认图标style object, 默认无}
-
-  iconBadgeClassName={徽章className string, 默认无}
-
-  onClickCell={点击单元格 func(item, index, args)}
-  onClickContent={点击图标容器 func(item, index, args)}
-  onClickIcon={点击图标 func(item, index, args)}
-
-  closeClassName={删除图标className string, 默认无}
-  onClickDelete={点击删除 func(item, index, args)}
-
-  onClickAdd={点击添加 func()}
->
-<!-- 直接放子元素，grid将自动排列 -->
-<div>菜单按钮1</div>
-<div>菜单按钮2</div>
-</Grid>
-```
-### 示例
-```javascript
-import Grid from 'seedsui-react/lib/Grid';
-const products = [
-  {
-    id: '1',
-    iconSrc: 'http://image-test.waiqin365.com/8100630123350000887/bas_pd/201801/5066464767803150144.jpg?x-oss-process=style/zk320',
-    caption: '冰红茶',
-    sndcaption: '￥100.00'
-  }
-];
-<Grid
-  list={products}
-  args={combine.ptype}
-  onClickIcon={onClick}
-  lazyLoad
-  col="3"
-  className="grid-bordered"
-  space={15}
-  iconBoxClassName="size100"
-  iconClassName="size100"
-  captionClassName="text-left nowrap2"
-  captionStyle={{height: '38px', lineHeight: '20px', width: '100px'}}
-  sndcaptionClassName="text-left nowrap"
-  sndcaptionStyle={{height: '18px', width: '100px'}}
-/>
-```
-[返回目录](#component)
 
 
 
@@ -1678,46 +1583,6 @@ import Container from 'seedsui-react/lib/Container';
 
 
 
-
-## Icon
-[图标](https://unpkg.com/seedsui-react/src/lib/Icon/Icon.js)
-### 属性
-```javascript
-<Icon
-  base={基础标签 string, 默认'icon'}
-  // img: 返回<span><img class="icon-img"/></span>
-  // pureImg: 返回<img class="icon-img"/>
-  // icon: 返回<span><i class="icon-full"/></span>
-  // pureIcon: 返回<i class="icon-full"/>
-  baseClassName={基础className string, 默认无, 基础'icon'}
-  className={图标className string, 默认无}
-  style={图标style object, 默认无}
-  lazyLoad={是否启用懒人加载 bool, 默认false}
-
-  defaultImgClassName={懒人加载默认图标className string, 默认无, 基础icon时'icon-full', img时'icon-img'}
-  defaultImgStyle={懒人加载默认图标style object, 默认无}
-  src={图标地址 string, 默认无}
-
-  badgeCaption={角标标题 number | string, 默认无}
-  badgeClassName={角标className string, 默认无}
-  badgeStyle={角标style object, 默认无}
-  badgeLimit={角标位数限制 number, 默认2, 如:1000,将显示99+}
-  badgeEllipsis={角标位数限制省略号 string, 默认'+'}
-  
-  onClickClose={点击删除 func(e)}
-  closeClassName={关闭className string, 默认无}
-  closeStyle={关闭style object, 默认无}
->
-图标内容
-</Icon>
-```
-### 示例
-```javascript
-import Icon from 'seedsui-react/lib/Icon';
-
-<Icon className="icon-edit size20"/>
-```
-[返回目录](#component)
 
 
 
@@ -2880,68 +2745,6 @@ onSubmit = () => {
 
 
 
-## List
-[列表](https://unpkg.com/seedsui-react/src/lib/List/List.js)
-### 属性
-```javascript
-<List
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'attribute'}
-  onClick={点击容器 func(args), 默认无}
-  lazyLoad={懒人加载 bool, 默认无}
-
-  licon={左图标 node, 默认无}
-  liconSrc={左图标地址 node, 默认无}
-  liconClassName={左图标className string, 默认无, 基础'licon'}
-  liconStyle={左图标style object, 默认无}
-  onClickLicon={点击左图标 func(args), 默认无}
-  liconLazyLoad={左图标懒人加载 bool, 默认无}
-
-  ricon={右图标 node, 默认无}
-  riconSrc={右图标地址 node, 默认无}
-  riconClassName={右图标className string, 默认无, 基础'ricon'}
-  riconStyle={右图标style object, 默认无}
-  onClickRicon={点击右图标 func(args), 默认无}
-  riconLazyLoad={右图标懒人加载 bool, 默认无}
-
-  showThumbnail={是否显示缩略图 bool, 默认无}
-  thumbnailSrc={缩略图地址 node, 默认无}
-  thumbnailClassName={缩略图className string, 默认'bg-no-img', 基础'list-thumbnail'}
-  thumbnailStyle={缩略图style object, 默认无}
-  onClickThumbnail={点击缩略图 func(args), 默认无}
-  thumbnailAfter={缩略图后 node, 默认无}
-
-  showAvatar={是否显示照片 bool, 默认无}
-  avatarSrc={照片地址 node, 默认无}
-  avatarClassName={照片className string, 默认'bg-no-avatar', 基础'list-avatar'}
-  avatarStyle={照片style object, 默认无}
-  onClickAvatar={点击照片 func(args), 默认无}
-  avatarAfter={照片后 node, 默认无}
-
-  caption={标题 node, 默认无}
-  captionClassName={标题className string, 默认无, 基础'list-caption'}
-  captionStyle={标题style object, 默认无}
-  onClickRcaption={点击标题 func(args), 默认无}
-  
-  sndcaption={副标题 node, 默认无}
-  sndcaptionClassName={副标题className string, 默认无, 基础'list-caption'}
-  sndcaptionStyle={副标题style object, 默认无}
-
-  containerClassName={中间区域className string, 默认无, 基础'list-caption'}
-  containerStyle={中间区域style object, 默认无}
-  onClickContainer={点击中间区域 func(args), 默认无}
-  containerAfter={中间区域后 node, 默认无}
-/>
-```
-### 示例
-```javascript
-import List from 'seedsui-react/lib/List';
-
-<List onClick={() => {Bridge.tel('02568736873')}} caption="技术支持" rcaption="02568736873" className="list-li-oneline" rcaptionClassName="color-placeholder" liconClassName="icon-support" riconClassName="shape-arrow-right sm" style={{padding: '10px 12px'}}/>
-```
-[返回目录](#component)
-
 
 
 ## ListPull
@@ -3356,15 +3159,12 @@ addData = () => {
 ### 属性
 ```javascript
 <Notice
-  show={显隐 bool, 默认true}
-    
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'notice'}
 
   wrapperParams={样式为notice-wrapper的div容器属性 object, 默认无}
   
   icon={图标dom node, 默认无}
-  iconParams={Icon组件属性 object, 默认{className: 'notice-icon-nodata'}}
 
   caption={标题 string, 默认'暂无数据'}
   captionParams={样式为notice-wrapper的div属性 object, 默认无}
@@ -4648,9 +4448,6 @@ Toast组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   captionClassName={消息className string, 默认无, 基础'toast-caption'}
 
   icon={图标dom node, 默认无}
-  iconSrc={图标地址 string, 默认无}
-  iconStyle={图标style object, 默认无}
-  iconClassName={图标className string, 默认无}
 />
 ```
 ### 示例
