@@ -96,7 +96,7 @@ export default class Tabbar extends Component {
     }
     // 遍历
     return list.map((item, index) => {
-      const {icon, iconActive, ricon, riconActive, caption, sndcaption, active, attributes = {}} = item;
+      const {icon, iconActive, ricon, riconActive, caption, sndcaption, active, attributes = {}, style = {}} = item;
       let isActive = (active || activeIndex === index);
       let liconDOM = null;
       if (icon) {
