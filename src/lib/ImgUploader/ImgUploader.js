@@ -143,7 +143,7 @@ export default class ImgUploader extends Component {
       return false;
     });
     if (failIndexs && failIndexs.length) {
-      Bridge.showToast(`${window._seeds_lang['the'] || '第'}${failIndexs.join(',')}${window._seeds_lang['th_image_failed_to_upload'] || '张图片上传失败'}, ${window._seeds_lang['re-photo_upload'] || '请重新拍照上传'}`, {mask: false});
+      Bridge.showToast(`${window._seeds_lang['the'] || '第'}${failIndexs.join(',')}${window._seeds_lang['th_image_failed_to_upload'] || '张图片上传失败'}, ${window._seeds_lang['re_photo_upload'] || '请重新拍照上传'}`, {mask: false});
     }
     return list;
   }
