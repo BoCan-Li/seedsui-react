@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Device from './../Device.js';
 import Bridge from './../Bridge';
-import Icon from './../Icon';
 
 export default class Titlebar extends Component {
   static propTypes = {
@@ -61,7 +60,7 @@ export default class Titlebar extends Component {
       }
       return (
         <a key={index} disabled={item.disabled} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
-          {(item.iconSrc || item.iconClassName) && <Icon className={`${item.iconClassName ? ' ' + item.iconClassName : ''}`} src={item.iconSrc ? item.iconSrc : ''} style={item.iconStyle}/>}
+          {(item.iconSrc || item.iconClassName) && <span className={`icon${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={item.iconSrc ? {backgroundImage: `url(${item.iconSrc})`} : {}}></span>}
           {item.icon && item.icon}
           {item.caption && <span>{item.caption}</span>}
         </a>

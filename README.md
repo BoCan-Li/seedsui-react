@@ -134,7 +134,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputStar](#inputstar) 评分框
 - [InputText](#inputtext) 文本框
 - [InputVerify](#inputverify) 验证码文本框
-- [InputWaiqin](#inputwaiqin) 外勤原生选择框
 - [Verify](#verify) 验证码文本框
 - [Jcrop](#jcrop) 图片裁切
 - [Legend](#legend) 标题
@@ -260,9 +259,6 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   captionClassName={标题className string, 默认无}
 
   icon={图标dom node, 默认无}
-  iconSrc={图标地址 string, 默认无}
-  iconStyle={图标style object, 默认无}
-  iconClassName={图标className string, 默认无}
 
   contentStyle={内容style object, 默认无}
   contentClassName={内容className string, 默认无}
@@ -286,7 +282,6 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 import Alert from 'seedsui-react/lib/Alert';
 <Alert
   show={this.state.alertShow}
-  iconClassName="icon-图标"
   submitCaption="确定按钮"
   onClickSubmit={this.onSubmitAlert}>
   提示内容
@@ -2486,18 +2481,10 @@ onChange = (value) => {
 
   // 左右图标
   licon={左图标 node, 默认无}
-  liconSrc={左图标地址 node, 默认无}
-  liconClassName={左图标className string, 默认无, 基础'licon'}
-  liconStyle={左图标style object, 默认无}
   onClickLicon={点击左图标 func(args), 默认无}
-  liconLazyLoad={左图标懒人加载 bool, 默认无}
 
   ricon={右图标 node, 默认无}
-  riconSrc={右图标地址 node, 默认无}
-  riconClassName={右图标className string, 默认无, 基础'ricon'}
-  riconStyle={右图标style object, 默认无}
   onClickRicon={点击右图标 func(args), 默认无}
-  riconLazyLoad={右图标懒人加载 bool, 默认无}
 
   // 清除按钮
   clear={清除 bool | func('', args), 默认无}
@@ -2522,81 +2509,6 @@ onChangeText = (value, args) => {
 
 
 
-
-
-## InputWaiqin
-[外勤原生选择框](https://unpkg.com/seedsui-react/src/lib/InputWaiqin/InputWaiqin.js)
-, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 外勤专用控件
-### 属性
-```javascript
-<InputWaiqin
-  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
-  value={值 string | number, 默认无}
-  valueForKey={选中key number | string, 默认无}
-  chooseType={选择类型 string, 默认'getCustomer'} // getCustomer|getCustomerMore|getCustomerType|getCustomerArea|getCustomerAreaMore|getDepartment|getDepartmentMore|getContact|getContactMore|getGoods|getLocationMap
-  chooseParams={选择参数 object, 默认会带上id-valueForKey和name-value, 配置如下:}
-  // 【getCustomer与getCustomerMore 的 chooseParams】:
-  // tradeType: PropTypes.string, // 1客户 2经销商 3门店,默认1
-  // hiddenAdd: PropTypes.bool, // 是否显示添加按钮, 默认false
-  // dms_type: PropTypes.string, // dms类型
-
-  // 【getCustomerType】
-
-  // 【getCustomerArea与getCustomerAreaMore】:
-
-  // 【getDepartment与getDepartmentMore】:
-
-  // 【getContact与getContactMore 的 chooseParams】:
-  // aclType: PropTypes.string, // 0只能看到下属 不传或者其他的参数为全部人员,默认为空
-
-  // 【getGoods】
-
-  // 【getLocationMap 的 chooseParams】:
-  // editable: PropTypes.string, // 是否可以标记位置, 1可标记
-  // latlng: PropTypes.string // 经纬度, 只在editable为0时生效
-  // title: PropTypes.string // 标题, 可不传
-  onClick={点击 func(value, args), 默认无}
-  onChange={值改变 func(value, option, args), 默认无}
-  {...others}
-/>
-```
-### 示例
-```javascript
-import InputWaiqin from 'seedsui-react/lib/InputWaiqin';
-
-this.state = {
-  id: '',
-  name: ''
-}
-
-onChange = (value, option) => {
-  this.setState({
-    id: option.id,
-    name: value
-  })
-}
-
-<InputWaiqin
-  valueBindProp
-  chooseType="getCustomer"
-  chooseParams={{tradeType: '1'}}
-  onChange={this.onChange}
-  value={this.state.name}
-  valueForKey={this.state.id}
-  placeholder="客户单择"
-  riconClassName="shape-arrow-right sm"
-/>
-<InputWaiqin
-  valueBindProp
-  chooseType="getContact"
-  onChange={this.onChange}
-  value={this.state.name}
-  valueForKey={this.state.id}
-  placeholder="全部员工"
-  riconClassName="shape-arrow-right sm"
-/>
-```
-[返回目录](#component)
 
 
 
@@ -4138,10 +4050,6 @@ import Sticker from 'seedsui-react/lib/Sticker';
   style={容器style object, 默认无}
   className={容器className string, 默认'tabbar-line tabbar-line-width70 border-b'}
   // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
-  iconBadgeStyle={图标徽章style object, 默认无}
-  iconBadgeClassName={图标徽章className string, 默认无}
-  riconBadgeStyle={右图标徽章style object, 默认无}
-  riconBadgeClassName={右图标徽章className string, 默认无}
   captionClassName={标题className string, 默认无, 基础'tab-caption'}
   captionStyle={标题style object, 默认无}
   sndCaptionClassName={副标题className string, 默认无, 基础'tab-sndcaption'}
@@ -4149,26 +4057,16 @@ import Sticker from 'seedsui-react/lib/Sticker';
   list={列表 array, 默认无, 格式如下:}
   // [
   //   {
-  //     iconStyle: object,
-  //     iconClassName: string,
-  //     iconActiveStyle: object,
-  //     iconActiveClassName: string,
-
-  //     iconBadgeClassName: string,
-  //     iconBadgeStyle: object,
-  //     iconBadgeCaption: string,
-
-  //     riconStyle: object,
-  //     riconClassName: string,
-
-  //     riconBadgeClassName: string,
-  //     riconBadgeStyle: object,
-  //     riconBadgeCaption: string,
+  //     icon: node,
+  //     iconActive: node,
+  //     ricon: node,
+  //     riconActive: node,
 
   //     caption: string,
   //     sndcaption: string,
   //     active: bool,
-  //     id: string
+  
+  //     attributes: object // tab属性
   //   }
   // ]
   tiled={宽度等分 bool, 默认宽度弹性伸缩}

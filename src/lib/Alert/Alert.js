@@ -24,9 +24,6 @@ export default class Alert extends Component {
     captionClassName: PropTypes.string,
 
     icon: PropTypes.node,
-    iconSrc: PropTypes.string,
-    iconStyle: PropTypes.object,
-    iconClassName: PropTypes.string,
 
     contentStyle: PropTypes.object,
     contentClassName: PropTypes.string,
@@ -71,7 +68,7 @@ export default class Alert extends Component {
       className, style,
       caption, captionStyle, captionClassName,
       contentStyle, contentClassName,
-      icon, iconSrc, iconStyle, iconClassName,
+      icon,
       children,
       submitCaption, submitStyle, submitClassName, onClickSubmit, disabled,
       cancelCaption, cancelStyle, cancelClassName, onClickCancel,
@@ -81,7 +78,6 @@ export default class Alert extends Component {
         <div className={`alert${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation="zoom">
           {caption && <h1 className={captionClassName} style={captionStyle}>{caption}</h1>}
           <div className={`alert-content${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
-            {(iconSrc || iconClassName) && <i className={`icon alert-content-icon${iconClassName ? ' ' + iconClassName : ''}`} src={iconSrc ? iconSrc : ''} style={iconStyle}/>}
             {icon}
             {/* 内容 */}
             {children}
