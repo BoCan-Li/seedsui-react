@@ -53,7 +53,6 @@ window._seeds_lang = {
   'low': '弱',
   'medium': '中',
   'strong': '强',
-  'pass_in': '请传入', // 未使用
   'hint_pass_in_parameters': '请传入参数',
   'hint_pass_in_correct_parameters': '请传入正确的参数',
   'wrong_parameter': '参数不正确',

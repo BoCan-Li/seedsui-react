@@ -159,8 +159,8 @@ var BaiduMap = function (id, params) {
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
     var boundary = new BMap.Boundary()
     if (!options.area) {
-      console.warn(`${window._seeds_lang['pass_in'] || '请传入'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
-      options.onError && options.onError(`${window._seeds_lang['pass_in'] || '请传入'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
+      console.warn(`${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
+      options.onError && options.onError(`${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
       return
     }
     boundary.get(options.area, function (res) { // 获取行政区域
