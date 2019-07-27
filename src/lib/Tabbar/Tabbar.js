@@ -86,12 +86,12 @@ export default class Tabbar extends Component {
     return icon;
   }
   getTabsDOM = () => {
-    const {list, activeIndex, style, captionClassName, captionStyle, sndCaptionClassName, sndCaptionStyle} = this.props;
+    const {list, activeIndex, captionClassName, captionStyle, sndCaptionClassName, sndCaptionStyle} = this.props;
     // tabStyle高度
     var tabStyle = {};
-    if (style && style.height) {
+    if (this.props.style && this.props.style.height) {
       tabStyle = {
-        height: style.height
+        height: this.props.style.height
       }
     }
     // 遍历

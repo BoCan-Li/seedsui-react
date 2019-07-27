@@ -4066,6 +4066,7 @@ import Sticker from 'seedsui-react/lib/Sticker';
   //     active: bool,
   
   //     attributes: object // tab属性
+  //     style: object
   //   }
   // ]
   tiled={宽度等分 bool, 默认宽度弹性伸缩}
