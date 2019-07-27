@@ -106,7 +106,7 @@ export default class Tabbar extends Component {
       if (ricon) {
         riconDOM = this.getIconDOM(ricon, riconActive, isActive);
       }
-      return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} key={index} {...attributes}>
+      return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} data-index={index} key={index} {...attributes}>
         {liconDOM && liconDOM}
         <div className="tab-content">
           <div className={`tab-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption || name}</div>

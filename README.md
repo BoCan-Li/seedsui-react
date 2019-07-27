@@ -114,7 +114,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Group](#group) 分组
 - [Handsign](#handsign) 手写签名
 - [Header](#header) page头部
-- [Icon](#icon) 图标
 - [ImgMark](#imgmark) 图片标注
 - [ImgLazy](#imglazy) 懒人加载
 - [IndexBar](#imguploader) 侧边索引栏
