@@ -117,7 +117,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Icon](#icon) 图标
 - [ImgMark](#imgmark) 图片标注
 - [ImgLazy](#imglazy) 懒人加载
-- [ImgUploader](#imguploader) 图片上传
 - [IndexBar](#imguploader) 侧边索引栏
 - [InputArea](#inputarea) 多行文本框
 - [InputCity](#inputcity) 城市选择
@@ -177,7 +176,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Toast](#toast) 提示弹框
 - [Tree](#tree) 树结构
 - [Verify](#verify) 验证码文本框
-- [VideoUploader](#videouploader) 视频上传
 - [Weather](#weather) 天气
 
 # Utils
@@ -1976,83 +1974,7 @@ this.state.lazy.load();
 
 
 
-## ImgUploader
-[图片上传](https://unpkg.com/seedsui-react/src/lib/ImgUploader/ImgUploader.js)
-### 属性
-```javascript
-<ImgUploader
-  className={容器className string, 默认无}
-  style={容器style object, 默认无}
-  caption={标题文字 node, 默认无}
-  captionStyle={标题style object, 默认无}
-  captionClassName={标题className string, 默认无}
-  list={内容列表 array, 默认[], 格式如下:}
-  // [{
-  //   id: '',
-  //   src: '',
-  //   thumb: ''
-  // }]
 
-  enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
-  max={最大选择数 string | number, 默认5}
-  sourceType={上传类型 array, 默认['album', 'camera']}
-  sizeType={压缩 array, 默认['compressed']} // ['original', 'compressed']
-
-  showUpload={是否显示上传按钮 bool, 默认false}
-  showDelete={是否显示删除按钮 bool, 默认false}
-  readOnly={是否只读 bool, 默认false}
-
-  showCount={标题是否显示上传个数 bool, 默认false}
-  chooseRepeat={是否允许重复选择照片 bool, 默认false}
-  chooseOptions={选择照片参数 object, 默认空}
-
-  onDeleteSuccess={照片删除完成 func(list)}
-  onChange={照片发生变化 func(list, res)}
-  onChooseBefore={选择前校验 await func()}
-  onChooseSuccess={照片选择完成 func(list, res)}
-
-  // 以下回调,只有微信有
-  onChooseFail={照片选择错误 func(res)}
-  onUploadsSuccess={照片全部上传完成 func(list)}
-  onUploadSuccess={照片上传完成 func(list, res)}
-  onUploadFail={照片上传失败 func(list, {id, index, item, errMsg})}
-/>
-```
-### 示例
-```javascript
-import ImgUploader from 'seedsui-react/lib/ImgUploader';
-
-this.state = {
-  list: [
-    {
-      id: '',
-      src: '',
-      thumb: ''
-    }
-  ]
-}
-
-onPhotoChange = (list) => {
-  this.setState({
-    list: list
-  })
-}
-onChooseBefore = () => {
-  return new Promise((relsove) => {
-    console.log('1');
-    relsove(false);
-  });
-}
-
-<ImgUploader
-  onChooseBefore={this.onChooseBefore}
-  caption="上传照片"
-  showUpload
-  list={this.state.list}
-  onChange={this.onPhotoChange}
-/>
-```
-[返回目录](#component)
 
 
 
@@ -4840,61 +4762,6 @@ onSubmit = () => {
 
 
 
-
-
-
-## VideoUploader
-[视频上传](https://unpkg.com/seedsui-react/src/lib/VideoUploader/VideoUploader.js)
-### 属性
-```javascript
-<VideoUploader
-  className={容器className string, 默认无}
-  style={容器style object, 默认无}
-
-  caption={标题文字 node, 默认无}
-  captionStyle={标题style object, 默认无}
-  captionClassName={标题className string, 默认无}
-  list={内容列表 array, 默认[], 格式如下:}
-  // [{
-  //   src: '',
-  //   thumb: ''
-  // }]
-  enableSafe={是否启动安全模式 object, 默认无} // 安全模式, 指一次传一张
-  max={最大选择数 number, 默认5}
-  sourceType={上传类型 array, 默认['album', 'camera']}
-  sizeType={压缩 array, 默认['compressed']} // ['original', 'compressed']
-
-  showUpload={是否显示上传按钮 bool, 默认false}
-  showDelete={是否显示删除按钮 bool, 默认false}
-  readOnly={是否只读 bool, 默认false}
-
-  showCount={标题是否显示上传个数 bool, 默认false}
-   
-  onChange={视频发生变化 func(list, {op: 'chooseSuccess|uploadsSuccess|deleteSuccess'})}
-  onChooseSuccess={视频选择完成 func(list)}
-  onUploadsSuccess={视频上传完成 func(list)}
-  onDeleteSuccess={视频删除完成 func(list)}
-/>
-```
-### 示例
-```javascript
-import Bridge from 'seedsui-react/lib/Bridge';
-import VideoUploader from 'seedsui-react/lib/VideoUploader';
-
-onClickVideo = (args) => {
-  Bridge.previewVideo({src: args.src});
-}
-
-<VideoUploader
-  caption="拍摄视频"
-  list={[
-  {
-    src: detail.video_url,
-    onClick: this.onClickVideo
-  }
-]}/>
-```
-[返回目录](#component)
 
 
 
