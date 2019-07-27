@@ -1,7 +1,6 @@
 // require PrototypeMath.js, 用于解决加减法精度丢失的问题
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Icon from './../Icon';
 import Close from './../Close';
 
 export default class NumBox extends Component {

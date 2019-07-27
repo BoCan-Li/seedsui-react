@@ -4,7 +4,6 @@ import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
 import Button from './../Button';
-import Icon from './../Icon';
 import Instance from './instance.js';
 import data from './instance.data.js';
 

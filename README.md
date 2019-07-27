@@ -175,7 +175,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Toast](#toast) 提示弹框
 - [Tree](#tree) 树结构
 - [Verify](#verify) 验证码文本框
-- [Weather](#weather) 天气
+
 
 # Utils
 - [MapUtil](#maputil) 地图工具
@@ -4662,26 +4662,6 @@ onSubmit = () => {
 
 
 
-
-## Weather
-[天气](https://unpkg.com/seedsui-react/src/lib/Weather/Weather.js)
-### 属性
-```javascript
-<Weather
-  location={位置 string, 默认'北京市'} // 格式 'lng,lat|lng,lat|lng,lat' 或 '北京市|上海市'
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'weather'}
-
-  icons={图标 object, 默认见Weather.js}
-/>
-```
-### 示例
-```javascript
-import Weather from 'seedsui-react/lib/Weather';
-
-<Weather location="上海市"/>
-```
-[返回目录](#component)
 
 
 

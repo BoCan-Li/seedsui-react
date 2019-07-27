@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import Page from './../lib/Page';
-import Header from './../lib/Header';
-import Footer from './../lib/Footer';
-import Titlebar from './../lib/Titlebar';
-import Tabbar from './../lib/Tabbar';
-import Badge from './../lib/Badge';
-import Container from './../lib/Container';
+import {Page, Header, Footer, Titlebar, Tabbar, Badge, Container} from './../lib';
 
 class App extends Component {
   constructor(props) {

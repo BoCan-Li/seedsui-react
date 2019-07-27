@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import Icon from './../Icon';
 
 export default class Toast extends Component {
   static propTypes = {

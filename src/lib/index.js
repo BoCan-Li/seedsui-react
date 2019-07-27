@@ -32,13 +32,10 @@ import Dragrefresh from './Dragrefresh';
 import Dropdown from './Dropdown';
 import Emoji from './Emoji'; // 不常用
 import Footer from './Footer';
-import Grid from './Grid';
 import Group from './Group';
 import Handsign from './Handsign'; // 不常用
 import Header from './Header';
-import Icon from './Icon';
 import ImgMark from './ImgMark';
-import ImgUploader from './ImgUploader';
 import IndexBar from './IndexBar';
 import InputArea from './InputArea';
 import InputCity from './InputCity';
@@ -57,7 +54,6 @@ import InputStar from './InputStar';
 import InputText from './InputText';
 // import Jcrop from './Jcrop'; // 不常用,裁切功能,需要引入jcrop插件
 import Legend from './Legend';
-import List from './List';
 import ListPull from './ListPull'; // 不常用
 import Loading from './Loading';
 import LotteryWheel from './LotteryWheel'; // 不常用
@@ -94,8 +90,6 @@ import Timepart from './Timepart'; // 不常用
 import Titlebar from './Titlebar';
 import Toast from './Toast';
 import Tree from './Tree'; // 不常用
-import VideoUploader from './VideoUploader'; // 不常用
-import Weather from './Weather'; // 不常用
 
 // utils
 import Ajax from './Ajax.js'; // 不常用
@@ -116,7 +110,7 @@ import History from './History.js'; // 不常用
 import ImgLazy from './ImgLazy';
 import jsonp from './jsonp'; // 不常用
 import MediaUtil from './MediaUtil.js'; // 不常用
-import Pubsub from './Pubsub.js'; // 不常用
+import PubSub from './PubSub.js'; // 不常用
 import ValidateID from './ValidateID.js'; // 不常用
 import Validator from './Validator.js'; // 不常用
 
@@ -148,13 +142,10 @@ export {
   Dropdown,
   Emoji, // 不常用
   Footer,
-  Grid,
   Group,
   Handsign, // 不常用
   Header,
-  Icon,
   ImgMark, // 不常用
-  ImgUploader,
   IndexBar, // 不常用
   InputArea,
   InputCity,
@@ -173,7 +164,6 @@ export {
   InputText,
   // Jcrop, // 不常用,裁切功能,需要安装jcrop插件
   Legend, // 不常用
-  List,
   ListPull,
   Loading,
   LotteryWheel, // 不常用
@@ -210,8 +200,6 @@ export {
   Titlebar,
   Toast,
   Tree,
-  VideoUploader, // 不常用
-  Weather, // 不常用
 
   // utils
   Ajax, // 不常用
@@ -232,7 +220,7 @@ export {
   ImgLazy,
   jsonp, // 不常用
   MediaUtil, // 不常用
-  Pubsub, // 不常用
+  PubSub, // 不常用
   ValidateID, // 不常用
   Validator, // 不常用
 
