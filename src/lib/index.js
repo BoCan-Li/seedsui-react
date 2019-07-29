@@ -10,9 +10,6 @@ import './PrototypePinyin.js'; // 不常用
 // components
 import Actionsheet from './Actionsheet';
 import Alert from './Alert';
-import Article from './Article';
-import Attribute from './Attribute';
-import Attributes from './Attributes';
 import Badge from './Badge';
 import BiClock from './BiClock'; // 不常用
 import BiDoughnut from './BiDoughnut'; // 不常用
@@ -120,9 +117,6 @@ export {
   // components
   Actionsheet, // 不常用
   Alert,
-  Article, // 不常用
-  Attribute,
-  Attributes,
   Badge,
   BiClock, // 不常用
   BiDoughnut, // 不常用

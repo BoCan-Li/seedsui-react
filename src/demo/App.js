@@ -68,7 +68,7 @@ class App extends Component {
         <Container>
         </Container>
         <Footer>
-        <Tabbar style={{marginBottom: '2px', height: '80px'}} iconBadgeClassName="outline top right" className="tabbar-footer border-t" tiled activeIndex={this.state.activeIndex} list={tabs} onClick={this.onClickTab}/>
+        <Tabbar style={{marginTop: '2px', height: '80px'}} iconBadgeClassName="outline top right" className="tabbar-footer border-t" tiled activeIndex={this.state.activeIndex} list={tabs} onClick={this.onClickTab}/>
         </Footer>
       </Page>
     );
