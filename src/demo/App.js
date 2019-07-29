@@ -57,7 +57,8 @@ class App extends Component {
     })
     const rBtns = [
       {
-        iconSrc: '//res.waiqin365.com/d/dinghuo365/browser/chrome.png'
+        iconClassName: 'icon-fav-fill',
+        iconStyle: {WebkitTransform: 'rotate(180deg)'}
       }
     ]
     return (

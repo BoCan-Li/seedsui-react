@@ -53,14 +53,14 @@ export default class Titlebar extends Component {
           style: this.props.backStyle || null,
           icon: this.props.backIcon || null,
           iconClassName: this.props.backIconClassName || null,
-          iconStyle: this.props.backIconStyle || null,
+          iconStyle: this.props.backIconStyle || {},
           caption: this.props.backCaption || null,
           onClick: this.onClickBack
         };
       }
       return (
         <a key={index} disabled={item.disabled} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
-          {(item.iconSrc || item.iconClassName) && <span className={`icon${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={item.iconSrc ? {backgroundImage: `url(${item.iconSrc})`} : {}}></span>}
+          {(item.iconSrc || item.iconClassName) && <span className={`icon${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(item.iconSrc ? {backgroundImage: `url(${item.iconSrc})`} : {}, item.iconStyle)}></span>}
           {item.icon && item.icon}
           {item.caption && <span>{item.caption}</span>}
         </a>
