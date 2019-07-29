@@ -72,7 +72,6 @@ import PickerDate from './PickerDate';
 import Player from './Player';
 import Popover from './Popover';
 import Preview from './Preview'; // 不常用
-import Price from './Price';
 import Progress from './Progress';
 import Radio from './Radio';
 import SearchBoard from './SearchBoard';
@@ -179,7 +178,6 @@ export {
   Player,
   Popover, // 不常用
   Preview, // 不常用
-  Price,
   Progress,
   Radio,
   SearchBoard,
