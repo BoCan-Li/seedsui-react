@@ -154,7 +154,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [PickerDate](#pickerdate) 日期选择弹框
 - [Player](#player) 视频播放器
 - [Popover](#popover) 箭头弹框
-- [Price](#price) 价格
 - [Progress](#progress) 进度条
 - [Radio](#radio) 单选框
 - [RouteComment](#routecomment) 评价路由
@@ -3573,28 +3572,6 @@ onPreview = () => {
 
 
 
-## Price
-[价格](https://unpkg.com/seedsui-react/src/lib/Price/Price.js)
-### 属性
-```javascript
-<Price
-  showSymbol={是否显示货币符号 bool, 默认true}
-  showThousandth={是否显示千分位 bool, 默认true}
-  className={容器className string, 默认'capitalize', 基础'price'} // normal | capitalize | capitalize lg
-  style={容器style object, 默认无}
-  price={价格数值 string | number, 默认无} // 如果不是数字的话, 将原样显示
-  unit={单位 string, 默认无}
-  digitsFixed={固定小数 bool, 默认true} // 例如100仍然显示100.00
-  digits={小数位控制 bool | number, 默认false}
-/>
-```
-### 示例
-```javascript
-import Price from 'seedsui-react/lib/Price';
-
-<Price price={100} digits={2} digitsFixed/>
-```
-[返回目录](#component)
 
 
 ## Progress
