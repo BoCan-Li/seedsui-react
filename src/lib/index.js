@@ -14,6 +14,7 @@ import Badge from './Badge';
 import BiClock from './BiClock'; // 不常用
 import BiDoughnut from './BiDoughnut'; // 不常用
 import BiGauge from './BiGauge'; // 不常用
+import Bridge from './Bridge';
 import Button from './Button';
 import Calendar from './Calendar'; // 不常用
 import Card from './Card';
@@ -54,6 +55,7 @@ import Legend from './Legend';
 import ListPull from './ListPull'; // 不常用
 import Loading from './Loading';
 import LotteryWheel from './LotteryWheel'; // 不常用
+import MapUtil from './MapUtil'; // 不常用
 import Mark from './Mark';
 import Marquee from './Marquee';
 import MenuTiled from './MenuTiled';
@@ -93,15 +95,16 @@ import Animate from './Animate.js'; // 不常用
 import ApiAxios from './ApiAxios.js';
 // import ApiSuperagent from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
 import BackboneRoute from './BackboneRoute.js'; // 不常用
-import DB from './DB.js';
 import CanvasUtil from './CanvasUtil.js'; // 不常用
 import Clipboard from './Clipboard.js';
+import DB from './DB.js';
 import Device from './Device.js';
 import EditUtil from './EditUtil.js'; // 不常用
 import EventUtil from './EventUtil.js'; // 不常用
 import FastClick from './FastClick.js';
 import Form from './Form.js'; // 不常用
 import FullScreen from './FullScreen.js'; // 不常用
+import GeoUtil from './GeoUtil.js'; // 不常用
 import History from './History.js'; // 不常用
 import ImgLazy from './ImgLazy';
 import jsonp from './jsonp'; // 不常用
@@ -110,8 +113,6 @@ import PubSub from './PubSub.js'; // 不常用
 import ValidateID from './ValidateID.js'; // 不常用
 import Validator from './Validator.js'; // 不常用
 
-// bridge
-import Bridge from './Bridge';
 export {
   // components
   Actionsheet, // 不常用
@@ -120,6 +121,7 @@ export {
   BiClock, // 不常用
   BiDoughnut, // 不常用
   BiGauge, // 不常用
+  Bridge,
   Button,
   Calendar, // 不常用
   Card,
@@ -160,6 +162,7 @@ export {
   ListPull,
   Loading,
   LotteryWheel, // 不常用
+  MapUtil, // 不常用
   Mark,
   Marquee,
   MenuTiled, // 不常用
@@ -208,14 +211,12 @@ export {
   FastClick,
   Form, // 不常用
   FullScreen, // 不常用
+  GeoUtil, // 不常用
   History, // 不常用
   ImgLazy,
   jsonp, // 不常用
   MediaUtil, // 不常用
   PubSub, // 不常用
   ValidateID, // 不常用
-  Validator, // 不常用
-
-  // bridge
-  Bridge
+  Validator // 不常用
 };
