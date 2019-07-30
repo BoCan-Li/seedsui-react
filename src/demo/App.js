@@ -10,25 +10,25 @@ class App extends Component {
         {
           icon: <i className="icon tab-icon icon-home"></i>,
           iconActive: <i className="icon tab-icon icon-search"></i>,
-          caption: '首页',
+          name: '首页',
           url: '/_react_/main/home'
         },
         {
           iconClassName: 'icon-grid',
           iconActiveClassName: 'icon-grid-fill',
-          caption: '商品',
+          name: '商品',
           url: '/_react_/main/goods'
         },
         {
           iconClassName: 'icon-cart',
           iconActiveClassName: 'icon-cart-fill',
-          caption: '购物车',
+          name: '购物车',
           url: '/_react_/main/cart'
         },
         {
           iconClassName: 'icon-user',
           iconActiveClassName: 'icon-user-fill',
-          caption: '我的',
+          name: '我的',
           url: '/_react_/main/me'
         },
       ]

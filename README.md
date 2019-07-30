@@ -3896,6 +3896,7 @@ import Sticker from 'seedsui-react/lib/Sticker';
   //     ricon: node,
   //     riconActive: node,
 
+  //     name: string, // 与caption完全相同, 允许传入name或者caption
   //     caption: string,
   //     sndcaption: string,
   //     active: bool,

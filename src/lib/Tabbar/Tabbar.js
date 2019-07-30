@@ -29,6 +29,7 @@ export default class Tabbar extends Component {
     //     ricon: node,
     //     riconActive: node,
 
+    //     name: string, // 与caption完全相同, 允许传入name或者caption
     //     caption: string,
     //     sndcaption: string,
     //     active: bool,
@@ -96,7 +97,7 @@ export default class Tabbar extends Component {
     }
     // 遍历
     return list.map((item, index) => {
-      const {icon, iconActive, ricon, riconActive, caption, sndcaption, active, attributes = {}, style = {}} = item;
+      const {icon, iconActive, ricon, riconActive, name, caption, sndcaption, active, attributes = {}, style = {}} = item;
       let isActive = (active || activeIndex === index);
       let liconDOM = null;
       if (icon) {
