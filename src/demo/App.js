@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Page, Header, Footer, Titlebar, Tabbar, Badge, Container} from './../lib';
+import {Page, Header, Footer, Titlebar, Tabbar, Badge, Container, Dropdown} from './../lib';
 
 class App extends Component {
   constructor(props) {
@@ -31,7 +31,8 @@ class App extends Component {
           name: '我的',
           url: '/_react_/main/me'
         },
-      ]
+      ],
+      dropdownList: [{"id":"","name":"分类","data":[{"id":"","name":"全部","children":[]}]},{"id":"","name":"品牌","data":[{"id":"","name":"全部"},{"id":"康师傅","name":"康师傅"},{"id":"雀巢","name":"雀巢"},{"id":"其他","name":"其他"},{"id":"美汁源","name":"美汁源"},{"id":"可口","name":"可口"},{"id":"宏宝莱","name":"宏宝莱"},{"id":"康师傅饮料","name":"康师傅饮料"},{"id":"百事","name":"百事"},{"id":"卫岗","name":"卫岗"},{"id":"百饮","name":"百饮"},{"id":"乐事","name":"乐事"},{"id":"","name":""},{"id":"康师傅方便面","name":"康师傅方便面"},{"id":"蒙牛","name":"蒙牛"},{"id":"伊利","name":"伊利"},{"id":"三只松鼠","name":"三只松鼠"}]},{"id":"","name":"筛选","data":[{"id":"","name":"全部"},{"id":"new","name":"新品"},{"id":"importance","name":"重点"}]}]
     }
   }
   componentDidMount () {
@@ -62,9 +63,10 @@ class App extends Component {
       }
     ]
     return (
-      <Page>
+      <Page ref={(el) => {this.$page = el}}>
         <Header>
           <Titlebar caption="SeedsUI" rButtons={rBtns}/>
+          <Dropdown portal={this.state.$page} list={this.state.dropdownList}/>
         </Header>
         <Container>
         </Container>

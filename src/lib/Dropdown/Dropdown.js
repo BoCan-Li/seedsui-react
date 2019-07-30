@@ -50,7 +50,7 @@ export default class Dropdown extends Component {
       tabbar.push({
         id: item.id,
         name: item.name,
-        riconClassName: 'shape-triangle-down'
+        ricon: <span className='icon tab-icon shape-triangle-down'></span>
       });
     };
     this.setState({
