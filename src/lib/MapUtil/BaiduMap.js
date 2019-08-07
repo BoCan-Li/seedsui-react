@@ -160,14 +160,18 @@ var BaiduMap = function (id, params) {
     var boundary = new BMap.Boundary()
     if (!options.area) {
       console.warn(`${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
-      options.onError && options.onError(`${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
+      options.onError && options.onError({
+        errMsg: `${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`
+      })
       return
     }
     boundary.get(options.area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
         console.warn(`${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`)
-        options.onError && options.onError(`${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`)
+        options.onError && options.onError({
+          errMsg: `${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`
+        })
         return
       }
       var polygons = []
@@ -208,7 +212,9 @@ var BaiduMap = function (id, params) {
       options.onSuccess && options.onSuccess(polygon)
     } else {
       console.warn(`drawPolygon: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${window._seeds_lang['or'] || '或者'}{points: []}`)
-      options.onError && options.onError(`drawPolygon: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${window._seeds_lang['or'] || '或者'}{points: []}`)
+      options.onError && options.onError({
+        errMsg: `drawPolygon: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${window._seeds_lang['or'] || '或者'}{points: []}`
+      })
     }
     return polygon
   }
@@ -224,7 +230,9 @@ var BaiduMap = function (id, params) {
   s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}
     if (!options.point) {
       console.warn(`drawLabel: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
-      options.onError && options.onError(`drawLabel: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      options.onError && options.onError({
+        errMsg: `drawLabel: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`
+      })
       return
     }
     var opts = {
@@ -241,12 +249,16 @@ var BaiduMap = function (id, params) {
   s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, styleOptions: {}}
     if (!options.point) {
       console.warn(`drawMarker: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
-      options.onError && options.onError(`drawMarker: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      options.onError && options.onError({
+        errMsg: `drawMarker: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`
+      })
       return
     }
     if (!options.point.lng || !options.point.lat) {
       console.warn(`drawMarker: ${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`)
-      options.onError && options.onError(`drawMarker: ${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`)
+      options.onError && options.onError({
+        errMsg: `drawMarker: ${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`
+      })
       return
     }
     var point = new BMap.Point(options.point.lng, options.point.lat)
@@ -272,12 +284,16 @@ var BaiduMap = function (id, params) {
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
       console.warn(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}overlay`)
-      options.onError && options.onError(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}overlay`)
+      options.onError && options.onError({
+        errMsg: `addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}overlay`
+      })
       return
     }
     if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}pass_in_parameters'] || '请传入参数'}{menus: [{text: \'\', handler: func()}]}`)
-      options.onError && options.onError(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: \'\', handler: func()}]}`)
+      console.warn(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
+      options.onError && options.onError({
+        errMsg: `addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: "", handler: func()}]}`
+      })
       return
     }
     var markerMenu = new BMap.ContextMenu()

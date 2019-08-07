@@ -1,7 +1,6 @@
 // require PrototypeMath.js, 用于解决加减法精度丢失的问题
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Close from './../Close';
 
 export default class NumBox extends Component {
   static propTypes = {
@@ -24,6 +23,7 @@ export default class NumBox extends Component {
     ]),
     digits: PropTypes.oneOfType([
       PropTypes.bool,
+      PropTypes.string,
       PropTypes.number
     ]),
     max: PropTypes.oneOfType([
@@ -65,9 +65,7 @@ export default class NumBox extends Component {
     onError: PropTypes.func,
   }
   static defaultProps = {
-    required: true,
     maxLength: '16',
-    readOnly: false,
     clearClassName: 'ricon close-icon-clear size18'
   }
   constructor(props) {
@@ -84,7 +82,8 @@ export default class NumBox extends Component {
     if (readOnly || disabled) {
       return;
     }
-    const value = Math.Calc.correctNumberBlur(this.props.value, {required, min});
+    // 失去焦点时只校验非空、最小值
+    const value = Math.Calc.correctNumber(this.props.value, {required, min});
     if (onChange && '' + value !== '' + this.props.value) onChange(value, Object.getArgs(e, this.props.args));
     if (onBlur) onBlur(value, Object.getArgs(e, this.props.args));
   };
@@ -132,7 +131,9 @@ export default class NumBox extends Component {
     if (e.target.validity.badInput) {
       e.target.value = '';
     }
-    var value = Math.Calc.correctNumber(e.target.value, this.props);
+    // 输入时只校验最大值、小数点、最大长度、返回错误
+    const {max, digits, maxLength, onError} = this.props;
+    var value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError});
     if (this.props.onChange) this.props.onChange(value, Object.getArgs(e, this.props.args));
   };
   // 点击减
@@ -245,7 +246,7 @@ export default class NumBox extends Component {
         />
         {licon && licon}
         {this.getInputDOM()}
-        {clear && value && <Close className={`clearicon${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle} onClick={this.onClear}/>}
+        {clear && value && <i className={`icon clearicon${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle} onClick={this.onClear}></i>}
         {ricon && ricon}
         <input
           ref={(el) => {this.$plus = el;}}

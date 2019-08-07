@@ -38,6 +38,7 @@ export default class InputPicker extends Component {
     };
   }
   componentDidMount () {
+    this.$el = this.refs.$ComponentInputText.$el;
     this.$input = this.refs.$ComponentInputText.$input;
   }
   onClick = (value, args) => {

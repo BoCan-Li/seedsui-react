@@ -41,6 +41,7 @@ export default class InputCity extends Component {
   static defaultProps = {
   }
   componentDidMount () {
+    this.$el = this.refs.$ComponentInputText.$el;
     this.$input = this.refs.$ComponentInputText.$input;
   }
   onClick = (value, args) => {

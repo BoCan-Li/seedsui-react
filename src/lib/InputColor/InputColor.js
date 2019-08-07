@@ -6,6 +6,7 @@ export default class InputColor extends Component {
     super(props);
   }
   componentDidMount () {
+    this.$el = this.refs.$ComponentInputText.$el;
     this.$input = this.refs.$ComponentInputText.$input;
   }
   render() {

@@ -37,6 +37,7 @@ export default class InputSelect extends Component {
     };
   }
   componentDidMount () {
+    this.$el = this.refs.$ComponentInputText.$el;
     this.$input = this.refs.$ComponentInputText.$input;
   }
   getValue = (options) => {

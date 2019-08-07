@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Close from './../Close';
 
 export default class InputText extends Component {
   static propTypes = {
@@ -28,6 +27,7 @@ export default class InputText extends Component {
     ]),
     digits: PropTypes.oneOfType([
       PropTypes.bool,
+      PropTypes.string,
       PropTypes.number
     ]),
     readOnly: PropTypes.bool,
@@ -100,7 +100,9 @@ export default class InputText extends Component {
   onChange = (e) => {
     var target = e.target;
     var value = target.value;
-    const {maxLength, pre, valueBindProp, type, onChange} = this.props;
+    const {
+      pre, valueBindProp, type, onChange, maxLength
+    } = this.props;
     // 自动扩充功能
     if (pre) {
       this.$pre.children[0].innerText = value;
@@ -109,6 +111,11 @@ export default class InputText extends Component {
     // 最大长度
     if (maxLength && value && value.length > maxLength) {
       value = value.substring(0, maxLength)
+    }
+    // 输入时只校验最大值、小数点、最大长度、返回错误
+    if (type === 'number') {
+      const {max, digits, onError} = this.props;
+      value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError});
     }
     // onChange
     if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
@@ -120,10 +127,14 @@ export default class InputText extends Component {
   onBlur = (e) => {
     var target = e.target;
     var value = target.value;
-    const {onBlur} = this.props;
-    if (onBlur) {
-      onBlur(value, Object.getArgs(e, this.props.args));
+    const {valueBindProp, min, type, onBlur, onChange} = this.props;
+    if (type === 'number') {
+      // 失去焦点时只校验非空、最小值
+      value = Math.Calc.correctNumber(value, {min});
+      if (!valueBindProp) target.value = value;
+      if (onChange) onChange(value, Object.getArgs(e, this.props.args));
     }
+    if (onBlur) onBlur(value, Object.getArgs(e, this.props.args));
   }
   onFocus = (e) => {
     var target = e.target;
@@ -155,7 +166,8 @@ export default class InputText extends Component {
   }
   getInputDOM = () => {
     const {
-      args, style, className, onClick, max, min, digits, onChange, onClickInput, onBlur, onFocus,
+      args, style, className, onClick, onChange, onClickInput, onBlur, onFocus,
+      max, min, digits,
       licon, onClickLicon,
       ricon, onClickRicon,
       clear, clearClassName, clearStyle,
@@ -214,9 +226,9 @@ export default class InputText extends Component {
     }
     // 如果值绑定属性,则只有通过父组件的prop来改变值
     if (valueBindProp) {
-      return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+      return <input max={max} min={min} autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
     }
-    return <input autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+    return <input max={max} min={min} autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={inputType} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
   }
   updateShowClear = () => {
     const {clear, valueBindProp} = this.props;
@@ -250,10 +262,10 @@ export default class InputText extends Component {
       showClear = false;
     }
     let isShowClear = valueBindProp ? showClear : this.state.showClear;
-    return (<div className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+    return (<div ref={(el) => {this.$el = el;}} className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
         {licon && licon}
         {this.getInputDOM()}
-        {clear && <Close className={`clearicon ${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle}/>}
+        {clear && <i className={`icon clearicon ${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
       </div>);

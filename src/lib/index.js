@@ -21,7 +21,6 @@ import Card from './Card';
 import Carrousel from './Carrousel';
 import Chat from './Chat';
 import Checkbox from './Checkbox';
-import Close from './Close';
 import Container from './Container';
 import Counter from './Counter'; // 不常用
 import Dialog from './Dialog';
@@ -128,7 +127,6 @@ export {
   Carrousel,
   Chat,
   Checkbox,
-  Close,
   Container,
   Counter, // 不常用
   Dialog,

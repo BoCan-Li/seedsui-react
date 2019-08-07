@@ -283,6 +283,16 @@ var Bridge = {
       if (callback) callback(result)
     }, null, params ? JSON.stringify(params) : null)
   },
+  /**
+    * 大华捷通支付
+    * @param {Object} params {payChannel:'UPPay 云闪付  WXPay微信支付 AliPay 支付宝支付', payData:'服务端获取'}
+    * @param {Function} callback 回调
+    */
+  qmfpay: function (params, callback) {
+    wq.wqpay.qmfpay((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, null, params ? JSON.stringify(params) : null)
+  },
   /*
   * 获取APP信息
   * params: {operation: 'AllInfo'}

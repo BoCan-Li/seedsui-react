@@ -110,29 +110,34 @@ Math.Calc = (function () {
   }
   // 矫正数字, 常用于输入过程中矫正, 可以为空串
   function correctNumber (argNumstr, options) {
-    const {max, min, digits, maxLength, onError} = options
+    const {max, min, digits, maxLength, required, onError} = options
     if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
+      // 非空校验
+      if (required) return min ? '' + min : '0'
       return ''
     }
-    var value = argNumstr.toString()
+    var value = String(argNumstr || '')
     // 最大值
     if (!isNaN(max) && value - max > 0) {
       // callback onError
-      if (onError) onError({msg: window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于' + max})
+      if (onError) onError({errMsg: window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于' + max})
       return '' + max
     }
     // 最小值
     if (!isNaN(min) && value - min < 0) {
       // callback onError
-      if (onError) onError({msg: window._seeds_lang['hint_cannot_be_less_than'] || '不能小于' + min})
+      if (onError) onError({errMsg: window._seeds_lang['hint_cannot_be_less_than'] || '不能小于' + min})
       return '' + min
     }
     // 截取小数位数
-    if (value.indexOf('.') !== -1 && !isNaN(digits) && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
-      if (digits - 0 === 0) { // 整数
-        value = value.substring(0, value.indexOf('.'))
-      } else { // 小数
-        value = value.substring(0, value.indexOf('.') + Number(digits) + 1)
+    if (!isNaN(digits)) {
+      console.log(digits)
+      if (value.indexOf('.') !== -1 && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
+        if (digits - 0 === 0) { // 整数
+          value = value.substring(0, value.indexOf('.'))
+        } else { // 小数
+          value = value.substring(0, value.indexOf('.') + Number(digits) + 1)
+        }
       }
     }
     // 最大长度限制
@@ -145,14 +150,6 @@ Math.Calc = (function () {
     }
     return '' + value
   }
-  // 矫正数字, 用于输入框失去焦点
-  function correctNumberBlur (argNumstr, options) {
-    const {required, min} = options;
-    var value = argNumstr;
-    if (value.length > 0) return '' + Number(value)
-    if (required && value === '') return min ? '' + min : '0'
-    return '' + value
-  }
   // 矫正手机号码, 用于输入过程中矫正
   function correctPhone (argPhone, options) {
     const {onError} = options;
@@ -163,7 +160,7 @@ Math.Calc = (function () {
       if (result) value = result[0];
       else value = '';
       // callback onError
-      if (onError) onError({msg: window._seeds_lang['hint_must_number'] || '必须要输入数字哦'});
+      if (onError) onError({errMsg: window._seeds_lang['hint_must_number'] || '必须要输入数字哦'});
     }
     return value;
   }
@@ -176,7 +173,6 @@ Math.Calc = (function () {
     toFixed: toFixed,
     toThousandth: toThousandth,
     correctNumber: correctNumber,
-    correctNumberBlur: correctNumberBlur,
     correctPhone: correctPhone
   }
 })();

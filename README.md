@@ -98,7 +98,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Carrousel](#carrousel) 轮播
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
-- [Close](#close) 关闭清除图标
 - [Container](#container) page主体
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
@@ -925,24 +924,6 @@ const {checked} = this.props;
 
 
 
-
-## Close
-[关闭删除图标](https://unpkg.com/seedsui-react/src/lib/Close/Close.js)
-### 属性
-```javascript
-<Close
-  style={图标style object, 默认无}
-  className={图标className string, 默认'close-icon close-icon-clear size18', 基础'icon'}
-  {...others}
-/>
-```
-### 示例
-```javascript
-import Close from 'seedsui-react/lib/Close';
-
-<Close onClick={this.onClear} className="cancel"/>
-```
-[返回目录](#component)
 
 
 
