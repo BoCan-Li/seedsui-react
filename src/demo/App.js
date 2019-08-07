@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import {Page, Header, Titlebar, Container, InputNumber, NumBox} from './../lib';
+import {Page, Header, Titlebar, Container, Emoji} from './../lib';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showEmoji: false,
       value: ''
     }
   }
@@ -13,11 +14,19 @@ class App extends Component {
   }
   onChange = (value) => {
     this.setState({
-      value
+      value: value
     })
   }
-  onError = (err) => {
-    console.log(err);
+  onSubmit = (value) => {
+    console.log(value)
+    alert(value);
+  }
+  toggleEmoji = () => {
+    this.setState((prevState) => {
+      return {
+        showEmoji: !prevState.showEmoji
+      }
+    })
   }
   render() {
     return (
@@ -26,8 +35,15 @@ class App extends Component {
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          <NumBox max="100" min="10" value={this.state.value} onChange={this.onChange} className="lg" digits="2" maxLength="11" onError={this.onError} clear style={{width: '200px'}}/>
-          <InputNumber valueBindProp max="100" min="10" value={this.state.value} onChange={this.onChange} className="lg" maxLength="100" onError={this.onError} clear style={{width: '200px'}}/>
+          <Emoji
+            autoFocus
+            show={this.state.showEmoji}
+            onChange={this.onChange}
+            value={this.state.value}
+            onClickMask={this.toggleEmoji}
+            onClickSubmit={this.onSubmit}
+          />
+          <input type="button" value="显隐" onClick={this.toggleEmoji}/>
         </Container>
       </Page>
     );

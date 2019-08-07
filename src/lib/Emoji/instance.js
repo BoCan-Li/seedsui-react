@@ -14,6 +14,8 @@ var Emoji = function (params) {
 		containerClass: 'emoji',
 		containerActiveClass: 'active',
 
+		submitClass: 'emoji-edit-submit',
+
 		textareaClass: 'emoji-edit-input',
 		
 		iconClass: 'emoji-edit-icon', // 展开和收缩按钮
@@ -190,7 +192,7 @@ var Emoji = function (params) {
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
 		s.mask[action]('click', s.onClick, false)
-		// 
+		// 失去焦点
 		s.textarea[action]('blur', s.onBlur, false)
 		// 获得光标位置
 		document[action]('selectionchange', s.onSelectionChange, false)
@@ -240,7 +242,7 @@ var Emoji = function (params) {
 		setTimeout(() => {
 			s.mask.scrollIntoView()
 			// document.getElementById('root').scrollIntoView()
-		}, 100);
+		}, 10);
 	}
 	// 获得光标位置
 	s.onSelectionChange = function (e) {

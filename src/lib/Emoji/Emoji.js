@@ -144,7 +144,7 @@ export default class Emoji extends Component {
               {...others}
             />
             <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
-            <Button className={`emoji-edit-submit${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} disabled={!value} onClick={this.onClickSubmit}>{submitCaption}</Button>
+            <Button className={`emoji-edit-submit${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} disabled={!value}>{submitCaption}</Button>
           </div>
           <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{display: 'none'}}>
             {this.getFaceDOM()}
