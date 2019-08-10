@@ -10,7 +10,7 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    console.log(Math.Calc.toFixed('100.00', 2))
+    // Device.adapterIPhoneX();
   }
   onChange = (value) => {
     this.setState({

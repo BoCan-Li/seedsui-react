@@ -188,12 +188,22 @@ var Emoji = function (params) {
 	}
   /* --------------------
   Controller
-  -------------------- */
+	-------------------- */
+	s.preventDefault = function (e) {
+    e.preventDefault()
+  }
   s.events = function (detach) {
     var action = detach ? 'removeEventListener' : 'addEventListener'
 		s.mask[action]('click', s.onClick, false)
-		// 失去焦点
-		s.textarea[action]('blur', s.onBlur, false)
+		// ios内核bug兼容
+		if (navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)) {
+			// 获取焦点
+			s.textarea[action]('focus', s.onFocus, false)
+			// 去除获取焦点时的滚动条
+			s.mask[action]('touchmove', s.preventDefault, false)
+			// 失去焦点
+			s.textarea[action]('blur', s.onBlur, false)
+		}
 		// 获得光标位置
 		document[action]('selectionchange', s.onSelectionChange, false)
 		s.textarea[action]('input', s.onInput, false)
@@ -237,11 +247,16 @@ var Emoji = function (params) {
 		}
 		e.stopPropagation()
 	}
+	// 兼容iphonex迅飞输入法快捷选词栏遮住输入框的问题
+	s.onFocus = function () {
+		setTimeout(() => {
+			document.body.scrollTop = document.body.scrollHeight
+		}, 300)
+	}
 	// 兼容ios12输入法把页面顶上去, 不回弹的问题
 	s.onBlur = function () {
 		setTimeout(() => {
-			s.mask.scrollIntoView()
-			// document.getElementById('root').scrollIntoView()
+			document.body.scrollTop = 0
 		}, 10);
 	}
 	// 获得光标位置

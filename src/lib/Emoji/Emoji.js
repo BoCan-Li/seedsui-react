@@ -11,7 +11,7 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Emoji extends Component {
   static propTypes = {
-    show: PropTypes.bool,
+    show: PropTypes.bool, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
     data: PropTypes.object,
 
     portal: PropTypes.object,
