@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Page, Header, Titlebar, Container, Emoji} from './../lib';
+import {Page, Header, Titlebar, Container, InputPhone, NumBox} from './../lib';
 
 class App extends Component {
   constructor(props) {
@@ -17,17 +17,6 @@ class App extends Component {
       value: value
     })
   }
-  onSubmit = (value) => {
-    console.log(value)
-    alert(value);
-  }
-  toggleEmoji = () => {
-    this.setState((prevState) => {
-      return {
-        showEmoji: !prevState.showEmoji
-      }
-    })
-  }
   render() {
     return (
       <Page ref={(el) => {this.$page = el}}>
@@ -35,15 +24,8 @@ class App extends Component {
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          <Emoji
-            autoFocus
-            show={this.state.showEmoji}
-            onChange={this.onChange}
-            value={this.state.value}
-            onClickMask={this.toggleEmoji}
-            onClickSubmit={this.onSubmit}
-          />
-          <input type="button" value="显隐" onClick={this.toggleEmoji}/>
+          <InputPhone maxLength="11" digits="2"/>
+          <NumBox value={this.state.value} onChange={this.onChange}/>
         </Container>
       </Page>
     );

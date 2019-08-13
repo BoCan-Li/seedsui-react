@@ -400,7 +400,7 @@ var Bridge = {
     * @param {Object} params {payChannel:'UPPay 云闪付  WXPay微信支付 AliPay 支付宝支付', payData:'服务端获取'}
     * @param {Function} callback 回调
     */
-   qmfpay: function (params, callback) {
+  qmfpay: function (params, callback) {
     this.invoke('qmfpay', params, callback)
   },
   /**
@@ -455,8 +455,8 @@ var Bridge = {
   isExistsFile({
     "fileName": "ss.txt",
     "size": 200
-  }，(result) => {
-  // 返回{{"isExists":"","filePath":"","fileName":""}，isExists:'0'不存在，'1'存在
+  }, (result) => {
+  // 返回格式 {{"isExists":"","filePath":"","fileName":""}，isExists:'0'不存在，'1'存在
   })
   */
   isExistsFile: function (params, callback) {
@@ -468,8 +468,8 @@ var Bridge = {
     "fileName": "ss.txt",
     "downloadUrl": "http://...",
     "size": 200
-  }，(result) => {
-  // 返回{{"code":"","filePath":"","message":""}，code:'0'失败，'1'成功，message失败原因
+  }, (result) => {
+  // 返回格式 {{"code":"","filePath":"","message":""}，code:'0'失败，'1'成功，message失败原因
   }) */
   downloadFile: function (params, callback) {
     this.invoke('downloadFile', params, callback)
@@ -477,8 +477,8 @@ var Bridge = {
   /* 附件打开
   openFile（{
     "filePath": ""
-  }，(result) => {
-  // 返回{{"code":"","message":""}，code:'0'失败，'1'成功，message失败原因
+  }, (result) => {
+  // 返回格式 {{"code":"","message":""}，code:'0'失败，'1'成功，message失败原因
   }） */
   openFile: function (params, callback) {
     this.invoke('openFile', params, callback)
