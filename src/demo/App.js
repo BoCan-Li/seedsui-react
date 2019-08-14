@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Page, Header, Titlebar, Container, InputPhone, NumBox} from './../lib';
+import {Page, Header, Titlebar, Container, InputTel, NumBox} from './../lib';
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class App extends Component {
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          <InputPhone maxLength="11" digits="2"/>
+          <InputTel maxLength="11" digits="2"/>
           <NumBox value={this.state.value} onChange={this.onChange}/>
         </Container>
       </Page>

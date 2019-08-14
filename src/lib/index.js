@@ -41,7 +41,7 @@ import InputDate from './InputDate';
 import InputLocation from './InputLocation';
 import InputNumber from './InputNumber';
 import InputPassword from './InputPassword';
-import InputPhone from './InputPhone';
+import InputTel from './InputTel';
 import InputPicker from './InputPicker';
 import InputPre from './InputPre';
 import InputRange from './InputRange';  // 不常用
@@ -147,7 +147,7 @@ export {
   InputLocation,
   InputNumber,
   InputPassword,
-  InputPhone,
+  InputTel,
   InputPicker,
   InputPre,
   InputRange, // 不常用
