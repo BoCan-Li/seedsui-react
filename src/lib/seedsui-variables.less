@@ -303,12 +303,12 @@ body{
 @border:#e5e5e5;
 @dpborder:#e5e5e5;
 
-@link:@primary-bg;
-@link-active-property: opacity;
-@link-active-value: 0.5;
-
-@disabled-property: opacity;
-@disabled-value: 0.5;
+a {
+	color: @primary-bg;
+	&:active{
+    opacity: 0.5;
+  }
+}
 
 @mask-bg:rgba(0,0,0,.4);
 
@@ -393,12 +393,10 @@ body{
 @hint-color:white;
 @hint-bg:#D29BCE;
 @hint-border:#D29BCE;
-@hint-property: none;
 @hint-value: none;
 @hint-color-active:white;
 @hint-bg-active:lighten(@hint-bg,20%);
 @hint-border-active:lighten(@hint-bg,20%);
-@hint-property-active: none;
 @hint-value-active: none;
 
 @disabled-color:#adadad;
@@ -3515,7 +3513,16 @@ body{
 		width: @14px;
 		background-size: @28px @7px;
 		background-image: linear-gradient(-45deg,@ticket-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-135deg,@ticket-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-45deg,transparent 75%,@ticket-sawtooth-bg 75%),linear-gradient(-135deg,transparent 75%,@ticket-sawtooth-bg 75%);
-	}
+  }
+  &.disabled {
+    &:after{
+      background-image: linear-gradient(-45deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-135deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-45deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%),linear-gradient(-135deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%);
+    }
+    .ticket-legend{
+      color: white;
+      background-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);
+    }
+  }
 }
 .setTicketLegend(){
   .flex;
@@ -3529,15 +3536,6 @@ body{
 .setTicketContainer(){
   .flex-1;
 	height: 100%;
-}
-.setTicket_disabled(){
-  &:after{
-		background-image: linear-gradient(-45deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-135deg,@ticket-disabled-sawtooth-bg 25%,transparent 25%,transparent),linear-gradient(-45deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%),linear-gradient(-135deg,transparent 75%,@ticket-disabled-sawtooth-bg 75%);
-	}
-	.ticket-legend{
-		color: white;
-		background-image: linear-gradient(90deg, #B9BEC5 1%, #CDD1D6 100%);
-	}
 }
 
 
