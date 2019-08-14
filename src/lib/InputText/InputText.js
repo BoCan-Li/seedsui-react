@@ -69,10 +69,15 @@ export default class InputText extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showClear: props.value && props.clear // 用于非valueBindProp
+      showClear: props.value && props.clear && !props.readOnly && !props.disabled // 用于非valueBindProp
     }
   }
-  
+  // 解决非valueBindProp状态下, readOnly和disabled发生变化时, 不更新清除按钮的问题
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.readOnly !== this.props.readOnly || prevProps.disabled !== this.props.disabled) {
+      this.updateShowClear()
+    }
+  }
   // 点击容器
   onClick = (e) => {
     e.stopPropagation();
@@ -118,11 +123,9 @@ export default class InputText extends Component {
       value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError});
     }
     // onChange
-    if (type !== 'text') { // 能输入中文的文本框,如果放开ios中文输入法会把拼音落进去
-      if (!valueBindProp) target.value = value;
-    }
     if (onChange) onChange(value, Object.getArgs(e, this.props.args));
-    this.updateShowClear();
+    // 非valueBindProp时, 更新清除按钮状态
+    if (!valueBindProp) this.updateShowClear(value);
   }
   onBlur = (e) => {
     var target = e.target;
@@ -152,17 +155,19 @@ export default class InputText extends Component {
   onClear = (e) => {
     this.$input.focus();
     // 赋值
-    if (!this.props.valueBindProp) this.$input.value = '';
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear('', Object.getArgs(e, this.props.args));
-    if (this.props.onChange) {
-      this.props.onChange('', Object.getArgs(e, this.props.args));
+    const {args, valueBindProp, clear, pre, onChange} = this.props;
+    if (!valueBindProp) this.$input.value = '';
+    if (clear && typeof clear === 'function') clear('', Object.getArgs(e, args));
+    if (onChange) {
+      onChange('', Object.getArgs(e, args));
     }
     // 自动扩充功能
-    if (this.props.pre) {
+    if (pre) {
       this.preAutoSize();
     }
     e.stopPropagation();
-    this.updateShowClear();
+    // 非valueBindProp时, 更新清除按钮状态
+    if (!valueBindProp) this.updateShowClear('');
   }
   getInputDOM = () => {
     const {
@@ -221,16 +226,21 @@ export default class InputText extends Component {
     }
     return <input max={max} min={min} autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={type} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
   }
-  updateShowClear = () => {
-    const {clear, valueBindProp} = this.props;
+  // 非valueBindProp时, 更新清除按钮状态
+  updateShowClear = (value) => {
+    const {readOnly, disabled, clear, valueBindProp} = this.props;
     if (valueBindProp) return;
+    if (readOnly || disabled || !clear) {
+      this.setState({
+        showClear: false
+      });
+      return;
+    }
     let showClear = false;
-    if (clear) {
-      if (this.$input && this.$input.value) {
-        showClear = true;
-      } else {
-        showClear = false;
-      }
+    if (value) {
+      showClear = true;
+    } else {
+      showClear = false;
     }
     this.setState({
       showClear: showClear
@@ -239,6 +249,7 @@ export default class InputText extends Component {
   render() {
     const {
       value, valueBindProp,
+      readOnly, disabled,
       className, style,
       licon,
       ricon,
@@ -247,7 +258,7 @@ export default class InputText extends Component {
     } = this.props;
     // 支持valueBindProp和非valueBindProp两种模式的清空按钮控制
     let showClear = false;
-    if (value) {
+    if (value && !readOnly && !disabled) {
       showClear = true;
     } else {
       showClear = false;
