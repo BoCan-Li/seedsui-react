@@ -45,6 +45,10 @@ var Device = (function () {
     platform = 'weixin'
     platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+  } else if (ua.indexOf('miniprogram') > -1) {
+    platform = 'weixinminiprogram'
+    platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('mqqbrowser') > -1) {
     platform = 'qq'
   } else if (ua.indexOf('ucbrowser') > -1) {
