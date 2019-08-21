@@ -12,6 +12,7 @@ class App extends Component {
   }
   componentDidMount () {
     // Device.adapterIPhoneX();
+    console.log((86745000).toDateByMilli('hour'))
   }
   onChange = (value) => {
     this.setState({

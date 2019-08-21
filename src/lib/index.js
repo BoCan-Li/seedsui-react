@@ -4,6 +4,7 @@ import './PrototypeArray.js';
 import './PrototypeMath.js';
 import './PrototypeObject.js';
 import './PrototypeString.js';
+import './PrototypeNumber.js';
 import './PrototypeDate.js';
 import './PrototypePinyin.js'; // 不常用
 
