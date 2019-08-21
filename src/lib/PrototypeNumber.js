@@ -1,5 +1,5 @@
 // 把相差的毫秒数转成日、时、分、秒
-Number.prototype.toDateByMilli = function (start) {
+Number.prototype.toDuration = function (start) {
   var milli = this
   // 如果从秒开始
   if (start === 'second') {
