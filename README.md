@@ -182,16 +182,15 @@ import Chat from 'seedsui-react/lib/Chat';
 ```javascript
 <Actionsheet
   portal={传送dom object, 默认document.getElementById('root')}
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
   duration={动画时长 number, 默认见seedsui-variables.less}
 
   list={*按钮项 array, 如: [{caption: string}]}
-  onClick={点击项 func(item, index), 有此属性才显示确定按钮}
+  onClick={点击项 func(e, item, index), 有此属性才显示确定按钮}
 
   maskStyle={遮罩style object, 默认无}
   maskClassName={遮罩className string, 默认无, 基础'mask actionsheet-mask'}
-  onClickMask={点击遮罩 func, 默认无}
+  onClickMask={点击遮罩 func(e), 默认无}
 
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'actionsheet'}
@@ -205,7 +204,7 @@ import Chat from 'seedsui-react/lib/Chat';
   cancelStyle={取消按钮style object, 默认无}
   cancelClassName={取消按钮className string, 默认无, 基础'actionsheet-cancel'}
   cancelCaption={取消按钮文字 node, 默认'取消'}
-  onClickCancel={点击取消按钮 func(), 默认无, 有此属性才显示取消按钮}
+  onClickCancel={点击取消按钮 func(e), 默认无, 有此属性才显示取消按钮}
 />
 ```
 ### 示例
@@ -3889,7 +3888,7 @@ import Sticker from 'seedsui-react/lib/Sticker';
   tiled={宽度等分 bool, 默认宽度弹性伸缩}
   disabled={是否禁用 bool, 默认无}
   exceptOnClickActive={排除点击选中的菜单 bool, 默认true}
-  onClick={点击页签 func(item, index), 默认无}
+  onClick={点击页签 func(e, item, index), 默认无}
   activeIndex={选中项 number, 默认0}
 />
 ```

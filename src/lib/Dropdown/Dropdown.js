@@ -57,7 +57,7 @@ export default class Dropdown extends Component {
       tabbar,
     });
   }
-  onClickTab = (item, index) => {
+  onClickTab = (e, item, index) => {
     if (this.state.tabbarActiveIndex >= 0) {
       this.setState({
         // 设置弹框的数据

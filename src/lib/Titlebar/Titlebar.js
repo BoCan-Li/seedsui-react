@@ -59,7 +59,7 @@ export default class Titlebar extends Component {
         };
       }
       return (
-        <a key={index} disabled={item.disabled} onClick={() => {if (item.onClick) item.onClick(item.args || '');}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
+        <a key={index} disabled={item.disabled} onClick={(e) => {if (item.onClick) item.onClick(Object.getArgs(e, item.args));}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
           {(item.iconSrc || item.iconClassName) && <span className={`icon${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(item.iconSrc ? {backgroundImage: `url(${item.iconSrc})`} : {}, item.iconStyle)}></span>}
           {item.icon && item.icon}
           {item.caption && <span>{item.caption}</span>}

@@ -7,7 +7,6 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 export default class Actionsheet extends Component {
   static propTypes = {
     portal: PropTypes.object,
-    args: PropTypes.any,
     show: PropTypes.bool,
 
     duration: PropTypes.number,
@@ -47,18 +46,18 @@ export default class Actionsheet extends Component {
     const target = e.target;
     if (target.classList.contains('actionsheet-mask')) {
       if (this.props.onClickMask) {
-        this.props.onClickMask();
+        this.props.onClickMask(e);
         e.stopPropagation();
       }
     } else if (target.classList.contains('actionsheet-option')) {
       const index = target.getAttribute('data-index');
       if (this.props.onClick) {
-        this.props.onClick(this.props.list[index], Number(index));
+        this.props.onClick(e, this.props.list[index], Number(index));
         e.stopPropagation();
       }
     } else if (target.classList.contains('actionsheet-cancel')) {
       if (this.props.onClickCancel) {
-        this.props.onClickCancel();
+        this.props.onClickCancel(e);
         e.stopPropagation();
       }
     }

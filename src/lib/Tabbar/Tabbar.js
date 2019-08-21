@@ -51,7 +51,7 @@ export default class Tabbar extends Component {
     const index = target.getAttribute('data-index');
     if (!index) return;
     if (this.props.onClick) {
-      this.props.onClick(this.props.list[index], Number(index));
+      this.props.onClick(e, this.props.list[index], Number(index));
       e.stopPropagation();
     }
   }
