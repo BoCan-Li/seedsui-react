@@ -756,6 +756,9 @@ a {
   text-align: left;
   -webkit-transform: translate3d(0,0,0); // 据说可以解决输入不显示文字的问题
   -webkit-backface-visibility:hidden;
+  &[disabled] {
+    color: #888;
+  }
 }
 .setInputTextLicon(){
   margin-right: 4px;
