@@ -401,6 +401,10 @@ var Bridge = {
     * @param {Function} callback 回调
     */
   qmfpay: function (params, callback) {
+    if (Bridge.getAppVersion() < '2.3.6') {
+      Bridge.showToast('请安装2.3.6以上版本', {mask: false})
+      return
+    }
     this.invoke('qmfpay', params, callback)
   },
   /**
@@ -446,6 +450,10 @@ var Bridge = {
     * @param {Function} callback({result: 'cn.com.wq.ordergoods'}), ios包名cn.com.wq.ordergoods, andriod包名com.waiqin365.dhcloud
     */
   getIdentification: function (callback) {
+    if (Bridge.getAppVersion() < '2.3.6') {
+      callback({})
+      return
+    }
     this.invoke('getIdentification', null, callback);
   },
   /* -----------------------------------------------------

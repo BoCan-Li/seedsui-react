@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Page, Header, Titlebar, Container, InputNumber} from './../lib';
+import {Page, Header, Titlebar, Container, InputNumber, Bridge} from './../lib';
 
 class App extends Component {
   constructor(props) {
@@ -11,8 +11,7 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    // Device.adapterIPhoneX();
-    console.log((86745000).toDateByMilli('hour'))
+    if (Bridge.qmfpay) Bridge.qmfpay();
   }
   onChange = (value) => {
     this.setState({
