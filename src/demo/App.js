@@ -11,7 +11,20 @@ class App extends Component {
     }
   }
   componentDidMount () {
-    if (Bridge.qmfpay) Bridge.qmfpay();
+    if (Bridge.qmfpay) Bridge.qmfpay({}, (res) => {
+      if (res.resultCode !== '0000') {
+        console.log(res)
+        let resultInfo = res.resultInfo;
+        if (resultInfo && typeof resultInfo === 'string') {
+          try {
+            resultInfo = JSON.parse(resultInfo);
+          } catch (err) {
+            console.log('JSON.parse(resultInfo)失败');
+          }
+        }
+        Bridge.showToast(resultInfo && resultInfo.resultMsg ? resultInfo.resultMsg : '支付失败', {mask: false});
+      }
+    });
   }
   onChange = (value) => {
     this.setState({
