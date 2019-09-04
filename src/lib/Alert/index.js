@@ -1,3 +1,3 @@
-import Ajax from './Ajax.js';
+import Alert from './Alert.js';
 
-export default Ajax;
+export default Alert;

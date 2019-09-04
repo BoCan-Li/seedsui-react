@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DB from './../DB.js';
+import DB from './../DB';
 
 export default class SearchBoard extends Component {
   static propTypes = {

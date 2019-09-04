@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Device from './../Device.js';
+import Device from './../Device';
 import Bridge from './../Bridge';
 
 export default class Titlebar extends Component {

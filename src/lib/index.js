@@ -89,25 +89,25 @@ export { default as Toast } from './Toast';
 export { default as Tree } from './Tree'; // 不常用
 
 // utils
-export { default as Ajax } from './Ajax.js'; // 不常用
-export { default as Animate } from './Animate.js'; // 不常用
-export { default as ApiAxios } from './ApiAxios.js';
-// export { default as ApiSuperagent } from './ApiSuperagent.js'; // 与Axios同类型,推荐使用Axios
-export { default as BackboneRoute } from './BackboneRoute.js'; // 不常用
-export { default as CanvasUtil } from './CanvasUtil.js'; // 不常用
-export { default as Clipboard } from './Clipboard.js';
-export { default as DB } from './DB.js';
-export { default as Device } from './Device.js';
-export { default as EditUtil } from './EditUtil.js'; // 不常用
-export { default as EventUtil } from './EventUtil.js'; // 不常用
-export { default as FastClick } from './FastClick.js';
-export { default as Form } from './Form.js'; // 不常用
-export { default as FullScreen } from './FullScreen.js'; // 不常用
-export { default as GeoUtil } from './GeoUtil.js'; // 不常用
-export { default as History } from './History.js'; // 不常用
+export { default as Ajax } from './Ajax'; // 不常用
+export { default as Animate } from './Animate'; // 不常用
+export { default as ApiAxios } from './ApiAxios';
+// export { default as ApiSuperagent } from './ApiSuperagent'; // 与Axios同类型,推荐使用Axios
+export { default as BackboneRoute } from './BackboneRoute'; // 不常用
+export { default as CanvasUtil } from './CanvasUtil'; // 不常用
+export { default as Clipboard } from './Clipboard';
+export { default as DB } from './DB';
+export { default as Device } from './Device';
+export { default as EditUtil } from './EditUtil'; // 不常用
+export { default as EventUtil } from './EventUtil'; // 不常用
+export { default as FastClick } from './FastClick';
+export { default as Form } from './Form'; // 不常用
+export { default as FullScreen } from './FullScreen'; // 不常用
+export { default as GeoUtil } from './GeoUtil'; // 不常用
+export { default as History } from './History'; // 不常用
 export { default as ImgLazy } from './ImgLazy';
 export { default as jsonp } from './jsonp'; // 不常用
-export { default as MediaUtil } from './MediaUtil.js'; // 不常用
-export { default as PubSub } from './PubSub.js'; // 不常用
-export { default as ValidateID } from './ValidateID.js'; // 不常用
-export { default as Validator } from './Validator.js'; // 不常用
+export { default as MediaUtil } from './MediaUtil'; // 不常用
+export { default as PubSub } from './PubSub'; // 不常用
+export { default as ValidateID } from './ValidateID'; // 不常用
+export { default as Validator } from './Validator'; // 不常用

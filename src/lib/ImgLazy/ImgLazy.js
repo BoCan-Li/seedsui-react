@@ -1,6 +1,6 @@
 // require [PrototypeString.js] clearProtocol()
 // ImgLazy 图片预加载
-import DB from './DB'
+import DB from './../DB'
 
 var ImgLazy = function (params) {
   /* --------------------
