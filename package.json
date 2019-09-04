@@ -6,7 +6,7 @@
     "react-seedsui",
     "seedsui-react"
   ],
-  "main": "build/index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colaboy/seedsui-react.git"
