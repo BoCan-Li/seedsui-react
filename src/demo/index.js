@@ -11,6 +11,15 @@ import '../lib/PrototypeObject.js';
 import '../lib/PrototypeString.js';
 import '../lib/PrototypeDate.js';
 import Device from '../lib/Device';
+import FastClick from '../lib/FastClick';
+
+// ios外勤客户端UIWebview点击慢的问题
+if (Device.platform === 'waiqin') {
+  var root = document.getElementById('root');
+  if (root && Device.os === 'ios') {
+    FastClick.attach(root);
+  }
+}
 // 动态加载桥接库
 Device.dynamicLoadBridge(() => {
   ReactDOM.render(<App />, document.getElementById('root'));
