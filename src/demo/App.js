@@ -1,36 +1,11 @@
 import React, { Component } from 'react';
-import {Page, Header, Titlebar, Container, InputNumber, Bridge} from './../lib';
+import {Page, Header, Titlebar, Container} from './../lib';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showEmoji: false,
-      value: '',
-      readOnly: false
-    }
   }
   componentDidMount () {
-    if (Bridge.qmfpay) Bridge.qmfpay({}, (res) => {
-      if (res.resultCode !== '0000') {
-        console.log(res)
-        let resultInfo = res.resultInfo;
-        if (resultInfo && typeof resultInfo === 'string') {
-          try {
-            resultInfo = JSON.parse(resultInfo);
-          } catch (err) {
-            console.log('JSON.parse(resultInfo)失败');
-          }
-        }
-        Bridge.showToast(resultInfo && resultInfo.resultMsg ? resultInfo.resultMsg : '支付失败', {mask: false});
-      }
-    });
-  }
-  onChange = (value) => {
-    this.setState({
-      value: value,
-      readOnly: value > 100
-    })
   }
   render() {
     return (
@@ -39,7 +14,21 @@ class App extends Component {
           <Titlebar caption="SeedsUI"/>
         </Header>
         <Container>
-          <InputNumber maxLength="11" clear/>
+          <div className="step-box">
+            <div className="step outline-active">
+              <div className="step-icon"><i className="icon-ok-fill"></i></div>
+              <div className="step-caption">发送授权书</div>
+            </div>
+            <div className="step active">
+              <div className="step-icon">2</div>
+              <div className="step-caption">法人授权</div>
+            </div>
+            <div className="step">
+              <div className="step-icon">3</div>
+              <div className="step-caption">认证通过</div>
+            </div>
+            <hr className="step-line"></hr>
+          </div>
         </Container>
       </Page>
     );

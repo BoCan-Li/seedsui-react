@@ -1,0 +1,72 @@
+// 法人授权页面
+.step-box{
+  position: relative;
+  display: flex;
+  .step-line{
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 15px;
+    z-index:0;
+  }
+  .step:nth-of-type(2){
+    flex:1;
+  }
+  .step{
+    position: relative;
+    z-index: 1;
+    color: #C4C4C4;
+    text-align: center;
+    .step-icon{
+      display: flex;
+      justify-content:center;
+      align-items:center;
+      margin: 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 100%;
+      border: 1px solid #C4C4C4;
+      background-color: white;
+      box-shadow: 0 0 0 5px white;
+      i{
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        position: relative;
+        font-style: normal;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: inline-flex;
+        justify-content:center;
+        align-items:center;
+      }
+      i::before{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+    }
+    .step-caption{
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    &.active{
+      color: #FF9008;
+      .step-icon{
+        background-color: #FF9008;
+        border: 1px solid #FF9008;
+        color: white;
+      }
+    }
+    &.outline-active{
+      color: #FF9008;
+      .step-icon{
+        background-color: white;
+        border: 1px solid #FF9008;
+        color: white;
+      }
+    }
+  }
+}

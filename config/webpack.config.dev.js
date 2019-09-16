@@ -182,7 +182,7 @@ module.exports = {
                         'iOS >= 8',
                         'Android > 4.4'
                       ],
-                      flexbox: 'no-2009',
+                      flexbox: 'no-2008',
                     }),
                   ],
                 },

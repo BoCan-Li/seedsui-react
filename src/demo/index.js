@@ -12,6 +12,7 @@ import '../lib/PrototypeString.js';
 import '../lib/PrototypeDate.js';
 import Device from '../lib/Device';
 import FastClick from '../lib/FastClick';
+import './main.less';
 
 var root = document.getElementById('root');
 // ios外勤客户端UIWebview点击慢的问题
