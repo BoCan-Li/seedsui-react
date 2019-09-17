@@ -118,7 +118,7 @@
 
 // 文字尺寸
 @font-size-xl:@20px;
-@font-size-lg:@18px;
+@font-size-lg:@16px;
 @font-size-md:@14px;
 @font-size-sm:@12px;
 
@@ -295,13 +295,13 @@ body{
 
 // 基础
 @font-family:Arial,"Microsoft Yahei";
-@body-bg:#f0f1f2;
+@body-bg:#f5f5f9;
 @body-color:#333;
 
-@sub:#808080;
-@placeholder:#999999;
-@border:#e0e0e0;
-@dpborder:#dddddd;
+@sub:#9e9e9e;
+@placeholder:#b6b6b6;
+@border:#e5e5e5;
+@dpborder:#e5e5e5;
 
 a {
 	color: #459df5;
@@ -314,13 +314,13 @@ a {
 
 // 常用颜色
 @primary-color:white;
-@primary-bg:#FF9008;
-@primary-border:#FF9008;
+@primary-bg:#EB464A;
+@primary-border:#EB464A;
 @primary-property: none;
 @primary-value: none;
 @primary-color-active:white;
-@primary-bg-active:#FF9008;
-@primary-border-active:#FF9008;
+@primary-bg-active:#EB464A;
+@primary-border-active:#EB464A;
 @primary-property-active: none;
 @primary-value-active: none;
 
@@ -369,8 +369,8 @@ a {
 @info-value-active: none;
 
 @link-color:white;
-@link-bg:#20aeff;
-@link-border:#20aeff;
+@link-bg:#0076FF;
+@link-border:#0076FF;
 @link-property: none;
 @link-value: none;
 @link-color-active:white;
@@ -400,13 +400,13 @@ a {
 @hint-value-active: none;
 
 @disabled-color:#adadad;
-@disabled-bg:#ccc;
-@disabled-border:#ccc;
+@disabled-bg:#838792;
+@disabled-border:#838792;
 @disabled-property: none;
 @disabled-value: none;
 @disabled-color-active:#adadad;
-@disabled-bg-active:#ccc;
-@disabled-border-active:#ccc;
+@disabled-bg-active:#838792;
+@disabled-border-active:#838792;
 @disabled-property-active: none;
 @disabled-value-active: none;
 
@@ -1020,7 +1020,7 @@ a {
   opacity:0;
 	transition-property:opacity;
   transition-duration:@animation-duration;
-  display: none; // 去掉动画
+  // display: none; // 去掉动画
 
   position: absolute;
   overflow: hidden;
@@ -1035,7 +1035,7 @@ a {
 	&.active{
 		visibility:visible;
     opacity:1;
-    display: block; // 去掉动画
+    // display: block; // 去掉动画
 	}
 }
 
@@ -1082,7 +1082,7 @@ a {
 	padding: @6px 0;
 	box-sizing:border-box;
 	color: #1A1A1A;
-  background-color:#f0f1f3;
+  background-color:#fff;
 }
 // Titlebar容器(自动拉伸类型)
 .setTitlebarFlex(){
@@ -3023,7 +3023,7 @@ a {
 	position:relative;
   min-width: @200px;
   &:active{
-    background-color:#f0f1f3;
+    background-color:#fff;
   }
   &.extend + ul{
     display: block;
