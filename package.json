@@ -11,10 +11,9 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
-    "build:after": "node build-after.js",
+    "build": "nwb build-react-component && node build-after.js",
     "clean": "nwb clean-module && nwb clean-demo",
-    "prepublishOnly": "npm run build:after",
+    "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
