@@ -1,8 +1,0 @@
-{
-  "extends": "react-app",
-  "rules": {
-    "no-restricted-globals": 0,
-    "no-useless-constructor": 0,
-    "no-extend-native": 0
-  }
-}
