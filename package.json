@@ -1,6 +1,6 @@
 {
   "name": "seedsui-react",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "seedsui-react React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -14,7 +14,7 @@
     "build": "nwb build-react-component",
     "build:after": "node build-after.js",
     "clean": "nwb clean-module && nwb clean-demo",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build:after",
     "start": "nwb serve-react-demo",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",

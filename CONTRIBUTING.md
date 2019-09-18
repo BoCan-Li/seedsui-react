@@ -4,19 +4,21 @@
 
 ## 打包
 
-> 小提示:打包命令
+> 打包命令
 
 ```
 npm run build
 ```
 
-> 小提示:打包完成后执行此命令
+> 打包完成后: 拷贝src的less和ts到lib中, 因为prepublishOnly配置publish命令时将执行 "npm run build:after", 所以<span style="color:red">可以不用执行此命令</span>
 
 ```
 npm run build:after
 ```
 
 ## 发布
+
+> 发布前会先执行 "npm run build:after"
 
 ```
 npm publish
