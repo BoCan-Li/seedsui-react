@@ -59,11 +59,11 @@ import Chat from 'seedsui-react/lib/Chat';
 [下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/components.less后修改<br>
 引入地址修改如:
 ```less
-@import "styles/top/appearance.less";
+@import "global/top/appearance.less";
 ```
 前缀改为../../../node_modules/seedsui-react/lib/
 ```less
-@import "../../../node_modules/seedsui-react/lib/styles/top/appearance.less";
+@import "../../../node_modules/seedsui-react/lib/global/top/appearance.less";
 ```
 
 #### 三个less汇集 src/components/seedsui/index.less:
