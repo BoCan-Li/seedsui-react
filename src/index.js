@@ -66,6 +66,7 @@ export { default as NumBoxPopPointer } from './NumBoxPopPointer';
 export { default as OnOff } from './OnOff';
 export { default as Page } from './Page';
 export { default as PagePull } from './PagePull'; // 不常用
+export { default as PDFView } from './PDFView'; // 不常用
 export { default as Peg } from './Peg'; // 不常用
 export { default as Picker } from './Picker';
 export { default as PickerCity } from './PickerCity';

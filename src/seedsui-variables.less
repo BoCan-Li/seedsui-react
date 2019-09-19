@@ -719,6 +719,65 @@ a {
 
 
 
+
+
+// PDFView文件预览
+.setPdfContainer(){
+  position: absolute;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #ccc;
+	overflow: hidden;
+}
+.setPdfWrapper(){
+  position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+.setPdfPage(){
+  position: relative;
+  top: 0;
+  left: 0;
+  line-height: 0;
+  margin-top: 10px;
+  transition: all .3s;
+  z-index: 10;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+  border-radius: 14px;
+  .pdf-page-canvas{
+    display: none;
+  }
+  .pdf-page-img{
+    width: 100%;
+  }
+  .pdf-page-load{}
+}
+
+
+
+
+
+
+
 // BI-Clock时钟
 @bi-clock-line-width:@2px;
 @bi-clock-color:@primary-bg;
