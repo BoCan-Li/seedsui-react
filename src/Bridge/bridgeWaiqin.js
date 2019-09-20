@@ -568,6 +568,7 @@ var Bridge = {
   /* -----------------------------------------------------
     拍照选图: 转为与微信的api一致, 原api如下:
     @params {
+      isAI: '1.是 0.不是'
       "operation": 1, // 操作：0：拍照；1，相册； 2：拍照/相册。
       "max": 2,
       "pwidth": 2, // 照片宽度
@@ -659,7 +660,7 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     上传图片
-    @params {dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id'}
+    @params {dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id', isAI: '1.是 0.不是'}
     @return 无
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
@@ -679,6 +680,7 @@ var Bridge = {
       url: params.dir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
+    if (params.isAI) uploadParams.isAI = params.isAI
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
   },
   /* -----------------------------------------------------

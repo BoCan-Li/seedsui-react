@@ -1,5 +1,5 @@
 // PDFView pdf文件预览
-import IScroll from './iscroll-zoom.js'
+// import IScroll from './iscroll-zoom.js'
 import PDFJS from 'pdfjs-dist'
 
 var PDFView = function (container, params) {
@@ -72,11 +72,11 @@ var PDFView = function (container, params) {
   -------------------- */
   // 带缩放的滚动控件
   s.initZoomScroll = function (container) {
-    s.iscroll = new IScroll(container, {
-      zoom: true,
-      scrollX: true,
-      scrollY: true
-    })
+    // s.iscroll = new IScroll(container, {
+    //   zoom: true,
+    //   scrollX: true,
+    //   scrollY: true
+    // })
   }
   // 创建一页
   s.createPage = function (container) {
@@ -160,7 +160,7 @@ var PDFView = function (container, params) {
       if (s.params.onInit) s.params.onInit()
     }
     // 刷新iscroll
-    s.iscroll.refresh()
+    // s.iscroll.refresh()
   }
 
   /* --------------------
