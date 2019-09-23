@@ -675,12 +675,17 @@ var Bridge = {
     // 格式化params
     var uploadParams = {
       filePathList: params.localIds.map((item) => {
+        if (params.isAI) {
+          return {
+            isAI: params.isAI,
+            path: item
+          }
+        }
         return {path: item}
       }),
       url: params.dir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
-    if (params.isAI) uploadParams.isAI = params.isAI
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
   },
   /* -----------------------------------------------------
