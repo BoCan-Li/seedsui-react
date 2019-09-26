@@ -729,31 +729,9 @@ a {
 	left: 0;
 	right: 0;
 	background: #ccc;
-  // overflow: hidden;
-  
-  overflow: scroll;
+  overflow: hidden;
 }
 .setPdfWrapper(){
-  // position: absolute;
-	// z-index: 1;
-	// -webkit-tap-highlight-color: rgba(0,0,0,0);
-	// width: 100%;
-	// -webkit-transform: translateZ(0);
-	// -moz-transform: translateZ(0);
-	// -ms-transform: translateZ(0);
-	// -o-transform: translateZ(0);
-	// transform: translateZ(0);
-	// -webkit-touch-callout: none;
-	// -webkit-user-select: none;
-	// -moz-user-select: none;
-	// -ms-user-select: none;
-	// user-select: none;
-	// -webkit-text-size-adjust: none;
-	// -moz-text-size-adjust: none;
-	// -ms-text-size-adjust: none;
-	// -o-text-size-adjust: none;
-  // text-size-adjust: none;
-  
   padding-bottom: 10px;
 }
 .setPdfPage(){
@@ -772,7 +750,22 @@ a {
   .pdf-page-img{
     width: 100%;
   }
-  .pdf-page-load{}
+  .pdf-page-load{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+  }
+  .pdf-page-error{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+  }
 }
 
 

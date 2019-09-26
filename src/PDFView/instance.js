@@ -1,5 +1,4 @@
 // PDFView pdf文件预览
-// import IScroll from './iscroll-zoom.js'
 import PDFJS from 'pdfjs-dist'
 
 var PDFView = function (container, params) {
@@ -13,13 +12,19 @@ var PDFView = function (container, params) {
     canvasClass: 'pdf-page-canvas',
     imgClass: 'pdf-page-img',
     loadClass: 'pdf-page-load',
+    errorClass: 'pdf-page-error',
+    hideClass: 'hide',
 
     source: '', // pdf地址
-    zoom: true, // 放大缩小
 
+    pageAttr: 'data-page', // 图片页数, 从0开始
+    completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
     /*
     callbacks
     onInit:function(PDFView)
+    onPageLoad:function(PDFView)
+    onLoad:function(PDFView)
+    on
     */
   }
   params = params || {}
@@ -43,9 +48,6 @@ var PDFView = function (container, params) {
 
   // Wrapper
   s.wrapper = null
-
-  // Iscroll
-  s.iscroll = null
   
   // 创建DOM
   s.create = function () {
@@ -70,14 +72,6 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
-  // 带缩放的滚动控件
-  s.initZoomScroll = function (container) {
-    // s.iscroll = new IScroll(container, {
-    //   zoom: true,
-    //   scrollX: true,
-    //   scrollY: true
-    // })
-  }
   // 创建一页
   s.createPage = function (container) {
     // page容器
@@ -95,6 +89,10 @@ var PDFView = function (container, params) {
     var load = document.createElement('div')
     load.setAttribute('class', s.params.loadClass)
     page.appendChild(load)
+    // error
+    var error = document.createElement('div')
+    error.setAttribute('class', s.params.errorClass + ' ' + s.params.hideClass)
+    page.appendChild(error)
     
     // 添加到容器
     if (container) container.appendChild(page)
@@ -120,12 +118,13 @@ var PDFView = function (container, params) {
   }
   // 渲染PDF
   s.total = 0 // 总页数
+  s.completeCount = 0 // 完成页数
   s.renderPDF = function (pdf) {
-    s.loadCount = 0
+    s.completeCount = 0
     if (!s.wrapper) return
 
     s.total = pdf.numPages // 总页数
-    for (let i = 1; i < s.total; i++) {
+    for (let i = 1; i <= s.total; i++) {
       pdf.getPage(i).then((page) => {
         let viewport = page.getViewport(1)
         // 创建页
@@ -144,32 +143,56 @@ var PDFView = function (container, params) {
         renderTask.promise.then(() => {
           let pngbase64 = s.canvasToPng(canvas)
           img.src = pngbase64
+          img.setAttribute(s.params.pageAttr, i - 1)
           img.addEventListener('load', s.onLoad, false)
+          img.addEventListener('error', s.onError, false)
         })
       })
     }
   }
-  // 加载完成事件
-  s.loadCount = 0 // 完成页数
-  s.onLoad = function (e) {
-    // 全部加载完成
-    s.loadCount++
-    if (s.loadCount === s.total - 1) {
-      // Callback onInit
-      s.event = e
-      if (s.params.onInit) s.params.onInit()
+  // 加载完成或失败事件
+  s.onLoad = function (e, isError) {
+    var target = e.target
+    var index = target.getAttribute(s.params.pageAttr)
+    // 显示此页Error层
+    if (isError) {
+      target.setAttribute(s.params.completeAttr, '0') // 0为加载失败
+      var errorTargets = s.wrapper.querySelectorAll('.' + s.params.errorClass)
+      if (errorTargets[index]) {
+        console.log('第' + index + '页加载失败')
+        errorTargets[index].classList.remove(s.params.hideClass)
+      }
+    } else {
+      console.log('第' + index + '页加载完成')
+      target.setAttribute(s.params.completeAttr, '1') // 1为加载成功
     }
-    // 刷新iscroll
-    // s.iscroll.refresh()
+    // 隐藏此页Load层
+    var loadTargets = s.wrapper.querySelectorAll('.' + s.params.loadClass)
+    if (loadTargets[index]) {
+      loadTargets[index].classList.add(s.params.hideClass)
+    }
+    s.event = e
+    // Callback onPageLoad
+    if (s.params.onPageLoad) s.params.onPageLoad(s)
+    // 全部加载完成回调
+    s.completeCount++
+    if (s.completeCount === s.total) {
+      // Callback onLoad
+      if (s.params.onLoad) s.params.onLoad(s)
+    }
   }
-
+  // 加载失败事件
+  s.onError = function (e) {
+    s.onLoad(e, true)
+  }
   /* --------------------
   Init
   -------------------- */
   // 主函数
   s.init = function () {
     s.loadPDF()
-    s.initZoomScroll(s.container)
+    // Callback onInit
+    if (s.params.onInit) s.params.onInit(s)
   }
   // 执行主函数
   s.init()
