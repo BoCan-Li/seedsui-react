@@ -584,7 +584,8 @@ var Bridge = {
       localIds: params.localIds,
       uploadDir: params.dir
     }
-    if (uploadParams.tenantId) params.tenantId = params.tenantId
+    if (params.tenantId) uploadParams.tenantId = params.tenantId
+    if (params.isAI) uploadParams.isAI = params.isAI
     this.invoke('uploadImage', uploadParams);
   },
   // 获取带前缀的图片
