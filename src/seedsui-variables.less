@@ -167,25 +167,29 @@
 	margin:0;
 	padding:0;
 }
-html{
-  overflow: hidden;
-}
 html,body {
 	position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  overflow: hidden;
 }
 // 键盘弹出后防止高度太小而使界面挤在一起
-body{
-  min-height: 440px;
+// body{
+//   min-height: 440px;
+// }
+// @media (max-height: 450px) {
+//   html,body{
+//     position: fixed;
+//   }
+// }
+/*
+// 也可以在页面内使用
+@media (max-height: 576px) {
+  display: none;
 }
-@media (max-height: 450px) {
-  html,body{
-    position: fixed;
-  }
-}
+*/
 body{
 	font-size:@font-size-md;
 	font-family:@font-family;
@@ -204,8 +208,6 @@ body{
   -webkit-overflow-scrolling:touch; // 平滑滚动
   -webkit-transform: translate3d(0,0,0); // 据说可以解决ios弹性短暂白屏的问题
   -webkit-backface-visibility:hidden;
-
-  overflow: hidden;
 }
 
 // 一个像素的线
