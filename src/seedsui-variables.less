@@ -177,12 +177,20 @@ html,body {
   bottom: 0;
   left: 0;
 }
+// 键盘弹出后防止高度太小而使界面挤在一起
+body{
+  min-height: 440px;
+}
+@media (max-height: 450px) {
+  html,body{
+    position: fixed;
+  }
+}
 body{
 	font-size:@font-size-md;
 	font-family:@font-family;
 
 	color:@body-color;
-	background-color:@body-bg;
 	word-break: break-all;
 	word-wrap: break-word;
   
