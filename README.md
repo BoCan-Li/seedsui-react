@@ -154,6 +154,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Player](#player) 视频播放器
 - [Popover](#popover) 箭头弹框
 - [Progress](#progress) 进度条
+- [PDFView](#pdfview) PDF文件预览
 - [Radio](#radio) 单选框
 - [RouteComment](#routecomment) 评价路由
 - [SearchBoard](#searchboard) 搜索面板
@@ -3586,6 +3587,44 @@ import Progress from 'seedsui-react/lib/Progress';
 <Progress percentage={10}/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+## PDFView
+[PDF文件预览](https://unpkg.com/seedsui-react/src/lib/PDFView/PDFView.js)
+### 属性
+```javascript
+<PDFView
+  src={值 string, 默认''}
+
+  {...others}
+/>
+```
+### 示例
+```javascript
+import PDFView from 'seedsui-react/lib/PDFView';
+
+<PDFView src="/demo/assets/test.pdf"/>
+```
+[返回目录](#component)
+
+
+
+
+
+
+
+
+
 
 
 ## Radio

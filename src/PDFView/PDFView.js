@@ -32,9 +32,12 @@ export default class PDFView extends Component {
     this.instance = instance;
   }
   componentDidUpdate (prevProps) {
-    if (!this.instance) return false;
     if (this.props.src && this.props.src !== prevProps.src) {
-      this.instance.update()
+      if (!this.instance) {
+        this.instance()
+      } else {
+        this.instance.update()
+      }
     }
   }
   componentDidMount () {
