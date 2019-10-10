@@ -1,43 +1,42 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container} from '../../src'
-import go from 'gojs';
+import {Page, Header, Titlebar, Container, Vott} from '../../src'
 
 class Demo extends Component {
-  componentDidMount () {
-    // 后面很多用到该变量来初始化diagram
-    let $ = go.GraphObject.make;
-    let diagram = $(go.Diagram, document.getElementById('myDiagramDiv'),
-      {
-        // 'initialContentAlignment': go.Spot.Center,
-        'isEnabled': true,  // 是否可拖拽，默认为是
-        // 'toolManager.mouseWheelBehavior': go.ToolManager.WheelNone,
-        // 'allowLink': false,   
-        // 'allowMove': false,
-        // 'allowRelink': false,  // 由于项目只想展示数据，我禁用了大部分图像交互操作，具体可参看官网API
-        // 'layout': $(go.TreeLayout, {angle: 0, arrangement: go.TreeLayout.ArrangementHorizontal}),      // angle可控制图像展示方向
-        // 'undoManager.isEnabled': true,
-        // Model ChangedEvents get passed up to component users
-        'ChangedSelection': function(e) {
-            console.log(e);
-        }
+  // 创建矩形
+  createRect = (attr) => {
+    var svg = this.createSvg('svg', {
+      'style': 'width:100%;height:100%;',
+      'viewBox': '0 0 100 100'
     });
-    // 创建图
-    // var diagram = new go.Diagram("myDiagramDiv");
-    // 创建节点 节点中元素的排列方式是 Panel.Auto
-    var node = new go.Node(go.Panel.Auto);
-    // 创建图形
-    var shape = new go.Shape();
-    // 定义图形属性
-    shape.figure = "Rectangle";
-    shape.fill = "lightblue";
-    shape.strokeWidth = 2;
-    shape.stroke = 'gray';
-    // 将图形加到节点
-    node.add(shape);
-    // 将节点加到图
-    diagram.add(node);
+    
+    var circle = this.createSvg('rect', {  
+      'x': '1',  
+      'y': '1',  
+      'width': '20',
+      'height': '20', 
+      'style': 'fill:#ff6666;stroke-width:1;stroke:rgb(255,0,0)'
+    });
+    svg.appendChild(circle);
+    return svg;
+  }
+  // 创建svg相关元素  
+  createSvg = (tag, attr) => {
+    if (!document.createElementNS) return // 防止IE8报错  
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', tag)
+    for (var key in attr) {
+      switch (key) {
+        case 'xlink:href': // 文本路径添加属性特有
+          svg.setAttributeNS('http://www.w3.org/1999/xlink', key, attr[key])
+          break
+        default:
+          svg.setAttribute(key, attr[key])
+      }
+    }
+    return svg;
+  }
+  componentDidMount () {
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -45,7 +44,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-          <div id="myDiagramDiv" style={{border: 'solid 1px blue', width: '400px', height: '150px'}}></div>
+          <Vott/>
       </Container>
     </Page>
   }

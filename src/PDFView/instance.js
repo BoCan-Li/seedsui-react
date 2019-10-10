@@ -24,7 +24,6 @@ var PDFView = function (container, params) {
     onInit:function(PDFView)
     onPageLoad:function(PDFView)
     onLoad:function(PDFView)
-    on
     */
   }
   params = params || {}
