@@ -237,14 +237,23 @@ body{
   left: 0;
   z-index:0;
 
-  // 微信中iphoneX、iphoneXs、iphoneXR, 高度减88为实际高度
+  // iphoneX、iphoneXs、iphoneXR, 微信头部高度88, 小程序头部高度87, 减掉头部高度为实际高度
   @media only screen and (device-width: 375px) and (height: 724px) and (-webkit-device-pixel-ratio: 3) {
+    bottom: 34px;
+  }
+  @media only screen and (device-width: 375px) and (height: 725px) and (-webkit-device-pixel-ratio: 3) {
     bottom: 34px;
   }
   @media only screen and (device-width: 414px) and (height: 808px) and (-webkit-device-pixel-ratio: 3) {
     bottom: 34px;
   }
+  @media only screen and (device-width: 414px) and (height: 807px) and (-webkit-device-pixel-ratio: 3) {
+    bottom: 34px;
+  }
   @media only screen and (device-width: 414px) and (height: 808px) and (-webkit-device-pixel-ratio:2) {
+    bottom: 34px;
+  }
+  @media only screen and (device-width: 414px) and (height: 807px) and (-webkit-device-pixel-ratio:2) {
     bottom: 34px;
   }
 }
