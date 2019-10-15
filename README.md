@@ -4619,7 +4619,7 @@ drawBlue = (e) => {
     polygon: polygon,
     onSuccess: () => {
       // 判断多边形是否合法
-      if (GeoUtil.isRegularPolygon(
+      if (GeoUtil.isPolygon(
           polygon.so.map(point => {
             return [point.lat, point.lng]
           })

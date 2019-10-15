@@ -145,7 +145,7 @@ var GeoUtil = {};
     * @param {Polygon} polygon
     * @returns {Boolean}
     */
-  GeoUtil.isRegularPolygon = function (polygon) {
+  GeoUtil.isPolygon = function (polygon) {
     var lines = GeoUtil.polygonToLines(polygon, true)
     for (var i = 0; i < lines.length; i++) {
       for (var j = i + 1; j < lines.length; j++) {
@@ -172,11 +172,6 @@ var GeoUtil = {};
     }
     return false
   }
-  /* -----------------------------------------------------
-    获得两个点之间的距离
-    @params {point1: {longitude: '', latitude: ''}, point2: {longitude: '', latitude: ''}, fail: fn
-    @return km
-  ----------------------------------------------------- */
   /**
     * 获得两个点之间的距离
     * @param {Point} p0
@@ -199,6 +194,35 @@ var GeoUtil = {};
     s = s * 6378.137 // EARTH_RADIUS;
     s = Math.round(s * 10000) / 10000
     return s
+  }
+  /**
+    * 多边形坐标点按逆时针排序, 从右上角开始到右下角结束
+    * @param {Polygon} points
+    * @return {Polygon} 错误返回-1
+    * 参考:https://cs.stackexchange.com/questions/52606/sort-a-list-of-points-to-form-a-non-self-intersecting-polygon
+    */
+   GeoUtil.sortPoints = function (points) {
+    points = points.splice(0)
+    var p0 = {}
+    p0[1] = Math.min.apply(null, points.map(p => p[1]))
+    p0[0] = Math.max.apply(null,  points.filter(p => p[1] == p0[1]).map(p => p[0]))
+    points.sort((a, b) => angleCompare(p0, a, b))
+    return points
+  }
+  function angleCompare(p0, a, b) {
+    var left = isLeft(p0, a, b)
+    if (left == 0) return distCompare(p0, a, b)
+    return left
+  }
+
+  function isLeft(p0, a, b) {
+    return (a[0] - p0[0]) * (b[1] - p0[1]) - (b[0] - p0[0]) * (a[1] - p0[1])
+  }
+
+  function distCompare(p0, a, b) {
+    var distA = (p0[0] - a[0]) * (p0[0] - a[0]) + (p0[1] - a[1]) * (p0[1] - a[1])
+    var distB = (p0[0] - b[0]) * (p0[0] - b[0]) + (p0[1] - b[1]) * (p0[1] - b[1])
+    return distA - distB
   }
 })();
 
