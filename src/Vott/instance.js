@@ -9,6 +9,18 @@ var Vott = function (container, params) {
     svgClass: 'vott-svg',
     shapeClass: 'vott-shape',
     shapeActiveClass: 'active',
+
+    // 编辑圆圈
+    xMinYMinClass: 'vott-shape-xMinYMin', // 左上
+    xMinYMidClass: 'vott-shape-xMinYMid', // 左中
+    xMinYMaxClass: 'vott-shape-xMinYMax', // 左下
+
+    xMidYMinClass: 'vott-shape-xMidYMin', // 中上
+    xMidYMaxClass: 'vott-shape-xMidYMax', // 中下
+
+    xMaxYMinClass: 'vott-shape-xMaxYMin', // 右上
+    xMaxYMidClass: 'vott-shape-xMaxYMid', // 右中
+    xMaxYMaxClass: 'vott-shape-xMaxYMax' // 右下
     /*
     callbacks
     onInit:function(s)
@@ -21,7 +33,7 @@ var Vott = function (container, params) {
       params[def] = defaults[def]
     }
   }
-  // Slider
+  // Vott
   var s = this
 
   // Params
@@ -34,18 +46,7 @@ var Vott = function (container, params) {
     return
   }
 
-  // Svg
-  s.svg = null
-
-  // 更新DOM
-  s.update = function () {
-    if (!s.container) return
-  }
-  s.update()
-  /* --------------------
-  Methods
-  -------------------- */
-  // 更新svg忏悔
+  // 更新svg属性
   s.updateSvg =  function (svg, attr) {
     if (!attr) return
     for (var key in attr) {
@@ -65,24 +66,51 @@ var Vott = function (container, params) {
     s.updateSvg(svg, attr)
     return svg
   }
-  
-  // 创建矩形
+
+  // Svg
+  s.svg = s.createSvg('svg', {
+    'class': s.params.svgClass,
+    // 'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem, 设置此值让svg内值同px相同
+    preserveAspectRatio: 'none' // 长宽比, none为拉伸到和svg画布相同尺寸, 设置此值让svg内值同px相同
+  })
+
+  // 更新DOM
+  s.update = function () {
+    if (!s.container) return
+    s.container.innerHTML = ''
+    s.container.appendChild(s.svg)
+  }
+  s.update()
+
+  /* --------------------
+  Methods
+  -------------------- */
+  // 创建形状
   s.createShape = function (svg, shapeName, attr) {
     // 创建svg容器
     if (!svg) {
-      svg = this.createSvg('svg', {
+      svg = s.createSvg('svg', {
         'class': s.params.svgClass,
-        'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem
+        // 'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem, 设置此值让svg内值同px相同
+        preserveAspectRatio: 'none' // 长宽比, none为拉伸到和svg画布相同尺寸, 设置此值让svg内值同px相同
       })
     }
     // 创建形状
-    var shape = this.createSvg(shapeName || 'rect', attr || {  
+    var shape = s.createSvg(shapeName || 'rect', attr || {  
       'x': 0,
       'y': 0,
       'width': 20,
       'height': 20, 
       'class': s.params.shapeClass + ' ' + s.params.shapeActiveClass
     })
+    svg.shape = shape
+    svg.appendChild(shape)
+
+    return svg
+  }
+  // 创建圆形
+  s.createCircle = function (svg, attr) {
+    var shape = s.createSvg('circle', attr)
     svg.shape = shape
     svg.appendChild(shape)
 
@@ -119,13 +147,42 @@ var Vott = function (container, params) {
       'y': startY - h
     })
   }
+  // 编辑形状
+  s.editShape = function (target) {
+    var startX = Number(target.getAttribute('x') || 0)
+    var startY = Number(target.getAttribute('y') || 0)
+    var width = Number(target.getAttribute('width') || 0)
+    var height = Number(target.getAttribute('height') || 0)
+    // 计算8个点的位置
+    var points = {
+      xMinYMin: [startX, startY], // 左上
+      xMinYMid: [startX, startY + height / 2], // 左中
+      xMinYMax: [startX, startY + height], // 左下
+
+      xMidYMin: [startX + width / 2, startY], // 中上
+      xMidYMax: [startX + width / 2, startY + height], // 中下
+
+      xMaxYMin: [startX + width, startY], // 右上
+      xMaxYMid: [startX + width, startY + height / 2], // 右中
+      xMaxYMax: [startX + width, startY + height] // 右下
+    }
+    for (var pointName in points) {
+      var point = points[pointName]
+      s.createCircle(s.svg, {
+        'cx': point[0],
+        'cy': point[1],
+        'r': 5,
+        'class': s.params[pointName + 'Class']
+      })
+    }
+  }
   /* --------------------
   Touch Events
   -------------------- */
   // 是否支持触摸事件
   s.isSupportTouch = 'ontouchstart' in window
   s.events = function (detach) {
-    var touchTarget = s.container
+    var touchTarget = s.svg
     var action = detach ? 'removeEventListener' : 'addEventListener'
     // touch兼容pc事件
     if (s.isSupportTouch) {
@@ -155,7 +212,7 @@ var Vott = function (container, params) {
   // Touch信息
   s.touches = {
     target: null, // 操作的对象
-    type: 'new', // 类型: 创建 'new', 移动 'move', 缩放 'size'
+    type: 'new', // 类型: 新增形状 'new', 已有形状 'old'
     startX: 0,
     startY: 0,
     currentX: 0,
@@ -177,14 +234,12 @@ var Vott = function (container, params) {
       s.touches.target.classList.remove(s.params.shapeActiveClass)
     }
 
-    if (e.target.classList.contains(s.params.shapeClass)) { // 点击形状
+    if (e.target.classList.contains(s.params.shapeClass)) { // 点击形状, 要么编辑, 要么移动
       e.target.classList.add(s.params.shapeActiveClass)
       s.touches.target = e.target
-      s.svg = e.target.parentNode
 
-      s.touches.type = 'move'
-    } else { // 点击svg或者空白
-      if (e.target.classList.contains(s.params.svgClass)) s.svg = e.target
+      s.touches.type = 'old'
+    } else if (e.target.classList.contains(s.params.svgClass)) { // 点击svg容器, 新增形状
       s.svg = s.createShape(s.svg, 'rect', {  
         'x': s.touches.startX,  
         'y': s.touches.startY,  
@@ -206,11 +261,10 @@ var Vott = function (container, params) {
     s.touches.diffX = s.touches.startX - s.touches.currentX
     s.touches.diffY = s.touches.startY - s.touches.currentY
     
-    // 缩放尺寸
-    if (s.touches.type === 'new') {
+    if (s.touches.type === 'new') { // 新增形状改大小
       s.scaleShape(s.touches.target, s.touches.startX, s.touches.startY, s.touches.diffX, s.touches.diffY)
-    } else if (s.touches.type === 'move') {
-      // 记录开始移动位置
+    } else if (s.touches.type === 'old') { // 已有形状拖动位置
+      // 记录开始移动位置, 使用原始值减去差值修改x和y属性, 防止阶减的情况
       if (!s.touches.moveStartX) s.touches.moveStartX = s.touches.target.getAttribute('x')
       if (!s.touches.moveStartY) s.touches.moveStartY = s.touches.target.getAttribute('y')
       s.moveShape(s.touches.target, s.touches.moveStartX, s.touches.moveStartY, s.touches.diffX, s.touches.diffY)
@@ -225,10 +279,17 @@ var Vott = function (container, params) {
     if (s.touches.moveStartX) s.touches.moveStartX = null
     if (s.touches.moveStartY) s.touches.moveStartY = null
 
-    // 单击事件
-    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
-      s.touches.target.parentNode.removeChild(s.touches.target)
-      s.touches.target = null
+    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 单击
+      if (s.touches.type === 'new') { // 如果点击新增的形状, 则删除此形状
+        s.touches.target.parentNode.removeChild(s.touches.target)
+        s.touches.target = null
+      } else if (s.touches.type === 'old') { // 如果是移动状态, 则为编辑
+        s.editShape(s.touches.target)
+      }
+    } else { // 拖动
+      if (s.touches.type === 'new') { // 如果拖动新增的形状, 完成显示编辑
+        s.editShape(s.touches.target)
+      }
     }
 
     s.moveEnd = true
