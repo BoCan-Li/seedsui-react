@@ -5,8 +5,11 @@ import BScroll from 'better-scroll';
 
 export default class PDFView extends Component {
   static propTypes = {
-    src: PropTypes.string,
-    stream: PropTypes.string
+    pictures: PropTypes.array, // 图片地址
+    src: PropTypes.string, // pdf地址
+    stream: PropTypes.string, // pdf流
+    errorHTML: PropTypes.string, // 加载错误时显示的信息
+    loadHTML: PropTypes.string // 加载时显示的信息
   }
   static defaultProps = {
   }
@@ -14,11 +17,21 @@ export default class PDFView extends Component {
     super(props);
   }
   instance = () => {
-    if (!this.props.src && !this.props.stream) return
+    const {
+      src,
+      stream,
+      pictures,
+      errorHTML,
+      loadHTML
+    } = this.props;
+    if (!src && !stream && !pictures) return
     let bscroll = null;
     const instance = new Instance(this.$el, {
-      src: this.props.src,
-      stream: this.props.stream,
+      src,
+      stream,
+      pictures,
+      errorHTML,
+      loadHTML,
       onLoad: () => {
         bscroll = new BScroll('.pdf-container', {
           scrollX: true,
@@ -34,11 +47,24 @@ export default class PDFView extends Component {
     this.instance = instance;
   }
   componentDidUpdate (prevProps) {
-    if ((this.props.src && this.props.src !== prevProps.src) || (this.props.stream && this.props.stream !== prevProps.stream)) {
+    const {
+      src,
+      stream,
+      pictures,
+      errorHTML,
+      loadHTML
+    } = this.props;
+    if ((src && src !== prevProps.src) || (stream && stream !== prevProps.stream) || (pictures && pictures !== prevProps.pictures)) {
       if (!this.instance) {
         this.instance()
       } else {
-        this.instance.update()
+        this.instance.update({
+          src,
+          stream,
+          pictures,
+          errorHTML,
+          loadHTML
+        })
       }
     }
   }
@@ -49,9 +75,12 @@ export default class PDFView extends Component {
     const {
       src,
       stream,
+      pictures,
+      errorHTML,
+      loadHTML,
       ...others
     } = this.props;
-    if (!src && !stream) {
+    if (!src && !stream && !pictures) {
       return null;
     }
     return (

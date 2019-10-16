@@ -1,5 +1,4 @@
 // PDFView pdf文件预览 (require pdfjs-dist)
-import PDFJS from 'pdfjs-dist'
 
 var PDFView = function (container, params) {
   /* --------------------
@@ -12,9 +11,12 @@ var PDFView = function (container, params) {
     canvasClass: 'pdf-page-canvas',
     imgClass: 'pdf-page-img',
     loadClass: 'pdf-page-load',
+    loadHTML: '加载中',
     errorClass: 'pdf-page-error',
+    errorHTML: '文件加载失败',
     hideClass: 'hide',
 
+    pictures: '', // 图片地址
     src: '', // pdf地址
     stream: '', // 文件流
 
@@ -59,8 +61,14 @@ var PDFView = function (container, params) {
 
     s.container.appendChild(s.wrapper)
   }
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+  }
   // 更新DOM
-  s.update = function () {
+  s.update = function (params) {
     if (!s.container) return
 
     s.wrapper = s.container.querySelector('.' + s.params.wrapperClass) || null
@@ -68,13 +76,20 @@ var PDFView = function (container, params) {
     if (!s.wrapper) {
       s.create()
     }
+
+    // 重新加载
+    if (s.init) {
+      s.wrapper.innerHTML = ''
+      s.updateParams(params)
+      s.init()
+    }
   }
   s.update()
   /* --------------------
   Methods
   -------------------- */
   // 创建一页
-  s.createPage = function (container) {
+  s.createPage = function () {
     // page容器
     var page = document.createElement('div')
     page.setAttribute('class', s.params.pageClass)
@@ -89,14 +104,16 @@ var PDFView = function (container, params) {
     // load
     var load = document.createElement('div')
     load.setAttribute('class', s.params.loadClass)
+    load.innerHTML = s.params.loadHTML
     page.appendChild(load)
     // error
     var error = document.createElement('div')
     error.setAttribute('class', s.params.errorClass + ' ' + s.params.hideClass)
+    error.innerHTML = s.params.errorHTML
     page.appendChild(error)
     
     // 添加到容器
-    if (container) container.appendChild(page)
+    if (s.wrapper) s.wrapper.appendChild(page)
 
     return page
   }
@@ -106,33 +123,53 @@ var PDFView = function (container, params) {
     var dataURL = canvas.toDataURL('image/png', 1.0);
     return dataURL
   }
-  // 加载PDF
-  s.loadPDF = function () {
+  // 加载
+  s.load = function () {
     if (!s.wrapper) {
       console.warn('SeedsUI Warn: wrapper为空')
       return
     }
+    if (s.params.pictures && s.params.pictures.length) { // Img加载
+      s.loadImg()
+    } else { // PDF加载
+      s.loadPDF()
+    }
+  }
+  // 加载PDF
+  s.loadPDF = function () {
     try {
-      var pdfData = null
-      if (s.params.stream) { // 文件流需要转成ArrayBuffer
-        var rawLength = s.params.stream.length
-        var array = new Uint8Array(new ArrayBuffer(rawLength))
-        for(i = 0; i < rawLength; i++) {
-          array[i] = PDFData.charCodeAt(i) & 0xff
-        }
-        pdfData = array
-      }
-      PDFJS.getDocument(pdfData || s.params.src).then(function (pdf) {
-        s.renderPDF(pdf)
+      import('pdfjs-dist').then((PDFJS) => {
+        PDFJS.getDocument(s.params.stream || s.params.src).then(function (pdf) {
+          s.renderPDF(pdf)
+        })
       })
     } catch (error) {
-      // Callback onLoadError
-      if (s.params.onLoadError) s.params.onLoadError(error)
+      console.log(error)
+      s.wrapper.innerHTML = s.params.errorHTML
+    }
+  }
+  // 加载图片
+  s.loadImg = function () {
+    var pictures = s.params.pictures
+    if (!pictures || !pictures.length) return
+    if (!pictures || !pictures.length) {
+      s.params.onLoadError()
+      return
+    }
+    s.total = pictures.length
+    s.completeCount = 0
+    for (var [i, picture] of pictures.entries()) {
+      // 创建页
+      let pageDOM = s.createPage()
+      let img = pageDOM.querySelector('img')
+      // 设置图片路径
+      img.src = picture
+      img.setAttribute(s.params.pageAttr, i)
+      img.addEventListener('load', s.onLoad, false)
+      img.addEventListener('error', s.onError, false)
     }
   }
   // 渲染PDF
-  s.total = 0 // 总页数
-  s.completeCount = 0 // 完成页数
   s.renderPDF = function (pdf) {
     s.completeCount = 0
     if (!s.wrapper) return
@@ -142,7 +179,7 @@ var PDFView = function (container, params) {
       pdf.getPage(i).then((page) => {
         let viewport = page.getViewport(1)
         // 创建页
-        let pageDOM = s.createPage(s.wrapper)
+        let pageDOM = s.createPage()
         let canvas = pageDOM.querySelector('canvas')
         let img = pageDOM.querySelector('img')
 
@@ -150,9 +187,9 @@ var PDFView = function (container, params) {
         canvas.height = viewport.height
         canvas.width = viewport.width
         let renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
+          canvasContext: context,
+          viewport: viewport
+        }
         let renderTask = page.render(renderContext)
         renderTask.promise.then(() => {
           let pngbase64 = s.canvasToPng(canvas)
@@ -165,20 +202,23 @@ var PDFView = function (container, params) {
     }
   }
   // 加载完成或失败事件
+  s.total = 0 // 总页数
+  s.completeCount = 0 // 完成页数
   s.onLoad = function (e, isError) {
     var target = e.target
     var index = target.getAttribute(s.params.pageAttr)
+    var errorTarget = target.parentNode.querySelector('.' + s.params.errorClass)
     // 显示此页Error层
     if (isError) {
+      console.log('第' + index + '页加载失败')
       target.setAttribute(s.params.completeAttr, '0') // 0为加载失败
-      var errorTargets = s.wrapper.querySelectorAll('.' + s.params.errorClass)
-      if (errorTargets[index]) {
-        console.log('第' + index + '页加载失败')
-        errorTargets[index].classList.remove(s.params.hideClass)
-      }
+      target.classList.add('hide')
+      if (errorTarget) errorTarget.classList.remove(s.params.hideClass)
     } else {
       console.log('第' + index + '页加载完成')
       target.setAttribute(s.params.completeAttr, '1') // 1为加载成功
+      target.classList.remove('hide')
+      if (errorTarget) errorTarget.classList.add('hide')
     }
     // 隐藏此页Load层
     var loadTargets = s.wrapper.querySelectorAll('.' + s.params.loadClass)
@@ -204,7 +244,7 @@ var PDFView = function (container, params) {
   -------------------- */
   // 主函数
   s.init = function () {
-    s.loadPDF()
+    s.load()
     // Callback onInit
     if (s.params.onInit) s.params.onInit(s)
   }
