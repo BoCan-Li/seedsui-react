@@ -5,7 +5,8 @@ import BScroll from 'better-scroll';
 
 export default class PDFView extends Component {
   static propTypes = {
-    src: PropTypes.string
+    src: PropTypes.string,
+    stream: PropTypes.string
   }
   static defaultProps = {
   }
@@ -13,10 +14,11 @@ export default class PDFView extends Component {
     super(props);
   }
   instance = () => {
-    if (!this.props.src) return
+    if (!this.props.src && !this.props.stream) return
     let bscroll = null;
     const instance = new Instance(this.$el, {
-      source: this.props.src,
+      src: this.props.src,
+      stream: this.props.stream,
       onLoad: () => {
         bscroll = new BScroll('.pdf-container', {
           scrollX: true,
@@ -32,7 +34,7 @@ export default class PDFView extends Component {
     this.instance = instance;
   }
   componentDidUpdate (prevProps) {
-    if (this.props.src && this.props.src !== prevProps.src) {
+    if ((this.props.src && this.props.src !== prevProps.src) || (this.props.stream && this.props.stream !== prevProps.stream)) {
       if (!this.instance) {
         this.instance()
       } else {
@@ -46,9 +48,10 @@ export default class PDFView extends Component {
   render() {
     const {
       src,
+      stream,
       ...others
     } = this.props;
-    if (!src) {
+    if (!src && !stream) {
       return null;
     }
     return (

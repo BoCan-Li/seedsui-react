@@ -1,4 +1,4 @@
-// PDFView pdf文件预览
+// PDFView pdf文件预览 (require pdfjs-dist)
 import PDFJS from 'pdfjs-dist'
 
 var PDFView = function (container, params) {
@@ -15,7 +15,8 @@ var PDFView = function (container, params) {
     errorClass: 'pdf-page-error',
     hideClass: 'hide',
 
-    source: '', // pdf地址
+    src: '', // pdf地址
+    stream: '', // 文件流
 
     pageAttr: 'data-page', // 图片页数, 从0开始
     completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
@@ -24,6 +25,7 @@ var PDFView = function (container, params) {
     onInit:function(PDFView)
     onPageLoad:function(PDFView)
     onLoad:function(PDFView)
+    onLoadError:function(error)
     */
   }
   params = params || {}
@@ -110,10 +112,23 @@ var PDFView = function (container, params) {
       console.warn('SeedsUI Warn: wrapper为空')
       return
     }
-    if (!s.params.source) return
-    PDFJS.getDocument(s.params.source).then(function (pdf) {
-      s.renderPDF(pdf)
-    })
+    try {
+      var pdfData = null
+      if (s.params.stream) { // 文件流需要转成ArrayBuffer
+        var rawLength = s.params.stream.length
+        var array = new Uint8Array(new ArrayBuffer(rawLength))
+        for(i = 0; i < rawLength; i++) {
+          array[i] = PDFData.charCodeAt(i) & 0xff
+        }
+        pdfData = array
+      }
+      PDFJS.getDocument(pdfData || s.params.src).then(function (pdf) {
+        s.renderPDF(pdf)
+      })
+    } catch (error) {
+      // Callback onLoadError
+      if (s.params.onLoadError) s.params.onLoadError(error)
+    }
   }
   // 渲染PDF
   s.total = 0 // 总页数

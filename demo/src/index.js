@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Vott} from '../../src'
+import {Page, Header, Titlebar, Container, Vott, PDFView} from '../../src'
 
 class Demo extends Component {
   componentDidMount () {
@@ -12,6 +12,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
+          <PDFView src="/demo/assets/test.pdf"/>
           <Vott src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
       </Container>
     </Page>
