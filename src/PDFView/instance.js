@@ -88,6 +88,26 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
+  // 互斥显示一页中的指定元素: canvas、img、load、error
+  s.showPageElement = function (pageDOM, elementName) {
+    var elements = {}
+    // 隐藏canvas
+    elements.canvas = pageDOM.querySelector('.' + s.params.canvasClass)
+    elements.canvas.classList.add(s.params.hideClass)
+    // 隐藏img
+    elements.img = pageDOM.querySelector('.' + s.params.imgClass)
+    elements.img.classList.add(s.params.hideClass)
+    // 隐藏load
+    elements.load = pageDOM.querySelector('.' + s.params.loadClass)
+    elements.load.classList.add(s.params.hideClass)
+    elements.load.innerHTML = s.params.loadHTML
+    // 隐藏error
+    elements.error = pageDOM.querySelector('.' + s.params.errorClass)
+    elements.error.classList.add(s.params.hideClass)
+    elements.error.innerHTML = s.params.errorHTML
+    // 显示指定的元素
+    if (elements[elementName]) elements[elementName].classList.remove(s.params.hideClass)
+  }
   // 创建一页
   s.createPage = function () {
     // page容器
@@ -141,11 +161,16 @@ var PDFView = function (container, params) {
       import('pdfjs-dist').then((PDFJS) => {
         PDFJS.getDocument(s.params.stream || s.params.src).then(function (pdf) {
           s.renderPDF(pdf)
+        }).catch(function (error) {
+          console.log(error)
+          var pageDOM = s.createPage()
+          s.showPageElement(pageDOM, 'error')
         })
       })
     } catch (error) {
       console.log(error)
-      s.wrapper.innerHTML = s.params.errorHTML
+      var pageDOM = s.createPage()
+      s.showPageElement(pageDOM, 'error')
     }
   }
   // 加载图片
@@ -160,8 +185,8 @@ var PDFView = function (container, params) {
     s.completeCount = 0
     for (var [i, picture] of pictures.entries()) {
       // 创建页
-      let pageDOM = s.createPage()
-      let img = pageDOM.querySelector('img')
+      var pageDOM = s.createPage()
+      var img = pageDOM.querySelector('img')
       // 设置图片路径
       img.src = picture
       img.setAttribute(s.params.pageAttr, i)
@@ -207,23 +232,15 @@ var PDFView = function (container, params) {
   s.onLoad = function (e, isError) {
     var target = e.target
     var index = target.getAttribute(s.params.pageAttr)
-    var errorTarget = target.parentNode.querySelector('.' + s.params.errorClass)
     // 显示此页Error层
     if (isError) {
       console.log('第' + index + '页加载失败')
       target.setAttribute(s.params.completeAttr, '0') // 0为加载失败
-      target.classList.add('hide')
-      if (errorTarget) errorTarget.classList.remove(s.params.hideClass)
+      s.showPageElement(target.parentNode, 'error')
     } else {
       console.log('第' + index + '页加载完成')
       target.setAttribute(s.params.completeAttr, '1') // 1为加载成功
-      target.classList.remove('hide')
-      if (errorTarget) errorTarget.classList.add('hide')
-    }
-    // 隐藏此页Load层
-    var loadTargets = s.wrapper.querySelectorAll('.' + s.params.loadClass)
-    if (loadTargets[index]) {
-      loadTargets[index].classList.add(s.params.hideClass)
+      s.showPageElement(target.parentNode, 'img')
     }
     s.event = e
     // Callback onPageLoad

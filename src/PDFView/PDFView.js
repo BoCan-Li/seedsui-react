@@ -12,6 +12,8 @@ export default class PDFView extends Component {
     loadHTML: PropTypes.string // 加载时显示的信息
   }
   static defaultProps = {
+    loadHTML: '加载中',
+    errorHTML: '文件加载失败'
   }
   constructor(props) {
     super(props);
