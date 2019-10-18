@@ -85,7 +85,7 @@ export default class Titlebar extends Component {
     // 设置显示标题
     let title = Device.getUrlParameter('titlebar', location.search);
     if (showUrlTitle && title) {
-      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{decodeURIComponent(title)}</h1>;
+      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{decodeURIComponent(decodeURIComponent(title))}</h1>;
     } else if (typeof caption === 'string') {
       caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>
     }

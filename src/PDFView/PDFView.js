@@ -6,10 +6,10 @@ import BScroll from 'better-scroll';
 export default class PDFView extends Component {
   static propTypes = {
     pictures: PropTypes.array, // 图片地址
-    src: PropTypes.string, // pdf地址
-    stream: PropTypes.string, // pdf流
+    src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     errorHTML: PropTypes.string, // 加载错误时显示的信息
-    loadHTML: PropTypes.string // 加载时显示的信息
+    loadHTML: PropTypes.string, // 加载时显示的信息
+    options: PropTypes.object // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true
   }
   static defaultProps = {
     loadHTML: '加载中',
@@ -21,19 +21,19 @@ export default class PDFView extends Component {
   instance = () => {
     const {
       src,
-      stream,
-      pictures,
-      errorHTML,
-      loadHTML
-    } = this.props;
-    if (!src && !stream && !pictures) return
-    let bscroll = null;
-    const instance = new Instance(this.$el, {
-      src,
-      stream,
       pictures,
       errorHTML,
       loadHTML,
+      options
+    } = this.props;
+    if (!src && !pictures) return
+    let bscroll = null;
+    const instance = new Instance(this.$el, {
+      src,
+      pictures,
+      errorHTML,
+      loadHTML,
+      options,
       onLoad: () => {
         bscroll = new BScroll('.pdf-container', {
           scrollX: true,
@@ -51,21 +51,21 @@ export default class PDFView extends Component {
   componentDidUpdate (prevProps) {
     const {
       src,
-      stream,
       pictures,
       errorHTML,
-      loadHTML
+      loadHTML,
+      options
     } = this.props;
-    if ((src && src !== prevProps.src) || (stream && stream !== prevProps.stream) || (pictures && pictures !== prevProps.pictures)) {
+    if ((src && src !== prevProps.src) || (pictures && pictures !== prevProps.pictures)) {
       if (!this.instance) {
         this.instance()
       } else {
         this.instance.update({
           src,
-          stream,
           pictures,
           errorHTML,
-          loadHTML
+          loadHTML,
+          options
         })
       }
     }
@@ -76,13 +76,13 @@ export default class PDFView extends Component {
   render() {
     const {
       src,
-      stream,
       pictures,
       errorHTML,
       loadHTML,
+      options,
       ...others
     } = this.props;
-    if (!src && !stream && !pictures) {
+    if (!src && !pictures) {
       return null;
     }
     return (
