@@ -284,6 +284,8 @@ var Vott = function (container, params) {
       touchTarget[action]('mousemove', s.onTouchMove, false)
       touchTarget[action]('mouseup', s.onTouchEnd, false)
     }
+    // 用于touch事件时只能取绝对位置
+    s.stageInfo = touchTarget.getBoundingClientRect()
   }
   // attach、dettach事件
   s.attach = function (event) {
@@ -310,8 +312,8 @@ var Vott = function (container, params) {
   }
   s.onTouchStart = function (e) {
     s.container.addEventListener('touchmove', preventDefault, false)
-    s.touches.startX = e.offsetX || e.touches[0].clientX
-    s.touches.startY = e.offsetY || e.touches[0].clientY
+    s.touches.startX = e.offsetX || e.touches[0].clientX - s.stageInfo.left
+    s.touches.startY = e.offsetY || e.touches[0].clientY - s.stageInfo.top
 
     // 允许拖动
     s.moveEnd = false
@@ -342,8 +344,8 @@ var Vott = function (container, params) {
   s.onTouchMove = function (e) {
     if (s.moveEnd) return
     if (!s.touches.target) return
-    s.touches.currentX = e.offsetX || e.touches[0].clientX
-    s.touches.currentY = e.offsetY || e.touches[0].clientY
+    s.touches.currentX = e.offsetX || e.touches[0].clientX - s.stageInfo.left
+    s.touches.currentY = e.offsetY || e.touches[0].clientY - s.stageInfo.top
     s.touches.diffX = s.touches.startX - s.touches.currentX
     s.touches.diffY = s.touches.startY - s.touches.currentY
     
@@ -361,8 +363,8 @@ var Vott = function (container, params) {
   }
   s.onTouchEnd = function (e) {
     if (s.params.stopPropagation) e.stopPropagation() // 此属性与FastClick冲突
-    s.touches.endX = e.offsetX || e.changedTouches[0].clientX
-    s.touches.endY = e.offsetY || e.changedTouches[0].clientY
+    s.touches.endX = e.offsetX || e.changedTouches[0].clientX - s.stageInfo.left
+    s.touches.endY = e.offsetY || e.changedTouches[0].clientY - s.stageInfo.top
 
     // 清空记录的移动位置
     if (s.touches.moveDiffX) s.touches.moveDiffX = null
