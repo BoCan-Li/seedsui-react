@@ -457,8 +457,14 @@ var Vott = function (container, params) {
     var shapes = s.svg.querySelectorAll('.' + s.params.shapeClass)
     var selected = []
     for (var shape of shapes) {
+      // 还原比例
+      var polygon = s.toPolygon(shape.getAttribute('points')).map(function (points) {
+        return points.map(function (point) {
+          return point / s.scale
+        })
+      })
       selected.push({
-        polygon: s.toPolygon(shape.getAttribute('points')),
+        polygon: polygon,
         css: shape.getAttribute('style') || '',
         class: shape.getAttribute('class') || '',
         id: shape.id || ''
