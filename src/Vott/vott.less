@@ -2,23 +2,23 @@
   .setVottContainer();
 }
 .vott-svg{
-  width:100%;
-  height:100%;
-  background-color: white;
+  .setVottSvg();
 }
 .vott-shape{
-  fill: #12d13b;
-  stroke-width:1;
+  fill: transparent;
+  stroke-width:2;
   stroke:#089927;
   &.active{
-    fill:#ff6666;
-    stroke-width:1;
-    stroke:rgb(255,0,0)
+    stroke-width:3;
+    stroke-dasharray: 10,10;
   }
 }
 .vott-shape-scaler{
-  stroke-width:1;
-  stroke: #000000;
+  stroke-width: 1;
+  stroke: #666;
+  fill: rgba(255,255,255,0.7);
+  stroke-dasharray: 1,1;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
   // 左上
   &.xMinYMin{
     cursor: nw-resize;
@@ -51,4 +51,21 @@
   &.xMaxYMax{
     cursor: se-resize;
   }
+}
+// 加载中
+.vott-loading{
+	.setVottLoading();
+}
+.vott-loading-icon{
+	.setVottLoadingIcon();
+}
+// 加载错误
+.vott-error{
+	.setVottError();
+}
+.vott-error-icon{
+	.setVottErrorIcon();
+}
+.vott-error-caption{
+	.setVottErrorCaption();
 }

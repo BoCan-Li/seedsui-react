@@ -3204,10 +3204,79 @@ a {
 
 // vott图片标注系统
 .setVottContainer(){
-  width: 100%;
-  height: 300px;
+  position: relative;
+  overflow: hidden;
+  background-color: #F2F2F2;
 }
+.setVottSvg(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  &.active{
+    display: block;
+  }
+}
+// 加载中
+@-webkit-keyframes rotateIn {
+  0% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(0);
+  }
 
+  100% {
+    -webkit-transform-origin: center center;
+    -webkit-transform: rotate(360deg);
+  }
+}
+.setVottLoading(){
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  &.active{
+    display: block;
+  }
+}
+.setVottLoadingIcon(){
+  background-image: url(//res.waiqin365.com/d/seedsui/icon/loading.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: @24px;
+  height: @24px;
+  animation: rotateIn 1s linear infinite;
+}
+// 加载错误
+.setVottError(){
+  .flex;
+  .flex-middle;
+  .flex-center;
+  .flex-vertical;
+  height: 100%;
+  display: none;
+  &.active{
+    .flex;
+  }
+}
+.setVottErrorIcon(){
+  font-family: iconfont;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+  &:extend(.icon-pic-error all);
+  color: #D8D8D8;
+}
+.setVottErrorCaption(){
+  margin-top: 4px;
+  &:extend(.font-size-sm);
+  color: #D8D8D8;
+}
 
 
 // Shape

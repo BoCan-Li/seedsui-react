@@ -6,10 +6,20 @@ var Vott = function (container, params) {
   Model
   -------------------- */
   var defaults = {
+    src: '',
+
+    loadingClass: 'imgmark-loading',
+    errorClass: 'imgmark-error',
+    activeClass: 'active',
+
     containerClass: 'vott-container',
+
     svgClass: 'vott-svg',
+
     shapeClass: 'vott-shape',
     shapeActiveClass: 'active',
+    shapeCss: '',
+    shapeActiveCss: '',
     hideClass: 'hide',
     // 编辑圆圈
     shapeScalerClass: 'vott-shape-scaler',
@@ -29,6 +39,7 @@ var Vott = function (container, params) {
     callbacks
     onInit:function(s)
     onChange:function(s)
+    onSuccess:function(s)
     */
   }
   params = params || {}
@@ -73,21 +84,62 @@ var Vott = function (container, params) {
   }
 
   // Svg
-  s.svg = s.createSvg('svg', {
+  s.svg = s.container.querySelector('.' + s.params.svgClass) || s.createSvg('svg', {
     'class': s.params.svgClass,
     // 'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem, 设置此值让svg内值同px相同
     preserveAspectRatio: 'none' // 长宽比, none为拉伸到和svg画布相同尺寸, 设置此值让svg内值同px相同
   })
 
+  // Loading
+  s.loadingContainer = s.container.parentNode.querySelector('.' + s.params.loadingClass) || null
+
+  // Error
+  s.errorContainer = s.container.parentNode.querySelector('.' + s.params.errorClass) || null
+
   // Scaler, 缩放圆圈
   s.scaler = null
 
+  // 图片加载完成或者错误
+  s.onLoad = function (e) {
+    console.log('加载完成')
+    var target = e.target
+    // 显隐
+    if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
+    if (s.errorContainer) s.errorContainer.classList.remove(s.params.activeClass)
+    s.svg.classList.add(s.params.activeClass)
+    // 计算宽高
+    var scale = 1
+    if (target.width > target.height) { // 宽图计算
+      scale = s.container.clientWidth / target.width
+    } else { // 长图计算
+      scale = s.container.clientHeight / target.height
+    }
+    var width = target.width * scale
+    var height = target.height * scale
+    s.svg.setAttribute('style', `width:${width};height:${height}`)
+    // 设置背景图
+    s.svg.style.backgroundImage = `url(${s.params.src})`
+    // s.draw(target, s.params.data, s.params.isDrawSrc)
+    //console.log(s.container.clientHeight)
+    // 缩小
+    // var scale = s.container.clientHeight / target.height
+    // s.svg.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
+    // s.svg.style.WebkitTransformOrigin = `0 0`
+    // Callback
+    if (s.params.onSuccess) s.params.onSuccess(s)
+  }
+  s.onError = function () {
+    if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
+    if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
+    s.svg.classList.remove(s.params.activeClass)
+    // Callback
+    if (s.params.onError) s.params.onError(s)
+  }
   // 更新DOM
   s.update = function () {
-    if (!s.container) return
+    if (!s.params.src || !s.container) return
     // 更新容器
-    s.container.innerHTML = ''
-    s.container.appendChild(s.svg)
+    s.svg.innerHTML = ''
     // 更新缩放圆圈
     var xMinYMin = s.svg.querySelector('.' + s.params.xMinYMinClass) // 左上
     var xMinYMid = s.svg.querySelector('.' + s.params.xMinYMidClass) // 左中
@@ -114,6 +166,13 @@ var Vott = function (container, params) {
         xMaxYMax: xMaxYMax // 右下
       }
     }
+
+    // 创建图片
+    console.log(s.params.src)
+    var img = new Image()
+    img.src = s.params.src
+    img.addEventListener('load', s.onLoad, false)
+    img.addEventListener('error', s.onError, false)
   }
   s.update()
 
@@ -133,7 +192,8 @@ var Vott = function (container, params) {
     // 创建形状
     var shape = s.createSvg(shapeName || 'polygon', attr || {  
       'points': '0,0,1,0,1,1,0,1',
-      'class': s.params.shapeClass + ' ' + s.params.shapeActiveClass
+      'class': s.params.shapeClass + ' ' + s.params.shapeActiveClass,
+      'style': s.params.shapeCss + '' + s.params.shapeActiveCss
     })
     svg.shape = shape
     svg.appendChild(shape)
@@ -245,7 +305,8 @@ var Vott = function (container, params) {
 
     s.updateSvg(target, {
       'points': points,
-      'class': s.params.shapeClass + ' ' + s.params.shapeActiveClass
+      'class': s.params.shapeClass + ' ' + s.params.shapeActiveClass,
+      'style': s.params.shapeCss + '' + s.params.shapeActiveCss
     })
   }
   // 显示缩放控件
@@ -439,6 +500,7 @@ var Vott = function (container, params) {
       s.touches.startY = points[1][1]
     } else if (e.target.classList.contains(s.params.shapeClass)) { // 点击形状, 则移动
       e.target.classList.add(s.params.shapeActiveClass)
+      e.target.setAttribute('style', e.target.getAttribute('style').replace(s.params.shapeActiveCss, ''))
       s.touches.target = e.target
 
       s.touches.type = 'move'

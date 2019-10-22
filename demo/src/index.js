@@ -19,7 +19,7 @@ class Demo extends Component {
       </Header>
       <Container>
           {/* <PDFView pictures={['/demo/assets/test1.png']}/> */}
-          <Vott style={{marginTop: '50px'}} src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
+          <Vott style={{height: '700px'}} src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
       </Container>
     </Page>
   }
