@@ -4,30 +4,40 @@ import Instance from './instance.js';
 
 export default class Vott extends Component {
   static propTypes = {
+    data: PropTypes.array, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
     src: PropTypes.string,
-    onChange: PropTypes.func
+    params: PropTypes.object
   }
   static defaultProps = {
   }
   constructor(props) {
     super(props);
   }
-  instance = () => {
-    const instance = new Instance(this.$el, {
-      src: this.props.src,
-      onChange: this.props.onChange
-    });
-    this.instance = instance;
+  componentDidUpdate (prevProps) {
+    if (this.instance) {
+      if (prevProps.params !== this.props.params) {
+        this.instance.setParams(this.props.params);
+      }
+      if (prevProps.src !== this.props.src) {
+        this.instance.setParams({src: this.props.src});
+        this.instance.update();
+      }
+    }
   }
   componentDidMount () {
     this.instance()
   }
+  instance = () => {
+    const {data, src, params, ...others} = this.props;
+    const instance = new Instance(this.$el, {
+      data: data,
+      src: src,
+      ...params
+    });
+    this.instance = instance;
+  }
   render() {
-    const {
-      src,
-      onChange,
-      ...others
-    } = this.props;
+    const {data, src, params, ...others} = this.props;
     return (
       <div className="vott-container" {...others} ref={(el) => {this.$el = el}}>
         <svg className="vott-svg" preserveAspectRatio="none"></svg>

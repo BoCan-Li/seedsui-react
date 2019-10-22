@@ -3221,6 +3221,58 @@ a {
     display: block;
   }
 }
+.setVottShape(){
+  fill: transparent;
+  stroke-width:2;
+  stroke:#089927;
+  &.active{
+    stroke-width:3;
+    stroke-dasharray: 5,5;
+  }
+}
+.setVottShapeBullet(){
+  display: none;
+  stroke-width: 1;
+  stroke: #666;
+  fill: rgba(255,255,255,0.7);
+  stroke-dasharray: 1,1;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
+  &.active{
+    display: block;
+  }
+  // 左上
+  &.xMinYMin{
+    cursor: nw-resize;
+  }
+  // 左中
+  &.xMinYMid{
+    cursor: w-resize;
+  }
+  // 左下
+  &.xMinYMax{
+    cursor: sw-resize;
+  }
+  // 中上
+  &.xMidYMin{
+    cursor: n-resize;
+  }
+  // 中下
+  &.xMidYMax{
+    cursor: s-resize;
+  }
+  // 右上
+  &.xMaxYMin{
+    cursor: ne-resize;
+  }
+  // 右中
+  &.xMaxYMid{
+    cursor: e-resize;
+  }
+  // 右下
+  &.xMaxYMax{
+    cursor: se-resize;
+  }
+}
 // 加载中
 @-webkit-keyframes rotateIn {
   0% {
