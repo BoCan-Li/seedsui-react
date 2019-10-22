@@ -140,6 +140,12 @@ var Vott = function (container, params) {
 
     return svg
   }
+  // 移除形状
+  s.removeShape = function (target) {
+    target.parentNode.removeChild(target)
+    s.touches.target = null
+    s.hideScaler()
+  }
   // 创建圆形
   s.createCircle = function (svg, attr) {
     var shape = s.createSvg('circle', attr)
@@ -375,6 +381,10 @@ var Vott = function (container, params) {
       touchTarget[action]('mousemove', s.onTouchMove, false)
       touchTarget[action]('mouseup', s.onTouchEnd, false)
     }
+    // 按Delete键删除形状
+    document[action]('keydown', s.onKeyDown, false)
+    // 双击删除形状
+    touchTarget[action]('dblclick', s.onDblClick, false)
     // 用于touch事件时只能取绝对位置
     s.stageInfo = touchTarget.getBoundingClientRect()
   }
@@ -409,6 +419,9 @@ var Vott = function (container, params) {
     // 允许拖动
     s.moveEnd = false
 
+    // 完成后, 将选中状态置为普通状态
+    if (s.touches.target) s.touches.target.classList.remove(s.params.shapeActiveClass)
+
     // 判断方向
     if (e.target.classList.contains(s.params.shapeScalerClass)) { // 点击右下角, 放大缩小
       if (e.target.classList.contains(s.params.xMinYMinClass)) s.touches.type = 'xMinYMin' // 左上
@@ -430,8 +443,6 @@ var Vott = function (container, params) {
 
       s.touches.type = 'move'
     } else if (e.target.classList.contains(s.params.svgClass)) { // 点击svg容器, 新增形状
-      // 完成后, 将选中状态置为普通状态
-      if (s.touches.target) s.touches.target.classList.remove(s.params.shapeActiveClass)
       // 新增形状
       s.svg = s.createShape(s.svg, 'polygon', {  
         'points': s.touches.startX + ',' + s.touches.startY + ',' +
@@ -492,6 +503,19 @@ var Vott = function (container, params) {
     }
 
     s.moveEnd = true
+  }
+  // 双击删除此形状
+  s.onDblClick = function (e) {
+    if (e.target.classList.contains(s.params.shapeClass) && e.target.classList.contains(s.params.shapeActiveClass)) {
+      s.removeShape(e.target)
+    }
+  }
+  // 按Delete键删除此形状
+  s.onKeyDown = function (e) {
+    if (!s.touches.target) return
+    if (e.keyCode === 8) {
+      s.removeShape(s.touches.target)
+    }
   }
   /* --------------------
   Init
