@@ -8,6 +8,21 @@ export default class Vott extends Component {
     src: PropTypes.string,
     params: PropTypes.object
   }
+  // data = {
+  //   polygon: [ // 逆时针
+  //     [x2, y1], // 右上
+  //     [x1, y1], // 左上
+  //     [x1, y2], // 左下
+  //     [x2, y2], // 右下
+  //   ],
+  //   style: '',
+  //   className: '',
+  //   id: '',
+  //   ...
+  // }
+  // params = {
+  //   shapeAttributes: '形状属性'
+  // }
   static defaultProps = {
   }
   constructor(props) {

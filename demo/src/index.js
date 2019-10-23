@@ -292,8 +292,12 @@ class Demo extends Component {
 	changeBlue = () => {
 		this.setState({
 			params: {
-				shapeCss: 'stroke:blue;',
-				shapeActiveCss: 'stroke:blue;'
+				shapeAttributes: {
+					style: 'stroke:blue;',
+					className: 'blue',
+					id: 'blue',
+					custom: '自定义blue'
+				}
 			}
 		})
 	}
@@ -310,9 +314,10 @@ class Demo extends Component {
           [item.x1, item.y2],
           [item.x2, item.y2],
         ],
-        css: '',
-        class: '',
-        id: '1'
+        style: 'stroke:red;',
+        className: 'default',
+				id: 'default',
+				custom: '自定义default'
       }
 		})
 	}

@@ -19,8 +19,7 @@ var Vott = function (container, params) {
 
     shapeClass: 'vott-shape',
     shapeActiveClass: 'active',
-    shapeCss: '',
-    shapeActiveCss: '',
+    shapeAttributes: {},
     // 编辑圆圈
     bulletClass: 'vott-shape-bullet',
     bulletActiveClass: 'active',
@@ -36,7 +35,7 @@ var Vott = function (container, params) {
     xMaxYMidClass: 'xMaxYMid', // 右中
     xMaxYMaxClass: 'xMaxYMax', // 右下
 
-    isScale: true // 缩放类型: true等比例缩放, false自由缩放
+    isScale: true // 缩放类型: true等比例缩放, false自由缩放, 对应元素属性data-scale-type 1和0
     /*
     callbacks
     onInit:function(s)
@@ -113,17 +112,21 @@ var Vott = function (container, params) {
   s.draw = function (data) {
     if (!data || !data.length) return
     for (let item of data) {
-      if (item.polygon.length !== 4) continue
-      item.polygon = item.polygon.map(function (points) {
+      let {polygon, id, className, style, ...others} = item
+      if (polygon.length !== 4) continue
+
+      polygon = polygon.map(function (points) {
         return points.map(function (point) {
           return point * s.scale
         })
       })
-      s.createShape(s.svg, 'polygon', {  
-        'points': item.polygon.join(','),
-        'class': s.params.shapeClass + (item.class ? ' ' + item.class : ''),
-        'style': s.params.shapeCss + (item.css || ''),
-        'id': item.id
+      s.createShape(s.svg, 'polygon', {
+        'points': polygon.join(','),
+        'data-scale-type': s.params.isScale ? '1' : '0',
+        'id': id || '',
+        'class': s.params.shapeClass + (className ? ' ' + className : ''),
+        'style': style || '',
+        'data-params': JSON.stringify({...others})
       })
     }
   }
@@ -201,34 +204,23 @@ var Vott = function (container, params) {
 
   // 创建形状
   s.createShape = function (svg, shapeName, attr) {
-    // 创建svg容器
-    if (!svg) {
-      svg = s.createSvg('svg', {
-        'class': s.params.svgClass,
-        // 'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem, 设置此值让svg内值同px相同
-        preserveAspectRatio: 'none' // 长宽比, none为拉伸到和svg画布相同尺寸, 设置此值让svg内值同px相同
-      })
-    }
+    if (!attr || !svg) return
     // 创建形状
-    var shape = s.createSvg(shapeName || 'polygon', attr || {  
-      'points': '0,0,1,0,1,1,0,1',
-      'class': s.params.shapeClass,
-      'style': s.params.shapeCss
-    })
+    var shape = s.createSvg(shapeName || 'polygon', attr)
     svg.shape = shape
     svg.appendChild(shape)
 
     return svg
   }
   // 选中形状
-  s.activeShape = function (target) {
-    target.classList.add(s.params.shapeActiveClass)
-    // target.setAttribute('style', target.getAttribute('style').replace(new RegExp(s.params.shapeActiveCss, 'gim'), '') + s.params.shapeActiveCss)
-  }
-  s.unActiveShape = function (target) {
-    target.classList.remove(s.params.shapeActiveClass)
-    s.touches.target = null
-    s.hideBullets()
+  s.activeShape = function (target, isActive) {
+    if (isActive === false) {
+      target.classList.remove(s.params.shapeActiveClass)
+      s.touches.target = null
+      s.hideBullets()
+    } else {
+      target.classList.add(s.params.shapeActiveClass)
+    }
   }
   // 移除形状
   s.removeShape = function (target) {
@@ -246,6 +238,11 @@ var Vott = function (container, params) {
   }
   // 拖动形状大小
   s.scaleShape = function (target, currentX, currentY, type) {
+    if (target.getAttribute('data-scale-type') === '0') {
+      console.log('自由缩放');
+      return;
+    }
+
     if (type === 'new') {
       type = 'xMaxYMax'
     }
@@ -254,88 +251,84 @@ var Vott = function (container, params) {
     // 坐标字符串
     var points = ''
 
-    if (s.params.isScale) { // 等比缩放, 并构建四个点
-      if (type === 'xMinYMin') { // 左上
-        let fixedX = polygon[3][0]
-        let fixedY = polygon[3][1]
-        points =
-        fixedX + ',' + currentY + ',' +
-        currentX + ',' + currentY + ',' +
-        currentX + ',' + fixedY + ',' +
-        fixedX + ',' + fixedY
-      } else if (type === 'xMinYMid') { // 左中
-        let fixedX1 = polygon[0][0]
-        let fixedY1 = polygon[0][1]
-        let fixedX2 = polygon[3][0]
-        let fixedY2 = polygon[3][1]
-        points =
-        fixedX1 + ',' + fixedY1 + ',' +
-        currentX + ',' + fixedY1 + ',' +
-        currentX + ',' + fixedY2 + ',' +
-        fixedX2 + ',' + fixedY2
-      } else if (type === 'xMinYMax') { // 左下
-        let fixedX = polygon[0][0]
-        let fixedY = polygon[0][1]
-        points =
-        fixedX + ',' + fixedY + ',' +
-        currentX + ',' + fixedY + ',' +
-        currentX + ',' + currentY + ',' +
-        fixedX + ',' + currentY
-      } else if (type === 'xMidYMin') { // 中上
-        let fixedX1 = polygon[2][0]
-        let fixedY1 = polygon[2][1]
-        let fixedX2 = polygon[3][0]
-        let fixedY2 = polygon[3][1]
-        points =
-        fixedX2 + ',' + currentY + ',' +
-        fixedX1 + ',' + currentY + ',' +
-        fixedX1 + ',' + fixedY1 + ',' +
-        fixedX2 + ',' + fixedY2
-      } else if (type === 'xMidYMax') { // 中下
-        let fixedX1 = polygon[0][0]
-        let fixedY1 = polygon[0][1]
-        let fixedX2 = polygon[1][0]
-        let fixedY2 = polygon[1][1]
-        points =
-        fixedX1 + ',' + fixedY1 + ',' +
-        fixedX2 + ',' + fixedY2 + ',' +
-        fixedX2 + ',' + currentY + ',' +
-        fixedX1 + ',' + currentY
-      } else if (type === 'xMaxYMin') { // 右上
-        let fixedX = polygon[2][0]
-        let fixedY = polygon[2][1]
-        points =
-        currentX + ',' + currentY + ',' +
-        fixedX + ',' + currentY + ',' +
-        fixedX + ',' + fixedY + ',' +
-        currentX + ',' + fixedY
-      } else if (type === 'xMaxYMid') { // 右中
-        let fixedX1 = polygon[1][0]
-        let fixedY1 = polygon[1][1]
-        let fixedX2 = polygon[2][0]
-        let fixedY2 = polygon[2][1]
-        points =
-        currentX + ',' + fixedY1 + ',' +
-        fixedX1 + ',' + fixedY1 + ',' +
-        fixedX2 + ',' + fixedY2 + ',' +
-        currentX + ',' + fixedY2
-      } else if (type === 'xMaxYMax') { // 右下
-        let fixedX = polygon[1][0]
-        let fixedY = polygon[1][1]
-        points =
-        currentX + ',' + fixedY + ',' +
-        fixedX + ',' + fixedY + ',' +
-        fixedX + ',' + currentY + ',' +
-        currentX + ',' + currentY
-      }
-    } else { // 自由缩放, 并构建四个点
-      console.log('自由缩放')
+    // 等比缩放, 并构建四个点
+    if (type === 'xMinYMin') { // 左上
+      let fixedX = polygon[3][0]
+      let fixedY = polygon[3][1]
+      points =
+      fixedX + ',' + currentY + ',' +
+      currentX + ',' + currentY + ',' +
+      currentX + ',' + fixedY + ',' +
+      fixedX + ',' + fixedY
+    } else if (type === 'xMinYMid') { // 左中
+      let fixedX1 = polygon[0][0]
+      let fixedY1 = polygon[0][1]
+      let fixedX2 = polygon[3][0]
+      let fixedY2 = polygon[3][1]
+      points =
+      fixedX1 + ',' + fixedY1 + ',' +
+      currentX + ',' + fixedY1 + ',' +
+      currentX + ',' + fixedY2 + ',' +
+      fixedX2 + ',' + fixedY2
+    } else if (type === 'xMinYMax') { // 左下
+      let fixedX = polygon[0][0]
+      let fixedY = polygon[0][1]
+      points =
+      fixedX + ',' + fixedY + ',' +
+      currentX + ',' + fixedY + ',' +
+      currentX + ',' + currentY + ',' +
+      fixedX + ',' + currentY
+    } else if (type === 'xMidYMin') { // 中上
+      let fixedX1 = polygon[2][0]
+      let fixedY1 = polygon[2][1]
+      let fixedX2 = polygon[3][0]
+      let fixedY2 = polygon[3][1]
+      points =
+      fixedX2 + ',' + currentY + ',' +
+      fixedX1 + ',' + currentY + ',' +
+      fixedX1 + ',' + fixedY1 + ',' +
+      fixedX2 + ',' + fixedY2
+    } else if (type === 'xMidYMax') { // 中下
+      let fixedX1 = polygon[0][0]
+      let fixedY1 = polygon[0][1]
+      let fixedX2 = polygon[1][0]
+      let fixedY2 = polygon[1][1]
+      points =
+      fixedX1 + ',' + fixedY1 + ',' +
+      fixedX2 + ',' + fixedY2 + ',' +
+      fixedX2 + ',' + currentY + ',' +
+      fixedX1 + ',' + currentY
+    } else if (type === 'xMaxYMin') { // 右上
+      let fixedX = polygon[2][0]
+      let fixedY = polygon[2][1]
+      points =
+      currentX + ',' + currentY + ',' +
+      fixedX + ',' + currentY + ',' +
+      fixedX + ',' + fixedY + ',' +
+      currentX + ',' + fixedY
+    } else if (type === 'xMaxYMid') { // 右中
+      let fixedX1 = polygon[1][0]
+      let fixedY1 = polygon[1][1]
+      let fixedX2 = polygon[2][0]
+      let fixedY2 = polygon[2][1]
+      points =
+      currentX + ',' + fixedY1 + ',' +
+      fixedX1 + ',' + fixedY1 + ',' +
+      fixedX2 + ',' + fixedY2 + ',' +
+      currentX + ',' + fixedY2
+    } else if (type === 'xMaxYMax') { // 右下
+      let fixedX = polygon[1][0]
+      let fixedY = polygon[1][1]
+      points =
+      currentX + ',' + fixedY + ',' +
+      fixedX + ',' + fixedY + ',' +
+      fixedX + ',' + currentY + ',' +
+      currentX + ',' + currentY
     }
 
     s.updateSvg(target, {
       'points': points
     })
-    s.activeShape(target)
   }
   // 显示缩放控件
   s.showBullets = function () {
@@ -381,6 +374,10 @@ var Vott = function (container, params) {
   }
   // 编辑形状
   s.editShape = function (target) {
+    if (target.getAttribute('data-scale-type') === '0') {
+      console.log('自由缩放')
+      return
+    }
     // 从右上角开始到右下角结束
     var points = target.getAttribute('points').split(',')
 
@@ -463,11 +460,13 @@ var Vott = function (container, params) {
           return point / s.scale
         })
       })
+      var params = shape.getAttribute('data-params') ? JSON.parse(shape.getAttribute('data-params')) : {}
       selected.push({
         polygon: polygon,
-        css: shape.getAttribute('style') || '',
+        className: shape.getAttribute('style') || '',
         class: shape.getAttribute('class') || '',
-        id: shape.id || ''
+        id: shape.id || '',
+        ...params
       })
     }
     return selected
@@ -547,7 +546,7 @@ var Vott = function (container, params) {
       s.touches.startY = points[1][1]
     } else if (e.target.classList.contains(s.params.shapeClass)) { // 点击形状, 则移动
       // 先取消选中形状
-      if (s.touches.target) s.unActiveShape(s.touches.target)
+      if (s.touches.target) s.activeShape(s.touches.target, false)
       // 选中形状
       s.touches.target = e.target
       s.activeShape(s.touches.target)
@@ -555,15 +554,19 @@ var Vott = function (container, params) {
       s.touches.type = 'move'
     } else if (e.target.classList.contains(s.params.svgClass)) { // 点击svg容器, 新增形状
       // 先取消选中形状
-      if (s.touches.target) s.unActiveShape(s.touches.target)
+      if (s.touches.target) s.activeShape(s.touches.target, false)
       // 选中形状
+      let {polygon, id, className, style, ...others} = s.params.shapeAttributes
       s.svg = s.createShape(s.svg, 'polygon', {  
         'points': s.touches.startX + ',' + s.touches.startY + ',' +
                   (s.touches.startX + 1) + ',' + s.touches.startY + ',' +
                   (s.touches.startX + 1) + ',' + (s.touches.startY + 1) + ',' +
                   s.touches.startX + ',' + (s.touches.startY + 1),
-        'class': s.params.shapeClass,
-        'style': s.params.shapeCss
+        'data-scale-type': s.params.isScale ? '1' : '0',
+        'id': id || '',
+        'class': s.params.shapeClass + (className ? ' ' + className : ''),
+        'style': style || '',
+        'data-params': JSON.stringify({...others})
       })
       s.touches.target = s.svg.shape
       s.container.appendChild(s.svg)
@@ -572,7 +575,7 @@ var Vott = function (container, params) {
       s.touches.type = 'new'
     } else {
       // 取消选中形状
-      if (s.touches.target) s.unActiveShape(s.touches.target)
+      if (s.touches.target) s.activeShape(s.touches.target, false)
     }
   }
   s.onTouchMove = function (e) {
