@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
+import BridgeBrowser from './../Bridge/bridgeBrowser';
 
 export default class Vott extends Component {
   static propTypes = {
     data: PropTypes.array, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
+    readOnly: PropTypes.bool, // 是否只读
     src: PropTypes.string,
-    params: PropTypes.object
+    params: PropTypes.object, // 设置实例化参数
+    preview: PropTypes.bool // 是否预览
   }
   // data = {
   //   polygon: [ // 逆时针
@@ -33,8 +36,15 @@ export default class Vott extends Component {
       if (prevProps.params !== this.props.params) {
         this.instance.setParams(this.props.params);
       }
+      if (prevProps.readOnly !== this.props.readOnly) {
+        this.instance.setReadOnly(this.props.readOnly);
+      }
       if (prevProps.src !== this.props.src) {
         this.instance.setParams({src: this.props.src});
+        this.instance.update();
+      }
+      if (prevProps.data !== this.props.data) {
+        this.instance.setParams({data: this.props.data});
         this.instance.update();
       }
     }
@@ -43,19 +53,46 @@ export default class Vott extends Component {
     this.instance()
   }
   instance = () => {
-    const {data, src, params, ...others} = this.props;
+    const {data, readOnly, src, params, preview, ...others} = this.props;
     const instance = new Instance(this.$el, {
+      readOnly: readOnly,
       data: data,
       src: src,
+      onSuccess: this.onLoad,
       ...params
     });
     this.instance = instance;
   }
+  onLoad = () => {
+    this.load = 1
+  }
+  onClick = () => {
+    if (!this.props.preview || !this.load) return
+    var svg = this.instance.svg;
+    var previewHTML = `<div class="preview-layer">${svg.outerHTML}</div>`;
+    BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML, onSuccess: (s) => {
+      var layer = s.container.querySelector('.preview-layer');
+      svg = s.container.querySelector('.vott-svg');
+      var width = svg.style.width;
+      var height = svg.style.height;
+      console.log(width)
+      // 计算宽高
+      var scale = 1
+      if (width > height) { // 宽图计算
+        scale = layer.clientWidth / width;
+      } else { // 长图计算
+        scale = layer.clientHeight / height;
+      }
+      console.log(scale)
+      svg.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
+      svg.style.WebkitTransformOrigin = `0 0`
+    }});
+  }
   render() {
-    const {data, src, params, ...others} = this.props;
+    const {data, readOnly, src, params, preview, ...others} = this.props;
     return (
       <div className="vott-container" {...others} ref={(el) => {this.$el = el}}>
-        <svg className="vott-svg" preserveAspectRatio="none"></svg>
+        <svg className="vott-svg" preserveAspectRatio="none" onClick={this.onClick}></svg>
         <div className={`vott-loading active`}>
           <div className={`vott-loading-icon`}></div>
         </div>

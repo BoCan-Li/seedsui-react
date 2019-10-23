@@ -284,10 +284,34 @@ class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
+			data: this.convertData(result.skuList),
+			readOnly: true,
 			params: {}
 		}
   }
   componentDidMount () {
+	}
+	onChangeData = () => {
+		this.setState({
+			data: this.convertData(result.skuList)
+		})
+	}
+	onChangeData1 = () => {
+		this.setState({
+			data: this.convertData(result1.skuList)
+		})
+	}
+	onChangeData2 = () => {
+		this.setState({
+			data: this.convertData(result2.skuList)
+		})
+	}
+	changeReadOnly = () => {
+		this.setState((prevState) => {
+			return {
+				readOnly: !prevState.readOnly
+			}
+		})
 	}
 	changeBlue = () => {
 		this.setState({
@@ -330,13 +354,19 @@ class Demo extends Component {
           {/* <PDFView pictures={['/demo/assets/test1.png']}/> */}
           <Vott
 						ref={el => {this.$vott = el}}
-						style={{height: '700px'}}
-						data={this.convertData(result.skuList)}
+						style={{height: '300px'}}
+						data={this.state.data}
+						preview={true}
+						readOnly={this.state.readOnly}
 						src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
 						params={this.state.params}
 					/>
+					<input type="button" value="只读" onClick={this.changeReadOnly}></input>
 					<input type="button" value="绘制蓝色" onClick={this.changeBlue}></input>
 					<input type="button" value="获取选中" onClick={this.getSelected}></input>
+					<input type="button" value="全部" onClick={this.onChangeData}/>
+					<input type="button" value="切换1" onClick={this.onChangeData1}/>
+					<input type="button" value="切换2" onClick={this.onChangeData2}/>
       </Container>
     </Page>
   }

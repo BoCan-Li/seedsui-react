@@ -337,6 +337,7 @@ var Bridge = {
         layerHTML: layerHTML,
         onSuccess: function (s) {
           s.show()
+          if (params.onSuccess) params.onSuccess(s)
         },
         onError: function () {
           Bridge.showToast(`${window._seeds_lang['invalid_image_src'] || '图片地址无效'}`, {mask: false})
@@ -347,6 +348,7 @@ var Bridge = {
       this.preview.setLayerHTML(layerHTML)
       this.preview.update()
     }
+    return this.preview
   },
   /* -----------------------------------------------------
     视频插件

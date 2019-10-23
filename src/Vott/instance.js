@@ -6,6 +6,7 @@ var Vott = function (container, params) {
   Model
   -------------------- */
   var defaults = {
+    readOnly: false, // 是否只读
     data: null, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
     src: '',
 
@@ -38,7 +39,6 @@ var Vott = function (container, params) {
     isScale: true // 缩放类型: true等比例缩放, false自由缩放, 对应元素属性data-scale-type 1和0
     /*
     callbacks
-    onInit:function(s)
     onSuccess:function(s)
     onError:function(s)
     */
@@ -58,6 +58,15 @@ var Vott = function (container, params) {
   s.setParams = function (params) {
     for (var n in params) {
       s.params[n] = params[n]
+    }
+  }
+  // 设置只读
+  s.setReadOnly = function (readOnly) {
+    s.params.readOnly = readOnly
+    if (readOnly) {
+      s.detach()
+    } else {
+      s.attach()
     }
   }
   // Container
@@ -153,6 +162,11 @@ var Vott = function (container, params) {
     s.draw(s.params.data)
     // Callback
     if (s.params.onSuccess) s.params.onSuccess(s)
+    // 增加事件
+    if (!s.params.readOnly) {
+      s.detach()
+      s.attach()
+    }
   }
   s.onError = function () {
     // 显隐
@@ -200,7 +214,6 @@ var Vott = function (container, params) {
     img.addEventListener('load', s.onLoad, false)
     img.addEventListener('error', s.onError, false)
   }
-  s.update()
 
   // 创建形状
   s.createShape = function (svg, shapeName, attr) {
@@ -643,7 +656,7 @@ var Vott = function (container, params) {
   -------------------- */
   // 主函数
   s.init = function () {
-    s.attach()
+    s.update()
   }
   // 执行主函数
   s.init()
