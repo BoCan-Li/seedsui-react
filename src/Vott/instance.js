@@ -39,6 +39,7 @@ var Vott = function (container, params) {
     isScale: true // 缩放类型: true等比例缩放, false自由缩放, 对应元素属性data-scale-type 1和0
     /*
     callbacks
+    onClick:function(s)
     onSuccess:function(s)
     onError:function(s)
     */
@@ -632,6 +633,11 @@ var Vott = function (container, params) {
     if (s.touches.type === 'new' && (bbox.height < 10 || bbox.width < 10)) {
       s.touches.target.parentNode.removeChild(s.touches.target)
       s.touches.target = null
+      // 单击事件
+      if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
+        s.event = e
+        if (s.params.onClick) s.params.onClick(s)
+      }
     } else { // 拖动
       s.editShape(s.touches.target)
     }

@@ -2384,7 +2384,7 @@ import Legend from 'seedsui-react/lib/Legend';
 
 
 ## Vott
-[签名](https://unpkg.com/seedsui-react/src/lib/Vott/Vott.js)
+[图片标注](https://unpkg.com/seedsui-react/src/lib/Vott/Vott.js)
 ### 属性
 ```javascript
 <Vott
@@ -2392,7 +2392,7 @@ import Legend from 'seedsui-react/lib/Legend';
   src={图片地址或者base64 string, 默认无}
   data={标注数据 array, 默认无}
   params={设置实例化参数 object, 默认无}
-  preview={是否预览 bool, 默认true}
+  preview={是否预览 bool, 默认true, 是否支持单击预览, readOnly为true时才生效}
   {...others}
 />
 // data = {
@@ -4016,7 +4016,11 @@ import Progress from 'seedsui-react/lib/Progress';
 ### 属性
 ```javascript
 <PDFView
-  src={值 string, 默认''}
+  src={值 string, 默认''} // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
+  pictures={图片地址 array, 默认''}
+  errorHTML={加载错误时显示的信息 string, 默认'文件加载失败'}
+  loadHTML={加载时显示的信息 string, 默认'加载中'}
+  options={getDocument选项 object, 默认无} // cMapUrl: '/demo/cmaps/', cMapPacked: true
 
   {...others}
 />
@@ -4025,7 +4029,7 @@ import Progress from 'seedsui-react/lib/Progress';
 ```javascript
 import PDFView from 'seedsui-react/lib/PDFView';
 
-<PDFView src="/demo/assets/test.pdf"/>
+<PDFView pictures={["/demo/assets/test1.png", "/demo/assets/test2.png"]}/>
 ```
 [返回目录](#component)
 

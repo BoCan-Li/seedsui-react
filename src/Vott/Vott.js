@@ -9,7 +9,7 @@ export default class Vott extends Component {
     readOnly: PropTypes.bool, // 是否只读
     src: PropTypes.string,
     params: PropTypes.object, // 设置实例化参数
-    preview: PropTypes.bool // 是否预览
+    preview: PropTypes.bool // 是否支持单击预览, readOnly为true时才生效
   }
   // data = {
   //   polygon: [ // 逆时针
@@ -41,10 +41,12 @@ export default class Vott extends Component {
       }
       if (prevProps.src !== this.props.src) {
         this.instance.setParams({src: this.props.src});
+        this.load = 0
         this.instance.update();
       }
       if (prevProps.data !== this.props.data) {
         this.instance.setParams({data: this.props.data});
+        this.load = 0
         this.instance.update();
       }
     }
@@ -67,15 +69,18 @@ export default class Vott extends Component {
     this.load = 1
   }
   onClick = () => {
-    if (!this.props.preview || !this.load) return
+    this.preview()
+  }
+  preview = () => {
+    if (!this.props.readOnly || !this.props.preview || !this.load) return
     var svg = this.instance.svg;
     var previewHTML = `<div class="preview-layer">${svg.outerHTML}</div>`;
     BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML, onSuccess: (s) => {
       var layer = s.container.querySelector('.preview-layer');
       svg = s.container.querySelector('.vott-svg');
-      var width = svg.style.width;
-      var height = svg.style.height;
-      console.log(width)
+      svg.style.backgroundImage = 'initial';
+      var width = svg.style.width.replace('px', '');
+      var height = svg.style.height.replace('px', '');
       // 计算宽高
       var scale = 1
       if (width > height) { // 宽图计算
@@ -83,7 +88,6 @@ export default class Vott extends Component {
       } else { // 长图计算
         scale = layer.clientHeight / height;
       }
-      console.log(scale)
       svg.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
       svg.style.WebkitTransformOrigin = `0 0`
     }});
