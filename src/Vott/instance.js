@@ -10,8 +10,8 @@ var Vott = function (container, params) {
     data: null, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
     src: '',
 
-    loadingClass: 'imgmark-loading',
-    errorClass: 'imgmark-error',
+    loadingClass: 'vott-loading',
+    errorClass: 'vott-error',
     activeClass: 'active',
 
     containerClass: 'vott-container',
@@ -107,10 +107,10 @@ var Vott = function (container, params) {
   })
 
   // Loading
-  s.loadingContainer = s.container.parentNode.querySelector('.' + s.params.loadingClass) || null
+  s.loadingContainer = s.container.querySelector('.' + s.params.loadingClass) || null
 
   // Error
-  s.errorContainer = s.container.parentNode.querySelector('.' + s.params.errorClass) || null
+  s.errorContainer = s.container.querySelector('.' + s.params.errorClass) || null
 
   // Bullets, 缩放圆圈
   s.bullets = null

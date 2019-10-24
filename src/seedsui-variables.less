@@ -524,17 +524,6 @@ a {
   }
 }
 // 加载中
-@-webkit-keyframes rotateIn {
-  0% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: rotate(0);
-  }
-
-  100% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: rotate(360deg);
-  }
-}
 .setImgmarkLoading(){
   position: absolute;
   left: 50%;
@@ -546,6 +535,17 @@ a {
   }
 }
 .setImgmarkLoadingIcon(){
+  @-webkit-keyframes rotateIn {
+    0% {
+      -webkit-transform-origin: center center;
+      -webkit-transform: rotate(0);
+    }
+  
+    100% {
+      -webkit-transform-origin: center center;
+      -webkit-transform: rotate(360deg);
+    }
+  }
   background-image: url(//res.waiqin365.com/d/seedsui/icon/loading.png);
   background-size: contain;
   background-position: center;
@@ -3274,17 +3274,7 @@ a {
   }
 }
 // 加载中
-@-webkit-keyframes rotateIn {
-  0% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: rotate(0);
-  }
 
-  100% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: rotate(360deg);
-  }
-}
 .setVottLoading(){
   position: absolute;
   left: 50%;
@@ -3296,6 +3286,17 @@ a {
   }
 }
 .setVottLoadingIcon(){
+  @-webkit-keyframes rotateIn {
+    0% {
+      -webkit-transform-origin: center center;
+      -webkit-transform: rotate(0);
+    }
+  
+    100% {
+      -webkit-transform-origin: center center;
+      -webkit-transform: rotate(360deg);
+    }
+  }
   background-image: url(//res.waiqin365.com/d/seedsui/icon/loading.png);
   background-size: contain;
   background-position: center;
