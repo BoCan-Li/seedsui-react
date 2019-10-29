@@ -13,7 +13,7 @@ export default class InputLocation extends Component {
     onChange: PropTypes.func
   }
   static defaultProps = {
-    locationingText: window._seeds_lang['positioning'] || '定位中...'
+    locationingText: window._seeds_lang['location'] || '定位中...'
   }
   constructor(props) {
     super(props);

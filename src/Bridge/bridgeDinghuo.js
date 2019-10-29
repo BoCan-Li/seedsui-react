@@ -558,27 +558,55 @@ var Bridge = {
   getNetworkType: function (callback) {
     this.invoke('getNetworkType', null, callback)
   },
-  /* -----------------------------------------------------
-    拍照、本地选图
-    @params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数'}
-    @return 选定照片的本地ID列表{localIds:[id,id,id]'}, src需要增加前缀'LocalResource://imageid'+id才能显示
-  ----------------------------------------------------- */
+  /**
+    * 拍照、本地选图
+    * @param {Object} params
+    * {
+    * sourceType:['album:相册', 'camera:拍照'],
+    * sizeType:['original:原图', 'compressed:压缩'],
+    * count:'最大张数',
+    * success({localIds:['LocalResource://imageid'+id]})
+    * }
+    */
   chooseImage: function (params) {
-    this.invoke('chooseImage', params, params.success);
+    this.invoke('chooseImage', params, function (res) {
+      res.localIds = res.localIds.map(function (id) {
+        return 'LocalResource://imageid' + id
+      })
+      if (params.success) params.success(res)
+    })
   },
-  /* -----------------------------------------------------
-    上传图片
-    @params {dir:'',localIds:['localId', 'localId'], tenantId: ''}
-  ----------------------------------------------------- */
-  uploadImage: function (params = {}) {
+  /**
+    * 拍照、本地选图
+    * @param {Object} params
+    * {
+    * dir:'',
+    * localIds:['LocalResource://imageid' + id],
+    * tenantId: 'ios必传'
+    * }
+    */
+   uploadImage: function (params = {}) {
     if (!params.dir) {
-      Bridge.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录dir, 无法上传', {mask: false})
-      return;
+      Bridge.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录', {mask: false})
+      return
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      Bridge.showToast('请传入上传图片列表后再上传图片', {mask: false})
-      return;
+      Bridge.showToast(window._seeds_lang['hint_upload_image_must_localIds'] || '没有上传图片地址', {mask: false})
+      return
     }
+    if (!params.tenantId) {
+      Bridge.showToast(window._seeds_lang['hint_upload_image_must_tenantId'] || '没有上传企业id', {mask: false})
+      return
+    }
+    // ios上传不能包含'LocalResource://imageid'
+    // if (/cpu iphone os (.*?) like mac os/.test(navigator.userAgent.toLowerCase())) {
+    //   params.localIds = params.localIds.map(function (localId) {
+    //     return localId.replace(new RegExp('LocalResource://imageid'), '')
+    //   })
+    // }
+    params.localIds = params.localIds.map(function (localId) {
+      return localId.replace(new RegExp('LocalResource://imageid'), '')
+    })
     // 格式化params
     var uploadParams = {
       localIds: params.localIds,
@@ -588,31 +616,20 @@ var Bridge = {
     if (params.isAI) uploadParams.isAI = params.isAI
     this.invoke('uploadImage', uploadParams);
   },
-  // 获取带前缀的图片
-  getPreviewImages: function (imgIds) {
-    return imgIds.map((imgId) => {
-      return 'LocalResource://imageid' + imgId
-    })
-  },
-  getPreviewImage: function (imgId) {
-    return 'LocalResource://imageid' + imgId
-  },
-  /* -----------------------------------------------------
-    图片预览
-    备注：图片LocalResource://imageid标识为本地，客户端优先从本地查找，本地没有再从网络加载
-    @params {urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接',index:'图片索引'}
-  ----------------------------------------------------- */
-  previewImage: function (argParams) {
-    if (!argParams.urls || !argParams.urls.length) return
-    var self = this
-    // 如果是网络图片直接显示,如果是本地图片,则加上前缀再显示
-    var params = argParams
-    params.urls = argParams.urls.map(function (url) {
-      if (url.indexOf('//') === -1 && url.indexOf('http://') === -1 && url.indexOf('https://') !== -1) {
-        return self.getPreviewImage(url)
-      }
-      return url
-    })
+  /**
+    * 图片预览
+    * @param {Object} params
+    * {
+    * urls:['本地照片需要加上LocalResource://imageid'],
+    * current:'当前显示图片地址',
+    * index:'当前显示图片索引'
+    * }
+    */
+  previewImage: function (params) {
+    if (!params.urls || !params.urls.length) {
+      Bridge.showToast(window._seeds_lang['hint_preview_image_must_urls'] || '没有预览图片地址', {mask: false})
+      return
+    }
     this.invoke('previewImage', params)
   },
   /* -----------------------------------------------------

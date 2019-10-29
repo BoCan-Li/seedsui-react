@@ -9,7 +9,7 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 export default class ImgMark extends Component {
   static propTypes = {
     // 数据源
-    data: PropTypes.array,
+    data: PropTypes.array, // [{strokeStyle: '', lineWidth: '', setLineDash: [], x1: '', y1: '', x2: '', y2: ''}]
     src: PropTypes.string,
     // canvas样式
     isDrawSrc: PropTypes.bool, // 是否绘制背景

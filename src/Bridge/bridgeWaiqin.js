@@ -384,7 +384,7 @@ var Bridge = {
   ----------------------------------------------------- */
   videoRecord: function (params = {}) {
     if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast('视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_video_record_version'] || '视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoRecord((res) => { // eslint-disable-line
@@ -392,7 +392,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoRecord:录制失败'})
-        else Bridge.showToast('录制失败', {mask: false})
+        else Bridge.showToast(window._seeds_lang['hint_video_record_version'] || '录制失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -403,7 +403,7 @@ var Bridge = {
   ----------------------------------------------------- */
   videoUpload: function (params = {}) {
     if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast('视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_video_upload_version'] || '视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoUpload((res) => { // eslint-disable-line
@@ -411,7 +411,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
-        else Bridge.showToast('上传失败', {mask: false})
+        else Bridge.showToast(window._seeds_lang['hint_video_upload_failed'] || '上传失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -422,14 +422,14 @@ var Bridge = {
   ----------------------------------------------------- */
   videoInfo: function (params = {}) {
     if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast('视频功能需要升级至6.2.2及以上的客户端', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_video_info_version'] || '视频功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoInfo((res) => { // eslint-disable-line
       if (res.result === '1') {
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: 'videoInfo:未查到此视频信息'})
+        if (params.fail) params.fail({errMsg: `videoInfo:${window._seeds_lang['hint_video_info_failed'] || '未查到此视频信息'}`})
       }
     }, JSON.stringify(params))
   },
@@ -517,8 +517,8 @@ var Bridge = {
         if (params.cache) DB.setCookie('app_location', JSON.stringify(location) , params.cache || 60)
         if (params.success) params.success(location)
       } else {
-        if (params.fail) params.fail({errMsg: 'getLocation:定位失败,请检查定位权限是否开启'})
-        else Bridge.showToast('定位失败,请检查定位权限是否开启', {mask: false})
+        if (params.fail) params.fail({errMsg: `getLocation: ${window._seeds_lang['hint_location_failed'] || '定位失败,请检查定位权限是否开启'}`})
+        else Bridge.showToast(window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -560,8 +560,8 @@ var Bridge = {
         }
         if (params.success) params.success(location)
       } else {
-        if (params.fail) params.fail({errMsg: 'getLocationMap:定位失败,请检查外勤365定位权限是否开启'})
-        else Bridge.showToast('定位失败,请检查外勤365定位权限是否开启', {mask: false})
+        if (params.fail) params.fail({errMsg: `getLocationMap:${window._seeds_lang['hint_location_map_failed'] || '定位失败, 请检查外勤365定位权限是否开启'}`})
+        else Bridge.showToast(window._seeds_lang['hint_location_map_failed'] || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -665,11 +665,11 @@ var Bridge = {
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     if (!params.dir) {
-      Bridge.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录dir, 无法上传', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录', {mask: false})
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      Bridge.showToast('请传入上传图片列表后再上传图片', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_upload_image_must_localIds'] || '没有上传图片地址', {mask: false})
       return;
     }
     // 格式化params
@@ -688,11 +688,20 @@ var Bridge = {
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
   },
-  /* -----------------------------------------------------
-    图片预览
-    @params {urls:'需要预览的图片http链接列表',index:'图片索引'}
-  ----------------------------------------------------- */
+  /**
+    * 图片预览
+    * @param {Object} params
+    * {
+    * urls:[],
+    * current:'当前显示图片地址',
+    * index:'当前显示图片索引'
+    * }
+    */
   previewImage: function (argParams) {
+    if (!argParams.urls || !argParams.urls.length) {
+      Bridge.showToast(window._seeds_lang['hint_preview_image_must_urls'] || '没有预览图片地址', {mask: false})
+      return
+    }
     // 格式化index
     var position = 0
     if (argParams && argParams.index) position = argParams.index
@@ -753,7 +762,7 @@ var Bridge = {
   },
   getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
     if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast('此功能需要升级至6.2.2及以上的客户端', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_get_customer_area_more_version'] || '此功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
@@ -805,11 +814,11 @@ var Bridge = {
   ----------------------------------------------------- */
   openNativePage: function (params = {ios: {}, android: {}}) {
     if (!params.ios.url) {
-      Bridge.showToast('ios参数url不能为空', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_open_native_page_must_ios_url'] || 'ios参数url不能为空', {mask: false})
       return
     }
     if (!params.android.url) {
-      Bridge.showToast('android参数url不能为空', {mask: false})
+      Bridge.showToast(window._seeds_lang['hint_open_native_page_must_android_url'] || 'android参数url不能为空', {mask: false})
       return
     }
     window.wq.wqload.wqOpenCustomerPager({
