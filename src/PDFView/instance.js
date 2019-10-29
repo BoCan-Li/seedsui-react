@@ -1,5 +1,4 @@
-// PDFView pdf文件预览 (require pdfjs-dist)
-
+// PDFView pdf文件预览
 var PDFView = function (container, params) {
   /* --------------------
   Model
@@ -18,7 +17,8 @@ var PDFView = function (container, params) {
 
     pictures: '', // 图片地址
     src: '', // pdf地址
-    options: null, // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true
+    cMapUrl: '',
+    // options: null, // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true(废弃)
 
     pageAttr: 'data-page', // 图片页数, 从0开始
     completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
@@ -138,7 +138,7 @@ var PDFView = function (container, params) {
     return page
   }
 
-  // canvas转成Blob
+  // canvas转成图片
   s.canvasToPng = function (canvas) {
     var dataURL = canvas.toDataURL('image/png', 1.0);
     return dataURL
@@ -151,7 +151,7 @@ var PDFView = function (container, params) {
     }
     if (s.params.pictures && s.params.pictures.length) { // Img加载
       s.loadImg()
-    } else { // PDF加载
+    } else if (s.params.src) { // PDF加载
       s.loadPDF()
     }
   }
@@ -165,39 +165,69 @@ var PDFView = function (container, params) {
     }
     return array
   }
-  // 加载PDF
+  // 加载PDF的库
   s.loadPDF = function () {
     try {
-      import('pdfjs-dist').then((PDFJS) => {
-        // 先判断来源是url还是data
-        var args = ''
-        if (s.params.options) {
-          var source = {}
-          if (s.params.src.indexOf('data:application/pdf;base64,') !== -1) {
-            var data = s.params.src.replace('data:application/pdf;base64,', '')
-            data = s.convertBase64ToBinary(data)
-            source = {data: data}
-          } else {
-            source = {url: s.params.src}
-          }
-          args = {...source, ...s.params.options}
-        } else {
-          args = s.params.src
+      var scriptPdf = document.createElement('script')
+      scriptPdf.type = 'text/javascript'
+      scriptPdf.src = '//res.waiqin365.com/d/seedsui/pdfview/pdf.min.js'
+      var scriptPdfWork = document.createElement('script')
+      scriptPdfWork.type = 'text/javascript'
+      scriptPdfWork.src = '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.min.js'
+      document.body.appendChild(scriptPdf)
+      document.body.appendChild(scriptPdfWork)
+      var loadCount = 0
+      scriptPdf.onload = function () {
+        if (!loadCount) loadCount = 1
+        else loadCount++
+        if (loadCount === 2) {
+          s.initPDF()
         }
-        console.log(args)
-        PDFJS.getDocument(args).then(function (pdf) {
-          s.renderPDF(pdf)
-        }).catch(function (error) {
-          console.log(error)
-          var pageDOM = s.createPage()
-          s.showPageElement(pageDOM, 'error')
-        })
-      })
+      }
+      scriptPdfWork.onload = function () {
+        if (!loadCount) loadCount = 1
+        else loadCount++
+        if (loadCount === 2) {
+          s.initPDF()
+        }
+      }
     } catch (error) {
       console.log(error)
       var pageDOM = s.createPage()
       s.showPageElement(pageDOM, 'error')
     }
+  }
+  // 初始化pdf文件
+  s.initPDF = function () {
+    // 设置cMapUrl, 解决中文不显示的问题
+    if (s.params.cMapUrl) {
+      PDFJS.cMapUrl = s.params.cMapUrl
+      PDFJS.cMapPacked = true
+    }
+    // 先判断来源是url还是data(废弃))
+    // var args = ''
+    // if (s.params.options) {
+    //   var source = {}
+    //   if (s.params.src.indexOf('data:application/pdf;base64,') !== -1) {
+    //     var data = s.params.src.replace('data:application/pdf;base64,', '')
+    //     data = s.convertBase64ToBinary(data)
+    //     source = {data: data}
+    //   } else {
+    //     source = {url: s.params.src}
+    //   }
+    //   args = {...source, ...s.params.options}
+    // } else {
+    //   args = s.params.src
+    // }
+    // console.log(args)
+    // PDFJS.getDocument(args)
+    PDFJS.getDocument(s.params.src).then(function (pdf) {
+      s.renderPDF(pdf)
+    }).catch(function (error) {
+      console.log(error)
+      var pageDOM = s.createPage()
+      s.showPageElement(pageDOM, 'error')
+    })
   }
   // 加载图片
   s.loadImg = function () {

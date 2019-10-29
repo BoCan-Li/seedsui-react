@@ -239,12 +239,9 @@ webpack: {
 npm install axios --save
 ```
 
+> 安装seedsui中PDFView组件依赖包(可选)
 ```
-npm install pdfjs-dist --save
-```
-
-```
-npm install iscroll --save
+npm install better-scroll --save
 ```
 
 > 打包配置

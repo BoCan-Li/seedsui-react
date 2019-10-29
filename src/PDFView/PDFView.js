@@ -9,7 +9,8 @@ export default class PDFView extends Component {
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     errorHTML: PropTypes.string, // 加载错误时显示的信息
     loadHTML: PropTypes.string, // 加载时显示的信息
-    options: PropTypes.object // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true
+    // options: PropTypes.object // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true(废弃)
+    cMapUrl: PropTypes.string
   }
   static defaultProps = {
     loadHTML: '加载中',
@@ -24,7 +25,8 @@ export default class PDFView extends Component {
       pictures,
       errorHTML,
       loadHTML,
-      options
+      // options(废弃)
+      cMapUrl
     } = this.props;
     if (!src && !pictures) return
     let bscroll = null;
@@ -33,7 +35,8 @@ export default class PDFView extends Component {
       pictures,
       errorHTML,
       loadHTML,
-      options,
+      // options, // (废弃)
+      cMapUrl,
       onLoad: () => {
         bscroll = new BScroll('.pdf-container', {
           scrollX: true,
@@ -54,7 +57,8 @@ export default class PDFView extends Component {
       pictures,
       errorHTML,
       loadHTML,
-      options
+      // options // (废弃)
+      cMapUrl
     } = this.props;
     if ((src && src !== prevProps.src) || (pictures && pictures !== prevProps.pictures)) {
       if (!this.instance) {
@@ -65,7 +69,8 @@ export default class PDFView extends Component {
           pictures,
           errorHTML,
           loadHTML,
-          options
+          // options // (废弃)
+          cMapUrl
         })
       }
     }
@@ -79,7 +84,8 @@ export default class PDFView extends Component {
       pictures,
       errorHTML,
       loadHTML,
-      options,
+      // options, // (废弃)
+      cMapUrl,
       ...others
     } = this.props;
     if (!src && !pictures) {

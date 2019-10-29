@@ -4020,7 +4020,7 @@ import Progress from 'seedsui-react/lib/Progress';
   pictures={图片地址 array, 默认''}
   errorHTML={加载错误时显示的信息 string, 默认'文件加载失败'}
   loadHTML={加载时显示的信息 string, 默认'加载中'}
-  options={getDocument选项 object, 默认无} // cMapUrl: '/demo/cmaps/', cMapPacked: true
+  cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
 
   {...others}
 />
@@ -4028,8 +4028,14 @@ import Progress from 'seedsui-react/lib/Progress';
 ### 示例
 ```javascript
 import PDFView from 'seedsui-react/lib/PDFView';
+import pdfsrc from './../assets/pdfview.js'
 
-<PDFView pictures={["/demo/assets/test1.png", "/demo/assets/test2.png"]}/>
+// 图片
+<PDFView pictures={["/demo/assets/pdfview.png"]}/>
+// PDF文件
+<PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/"/>
+// PDFbase64编码
+<PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/"/>
 ```
 [返回目录](#component)
 
