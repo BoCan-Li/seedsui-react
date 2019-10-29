@@ -155,16 +155,17 @@ var PDFView = function (container, params) {
       s.loadPDF()
     }
   }
-  s.convertBase64ToBinary = function (base64) {   //编码转换
-    var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
-    var rawLength = raw.length
-    // 转换成pdf.js能直接解析的Uint8Array类型
-    var array = new Uint8Array(new ArrayBuffer(rawLength))
-    for (var i = 0; i < rawLength; i++) {
-      array[i] = raw.charCodeAt(i) & 0xff
-    }
-    return array
-  }
+  // base64编码转成流(废弃)
+  // s.convertBase64ToBinary = function (base64) {
+  //   var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
+  //   var rawLength = raw.length
+  //   // 转换成pdf.js能直接解析的Uint8Array类型
+  //   var array = new Uint8Array(new ArrayBuffer(rawLength))
+  //   for (var i = 0; i < rawLength; i++) {
+  //     array[i] = raw.charCodeAt(i) & 0xff
+  //   }
+  //   return array
+  // }
   // 加载PDF的库
   s.loadPDF = function () {
     try {
@@ -204,7 +205,7 @@ var PDFView = function (container, params) {
       PDFJS.cMapUrl = s.params.cMapUrl
       PDFJS.cMapPacked = true
     }
-    // 先判断来源是url还是data(废弃))
+    // 先判断来源是url还是data(废弃)
     // var args = ''
     // if (s.params.options) {
     //   var source = {}
