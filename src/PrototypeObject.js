@@ -2,6 +2,7 @@
 判断是否是空对象
 ------------------- */
 Object.isEmptyObject = function (obj) {
+  if (typeof obj !== 'object') return false
   for (var n in obj) {
     if (obj.hasOwnProperty(n)) {
       return false
