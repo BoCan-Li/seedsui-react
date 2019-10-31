@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
-import pdfsrc from './../assets/pdfview.js'
 
-import {Page, Header, Titlebar, Container, PDFView} from '../../src'
+import {Page, Header, Titlebar, Container, Chat} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -16,7 +15,23 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-          <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/"/>
+          <Chat
+            icon={<div className="chat-author"> 
+              <div className="chat-author-avatar"></div>
+              {/* <div className="chat-author-name">作者</div> */}
+            </div>}
+          >
+            内容
+          </Chat>
+          <Chat
+            className="right"
+            icon={<div className="chat-author"> 
+              <div className="chat-author-avatar"></div>
+              {/* <div className="chat-author-name">作者</div> */}
+            </div>}
+          >
+            中华人民共和国中华人民共和国中华人民共和国中华人民共和国
+          </Chat>
       </Container>
     </Page>
   }

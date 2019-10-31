@@ -854,35 +854,28 @@ onCarrouselChange = (e) => {
 ### 属性
 ```javascript
 <Chat
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'chat'}
-  onClick={点击聊天框 func()}
+  icon={头像 node, 默认无}
 
-  showAvatar={是否显示照片 bool, 默认false}
-  avatarClassName={照片className string, 默认'chat-avatar'}
-  avatarStyle={照片style object, 默认无}
-  avatarSrc={照片src string, 默认无}
-  avatarAfter={照片后元素 node, 默认无}
-  onClickAvatar={点击照片 func()}
+  contentParams={文本容器属性 object, 默认无} // 例如: contentParams={className: 'chat-content'}
+  textParams={文本属性 object, 默认无}
 
-  author={用户名称 string, 默认无}
-  authorClassName={用户名称className string, 默认无, 基础'chat-author'}
-  authorStyle={用户名称style object, 默认无}
+  children={text容器内子元素 node, 默认无}
 
-  contentClassName={内容className string, 默认无, 基础'chat-content'}
-  contentStyle={内容style object, 默认无}
-  onClickContent={点击内容 func()}
->
-内容
-</Chat>
+  {...others}
+/>
 ```
 ### 示例
 ```javascript
 import Chat from 'seedsui-react/lib/Chat';
 
-<Chat>
-内容
+<Chat
+  className="right"
+  icon={<div className="chat-author"> 
+    <div className="chat-author-avatar"></div>
+    <div className="chat-author-name">作者</div>
+  </div>}
+>
+  内容
 </Chat>
 ```
 [返回目录](#component)
@@ -3242,17 +3235,14 @@ addData = () => {
 ### 属性
 ```javascript
 <Notice
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'notice'}
-
-  wrapperParams={样式为notice-wrapper的div容器属性 object, 默认无}
+  wrapperParams={画布容器属性 object, 默认无} // 例如: wrapperParams={className: 'notice-wrapper'}
   
   icon={图标dom node, 默认无}
 
   caption={标题 string, 默认'暂无数据'}
-  captionParams={样式为notice-wrapper的div属性 object, 默认无}
+  captionParams={标题容器属性 object, 默认无} // 例如: captionParams={className: 'notice-caption'}
   sndcaption={副标题 string, 默认''}
-  sndcaptionParams={样式为notice-wrapper的div属性 object, 默认无}
+  sndcaptionParams={副标题容器属性 object, 默认无} // 例如: sndcaptionParams={className: 'notice-sndcaption'}
 
   children={wrapper容器内子元素 node, 默认无}
 

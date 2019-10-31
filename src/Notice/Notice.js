@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class Notice extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    style: PropTypes.object,
-
     wrapperParams: PropTypes.object,
 
     icon: PropTypes.node,
@@ -28,7 +25,6 @@ export default class Notice extends Component {
   }
   render() {
     const {
-      className, style,
       wrapperParams,
       icon,
       caption, captionParams,
@@ -37,7 +33,7 @@ export default class Notice extends Component {
       ...others
     } = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`notice${className ? ' ' + className : ''}`} style={style} {...others}>
+      <div ref={el => {this.$el = el;}} {...others} className={`notice${others.className ? ' ' + others.className : ''}`}>
         <div {...wrapperParams} className={`notice-wrapper${wrapperParams.className ?  ' ' + wrapperParams.className : ''}`}>
           {icon ? icon : <i className="icon notice-icon notice-icon-nodata"></i>}
           {caption && <div {...captionParams} className={`notice-caption${captionParams.className ?  ' ' + captionParams.className : ''}`}>{caption}</div>}
