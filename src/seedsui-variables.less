@@ -3831,6 +3831,17 @@ a {
     margin-left: @12px;
     width: 70%;
   }
+  // 内容标题
+  .chat-content-caption {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  .chat-content-caption+.chat-content-text {
+    &:after {
+      top: 10px;
+    }
+  }
   // 内容
   .chat-content-text {
     display: inline-block;
@@ -3873,10 +3884,12 @@ a {
     .chat-content {
       width: 70%;
       margin-right: @12px;
-      text-align: right;
       float: right;
     }
-    .chat-content-text{
+    .chat-content-caption {
+      text-align: right;
+    }
+    .chat-content-text {
       background-color:@chat-even-bg;
       &:after {
         left: 100%;
@@ -3884,6 +3897,19 @@ a {
         border-left-color: @chat-even-bg;
       }
     }
+  }
+  // 聊天时间
+  .chat-time{
+    .flex;
+    .flex-center;
+  }
+  .chat-time-text{
+    display: block;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+    color: white;
+    padding: 4px;
+    font-size: 12px;
   }
 }
 
