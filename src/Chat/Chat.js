@@ -5,8 +5,8 @@ export default class Chat extends Component {
   static propTypes = {
     icon: PropTypes.node,
 
-    contentParams: PropTypes.object,
-    textParams: PropTypes.object,
+    contentAttribute: PropTypes.object,
+    textAttribute: PropTypes.object,
 
     children: PropTypes.node
   }
@@ -18,16 +18,16 @@ export default class Chat extends Component {
   render() {
     const {
       icon,
-      contentParams = {},
-      textParams = {},
+      contentAttribute = {},
+      textAttribute = {},
       children,
       ...others
     } = this.props;
     return (
       <div ref={el => {this.$el = el;}} {...others} className={`chat${others.className ? ' ' + others.className : ''}`}> 
         {icon}
-        <div {...contentParams} className={`chat-content${contentParams.className ?  ' ' + contentParams.className : ''}`}>
-          <div {...textParams} className={`chat-content-text${textParams.className ? ' ' + textParams.className : ''}`}>
+        <div {...contentAttribute} className={`chat-content${contentAttribute.className ?  ' ' + contentAttribute.className : ''}`}>
+          <div {...textAttribute} className={`chat-content-text${textAttribute.className ? ' ' + textAttribute.className : ''}`}>
             {children}
           </div> 
         </div>

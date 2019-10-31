@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Chat} from '../../src'
+import {Page, Header, Titlebar, Container, Notice} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -15,23 +15,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-          <Chat
-            icon={<div className="chat-author"> 
-              <div className="chat-author-avatar"></div>
-              {/* <div className="chat-author-name">作者</div> */}
-            </div>}
-          >
-            内容
-          </Chat>
-          <Chat
-            className="right"
-            icon={<div className="chat-author"> 
-              <div className="chat-author-avatar"></div>
-              {/* <div className="chat-author-name">作者</div> */}
-            </div>}
-          >
-            中华人民共和国中华人民共和国中华人民共和国中华人民共和国
-          </Chat>
+        <Notice content="aa" contentHTML='<p>hh</p>'/>
       </Container>
     </Page>
   }

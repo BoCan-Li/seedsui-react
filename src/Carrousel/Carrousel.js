@@ -7,16 +7,16 @@ export default class Carrousel extends Component {
     style: PropTypes.object, // 设置容器Style
     className: PropTypes.string, // 设置容器className
 
-    slideParams: PropTypes.object,
+    slideAttribute: PropTypes.object,
 
     pagination: PropTypes.oneOfType([  // 是否显示小点点
       PropTypes.bool,
       PropTypes.node
     ]),
-    paginationParams: PropTypes.object,
+    paginationAttribute: PropTypes.object,
 
-    prevParams: PropTypes.object,
-    nextParams: PropTypes.object,
+    prevAttribute: PropTypes.object,
+    nextAttribute: PropTypes.object,
 
     stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 设置为false解决与FastClick插件touch事件冲突的问题
     activeIndex: PropTypes.number, // 默认选中第几块
@@ -25,7 +25,7 @@ export default class Carrousel extends Component {
     autoplay: PropTypes.number, // 是否自动播放
     slidesPerView: PropTypes.number, // 一屏显示几块,默认1块
     defaultSrc: PropTypes.string, // 默认图片
-    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconParams: {}, caption: 'xx'}]
+    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
     enableOnChange: PropTypes.bool, // 手动调用slideTo方法是否触发onChange事件回调
     speed: PropTypes.number, // 动画过渡的速度
     onClick: PropTypes.func, // func(s, e)
@@ -35,10 +35,10 @@ export default class Carrousel extends Component {
     children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
   }
   static defaultProps = {
-    slideParams: {},
-    paginationParams: {},
-    prevParams: {},
-    nextParams: {},
+    slideAttribute: {},
+    paginationAttribute: {},
+    prevAttribute: {},
+    nextAttribute: {},
     stopPropagation: false, // 设置为false解决与FastClick插件touch事件冲突的问题
     activeIndex: 0,
     page: 0,
@@ -102,11 +102,11 @@ export default class Carrousel extends Component {
     return (list.length > 0 ? 'carrousel-container' : 'carrousel-page') + (className ? ' ' + className : '');
   }
   getSlideStyle = (item) => {
-    const {slideParams} = this.props;
+    const {slideAttribute} = this.props;
     if (item.bg) {
-      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, slideParams.style);
+      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, slideAttribute.style);
     }
-    return slideParams.style;
+    return slideAttribute.style;
   }
   update = () => {
     // 更新为默认图片
@@ -126,9 +126,9 @@ export default class Carrousel extends Component {
   render() {
     const {
       className, style,
-      slideParams,
-      pagination, paginationParams,
-      prevParams, nextParams,
+      slideAttribute,
+      pagination, paginationAttribute,
+      prevAttribute, nextAttribute,
       stopPropagation,
       activeIndex,
 
@@ -152,10 +152,10 @@ export default class Carrousel extends Component {
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
-          return <div className={`carrousel-slide${slideParams.className ? ' ' + slideParams.className : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
+          return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
             {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
             {item.caption && <div className="carrousel-summary">
-              {item.iconParams && item.iconParams.className && <i {...item.iconParams} className={`icon carrousel-summary-icon${item.iconParams.className ? ' ' + item.iconParams.className : ''}`}></i>}
+              {item.iconAttribute && item.iconAttribute.className && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
               <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>
                 {item.caption}
               </span>
@@ -167,10 +167,10 @@ export default class Carrousel extends Component {
           return <div className="carrousel-slide" key={index}>{item}</div>
         })}
       </div>
-      {pagination === true && <div {...paginationParams} className={`carrousel-pagination${paginationParams.className ? ' ' + paginationParams.className : ''}`}></div>}
+      {pagination === true && <div {...paginationAttribute} className={`carrousel-pagination${paginationAttribute.className ? ' ' + paginationAttribute.className : ''}`}></div>}
       {pagination && pagination !== true && pagination}
-      {list.length > 1 && <div {...prevParams} className={`carrousel-prev${prevParams.className ? ' ' + prevParams.className : ''}`}></div>}
-      {list.length > 1 && <div {...nextParams} className={`carrousel-next${nextParams.className ? ' ' + nextParams.className : ''}`}></div>}
+      {list.length > 1 && <div {...prevAttribute} className={`carrousel-prev${prevAttribute.className ? ' ' + prevAttribute.className : ''}`}></div>}
+      {list.length > 1 && <div {...nextAttribute} className={`carrousel-next${nextAttribute.className ? ' ' + nextAttribute.className : ''}`}></div>}
       </div>
     );
   }

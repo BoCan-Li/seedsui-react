@@ -3,42 +3,41 @@ import PropTypes from 'prop-types';
 
 export default class Notice extends Component {
   static propTypes = {
-    wrapperParams: PropTypes.object,
+    wrapperAttribute: PropTypes.object,
 
     icon: PropTypes.node,
 
     caption: PropTypes.node,
-    captionParams: PropTypes.object,
+    captionAttribute: PropTypes.object,
     sndcaption: PropTypes.node,
-    sndcaptionParams: PropTypes.object,
+    sndcaptionAttribute: PropTypes.object,
 
-    children: PropTypes.node
+    content: PropTypes.node,
+    contentHTML: PropTypes.string
   }
   static defaultProps = {
-    wrapperParams: {},
-    caption: '暂无数据',
-    captionParams: {},
-    sndcaptionParams: {}
   }
   constructor(props) {
     super(props);
   }
   render() {
     const {
-      wrapperParams,
+      wrapperAttribute = {},
       icon,
-      caption, captionParams,
-      sndcaption, sndcaptionParams,
-      children,
+      caption = '暂无数据', captionAttribute = {},
+      sndcaption, sndcaptionAttribute = {},
+      content,
+      contentHTML,
       ...others
     } = this.props;
     return (
       <div ref={el => {this.$el = el;}} {...others} className={`notice${others.className ? ' ' + others.className : ''}`}>
-        <div {...wrapperParams} className={`notice-wrapper${wrapperParams.className ?  ' ' + wrapperParams.className : ''}`}>
+        <div {...wrapperAttribute} className={`notice-wrapper${wrapperAttribute.className ?  ' ' + wrapperAttribute.className : ''}`}>
           {icon ? icon : <i className="icon notice-icon notice-icon-nodata"></i>}
-          {caption && <div {...captionParams} className={`notice-caption${captionParams.className ?  ' ' + captionParams.className : ''}`}>{caption}</div>}
-          {sndcaption && <div {...sndcaptionParams} className={`notice-sndcaption${sndcaptionParams.className ?  ' ' + sndcaptionParams.className : ''}`}>{sndcaption}</div>}
-          {children}
+          {caption && <div {...captionAttribute} className={`notice-caption${captionAttribute.className ?  ' ' + captionAttribute.className : ''}`}>{caption}</div>}
+          {sndcaption && <div {...sndcaptionAttribute} className={`notice-sndcaption${sndcaptionAttribute.className ?  ' ' + sndcaptionAttribute.className : ''}`}>{sndcaption}</div>}
+          {content}
+          {contentHTML && <div dangerouslySetInnerHTML={{__html: contentHTML}}></div>}
         </div>
       </div>
     );

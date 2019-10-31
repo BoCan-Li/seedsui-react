@@ -799,10 +799,10 @@ import Card from 'seedsui-react/lib/Card';
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础:list模式下为'carrousel-container'|page模式下为'carrousel-page'}
   
-  slideParams={div左线条属性 object, 默认无, 基础{className: 'carrousel-slide'}}
+  slideAttribute={div左线条属性 object, 默认无, 基础{className: 'carrousel-slide'}}
 
   pagination={是否显示小点点 bool | node, 默认false} // 传node为自定义分页
-  paginationParams={div小点点容器属性 object, 默认无, 基础{className: 'carrousel-pagination'}}
+  paginationAttribute={div小点点容器属性 object, 默认无, 基础{className: 'carrousel-pagination'}}
 
   stopPropagation={是否阻止点击事件的传播 bool, 默认false} // 当touch事件与FastClick插件冲突时可设为false
   loop={是否循环显示 bool, 默认false}
@@ -811,7 +811,7 @@ import Card from 'seedsui-react/lib/Card';
   autoplay={自动播放毫秒数 number, 默认0} // 设置大于0的数值才会触发自动播放
   slidesPerView={一屏显示几块 number, 默认1}
   defaultSrc={默认图片 string, 默认'//res.waiqin365.com/d/seedsui/carrousel/default.png'}
-  list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconParams: {}, caption: 'xx'}]
+  list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
   speed={动画过渡的速度 number, 默认300}
   enableOnChange={手动调用slideTo方法是否触发onChange事件回调 bool, 默认true}
   onChange={轮播时事件回调 func()}
@@ -856,8 +856,8 @@ onCarrouselChange = (e) => {
 <Chat
   icon={头像 node, 默认无}
 
-  contentParams={文本容器属性 object, 默认无} // 例如: contentParams={className: 'chat-content'}
-  textParams={文本属性 object, 默认无}
+  contentAttribute={文本容器属性 object, 默认无} // 例如: contentAttribute={className: 'chat-content'}
+  textAttribute={文本属性 object, 默认无}
 
   children={text容器内子元素 node, 默认无}
 
@@ -1073,8 +1073,8 @@ import Dot from 'seedsui-react/lib/Dot';
 
   hasMore={状态标识 number, 默认-2} // 1刷新完成 | 0没有更多数据 | -1网络错误 | 404找不到数据 | -2空闲但展现底部转圈
 
-  showNoData={是否允许暂无数据 bool, 默认false}
-  noDataParams={无数据时的Notive组件属性 object, 默认无}
+  showNotice={是否允许暂无数据 bool, 默认false}
+  noticeProps={无数据时的Notice组件属性 object, 默认无}
 
   lazyLoad={是否启用懒人加载 bool, 默认false} // 每当didUpdate时会执行lazyLoadInstance.load();
 
@@ -1144,7 +1144,7 @@ loadData = () => {
   onBottomRefresh={this.onBottomRefresh}
   bottomErrorCaption="加载失败, 点击重新加载"
   onClickBottomError={this.onBottomRefresh}
-  noDataParams={{onClick: this.onTopRefresh, caption: '暂无数据, 点击重新加载'}}
+  noticeProps={{onClick: this.onTopRefresh, caption: '暂无数据, 点击重新加载'}}
 >
   {this.state.list.map((item, index) => {
     return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item}</div>
@@ -3235,14 +3235,14 @@ addData = () => {
 ### 属性
 ```javascript
 <Notice
-  wrapperParams={画布容器属性 object, 默认无} // 例如: wrapperParams={className: 'notice-wrapper'}
+  wrapperAttribute={画布容器属性 object, 默认无} // 例如: wrapperAttribute={className: 'notice-wrapper'}
   
   icon={图标dom node, 默认无}
 
   caption={标题 string, 默认'暂无数据'}
-  captionParams={标题容器属性 object, 默认无} // 例如: captionParams={className: 'notice-caption'}
+  captionAttribute={标题容器属性 object, 默认无} // 例如: captionAttribute={className: 'notice-caption'}
   sndcaption={副标题 string, 默认''}
-  sndcaptionParams={副标题容器属性 object, 默认无} // 例如: sndcaptionParams={className: 'notice-sndcaption'}
+  sndcaptionAttribute={副标题容器属性 object, 默认无} // 例如: sndcaptionAttribute={className: 'notice-sndcaption'}
 
   children={wrapper容器内子元素 node, 默认无}
 
@@ -4416,11 +4416,11 @@ import Ticket from 'seedsui-react/lib/Ticket';
   className={容器className string, 默认无, 基础'timeline'}
   style={容器style object, 默认无}
 
-  lineParams={div左线条属性 object, 默认无, 基础{className: 'timeline-line'}}
+  lineAttribute={div左线条属性 object, 默认无, 基础{className: 'timeline-line'}}
 
-  badgeParams={div左小球的容器 object, 默认无, 基础{className: 'timeline-badge'}}
+  badgeAttribute={div左小球的容器 object, 默认无, 基础{className: 'timeline-badge'}}
 
-  dotParams={Dot组件小球属性 object, 默认{className: ''}}
+  dotAttribute={Dot组件小球属性 object, 默认{className: ''}}
   
   {...others}
 />

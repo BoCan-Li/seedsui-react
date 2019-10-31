@@ -23,8 +23,8 @@ export default class Dragrefresh extends Component {
     children: PropTypes.node,
     hasMore: PropTypes.number, // hasMore: 0.无更多数据 1.数据加载完成 404.一条数据都没有 -1. 加载错误 -2. 重置状态,为了后面可以更新DOM
 
-    showNoData: PropTypes.bool, // 是否允许暂无数据
-    noDataParams: PropTypes.object,
+    showNotice: PropTypes.bool, // 是否允许暂无数据
+    noticeProps: PropTypes.object,
 
     lazyLoad: PropTypes.bool,
 
@@ -39,7 +39,7 @@ export default class Dragrefresh extends Component {
     onClickBottomError: PropTypes.func,
   }
   static defaultProps = {
-    showNoData: true,
+    showNotice: true,
     bottomLoadingCaption: (window._seeds_lang['loading'] || '正在加载...'),
     bottomNoDataCaption: (window._seeds_lang['no_more_data'] || '没有更多数据了'),
     bottomErrorCaption: (window._seeds_lang['refreshing_failed'] || '加载失败, 请稍后再试')
@@ -149,9 +149,9 @@ export default class Dragrefresh extends Component {
     }
     console.log(`hasMore: 由${prevHasMore}变成${hasMore}`)
     // 无数据时不允许触发刷新
-    if (this.props.showNoData && hasMore === 404) {
+    if (this.props.showNotice && hasMore === 404) {
       this.instance.detach();
-    } else if (this.props.showNoData && prevHasMore === 404 && hasMore !== 404) {
+    } else if (this.props.showNotice && prevHasMore === 404 && hasMore !== 404) {
       this.instance.attach();
     }
     // 刷新完成, 需收起头
@@ -174,8 +174,8 @@ export default class Dragrefresh extends Component {
   render() {
     const {
       style, className,
-      onTopRefresh, onBottomRefresh, showNoData, hasMore,
-      noDataParams,
+      onTopRefresh, onBottomRefresh, showNotice, hasMore,
+      noticeProps,
       bottomLoadingCaption, bottomNoDataCaption, bottomErrorCaption, onClickBottomError
     } = this.props;
     return (
@@ -203,7 +203,7 @@ export default class Dragrefresh extends Component {
             <div className="df-pull-caption">{bottomErrorCaption}</div>
           </div>
         </div>}
-        {hasMore === 404 && showNoData && <Notice caption={'暂无数据'} {...noDataParams}/>}
+        {hasMore === 404 && showNotice && <Notice caption={'暂无数据'} {...noticeProps}/>}
       </div>
     );
   }
