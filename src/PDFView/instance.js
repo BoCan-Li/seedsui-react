@@ -22,6 +22,9 @@ var PDFView = function (container, params) {
 
     pageAttr: 'data-page', // 图片页数, 从0开始
     completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
+
+    pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js',
+    pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js'
     /*
     callbacks
     onInit:function(PDFView)
@@ -168,13 +171,18 @@ var PDFView = function (container, params) {
   // }
   // 加载PDF的库
   s.loadPDF = function () {
+    if (!s.params.pdfLib || !s.params.pdfWorkLib) {
+      console.log('SeedsUI: 请先加载pdf资源库')
+      return
+    }
     try {
       var scriptPdf = document.createElement('script')
       scriptPdf.type = 'text/javascript'
-      scriptPdf.src = '//res.waiqin365.com/d/seedsui/pdfview/pdf.min.js'
+      scriptPdf.src = s.params.pdfLib
+      
       var scriptPdfWork = document.createElement('script')
       scriptPdfWork.type = 'text/javascript'
-      scriptPdfWork.src = '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.min.js'
+      scriptPdfWork.src = s.params.pdfWorkLib
       document.body.appendChild(scriptPdf)
       document.body.appendChild(scriptPdfWork)
       var loadCount = 0

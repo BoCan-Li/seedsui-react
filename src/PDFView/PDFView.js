@@ -10,7 +10,9 @@ export default class PDFView extends Component {
     errorHTML: PropTypes.string, // 加载错误时显示的信息
     loadHTML: PropTypes.string, // 加载时显示的信息
     // options: PropTypes.object // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true(废弃)
-    cMapUrl: PropTypes.string
+    cMapUrl: PropTypes.string,
+    pdfLib: PropTypes.string, // pdf.js库
+    pdfWorkLib: PropTypes.string // pdf.work.js库
   }
   static defaultProps = {
     loadHTML: '加载中',
@@ -26,7 +28,9 @@ export default class PDFView extends Component {
       errorHTML,
       loadHTML,
       // options(废弃)
-      cMapUrl
+      cMapUrl,
+      pdfLib,
+      pdfWorkLib
     } = this.props;
     if (!src && !pictures) return
     let bscroll = null;
@@ -37,6 +41,8 @@ export default class PDFView extends Component {
       loadHTML,
       // options, // (废弃)
       cMapUrl,
+      pdfLib,
+      pdfWorkLib,
       onLoad: () => {
         bscroll = new BScroll('.pdf-container', {
           scrollX: true,
@@ -86,6 +92,8 @@ export default class PDFView extends Component {
       loadHTML,
       // options, // (废弃)
       cMapUrl,
+      pdfLib,
+      pdfWorkLib,
       ...others
     } = this.props;
     if (!src && !pictures) {

@@ -4027,6 +4027,8 @@ import Progress from 'seedsui-react/lib/Progress';
   loadHTML={加载时显示的信息 string, 默认'加载中'}
   cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
 
+  pdfLib={pdf.js库 string, 默认'//res.waiqin365.com/d/seedsui/pdfview/pdf.js'}
+  pdfWorkLib={pdf.work.js库 string, 默认'//res.waiqin365.com/d/seedsui/pdfview/pdf.js'}
   {...others}
 />
 ```

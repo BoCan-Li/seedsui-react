@@ -150,7 +150,7 @@ var Device = (function () {
   /**
     * 动态加载桥接库
     * @param {Func} callback 加载完成回调
-    * @param {Object} options {wxUrl: '', wqUrl: ''}
+    * @param {Object} options {wxLib: '', wqLib: ''}
     */
   function dynamicLoadBridge(callback, options = {}) {
     if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo') {
@@ -161,14 +161,14 @@ var Device = (function () {
     script.type = 'text/javascript'
     script.defer = 'defer'
     if (platform === 'weixin' || platform === 'weixinwork') { // 微信
-      script.src = options.wxUrl || '//res.wx.qq.com/open/js/jweixin-1.4.0.js'
+      script.src = options.wxLib || '//res.wx.qq.com/open/js/jweixin-1.4.0.js'
       if (callback) {
         script.onload = function () {
           callback()
         }
       }
     } else if (platform === 'waiqin') { // 外勤
-      script.src = options.wqUrl || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
+      script.src = options.wqLib || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       if (callback) {
         script.onload = function () {
           document.addEventListener('deviceready', () => {
