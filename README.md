@@ -3259,6 +3259,9 @@ addData = () => {
   sndcaption={副标题 string, 默认''}
   sndcaptionAttribute={副标题容器属性 object, 默认无} // 例如: sndcaptionAttribute={className: 'notice-sndcaption'}
 
+  content={标题 string, 默认'暂无数据'}
+  contentHTML={标题html string, 默认'暂无数据'}
+  
   children={wrapper容器内子元素 node, 默认无}
 
   {...others}

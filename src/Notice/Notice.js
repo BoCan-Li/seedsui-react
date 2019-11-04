@@ -13,7 +13,9 @@ export default class Notice extends Component {
     sndcaptionAttribute: PropTypes.object,
 
     content: PropTypes.node,
-    contentHTML: PropTypes.string
+    contentHTML: PropTypes.string,
+
+    children: PropTypes.node
   }
   static defaultProps = {
   }
@@ -28,6 +30,7 @@ export default class Notice extends Component {
       sndcaption, sndcaptionAttribute = {},
       content,
       contentHTML,
+      children,
       ...others
     } = this.props;
     return (
@@ -38,6 +41,7 @@ export default class Notice extends Component {
           {sndcaption && <div {...sndcaptionAttribute} className={`notice-sndcaption${sndcaptionAttribute.className ?  ' ' + sndcaptionAttribute.className : ''}`}>{sndcaption}</div>}
           {content}
           {contentHTML && <div dangerouslySetInnerHTML={{__html: contentHTML}}></div>}
+          {children}
         </div>
       </div>
     );
