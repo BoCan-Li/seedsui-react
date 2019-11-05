@@ -27,7 +27,6 @@ var Alert = function (params) {
     buttonCancelHTML: window._seeds_lang['cancel'] || '取消',
 
     isClickMaskHide: false,
-    args: null
     /*
     Callbacks:
     onClick:function(Alert)
@@ -245,28 +244,15 @@ var Alert = function (params) {
   s.detach = function (event) {
     s.events(true)
   }
-  s.getArgs = function (e) {
-    var args = s.params.args
-    if (args !== undefined) {
-      if (typeof args === 'string' && args === '$event') {
-        args = e
-      } else if (Array.isArray(args) && args.indexOf('$event') > -1) {
-        args[args.indexOf('$event')] = e
-      }
-    } else {
-      args = e
-    }
-    return args
-  }
   s.onClick = function (e) {
     s.event = e
 
-    if (s.params.onClick) s.params.onClick(s, s.getArgs(e))
+    if (s.params.onClick) s.params.onClick(s)
     if (e.target.className.indexOf(s.params.buttonSubmitClass) !== -1) {
-      if (s.params.onClickSubmit) s.params.onClickSubmit(s, s.getArgs(e))
+      if (s.params.onClickSubmit) s.params.onClickSubmit(s)
       else s.hide()
     } else if (e.target.className.indexOf(s.params.buttonCancelClass) !== -1) {
-      if (s.params.onClickCancel) s.params.onClickCancel(s, s.getArgs(e))
+      if (s.params.onClickCancel) s.params.onClickCancel(s)
       else s.hide()
     }
   }
@@ -282,7 +268,7 @@ var Alert = function (params) {
   s.onClickMask = function (e) {
     if (e.target === s.mask) {
       s.target = e.target
-      if (s.params.onClickMask) s.params.onClickMask(s, s.getArgs(e))
+      if (s.params.onClickMask) s.params.onClickMask(s)
       if (s.params.isClickMaskHide) s.hide()
     }
   }
@@ -293,10 +279,10 @@ var Alert = function (params) {
     if (e && e.propertyName === 'visibility') return
     if (s.isHid) {
       // Callback onHid
-      if (s.params.onHid) s.params.onHid(s, s.getArgs(e))
+      if (s.params.onHid) s.params.onHid(s)
     } else {
       // Callback onShowed
-      if (s.params.onShowed) s.params.onShowed(s, s.getArgs(e))
+      if (s.params.onShowed) s.params.onShowed(s)
     }
   }
   /* --------------------

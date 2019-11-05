@@ -7,38 +7,26 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 export default class Alert extends Component {
   static propTypes = {
     portal: PropTypes.object,
-    args: PropTypes.any,
     show: PropTypes.bool,
 
     duration: PropTypes.number,
 
-    maskStyle: PropTypes.object,
-    maskClassName: PropTypes.string,
-    onClickMask: PropTypes.func,
-
-    style: PropTypes.object,
-    className: PropTypes.string,
+    maskAttribute: PropTypes.object,
 
     caption: PropTypes.node,
-    captionStyle: PropTypes.object,
-    captionClassName: PropTypes.string,
+    captionAttribute: PropTypes.object,
 
     icon: PropTypes.node,
 
-    contentStyle: PropTypes.object,
-    contentClassName: PropTypes.string,
-    children: PropTypes.node,
+    contentAttribute: PropTypes.object,
 
-    submitStyle: PropTypes.object,
-    submitClassName: PropTypes.string,
     submitCaption: PropTypes.node,
-    disabled: PropTypes.bool,
-    onClickSubmit: PropTypes.func,
+    submitAttribute: PropTypes.object,
 
-    cancelStyle: PropTypes.object,
-    cancelClassName: PropTypes.string,
     cancelCaption: PropTypes.node,
-    onClickCancel: PropTypes.func,
+    cancelAttribute: PropTypes.object,
+
+    children: PropTypes.node,
   }
   static defaultProps = {
     submitCaption: window._seeds_lang['ok'] || '确定',
@@ -49,42 +37,43 @@ export default class Alert extends Component {
   }
   componentDidMount = () => {
   }
-  onClickMask = (e) => {
-    if (this.props.onClickMask) this.props.onClickMask(Object.getArgs(e, this.props.args));
-    e.stopPropagation();
-  }
-  onClickCancel = (e) => {
-    if (this.props.onClickCancel) this.props.onClickCancel(Object.getArgs(e, this.props.args));
-    e.stopPropagation();
-  }
-  onClickSubmit = (e) => {
-    if (this.props.onClickSubmit) this.props.onClickSubmit(Object.getArgs(e, this.props.args));
-    e.stopPropagation();
-  }
   render() {
     const {
-      duration, show,
-      maskClassName, maskStyle,
-      className, style,
-      caption, captionStyle, captionClassName,
-      contentStyle, contentClassName,
+      portal,
+      show,
+
+      duration,
+
+      maskAttribute = {},
+
+      caption,
+      captionAttribute = {},
+
       icon,
+
+      contentAttribute = {},
+
+      submitCaption,
+      submitAttribute = {},
+
+      cancelCaption,
+      cancelAttribute = {},
+
       children,
-      submitCaption, submitStyle, submitClassName, onClickSubmit, disabled,
-      cancelCaption, cancelStyle, cancelClassName, onClickCancel,
+      ...others
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`mask alert-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClickMask}>
-        <div className={`alert${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation="zoom">
-          {caption && <h1 className={captionClassName} style={captionStyle}>{caption}</h1>}
-          <div className={`alert-content${contentClassName ? ' ' + contentClassName : ''}`} style={contentStyle}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask alert-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskAttribute.style || {})}>
+        <div data-animation="zoom" {...others} className={`alert${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, others.style || {})}>
+          {caption && <h1 {...captionAttribute}>{caption}</h1>}
+          <div {...contentAttribute} className={`alert-content${contentAttribute.className ? ' ' + contentAttribute.className : ''}`}>
             {icon}
             {/* 内容 */}
             {children}
           </div>
           <div className="alert-handler">
-            {onClickCancel && <a className={`alert-cancel button lg${cancelClassName ? ' ' + cancelClassName : ''}`} style={cancelStyle} onClick={this.onClickCancel}>{cancelCaption}</a>}
-            {onClickSubmit && <a className={`alert-submit button lg${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} onClick={this.onClickSubmit} disabled={disabled}>{submitCaption}</a>}
+            {cancelCaption && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
+            {submitCaption && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption}</a>}
           </div>
         </div>
       </div>,

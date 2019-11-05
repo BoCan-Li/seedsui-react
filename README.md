@@ -242,33 +242,29 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   show={*显隐 bool, 默认false}
   duration={动画时长 number, 默认见seedsui-variables.less}
 
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无}
-  onClickMask={点击遮罩 func, 默认无}
+  maskAttribute={遮罩属性 object, 默认无}
 
   style={容器style object, 默认无}
   className={容器className string, 默认无}
 
   caption={标题文字 node, 默认无}
-  captionStyle={标题style object, 默认无}
-  captionClassName={标题className string, 默认无}
+  captionAttribute={标题属性 object, 默认无}
 
   icon={图标dom node, 默认无}
 
   contentStyle={内容style object, 默认无}
-  contentClassName={内容className string, 默认无}
-  children={内容 node, 默认无}
+  contentAttribute={内容属性 object, 默认无}
 
-  submitStyle={确定按钮style object, 默认无}
-  submitClassName={确定按钮className string, 默认无}
+  
+
   submitCaption={确定按钮文字 node, 默认'确定'}
-  disabled={确定按钮是否禁用 bool, 默认false}
-  onClickSubmit={点击确定按钮 func(args), 有此属性才显示确定按钮}
+  submitAttribute={确定按钮属性 object, 默认无}
 
-  cancelStyle={取消按钮style object, 默认无}
-  cancelClassName={取消按钮className string, 默认无}
   cancelCaption={取消按钮文字 node, 默认'取消'}
-  onClickCancel={点击取消按钮 func(args), 默认无, 有此属性才显示取消按钮}
+  cancelAttribute={取消按钮属性 object, 默认无}
+
+  children={内容 node, 默认无}
+  {...others}
 />
 ```
 
