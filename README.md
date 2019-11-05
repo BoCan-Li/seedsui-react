@@ -4028,6 +4028,7 @@ import Progress from 'seedsui-react/lib/Progress';
   pictures={图片地址 array, 默认''}
   errorHTML={加载错误时显示的信息 string, 默认'文件加载失败'}
   loadHTML={加载时显示的信息 string, 默认'加载中'}
+  nodataHTML={暂无数据显示的信息 string, 默认'暂无数据'}
   cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
 
   pdfLib={pdf.js库 string, 默认'//res.waiqin365.com/d/seedsui/pdfview/pdf.js'}

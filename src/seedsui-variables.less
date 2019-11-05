@@ -777,9 +777,6 @@ a {
   border-radius: 4px;
   min-height: 100px;
   background-color: white;
-  .pdf-page-canvas{
-    display: none;
-  }
   .pdf-page-img{
     width: 100%;
   }
@@ -794,6 +791,16 @@ a {
     color: @sub;
   }
   .pdf-page-error{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    .flex;
+    .flex-middle;
+    .flex-center;
+    color: @sub;
+  }
+  .pdf-page-nodata{
     position: absolute;
     top: 0;
     bottom: 0;

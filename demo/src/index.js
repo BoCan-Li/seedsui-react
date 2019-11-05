@@ -6,8 +6,16 @@ import {Page, Header, Titlebar, Container, PDFView} from '../../src'
 class Demo extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      pictures: []
+    }
   }
   componentDidMount () {
+    setTimeout(() => {
+      this.setState({
+        pictures: ["/demo/assets/pdfview.png"]
+      })
+    }, 2000);
 	}
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -15,7 +23,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/"/>
+        <PDFView pictures={this.state.pictures} nodataHTML="hh"/>
       </Container>
     </Page>
   }

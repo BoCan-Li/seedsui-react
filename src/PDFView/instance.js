@@ -13,6 +13,8 @@ var PDFView = function (container, params) {
     loadHTML: '加载中',
     errorClass: 'pdf-page-error',
     errorHTML: '文件加载失败',
+    nodataClass: 'pdf-page-nodata',
+    nodataHTML: '暂无数据',
     hideClass: 'hide',
 
     pictures: '', // 图片地址
@@ -30,7 +32,6 @@ var PDFView = function (container, params) {
     onInit:function(PDFView)
     onPageLoad:function(PDFView)
     onLoad:function(PDFView)
-    onLoadError:function(error)
     */
   }
   params = params || {}
@@ -91,6 +92,26 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
+  // base64编码转成流(废弃)
+  // s.convertBase64ToBinary = function (base64) {
+  //   var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
+  //   var rawLength = raw.length
+  //   // 转换成pdf.js能直接解析的Uint8Array类型
+  //   var array = new Uint8Array(new ArrayBuffer(rawLength))
+  //   for (var i = 0; i < rawLength; i++) {
+  //     array[i] = raw.charCodeAt(i) & 0xff
+  //   }
+  //   return array
+  // }
+  // s.convertBase64ToBinary使用方法
+  // var data = s.params.src.replace('data:application/pdf;base64,', '')
+  // data = s.convertBase64ToBinary(data)
+  // PDFJS.getDocument({data: data, ...options})
+  // 计算宽高比例
+  s.scale = 1
+  s.updateScale = function (target) {
+    s.scale = s.container.clientWidth / target.width
+  }
   // 互斥显示一页中的指定元素: canvas、img、load、error
   s.showPageElement = function (pageDOM, elementName) {
     var elements = {}
@@ -108,6 +129,10 @@ var PDFView = function (container, params) {
     elements.error = pageDOM.querySelector('.' + s.params.errorClass)
     elements.error.classList.add(s.params.hideClass)
     elements.error.innerHTML = s.params.errorHTML
+    // 隐藏nodata
+    elements.nodata = pageDOM.querySelector('.' + s.params.nodataClass)
+    elements.nodata.classList.add(s.params.hideClass)
+    elements.nodata.innerHTML = s.params.nodataHTML
     // 显示指定的元素
     if (elements[elementName]) elements[elementName].classList.remove(s.params.hideClass)
   }
@@ -134,11 +159,22 @@ var PDFView = function (container, params) {
     error.setAttribute('class', s.params.errorClass + ' ' + s.params.hideClass)
     error.innerHTML = s.params.errorHTML
     page.appendChild(error)
+    // nodata
+    var nodata = document.createElement('div')
+    nodata.setAttribute('class', s.params.nodataClass + ' ' + s.params.hideClass)
+    nodata.innerHTML = s.params.nodataHTML
+    page.appendChild(nodata)
     
     // 添加到容器
     if (s.wrapper) s.wrapper.appendChild(page)
 
     return page
+  }
+  // 显示暂无数据
+  s.showNoData = function () {
+    s.wrapper.innerHTML = ''
+    var pageDOM = s.createPage()
+    s.showPageElement(pageDOM, 'nodata')
   }
 
   // canvas转成图片
@@ -156,19 +192,10 @@ var PDFView = function (container, params) {
       s.loadImg()
     } else if (s.params.src) { // PDF加载
       s.loadPDF()
+    } else {
+      s.showNoData()
     }
   }
-  // base64编码转成流(废弃)
-  // s.convertBase64ToBinary = function (base64) {
-  //   var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
-  //   var rawLength = raw.length
-  //   // 转换成pdf.js能直接解析的Uint8Array类型
-  //   var array = new Uint8Array(new ArrayBuffer(rawLength))
-  //   for (var i = 0; i < rawLength; i++) {
-  //     array[i] = raw.charCodeAt(i) & 0xff
-  //   }
-  //   return array
-  // }
   // 加载PDF的库
   s.loadPDF = function () {
     if (!s.params.pdfLib || !s.params.pdfWorkLib) {
@@ -202,8 +229,7 @@ var PDFView = function (container, params) {
       }
     } catch (error) {
       console.log(error)
-      var pageDOM = s.createPage()
-      s.showPageElement(pageDOM, 'error')
+      s.showNoData()
     }
   }
   // 初始化pdf文件
@@ -213,48 +239,26 @@ var PDFView = function (container, params) {
       PDFJS.cMapUrl = s.params.cMapUrl
       PDFJS.cMapPacked = true
     }
-    // 先判断来源是url还是data(废弃)
-    // var args = ''
-    // if (s.params.options) {
-    //   var source = {}
-    //   if (s.params.src.indexOf('data:application/pdf;base64,') !== -1) {
-    //     var data = s.params.src.replace('data:application/pdf;base64,', '')
-    //     data = s.convertBase64ToBinary(data)
-    //     source = {data: data}
-    //   } else {
-    //     source = {url: s.params.src}
-    //   }
-    //   args = {...source, ...s.params.options}
-    // } else {
-    //   args = s.params.src
-    // }
-    // console.log(args)
     // PDFJS.getDocument(args)
     PDFJS.getDocument(s.params.src).then(function (pdf) {
       s.renderPDF(pdf)
     }).catch(function (error) {
       console.log(error)
-      var pageDOM = s.createPage()
-      s.showPageElement(pageDOM, 'error')
+      s.showNoData()
     })
   }
   // 加载图片
   s.loadImg = function () {
     var pictures = s.params.pictures
-    if (!pictures || !pictures.length) return
-    if (!pictures || !pictures.length) {
-      s.params.onLoadError()
-      return
-    }
     s.total = pictures.length
     s.completeCount = 0
     for (var [i, picture] of pictures.entries()) {
       // 创建页
       var pageDOM = s.createPage()
+      pageDOM.setAttribute(s.params.pageAttr, i)
       var img = pageDOM.querySelector('img')
       // 设置图片路径
       img.src = picture
-      img.setAttribute(s.params.pageAttr, i)
       img.addEventListener('load', s.onLoad, false)
       img.addEventListener('error', s.onError, false)
     }
@@ -270,8 +274,8 @@ var PDFView = function (container, params) {
         let viewport = page.getViewport(1)
         // 创建页
         let pageDOM = s.createPage()
+        pageDOM.setAttribute(s.params.pageAttr, i)
         let canvas = pageDOM.querySelector('canvas')
-        let img = pageDOM.querySelector('img')
 
         let context = canvas.getContext('2d')
         canvas.height = viewport.height
@@ -282,11 +286,19 @@ var PDFView = function (container, params) {
         }
         let renderTask = page.render(renderContext)
         renderTask.promise.then(() => {
-          let pngbase64 = s.canvasToPng(canvas)
-          img.src = pngbase64
-          img.setAttribute(s.params.pageAttr, i - 1)
-          img.addEventListener('load', s.onLoad, false)
-          img.addEventListener('error', s.onError, false)
+          s.updateScale(canvas)
+          canvas.style.WebkitTransform = `scale(${s.scale})`
+          canvas.style.WebkitTransformOrigin = `0 0`
+
+          s.pageWidth = canvas.width * s.scale
+          s.pageHeight = canvas.height * s.scale
+          pageDOM.style.width = s.pageWidth + 'px'
+          pageDOM.style.height = s.pageHeight + 'px'
+
+          s.onLoad({target: canvas})
+          s.showPageElement(pageDOM, 'canvas')
+        }).catch((err) => {
+          s.onLoad({target: canvas}, true)
         })
       })
     }
@@ -295,16 +307,17 @@ var PDFView = function (container, params) {
   s.total = 0 // 总页数
   s.completeCount = 0 // 完成页数
   s.onLoad = function (e, isError) {
-    var target = e.target
-    var index = target.getAttribute(s.params.pageAttr)
+    var target = e.target // canvas或者img
+    var pageDOM = target.parentNode
+    var index = pageDOM ? pageDOM.getAttribute(s.params.pageAttr) : 'page'
     // 显示此页Error层
     if (isError) {
       console.log('第' + index + '页加载失败')
-      target.setAttribute(s.params.completeAttr, '0') // 0为加载失败
+      pageDOM && pageDOM.setAttribute(s.params.completeAttr, '0') // 0为加载失败
       s.showPageElement(target.parentNode, 'error')
     } else {
       console.log('第' + index + '页加载完成')
-      target.setAttribute(s.params.completeAttr, '1') // 1为加载成功
+      pageDOM && pageDOM.setAttribute(s.params.completeAttr, '1') // 1为加载成功
       s.showPageElement(target.parentNode, 'img')
     }
     s.event = e
