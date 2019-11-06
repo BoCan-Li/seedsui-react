@@ -61,8 +61,6 @@ export { default as MenuTiled } from './MenuTiled';
 export { default as MenuTree } from './MenuTree';
 export { default as Notice } from './Notice';
 export { default as NumBox } from './NumBox';
-export { default as NumBoxPop } from './NumBoxPop';
-export { default as NumBoxPopPointer } from './NumBoxPopPointer';
 export { default as OnOff } from './OnOff';
 export { default as Page } from './Page';
 export { default as PagePull } from './PagePull'; // 不常用
