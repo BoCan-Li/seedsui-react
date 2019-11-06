@@ -239,7 +239,6 @@ var PDFView = function (container, params) {
       PDFJS.cMapUrl = s.params.cMapUrl
       PDFJS.cMapPacked = true
     }
-    // PDFJS.getDocument(args)
     PDFJS.getDocument(s.params.src).then(function (pdf) {
       s.renderPDF(pdf)
     }).catch(function (error) {
@@ -278,23 +277,25 @@ var PDFView = function (container, params) {
         let canvas = pageDOM.querySelector('canvas')
 
         let context = canvas.getContext('2d')
+        // 设置canvas的宽高
         canvas.height = viewport.height
         canvas.width = viewport.width
+        s.updateScale(canvas)
+        canvas.style.WebkitTransform = `scale(${s.scale})`
+        canvas.style.WebkitTransformOrigin = `0 0`
+
+        // 设置单页的宽高
+        s.pageWidth = canvas.width * s.scale
+        s.pageHeight = canvas.height * s.scale
+        pageDOM.style.width = s.pageWidth + 'px'
+        pageDOM.style.height = s.pageHeight + 'px'
+
         let renderContext = {
           canvasContext: context,
           viewport: viewport
         }
         let renderTask = page.render(renderContext)
         renderTask.promise.then(() => {
-          s.updateScale(canvas)
-          canvas.style.WebkitTransform = `scale(${s.scale})`
-          canvas.style.WebkitTransformOrigin = `0 0`
-
-          s.pageWidth = canvas.width * s.scale
-          s.pageHeight = canvas.height * s.scale
-          pageDOM.style.width = s.pageWidth + 'px'
-          pageDOM.style.height = s.pageHeight + 'px'
-
           s.onLoad({target: canvas})
           s.showPageElement(pageDOM, 'canvas')
         }).catch((err) => {
