@@ -144,24 +144,6 @@
 	color:@placeholder;	
 }
 
-.setHorizontalTb(){
-  -webkit-writing-mode:horizontal-tb;
-}
-.setHorizontalBt(){
-  -webkit-writing-mode:horizontal-bt;
-}
-.setVerticalRl(){
-  -webkit-writing-mode:vertical-rl;
-}
-.setVerticalLr(){
-  -webkit-writing-mode:vertical-lr;
-}
-.setNoselect(){
-  -webkit-touch-callout:none;
-  -webkit-user-select:none;
-  user-select:none;
-}
-
 // 设置body样式
 *{
 	margin:0;
@@ -1493,7 +1475,10 @@ a {
 		visibility:hidden;
 		&.active{
 			visibility:visible;
-		}
+    }
+    &.transition-duration-0{
+      transition-duration: 0ms;
+    }
 	}
 	// 从右往左滑动
 	&[data-animation="slideLeft"]{

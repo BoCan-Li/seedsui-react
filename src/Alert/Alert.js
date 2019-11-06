@@ -9,8 +9,6 @@ export default class Alert extends Component {
     portal: PropTypes.object,
     show: PropTypes.bool,
 
-    duration: PropTypes.number,
-
     maskAttribute: PropTypes.object,
 
     caption: PropTypes.node,
@@ -42,8 +40,6 @@ export default class Alert extends Component {
       portal,
       show,
 
-      duration,
-
       maskAttribute = {},
 
       caption,
@@ -63,8 +59,8 @@ export default class Alert extends Component {
       ...others
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask alert-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskAttribute.style || {})}>
-        <div data-animation="zoom" {...others} className={`alert${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, others.style || {})}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask alert-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
+        <div data-animation="zoom" {...others} className={`alert${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
           {caption && <h1 {...captionAttribute}>{caption}</h1>}
           <div {...contentAttribute} className={`alert-content${contentAttribute.className ? ' ' + contentAttribute.className : ''}`}>
             {icon}
@@ -72,8 +68,8 @@ export default class Alert extends Component {
             {children}
           </div>
           <div className="alert-handler">
-            {cancelCaption && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
-            {submitCaption && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption}</a>}
+            {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
+            {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption}</a>}
           </div>
         </div>
       </div>,

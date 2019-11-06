@@ -6,7 +6,9 @@
 	pointer-events:auto;
 }
 .noselect{
-	.setNoselect();
+	-webkit-touch-callout:none;
+  -webkit-user-select:none;
+  user-select:none;
 }
 
 // 显示与隐藏
@@ -155,16 +157,16 @@
 
 // 层和文字排列
 .horizontal-tb{
-	.setHorizontalTb();
+	-webkit-writing-mode:horizontal-tb;
 }
 .horizontal-bt{
-	.setHorizontalBt();
+	-webkit-writing-mode:horizontal-bt;
 }
 .vertical-rl{ // 文字旋转90%，从右至左
-	.setVerticalRl();
+	-webkit-writing-mode:vertical-rl;
 }
 .vertical-lr{ // 文字旋转90%，从左至右
-	.setVerticalLr();
+	-webkit-writing-mode:vertical-lr;
 }
 
 // 阴影
@@ -201,19 +203,11 @@
 	vertical-align: baseline;
 }
 
-// 必填项
-.required{
-  color: @badge-bg;;
-	font-size: @font-size-lg;
-	line-height: @font-size-lg;
-  width: @8px;
-	height: @8px;
-	text-align: center;
+// 动画
+.transition-duration-0{
+	transition-duration: 0ms;
 }
-.required-left {
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
+.animation-duration-0{
+	animation-duration: 0ms;
 }
 // common.less(end)

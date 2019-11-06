@@ -271,12 +271,33 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 ### 示例
 ```javascript
 import Alert from 'seedsui-react/lib/Alert';
+
+this.state = {
+  show: false
+}
+
+onClick = () => {
+  this.setState((prevState) => {
+    return {
+      show: !prevState.show
+    }
+  })
+}
+
 <Alert
-  show={this.state.alertShow}
-  submitCaption="确定按钮"
-  onClickSubmit={this.onSubmitAlert}>
-  提示内容
+  show={this.state.show}
+  style={{color: 'green'}}
+  className="transition-duration-0"
+  maskAttribute={{className: "transition-duration-0"}}
+  portal={document.body}
+  submitAttribute={{onClick: this.onClick, className: 'primary', disabled: false}}
+  cancelAttribute={{onClick: this.onClick}}
+  captionAttribute={{style: {padding: '30px 12px 5px 12px'}}}
+  contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}
+>
+  <div>hhh</div>
 </Alert>
+<input type="button" value="显隐" onClick={this.onClick}/>
 ```
 [返回目录](#component)
 
@@ -4022,13 +4043,16 @@ import Progress from 'seedsui-react/lib/Progress';
 <PDFView
   src={值 string, 默认''} // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
   pictures={图片地址 array, 默认''}
-  errorHTML={加载错误时显示的信息 string, 默认'文件加载失败'}
-  loadHTML={加载时显示的信息 string, 默认'加载中'}
-  nodataHTML={暂无数据显示的信息 string, 默认'暂无数据'}
   cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
 
-  pdfLib={pdf.js库 string, 默认'//res.waiqin365.com/d/seedsui/pdfview/pdf.js'}
-  pdfWorkLib={pdf.work.js库 string, 默认'//res.waiqin365.com/d/seedsui/pdfview/pdf.js'}
+  params={设置实例化参数 object, 默认{}}
+  // params: {
+  //   errorHTML: '文件加载失败', // 加载错误时显示的信息
+  //   loadHTML: '加载中', // 加载时显示的信息
+  //   nodataHTML: '暂无数据', // 暂无数据
+  //   pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js', // pdf.js库
+  //   pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js' // pdf.work.js库
+  // }
   {...others}
 />
 ```

@@ -7,18 +7,17 @@ class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      pictures: []
+      show: false
     }
   }
   componentDidMount () {
-    setTimeout(() => {
-      this.setState({
-        pictures: ["/demo/assets/pdfview.png"]
-      })
-    }, 2000);
   }
-  onClick = (e) => {
-    e.hide()
+  onClick = () => {
+    this.setState((prevState) => {
+      return {
+        show: !prevState.show
+      }
+    })
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -26,9 +25,20 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <Alert show className="bg-primary" style={{color: 'red'}} portal={document.body} duration={0} submitAttribute={{onClick: this.onSubmit, className: 'primary', disabled: false}} cancelAttribute={{onClick: this.onCancel}} captionAttribute={{style: {padding: '30px 12px 5px 12px'}}} contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}>
+        <Alert
+          show={this.state.show}
+          style={{color: 'green'}}
+          className="transition-duration-0"
+          maskAttribute={{className: "transition-duration-0"}}
+          portal={document.body}
+          submitAttribute={{onClick: this.onClick, className: 'primary', disabled: false}}
+          cancelAttribute={{onClick: this.onClick}}
+          captionAttribute={{style: {padding: '30px 12px 5px 12px'}}}
+          contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}
+        >
           <div>hhh</div>
         </Alert>
+        <input type="button" value="显隐" onClick={this.onClick}/>
       </Container>
     </Page>
   }

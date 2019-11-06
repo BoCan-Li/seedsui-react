@@ -55,7 +55,14 @@ export default class Vott extends Component {
     this.instance()
   }
   instance = () => {
-    const {data, readOnly, src, params, preview, ...others} = this.props;
+    const {
+      data,
+      readOnly,
+      src,
+      params = {},
+      preview,
+      ...others
+    } = this.props;
     const instance = new Instance(this.$el, {
       readOnly: readOnly,
       data: data,
@@ -93,7 +100,14 @@ export default class Vott extends Component {
     }});
   }
   render() {
-    const {data, readOnly, src, params, preview, ...others} = this.props;
+    const {
+      data,
+      readOnly,
+      src,
+      params = {},
+      preview,
+      ...others
+    } = this.props;
     return (
       <div className="vott-container" {...others} ref={(el) => {this.$el = el}}>
         <svg className="vott-svg" preserveAspectRatio="none" onClick={this.onClick}></svg>
