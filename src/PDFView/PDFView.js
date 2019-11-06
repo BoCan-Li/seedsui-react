@@ -16,7 +16,6 @@ export default class PDFView extends Component {
     //   pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js', // pdf.js库
     //   pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js' // pdf.work.js库
     // }
-    onLoad: PropTypes.func // 加载完成
   }
   static defaultProps = {
   }
@@ -28,30 +27,30 @@ export default class PDFView extends Component {
       pictures,
       src,
       cMapUrl,
-      params = {},
-      onLoad
+      params = {}
     } = this.props;
     if (!src && !pictures) return
-    let bscroll = null;
-    const instance = new Instance(this.$el, {
+    this.instance = new Instance(this.$el, {
       pictures,
       src,
       cMapUrl,
       ...params,
       onLoad: (s) => {
-        if (onLoad) onLoad(s)
-        bscroll = new BScroll('.pdf-container', {
+        if (params.onLoad) params.onLoad(s)
+        if (this.bscroll) {
+          this.bscroll.refresh();
+          return;
+        }
+        this.bscroll = new BScroll('.pdf-container', {
           scrollX: true,
           zoom: {
             start: 1,
             min: 1,
             max: 4
-           }
+          }
         });
       }
     });
-    this.bscroll = bscroll;
-    this.instance = instance;
   }
   componentDidUpdate (prevProps) {
     const {
@@ -82,7 +81,6 @@ export default class PDFView extends Component {
       src,
       cMapUrl,
       params = {},
-      onLoad,
       ...others
     } = this.props;
     if (!src && !pictures) {

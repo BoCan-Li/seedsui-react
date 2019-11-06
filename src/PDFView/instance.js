@@ -228,6 +228,7 @@ var PDFView = function (container, params) {
         }
       }
     } catch (error) {
+      console.log('SeedsUI: pdfjs库加载失败')
       console.log(error)
       s.showNoData()
     }
@@ -242,6 +243,7 @@ var PDFView = function (container, params) {
     PDFJS.getDocument(s.params.src).then(function (pdf) {
       s.renderPDF(pdf)
     }).catch(function (error) {
+      console.log('SeedsUI: pdf格式不正确')
       console.log(error)
       s.showNoData()
     })
@@ -300,7 +302,13 @@ var PDFView = function (container, params) {
           s.showPageElement(pageDOM, 'canvas')
         }).catch((err) => {
           s.onLoad({target: canvas}, true)
+          console.log('SeedsUI: 渲染第' + i + '页失败')
+          console.log(err)
         })
+      }).catch((err) => {
+        s.completeCount++
+        console.log('SeedsUI: 读取第' + i + '页失败')
+        console.log(err)
       })
     }
   }
@@ -331,7 +339,7 @@ var PDFView = function (container, params) {
       if (s.params.onLoad) s.params.onLoad(s)
     }
   }
-  // 加载失败事件
+  // 图片加载失败事件
   s.onError = function (e) {
     s.onLoad(e, true)
   }

@@ -4050,7 +4050,9 @@ import Progress from 'seedsui-react/lib/Progress';
   //   loadHTML: '加载中', // 加载时显示的信息
   //   nodataHTML: '暂无数据', // 暂无数据
   //   pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js', // pdf.js库
-  //   pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js' // pdf.work.js库
+  //   pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js', // pdf.work.js库
+  //   onInit: function (s),
+  //   onLoad: function (s),
   // }
   {...others}
 />
