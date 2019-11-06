@@ -240,7 +240,6 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   portal={传送dom object, 默认document.getElementById('root')}
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
-  duration={动画时长 number, 默认见seedsui-variables.less}
 
   maskAttribute={遮罩属性 object, 默认无}
 
