@@ -125,10 +125,13 @@ export default class Carrousel extends Component {
   }
   render() {
     const {
-      className, style,
-      slideAttribute,
-      pagination, paginationAttribute,
-      prevAttribute, nextAttribute,
+      className,
+      style,
+      slideAttribute = {},
+      pagination,
+      paginationAttribute = {},
+      prevAttribute = {}, 
+      nextAttribute = {},
       stopPropagation,
       activeIndex,
 

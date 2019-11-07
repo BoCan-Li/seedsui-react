@@ -2193,13 +2193,23 @@ a {
   @checkbox-color: @placeholder;
   @checkbox-color-active: @primary-bg;
   @checkbox-color-disabled: @disabled-bg;
-
-  .checkbox-box{
+  .checkbox{
     .inline-flex;
     .flex-middle;
+    &[disabled]{
+      color:@checkbox-color-disabled;
+      &:extend(.events-none);
+    }
+    &[data-checked=true]{
+      .checkbox-input{
+        font-family: 'iconfont';
+        &:extend(.icon-rdo-ok-fill all);
+        color:@checkbox-color-active;
+      }
+    }
   }
-  .checkbox{
-    &:extend(.appearance);
+  .checkbox-input{
+    &:extend(.events-none);
     height: @22px;
     width: @22px;
     line-height: @22px;
@@ -2215,22 +2225,12 @@ a {
   
     color:@checkbox-color;
   
-    &:checked,&.active{
-      color:@checkbox-color-active;
-    }
-    &[disabled]{
-      color:@checkbox-color-disabled;
-    }
     font-family: 'iconfont';
     &:extend(.icon-rdo all);
   }
-  // icon
-  .checkbox:checked{
-    font-family: 'iconfont';
-    &:extend(.icon-rdo-ok-fill all);
-  }
   // caption
-  .checkbox+.checkbox-caption{
+  .checkbox-caption{
+    &:extend(.events-none);
     margin-left:@4px;
   }
 }
@@ -5474,12 +5474,23 @@ a {
   @radio-color: @placeholder;
   @radio-color-active: @primary-bg;
   @radio-color-disabled: @disabled-bg;
-  .radio-box{
+  .radio{
     .inline-flex;
     .flex-middle;
+    &[disabled]{
+      color:@radio-color-disabled;
+      &:extend(.events-none);
+    }
+    &[data-checked=true]{
+      .radio-input{
+        font-family: 'iconfont';
+        &:extend(.icon-rdo-ok-fill all);
+        color:@radio-color-active;
+      }
+    }
   }
-  .radio{
-    &:extend(.appearance);
+  .radio-input{
+    &:extend(.events-none);
     height: @22px;
     width: @22px;
     line-height: @22px;
@@ -5495,22 +5506,12 @@ a {
   
     color:@radio-color;
   
-    &:checked,&.active{
-      color:@radio-color-active;
-    }
-    &[disabled]{
-      color:@radio-color-disabled;
-    }
     font-family: 'iconfont';
     &:extend(.icon-rdo all);
   }
-  // icon
-  .radio:checked{
-    font-family: 'iconfont';
-    &:extend(.icon-rdo-ok-fill all);
-  }
   // caption
-  .radio+.radio-caption{
+  .radio-caption{
+    &:extend(.events-none);
     margin-left:@4px;
   }
 }
@@ -7429,6 +7430,9 @@ hr:extend(.border-b){
 
 
 // common公共样式
+.events-none{
+  pointer-events: none;
+}
 // 禁止长按选择
 .noselect{
 	-webkit-touch-callout:none;

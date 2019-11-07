@@ -9,13 +9,11 @@ export default class Titlebar extends Component {
     
     showUrlTitle: PropTypes.bool, // 标题是否显示url中的titlebar
     caption: PropTypes.node,
-    // 以下三个属性, 只有caption为string类型或者显示地址栏标题时才有用
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object,
-    onClickCaption: PropTypes.func,
+    captionAttribute: PropTypes.object, // 只有caption为string类型或者显示地址栏标题时才有用
 
     lButtons: PropTypes.array, // [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
     rButtons: PropTypes.array,
+
     backClassName: PropTypes.string,
     backStyle: PropTypes.object,
     backIcon: PropTypes.node,
@@ -23,6 +21,7 @@ export default class Titlebar extends Component {
     backIconStyle: PropTypes.object,
     backCaption: PropTypes.string,
     onClickBack: PropTypes.func,
+
     children: PropTypes.node
   }
   static defaultProps = {
@@ -70,10 +69,26 @@ export default class Titlebar extends Component {
   render() {
     let {
       className,
+    
       showUrlTitle,
-      caption, captionClassName, captionStyle, children, onClickCaption,
-      lButtons, rButtons, backIconClassName, backIconStyle, backClassName, backStyle, backCaption, onClickBack, ...others
+      caption,
+      captionAttribute = {},
+
+      lButtons,
+      rButtons,
+
+      backClassName,
+      backStyle,
+      backIcon,
+      backIconClassName,
+      backIconStyle,
+      backCaption,
+      onClickBack,
+      
+      children,
+      ...others
     } = this.props;
+    // 构建左右按钮
     let lButtonsDOM = null;
     if (Array.isArray(lButtons)) {
       lButtonsDOM = this.getButtonsDOM(lButtons);
@@ -85,9 +100,9 @@ export default class Titlebar extends Component {
     // 设置显示标题
     let title = Device.getUrlParameter('titlebar', location.search);
     if (showUrlTitle && title) {
-      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{decodeURIComponent(decodeURIComponent(title))}</h1>;
+      caption = <h1 {...captionAttribute} className={`titlebar-caption nowrap text-center${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{decodeURIComponent(decodeURIComponent(title))}</h1>;
     } else if (typeof caption === 'string') {
-      caption = <h1 className={`titlebar-caption nowrap text-center${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle} onClick={onClickCaption}>{caption}</h1>
+      caption = <h1 {...captionAttribute} className={`titlebar-caption nowrap text-center${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</h1>
     }
     return (
       <div className={`titlebar${className ? ' ' + className : ''}`} {...others}>

@@ -8,17 +8,10 @@ export default class Toast extends Component {
     
     show: PropTypes.bool,
 
-    duration: PropTypes.number,
-
-    maskClassName: PropTypes.string,
-    maskStyle: PropTypes.object,
-
-    className: PropTypes.string,
-    style: PropTypes.object,
+    maskAttribute: PropTypes.object,
 
     caption: PropTypes.node,
-    captionStyle: PropTypes.object,
-    captionClassName: PropTypes.string,
+    captionAttribute: PropTypes.object,
 
     icon: PropTypes.node
   }
@@ -33,19 +26,18 @@ export default class Toast extends Component {
     const {
       portal,
       show,
-      duration,
-      maskClassName, maskStyle,
-      className, style,
+      maskAttribute = {},
       icon,
-      caption, captionStyle, captionClassName,
+      caption,
+      captionAttribute = {},
       ...others
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`mask toast-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} {...others}>
-        <div className={`toast${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask toast-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
+        <div {...others} className={`toast${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
           <div className="toast-wrapper">
             {icon}
-            {caption && <span className={`toast-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</span>}
+            {caption && <span {...captionAttribute} className={`toast-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</span>}
           </div>
         </div>
       </div>,

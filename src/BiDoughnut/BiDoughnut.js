@@ -10,10 +10,10 @@ export default class BiDoughnut extends Component {
     delay: PropTypes.number, // 延时
 
     className: PropTypes.string,
+    style: PropTypes.object,
 
-    children: PropTypes.node,
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object
+    captionAttribute: PropTypes.object,
+    children: PropTypes.node
   };
 
   static defaultProps = {
@@ -88,21 +88,28 @@ export default class BiDoughnut extends Component {
   }
   render() {
     const {
-      lineWidth, size,
+      lineWidth,
+      size,
+      duration,
+      rotate,
+      delay,
       className,
-      children, captionClassName, captionStyle
+      style = {},
+      captionAttribute = {},
+      children,
+      ...others
     } = this.props;
     // 动画旋转
     this.aniRotate();
     return (
-      <div className={`bi-doughtut ${className}`} style={{width: `${size}px`, height: `${size}px`}}>
+      <div {...others} className={`bi-doughtut ${className}`} style={{width: `${size}px`, height: `${size}px`, ...style}}>
         <div className="bi-doughtut-wrapper left">
           <div ref={(el) => {this.$elLeftCircle = el;}} className="bi-doughtut-circle left" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
         </div>
         <div className="bi-doughtut-wrapper right">
           <div ref={(el) => {this.$elRightCircle = el;}} className="bi-doughtut-circle right" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
         </div>
-        <div className={`bi-doughtut-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{children}</div>
+        <div {...captionAttribute} className={`bi-doughtut-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{children}</div>
       </div>
     );
   }

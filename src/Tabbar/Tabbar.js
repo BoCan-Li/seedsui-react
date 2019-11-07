@@ -6,11 +6,8 @@ export default class Tabbar extends Component {
     style: PropTypes.object,
     className: PropTypes.string, // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
 
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object,
-
-    sndCaptionClassName: PropTypes.string,
-    sndCaptionStyle: PropTypes.object,
+    captionAttribute: PropTypes.object,
+    sndcaptionAttribute: PropTypes.object,
 
     list: PropTypes.array,
 
@@ -87,7 +84,7 @@ export default class Tabbar extends Component {
     return icon;
   }
   getTabsDOM = () => {
-    const {list, activeIndex, captionClassName, captionStyle, sndCaptionClassName, sndCaptionStyle} = this.props;
+    const {list, activeIndex, captionAttribute = {}, sndcaptionAttribute = {}} = this.props;
     // tabStyle高度
     var tabStyle = {};
     if (this.props.style && this.props.style.height) {
@@ -110,8 +107,8 @@ export default class Tabbar extends Component {
       return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} data-index={index} key={index} {...attributes}>
         {liconDOM && liconDOM}
         <div className="tab-content">
-          <div className={`tab-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption || name}</div>
-          {sndcaption && <div className={`tab-sndcaption${sndCaptionClassName ? ' ' + sndCaptionClassName : ''}`} style={sndCaptionStyle}>{sndcaption}</div>}
+          <div {...captionAttribute} className={`tab-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption || name}</div>
+          {sndcaption && <div {...sndcaptionAttribute} className={`tab-sndcaption${sndcaptionAttribute.className ? ' ' + sndcaptionAttribute.className : ''}`}>{sndcaption}</div>}
         </div>
         {riconDOM && riconDOM}
       </li>);

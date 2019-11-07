@@ -4,14 +4,8 @@ import Counter from './../Counter';
 
 export default class Progress extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
-
-    barStyle: PropTypes.object,
-    barClassName: PropTypes.string,
-
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object,
+    barAttribute: PropTypes.object,
+    captionAttribute: PropTypes.object,
 
     percentage: PropTypes.number,
     max: PropTypes.number,
@@ -37,10 +31,13 @@ export default class Progress extends Component {
   }
   render() {
     const {
-      style, className,
-      barStyle, barClassName,
-      captionStyle, captionClassName,
-      percentage, max, min, value, showPercentage,
+      barAttribute = {},
+      captionAttribute = {},
+      percentage,
+      max,
+      min,
+      value,
+      showPercentage,
       children,
       ...others
     } = this.props;
@@ -58,10 +55,10 @@ export default class Progress extends Component {
     } else if (barPercentage < 0) {
       barPercentage = 0;
     }
-    return <div className={`progress${className ? ' ' + className : ''}`} style={style} {...others}>
-      <span ref={(el) => {this.$bar = el;}} className={`progress-bar${barClassName ? ' ' + barClassName : ''}`} style={Object.assign({}, barStyle, {width: barPercentage + '%'})}>
-        {showPercentage && <Counter duration={1000} to={textPercentage} from={0} suffix={'%'} className={`progress-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}/>}
-        {!showPercentage && <Counter duration={1000} to={Number(value)} from={min} suffix={'/' + max} className={`progress-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}/>}
+    return <div {...others} className={`progress${others.className ? ' ' + others.className : ''}`} style={style} >
+      <span ref={(el) => {this.$bar = el;}} {...barAttribute} className={`progress-bar${barAttribute.className ? ' ' + barAttribute.className : ''}`} style={Object.assign({}, barAttribute.style || {}, {width: barPercentage + '%'})}>
+        {showPercentage && <Counter {...captionAttribute} className={`progress-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`} duration={1000} to={textPercentage} from={0} suffix={'%'}/>}
+        {!showPercentage && <Counter {...captionAttribute} className={`progress-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`} duration={1000} to={Number(value)} from={min} suffix={'/' + max}/>}
       </span>
       {children}
     </div>;

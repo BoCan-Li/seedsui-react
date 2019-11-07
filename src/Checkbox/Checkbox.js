@@ -3,39 +3,31 @@ import PropTypes from 'prop-types';
 
 export default class Checkbox extends Component {
   static propTypes = {
-    args: PropTypes.any,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    onClick: PropTypes.func,
-
-    name: PropTypes.string,
     value: PropTypes.string,
     checked: PropTypes.bool,
-    disabled: PropTypes.bool,
+
+    inputAttribute: PropTypes.object,
 
     caption: PropTypes.string,
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object
+    captionAttribute: PropTypes.object
   }
   static defaultProps = {
-    args: null,
-    value: '',
-    checked: false
   }
   constructor(props) {
     super(props);
   }
-  onClick = (e) => {
-    if (this.props.disabled) return;
-    if (this.props.onClick) this.props.onClick(this.$input.checked, Object.getArgs(e, this.props.args));
-  }
   render() {
-    const {style, className,
-      name, value, checked,
-      caption, captionClassName, captionStyle} = this.props;
-    return (<div ref={el => {this.$el = el;}} className={`checkbox-box${className ? ' ' + className : ''}`} onClick={this.onClick} style={style}>
-      <input readOnly={true} checked={checked} type="checkbox" className="checkbox events-none" name={name} value={value} ref={(el) => {this.$input = el}}/>
-      {caption && <span className={`checkbox-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>{caption}</span>}
+    const {
+      value,
+      checked,
+      inputAttribute = {},
+      caption,
+      captionAttribute = {},
+      ...others
+    } = this.props;
+    return (<div ref={(el) => {this.$el = el}} {...others} data-checked={checked} data-value={value} className={`checkbox${others.className ? ' ' + others.className : ''}`}>
+      <span {...inputAttribute} className={`checkbox-input${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>
+      {caption && <span {...captionAttribute} className={`checkbox-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</span>}
     </div>);
   }
 }

@@ -4,9 +4,6 @@ import {Counter as Instance} from './instance.js';
 
 export default class Counter extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
-
     duration: PropTypes.number,
     from: PropTypes.number,
     to: PropTypes.number,
@@ -36,11 +33,13 @@ export default class Counter extends Component {
   }
   render() {
     const {
-      style, className,
-      duration, from, to, suffix,
+      duration,
+      from,
+      to,
+      suffix,
       autoplay,
       ...others
     } = this.props;
-    return <span ref={el => {this.$el = el;}} className={`counter${className ? ' ' + className: ''}`} style={style} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix} {...others}>1</span>;
+    return <span ref={el => {this.$el = el;}} {...others} className={`counter${others.className ? ' ' + others.className: ''}`} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
   }
 }

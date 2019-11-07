@@ -1,27 +1,22 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Marquee} from '../../src'
-const list = [
-  {
-    key: '1',
-    value: '标题标题'
-  },
-  {
-    key: '2',
-    value: '标题标题2'
-  },
-  {
-    key: '3',
-    value: '标题标题3'
-  }
-]
+import {Page, Header, Titlebar, Container, Checkbox} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      checked: true,
+      value: ''
+    }
   }
   componentDidMount () {
+  }
+  onClick = (checked) => {
+    this.setState({
+      checked: !checked
+    })
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -29,13 +24,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <Marquee
-          className="horizontal"
-          list={list}
-          step={48}
-          contentStyle={{height: '38px', padding: '5px 0'}}
-          contentClassName="flex flex-center nowrap2"
-        />
+        <Checkbox checked={this.state.checked} caption="设为默认" value={this.state.value} style={{display: 'block'}} onClick={(e) => this.onClick(e.target.getAttribute('data-checked') === 'true')}/>
       </Container>
     </Page>
   }

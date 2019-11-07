@@ -372,8 +372,10 @@ import BiClock from 'seedsui-react/lib/BiClock';
   delay={延时 number, 默认100}
 
   className={容器className string, 默认无, 基础'bi-doughtut'}
-  captionClassName={标题className string, 默认无, 基础'bi-doughtut-caption'}
-  captionStyle={标题style object, 默认无}
+  style={容器style object, 默认无}
+
+  captionAttribute={中间内容属性 object, 默认无}
+  children={中间内容 node, 默认无}
 >
 标题内容
 <BiDoughnut>
@@ -412,10 +414,8 @@ import BiDoughnut from 'seedsui-react/lib/BiDoughnut';
   rotate={旋转角度 number, 默认0, 最大270}
   delay={延时 number, 默认100}
 
-  className={容器className string, 默认无, 基础'bi-gauge-box'}
-  style={容器style object, 默认无}
-  captionClassName={标题className string, 默认无, 基础'bi-gauge-caption'}
-  captionStyle={标题style object, 默认无}
+  captionAttribute={标题属性 object, 默认无}
+  children={标题内容 node, 默认无}
 >
 标题内容
 <BiGauge>
@@ -994,8 +994,6 @@ import Container from 'seedsui-react/lib/Container';
 ### 属性
 ```javascript
 <Counter
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'container'}
   duration={动画时长 number, 默认5000}
   from={开始数字 number, 默认0}
   to={结束数字 number, 默认10}
@@ -3905,14 +3903,8 @@ onPreview = () => {
 ### 属性
 ```javascript
 <Progress
-  className={容器className string, 默认无, 基础'progress'}
-  style={容器style object, 默认无}
-
-  barStyle={进度条style object, 默认无}
-  barClassName={进度条className string, 默认无, 基础'progress-bar'}
-
-  captionClassName={进度条文字className string, 默认无, 基础'progress-caption'}
-  captionStyle={进度条文字style object, 默认无}
+  barAttribute={进度条属性 object, 默认无}
+  captionAttribute={进度条文字属性 object, 默认无}
 
   percentage={百分比 number, 默认无} // 百分比与max min value, 只要一种就行了
   max={最大值 number, 默认100}
@@ -3995,30 +3987,37 @@ import pdfsrc from './../assets/pdfview.js'
 ### 属性
 ```javascript
 <Radio
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'radio-box'}
-  onClick={点击复选框 func(checked, args)}
+  value={容器框data-value string, 默认无}
+  checked={容器框data-checked bool, 默认无} // 获取状态用e.target.getAttribute('data-checked') === 'true'
 
-  name={复选框name string, 默认无}
-  value={复选框value string, 默认无}
-  checked={是否选中 bool, 默认false}
-  disabled={是否禁用 bool, 默认false}
+  inputAttribute={单选框属性 object, 默认无}
 
-  caption={复选框标题 string, 默认无}
-  captionClassName={复选框标题className string, 默认无, 基础'radio-caption'}
-  captionStyle={复选框标题style object, 默认无}
+  caption={标题内容 string, 默认无}
+  captionAttribute={标题属性 object, 默认无}
+  {...others}
 />
 ```
 ### 示例
 ```javascript
 import Radio from 'seedsui-react/lib/Radio';
-
-onClick = (checked, args) => {
-  console.log(checked, args)
+this.state = {
+  checked: true,
+  value: '1'
 }
 
-<Radio onClick={this.onClick}/>
+onClick = (checked) => {
+  this.setState({
+    checked: !checked
+  })
+}
+
+<Checkbox
+  checked={this.state.checked} // 获取时读取data-checked
+  caption="设为默认"
+  value={this.state.value} // 获取时读取data-value
+  style={{display: 'block'}}
+  onClick={(e) => this.onClick(e.target.getAttribute('data-checked') === 'true')}
+/>
 ```
 [返回目录](#component)
 
@@ -4264,12 +4263,9 @@ import Sticker from 'seedsui-react/lib/Sticker';
 ```javascript
 <Tabbar
   style={容器style object, 默认无}
-  className={容器className string, 默认'tabbar-line tabbar-line-width70 border-b'}
-  // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
-  captionClassName={标题className string, 默认无, 基础'tab-caption'}
-  captionStyle={标题style object, 默认无}
-  sndCaptionClassName={副标题className string, 默认无, 基础'tab-sndcaption'}
-  sndCaptionStyle={副标题style object, 默认无}
+  className={容器className string, 默认'tabbar-line tabbar-line-width70 border-b'} // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
+  captionAttribute={标题属性 object, 默认无} // className: 'tab-caption'
+  sndcaptionAttribute={副属性 object, 默认无} // className: 'tab-sndcaption'
   list={列表 array, 默认无, 格式如下:}
   // [
   //   {
@@ -4428,10 +4424,7 @@ import Timepart from 'seedsui-react/lib/Timepart';
 
   showUrlTitle={标题是否显示url中的title bool, 默认true, 将会读取url中'titlebar'参数做为标准}
   caption={标题 node, 默认无}
-  // 以下三个属性, 只有caption为string类型或者显示地址栏标题时才有用
-  captionClassName={标题className string, 默认无, 基础'titlebar-caption nowrap text-center'}
-  captionStyle={标题style object, 默认无}
-  onClickCaption={点击标题 func(e), 默认无}
+  captionAttribute={标题属性 object, 默认无} // 只有caption为string类型或者显示地址栏标题时才有用
 
   lButtons={左按钮 array, 默认['$back']}
   // '$back' 等同于{iconClassName: 'shape-arrow-left', onClick: this.onClickBack}
@@ -4475,17 +4468,13 @@ Toast组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 
   duration={动画时长 number, 默认false}
 
-  maskClassName={遮罩className string, 默认无, 基础'mask toast-mask'}
-  maskStyle={遮罩style object, 默认无}
+  maskAttribute={遮罩属性 object, 默认无}
 
-  className={弹框className string, 默认无, 基础'toast'}
-  style={弹框style object, 默认无}
-
-  caption={消息 node, 默认无}
-  captionStyle={消息style object, 默认无}
-  captionClassName={消息className string, 默认无, 基础'toast-caption'}
+  caption={消息内容 node, 默认无}
+  captionAttribute={消息内容属性 object, 默认无}
 
   icon={图标dom node, 默认无}
+  {...others}
 />
 ```
 ### 示例

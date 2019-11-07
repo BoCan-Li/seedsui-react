@@ -6,12 +6,9 @@ export default class BiGauge extends Component {
     duration: PropTypes.number, // 时长
     rotate: PropTypes.number, // 最大270
     delay: PropTypes.number, // 延时
-
-    className: PropTypes.string,
-    style: PropTypes.object,
+    
+    captionAttribute: PropTypes.object,
     children: PropTypes.node,
-    captionClassName: PropTypes.string,
-    captionStyle: PropTypes.object
   };
 
   static defaultProps = {
@@ -57,16 +54,20 @@ export default class BiGauge extends Component {
   }
   render() {
     const {
-      className, style,
-      children, captionClassName, captionStyle
+      duration,
+      rotate,
+      delay,
+      captionAttribute = {},
+      children,
+      ...others
     } = this.props;
     // 动画旋转
     this.aniRotate();
     return (
-      <div ref={(el) => {this.$el = el;}} className={`bi-gauge-box${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el;}} {...others} className={`bi-gauge-box${others.className ? ' ' + others.className : ''}`}>
         <div className="bi-gauge">
           <div ref={(el) => {this.$elPointer = el;}} className="bi-gauge-pointer"></div>
-          <div className={`bi-gauge-caption${captionClassName ? ' ' + captionClassName : ''}`} style={captionStyle}>
+          <div {...captionAttribute} className={`bi-gauge-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>
             {children}
           </div>
         </div>
