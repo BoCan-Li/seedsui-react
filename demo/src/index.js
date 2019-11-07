@@ -1,28 +1,27 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, PDFView} from '../../src'
-import pdfsrc from './../assets/pdfview.js'
+import {Page, Header, Titlebar, Container, Marquee} from '../../src'
+const list = [
+  {
+    key: '1',
+    value: '标题标题'
+  },
+  {
+    key: '2',
+    value: '标题标题2'
+  },
+  {
+    key: '3',
+    value: '标题标题3'
+  }
+]
 
 class Demo extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      src: '/demo/assets/pdfview.pdf'
-    }
   }
   componentDidMount () {
-    setTimeout(() => {
-      this.setState({
-        src: pdfsrc
-      })
-    }, 2000);
-  }
-  onLoadPDF = () => {
-    console.log('加载PDF完成')
-  }
-  onInitPDF = () => {
-    console.log('开始加载PDF')
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -30,7 +29,13 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <PDFView src={this.state.src} cMapUrl="/demo/assets/cmaps/" params={{onLoad: this.onLoadPDF, onInit: this.onInitPDF}}/>
+        <Marquee
+          className="horizontal"
+          list={list}
+          step={48}
+          contentStyle={{height: '38px', padding: '5px 0'}}
+          contentClassName="flex flex-center nowrap2"
+        />
       </Container>
     </Page>
   }

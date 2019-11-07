@@ -1,27 +1,3 @@
 // page-pull.less(start)
-.page-pull{
-  &:extend(.page);
-  overflow: visible;
-}
-.page-side-left, .page-side-right{
-  position:absolute;
-  top:0;
-  bottom:0;
-  visibility:visible;
-  background-color: @page-bg;
-}
-.page-side-left{
-  .setPageSideLeft();
-  left:0;
-}
-.page-side-right{
-  .setPageSideRight();
-  right:0;
-}
-.page-side-left[data-transition="push"]{
-  transform:translateX(-100%);
-}
-.page-side-right[data-transition="push"]{
-  transform:translateX(100%);
-}
+.setPagePull();
 // page-pull.less(end)

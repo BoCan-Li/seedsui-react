@@ -74,7 +74,6 @@ export { default as Popover } from './Popover';
 export { default as Preview } from './Preview'; // 不常用
 export { default as Progress } from './Progress';
 export { default as Radio } from './Radio';
-export { default as SearchBoard } from './SearchBoard';
 export { default as SelectPicker } from './SelectPicker';
 export { default as Star } from './Star';
 export { default as Stencil } from './Stencil'; // 不常用

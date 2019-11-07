@@ -1,37 +1,3 @@
 // progress.less(start)
-//进度条容器
-.progress {
-  .setProgress();
-}
-//进度条
-.progress-bar {
-  .setProgressBar();
-}
-//进度条文字
-.progress-caption {
-  .setProgressCaption();
-}
-
-// 系统控件
-progress {
-  display:block;
-  height:@10px;
-  border-width:@1px;
-  border-style:solid;
-  border-radius:@5px;
-  overflow:hidden;
-
-  color:@border; // 兼容IE10
-  border-color:@border;  
-  background-color:transparent;
-}
-progress::-moz-progress-bar {
-  background:@primary-bg;
-}
-progress::-webkit-progress-bar {
-  background:transparent;
-}
-progress::-webkit-progress-value  {
-  background-color:@primary-bg;
-}
+.setProgress();
 // progress.less(end)
