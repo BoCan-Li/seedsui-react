@@ -9,33 +9,19 @@ export default class Actionsheet extends Component {
     portal: PropTypes.object,
     show: PropTypes.bool,
 
-    duration: PropTypes.number,
-
     list: PropTypes.array, // [{caption: string, onClick: func}]
 
-    maskStyle: PropTypes.object,
-    maskClassName: PropTypes.string,
-    onClickMask: PropTypes.func,
+    maskAttribute: PropTypes.object,
+    groupAttribute: PropTypes.object,
+    optionAttribute: PropTypes.object,
 
-    style: PropTypes.object,
-    className: PropTypes.string,
-
-    groupStyle: PropTypes.object,
-    groupClassName: PropTypes.string,
-
-    optionStyle: PropTypes.object,
-    optionClassName: PropTypes.string,
-
-    cancelStyle: PropTypes.object,
-    cancelClassName: PropTypes.string,
     cancelCaption: PropTypes.node,
-    onClickCancel: PropTypes.func,
+    cancelAttribute: PropTypes.object,
 
     onClick: PropTypes.func
   }
   static defaultProps = {
-    cancelCaption: window._seeds_lang['cancel'] || '取消',
-    optionClassName: 'border-b'
+    cancelCaption: window._seeds_lang['cancel'] || '取消'
   }
   constructor(props) {
     super(props);
@@ -43,47 +29,47 @@ export default class Actionsheet extends Component {
   componentDidMount = () => {
   }
   onClick = (e) => {
-    const target = e.target;
-    if (target.classList.contains('actionsheet-mask')) {
-      if (this.props.onClickMask) {
-        this.props.onClickMask(e);
-        e.stopPropagation();
-      }
-    } else if (target.classList.contains('actionsheet-option')) {
-      const index = target.getAttribute('data-index');
-      if (this.props.onClick) {
-        this.props.onClick(e, this.props.list[index], Number(index));
-        e.stopPropagation();
-      }
-    } else if (target.classList.contains('actionsheet-cancel')) {
-      if (this.props.onClickCancel) {
-        this.props.onClickCancel(e);
-        e.stopPropagation();
-      }
+    var item = null;
+    var index = null;
+    if (e.target.classList.contains('actionsheet-option')) {
+      index = target.getAttribute('data-index');
+      index = Number(index);
+      item = this.props.list[index] || null;
+    }
+    if (this.props.onClick) {
+      this.props.onClick(e, item, index);
+      e.stopPropagation()
     }
   }
   render() {
     const {
-      duration, show,
-      maskClassName, maskStyle,
-      className, style,
+      portal,
+      show,
+
       list,
-      groupStyle, groupClassName,
-      optionStyle, optionClassName,
-      cancelCaption, cancelStyle, cancelClassName, onClickCancel
+
+      maskAttribute = {},
+      groupAttribute = {},
+      optionAttribute = {},
+      
+      cancelCaption,
+      cancelAttribute = {},
+
+      onClick,
+      ...others
     } = this.props;
     return createPortal(
-      <div ref={(el) => {this.$el = el}} className={`mask actionsheet-mask${maskClassName ? ' ' + maskClassName : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, maskStyle)} onClick={this.onClick}>
-        <div className={`actionsheet${className ? ' ' + className : ''}${show ? ' active' : ''}`} style={Object.assign(duration !== undefined ? {WebkitTransitionDuration: duration + 'ms'} : {}, style)} data-animation="slideUp">
-          <div className={`actionsheet-group${groupClassName ? ' ' + groupClassName : ''}`} style={groupStyle}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask actionsheet-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} onClick={this.onClick}>
+        <div data-animation="slideUp" {...others} className={`actionsheet${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
+          <div {...groupAttribute} className={`actionsheet-group${groupAttribute.className ? ' ' + groupAttribute.className : ''}`}>
             {list && list.map((item, index) => {
-              return <a className={`actionsheet-option${optionClassName ? ' ' + optionClassName : ''}`} style={optionStyle} key={index} data-index={index}>{item.caption}</a>
+              return <a {...optionAttribute} className={`actionsheet-option${optionAttribute.className ? ' ' + optionAttribute.className : ' border-b'}`} key={index} data-index={index}>{item.caption}</a>
             })}
           </div>
-          {onClickCancel && <a className={`actionsheet-cancel${cancelClassName ? ' ' + cancelClassName : ''}`} style={cancelStyle}>{cancelCaption}</a>}
+          {cancelAttribute.onClick && <a {...cancelAttribute} className={`actionsheet-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
         </div>
       </div>,
-      this.props.portal || document.getElementById('root')
+      portal || document.getElementById('root')
     );
   }
 }
