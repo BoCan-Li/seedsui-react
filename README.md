@@ -4417,9 +4417,12 @@ import Timepart from 'seedsui-react/lib/Timepart';
 
   lButtons={左按钮 array, 默认['$back']}
   // '$back' 等同于{iconClassName: 'shape-arrow-left', onClick: this.onClickBack}
-  // 格式 [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
-
+  // 格式 [{caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}]
   rButtons={右按钮 array, 默认无}
+
+  backButtonAttribute={返回按钮属性 object, 默认无} // 设置默认返回按钮的样式及属性
+  // 格式 {caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}
+
   backClassName={返回按钮className string, 默认无}
   backStyle={返回按钮style object, 默认无}
   backIcon={返回按钮图标 node, 默认无}

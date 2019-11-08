@@ -11,16 +11,10 @@ export default class Titlebar extends Component {
     caption: PropTypes.node,
     captionAttribute: PropTypes.object, // 只有caption为string类型或者显示地址栏标题时才有用
 
-    lButtons: PropTypes.array, // [{className: string, style: object, iconClassName: string, icon: node, caption: string}]
+    lButtons: PropTypes.array, // [{caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}]
     rButtons: PropTypes.array,
 
-    backClassName: PropTypes.string,
-    backStyle: PropTypes.object,
-    backIcon: PropTypes.node,
-    backIconClassName: PropTypes.string,
-    backIconStyle: PropTypes.object,
-    backCaption: PropTypes.string,
-    onClickBack: PropTypes.func,
+    backButtonAttribute: PropTypes.object,  // {caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}
 
     children: PropTypes.node
   }
@@ -28,32 +22,35 @@ export default class Titlebar extends Component {
     showUrlTitle: true,
     lButtons: ['$back'],
     className: 'border-b',
-    backIconClassName: 'shape-arrow-left'
+    backButtonAttribute: {
+      className: 'shape-arrow-left'
+    }
   }
   constructor(props) {
     super(props);
     this.state = {}
   }
   onClickBack = () => {
-    const {onClickBack} = this.props;
-    // 如果有onClickBack的props,则优先执行props的方法
-    if (onClickBack) {
-      onClickBack();
+    const {backButtonAttribute} = this.props;
+    // 如果有返回按钮的点击事件,则优先执行props的方法
+    if (backButtonAttribute.onClick) {
+      backButtonAttribute.onClick();
       return;
     }
     // 否则走默认的返回
     Bridge.back();
   }
   getButtonsDOM = (arr) => {
+    const {backButtonAttribute} = this.props;
     return arr.map((item, index) => {
       if (item === '$back') {
         item = {
-          className: this.props.backClassName || null,
-          style: this.props.backStyle || null,
-          icon: this.props.backIcon || null,
-          iconClassName: this.props.backIconClassName || null,
-          iconStyle: this.props.backIconStyle || {},
-          caption: this.props.backCaption || null,
+          className: backButtonAttribute.className || null,
+          style: backButtonAttribute.style || null,
+          icon: backButtonAttribute.icon || null,
+          iconClassName: backButtonAttribute.iconClassName || null,
+          iconStyle: backButtonAttribute.iconStyle || {},
+          caption: backButtonAttribute.caption || null,
           onClick: this.onClickBack
         };
       }
@@ -77,13 +74,7 @@ export default class Titlebar extends Component {
       lButtons,
       rButtons,
 
-      backClassName,
-      backStyle,
-      backIcon,
-      backIconClassName,
-      backIconStyle,
-      backCaption,
-      onClickBack,
+      backButtonAttribute,
       
       children,
       ...others
