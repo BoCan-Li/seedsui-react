@@ -128,10 +128,9 @@ export default class Dropdown extends Component {
     DOM.push(<Dialog
       key="dialog"
       portal={this.props.portal}
-      onClickMask={this.onClickMask}
+      maskAttribute={{onClick: this.onClickMask, style: {top: this.state.top + 'px'}}}
       animation="slideDown"
       style={{width: '100%'}}
-      maskStyle={{top: this.state.top + 'px'}}
       show={this.state.dialogShow}
     >
       <MenuTiled

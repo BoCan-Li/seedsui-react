@@ -11,41 +11,26 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Emoji extends Component {
   static propTypes = {
+    portal: PropTypes.object,
     show: PropTypes.bool, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
     data: PropTypes.object,
 
-    portal: PropTypes.object,
-    args: PropTypes.any,
-
     autoFocus: PropTypes.bool,
-
     value: PropTypes.string,
     placeholder: PropTypes.string,
 
-    isClickMaskHide: PropTypes.bool,
-    onClickMask: PropTypes.func,
-
-    maskClassName: PropTypes.string,
-    maskStyle: PropTypes.object,
-
-    className: PropTypes.string,
-    style: PropTypes.object,
-
+    maskAttribute: PropTypes.object,
+    submitAttribute: PropTypes.object,
+    inputAttribute: PropTypes.object,
+    liconAttribute: PropTypes.bool,
     licon: PropTypes.node,
 
-    onChange: PropTypes.func,
-
-    submitStyle: PropTypes.object,
-    submitClassName: PropTypes.string,
-    submitCaption: PropTypes.node,
-    onClickSubmit: PropTypes.func,
+    onChange: PropTypes.func
   }
   static defaultProps = {
     autoFocus: false,
     data: data,
     placeholder: window._seeds_lang['say_something'] || '说点什么吧...',
-    isClickMaskHide: false,
-    submitCaption: window._seeds_lang['submit'] || '提交',
   }
   constructor(props) {
     super(props);
@@ -59,26 +44,21 @@ export default class Emoji extends Component {
   componentDidMount = () => {
     if (this.props.autoFocus && this.$inputPre) this.$inputPre.$input.focus();
     if (this.instance) return
-    var instance = new Instance({
+    const {
+      maskAttribute = {},
+      submitAttribute = {}
+    } = this.props;
+    this.instance = new Instance({
       data: this.props.data,
 
       mask: this.$el,
-      isClickMaskHide: this.props.isClickMaskHide,
-      onClickMask: this.onClickMask,
+      isClickMaskHide: false,
+      onClickMask: maskAttribute.onClick || null,
 
-      onClickSubmit: this.onClickSubmit,
+      onClickSubmit: submitAttribute.onClick || null,
 
       onChange: this.props.onChange
     });
-    this.instance = instance;
-  }
-  // 遮罩
-  onClickMask = (s, e) => {
-    if (this.props.onClickMask) this.props.onClickMask(Object.getArgs(e, this.props.args));
-  }
-  // 提交按钮
-  onClickSubmit = (value, s, e) => {
-    if (this.props.onClickSubmit) this.props.onClickSubmit(value, Object.getArgs(e, this.props.args));
   }
   // 表情
   getFaceDOM = () => {
@@ -113,25 +93,22 @@ export default class Emoji extends Component {
       show,
       data,
       portal,
-      args,
       autoFocus,
       value,
       placeholder,
-      isClickMaskHide,
-      onClickMask,
-      maskClassName,
-      maskStyle,
-      className,
-      style,
+      maskAttribute = {},
+      submitAttribute = {},
+      inputAttribute = {},
+      liconAttribute = {},
       licon,
       onChange,
-      submitCaption,submitStyle, submitClassName, onClickSubmit,
       ...others
     } = this.props;
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`mask emoji-mask${show ? ' active' : ''}${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} onClick={this.onClickMask}>
-        <div ref={el => {this.$container = el;}} className={`emoji active${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+      <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
+        <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
           {licon}
+          {liconAttribute && liconAttribute.className && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <div className="emoji-edit">
             <InputPre
               ref={(el) => {this.$inputPre = el;}}
@@ -141,10 +118,10 @@ export default class Emoji extends Component {
               value={value}
               onChange={onChange}
               placeholder={placeholder}
-              {...others}
+              {...inputAttribute}
             />
             <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
-            <Button className={`emoji-edit-submit${submitClassName ? ' ' + submitClassName : ''}`} style={submitStyle} disabled={!value}>{submitCaption}</Button>
+            <Button {...submitAttribute} className={`emoji-edit-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`} disabled={!value}>{submitAttribute.caption || (window._seeds_lang['submit'] || '提交')}</Button>
           </div>
           <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{display: 'none'}}>
             {this.getFaceDOM()}

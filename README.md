@@ -1046,7 +1046,7 @@ onClick = () => {
   animation="zoom"
   style={{width: '80%', height: '80%', backgroundColor: 'white', borderRadius: '10px', WebkitTransitionDuration: '200ms'}}
   className="transition-duration-0"
-  maskAttribute={{className: 'transition-duration-0', style: {WebkitTransitionDuration: '200ms'}, onClick: this.onClick}}
+  maskAttribute={{onClick: this.onClick, className: 'transition-duration-0', style: {WebkitTransitionDuration: '200ms'}}}
 >
   弹出框内容
 </Dialog>
@@ -1276,7 +1276,7 @@ toggleEmoji = () => {
   show={this.state.showEmoji}
   onChange={this.onChange}
   value={this.state.value}
-  onClickMask={this.toggleEmoji}
+  maskAttribute={{onClick: this.toggleEmoji}}
 />
 <input type="button" value="显隐" onClick={this.toggleEmoji}/>
 ```
