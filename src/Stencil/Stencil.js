@@ -18,7 +18,7 @@ export default class Stencil extends Component {
     return createPortal(
       <div ref={el => {this.$el = el;}} className={`stencil${className ? ' ' + className : ''}`} {...others}>
       </div>,
-      this.props.portal || document.getElementById('root')
+      this.props.portal || document.getElementById('root') || document.body
     );
   }
 }

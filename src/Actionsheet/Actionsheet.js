@@ -69,7 +69,7 @@ export default class Actionsheet extends Component {
           {cancelAttribute.onClick && <a {...cancelAttribute} className={`actionsheet-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
         </div>
       </div>,
-      portal || document.getElementById('root')
+      portal || document.getElementById('root') || document.body
     );
   }
 }

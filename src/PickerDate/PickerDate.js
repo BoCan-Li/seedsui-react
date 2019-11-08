@@ -233,7 +233,7 @@ export default class PickerDate extends Component {
           </div>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root')
+      this.props.portal || document.getElementById('root') || document.body
     );
   }
 }

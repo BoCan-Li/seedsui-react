@@ -63,7 +63,7 @@ export default class Preview extends Component {
         </div>
         <div className={`preview-container`}></div>
       </div>,
-      portal || document.getElementById('root')
+      portal || document.getElementById('root') || document.body
     );
   }
 }

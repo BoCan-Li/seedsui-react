@@ -1929,37 +1929,16 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ### 属性
 ```javascript
 <InputCity
-  data={数据源 array, 默认内置数据源}
-  dataKeyPropertyName={data数据key的属性名称 string, 默认'key'}
-  dataValuePropertyName={data数据value的属性名称 string, 默认'value'}
-  dataChildPropertyName={data数据child的属性名称 string, 默认'children'}
-  // export default [
-  //   {
-  //     "value": "北京",
-  //     "children": [
-  //       {
-  //         "value": "东城区",
-  //         "key": "110101"
-  //       }
-  //     ]
-  //   }
-  // ]
-  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
-  valueForKeys={选中key array, 默认无}
-  split={分隔符 string, 默认'-'}
-  type={城市类型 string, 默认'area'} // 'area' | 'city'
+  // Input
+  onClick={点击文本框 func(value, args), 默认无}
   onChange={值改变 func(value, option, args), 默认无}
+
   // Picker
-  pickerMaskClassName={弹出框遮罩className string, 默认无}
-  pickerMaskStyle={弹出框遮罩style object, 默认无}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
-  // 自定义Picker事件
-  pickerShow={控制picker的显隐 bool, 默认无}
-  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
-  onClickCancel={点击picker取消按钮 func({target}), 默认无}
-  onClickMask={点击picker遮罩 func({target}), 默认无}
-  {...others}
+  valueForKey={选中key用split分割 string, 默认无}
+  type={城市类型 string, 默认'district'} // 'district' | 'city'
+  pickerProps={Picker弹框属性 object, 默认无} // className: picker
+
+  {...others} // Input
 />
 ```
 ### 示例
@@ -1982,8 +1961,13 @@ onChange = (value) => {
   onChange={this.onChange}
   placeholder="请选择"
   className="border-b"
-  pickerMaskStyle={{zIndex: '11'}}
-  pickerMaskClassName="bg-white"
+  pickerProps={{
+    split: ','
+    portal: document.getElementById('root'),
+    maskAttribute: {
+      style: {zIndex: '11'}
+    }
+  }}
 />
 ```
 [返回目录](#component)

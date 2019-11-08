@@ -90,9 +90,9 @@ export default class Emoji extends Component {
   
   render() {
     const {
+      portal,
       show,
       data,
-      portal,
       autoFocus,
       value,
       placeholder,
@@ -128,7 +128,7 @@ export default class Emoji extends Component {
           </Carrousel>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root')
+      portal || document.getElementById('root') || document.body
     );
   }
 }

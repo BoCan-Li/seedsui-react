@@ -1,33 +1,22 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
-import pdfsrc from './../assets/pdfview.js'
 
-import {Page, Header, Titlebar, Container, Emoji} from '../../src'
+import {Page, Header, Titlebar, Container, InputCity} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      showEmoji: false,
-      value: ''
+      value: '新疆,乌鲁木齐市,天山区'
     }
   }
   componentDidMount () {
     
   }
   onChange = (value) => {
-    console.log(value)
     this.setState({
       value: value
-    })
-  }
-  
-  toggleEmoji = () => {
-    this.setState((prevState) => {
-      return {
-        showEmoji: !prevState.showEmoji
-      }
-    })
+    });
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -35,15 +24,19 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-      <Emoji
-      portal={document.body}
-  autoFocus
-  show={this.state.showEmoji}
-  onChange={this.onChange}
-  value={this.state.value}
-  maskAttribute={{onClick: this.toggleEmoji}}
-/>
-<input type="button" value="显隐" onClick={this.toggleEmoji}/>
+        <InputCity
+          valueBindProp
+          value={this.state.value}
+          onChange={this.onChange}
+          placeholder="请选择"
+          className="border-b"
+          pickerProps={{
+            split: ',',
+            maskAttribute: {
+              style: {zIndex: '11'}
+            }
+          }}
+        />
       </Container>
     </Page>
   }

@@ -8,33 +8,29 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class PickerCity extends Component {
   static propTypes = {
-    data: PropTypes.array,
-    dataKeyPropertyName: PropTypes.string,
-    dataValuePropertyName: PropTypes.string,
-    dataChildPropertyName: PropTypes.string,
-
     portal: PropTypes.object,
+    data: PropTypes.array,
+    dataFormat: PropTypes.object, // {keyName: '', valueName: '', childName: ''}
     split: PropTypes.string,
+
     type: PropTypes.string, // district | city
-
-    maskClassName: PropTypes.string,
-    maskStyle: PropTypes.object,
-    className: PropTypes.string,
-    style: PropTypes.object,
-
+    show: PropTypes.bool,
     value: PropTypes.string,
     valueForKey: PropTypes.string,
-    show: PropTypes.bool,
-    onClickMask: PropTypes.func,
-    onClickCancel: PropTypes.func,
-    onClickSubmit: PropTypes.func
+
+    maskAttribute: PropTypes.object,
+    submitAttribute: PropTypes.object,
+    cancelAttribute: PropTypes.object,
+    className: PropTypes.string,
+    style: PropTypes.object,
   }
   static defaultProps = {
     data: null,
-    dataKeyPropertyName: 'key',
-    dataValuePropertyName: 'value',
-    dataChildPropertyName: 'children',
-
+    dataFormat: {
+      keyName: 'key',
+      valueName: 'value',
+      childName: 'children'
+    },
     split: '-',
     type: 'district'
   }
@@ -48,14 +44,19 @@ export default class PickerCity extends Component {
     if (nextProps.show === this.props.show) return false;
     return true;
   }
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = () => {
     if (this.instance) {
-      if (this.props.show) {
-        if (this.props.data) {
+      const {
+        show,
+        data,
+        dataFormat
+      } = this.props;
+      if (show) {
+        if (data) {
           this.instance.setData(this.props.data, {
-            dataChildPropertyName: this.props.dataChildPropertyName,
-            dataKeyPropertyName: this.props.dataKeyPropertyName,
-            dataValuePropertyName: this.props.dataValuePropertyName
+            dataChildPropertyName: dataFormat.childName,
+            dataKeyPropertyName: dataFormat.keyName,
+            dataValuePropertyName: dataFormat.valueName
           });
         }
         this.setDefault();
@@ -75,11 +76,12 @@ export default class PickerCity extends Component {
     this.instance.update();
   }
   getDefaultValues = () => {
+    const {value, split} = this.props;
     // 默认值
-    var defaultValue = this.props.value;
+    var defaultValue = value;
     var defaultValues = [];
     if (defaultValue) {
-      defaultValues = defaultValue.split(this.props.split).map((item) => {
+      defaultValues = defaultValue.split(split).map((item) => {
         return item.trim();
       });
     }
@@ -96,15 +98,23 @@ export default class PickerCity extends Component {
     var defaultValues = this.getDefaultValues();
     var defaultKeys = this.getDefaultKeys();
     // render数据
+    const {
+      dataFormat,
+      split,
+      type,
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {}
+    } = this.props;
     const instance = new Instance({
       data: this.props.data || data,
-      dataKeyPropertyName: this.props.dataKeyPropertyName,
-      dataValuePropertyName: this.props.dataValuePropertyName,
-      dataChildPropertyName: this.props.dataChildPropertyName,
+      dataKeyPropertyName: dataFormat.keyName,
+      dataValuePropertyName: dataFormat.valueName,
+      dataChildPropertyName: dataFormat.childName,
       
       mask: this.$el,
-      split: this.props.split,
-      viewType: this.props.type,
+      split: split,
+      viewType: type,
       defaultProvinceKey: defaultKeys[0] || '',
       defaultCityKey: defaultKeys[1] || '',
       defaultDistrictKey: defaultKeys[2] || '',
@@ -112,15 +122,15 @@ export default class PickerCity extends Component {
       defaultCity: defaultValues[1] || '',
       defaultDistrict: defaultValues[2] || '',
       onClickMask: (e) => {
-        if (this.props.onClickMask) this.props.onClickMask(e)
+        if (maskAttribute.onClick) maskAttribute.onClick(e)
       },
       onClickCancel: (e) => {
         // e.hide()
-        if (this.props.onClickCancel) this.props.onClickCancel(e);
+        if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
         // e.hide()
-        if (this.props.onClickSubmit) this.props.onClickSubmit(e);
+        if (submitAttribute.onClick) submitAttribute.onClick(e);
       },
       onHid: (e) => {
       }
@@ -132,14 +142,41 @@ export default class PickerCity extends Component {
     }
     this.instance = instance;
   }
+  filterProps = (props) => {
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
+  }
   render() {
-    const {maskClassName, maskStyle, className, style} = this.props;
+    let {
+      portal,
+      data,
+      dataFormat, // {keyName: '', valueName: '', childName: ''}
+      split,
+      type, // district | city
+      show,
+      value,
+      valueForKey,
+
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {},
+      ...others
+    } = this.props;
+    // 剔除掉onClick事件, 因为在instance时已经回调了
+    maskAttribute = this.filterProps(maskAttribute)
+    submitAttribute = this.filterProps(submitAttribute)
+    cancelAttribute = this.filterProps(cancelAttribute)
     return createPortal(
-      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
-        <div className={`picker${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
+        <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
           <div className="picker-header">
-            <a className="picker-cancel">{window._seeds_lang['cancel'] || '取消'}</a>
-            <a className="picker-submit">{window._seeds_lang['finish'] || '完成'}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">
@@ -149,7 +186,7 @@ export default class PickerCity extends Component {
           </div>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root')
+      portal || document.getElementById('root') || document.body
     );
   }
 }
