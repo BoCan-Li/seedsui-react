@@ -23,7 +23,7 @@ export default class Titlebar extends Component {
     lButtons: ['$back'],
     className: 'border-b',
     backButtonAttribute: {
-      className: 'shape-arrow-left'
+      iconClassName: 'shape-arrow-left'
     }
   }
   constructor(props) {

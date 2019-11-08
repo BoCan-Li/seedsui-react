@@ -1016,21 +1016,13 @@ onClick = () => {
 ```javascript
 <Dialog
   portal={传送dom object, 默认document.getElementById('root')}
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
 
   animation={动画 string, 默认'fade'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
-  duration={动画时长 number, 默认见seedsui-variable.less}
-  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
-  onClickMask={点击遮罩 func(s)}
-  onShowed={显示完成 func(s)}
-  onHid={隐藏完成 func(s)}
 
-  maskClassName={遮罩className string, 默认无, 基础'mask dialog-mask'}
-  maskStyle={遮罩style object, 默认无}
-
-  className={容器className string, 默认无, 基础'container'}
-  style={容器style object, 默认无}
+  maskAttribute={遮罩属性 object, 默认无} // className: mask dialog-mask
+  
+  children={内容 node, 默认无}
   {...others}
 >
 </Dialog>
@@ -1038,10 +1030,27 @@ onClick = () => {
 ### 示例
 ```javascript
 import Dialog from 'seedsui-react/lib/Dialog';
-
-<Dialog show={this.state.showDialog} animation="zoom" duration={200} style={{width: '80%', height: '80%', backgroundColor: 'white', borderRadius: '10px'}}>
-弹出框内容
+this.state = {
+  showDialog: false
+}
+onClick = () => {
+  this.setState((prevState) => {
+    return {
+      showDialog: !prevState.showDialog
+    }
+  })
+}
+<Dialog
+  portal={document.body}
+  show={this.state.showDialog}
+  animation="zoom"
+  style={{width: '80%', height: '80%', backgroundColor: 'white', borderRadius: '10px', WebkitTransitionDuration: '200ms'}}
+  className="transition-duration-0"
+  maskAttribute={{className: 'transition-duration-0', style: {WebkitTransitionDuration: '200ms'}, onClick: this.onClick}}
+>
+  弹出框内容
 </Dialog>
+<input type="button" value="显隐" onClick={this.onClick}/>
 ```
 [返回目录](#component)
 

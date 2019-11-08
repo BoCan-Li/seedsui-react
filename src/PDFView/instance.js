@@ -20,7 +20,6 @@ var PDFView = function (container, params) {
     pictures: '', // 图片地址
     src: '', // pdf地址
     cMapUrl: '',
-    // options: null, // getDocument选项: cMapUrl: '/demo/cmaps/', cMapPacked: true(废弃)
 
     pageAttr: 'data-page', // 图片页数, 从0开始
     completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
@@ -92,21 +91,17 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
-  // base64编码转成流(废弃)
-  // s.convertBase64ToBinary = function (base64) {
-  //   var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
-  //   var rawLength = raw.length
-  //   // 转换成pdf.js能直接解析的Uint8Array类型
-  //   var array = new Uint8Array(new ArrayBuffer(rawLength))
-  //   for (var i = 0; i < rawLength; i++) {
-  //     array[i] = raw.charCodeAt(i) & 0xff
-  //   }
-  //   return array
-  // }
-  // s.convertBase64ToBinary使用方法
-  // var data = s.params.src.replace('data:application/pdf;base64,', '')
-  // data = s.convertBase64ToBinary(data)
-  // PDFJS.getDocument({data: data, ...options})
+  // base64编码转成流
+  s.convertBase64ToBinary = function (base64) {
+    var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
+    var rawLength = raw.length
+    // 转换成pdf.js能直接解析的Uint8Array类型
+    var array = new Uint8Array(new ArrayBuffer(rawLength))
+    for (var i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i) & 0xff
+    }
+    return array
+  }
   // 计算宽高比例
   s.scale = 1
   s.updateScale = function (target) {
@@ -172,6 +167,9 @@ var PDFView = function (container, params) {
   }
   // 显示暂无数据
   s.showNoData = function () {
+    // Callback onLoad
+    if (s.params.onLoad) s.params.onLoad(s)
+    // 页面显示暂无数据
     s.wrapper.innerHTML = ''
     var pageDOM = s.createPage()
     s.showPageElement(pageDOM, 'nodata')
@@ -240,7 +238,17 @@ var PDFView = function (container, params) {
       PDFJS.cMapUrl = s.params.cMapUrl
       PDFJS.cMapPacked = true
     }
-    PDFJS.getDocument(s.params.src).then(function (pdf) {
+    // 地址访问, 发请求获取地址
+    var param = s.params.src
+    // base64访问, 直接读取data, 不需要发请求
+    if (s.params.src.indexOf('data:application/pdf;base64,') === 0) {
+      var data = s.params.src.replace('data:application/pdf;base64,', '')
+      data = s.convertBase64ToBinary(data)
+      param = {
+        data: data
+      }
+    }
+    PDFJS.getDocument(param).then(function (pdf) {
       s.renderPDF(pdf)
     }).catch(function (error) {
       console.log('SeedsUI: pdf格式不正确')

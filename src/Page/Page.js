@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class Page extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
     animation: PropTypes.string,
     children: PropTypes.node
   }
@@ -15,9 +13,9 @@ export default class Page extends Component {
   componentDidMount () {
   }
   render() {
-    const {animation, style, className, children, ...others} = this.props;
+    const {animation, children, ...others} = this.props;
     return (
-      <section ref={(el) => {this.$el = el}} className={'page' + (className ? ' ' + className : '')} data-animation={animation} style={style} {...others}>
+      <section ref={(el) => {this.$el = el}} {...others} className={'page' + (others.className ? ' ' + others.className : '')} data-animation={animation}>
         {children}
       </section>
     );
