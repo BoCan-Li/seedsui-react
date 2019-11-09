@@ -2926,22 +2926,25 @@ onClickListPull = (item, index, btn) => {
   portal={加载框传送至dom object, 默认无} // 不设置protal, 则不传送
   type={加载框类型 string, 默认'floating'} // 'floating | filling | custom'
 
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className object, 默认无}
-  maskBefore={遮罩第一层dom node, 默认无}
+  maskAttribute={遮罩属性 object, 默认无}
+  iconAttribute={加载图标属性 object, 默认无}
+  captionAttribute={标题属性 object, 默认无}
+  caption={标题内容 node, 默认'正在加载...'}
 
-  style={加载框style object, 默认无}
-
-  iconClassName={图标className string, 默认无, 基础'loading-custom-icon'}
-  iconSrc={图标地址 string, 默认无}
-  caption={标题 string, 默认'正在加载...'}
+  children={子元素 node, 默认无}
 />
 ```
 ### 示例
 ```javascript
 import Loading from 'seedsui-react/lib/Loading';
 
-<Loading maskStyle={{top: '44px'}}/>
+<Loading
+  maskAttribute={{
+    style: {
+      top: '44px'
+    }
+  }}
+/>
 ```
 [返回目录](#component)
 

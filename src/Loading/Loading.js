@@ -9,15 +9,12 @@ export default class Loading extends Component {
     portal: PropTypes.object, // 传送至DOM
     type: PropTypes.string, // floating | filling | custom
     
-    maskStyle: PropTypes.object,
-    maskClassName: PropTypes.string,
-    maskBefore: PropTypes.node,
+    maskAttribute: PropTypes.object,
+    iconAttribute: PropTypes.object,
+    captionAttribute: PropTypes.object,
+    caption: PropTypes.node,
 
-    style: PropTypes.object,
-
-    iconClassName: PropTypes.string,
-    iconSrc: PropTypes.string,
-    caption: PropTypes.string
+    children: PropTypes.node
   }
   static defaultProps = {
     caption: window._seeds_lang['loading'] || '正在加载...',
@@ -29,22 +26,27 @@ export default class Loading extends Component {
   }
   render() {
     const {
+      portal,
       type,
-      maskStyle, maskClassName, maskBefore,
-      style,
-      iconClassName, iconSrc, caption } = this.props;
+      maskAttribute = {},
+      iconAttribute = {},
+      captionAttribute = {},
+      caption,
+      children,
+      ...others
+    } = this.props;
     let content = <div>加载中...</div>;
     if (type === 'custom') { // 自定义样式
-      content = (<div className="loading-custom" style={style}>
-        {(iconClassName || iconSrc) && <span style={iconSrc ? {backgroundImage: `url(${iconSrc})`} : {}} className={`loading-custom-icon${iconClassName ? ' ' + iconClassName : ''}`}></span>}
-        {caption && <p className="loading-custom-caption">{caption}</p>}
+      content = (<div {...others} className={`loading-custom${others.className ? ' ' + others.className : ''}`}>
+        {(iconAttribute.className || iconAttribute.src) && <span style={iconAttribute.src ? {backgroundImage: `url(${iconAttribute.src})`} : {}} className={`loading-custom-icon${iconAttribute.className ? ' ' + iconAttribute.className : ''}`}></span>}
+        {caption && <p {...captionAttribute} className={`loading-custom-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</p>}
       </div>);
     } else if(type === 'filling') { // 填料环
-      content = (<div className="loading-filling active" style={style}>
+      content = (<div {...others} className={`loading-filling active${others.className ? ' ' + others.className : ''}`}>
         <div className="loading-filling-icon"></div>
       </div>);
     } else if (type === 'floating') { // 流光
-      content = (<div className="loading-floating animated" style={style}>
+      content = (<div {...others} className={`loading-floating animated${others.className ? ' ' + others.className : ''}`}>
         <div className="loading-floating-icon">
           <div className="loading-floating-blade"></div>
           <div className="loading-floating-blade"></div>
@@ -59,22 +61,22 @@ export default class Loading extends Component {
           <div className="loading-floating-blade"></div>
           <div className="loading-floating-blade"></div>
         </div>
-        <div className="loading-floating-caption">{caption}</div>
+        {caption && <div {...captionAttribute} className={`loading-floating-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</div>}
       </div>);
     }
-    if (this.props.portal) {
+    if (portal) {
       return createPortal(
-        <div className={'loading-mask mask active' + (maskClassName ? ' ' + maskClassName : '')} style={maskStyle}>
-          {maskBefore}
+        <div ref={el => {this.$el = el;}} {...maskAttribute} className={'loading-mask mask active' + (maskAttribute.className ? ' ' + maskAttribute.className : '')}>
           {content}
+          {children}
         </div>,
-        this.props.portal
+        portal || document.getElementById('root') || document.body
       )
     }
     return (
-      <div ref={el => {this.$el = el;}} className={'loading-mask mask active' + (maskClassName ? ' ' + maskClassName : '')} style={maskStyle}>
-        {maskBefore}
+      <div ref={el => {this.$el = el;}} {...maskAttribute} className={'loading-mask mask active' + (maskAttribute.className ? ' ' + maskAttribute.className : '')}>
         {content}
+        {children}
       </div>
     );
   }
