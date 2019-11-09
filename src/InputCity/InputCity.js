@@ -26,8 +26,13 @@ export default class InputCity extends Component {
   static defaultProps = {
   }
   componentDidMount () {
-    this.$el = this.refs.$ComponentInputText.$el;
-    this.$input = this.refs.$ComponentInputText.$input;
+    this.$el = null;
+    this.$input = null;
+    if (this.refs.$ComponentInputText && this.refs.$ComponentInputText.$el && this.refs.$ComponentInputText.$input) {
+      this.$el = this.refs.$ComponentInputText.$el;
+      this.$input = this.refs.$ComponentInputText.$input;
+    }
+    this.$picker = this.refs.$ComponentPicker;
   }
   // 点击文本框
   onClickInput = (e, value) => {
@@ -115,6 +120,7 @@ export default class InputCity extends Component {
       <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClickInput}/>,
       <PickerCity
         key="pickercity"
+        ref="$ComponentPicker"
         {...pickerProps}
         maskAttribute={{
           ...pickerProps.maskAttribute,

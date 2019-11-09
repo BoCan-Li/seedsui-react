@@ -1984,21 +1984,17 @@ onChange = (e, value) => {
 ### 属性
 ```javascript
 <InputDate
-  valueForKey={选中key string, 默认无}
-  type={日期类型 string, 默认'date'} // 'date | month | time | datetime'
-  split={分隔符 string, 默认'-'}
-  onChange={值改变 func(value, option, args), 默认无}
-  onError={错误 func({msg: ''}), 默认无}
+  // Input
+  min={最小值 func(e, value), 默认无} // YYYY-MM-DD
+  max={最大值 func(e, value), 默认无} // YYYY-MM-DD
+  onClick={点击文本框 func(e, value), 默认无}
+  onChange={值改变 func(e, value, option), 默认无}
+  onError={错误 func(e, {msg: '', select: '', min: '', value: ''}), 默认无}
+
   // Picker
-  pickerMaskClassName={弹出框遮罩className string, 默认无}
-  pickerMaskStyle={弹出框遮罩style object, 默认无}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
-  // 自定义Picker事件
-  pickerShow={控制picker的显隐 bool, 默认无}
-  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
-  onClickCancel={点击picker取消按钮 func({target}), 默认无}
-  onClickMask={点击picker遮罩 func({target}), 默认无}
+  valueForKey={选中key用split分割 string, 默认无}
+  type={城市类型 string, 默认'district'} // 'date | month | time | datetime'
+  pickerProps={Picker弹框属性 object, 默认无} // className: picker
   {...others}
 />
 ```
@@ -2007,23 +2003,35 @@ onChange = (e, value) => {
 import InputDate from 'seedsui-react/lib/InputDate';
 
 this.state = {
-  date: ''
+  value: ''
 }
 
-onChangeDate = (text) => {
+onChange = (e, value) => {
+  console.log(e.target)
   this.setState({
-    date: text
+    value: value
   });
+}
+onError = (e, msg) => {
+  console.log(e)
+  console.log(msg);
 }
 
 <InputDate
   valueBindProp
-  min={new Date().format('yyyy-MM-dd')}
-  value={this.state.date}
-  onChange={this.onChangeDate}
+  min={new Date().format('YYYY-MM-DD')}
+  onError={this.onError}
+  value={this.state.value}
+  onChange={this.onChange}
   placeholder="请选择"
   className="border-b"
-  pickerMaskStyle={{zIndex: '11'}}
+  pickerProps={{
+    maskAttribute: {
+      style: {
+        zIndex: '11'
+      }
+    }
+  }}
 />
 ```
 
