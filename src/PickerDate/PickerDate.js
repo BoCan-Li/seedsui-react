@@ -8,22 +8,18 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 export default class PickerDate extends Component {
   static propTypes = {
     portal: PropTypes.object,
-    split: PropTypes.string,
-    type: PropTypes.string, // 'date','month','time','datetime'
-
-    maskClassName: PropTypes.string,
-    maskStyle: PropTypes.object,
-    className: PropTypes.string,
-    style: PropTypes.object,
-
     data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
-    value: PropTypes.string, // 例: 2018-02-26
-    valueForKey: PropTypes.string,
-    
+    split: PropTypes.string,
+
+    type: PropTypes.string, // 'date','month','time','datetime'
     show: PropTypes.bool,
-    onClickMask: PropTypes.func,
-    onClickCancel: PropTypes.func,
-    onClickSubmit: PropTypes.func,
+    value: PropTypes.string, // '2018-02-26'
+    valueForKey: PropTypes.string, // '2018-02-26'
+
+    maskAttribute: PropTypes.object,
+    submitAttribute: PropTypes.object,
+    cancelAttribute: PropTypes.object,
+
     onError: PropTypes.func
   }
   static defaultProps = {
@@ -181,10 +177,18 @@ export default class PickerDate extends Component {
     var data = this.getData();
     var def = this.getDefault();
     // render数据
-    const instance = new Instance({
+    const {
+      split,
+      type,
+      show,
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {}
+    } = this.props;
+    this.instance = new Instance({
       mask: this.$el,
-      split: this.props.split,
-      viewType: this.props.type,
+      split: split,
+      viewType: type,
       yearsData: data.yearsData,
       monthsData: data.monthsData,
       daysData: data.daysData,
@@ -196,34 +200,60 @@ export default class PickerDate extends Component {
       defaultHour: def.hour,
       defaultMinute: def.minute,
       onClickMask: (e) => {
-        if (this.props.onClickMask) this.props.onClickMask(e)
+        if (maskAttribute.onClick) maskAttribute.onClick(e)
       },
       onClickCancel: (e) => {
-        // e.hide()
-        if (this.props.onClickCancel) this.props.onClickCancel(e);
+        if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        // e.hide()
-        if (this.props.onClickSubmit) this.props.onClickSubmit(e);
+        if (submitAttribute.onClick) submitAttribute.onClick(e);
       },
       onHid: (e) => {
       }
     })
-    if (this.props.show && instance) {
+    if (show && this.instance) {
       setTimeout(function(){
-        instance.show();
+        this.instance.show();
       },10);
     }
-    this.instance = instance;
+  }
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
   }
   render() {
-    const {maskClassName, maskStyle, className, style} = this.props;
+    let {
+      portal,
+      data,
+      split,
+      type,
+      show,
+      value,
+      valueForKey,
+
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {},
+
+      onError,
+      ...others
+    } = this.props;
+    // 剔除掉onClick事件, 因为在instance时已经回调了
+    maskAttribute = this.filterProps(maskAttribute)
+    submitAttribute = this.filterProps(submitAttribute)
+    cancelAttribute = this.filterProps(cancelAttribute)
     return createPortal(
-      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
-        <div className={`picker${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
+        <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
           <div className="picker-header">
-            <a className="picker-cancel">{window._seeds_lang['cancel'] || '取消'}</a>
-            <a className="picker-submit">{window._seeds_lang['finish'] || '完成'}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">

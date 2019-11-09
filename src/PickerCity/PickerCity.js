@@ -16,13 +16,11 @@ export default class PickerCity extends Component {
     type: PropTypes.string, // district | city
     show: PropTypes.bool,
     value: PropTypes.string,
-    valueForKey: PropTypes.string,
+    valueForKey: PropTypes.string, // 
 
     maskAttribute: PropTypes.object,
     submitAttribute: PropTypes.object,
-    cancelAttribute: PropTypes.object,
-    className: PropTypes.string,
-    style: PropTypes.object,
+    cancelAttribute: PropTypes.object
   }
   static defaultProps = {
     data: null,
@@ -102,11 +100,12 @@ export default class PickerCity extends Component {
       dataFormat,
       split,
       type,
+      show,
       maskAttribute = {},
       submitAttribute = {},
       cancelAttribute = {}
     } = this.props;
-    const instance = new Instance({
+    this.instance = new Instance({
       data: this.props.data || data,
       dataKeyPropertyName: dataFormat.keyName,
       dataValuePropertyName: dataFormat.valueName,
@@ -125,23 +124,21 @@ export default class PickerCity extends Component {
         if (maskAttribute.onClick) maskAttribute.onClick(e)
       },
       onClickCancel: (e) => {
-        // e.hide()
         if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        // e.hide()
         if (submitAttribute.onClick) submitAttribute.onClick(e);
       },
       onHid: (e) => {
       }
     });
-    if (this.props.show && instance) {
+    if (show && this.instance) {
       setTimeout(function(){
-        instance.show();
+        this.instance.show();
       },10);
     }
-    this.instance = instance;
   }
+  // 过滤已经回调的属性
   filterProps = (props) => {
     var propsed = {}
     for (let n in props) {
@@ -155,9 +152,9 @@ export default class PickerCity extends Component {
     let {
       portal,
       data,
-      dataFormat, // {keyName: '', valueName: '', childName: ''}
+      dataFormat,
       split,
-      type, // district | city
+      type,
       show,
       value,
       valueForKey,

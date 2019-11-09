@@ -30,10 +30,15 @@ export default class InputCity extends Component {
     this.$input = this.refs.$ComponentInputText.$input;
   }
   // 点击文本框
-  onClickInput = (value, args) => {
-    if (this.props.onClick) this.props.onClick(value, args);
-    this.setState({
-      show: !this.state.show
+  onClickInput = (e, value) => {
+    const {
+      onClick
+    } = this.props;
+    if (onClick) onClick(e, value);
+    this.setState((prevState) => {
+      return {
+        show: !prevState.show
+      }
     });
   }
   // 点击遮罩
@@ -42,6 +47,7 @@ export default class InputCity extends Component {
       pickerProps = {}
     } = this.props;
     if (pickerProps && pickerProps.maskAttribute && pickerProps.maskAttribute.onClick) {
+      e.target = this.$input;
       pickerProps.maskAttribute.onClick(e);
       return;
     }
@@ -59,6 +65,7 @@ export default class InputCity extends Component {
       pickerProps = {}
     } = this.props;
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
+      e.target = this.$input;
       pickerProps.submitAttribute.onClick(e);
       return;
     }
@@ -67,7 +74,8 @@ export default class InputCity extends Component {
     const options = e.activeOptions;
     if (!valueBindProp) this.$input.value = value;
     if (onChange) {
-      onChange(value, options, Object.getArgs(e, this.props.args));
+      e.target = this.$input;
+      onChange(e, value, options);
     }
     // 隐藏框
     this.setState((prevState) => {
@@ -82,6 +90,7 @@ export default class InputCity extends Component {
       pickerProps = {}
     } = this.props;
     if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
+      e.target = this.$input;
       pickerProps.cancelAttribute.onClick(e);
       return;
     }

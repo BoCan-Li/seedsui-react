@@ -1,22 +1,27 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputCity} from '../../src'
+import {Page, Header, Titlebar, Container, InputDate} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: '新疆,乌鲁木齐市,天山区'
+      value: ''
     }
   }
   componentDidMount () {
     
   }
-  onChange = (value) => {
+  onChange = (e, value) => {
+    console.log(e.target)
     this.setState({
       value: value
     });
+  }
+  onError = (e, msg) => {
+    console.log(e)
+    console.log(msg);
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -24,16 +29,19 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputCity
+        <InputDate
           valueBindProp
+          min={new Date().format('YYYY-MM-DD')}
+          onError={this.onError}
           value={this.state.value}
           onChange={this.onChange}
           placeholder="请选择"
           className="border-b"
           pickerProps={{
-            split: ',',
             maskAttribute: {
-              style: {zIndex: '11'}
+              style: {
+                zIndex: '11'
+              }
             }
           }}
         />

@@ -1930,8 +1930,8 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```javascript
 <InputCity
   // Input
-  onClick={点击文本框 func(value, args), 默认无}
-  onChange={值改变 func(value, option, args), 默认无}
+  onClick={点击文本框 func(e, value), 默认无}
+  onChange={值改变 func(e, value, option), 默认无}
 
   // Picker
   valueForKey={选中key用split分割 string, 默认无}
@@ -1949,7 +1949,8 @@ this.state = {
   value: ''
 }
 
-onChange = (value) => {
+onChange = (e, value) => {
+  console.log(e.event)
   this.setState({
     value: value
   });
@@ -1962,8 +1963,7 @@ onChange = (value) => {
   placeholder="请选择"
   className="border-b"
   pickerProps={{
-    split: ','
-    portal: document.getElementById('root'),
+    split: ',',
     maskAttribute: {
       style: {zIndex: '11'}
     }
