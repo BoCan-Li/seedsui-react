@@ -84,6 +84,11 @@ import Chat from 'seedsui-react/lib/Chat';
 [下载国际化文件](https://unpkg.com/seedsui-react/lib/lang.js), 修改window._seeds_lang对象即可
 
 
+# 组件规范
+- 所有事件第一个参数都为e
+- 所有组件内dom属性都使用xxAttribute
+- 所有组件内组件属性都使用xxProps
+
 # Component
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
@@ -157,7 +162,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Radio](#radio) 单选框
 - [RouteComment](#routecomment) 评价路由
 - [SearchBoard](#searchboard) 搜索面板
-- [SelectPicker](#selectpicker) 选择弹框
+- [PickerSelect](#pickerselect) 选择弹框
 - [Star](#star) 星星
 - [Stencil](#stencil) 加载模板
 - [Sticker](#sticker) 标签贴
@@ -1936,9 +1941,9 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   // Picker
   valueForKey={选中key用split分割 string, 默认无}
   type={城市类型 string, 默认'district'} // 'district' | 'city'
-  pickerProps={Picker弹框属性 object, 默认无} // className: picker
+  pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
 
-  {...others} // Input
+  {...others} // InputText组件
 />
 ```
 ### 示例
@@ -1994,8 +1999,8 @@ onChange = (e, value) => {
   // Picker
   valueForKey={选中key用split分割 string, 默认无}
   type={城市类型 string, 默认'district'} // 'date | month | time | datetime'
-  pickerProps={Picker弹框属性 object, 默认无} // className: picker
-  {...others}
+  pickerProps={PickerDate组件弹框属性 object, 默认无} // className: picker
+  {...others} // InputText组件
 />
 ```
 ### 示例
@@ -2072,20 +2077,16 @@ onError = (e, msg) => {
 ### 属性
 ```javascript
 <InputPicker
-  valueForKey={选中key number | string, 默认无}
-  list={选择列表 array, 默认无}
-  onChange={值改变 func(value, option, args), 默认无}
+  // Input
+  onClick={点击文本框 func(e, value), 默认无}
+  onChange={值改变 func(e, value, option), 默认无}
+
   // Picker
-  pickerMaskClassName={弹出框遮罩className string, 默认无}
-  pickerMaskStyle={弹出框遮罩style object, 默认无}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
-  // 自定义Picker事件
-  pickerShow={控制picker的显隐 bool, 默认无}
-  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
-  onClickCancel={点击picker取消按钮 func({target}), 默认无}
-  onClickMask={点击picker遮罩 func({target}), 默认无}
-  {...others}
+  list={选择列表 array, 默认无} // [{key: '', value: ''}]
+  valueForKey={选中key用split分割 string, 默认无}
+  pickerProps={Picker组件弹框属性 object, 默认无} // className: picker
+
+  {...others} // InputText组件
 />
 ```
 ### 示例
@@ -2093,7 +2094,7 @@ onError = (e, msg) => {
 import InputPicker from 'seedsui-react/lib/InputPicker';
 
 this.state = {
-  value: '',
+  value: '333',
   list: [
     {
       key: '1',
@@ -2110,8 +2111,9 @@ this.state = {
   ]
 }
 
-onChange = (value, option, args) => {
-  console.log(value, option, args);
+onChange = (e, value, option) => {
+  console.log(e.target)
+  console.log(value, option)
   this.setState({
     value: value
   });
@@ -2124,8 +2126,12 @@ onChange = (value, option, args) => {
   onChange={this.onChange}
   placeholder="请选择"
   className="border-b"
-  pickerMaskStyle={{zIndex: '11'}}
-  pickerMaskClassName="bg-white"
+  pickerProps={{
+    maskAttribute: {
+      style: {zIndex: '11'},
+      className: "bg-white"
+    }
+  }}
 />
 ```
 [返回目录](#component)
@@ -2189,26 +2195,21 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 
 ## InputSelect
 [选择框](https://unpkg.com/seedsui-react/src/lib/InputSelect/InputSelect.js)
-, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[SelectPicker 选择弹框](#selectpicker)组件
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerSelect 选择弹框](#pickerselect)组件
 ### 属性
 ```javascript
 <InputSelect
-  valueForKey={选中key number | string, 默认无}
-  split={分隔符 string, 默认'-'}
-  multiple={是否允许多选 bool, 默认false}
-  list={选择列表 array, 默认无}
-  onChange={值改变 func(value, options, args), 默认无}
+  // Input
+  onClick={点击文本框 func(e, value), 默认无}
+  onChange={值改变 func(e, value, option), 默认无}
+
   // Picker
-  pickerMaskClassName={弹出框遮罩className string, 默认无}
-  pickerMaskStyle={弹出框遮罩style object, 默认无}
-  pickerClassName={弹出框className string, 默认无}
-  pickerStyle={弹出框style object, 默认无}
-  // 自定义Picker事件
-  pickerShow={控制picker的显隐 bool, 默认无}
-  onClickSubmit={点击picker确定按钮 func({target, activeOptions, activeText}), 默认无}
-  onClickCancel={点击picker取消按钮 func({target}), 默认无}
-  onClickMask={点击picker遮罩 func({target}), 默认无}
-  {...others}
+  multiple={是否允许多选 bool, 默认false}
+  list={选择列表 array, 默认无} // [{key: '', value: ''}]
+  valueForKey={选中key用split分割 string, 默认无}
+  pickerProps={PickerSelect组件弹框属性 object, 默认无} // className: picker
+
+  {...others} // InputText组件
 />
 ```
 ### 示例
@@ -2216,7 +2217,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 import InputSelect from 'seedsui-react/lib/InputSelect';
 
 this.state = {
-  value: '',
+  value: '333',
   list: [
     {
       key: '1',
@@ -2233,23 +2234,30 @@ this.state = {
   ]
 }
 
-onChange = (value, option, args) => {
-  console.log(value, option, args);
+onChange = (e, value, option) => {
+  console.log(e.target)
+  console.log(value, option)
   this.setState({
     value: value
   });
 }
 
 <InputSelect
-  multiple
   list={this.state.list}
+  multiple
   valueBindProp
   value={this.state.value}
+  valueForKey={'1-3'}
   onChange={this.onChange}
   placeholder="请选择"
   className="border-b"
-  pickerMaskStyle={{zIndex: '11'}}
-  pickerMaskClassName="bg-white"
+  pickerProps={{
+    split: '-',
+    maskAttribute: {
+      style: {zIndex: '11'},
+      className: "bg-white"
+    }
+  }}
 />
 ```
 [返回目录](#component)
@@ -3511,22 +3519,15 @@ import Peg from 'seedsui-react/lib/Peg';
 ```javascript
 <Picker
   portal={传送dom object, 默认document.getElementById('root')}
-  show={*显隐 bool, 默认false}
-
-  value={值 number | string, 默认无}
-  valueForKey={选中key number | string, 默认无}
-
   list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
-
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'picker'}
-
-  slotClassName={一槽className string, 默认'text-center'}
-  onClickMask={点击遮罩 func, 默认无}
-  onClickCancel={点击取消按钮 func(s), 默认无}
-  onClickSubmit={点击确定按钮 func(s), 默认无}
+  show={*显隐 bool, 默认false}
+  value={值 string, 默认无}
+  valueForKey={选中key string, 默认无}
+  maskAttribute={遮罩属性 object, 默认无}
+  submitAttribute={确定按钮属性 object, 默认无}
+  cancelAttribute={取消按钮属性 object, 默认无}
+  slotAttribute={槽按钮属性 object, 默认无} // 现仅支持修改className
+  {...others}
 />
 ```
 ### 示例
@@ -3576,9 +3577,15 @@ onClick = () => {
   list={this.state.pickerList}
   valueForKey={this.state.pickerId}
   show={this.state.pickerShow}
-  onClickSubmit={this.onClickSubmit}
-  onClickCancel={this.hidePicker}
-  onClickMask={this.hidePicker}
+  submitAttribute={{
+    onClick: this.onClickSubmit
+  }}
+  cancelAttribute={{
+    onClick: this.hidePicker
+  }}
+  maskAttribute={{
+    onClick: this.hidePicker
+  }}
 />
 ```
 [返回目录](#component)
@@ -4120,31 +4127,28 @@ searchGoods = (value) => {
 
 
 
-## SelectPicker
-[选择弹框](https://unpkg.com/seedsui-react/src/lib/SelectPicker/SelectPicker.js)
+## PickerSelect
+[选择弹框](https://unpkg.com/seedsui-react/src/lib/PickerSelect/PickerSelect.js)
 ### 属性
 ```javascript
-<SelectPicker
+<PickerSelect
   portal={传送dom object, 默认document.getElementById('root')}
   multiple={是否允许多选 bool, 默认false}
-  value={值 number | string, 默认无}
-  valueForKey={选中key number | string, 默认无}
-  list={选择列表 array, 默认无} // 格式 [key: 'xx', value: 'xx']
-
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
-  className={容器className string, 默认无, 基础'selectpicker'}
-  style={容器style object, 默认无}
-  slotClassName={一槽className string, 默认'text-center'}
+  list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
+  split={多选分割字符串 bool, 默认,}
   show={*显隐 bool, 默认false}
-  onClickMask={点击遮罩 func(e), 默认无}
-  onClickCancel={点击取消按钮 func(e), 默认无}
-  onClickSubmit={点击确定按钮 func(selected), 默认无}
+  value={值 string, 默认无}
+  valueForKey={选中key string | number, 默认无}
+  maskAttribute={遮罩属性 object, 默认无}
+  submitAttribute={确定按钮属性 object, 默认无}
+  cancelAttribute={取消按钮属性 object, 默认无}
+  optionAttribute={选项属性 object, 默认无}
+  {...others}
 />
 ```
 ### 示例
 ```javascript
-import SelectPicker from 'seedsui-react/lib/SelectPicker';
+import PickerSelect from 'seedsui-react/lib/PickerSelect';
 
 onClickSubmit = (e) => {
   const value = e.activeOptions[0].value;
@@ -4164,12 +4168,18 @@ onClickMask = () => {
   });
 }
 
-<SelectPicker
+<PickerSelect
   value=""
   show={this.state.show}
-  onClickSubmit={this.onClickSubmit}
-  onClickCancel={this.onClickCancel}
-  onClickMask={this.onClickMask}
+  submitAttribute={{
+    onClick: this.onClickSubmit
+  }}
+  cancelAttribute={{
+    onClick: this.onClickCancel
+  }}
+  maskAttribute={{
+    onClick: this.onClickMask
+  }}
 />
 ```
 [返回目录](#component)

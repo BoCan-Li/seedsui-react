@@ -5586,17 +5586,17 @@ a {
 
 
 
-// SelectPicker选择器
-.setSelectPicker(){
-  @selectpicker-color-active: @primary-bg;
-  .selectpicker{
+// PickerSelect选择器
+.setPickerSelect(){
+  @pickerselect-color-active: @primary-bg;
+  .pickerselect{
     &:extend(.picker);
     background-color: @picker-selected-bg;
   }
-  .selectpicker.active{
+  .pickerselect.active{
     &:extend(.picker.active);
   }
-  .selectpicker-wrapper{
+  .pickerselect-wrapper{
     display: block;
     position: relative;
     overflow: auto;
@@ -5604,24 +5604,24 @@ a {
     max-height: 215px;
   }
   // 列表选项
-  .selectpicker-option{
+  .pickerselect-option{
     &:extend(.flex, .border-b);
     .flex-middle;
     padding: 10px 12px;
   }
-  .selectpicker-option.active{
-    color:@selectpicker-color-active;
-    .selectpicker-option-icon{
+  .pickerselect-option.active{
+    color:@pickerselect-color-active;
+    .pickerselect-option-icon{
       visibility: visible;
     }
   }
-  .selectpicker-option-caption{
+  .pickerselect-option-caption{
     position: relative;
     display: block;
     &:extend(.flex-1);
     pointer-events: none;
   }
-  .selectpicker-option-icon{
+  .pickerselect-option-icon{
     font-family: 'iconfont';
     &:extend(.icon-ok-fill all);
     font-size: 16px;

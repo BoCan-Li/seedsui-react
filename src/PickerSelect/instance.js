@@ -1,5 +1,5 @@
-// SelectPicker 滚动选择器
-var SelectPicker = function (params) {
+// PickerSelect 滚动选择器
+var PickerSelect = function (params) {
   if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* ------------------------
   Model
@@ -15,7 +15,7 @@ var SelectPicker = function (params) {
     maskActiveClass: 'active',
     maskFeatureClass: 'picker-mask',
 
-    pickerClass: 'selectpicker',
+    pickerClass: 'pickerselect',
     pickerActiveClass: 'active',
 
     headerClass: 'picker-header',
@@ -24,8 +24,8 @@ var SelectPicker = function (params) {
     headerCancelClass: 'picker-cancel',
     headerCancelText: window._seeds_lang['cancel'] || '取消',
 
-    wrapperClass: 'selectpicker-wrapper',
-    optionClass: 'selectpicker-option',
+    wrapperClass: 'pickerselect-wrapper',
+    optionClass: 'pickerselect-option',
     optionActiveClass: 'active'
     /* callbacks
     onInit:function (Picker)
@@ -51,7 +51,7 @@ var SelectPicker = function (params) {
   // Dom元素
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
   if (!s.overflowContainer) {
-    console.log('SeedsUI Error：未找到SelectPicker的overflowContainer元素，请检查传入参数是否正确')
+    console.log('SeedsUI Error：未找到PickerSelect的overflowContainer元素，请检查传入参数是否正确')
     return
   }
   s.picker = null
@@ -289,4 +289,4 @@ var SelectPicker = function (params) {
   return s
 }
 
-export default SelectPicker
+export default PickerSelect

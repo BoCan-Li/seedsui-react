@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputPicker} from '../../src'
+import {Page, Header, Titlebar, Container, InputSelect} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -40,14 +40,17 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputPicker
+        <InputSelect
           list={this.state.list}
+          multiple
           valueBindProp
           value={this.state.value}
+          valueForKey={'1-3'}
           onChange={this.onChange}
           placeholder="请选择"
           className="border-b"
           pickerProps={{
+            split: '-',
             maskAttribute: {
               style: {zIndex: '11'},
               className: "bg-white"

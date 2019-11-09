@@ -35,11 +35,11 @@ export default class InputPicker extends Component {
     this.$picker = this.refs.$ComponentPicker;
   }
   // 点击文本框
-  onClickInput = (e, value) => {
+  onClickInput = (...parameter) => {
     const {
       onClick
     } = this.props;
-    if (onClick) onClick(e, value);
+    if (onClick) onClick(...parameter);
     this.setState((prevState) => {
       return {
         show: !prevState.show
