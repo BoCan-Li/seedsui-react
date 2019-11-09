@@ -3749,20 +3749,12 @@ onClickVideo = (args) => {
 ### 属性
 ```javascript
 <Popover
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
-
   animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
-  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
-
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
-  onClickMask={点击遮罩 func(args), 默认无}
-
-  className={容器className string, 默认无, 基础'popover'}
-  // 'top-left | top-center | top-right | left-top | left-middle | left-bottom', 其中top与bottom、left与right拥有相同属性
-  style={容器style object, 默认无}
+  maskAttribute={遮罩属性 object, 默认无} // className: mask popover-mask
+  children={容器内容 node, 默认无}
+  {...others} // 容器属性
 >
 内容内容
 </Popover>
@@ -3807,7 +3799,14 @@ hidePopover = () => {
 
 <input type="button" value="显示" onClick={this.showPopover} style={{position: 'absolute', left: '50%', top: '20px'}}/>
 {/* 更多操作 */}
-<Popover show={this.state.popoverShow} className={this.state.popoverClassName} style={this.state.popoverStyle} onClickMask={this.hidePopover}>
+<Popover
+  show={this.state.popoverShow}
+  className={this.state.popoverClassName}
+  style={this.state.popoverStyle}
+  maskAttribute={{
+    onClick: this.hidePopover
+  }}
+>
   操作操作<br/>
   操作操作<br/>
   操作操作<br/>
