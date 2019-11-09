@@ -1,3 +1,4 @@
+// require PrototypeDate.js和PrototypeString.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
@@ -10,8 +11,9 @@ export default class PickerDate extends Component {
     portal: PropTypes.object,
     data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
     split: PropTypes.string,
+    timeSplit: PropTypes.string,
 
-    type: PropTypes.string, // 'date','month','time','datetime'
+    type: PropTypes.string, // date | month | time | datetime
     show: PropTypes.bool,
     value: PropTypes.string, // '2018-02-26'
     valueForKey: PropTypes.string, // '2018-02-26'
@@ -24,6 +26,7 @@ export default class PickerDate extends Component {
   }
   static defaultProps = {
     split: '-',
+    timeSplit: ':',
     type: 'date'
   }
   constructor(props) {
@@ -51,7 +54,7 @@ export default class PickerDate extends Component {
     this.instance.update();
   }
   getDefault = () => {
-    const {split, type, onError} = this.props;
+    const {split, timeSplit, type, onError} = this.props;
     var defaultValue = this.props.valueForKey || this.props.value;
     var now = new Date();
     var nowYear = now.getFullYear();
@@ -67,31 +70,32 @@ export default class PickerDate extends Component {
     // 默认值
     if (type === 'date') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
-        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}`);
+      const e = this.instance ? this.instance : {};
+      if (!defaultValue || !defaultValue.isDate(split)) {
+        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}`});
       } else {
-        let dateValues = defaultValue.split(this.props.split)
+        let dateValues = defaultValue.split(split)
         defaultYear = dateValues[0]
         defaultMonth = dateValues[1]
         defaultDay = dateValues[2] || '01'
       }
     } else if (type === 'month') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}$`).test(defaultValue)) {
-        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`);
+      if (!defaultValue || !defaultValue.isMonth(split)) {
+        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
       } else {
-        let monthValues = defaultValue.split(this.props.split)
+        let monthValues = defaultValue.split(split)
         defaultYear = monthValues[0]
         defaultMonth = monthValues[1]
       }
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}\\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
-        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`);
+      if (!defaultValue || !defaultValue.isDateTime(split, timeSplit)) {
+        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
       } else {
         let values = defaultValue.split(' ')
-        let dateValues = values[0].split(this.props.split)
-        let timeValues = values[1].split(':')
+        let dateValues = values[0].split(split || '-')
+        let timeValues = values[1].split(timeSplit || ':')
         defaultYear = dateValues[0]
         defaultMonth = dateValues[1]
         defaultDay = dateValues[2]
@@ -100,10 +104,10 @@ export default class PickerDate extends Component {
       }
     } else if (type === 'time') {
       // 如果不是合法的日期格式
-      if (!defaultValue || !new RegExp(`^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(defaultValue)) {
-        if (onError) onError(`${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, hh:mm`);
+      if (!defaultValue || !defaultValue.isTime(split, timeSplit)) {
+        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
       } else {
-        let timeValues = defaultValue.split(':')
+        let timeValues = defaultValue.split(timeSplit || ':')
         defaultHour = timeValues[0]
         defaultMinute = timeValues[1]
       }
@@ -179,6 +183,7 @@ export default class PickerDate extends Component {
     // render数据
     const {
       split,
+      timeSplit,
       type,
       show,
       maskAttribute = {},
@@ -188,6 +193,7 @@ export default class PickerDate extends Component {
     this.instance = new Instance({
       mask: this.$el,
       split: split,
+      timeSplit: timeSplit,
       viewType: type,
       yearsData: data.yearsData,
       monthsData: data.monthsData,
@@ -232,6 +238,7 @@ export default class PickerDate extends Component {
       portal,
       data,
       split,
+      timeSplit,
       type,
       show,
       value,
@@ -263,7 +270,7 @@ export default class PickerDate extends Component {
           </div>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root') || document.body
+      portal || document.getElementById('root') || document.body
     );
   }
 }

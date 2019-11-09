@@ -10,13 +10,13 @@ export default class PickerCity extends Component {
   static propTypes = {
     portal: PropTypes.object,
     data: PropTypes.array,
-    dataFormat: PropTypes.object, // {keyName: '', valueName: '', childName: ''}
+    dataFormat: PropTypes.object, // {keyName: 'key', valueName: 'value', childName: 'children'}
     split: PropTypes.string,
 
     type: PropTypes.string, // district | city
     show: PropTypes.bool,
-    value: PropTypes.string,
-    valueForKey: PropTypes.string, // 
+    value: PropTypes.string, // '北京-东城区'
+    valueForKey: PropTypes.string, // '110000-110101'
 
     maskAttribute: PropTypes.object,
     submitAttribute: PropTypes.object,

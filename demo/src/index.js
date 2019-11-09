@@ -1,27 +1,38 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputDate} from '../../src'
+import {Page, Header, Titlebar, Container, InputPicker} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: ''
+      value: '333',
+      list: [
+        {
+          key: '1',
+          value: '111'
+        },
+        {
+          key: '2',
+          value: '222'
+        },
+        {
+          key: '3',
+          value: '333'
+        }
+      ]
     }
   }
   componentDidMount () {
     
   }
-  onChange = (e, value) => {
+  onChange = (e, value, option) => {
     console.log(e.target)
+    console.log(value, option)
     this.setState({
       value: value
     });
-  }
-  onError = (e, msg) => {
-    console.log(e)
-    console.log(msg);
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -29,19 +40,17 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputDate
+        <InputPicker
+          list={this.state.list}
           valueBindProp
-          min={new Date().format('YYYY-MM-DD')}
-          onError={this.onError}
           value={this.state.value}
           onChange={this.onChange}
           placeholder="请选择"
           className="border-b"
           pickerProps={{
             maskAttribute: {
-              style: {
-                zIndex: '11'
-              }
+              style: {zIndex: '11'},
+              className: "bg-white"
             }
           }}
         />

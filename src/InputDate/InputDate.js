@@ -1,4 +1,4 @@
-// require PrototypeDate.js
+// require PrototypeDate.js和PrototypeString.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
@@ -41,32 +41,34 @@ export default class InputDate extends Component {
   }
   // 日期纠正
   correctDate = (val) => {
+    const {type, min, max, onError, pickerProps = {}} = this.props;
+    const split = pickerProps.split || '-';
+    const timeSplit = pickerProps.timeSplit || ':';
     let text = val;
-    const {type, min, max, onError} = this.props;
-    const selectDate = text.toDate();
+    const selectDate = text.toDate(split, timeSplit);
     const value = this.$input.value;
     const e = this.$picker && this.$picker.instance ? this.$picker.instance : {};
     e.target = this.$input;
-    if (min && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(min) || /^[0-9]{2}:[0-9]{2}$/.test(min))) {
-      if (type === 'date' && selectDate.compareDate(min.toDate()) === -1) {
+    if (min && (min.isDateTime(split, timeSplit) || min.isDate(split) || min.isMonth(split) || min.isTime(timeSplit))) {
+      if (type === 'date' && selectDate.compareDate(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
-      } else if (type === 'month' && selectDate.compareMonth(min.toDate()) === -1) {
+      } else if (type === 'month' && selectDate.compareMonth(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
-      } else if (type === 'time' && selectDate.compareTime(min.toDate()) === -1) {
+      } else if (type === 'time' && selectDate.compareTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
-      } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate()) === -1) {
+      } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
@@ -74,26 +76,26 @@ export default class InputDate extends Component {
         text = min;
       }
     }
-    if (max && (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(max) || /^[0-9]{2}:[0-9]{2}$/.test(max))) {
-      if (type === 'date' && selectDate.compareDate(max.toDate()) === 1) {
+    if (max && (max.isDateTime(split, timeSplit) || max.isDate(split) || max.isMonth(split) || max.isTime(timeSplit))) {
+      if (type === 'date' && selectDate.compareDate(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
-      } else if (type === 'month' && selectDate.compareMonth(max.toDate()) === 1) {
+      } else if (type === 'month' && selectDate.compareMonth(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
-      } else if (type === 'time' && selectDate.compareTime(max.toDate()) === 1) {
+      } else if (type === 'time' && selectDate.compareTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
-      } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate()) === 1) {
+      } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
           onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;

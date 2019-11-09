@@ -75,6 +75,7 @@ export default class InputCity extends Component {
       return;
     }
     // 赋值
+    if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
     const value = e.activeText;
     const options = e.activeOptions;
     if (!valueBindProp) this.$input.value = value;
@@ -107,12 +108,13 @@ export default class InputCity extends Component {
   }
   render() {
     let {
+      // Input
       onClick,
       onChange,
 
       // Picker
       valueForKey,
-      type, // 'district' | 'city'
+      type,
       pickerProps,
       ...others
     } = this.props;

@@ -10,12 +10,7 @@ export default class Picker extends Component {
     portal: PropTypes.object,
     list: PropTypes.array, // [{key: '', value: ''}]
 
-    maskClassName: PropTypes.string,
-    maskStyle: PropTypes.object,
-    className: PropTypes.string,
-    style: PropTypes.object,
-
-    slotClassName: PropTypes.string,
+    show: PropTypes.bool,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -24,13 +19,13 @@ export default class Picker extends Component {
       PropTypes.string,
       PropTypes.number
     ]),
-    show: PropTypes.bool,
-    onClickMask: PropTypes.func,
-    onClickCancel: PropTypes.func,
-    onClickSubmit: PropTypes.func,
+
+    maskAttribute: PropTypes.object,
+    submitAttribute: PropTypes.object,
+    cancelAttribute: PropTypes.object,
+    slotAttribute: PropTypes.object
   }
   static defaultProps = {
-    slotClassName: 'text-center'
   }
   constructor(props) {
     super(props);
@@ -56,14 +51,18 @@ export default class Picker extends Component {
     }
   }
   setDefault = () => {
-    const {valueForKey, list} = this.props;
+    const {
+      valueForKey,
+      list,
+      slotAttribute = {}
+    } = this.props;
     let key = valueForKey || '';
     if (!key) {
       const defaultOpt = this.getDefaults();
       if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
     }
     this.instance.clearSlots();
-    this.instance.addSlot(list, key || '', this.props.slotClassName); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
+    this.instance.addSlot(list, key || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
   }
   getDefaults = () => {
     const {list, valueForKey, value} = this.props;
@@ -82,21 +81,26 @@ export default class Picker extends Component {
     return values[0];
   }
   initInstance = () => {
-    const {list} = this.props;
+    const {
+      list,
+      show,
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {},
+      slotAttribute = {}
+    } = this.props;
     if (!list || list.length === 0 || this.instance) return;
     // render数据
-    const instance = new Instance({
+    this.instance = new Instance({
       mask: this.$el,
       onClickMask: (e) => {
-        if (this.props.onClickMask) this.props.onClickMask(e)
+        if (maskAttribute.onClick) maskAttribute.onClick(e)
       },
       onClickCancel: (e) => {
-        // e.hide()
-        if (this.props.onClickCancel) this.props.onClickCancel(e);
+        if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        // e.hide()
-        if (this.props.onClickSubmit) this.props.onClickSubmit(e);
+        if (submitAttribute.onClick) submitAttribute.onClick(e);
       },
       onHid: (e) => {
       }
@@ -105,20 +109,45 @@ export default class Picker extends Component {
     const defaultOpt = this.getDefaults();
     let key = '';
     if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
-    instance.addSlot(list, key, this.props.slotClassName);
-    if (this.props.show && instance) {
-      instance.show()
+    this.instance.addSlot(list, key, slotAttribute.className || 'text-center');
+    if (show && this.instance) {
+      this.instance.show()
     }
-    this.instance = instance;
+  }
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
   }
   render() {
-    const {maskClassName, maskStyle, className, style} = this.props;
+    let {
+      portal,
+      list,
+      show,
+      value,
+      valueForKey,
+
+      maskAttribute = {},
+      submitAttribute = {},
+      cancelAttribute = {},
+      slotAttribute = {},
+      ...others
+    } = this.props;
+    // 剔除掉onClick事件, 因为在instance时已经回调了
+    maskAttribute = this.filterProps(maskAttribute)
+    submitAttribute = this.filterProps(submitAttribute)
+    cancelAttribute = this.filterProps(cancelAttribute)
     return createPortal(
-      <div className={`mask picker-mask${maskClassName ? ' ' + maskClassName : ''}`} style={maskStyle} ref={(el) => {this.$el = el}}>
-        <div className={`picker${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
+        <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
           <div className="picker-header">
-            <a className="picker-cancel">{window._seeds_lang['cancel'] || '取消'}</a>
-            <a className="picker-submit">{window._seeds_lang['finish'] || '完成'}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">
@@ -128,7 +157,7 @@ export default class Picker extends Component {
           </div>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root') || document.body
+      portal || document.getElementById('root') || document.body
     );
   }
 }

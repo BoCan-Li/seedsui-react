@@ -2003,7 +2003,7 @@ onChange = (e, value) => {
 import InputDate from 'seedsui-react/lib/InputDate';
 
 this.state = {
-  value: ''
+  value: new Date().format('YYYY,MM,DD hh&mm')
 }
 
 onChange = (e, value) => {
@@ -2019,13 +2019,16 @@ onError = (e, msg) => {
 
 <InputDate
   valueBindProp
-  min={new Date().format('YYYY-MM-DD')}
+  type="datetime"
+  max={new Date().format('YYYY,MM,DD hh&mm')}
   onError={this.onError}
   value={this.state.value}
   onChange={this.onChange}
   placeholder="请选择"
   className="border-b"
   pickerProps={{
+    split: ',',
+    timeSplit: '&',
     maskAttribute: {
       style: {
         zIndex: '11'
@@ -3589,35 +3592,17 @@ onClick = () => {
 ### 属性
 ```javascript
 <PickerCity
-  data={数据源 array, 默认内置数据源}
-  dataKeyPropertyName={data数据key的属性名称 string, 默认'key'}
-  dataValuePropertyName={data数据value的属性名称 string, 默认'value'}
-  dataChildPropertyName={data数据child的属性名称 string, 默认'children'}
-  // export default [
-  //   {
-  //     "value": "北京",
-  //     "children": [
-  //       {
-  //         "value": "东城区",
-  //         "key": "110101"
-  //       }
-  //     ]
-  //   }
-  // ]
   portal={传送dom object, 默认document.getElementById('root')}
-  valueForKey={选中key string, 默认无}
+  data={数据源 array, 默认内置数据源}
+  dataFormat={数据源格式化 object, 默认如注释} // {keyName: 'key', valueName: 'value', childName: 'children'}
   split={分隔符 string, 默认'-'}
-  type={类型 string, 默认'area'} // area | city
-
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
-  className={容器className string, 默认无, 基础'picker'}
-  style={容器style object, 默认无}
-  value={值 string, 默认无}
+  type={类型 string, 默认'district'} // district | city
   show={*显隐 bool, 默认false}
-  onClickMask={点击遮罩 func, 默认无}
-  onClickCancel={点击取消按钮 func(s), 默认无}
-  onClickSubmit={点击确定按钮 func(s), 默认无}
+  value={值 string, 默认无} // '北京-东城区'
+  valueForKey={选中key string, 默认无} // '110000-110101'
+  maskAttribute={遮罩属性 object, 默认无}
+  submitAttribute={确定按钮属性 object, 默认无}
+  cancelAttribute={取消按钮属性 object, 默认无}
 />
 ```
 ### 示例
@@ -3645,9 +3630,15 @@ onClickMask = () => {
 <PickerCity
   value=""
   show={this.state.show}
-  onClickSubmit={this.onClickSubmit}
-  onClickCancel={this.onClickCancel}
-  onClickMask={this.onClickMask}
+  submitAttribute={{
+    onClick: this.onClickSubmit
+  }}
+  cancelAttribute={{
+    onClick: this.onClickCancel
+  }}
+  maskAttribute={{
+    onClick: this.onClickMask
+  }}
 />
 ```
 [返回目录](#component)
@@ -3660,21 +3651,18 @@ onClickMask = () => {
 ### 属性
 ```javascript
 <PickerDate
-  valueForKey={选中key string, 默认无}
   portal={传送dom object, 默认document.getElementById('root')}
+  data={数据源 array, 默认内置数据源}
   split={分隔符 string, 默认'-'}
-  type={类型 string, 默认'area'} // area | city
-
-  maskStyle={遮罩style object, 默认无}
-  maskClassName={遮罩className string, 默认无, 基础'mask popover-mask'}
-  className={容器className string, 默认无, 基础'picker'}
-  style={容器style object, 默认无}
-  value={值 string, 默认无}
+  type={类型 string, 默认'district'} // date | month | time | datetime
   show={*显隐 bool, 默认false}
-  onClickMask={点击遮罩 func, 默认无}
-  onClickCancel={点击取消按钮 func(s), 默认无}
-  onClickSubmit={点击确定按钮 func(s), 默认无}
-  onError={错误 func(s), 默认无}
+  value={值 string, 默认无} // '2018-02-26'
+  valueForKey={选中key string, 默认无} // '2018-02-26'
+  maskAttribute={遮罩属性 object, 默认无}
+  submitAttribute={确定按钮属性 object, 默认无}
+  cancelAttribute={取消按钮属性 object, 默认无}
+
+  onError={错误 func(e, {msg: ''}), 默认无}
 />
 ```
 ### 示例
@@ -3702,9 +3690,15 @@ onClickMask = () => {
 <PickerDate
   value=""
   show={this.state.show}
-  onClickSubmit={this.onClickSubmit}
-  onClickCancel={this.onClickCancel}
-  onClickMask={this.onClickMask}
+  submitAttribute={{
+    onClick: this.onClickSubmit
+  }}
+  cancelAttribute={{
+    onClick: this.onClickCancel
+  }}
+  maskAttribute={{
+    onClick: this.onClickMask
+  }}
 />
 ```
 [返回目录](#component)

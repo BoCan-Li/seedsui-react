@@ -14,6 +14,7 @@ var PickerDate = function (params) {
     ---------------- */
   var defaults = {
     split: '-',
+    timeSplit: ':',
     
     viewType: 'date', // 'date','month','time','datetime'
     isSimpleYear: false,
@@ -245,8 +246,8 @@ var PickerDate = function (params) {
       return n['key']
     })
     if (s.params.viewType === 'date') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2]
-    else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + ':' + activeKeys[4]
-    else if (s.params.viewType === 'time') return activeKeys[0] + ':' + activeKeys[1]
+    else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + s.params.timeSplit + activeKeys[4]
+    else if (s.params.viewType === 'time') return activeKeys[0] + s.params.timeSplit + activeKeys[1]
     else if (s.params.viewType === 'month') return activeKeys[0] + s.params.split + activeKeys[1]
   }
   s.setDefaultsByKeys = function (activeKeys) {

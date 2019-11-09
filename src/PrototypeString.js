@@ -95,43 +95,43 @@ window.String.prototype.isQueryId = function () {
   return true
 }
 // 判断是否是合法的日期 YYYY-MM-DD
-window.String.prototype.isDate = function (split) {
-  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}$`).test(this)
+window.String.prototype.isDate = function (dateSplit) {
+  return new RegExp(`^[0-9]{4}${dateSplit || '-'}[0-9]{2}${dateSplit || '-'}[0-9]{2}$`).test(this)
 }
 // 判断是否是合法的月份 yyyy-MM
-window.String.prototype.isMonth = function (split) {
-  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}$`).test(this)
+window.String.prototype.isMonth = function (dateSplit) {
+  return new RegExp(`^[0-9]{4}${dateSplit || '-'}[0-9]{2}$`).test(this)
 }
 // 判断是否是日期格式 YYYY-MM-DD hh:mm:ss 或 YYYY-MM-DD hh:mm
-window.String.prototype.isDateTime = function (split) {
-  return new RegExp(`^[0-9]{4}${split || '-'}[0-9]{2}${split || '-'}[0-9]{2}\\s[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(this)
+window.String.prototype.isDateTime = function (dateSplit, timeSplit) {
+  return new RegExp(`^[0-9]{4}${dateSplit || '-'}[0-9]{2}${dateSplit || '-'}[0-9]{2}\\s[0-9]{2}${timeSplit || ':'}[0-9]{2}(${timeSplit || ':'}[0-9]{2})?$`).test(this)
 }
 // 判断是否是时间格式 hh:mm 或 hh:mm:ss
-window.String.prototype.isTime = function () {
-  return new RegExp(`^[0-9]{2}:[0-9]{2}(:[0-9]{2})?$`).test(this)
+window.String.prototype.isTime = function (timeSplit) {
+  return new RegExp(`^[0-9]{2}${timeSplit || ':'}[0-9]{2}(${timeSplit || ':'}[0-9]{2})?$`).test(this)
 }
 // 转换成日期
-window.String.prototype.toDate = function (dateSplit) {
+window.String.prototype.toDate = function (dateSplit, timeSplit) {
   var date = new Date()
   var dateStrArr = [date.getFullYear(), date.getMonth(), date.getDate()]
   var timeStrArr = [date.getHours(), date.getMinutes(), date.getSeconds()]
-  if (this.isDate()) {
+  if (this.isDate(dateSplit)) {
     dateStrArr = this.split(dateSplit || '-')
-  } else if (this.isDateTime()) {
+  } else if (this.isDateTime(dateSplit, timeSplit)) {
     var tempDateStrArr = this.split(dateSplit || '-')
-    var tempTimeStrArr = tempDateStrArr[2].split(' ')[1].split(':')
+    var tempTimeStrArr = tempDateStrArr[2].split(' ')[1].split(timeSplit || ':')
     dateStrArr[0] = tempDateStrArr[0]
     dateStrArr[1] = tempDateStrArr[1]
     dateStrArr[2] = tempDateStrArr[2].split(' ')[0]
     timeStrArr[0] = tempTimeStrArr[0]
     timeStrArr[1] = tempTimeStrArr[1]
     timeStrArr[2] = tempTimeStrArr[2] || timeStrArr[2]
-  } else if (this.isMonth()) {
+  } else if (this.isMonth(dateSplit)) {
     tempDateStrArr = this.split(dateSplit || '-')
     dateStrArr[0] = tempDateStrArr[0]
     dateStrArr[1] = tempDateStrArr[1]
-  } else if (this.isTime()) {
-    tempTimeStrArr = this.split(':')
+  } else if (this.isTime(timeSplit)) {
+    tempTimeStrArr = this.split(timeSplit || ':')
     timeStrArr[0] = tempTimeStrArr[0]
     timeStrArr[1] = tempTimeStrArr[1]
     timeStrArr[2] = tempTimeStrArr[2] || timeStrArr[2]
