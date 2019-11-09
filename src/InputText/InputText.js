@@ -3,15 +3,13 @@ import PropTypes from 'prop-types';
 
 export default class InputText extends Component {
   static propTypes = {
-    type: PropTypes.string, // 类型: text, number, tel, password
+    type: PropTypes.string, // 类型: text | number | tel | password
     valueBindProp: PropTypes.bool, // 值是否绑定属性
     pre: PropTypes.bool, // 自动扩充功能
     // 容器
-    args: PropTypes.any,
-    style: PropTypes.object,
-    className: PropTypes.string,
     onClick: PropTypes.func,
     // 文本框
+    inputAttribute: PropTypes.object,
     autoFocus: PropTypes.bool,
     maxLength: PropTypes.oneOfType([
       PropTypes.string,
@@ -33,29 +31,26 @@ export default class InputText extends Component {
     readOnly: PropTypes.bool,
     disabled: PropTypes.bool,
 
-    inputStyle: PropTypes.object,
-    inputClassName: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
     ]),
     placeholder: PropTypes.string,
+    // 文本框事件
     onChange: PropTypes.func,
-    onClickInput: PropTypes.func,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     // 左右图标
+    liconAttribute: PropTypes.bool,
     licon: PropTypes.node,
-    onClickLicon: PropTypes.func, // 点击样式包含licon触发
+    riconAttribute: PropTypes.bool,
     ricon: PropTypes.node,
-    onClickRicon: PropTypes.func, // 点击样式包含ricon触发
     // 清除按键
     clear: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.func
     ]),
-    clearClassName: PropTypes.string,
-    clearStyle: PropTypes.object,
+    clearAttribute: PropTypes.object,
     // 右侧内容
     rcaption: PropTypes.node
   }
@@ -63,8 +58,7 @@ export default class InputText extends Component {
     type: 'text',
     value: '',
     readOnly: false,
-    disabled: false,
-    clearClassName: 'ricon close-icon-clear size18'
+    disabled: false
   }
   constructor(props) {
     super(props);
@@ -81,20 +75,25 @@ export default class InputText extends Component {
   // 点击容器
   onClick = (e) => {
     e.stopPropagation();
-    const {onClick, onClickInput, onClickLicon, onClickRicon} = this.props;
+    const {
+      onClick,
+      inputAttribute = {},
+      liconAttribute = {},
+      riconAttribute = {}
+    } = this.props;
     if (this.props.disabled) return;
     var target = e.target;
     if (target.classList.contains('clearicon')) {
       this.onClear(e);
     } else if (target.classList.contains('licon')) {
-      if (onClickLicon) onClickLicon(this.$input.value, Object.getArgs(e, this.props.args));
+      if (liconAttribute.onClick) liconAttribute.onClick(e, this.$input.value);
     } else if (target.classList.contains('ricon')) {
-      if (onClickRicon) onClickRicon(this.$input.value, Object.getArgs(e, this.props.args));
+      if (riconAttribute.onClick) riconAttribute.onClick(e, this.$input.value);
     } else if (target.classList.contains('input-text')) {
-      if (onClick) onClick(this.$input.value, Object.getArgs(e, this.props.args));
-      if (onClickInput) onClickInput(this.$input.value, Object.getArgs(e, this.props.args));
+      if (onClick) onClick(e, this.$input.value);
+      if (inputAttribute.onClick) inputAttribute.onClick(e, this.$input.value);
     } else {
-      if (onClick) onClick(this.$input.value, Object.getArgs(e, this.props.args));
+      if (onClick) onClick(e, this.$input.value);
     }
   }
   // 自动扩充功能
@@ -123,7 +122,7 @@ export default class InputText extends Component {
       value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError});
     }
     // onChange
-    if (onChange) onChange(value, Object.getArgs(e, this.props.args));
+    if (onChange) onChange(e, value);
     // 非valueBindProp时, 更新清除按钮状态
     if (!valueBindProp) this.updateShowClear(value);
   }
@@ -135,16 +134,16 @@ export default class InputText extends Component {
       // 失去焦点时只校验非空、最小值
       value = Math.Calc.correctNumber(value, {min});
       if (!valueBindProp) target.value = value;
-      if (onChange) onChange(value, Object.getArgs(e, this.props.args));
+      if (onChange) onChange(e, value);
     }
-    if (onBlur) onBlur(value, Object.getArgs(e, this.props.args));
+    if (onBlur) onBlur(e, value);
   }
   onFocus = (e) => {
     var target = e.target;
     var value = target.value;
     const {onFocus, readOnly} = this.props;
     if (onFocus) {
-      onFocus(value, Object.getArgs(e, this.props.args));
+      onFocus(e, value);
       e.stopPropagation();
     }
     if (readOnly) {
@@ -155,11 +154,11 @@ export default class InputText extends Component {
   onClear = (e) => {
     this.$input.focus();
     // 赋值
-    const {args, valueBindProp, clear, pre, onChange} = this.props;
+    const {valueBindProp, clear, pre, onChange} = this.props;
     if (!valueBindProp) this.$input.value = '';
-    if (clear && typeof clear === 'function') clear('', Object.getArgs(e, args));
+    if (clear && typeof clear === 'function') clear(e, '');
     if (onChange) {
-      onChange('', Object.getArgs(e, args));
+      onChange(e, '');
     }
     // 自动扩充功能
     if (pre) {
@@ -171,26 +170,27 @@ export default class InputText extends Component {
   }
   getInputDOM = () => {
     const {
-      args, style, className, onClick, onChange, onClickInput, onBlur, onFocus,
-      max, min, digits,
-      licon, onClickLicon,
-      ricon, onClickRicon,
-      clear, clearClassName, clearStyle,
-      rcaption, // 为others不多属性
+      max,
+      min,
       pre, // 自动伸缩文本框
       type,
       valueBindProp,
-      autoFocus, inputClassName, inputStyle, maxLength, value, placeholder, readOnly, disabled,
-      ...others
+      autoFocus,
+      inputAttribute = {},
+      maxLength,
+      value,
+      placeholder,
+      readOnly,
+      disabled
     } = this.props;
     // pre类型
     if (pre) {
       // pre的左右padding
       let preLeft = 0;
       let preRight = 0;
-      if (inputStyle) {
-        if (inputStyle.padding) {
-          const paddingValues = inputStyle.padding.split(' ');
+      if (inputAttribute.style) {
+        if (inputAttribute.style.padding) {
+          const paddingValues = inputAttribute.style.padding.split(' ');
           if (paddingValues.length === 1) {
             preLeft = paddingValues[0];
             preRight = paddingValues[0];
@@ -201,14 +201,14 @@ export default class InputText extends Component {
             preLeft = paddingValues[1];
             preRight = paddingValues[3];
           }
-        } else if (inputStyle.paddingLeft || inputStyle.paddingRight) {
-          preLeft = inputStyle.paddingLeft || '0';
-          preRight = inputStyle.paddingRight || '0';
+        } else if (inputAttribute.style.paddingLeft || inputAttribute.style.paddingRight) {
+          preLeft = inputAttribute.style.paddingLeft || '0';
+          preRight = inputAttribute.style.paddingRight || '0';
         }
       }
-      return (<div className={`input-pre-box${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle}>
-        {valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
-        {!valueBindProp && <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} {...others}></textarea>}
+      return (<div {...inputAttribute} className={`input-pre-box${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}>
+        {valueBindProp && <textarea ref={(el) => {this.$input = el;}} autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus}></textarea>}
+        {!valueBindProp && <textarea ref={(el) => {this.$input = el;}} autoFocus={autoFocus} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus}></textarea>}
         <pre ref={(el) => {this.$pre = el;}} style={{left: preLeft, right: preRight}}><span>{value}</span></pre>
       </div>);
     }
@@ -216,15 +216,15 @@ export default class InputText extends Component {
     if (type === 'textarea') {
       // 如果值绑定属性,则只有通过父组件的prop来改变值
       if (valueBindProp) {
-        return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+        return <textarea ref={(el) => {this.$input = el;}} {...inputAttribute} autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}></textarea>;
       }
-      return <textarea autoFocus={autoFocus} ref={(el) => {this.$input = el;}} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}></textarea>;
+      return <textarea ref={(el) => {this.$input = el;}} {...inputAttribute} autoFocus={autoFocus} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-area${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}></textarea>;
     }
     // 其它类型
     if (valueBindProp) { // 如果值绑定属性,则只有通过父组件的prop来改变值
-      return <input max={max} min={min} autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={type} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+      return <input ref={(el) => {this.$input = el;}} {...inputAttribute} max={max} min={min} autoFocus={autoFocus} type={type} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>;
     }
-    return <input max={max} min={min} autoFocus={autoFocus} ref={(el) => {this.$input = el;}} type={type} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputClassName ? ' ' + inputClassName : ''}`} style={inputStyle} {...others}/>;
+    return <input ref={(el) => {this.$input = el;}} {...inputAttribute} max={max} min={min} autoFocus={autoFocus} type={type} defaultValue={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={this.onChange} onBlur={this.onBlur} onFocus={this.onFocus} className={`input-text${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>;
   }
   // 非valueBindProp时, 更新清除按钮状态
   updateShowClear = (value) => {
@@ -248,13 +248,38 @@ export default class InputText extends Component {
   }
   render() {
     const {
-      value, valueBindProp,
-      readOnly, disabled,
-      className, style,
+      type,
+      valueBindProp,
+      pre,
+      // 容器
+      onClick,
+      // 文本框
+      inputAttribute = {},
+      autoFocus,
+      maxLength,
+      max,
+      min,
+      digits,
+      readOnly,
+      disabled,
+
+      value,
+      placeholder,
+      // 文本框事件
+      onChange,
+      onBlur,
+      onFocus,
+      // 左右图标
+      liconAttribute,
       licon,
+      riconAttribute,
       ricon,
-      clear, clearClassName, clearStyle,
-      rcaption
+      // 清除按键
+      clear,
+      clearAttribute,
+      // 右侧内容
+      rcaption,
+      ...othres
     } = this.props;
     // 支持valueBindProp和非valueBindProp两种模式的清空按钮控制
     let showClear = false;
@@ -264,10 +289,12 @@ export default class InputText extends Component {
       showClear = false;
     }
     let isShowClear = valueBindProp ? showClear : this.state.showClear;
-    return (<div ref={(el) => {this.$el = el;}} className={`input-text-box${className ? ' ' + className : ''}`} style={style} onClick={this.onClick}>
+    return (<div ref={(el) => {this.$el = el;}} {...othres} className={`input-text-box${othres.className ? ' ' + othres.className : ''}`} onClick={this.onClick}>
         {licon && licon}
+        {liconAttribute && liconAttribute.className && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
         {this.getInputDOM()}
-        {clear && <i className={`icon clearicon ${isShowClear ? '' : 'hide'}${clearClassName ? ' ' + clearClassName : ''}`} style={clearStyle}></i>}
+        {clear && <i {...clearAttribute} className={`icon clearicon ${isShowClear ? '' : 'hide'}${clearAttribute ? ' ' + clearAttribute.className : 'ricon close-icon-clear size18'}`}></i>}
+        {riconAttribute && riconAttribute.className && <i {...riconAttribute} className={`icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
       </div>);

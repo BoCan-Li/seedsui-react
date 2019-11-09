@@ -2311,58 +2311,52 @@ onChange = (value) => {
 ### 属性
 ```javascript
 <InputText
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  type={类型 string, 默认'text'} // text | password
+  type={类型 string, 默认'text'} // 与w3c的type一致: text | number | tel | password
   valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
   pre={是否启用自动扩充功能 bool, 默认无}
   // 容器
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'attribute'}
-  onClick={点击容器 func(value, args), 默认无}
-    
+  onClick={点击容器 func(e, value), 默认无}
   // 文本框
-  name={文本框name string, 默认无}
-  maxLength={文本框最大输入长度 string, 默认无}
-  max={文本框最大值 string | number, 默认无} // 日期或者数字框专用
+  inputAttribute={文本框属性 object, 默认无}
+  autoFocus={自动获取焦点 bool, 默认false}
+  maxLength={文本框最大输入长度 string | number, 默认无}
   min={文本框最小值 string | number, 默认无} // 日期或者数字框专用
   digits={文本框截取小数 string | number, 默认false} // 日期或者数字框专用
   readOnly={文本是否只读 bool, 默认无}
   disabled={文本是否禁用 bool, 默认无}
 
-  inputStyle={文本框style object, 默认无}
-  inputClassName={文本框className string, 默认无}
   value={值 string | number, 默认''}
   placeholder={占位符 string, 默认''}
-  onChange={值改变 func(value, args), 默认无}
-  onClickInput={点击文本框 func(value, args), 默认无}
-  onBlur={失去焦点 func(value, args), 默认无}
-  onFocus={获取焦点 func(value, args), 默认无}
+  
+  // 文本框事件
+  onChange={值改变 func(e, value), 默认无}
+  onBlur={失去焦点 func(e, value), 默认无}
+  onFocus={获取焦点 func(e, value), 默认无}
 
   // 左右图标
+  liconAttribute={左图标属性 object, 默认无}
   licon={左图标 node, 默认无}
-  onClickLicon={点击左图标 func(args), 默认无}
 
+  riconAttribute={右图标属性 object, 默认无}
   ricon={右图标 node, 默认无}
-  onClickRicon={点击右图标 func(args), 默认无}
 
   // 清除按钮
-  clear={清除 bool | func('', args), 默认无}
-  clearClassName={清除图标className string, 默认'ricon close-icon-clear size18'} // 见Close组件
-  clearStyle={清除图标style object, 默认无}
+  clear={清除 bool | func(e, ''), 默认无}
+  clearAttribute={清除图标属性 object, 默认无}
 
   // 右侧内容
-  rcaption={右侧内容 string, 默认无}
+  rcaption={右侧内容 node, 默认无}
 />
 ```
 ### 示例
 ```javascript
 import InputText from 'seedsui-react/lib/InputText';
 
-onChangeText = (value, args) => {
-  console.log(value, args);
+onChange = (e, value) => {
+  console.log(e, value);
 }
 
-<InputText onChange={this.onChangeText}/>
+<InputText onChange={this.onChange}/>
 ```
 
 

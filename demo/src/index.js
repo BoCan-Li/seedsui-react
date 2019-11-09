@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputSelect} from '../../src'
+import {Page, Header, Titlebar, Container, InputPre} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -27,9 +27,13 @@ class Demo extends Component {
   componentDidMount () {
     
   }
-  onChange = (e, value, option) => {
+  onClick = (e, value) => {
     console.log(e.target)
-    console.log(value, option)
+    console.log(value)
+  }
+  onChange = (e, value) => {
+    console.log(e.target)
+    console.log(value)
     this.setState({
       value: value
     });
@@ -40,22 +44,11 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputSelect
-          list={this.state.list}
-          multiple
+        <InputPre
+          maxLength={11}
           valueBindProp
           value={this.state.value}
-          valueForKey={'1-3'}
           onChange={this.onChange}
-          placeholder="请选择"
-          className="border-b"
-          pickerProps={{
-            split: '-',
-            maskAttribute: {
-              style: {zIndex: '11'},
-              className: "bg-white"
-            }
-          }}
         />
       </Container>
     </Page>

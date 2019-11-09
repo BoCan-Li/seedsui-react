@@ -106,11 +106,11 @@ export default class InputDate extends Component {
     return text;
   }
   // 点击文本框
-  onClickInput = (e, value) => {
+  onClickInput = (...parameter) => {
     const {
       onClick
     } = this.props;
-    if (onClick) onClick(e, value);
+    if (onClick) onClick(...parameter);
     this.setState((prevState) => {
       return {
         show: !prevState.show
