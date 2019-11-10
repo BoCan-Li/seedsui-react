@@ -25,7 +25,7 @@ class Demo extends Component {
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
-        <Titlebar caption="SeedsUI" rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
+        <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
         <Button className="lg primary">提交</Button>

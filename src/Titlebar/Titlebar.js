@@ -52,7 +52,7 @@ export default class Titlebar extends Component {
           className: backButtonAttribute.className || null,
           style: backButtonAttribute.style || null,
           icon: backButtonAttribute.icon || null,
-          iconAttribute: backButtonAttribute.iconAttribute || {},
+          iconAttribute: backButtonAttribute.iconAttribute || {className: 'shape-arrow-left'},
           caption: backButtonAttribute.caption || null,
           onClick: this.onClickBack
         };
