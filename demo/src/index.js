@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputPicker, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, InputText, Bridge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -13,8 +13,10 @@ class Demo extends Component {
   componentDidMount () {
     Bridge.debug = true;
   }
-  onChange = (...params) => {
-    console.log(...params)
+  onChange = (e, value) => {
+    this.setState({
+      value: value
+    })
   }
   onClick = (...params) => {
     console.log(...params)
@@ -25,7 +27,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputPicker placeholder="点击选择地区" onClick={this.onClick} onChange={this.onChange}/>
+        <InputText placeholder="点击选择地区" onClick={this.onClick} onChange={this.onChange}/>
       </Container>
     </Page>
   }
