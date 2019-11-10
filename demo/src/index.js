@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, Player} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, Badge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -20,12 +20,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <Player
-          data-src='https://www.w3school.com.cn/i/movie.ogg'
-          src={'https://www.w3school.com.cn/i/movie.ogg'}
-          poster={`https://www.w3school.com.cn/sp/tiy-retina.jpg`}
-          onClick={this.onClick}
-        />
+        <Badge limit={0}>100000asdf0</Badge>
       </Container>
     </Page>
   }

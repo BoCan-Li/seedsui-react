@@ -305,10 +305,9 @@ onClick = () => {
 ### 属性
 ```javascript
 <Badge
-  className={容器className string, 默认无, 基础'badge',内容大于两位时会加上'badge-max-width'}
-  style={容器style object, 默认无}
+  children={内容 node, 默认无}
   limit={位数限制 number, 默认2, 如:1000,将显示99+}
-  ellipsis={位数限制省略号 string, 默认'+'}
+  ellipsis={位数限制省略号 string, 默认'+'} // 有limit属性时ellipsis才生效
   {...others}
 />
 ```
@@ -780,9 +779,7 @@ defaultDate.nextMonth();
 ### 属性
 ```javascript
 <Card
-  style={卡片style object, 默认无}
-  className={卡片className string, 默认无, 基础'card'}
-  onClick={点击项 func(args)}
+  children={子元素 node, 默认无}
   {...others}
 >
 卡片内容
