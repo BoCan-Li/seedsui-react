@@ -22,14 +22,13 @@ export default class Loading extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = {}
   }
   render() {
     const {
       portal,
       type,
       maskAttribute = {},
-      iconAttribute = {},
+      iconAttribute,
       captionAttribute = {},
       caption,
       children,
@@ -38,7 +37,7 @@ export default class Loading extends Component {
     let content = <div>加载中...</div>;
     if (type === 'custom') { // 自定义样式
       content = (<div {...others} className={`loading-custom${others.className ? ' ' + others.className : ''}`}>
-        {(iconAttribute.className || iconAttribute.src) && <span style={iconAttribute.src ? {backgroundImage: `url(${iconAttribute.src})`} : {}} className={`loading-custom-icon${iconAttribute.className ? ' ' + iconAttribute.className : ''}`}></span>}
+        {iconAttribute && <span {...iconAttribute} className={`loading-custom-icon${iconAttribute.className ? ' ' + iconAttribute.className : ''}`}></span>}
         {caption && <p {...captionAttribute} className={`loading-custom-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</p>}
       </div>);
     } else if(type === 'filling') { // 填料环

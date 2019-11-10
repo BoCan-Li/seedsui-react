@@ -11,10 +11,10 @@ export default class Titlebar extends Component {
     caption: PropTypes.node,
     captionAttribute: PropTypes.object, // 只有caption为string类型或者显示地址栏标题时才有用
 
-    lButtons: PropTypes.array, // [{caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}]
+    lButtons: PropTypes.array, // [{caption: string, className: string, style: object, icon: node, iconAttribute: {className: ''}}]
     rButtons: PropTypes.array,
 
-    backButtonAttribute: PropTypes.object,  // {caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}
+    backButtonAttribute: PropTypes.object,  // {caption: string, className: string, style: object, icon: node, iconAttribute: {className: ''}}
 
     children: PropTypes.node
   }
@@ -23,23 +23,27 @@ export default class Titlebar extends Component {
     lButtons: ['$back'],
     className: 'border-b',
     backButtonAttribute: {
-      iconClassName: 'shape-arrow-left'
+      iconAttribute: {
+        className: 'shape-arrow-left'
+      }
     }
   }
   constructor(props) {
     super(props);
     this.state = {}
   }
-  onClickBack = () => {
+  // 默认的返回按键
+  onClickBack = (e) => {
     const {backButtonAttribute} = this.props;
     // 如果有返回按钮的点击事件,则优先执行props的方法
     if (backButtonAttribute.onClick) {
-      backButtonAttribute.onClick();
+      backButtonAttribute.onClick(e);
       return;
     }
     // 否则走默认的返回
     Bridge.back();
   }
+  // 解析返回按钮dom
   getButtonsDOM = (arr) => {
     const {backButtonAttribute} = this.props;
     return arr.map((item, index) => {
@@ -48,15 +52,14 @@ export default class Titlebar extends Component {
           className: backButtonAttribute.className || null,
           style: backButtonAttribute.style || null,
           icon: backButtonAttribute.icon || null,
-          iconClassName: backButtonAttribute.iconClassName || null,
-          iconStyle: backButtonAttribute.iconStyle || {},
+          iconAttribute: backButtonAttribute.iconAttribute || {},
           caption: backButtonAttribute.caption || null,
           onClick: this.onClickBack
         };
       }
       return (
-        <a key={index} disabled={item.disabled} onClick={(e) => {if (item.onClick) item.onClick(Object.getArgs(e, item.args));}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
-          {(item.iconSrc || item.iconClassName) && <span className={`icon${item.iconClassName ? ' ' + item.iconClassName : ''}`} style={Object.assign(item.iconSrc ? {backgroundImage: `url(${item.iconSrc})`} : {}, item.iconStyle)}></span>}
+        <a key={index} disabled={item.disabled} onClick={(e) => {if (item.onClick) item.onClick(e, item, index)}} className={`titlebar-button button${item.className ? ' ' + item.className : ' bar'}`} style={item.style}>
+          {item.iconAttribute && <span {...item.iconAttribute} className={`icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></span>}
           {item.icon && item.icon}
           {item.caption && <span>{item.caption}</span>}
         </a>

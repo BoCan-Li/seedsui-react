@@ -13,7 +13,7 @@ class Demo extends Component {
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
-        <Titlebar caption="SeedsUI"/>
+        <Titlebar caption="SeedsUI" rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
       </Container>

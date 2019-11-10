@@ -85,7 +85,9 @@ import Chat from 'seedsui-react/lib/Chat';
 
 
 # 组件规范
-- 所有事件第一个参数都为e
+> 为了使开发者不感觉到使用SeedsUI是在学习一种新的语言，所以SeedsUI整体设计尽量使用W3C和React的规范，使开发者感觉到仍然在使用React原生DOM在开发，从而能够节省更多的学习时间和使用体验：
+
+- 所有事件第一个参数都为e: 文本框为:(e, value); 列表类为(e, item, index); 选项类为(e, value, options)
 - 所有组件内dom属性都使用xxAttribute
 - 所有组件内组件属性都使用xxProps
 
@@ -4417,20 +4419,14 @@ import Timepart from 'seedsui-react/lib/Timepart';
   captionAttribute={标题属性 object, 默认无} // 只有caption为string类型或者显示地址栏标题时才有用
 
   lButtons={左按钮 array, 默认['$back']}
-  // '$back' 等同于{iconClassName: 'shape-arrow-left', onClick: this.onClickBack}
-  // 格式 [{caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}]
+  // '$back' 等同于{iconAttribute: {className: 'shape-arrow-left', onClick: 默认的返回事件}}
   rButtons={右按钮 array, 默认无}
+  // [{caption: string, className: string, style: object, icon: node, iconAttribute: object}]
 
   backButtonAttribute={返回按钮属性 object, 默认无} // 设置默认返回按钮的样式及属性
-  // 格式 {caption: string, className: string, style: object, icon: node, iconSrc: string, iconClassName: string, iconStyle: object}
-
-  backClassName={返回按钮className string, 默认无}
-  backStyle={返回按钮style object, 默认无}
-  backIcon={返回按钮图标 node, 默认无}
-  backIconClassName={返回按钮图标className string, 默认无}
-  backIconStyle={返回按钮图标style object, 默认无}
-  backCaption={返回按钮标题 string, 默认无}
-  onClickBack={点击标题 func(), 默认无} // 当设置onClickBack后, 默认的onClickBack事件将被代替
+  // {caption: string, className: string, style: object, icon: node, iconAttribute: object}
+  children={}
+  {...others}
 >
 如果此处写了内容, 将代替caption
 </Titlebar>
