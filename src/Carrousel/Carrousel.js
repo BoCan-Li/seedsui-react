@@ -158,7 +158,7 @@ export default class Carrousel extends Component {
           return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
             {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
             {item.caption && <div className="carrousel-summary">
-              {item.iconAttribute && item.iconAttribute.className && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
+              {item.iconAttribute && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
               <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>
                 {item.caption}
               </span>

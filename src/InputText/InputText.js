@@ -41,9 +41,9 @@ export default class InputText extends Component {
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     // 左右图标
-    liconAttribute: PropTypes.bool,
+    liconAttribute: PropTypes.object,
     licon: PropTypes.node,
-    riconAttribute: PropTypes.bool,
+    riconAttribute: PropTypes.object,
     ricon: PropTypes.node,
     // 清除按键
     clear: PropTypes.oneOfType([
@@ -291,11 +291,11 @@ export default class InputText extends Component {
     let isShowClear = valueBindProp ? showClear : this.state.showClear;
     return (<div ref={(el) => {this.$el = el;}} {...othres} className={`input-text-box${othres.className ? ' ' + othres.className : ''}`} onClick={this.onClick}>
         {licon && licon}
-        {liconAttribute && liconAttribute.className && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+        {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
         {this.getInputDOM()}
         {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
         {clear && <i {...clearAttribute} className={`icon clearicon${isShowClear ? '' : ' hide'}${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
-        {riconAttribute && riconAttribute.className && <i {...riconAttribute} className={`icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
+        {riconAttribute && <i {...riconAttribute} className={`icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
       </div>);

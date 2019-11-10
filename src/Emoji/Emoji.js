@@ -22,7 +22,7 @@ export default class Emoji extends Component {
     maskAttribute: PropTypes.object,
     submitAttribute: PropTypes.object,
     inputAttribute: PropTypes.object,
-    liconAttribute: PropTypes.bool,
+    liconAttribute: PropTypes.object,
     licon: PropTypes.node,
 
     onChange: PropTypes.func
@@ -108,7 +108,7 @@ export default class Emoji extends Component {
       <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
         <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
           {licon}
-          {liconAttribute && liconAttribute.className && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+          {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <div className="emoji-edit">
             <InputPre
               ref={(el) => {this.$inputPre = el;}}
