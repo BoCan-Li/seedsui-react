@@ -76,7 +76,7 @@ var InputRange = function (container, params) {
 	s.onTouchEnd = function (e) {
 		e.stopPropagation()
 		s.hideToolTip()
-		s.target = s.input
+		s.event = e
 		if (s.params.onChange && !s.input.disabled) s.params.onChange(s)
 	}
 	s.onClick = function () {

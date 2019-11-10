@@ -267,7 +267,7 @@ var Alert = function (params) {
   }
   s.onClickMask = function (e) {
     if (e.target === s.mask) {
-      s.target = e.target
+      s.event = e
       if (s.params.onClickMask) s.params.onClickMask(s)
       if (s.params.isClickMaskHide) s.hide()
     }

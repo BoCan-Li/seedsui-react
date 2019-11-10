@@ -148,6 +148,7 @@ var MenuTree = function (container, params) {
   // 点击树
   s.onClick = function (e) {
     var target = e.target
+    s.event = e
     s.target = target
     s.targetLine = target
     if (!target.classList.contains(s.params.tagClass)) return

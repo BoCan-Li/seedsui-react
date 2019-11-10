@@ -358,7 +358,7 @@ var Timepart = function (container, params) {
   Events Handler
   ----------------------- */
   s.onClickContainer = function (e) {
-    s.target = e.target
+    s.event = e
     // Callback onClick
     if (s.params.onClick) s.params.onClick(s)
     // Callback onClickPart

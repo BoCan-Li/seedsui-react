@@ -203,13 +203,13 @@ var Dialog = function (params) {
     return args
   }
   s.onClick = function (e) {
-    s.target = e.target
+    s.event = e
     // CallBack onClick
     if (s.params.onClick) s.params.onClick(s, s.getArgs(e))
   }
   s.onClickMask = function (e) {
     if (e.target === s.mask) {
-      s.target = e.target
+      s.event = e
       // CallBack onClickMask
       if (s.params.onClickMask) s.params.onClickMask(s, s.getArgs(e))
       if (s.params.isClickMaskHide) s.hide()
@@ -217,7 +217,7 @@ var Dialog = function (params) {
   }
   s.onTransitionEnd = function (e) {
     if (e.propertyName === 'visibility') return
-    s.target = e.target
+    s.event = e
     // Callback onTransitionEnd
     if (s.params.onTransitionEnd) s.params.onTransitionEnd(s, s.getArgs(e))
     if (s.isHid) {

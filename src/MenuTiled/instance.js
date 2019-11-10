@@ -98,11 +98,12 @@ var MenuTiled = function (container, params) {
   // 点击树
   s.onClick = function (e) {
     var target = e.target
+    s.event = e
     s.target = target
     s.targetLine = target
     if (!target.classList.contains(s.params.tagClass)) return
     // isActived
-    var isActived = s.target.classList.contains('active')
+    var isActived = target.classList.contains('active')
     // isExtend
     var isExtend = target.classList.contains(s.params.extendClass)
     // item

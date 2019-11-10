@@ -162,7 +162,7 @@ var ListPull = function (container, params) {
 		s.touches.endX = e.clientX || e.changedTouches[0].clientX
 		s.touches.endY = e.clientY || e.changedTouches[0].clientY
 		if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 点击
-			s.target = e.target
+			s.event = e
 			s.hide(e.target)
 			// 在展开状态下(s.leftClientWidth || s.rightClientWidth),如果点击主容器handler将无效
 			if (!e.target.classList.contains(s.params.handlerClass) || s.leftClientWidth || s.rightClientWidth) {

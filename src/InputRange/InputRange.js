@@ -4,9 +4,6 @@ import Instance from './instance';
 
 export default class InputRange extends Component {
   static propTypes = {
-    args: PropTypes.any,
-    style: PropTypes.object,
-    className: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -24,6 +21,8 @@ export default class InputRange extends Component {
       PropTypes.number
     ]),
     disabled: PropTypes.bool,
+    inputAttribute: PropTypes.object,
+    tooltipAttribute: PropTypes.object,
     onChange: PropTypes.func
   }
   static defaultProps = {
@@ -36,20 +35,31 @@ export default class InputRange extends Component {
     super(props);
   }
   componentDidMount () {
-    const instance = new Instance(this.$el);
-    this.instance = instance;
+    this.instance = new Instance(this.$el,{
+      onChange: this.onChange(e)
+    });
   }
   onChange = (e) => {
     if (this.props.onChange) {
-      this.props.onChange(this.$input.value, Object.getArgs(e, this.props.args));
+      this.props.onChange(e, this.$input.value);
     }
   }
   render() {
-    const {disabled, style, className, value, min, max, step} = this.props;
+    const {
+      value,
+      min,
+      max,
+      step,
+      disabled,
+      inputAttribute = {},
+      tooltipAttribute = {},
+      onChange,
+      ...others
+    } = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`range${className ? ' ' + className : ''}`} style={style}>
-        <input disabled={disabled} ref={el => {this.$input = el;}} type="range" className="range-input" min={min} max={max} step={step} defaultValue={value}/>
-        <div ref={el => {this.$tooltip = el;}} className="range-tooltip">{value}</div>
+      <div ref={el => {this.$el = el;}} {...others} className={`range${others.className ? ' ' + others.className : ''}`}>
+        <input ref={el => {this.$input = el;}} {...inputAttribute} disabled={disabled} type="range" className={`range-input${inputAttribute.className ? ' ' + inputAttribute.className : ''}`} min={min} max={max} step={step} defaultValue={value}/>
+        <div ref={el => {this.$tooltip = el;}} {...tooltipAttribute} className={`range-tooltip${tooltipAttribute.className ? ' ' + tooltipAttribute.className : ''}`}>{value}</div>
       </div>
     );
   }
