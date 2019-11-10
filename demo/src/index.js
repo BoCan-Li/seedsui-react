@@ -1,24 +1,26 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputStar} from '../../src'
+import {Page, Header, Titlebar, Container, Button, Bridge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: 0
+      value: ''
     }
   }
   componentDidMount () {
+    Bridge.debug = true;
   }
   onChange = (e, value) => {
+    console.log(e.target);
     this.setState({
       value
     })
   }
-  onError = (e, error) => {
-    console.log(error)
+  onClick = (e) => {
+    console.log(e.target)
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -26,12 +28,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputStar
-          min={3}
-          value={this.state.value}
-          onChange={this.onChange}
-          onError={this.onError}
-        />
+        <Button className="lg primary">提交</Button>
       </Container>
     </Page>
   }

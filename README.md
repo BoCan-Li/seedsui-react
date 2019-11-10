@@ -688,11 +688,7 @@ Bridge.showToast('提交成功', {
 ### 属性
 ```javascript
 <Button
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  style={按钮style object, 默认无}
-  className={按钮className string, 默认无, 基础'button'} // 尺寸样式'sm | lg | xl'
-  disabled={是否禁用 bool, 默认false}
-  onClick={点击项 func(args)}
+  children={子元素 node, 默认无}
   {...others}
 >
   按钮内容
@@ -2043,6 +2039,11 @@ onError = (e, msg) => {
 ```
 
 
+
+
+
+
+
 ## InputLocation
 [定位框](https://unpkg.com/seedsui-react/src/lib/InputLocation/InputLocation.js)
 , 其它属性用法与[InputText 文本框](#inputtext) 组件一致
@@ -2055,6 +2056,28 @@ onError = (e, msg) => {
   {...others}
 />
 ```
+### 示例
+```javascript
+import InputLocation from 'seedsui-react/lib/InputLocation';
+
+this.state = {
+  value: ''
+}
+
+onChange = (e, value) => {
+  console.log(e.target);
+  this.setState({
+    value
+  })
+}
+
+<InputLocation value={this.state.value} placeholder="定位" onChange={this.onChange}/>
+```
+
+
+
+
+
 
 
 ## InputNumber
