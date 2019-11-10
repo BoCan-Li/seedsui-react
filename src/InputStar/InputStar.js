@@ -6,7 +6,6 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputStar extends Component {
   static propTypes = {
-    args: PropTypes.any,
     min: PropTypes.number,
     max: PropTypes.number,
     value: PropTypes.oneOfType([
@@ -14,11 +13,9 @@ export default class InputStar extends Component {
       PropTypes.number
     ]),
     onChange: PropTypes.func,
-    className: PropTypes.string,
-    style: PropTypes.object,
+    onError: PropTypes.func // ({e, {msg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}})
   }
   static defaultProps = {
-    args: null,
     value: 0,
     min: 0,
     max: 5
@@ -27,19 +24,30 @@ export default class InputStar extends Component {
     super(props);
   }
   onChange (e, argNum) {
-    const {min, onChange, onError} = this.props;
+    const {value, min, onChange, onError} = this.props;
     let num = argNum;
     if (num < min) {
       if (onError) {
-        onError(`${window._seeds_lang['hint_cannot_be_less_than'] || '不能小于'}${min}${window._seeds_lang['star'] || '颗星'}`);
-      } else {
-        num = min;
+        onError(e, {
+          msg: `${window._seeds_lang['hint_cannot_be_less_than'] || '不能小于'}${min}${window._seeds_lang['star'] || '颗星'}`,
+          select: num,
+          min: min,
+          value: min
+        });
       }
+      num = min;
     }
-    if (onChange) onChange(num, Object.getArgs(e, this.props.args));
+    if (onChange) onChange(e, num);
   }
   render() {
-    const {max, min, value, className, style} = this.props;
+    const {
+      max,
+      min,
+      value,
+      onChange,
+      onError,
+      ...others
+    } = this.props;
     const stars = [];
     for (var i = 1; i <= max; i++) {
       stars.push(i);
@@ -47,7 +55,7 @@ export default class InputStar extends Component {
     let current = value
     if (current < min) current = min
     return (
-      <div className={`input-star${className ? ' ' + className : ''}`} style={style}>
+      <div {...others} className={`input-star${others.className ? ' ' + others.className : ''}`}>
         {stars.map((index) => (
           <Star onClick={(e) => {this.onChange(e, index);}} key={index} className={index <= current ? 'active' : ''}/>
         ))}

@@ -2270,13 +2270,12 @@ onChange = (e, value, option) => {
 ### 属性
 ```javascript
 <InputStar
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   min={最小值 number, 默认0}
   max={最大值 number, 默认5}
   value={值 number, 默认0}
   onChange={值改变 func(value), 默认无}
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'input-star'}
+  onError={超出限制错误 func(e, {msg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}), 默认无}
+  {...others} // 容器属性
 />
 ```
 ### 示例
@@ -2287,16 +2286,20 @@ this.state = {
   value: 0
 }
 
-onChange = (value) => {
+onChange = (e, value) => {
   this.setState({
     value
   })
 }
+onError = (e, error) => {
+  console.log(error)
+}
 
 <InputStar
-  min={2}
+  min={3}
   value={this.state.value}
   onChange={this.onChange}
+  onError={this.onError}
 />
 ```
 [返回目录](#component)
