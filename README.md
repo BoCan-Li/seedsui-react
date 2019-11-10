@@ -3719,28 +3719,29 @@ onClickMask = () => {
 ### 属性
 ```javascript
 <Player
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  className={视频容器className string, 默认无, 基础'player-thumbnail'}
-  style={视频容器style object, 默认无}
+  src={视频播放地址 string, 默认无}
+  poster={封面图片地址 string, 默认无}
+  videoAttribute={video元素属性, 默认无} // className player-thumbnail-video
+  onClick={点击视频 func(e), 默认无}
   children={视频容器内子元素 node, 默认无}
-
-  src={视频播放地址 string, 默认无, 基础'player-thumbnail'}
-  onClick={点击视频 func(s), 默认无} // 设置此属性后,默认点击预览将会被此事件代替
-  {...others} // video标签的属性,例如poster
+  {...others}  // 容器属性
 />
 ```
 ### 示例
 ```javascript
 import Player from 'seedsui-react/lib/Player';
 
-onClickVideo = (args) => {
-  Bridge.previewVideo({src: args.src});
+onClick = (e) => {
+  console.log(e.target)
+  var src = e.target.getAttribute('data-src');
+  Bridge.previewVideo({src: src});
 }
 
 <Player
-  args={{src: ''}}
-  src={''}
-  onClick={this.onClickVideo}
+  data-src='https://www.w3school.com.cn/i/movie.ogg'
+  src={'https://www.w3school.com.cn/i/movie.ogg'}
+  poster={`https://www.w3school.com.cn/sp/tiy-retina.jpg`}
+  onClick={this.onClick}
 />
 ```
 [返回目录](#component)

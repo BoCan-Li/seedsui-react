@@ -6,13 +6,11 @@ import MediaUtil from '../MediaUtil';
 
 export default class Player extends Component {
   static propTypes = {
-    args: PropTypes.any,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    children: PropTypes.node,
-
     src: PropTypes.string,
-    onClick: PropTypes.func
+    poster: PropTypes.string,
+    videoAttribute: PropTypes.object,
+    onClick: PropTypes.func,
+    children: PropTypes.node
   }
   static defaultProps = {
   }
@@ -29,34 +27,43 @@ export default class Player extends Component {
       }
     });
   }
+  // 默认点击预览
   onClick = (e) => {
     if (this.props.onClick) {
-      this.props.onClick(Object.getArgs(e, this.props.args));
-    } else {
-      var target = e.currentTarget.querySelector('video');
-      FullScreen.enter(target);
-
-      setTimeout(() => {
-        target.play();
-      }, 500);
+      this.props.onClick(e);
+      return;
     }
+    var target = e.currentTarget.querySelector('video');
+    FullScreen.enter(target);
+
+    setTimeout(() => {
+      target.play();
+    }, 500);
     e.stopPropagation();
   }
+  // 获取媒体类型
   getType = () => {
     const {src} = this.props;
     return MediaUtil.sourceType(src);
   }
   render() {
-    const {args, children, style, className, src, onClick, ...others} = this.props;
+    const {
+      src,
+      poster,
+      videoAttribute = {},
+      onClick,
+      children,
+      ...others
+    } = this.props;
     // Andriod
     if (Device.os === 'andriod' || onClick) {
       return (
-        <div ref={(el) => {this.$el = el}} className={'player-thumbnail' + (className ? ' ' + className : '')} style={style} onClick={this.onClick}>
-          {!onClick && <video ref={(el) => {this.$video = el}} {...others}>
+        <div ref={(el) => {this.$el = el}} {...others} className={'player-thumbnail' + (others.className ? ' ' + others.className : '')} onClick={this.onClick}>
+          <video ref={(el) => {this.$video = el}} {...videoAttribute} className={'player-thumbnail-video' + (others.videoAttribute ? ' ' + others.videoAttribute : '')}>
             <source src={src} type={this.getType()} />
             您的浏览器不支持 video 标签。
-          </video>}
-          {this.props.poster && <div style={{backgroundImage: `url(${this.props.poster})`}} className="player-thumbnail-poster"/>}
+          </video>
+          {poster && <div style={{backgroundImage: `url(${poster})`}} className="player-thumbnail-poster"/>}
           <div className="player-thumbnail-button"></div>
           {children}
         </div>
@@ -64,8 +71,8 @@ export default class Player extends Component {
     }
     // Ios
     return (
-      <div ref={(el) => {this.$el = el}} className={'player-thumbnail' + (className ? ' ' + className : '')} style={style}>
-        <video controls ref={(el) => {this.$video = el}} {...others}>
+      <div ref={(el) => {this.$el = el}} {...others} className={'player-thumbnail' + (others.className ? ' ' + others.className : '')}>
+        <video controls ref={(el) => {this.$video = el}} {...videoAttribute} className={'player-thumbnail-video' + (others.videoAttribute ? ' ' + others.videoAttribute : '')}>
           <source src={src} type={this.getType()} />
           您的浏览器不支持 video 标签。
         </video>
