@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Button, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, InputPre, Bridge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -13,8 +13,7 @@ class Demo extends Component {
   componentDidMount () {
     Bridge.debug = true;
   }
-  onChange = (e, value) => {
-    console.log(e.target);
+  onChange = (value) => {
     this.setState({
       value
     })
@@ -28,7 +27,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <Button className="lg primary">提交</Button>
+        <InputPre valueBindProp placeholder="请输入备注" value={this.state.value} onChange={(e, value) => this.onChange(value)} className="bordered" inputAttribute={{style: {padding: '2px 8px'}}}/>
       </Container>
     </Page>
   }

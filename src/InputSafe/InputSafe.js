@@ -6,10 +6,7 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputSafe extends Component {
   static propTypes = {
-    value: PropTypes.string,
-
-    style: PropTypes.object,
-    className: PropTypes.string
+    value: PropTypes.string
   }
   static defaultProps = {
     value: ''
@@ -20,9 +17,12 @@ export default class InputSafe extends Component {
   componentDidMount () {
   }
   render() {
-    const {value, style, className} = this.props;
+    const {
+      value,
+      ...others
+    } = this.props;
     var lvl = value.safeLvl();
-    return <ul className={`input-safe lvl${lvl}${className ? ' ' + className : ''}`} style={style}> 
+    return <ul {...others} className={`input-safe lvl${lvl}${others.className ? ' ' + others.className : ''}`}> 
       <li> 
         <div className="input-safe-progress"></div>
         <span className="input-safe-caption">{window._seeds_lang['low'] || '弱'}</span>
