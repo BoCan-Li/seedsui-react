@@ -117,7 +117,7 @@ export default class InputPicker extends Component {
       // Picker
       list,
       valueForKey,
-      pickerProps,
+      pickerProps = {},
       ...others
     } = this.props;
     return [

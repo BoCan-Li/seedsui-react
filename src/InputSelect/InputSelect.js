@@ -134,7 +134,7 @@ export default class InputSelect extends Component {
       multiple,
       list,
       valueForKey,
-      pickerProps,
+      pickerProps = {},
       ...others
     } = this.props;
     return [

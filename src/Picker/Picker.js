@@ -31,6 +31,10 @@ export default class Picker extends Component {
     super(props);
   }
   componentDidMount = () => {
+    const {
+      list
+    } = this.props;
+    if (!list || !list.length) return;
     this.initInstance()
   }
   shouldComponentUpdate = (nextProps) => {
@@ -38,14 +42,19 @@ export default class Picker extends Component {
     return true;
   }
   componentDidUpdate = () => {
+    const {
+      list,
+      show
+    } = this.props;
+    if (!list || !list.length) return;
     if (this.instance) {
-      if (this.props.show) {
+      if (show) {
         this.setDefault();
         this.instance.show();
       }
       else this.instance.hide()
     } else {
-      if (this.props.list.length > 0) {
+      if (list.length > 0) {
         this.initInstance();
       }
     }

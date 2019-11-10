@@ -117,7 +117,7 @@ export default class InputCity extends Component {
       // Picker
       valueForKey,
       type,
-      pickerProps,
+      pickerProps = {},
       ...others
     } = this.props;
     return [

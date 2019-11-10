@@ -35,10 +35,15 @@ export default class PickerSelect extends Component {
   componentDidMount = () => {
   }
   componentDidUpdate = (prevProps) => {
-    if (this.$el && this.props.show !== prevProps.show) {
+    const {
+      list,
+      show
+    } = this.props;
+    if (!list || !list.length) return;
+    if (this.$el && show !== prevProps.show) {
       const selectedKeys = Object.values(this.getSelectedKeys() || []) || [];
       [].slice.call(this.$el.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
-        if (selectedKeys.indexOf(this.props.list[i].key) !== -1) {
+        if (selectedKeys.indexOf(list[i].key) !== -1) {
           n.classList.add('active');
         } else {
           n.classList.remove('active');
