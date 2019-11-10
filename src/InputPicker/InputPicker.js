@@ -69,15 +69,17 @@ export default class InputPicker extends Component {
       onChange,
       pickerProps = {}
     } = this.props;
-    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      e.target = this.$input;
-      pickerProps.submitAttribute.onClick(e);
-      return;
-    }
-    // 赋值
+    // 获取值
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
     const value = e.activeOptions[0].value;
     const options = e.activeOptions;
+    // 确定按钮回调
+    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
+      e.target = this.$input;
+      pickerProps.submitAttribute.onClick(e, value, options);
+      return;
+    }
+    // 赋值
     if (!valueBindProp) this.$input.value = value;
     if (onChange) {
       e.target = this.$input;

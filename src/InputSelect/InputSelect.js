@@ -85,15 +85,17 @@ export default class InputSelect extends Component {
       onChange,
       pickerProps = {}
     } = this.props;
-    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      e.target = this.$input;
-      pickerProps.submitAttribute.onClick(e);
-      return;
-    }
-    // 赋值
+    // 获取值
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
     const value = this.buildValue(e.activeOptions);
     const options = this.buildOptions(e.activeOptions);
+    // 确定按钮回调
+    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
+      e.target = this.$input;
+      pickerProps.submitAttribute.onClick(e, value, options);
+      return;
+    }
+    // 赋值
     if (!valueBindProp) this.$input.value = value;
     if (onChange) {
       e.target = this.$input;
@@ -122,22 +124,6 @@ export default class InputSelect extends Component {
       }
     });
   }
-  // onClickSubmit = (selected) => {
-  //   if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
-  //   if (this.props.onClickSubmit) {
-  //     this.props.onClickSubmit(selected);
-  //     return;
-  //   }
-  //   const value = this.buildValue(selected);
-  //   // 赋值
-  //   if (!this.props.valueBindProp) this.$input.value = value;
-  //   this.setState({
-  //     show: !this.state.show
-  //   });
-  //   if (this.props.onChange) {
-  //     this.props.onChange(value, selected, this.props.args);
-  //   }
-  // }
   render() {
     const {
       // Input
