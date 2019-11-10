@@ -276,7 +276,7 @@ export default class InputText extends Component {
       ricon,
       // 清除按键
       clear,
-      clearAttribute,
+      clearAttribute = {},
       // 右侧内容
       rcaption,
       ...othres
@@ -294,7 +294,7 @@ export default class InputText extends Component {
         {liconAttribute && liconAttribute.className && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
         {this.getInputDOM()}
         {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-        {clear && <i {...clearAttribute} className={`icon clearicon${isShowClear ? '' : ' hide'}${clearAttribute ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+        {clear && <i {...clearAttribute} className={`icon clearicon${isShowClear ? '' : ' hide'}${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
         {riconAttribute && riconAttribute.className && <i {...riconAttribute} className={`icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}

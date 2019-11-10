@@ -21,12 +21,7 @@ export default class Titlebar extends Component {
   static defaultProps = {
     showUrlTitle: true,
     lButtons: ['$back'],
-    className: 'border-b',
-    backButtonAttribute: {
-      iconAttribute: {
-        className: 'shape-arrow-left'
-      }
-    }
+    className: 'border-b'
   }
   constructor(props) {
     super(props);
@@ -34,7 +29,9 @@ export default class Titlebar extends Component {
   }
   // 默认的返回按键
   onClickBack = (e) => {
-    const {backButtonAttribute} = this.props;
+    const {
+      backButtonAttribute = {}
+    } = this.props;
     // 如果有返回按钮的点击事件,则优先执行props的方法
     if (backButtonAttribute.onClick) {
       backButtonAttribute.onClick(e);
@@ -45,7 +42,9 @@ export default class Titlebar extends Component {
   }
   // 解析返回按钮dom
   getButtonsDOM = (arr) => {
-    const {backButtonAttribute} = this.props;
+    const {
+      backButtonAttribute = {}
+    } = this.props;
     return arr.map((item, index) => {
       if (item === '$back') {
         item = {
@@ -77,7 +76,7 @@ export default class Titlebar extends Component {
       lButtons,
       rButtons,
 
-      backButtonAttribute,
+      backButtonAttribute = {},
       
       children,
       ...others
