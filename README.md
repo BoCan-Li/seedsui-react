@@ -936,12 +936,17 @@ import Chat from 'seedsui-react/lib/Chat';
 ```javascript
 import Checkbox from 'seedsui-react/lib/Checkbox';
 
-onClick = (checked) => {
-  this.props.checkChange(!checked)
+this.state = {
+  checked: false
 }
 
-const {checked} = this.props;
-<Checkbox caption="全选" checked={checked} onClick={this.onClick}/>
+onClick = (e, checked) => {
+  this.setState({
+    checked: !checked
+  })
+}
+
+<Checkbox caption="全选" checked={this.state.checked} onClick={this.onClick}/>
 ```
 [返回目录](#component)
 
@@ -4032,24 +4037,18 @@ import pdfsrc from './../assets/pdfview.js'
 ### 示例
 ```javascript
 import Radio from 'seedsui-react/lib/Radio';
+
 this.state = {
-  checked: true,
-  value: '1'
+  checked: false
 }
 
-onClick = (checked) => {
+onClick = (e, checked) => {
   this.setState({
     checked: !checked
   })
 }
 
-<Checkbox
-  checked={this.state.checked} // 获取时读取data-checked
-  caption="设为默认"
-  value={this.state.value} // 获取时读取data-value
-  style={{display: 'block'}}
-  onClick={(e) => this.onClick(e.target.getAttribute('data-checked') === 'true')}
-/>
+<Radio caption="全选" checked={this.state.checked} onClick={this.onClick}/>
 ```
 [返回目录](#component)
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Marquee, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, Radio, Bridge} from '../../src'
 
 const list = [
   {
@@ -18,7 +18,7 @@ class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: '12341234'
+      checked: false
     }
   }
   componentDidMount () {
@@ -29,8 +29,10 @@ class Demo extends Component {
       value: value
     })
   }
-  onClick = (...params) => {
-    console.log(...params)
+  onClick = (e, checked) => {
+    this.setState({
+      checked: !checked
+    })
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -38,15 +40,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <Marquee
-          list={list}
-          onClick={this.onClick}
-          step={48}
-          contentAttribute={{
-            style: {height: '38px', padding: '5px 0'},
-            className: 'flex flex-center nowrap2'
-          }}
-        />
+        <Radio caption="全选" checked={this.state.checked} onClick={this.onClick}/>
       </Container>
     </Page>
   }

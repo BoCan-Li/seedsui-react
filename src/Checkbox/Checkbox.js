@@ -9,7 +9,8 @@ export default class Checkbox extends Component {
     inputAttribute: PropTypes.object,
 
     caption: PropTypes.string,
-    captionAttribute: PropTypes.object
+    captionAttribute: PropTypes.object,
+    onClick: PropTypes.func
   }
   static defaultProps = {
   }
@@ -23,9 +24,10 @@ export default class Checkbox extends Component {
       inputAttribute = {},
       caption,
       captionAttribute = {},
+      onClick,
       ...others
     } = this.props;
-    return (<div ref={(el) => {this.$el = el}} {...others} data-checked={checked} data-value={value} className={`checkbox${others.className ? ' ' + others.className : ''}`}>
+    return (<div ref={(el) => {this.$el = el}} {...others} onClick={(e) => {onClick(e, e.target.getAttribute('data-checked') === 'true')}} data-checked={checked} data-value={value} className={`checkbox${others.className ? ' ' + others.className : ''}`}>
       <span {...inputAttribute} className={`checkbox-input${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>
       {caption && <span {...captionAttribute} className={`checkbox-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</span>}
     </div>);
