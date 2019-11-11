@@ -4,13 +4,8 @@ import Instance from './instance.js';
 
 export default class Marquee extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
     list: PropTypes.array, // [{key: 'xx', value: ''}]
-
-    contentStyle: PropTypes.object,
-    contentClassName: PropTypes.string,
-
+    contentAttribute: PropTypes.object,
     step: PropTypes.number,
     duration: PropTypes.number,
     delay: PropTypes.number,
@@ -57,19 +52,37 @@ export default class Marquee extends Component {
     instance.play();
     this.instance = instance;
   }
-  onClick = (item, index) => {
-    if (this.props.onClick) this.props.onClick(item, index);
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    if (!props) return props;
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
   }
   render() {
-    const {
-      className, style, list,
-      contentClassName, contentStyle,
-      step
+    let {
+      list,
+      contentAttribute = {},
+      step,
+      duration,
+      delay,
+      direction,
+      loop,
+      onClick,
+      ...others
     } = this.props;
+
+    // 剔除掉onClick事件, 因为在容器onClick已经回调了
+    contentAttribute = this.filterProps(contentAttribute)
+
     return (
-      <ul ref={el => {this.$el = el;}} className={`marquee${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => {this.$el = el;}} {...others} className={`marquee${others.className ? ' ' + others.className : ''}`}>
         {list && list.map((item, index) => {
-          return <li className={`marquee-li${contentClassName ? ' ' + contentClassName : ''}`} style={Object.assign({height: step + 'px'}, contentStyle)} key={index} onClick={() => {this.onClick(item, index)}}>{item.value}</li>
+          return <li key={index} {...contentAttribute} className={`marquee-li${contentAttribute.className ? ' ' + contentAttribute.className : ''}`} style={Object.assign({height: step + 'px'}, contentAttribute.style || {})} onClick={(e) => {onClick(e, item, index)}}>{item.value}</li>
         })}
       </ul>
     );

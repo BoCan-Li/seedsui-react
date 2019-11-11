@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 
 export default class Ticket extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    legendStyle: PropTypes.object,
-    legendClassName: PropTypes.string,
     legend: PropTypes.node,
-    containerStyle: PropTypes.object,
-    containerClassName: PropTypes.string,
+    legendAttribute: PropTypes.object,
+    contentAttribute: PropTypes.object,
     children: PropTypes.node
   }
   constructor(props) {
@@ -17,17 +14,18 @@ export default class Ticket extends Component {
 
   render() {
     const {
-      className,
-      legend, legendStyle, legendClassName,
-      children, containerStyle, containerClassName,
+      legend,
+      legendAttribute = {},
+      contentAttribute = {},
+      children,
       ...others
     } = this.props;
     return (
-      <div className={'ticket' + (className ? ' ' + className : '')} {...others}>
-        <div className={'ticket-legend' + (legendClassName ? ' ' + legendClassName : '')} style={legendStyle}>
+      <div ref={el => {this.$el = el;}} {...others} className={'ticket' + (others.className ? ' ' + others.className : '')} >
+        <div {...legendAttribute} className={`ticket-legend${legendAttribute.className ? ' ' + legendAttribute.className : ''}`}>
           {legend}
         </div>
-        <div className={'ticket-container' + (containerClassName ? ' ' + containerClassName : '')} style={containerStyle}>
+        <div {...contentAttribute} className={`ticket-content${contentAttribute.className ? ' ' + contentAttribute.className : ''}`}>
           {children}
         </div>
       </div>

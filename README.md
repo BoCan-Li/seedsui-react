@@ -3136,19 +3136,15 @@ import Mark from 'seedsui-react/lib/Mark';
 ### 属性
 ```javascript
 <Marquee
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'marquee'}
   list={列表 array, 默认无} // [{key: 'xx', value: ''}]
-
-  contentStyle={单条style object, 默认无}
-  contentClassName={单条className string, 默认无, 基础'marquee-li'}
-
+  contentAttribute={单条属性 object, 默认无}
   step={一次移动数值 number, 默认50}
   duration={移动动画时长 number, 默认300}
   delay={一次移动停留时长 number, 默认2000}
   direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
   loop={是否循环 bool, 默认true}
   onClick={点击 func(item, index), 默认无}
+  {...others} // 容器属性
 />
 ```
 ### 示例
@@ -3157,18 +3153,32 @@ import Marquee from 'seedsui-react/lib/Marquee';
 const list = [
   {
     key: '1',
-    value: '标题标题'
+    value: '标题标题1'
+  },
+  {
+    key: '2',
+    value: '标题标题2'
   }
-]
+];
+onClick = (...params) => {
+  console.log(...params)
+}
 <Marquee
   list={list}
-  onClick={onClick}
+  onClick={this.onClick}
   step={48}
-  contentStyle={{height: '38px', padding: '5px 0'}}
-  contentClassName="flex flex-center nowrap2"
+  contentAttribute={{
+    style: {height: '38px', padding: '5px 0'},
+    className: 'flex flex-center nowrap2'
+  }}
 />
 ```
 [返回目录](#component)
+
+
+
+
+
 
 
 
@@ -3490,17 +3500,15 @@ import Container from 'seedsui-react/lib/Container';
 ### 属性
 ```javascript
 <PagePull
-  // Side 侧边栏
+    // Side 侧边栏
     drag={是否允许拖拽 bool, 默认true}
-    lSide={左侧边栏 node, 默认无}
-    lSideStyle={左侧边栏style object, 默认无}
-    lSideClassName={左侧边栏className string, 默认无, 基础'page-side-left'}
-    rSide={右侧边栏 node, 默认无}
-    rSideStyle={右侧边栏style object, 默认无}
-    rSideClassName={右侧边栏className string, 默认无, 基础'page-side-right'}
     transition={过渡动画 string, 默认'push'} // 'push | reveal'
-    onShowedLeft={左侧显示 func(s), 默认无}
-    onShowedRight={右侧显示 func(s), 默认无}
+    lSide={左侧边栏 node, 默认无}
+    lSideAttribute={左栏属性 object, 默认无} // 其中显示事件为onShowed
+    rSide={右侧边栏 node, 默认无}
+    rSideAttribute={右栏属性 object, 默认无} // 其中显示事件为onShowed
+    // Page
+    children={页面内容 node, 默认无}
   {...others}
 >
 页面

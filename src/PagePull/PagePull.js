@@ -5,19 +5,15 @@ import Instance from './instance.js';
 
 export default class PagePull extends Component {
   static propTypes = {
-    // Page
-    children: PropTypes.node,
     // Side 侧边栏
     drag: PropTypes.bool,
-    lSide: PropTypes.node, // 左侧边栏
-    lSideStyle: PropTypes.object,
-    lSideClassName: PropTypes.string,
-    rSide: PropTypes.node, // 右侧边栏
-    rSideStyle: PropTypes.object,
-    rSideClassName: PropTypes.string,
     transition: PropTypes.string, // 过渡动画, push | reveal
-    onShowedLeft: PropTypes.func,
-    onShowedRight: PropTypes.func
+    lSide: PropTypes.node, // 左侧边栏
+    lSideAttribute: PropTypes.object,
+    rSide: PropTypes.node, // 右侧边栏
+    rSideAttribute: PropTypes.object,
+    // Page
+    children: PropTypes.node
   };
 
   static defaultProps = {
@@ -29,23 +25,48 @@ export default class PagePull extends Component {
     super(props, context);
   }
   componentDidMount = () => {
+    const {
+      transition,
+      lSideAttribute = {},
+      rSideAttribute = {},
+    } = this.props;
     const instance = new Instance(this.$el, {
       drag: true,
-      transition: this.props.transition || 'push',
-      onShowedLeft: this.props.onShowedLeft,
-      onShowedRight: this.props.onShowedRight
+      transition: transition || 'push',
+      onShowedLeft: lSideAttribute.onShowed,
+      onShowedRight: rSideAttribute.onShowed
     });
     this.instance = instance;
   }
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    if (!props) return props;
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onShowed') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
+  }
   render() {
-    const {
-      lSide, lSideStyle, lSideClassName,
-      rSide, rSideStyle, rSideClassName,
+    let {
+      // Side
       drag,
-      children,
       transition,
+      lSide,
+      lSideAttribute = {},
+      rSide,
+      rSideAttribute = {},
+      // Page
+      children,
       ...others
     } = this.props;
+
+    // 剔除掉onShowed事件, 因为在instance时已经回调了
+    lSideAttribute = this.filterProps(lSideAttribute)
+    rSideAttribute = this.filterProps(rSideAttribute)
+
     return (
       <div className="page-pull" ref={el => {this.$el = el;}}> 
         {/* 主体部分 */}
@@ -54,11 +75,11 @@ export default class PagePull extends Component {
           <div className="mask"></div>
         </Page>
         {/* 左侧边栏 */}
-        {lSide && <aside className={`page-side-left${lSideClassName ? ' ' + lSideClassName : ''}`} style={lSideStyle} data-transition={transition} ref={el => {this.$lSide = el;}}> 
+        {lSide && <aside ref={el => {this.$lSide = el;}} {...lSideAttribute} className={`page-side-left${lSideAttribute.className ? ' ' + lSideAttribute.className : ''}`} data-transition={transition}> 
           {lSide}
         </aside>}
         {/* 右侧边栏 */}
-        {rSide && <aside className={`page-side-right${rSideClassName ? ' ' + rSideClassName : ''}`} style={rSideStyle} data-transition={transition} ref={el => {this.$rSide = el;}}>
+        {rSide && <aside ref={el => {this.$rSide = el;}} {...lSideAttribute} className={`page-side-right${lSideAttribute.className ? ' ' + lSideAttribute.className : ''}`} data-transition={transition}>
           {rSide}
         </aside>}
       </div>
