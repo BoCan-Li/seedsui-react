@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Radio, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, OnOff, Bridge} from '../../src'
 
 const list = [
   {
@@ -40,7 +40,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <Radio caption="全选" checked={this.state.checked} onClick={this.onClick}/>
+        <OnOff caption="全选" checked={this.state.checked} onClick={this.onClick} onAttribute={{caption: '开'}} offAttribute={{caption: '关'}}/>
       </Container>
     </Page>
   }

@@ -17,11 +17,10 @@ export default class ImgMark extends Component {
     strokeStyle: PropTypes.string,
     lineWidth: PropTypes.number,
     quality: PropTypes.number,
+    style: PropTypes.object,
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
     width: PropTypes.number, // 宽度
     height: PropTypes.number, // 高度
-    style: PropTypes.object,
-    className: PropTypes.string,
 
     onClick: PropTypes.func,
 
@@ -111,9 +110,16 @@ export default class ImgMark extends Component {
   }
   render() {
     const {
-      data, src, isDrawSrc, watermark,
-      strokeStyle, lineWidth, quality,
-      width, height, style, className,
+      data,
+      src,
+      isDrawSrc,
+      watermark,
+      strokeStyle,
+      lineWidth,
+      quality,
+      style,
+      width,
+      height,
       onClick,
       preview,
       children,
@@ -124,7 +130,7 @@ export default class ImgMark extends Component {
       isDrawSrcStyle = {backgroundImage: `url(${src})`};
     }
     return (
-      <div className={`imgmark${className ? ' ' + className : ''}`} style={Object({width: width, height: height}, style)} onClick={this.onClick} {...others}>
+      <div ref={el => {this.$el = el;}} {...others} className={`imgmark${others.className ? ' ' + others.className : ''}`} style={Object({width: width, height: height}, style || {})} onClick={this.onClick}>
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>

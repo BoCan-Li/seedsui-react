@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class Footer extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
     children: PropTypes.node
   }
   constructor(props) {
@@ -12,9 +10,12 @@ export default class Footer extends Component {
   }
 
   render() {
-    const {style, className, children, ...others} = this.props;
+    const {
+      children,
+      ...others
+    } = this.props;
     return (
-      <footer ref={el => {this.$el = el;}} className={'footer' + (className ? ' ' + className : '')} style={style} {...others}>
+      <footer ref={el => {this.$el = el;}} {...others} className={`footer${others.className ? ' ' + others.className : ''}`}>
         {children}
       </footer>
     );

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 export default class Legend extends Component {
   static propTypes = {
-    className: PropTypes.string,
     children: PropTypes.node
   }
   static defaultProps = {
@@ -13,9 +12,9 @@ export default class Legend extends Component {
   }
 
   render() {
-    const {className, children, ...others} = this.props;
+    const {children, ...others} = this.props;
     return (
-      <div className={`legend${className ? ' ' + className : ''}`} {...others}>
+      <div ref={(el) => {this.$el = el;}} {...others} className={`legend${others.className ? ' ' + others.className : ''}`}>
         <div className="legend-caption">
           {children}
         </div>

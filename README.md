@@ -917,7 +917,6 @@ import Chat from 'seedsui-react/lib/Chat';
 ### 属性
 ```javascript
 <Checkbox
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'checkbox-box'}
   onClick={点击复选框 func(checked, args)}
@@ -3433,36 +3432,30 @@ onChangeNum = (val, args) => {
 ### 属性
 ```javascript
 <OnOff
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'onoff'}
   readOnly={是否只读 bool, 默认无}
+  disabled={是否禁用 bool, 默认无}
   checked={是否选中 bool, 默认无} // 选中时clasName将会增加'active'
-  onCaption={开文字 string, 默认无} // 开关文字有一个为空时, className将会增加'notext'
-  offCaption={关文字 string, 默认无}
+  onAttribute={是属性 object, 默认无}
+  offAttribute={否属性 object, 默认无} // {caption: '关'}
   onClick={点击容器 func(bool), 默认无}
 />
 ```
 ### 示例
 ```javascript
-import Checkbox from 'seedsui-react/lib/Checkbox';
+import OnOff from 'seedsui-react/lib/OnOff';
 
-onClick = (checked) => {
-  this.props.checkChange(!checked)
+
+this.state = {
+  checked: false
 }
 
-const {checked} = this.props;
-<List
-  className="list-li-oneline"
-  caption="设置为默认收货地址"
-  rcaption={
-    <OnOff
-      readOnly={this.state.isFirst}
-      className="reverse"
-      checked={is_default === '0'}
-      onClick={(isChecked) => {defaultChange(isChecked ? '1' : '0')}}
-    />
-  }
-/>
+onClick = (e, checked) => {
+  this.setState({
+    checked: !checked
+  })
+}
+
+<OnOff caption="全选" checked={this.state.checked} onClick={this.onClick} onAttribute={{caption: '开'}} offAttribute={{caption: '关'}}/>
 ```
 [返回目录](#component)
 

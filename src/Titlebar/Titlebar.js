@@ -98,7 +98,7 @@ export default class Titlebar extends Component {
       caption = <h1 {...captionAttribute} className={`titlebar-caption nowrap text-center${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</h1>
     }
     return (
-      <div className={`titlebar${className ? ' ' + className : ''}`} {...others}>
+      <div ref={el => {this.$el = el;}} {...others} className={`titlebar${className ? ' ' + className : ''}`} >
         <div className="titlebar-left">
           {lButtonsDOM}
         </div>

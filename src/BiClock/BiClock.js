@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 
 export default class BiClock extends Component {
   static propTypes = {
+    style: PropTypes.object,
     lineWidth: PropTypes.number, // 边框宽度
     size: PropTypes.number, // 大小,px
     time: PropTypes.string, // hh:mm
-    style: PropTypes.object,
-    className: PropTypes.string,
     duration: PropTypes.number, // 时长
     delay: PropTypes.number // 延时
   }
@@ -47,11 +46,19 @@ export default class BiClock extends Component {
     }, this.props.delay);
   }
   render() {
-    const {lineWidth, size, className} = this.props;
+    const {
+      style,
+      lineWidth,
+      size,
+      time,
+      duration,
+      delay,
+      ...others
+    } = this.props;
     // 动画旋转
     this.aniRotate();
     return (
-      <div ref={el => {this.$el = el;}} className={`bi-clock${className ? ' ' + className : ''}`} style={{width: `${size}px`, height: `${size}px`, borderWidth: `${lineWidth}px`}}>
+      <div {...others} ref={el => {this.$el = el;}} className={`bi-clock${others.className ? ' ' + others.className : ''}`} style={Object.assign({width: `${size}px`, height: `${size}px`, borderWidth: `${lineWidth}px`}, style || {})}>
         <div ref={el => {this.$hour = el;}} className="bi-clock-hour" style={{width: `${lineWidth}px`}}></div>
         <div ref={el => {this.$minute = el;}} className="bi-clock-minute" style={{width: `${lineWidth}px`}}></div>
         <div className="bi-clock-origin" style={{width: `${lineWidth + 1}px`, height: `${lineWidth + 1}px`}}></div>

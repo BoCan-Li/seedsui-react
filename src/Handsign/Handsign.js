@@ -10,9 +10,7 @@ export default class Handsign extends Component {
     suffix: PropTypes.string,
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
     width: PropTypes.number, // 宽度
-    height: PropTypes.number, // 高度
-    style: PropTypes.object,
-    className: PropTypes.string
+    height: PropTypes.number // 高度
   }
   static defaultProps = {
     strokeStyle: '#000',
@@ -52,12 +50,15 @@ export default class Handsign extends Component {
   }
   render() {
     const {
-      strokeStyle, lineWidth, quality,
-      width, height, style, className,
+      strokeStyle,
+      lineWidth,
+      quality,
+      width,
+      height,
       ...others
     } = this.props;
     return (
-      <canvas ref={el => {this.$el = el;}} className={className} style={style} width={width} height={height} {...others}>Canvas画板</canvas>
+      <canvas ref={el => {this.$el = el;}} {...others} width={width} height={height}>Canvas画板</canvas>
     );
   }
 }

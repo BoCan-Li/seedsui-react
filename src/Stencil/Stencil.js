@@ -4,8 +4,6 @@ import {createPortal} from 'react-dom';
 
 export default class Stencil extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    style: PropTypes.object
   }
   static defaultProps = {
     className: 'stencil-list'
@@ -14,9 +12,9 @@ export default class Stencil extends Component {
     super(props);
   }
   render() {
-    const {className, ...others} = this.props;
+    const {...others} = this.props;
     return createPortal(
-      <div ref={el => {this.$el = el;}} className={`stencil${className ? ' ' + className : ''}`} {...others}>
+      <div ref={el => {this.$el = el;}} {...others} className={`stencil${others.className ? ' ' + others.className : ''}`}>
       </div>,
       this.props.portal || document.getElementById('root') || document.body
     );

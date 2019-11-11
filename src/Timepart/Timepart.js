@@ -5,9 +5,6 @@ import Instance from './instance.js';
 export default class Timepart extends Component {
   static propTypes = {
     multiple: PropTypes.bool, // 是否支持多选
-    className: PropTypes.string,
-    style: PropTypes.object,
-
     startTime: PropTypes.string,
     endTime: PropTypes.string,
     times: PropTypes.array, // [{className: string, startTime: 'hh:ss', endTime: 'hh:ss', data: string, cover: bool}]
@@ -115,9 +112,18 @@ export default class Timepart extends Component {
     if (this.props.onChange) this.props.onChange(times);
   }
   render() {
-    const {className, style} = this.props;
+    const {
+      multiple,
+      startTime,
+      endTime,
+      times,
+
+      onChange,
+      onError,
+      ...others
+    } = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`timepart${className ? ' ' + className: ''}`} style={style}>
+      <div ref={el => {this.$el = el;}} {...others} className={`timepart${others.className ? ' ' + others.className: ''}`}>
       </div>
     );
   }

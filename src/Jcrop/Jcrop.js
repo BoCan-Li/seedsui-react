@@ -6,7 +6,6 @@ import 'jcrop/dist/jcrop.css'; // Jcrop
 export default class Jcrop extends Component {
   static propTypes = {
     style: PropTypes.object,
-    className: PropTypes.string,
     src: PropTypes.string,
     rect: PropTypes.array, // [10,10,100,100]
     scale: PropTypes.array, // [.7,.5]
@@ -66,9 +65,9 @@ export default class Jcrop extends Component {
     });
   }
   render() {
-    const {rect, scale, options, onChange, src, style, className, ...others} = this.props;
+    const {rect, scale, options, onChange, src, style, ...others} = this.props;
     return (
-      <img alt="" ref={(el) => {this.$el = el;}} className={className} style={Object.assign({maxWidth: '100%'}, style)} src={src} {...others}/>
+      <img alt="" ref={(el) => {this.$el = el;}} {...others} style={Object.assign({maxWidth: '100%'}, style)} src={src}/>
     );
   }
 }

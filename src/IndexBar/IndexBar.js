@@ -6,8 +6,6 @@ export default class IndexBar extends Component {
   static propTypes = {
     overflowContainer: PropTypes.any, // 滚动区域
     parent: PropTypes.any, // DOM注入容器
-    className: PropTypes.string,
-    style: PropTypes.object,
     indexs: PropTypes.array,
   }
   static defaultProps = {
@@ -30,8 +28,13 @@ export default class IndexBar extends Component {
     this.instance = instance;
   }
   render() {
-    const {indexs, className, style} = this.props;
-    return (<div ref={el => {this.$el = el;}} className={`indexbar${className ? ' ' + className : ''}`} style={style}>
+    const {
+      overflowContainer,
+      parent,
+      indexs,
+      ...others
+    } = this.props;
+    return (<div ref={el => {this.$el = el;}} {...others} className={`indexbar${others.className ? ' ' + others.className : ''}`}>
       {indexs.map((index, i) => {
         return <a key={`btn${i}`}>{index}</a>
       })}

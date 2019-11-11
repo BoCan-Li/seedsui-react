@@ -8,9 +8,6 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class Dragrefresh extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
-
     threshold: PropTypes.number, // 头部下拉的触发位置
     end: PropTypes.number, // 头部下拉的结束位置
     endRefresh: PropTypes.bool, // 滑动到指位置后自动刷新
@@ -173,13 +170,36 @@ export default class Dragrefresh extends Component {
   }
   render() {
     const {
-      style, className,
-      onTopRefresh, onBottomRefresh, showNotice, hasMore,
+      threshold,
+      end,
+      endRefresh,
+      moveTimeout,
+      onTopRefresh,
+      onTopComplete,
+      onBottomRefresh,
+      onBottomComplete,
+
+      children,
+      hasMore,
+
+      showNotice,
       noticeProps,
-      bottomLoadingCaption, bottomNoDataCaption, bottomErrorCaption, onClickBottomError
+
+      lazyLoad,
+
+      onScroll,
+
+      // 底部加载中
+      bottomLoadingCaption,
+      // 底部加载完成
+      bottomNoDataCaption,
+      // 底部加载错误
+      bottomErrorCaption,
+      onClickBottomError,
+      ...others
     } = this.props;
     return (
-      <div ref={(el) => {this.$el = el;}} className={`container${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el;}} {...others} className={`container${others.className ? ' ' + others.className : ''}`}>
         {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>

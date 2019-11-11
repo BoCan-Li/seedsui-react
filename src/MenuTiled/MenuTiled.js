@@ -5,8 +5,6 @@ import Instance from './instance.js';
 
 export default class MenuTiled extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
     selectedId: PropTypes.string, // 默认选中项的id
     onClick: PropTypes.func,
 
@@ -57,9 +55,9 @@ export default class MenuTiled extends Component {
     if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
   }
   render() {
-    const {className, selectedId, onClick, list, ...others} = this.props;
+    const {selectedId, onClick, list, ...others} = this.props;
     return (
-      <div ref={el => {this.$el = el;}} className={`menutiled${className ? ' ' + className : ''}`} {...others}>
+      <div ref={el => {this.$el = el;}} {...others} className={`menutiled${others.className ? ' ' + others.className : ''}`}>
       </div>
     );
   }

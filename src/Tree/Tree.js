@@ -5,8 +5,6 @@ import Instance from './instance.js';
 
 export default class Tree extends Component {
   static propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
     treeStyle: PropTypes.object,
     treeClassName: PropTypes.string,
     
@@ -137,9 +135,34 @@ export default class Tree extends Component {
     if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
   }
   render() {
-    const {style, className, treeStyle, treeClassName} = this.props;
+    const {
+      treeStyle,
+      treeClassName,
+      
+      multiple,
+      checkbox,
+      bar,
+      selected,
+      list,
+
+      buttonAddHTML,
+      buttonAddClassName,
+      buttonAddSrc,
+      onClickAdd,
+
+      buttonDelHTML,
+      buttonDelClassName,
+      buttonDelSrc,
+      onClickDel,
+
+      onClickLastChild,
+
+      onClick,
+      onData,
+      ...others
+    } = this.props;
     return (
-      <div ref={(el) => {this.$el = el}} className={`tree-box${className ? ' ' + className : ''}`} style={style}>
+      <div ref={(el) => {this.$el = el}} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
         <ul ref={(el) => {this.$tree = el}} className={`tree${treeClassName ? ' ' + treeClassName : ''}`} style={treeStyle}></ul>
       </div>
     );

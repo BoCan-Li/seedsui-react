@@ -6,8 +6,6 @@ import Button from './../Button';
 export default class ListPull extends Component {
   static propTypes = {
     list: PropTypes.array, // [{container: node, lButtons: [{value: '按钮文字', className: 'warn', style: object}], rButtons: 同lButtons}]
-    style: PropTypes.object,
-    className: PropTypes.string,
     onClick: PropTypes.func,
     onShowedLeft: PropTypes.func,
     onShowedRight: PropTypes.func
@@ -40,9 +38,14 @@ export default class ListPull extends Component {
     this.instance = instance;
   }
   render() {
-    const { list, style, className } = this.props;
+    const {
+      list,
+      onShowedLeft,
+      onShowedRight,
+      ...others
+    } = this.props;
     return (
-      <ul ref={el => { this.$el = el; }} className={`list-pull${className ? ' ' + className : ''}`} style={style}>
+      <ul ref={el => { this.$el = el; }} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
         {list.map((item, index) => {
           return <li key={`button${index}`} data-index={`${index}`} className="border-b list-pull-li">
             {item.lButtons && item.lButtons.length && <div className="list-pull-left">

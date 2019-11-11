@@ -24,8 +24,6 @@ export default class LotteryWheel extends Component {
     // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
     width: PropTypes.number, // 宽度
     height: PropTypes.number, // 高度
-    style: PropTypes.object,
-    className: PropTypes.string,
     // 间隔
     spacing: PropTypes.number,
     // 保存
@@ -71,9 +69,35 @@ export default class LotteryWheel extends Component {
     this.instance = instance;
   }
   render() {
-    const {width, height, className, style} = this.props;
+    const {
+      data,
+      // 数据默认值
+      fontFamily,
+      fontSize,
+      fontTop,
+      fontFillStyle,
+
+      bgFillStyle,
+      bgStrokeStyle,
+      bgLineWidth,
+
+      iconWidth,
+      iconHeight,
+      iconTop,
+
+      around,
+      // 不能使用style制定宽高,canvas用style的width|height会导致绘图位置不正确
+      width, // 宽度
+      height, // 高度
+      // 间隔
+      spacing,
+      // 保存
+      suffix,
+      quality,
+      ...others
+    } = this.props;
     return (
-      <canvas ref={el => {this.$el = el;}} width={width} height={height} className={className} style={style}>
+      <canvas ref={el => {this.$el = el;}} {...others} width={width} height={height}>
         Canvas抽奖轮盘
       </canvas>
     );

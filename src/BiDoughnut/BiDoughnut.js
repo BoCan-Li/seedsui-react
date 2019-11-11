@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 
 export default class BiDoughnut extends Component {
   static propTypes = {
+    style: PropTypes.object,
     lineWidth: PropTypes.number, // 边框宽度
     size: PropTypes.number, // 大小,px
     duration: PropTypes.number, // 时长
     rotate: PropTypes.number, // 最大360
     delay: PropTypes.number, // 延时
-
-    className: PropTypes.string,
-    style: PropTypes.object,
-
     captionAttribute: PropTypes.object,
     children: PropTypes.node
   };
@@ -88,13 +85,13 @@ export default class BiDoughnut extends Component {
   }
   render() {
     const {
+      style,
       lineWidth,
       size,
       duration,
       rotate,
       delay,
       className,
-      style = {},
       captionAttribute = {},
       children,
       ...others
@@ -102,7 +99,7 @@ export default class BiDoughnut extends Component {
     // 动画旋转
     this.aniRotate();
     return (
-      <div {...others} className={`bi-doughtut ${className}`} style={{width: `${size}px`, height: `${size}px`, ...style}}>
+      <div {...others} className={`bi-doughtut${others.className ? ' ' + others.className : ''}`} style={Object.assign({width: `${size}px`, height: `${size}px`}, style || {})}>
         <div className="bi-doughtut-wrapper left">
           <div ref={(el) => {this.$elLeftCircle = el;}} className="bi-doughtut-circle left" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
         </div>
