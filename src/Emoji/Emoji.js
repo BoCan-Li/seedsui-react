@@ -21,7 +21,7 @@ export default class Emoji extends Component {
 
     maskAttribute: PropTypes.object,
     submitAttribute: PropTypes.object,
-    inputAttribute: PropTypes.object,
+    inputProps: PropTypes.object,
     liconAttribute: PropTypes.object,
     licon: PropTypes.node,
 
@@ -87,9 +87,19 @@ export default class Emoji extends Component {
       </div>
     });
   }
-  
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    if (!props) return props;
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
+  }
   render() {
-    const {
+    let {
       portal,
       show,
       data,
@@ -98,12 +108,17 @@ export default class Emoji extends Component {
       placeholder,
       maskAttribute = {},
       submitAttribute = {},
-      inputAttribute = {},
+      inputProps = {},
       liconAttribute = {},
       licon,
       onChange,
       ...others
     } = this.props;
+
+    // 剔除掉onClick事件, 因为在instance时已经回调了
+    maskAttribute = this.filterProps(maskAttribute)
+    submitAttribute = this.filterProps(submitAttribute)
+
     return createPortal(
       <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
         <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
@@ -113,12 +128,12 @@ export default class Emoji extends Component {
             <InputPre
               ref={(el) => {this.$inputPre = el;}}
               className="emoji-edit-input"
-              inputStyle={{padding: '0'}}
+              inputAttribute={{style: {padding: '0'}}}
               valueBindProp
               value={value}
               onChange={onChange}
               placeholder={placeholder}
-              {...inputAttribute}
+              {...inputProps}
             />
             <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
             <Button {...submitAttribute} className={`emoji-edit-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`} disabled={!value}>{submitAttribute.caption || (window._seeds_lang['submit'] || '提交')}</Button>

@@ -206,15 +206,26 @@ import Chat from 'seedsui-react/lib/Chat';
 ### 示例
 ```javascript
 import Actionsheet from 'seedsui-react/lib/Actionsheet';
-onClickActionsheet = (item, index) => {
-  console.log(item) // => {caption: '菜单1'}
+onClick = (e, item, index) => {
+  console.log(e, item, index)
+}
+hide = (...param) => {
+  console.log(...param)
+  this.setState({
+    show: false
+  });
 }
 <Actionsheet
-  show={this.state.actionsheetShow}
+  show={this.state.show}
   list={[{caption: '菜单1'}, {caption: '菜单2'}]}
-  onClick={this.onClickActionsheet}
-  onClickCancel={this.hideActionsheet}
-  onClickMask={this.hideActionsheet}/>
+  onClick={this.onClick}
+  cancelAttribute={{
+    onClick: this.hide
+  }}
+  maskAttribute={{
+    onClick: this.hide
+  }}
+/>
 ```
 [返回目录](#component)
 

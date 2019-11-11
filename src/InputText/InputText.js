@@ -77,24 +77,30 @@ export default class InputText extends Component {
     e.stopPropagation();
     const {
       onClick,
+      clear,
       inputAttribute = {},
       liconAttribute = {},
       riconAttribute = {}
     } = this.props;
     if (this.props.disabled) return;
     var target = e.target;
-    if (target.classList.contains('clearicon')) {
+    if (target.classList.contains('clearicon') && typeof clear === 'function') {
       this.onClear(e);
-    } else if (target.classList.contains('licon')) {
-      if (liconAttribute.onClick) liconAttribute.onClick(e, this.$input.value);
-    } else if (target.classList.contains('ricon')) {
-      if (riconAttribute.onClick) riconAttribute.onClick(e, this.$input.value);
-    } else if (target.classList.contains('input-text')) {
-      if (onClick) onClick(e, this.$input.value);
-      if (inputAttribute.onClick) inputAttribute.onClick(e, this.$input.value);
-    } else {
-      if (onClick) onClick(e, this.$input.value);
+      return;
     }
+    if (target.classList.contains('licon') && liconAttribute.onClick) {
+      liconAttribute.onClick(e, this.$input.value);
+      return;
+    }
+    if (target.classList.contains('ricon') && riconAttribute.onClick) {
+      riconAttribute.onClick(e, this.$input.value);
+      return;
+    }
+    if (target.classList.contains('input-text') && inputAttribute.onClick) {
+      inputAttribute.onClick(e, this.$input.value);
+      return;
+    }
+    if (onClick) onClick(e, this.$input.value);
   }
   // 自动扩充功能
   preAutoSize = () => {
@@ -169,7 +175,7 @@ export default class InputText extends Component {
     if (!valueBindProp) this.updateShowClear('');
   }
   getInputDOM = () => {
-    const {
+    let {
       max,
       min,
       pre, // 自动伸缩文本框
@@ -183,6 +189,8 @@ export default class InputText extends Component {
       readOnly,
       disabled
     } = this.props;
+    // 剔除掉onClick事件, 因为在容器onClick已经回调了
+    inputAttribute = this.filterProps(inputAttribute)
     // pre类型
     if (pre) {
       // pre的左右padding
@@ -246,8 +254,21 @@ export default class InputText extends Component {
       showClear: showClear
     });
   }
+
+  // 过滤已经回调的属性
+  filterProps = (props) => {
+    if (!props) return props;
+    var propsed = {}
+    for (let n in props) {
+      if (n !== 'onClick') {
+        propsed[n] = props[n]
+      }
+    }
+    return propsed;
+  }
+
   render() {
-    const {
+    let {
       type,
       valueBindProp,
       pre,
@@ -289,6 +310,10 @@ export default class InputText extends Component {
       showClear = false;
     }
     let isShowClear = valueBindProp ? showClear : this.state.showClear;
+    // 剔除掉onClick事件, 因为在容器onClick已经回调了
+    liconAttribute = this.filterProps(liconAttribute)
+    riconAttribute = this.filterProps(riconAttribute)
+    clearAttribute = this.filterProps(clearAttribute)
     return (<div ref={(el) => {this.$el = el;}} {...othres} className={`input-text-box${othres.className ? ' ' + othres.className : ''}`} onClick={this.onClick}>
         {licon && licon}
         {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}

@@ -27,7 +27,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputText placeholder="点击选择地区" onClick={this.onClick} onChange={this.onChange}/>
+        <InputText placeholder="点击选择地区" onClick={this.onClick} onChange={this.onChange} liconAttribute={{onClick: this.onClick, className: 'icon-ok-fill'}}/>
       </Container>
     </Page>
   }

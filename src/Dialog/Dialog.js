@@ -6,7 +6,7 @@ export default class Dialog extends Component {
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool,
-
+    onClick: PropTypes.func,
     animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
 
     maskAttribute: PropTypes.object,
@@ -35,7 +35,7 @@ export default class Dialog extends Component {
     const {
       portal,
       show,
-
+      onClick,
       animation,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
 
       maskAttribute = {},
@@ -68,7 +68,7 @@ export default class Dialog extends Component {
     }
     return createPortal(
       <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask dialog-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
-        <div {...others} className={`dialog${transformOrigin ? ' ' + transformOrigin : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} onClick={others.onClick ? others.onClick : this.onClick} data-animation={animation}>
+        <div {...others} className={`dialog${transformOrigin ? ' ' + transformOrigin : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} onClick={onClick ? onClick : this.onClick} data-animation={animation}>
           {children && children}
         </div>
       </div>,

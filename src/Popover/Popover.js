@@ -7,6 +7,7 @@ export default class Popover extends Component {
     portal: PropTypes.object,
     show: PropTypes.bool,
     animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+    onClick: PropTypes.func,
     maskAttribute: PropTypes.object,
     children: PropTypes.node
   }
@@ -27,13 +28,14 @@ export default class Popover extends Component {
       portal,
       show,
       animation,
+      onClick,
       maskAttribute = {},
       children,
       ...others
     } = this.props;
     return createPortal(
       <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask popover-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
-        <div {...others} className={`popover${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} data-animation={animation} onClick={others.onClick ? others.onClick : this.onClick}>
+        <div {...others} className={`popover${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} data-animation={animation} onClick={onClick ? onClick : this.onClick}>
           {children && children}
         </div>
       </div>,

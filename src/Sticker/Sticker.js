@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 export default class Peg extends Component {
   static propTypes = {
     type: PropTypes.string, // line
-    iconClassName: PropTypes.string,
     className: PropTypes.string,
-    style: PropTypes.object,
+    iconAttribute: PropTypes.object,
     children: PropTypes.node
   }
   static defaultProps = {
@@ -16,18 +15,30 @@ export default class Peg extends Component {
     super(props);
   }
   render() {
-    const {type, iconClassName, className, style, children} = this.props;
-    let newClassName = '';
+    const {
+      type,
+      className,
+      iconAttribute,
+      children,
+      ...others
+    } = this.props;
+
+    // 根据类型使用不同的className
+    let typeClassName = '';
     switch (type) {
       case 'line':
-        newClassName = 'sticker-line';
+        typeClassName = 'sticker-line';
         break;
       default:
-        newClassName = 'sticker';
+        typeClassName = 'sticker';
+    }
+    // 如果有图标, 则使用图标类型的样式sticker-icon
+    if (iconAttribute) {
+      typeClassName = typeClassName + ' sticker-icon';
     }
     return (
-      <span ref={el => {this.$el = el;}} className={`${newClassName}${iconClassName ? ' sticker-icon' : ''}${className ? ' ' + className: ''}`} style={style}>
-        {iconClassName && <span class={`size12 ${iconClassName}`}></span>}
+      <span ref={el => {this.$el = el;}} {...others} className={`${typeClassName}${className ? ' ' + className: ''}`}>
+        {iconAttribute && <span {...iconAttribute} class={`size12${iconAttribute.className ? ' ' + iconAttribute.className : ''}`}></span>}
         {children && <span>{children}</span>}
       </span>
     );
