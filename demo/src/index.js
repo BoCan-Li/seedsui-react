@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputText, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, InputLocation, Bridge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -28,7 +28,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputText clear={this.onClear} value={this.state.value} onChange={this.onChange}/>
+        <InputLocation value={this.state.value} placeholder="请点击获取位置信息" onChange={this.onChange}/>
       </Container>
     </Page>
   }

@@ -7,14 +7,14 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputLocation extends Component {
   static propTypes = {
-    locationing: PropTypes.string,
-    locationFailed: PropTypes.string,
+    locationingValue: PropTypes.string,
+    failedValue: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func
   }
   static defaultProps = {
-    locationing: window._seeds_lang['location'] || '定位中...',
-    locationFailed: window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
+    locationingValue: window._seeds_lang['location'] || '定位中...',
+    failedValue: window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
   }
   constructor(props) {
     super(props);
@@ -29,16 +29,16 @@ export default class InputLocation extends Component {
   }
   onClick = (event, value) => {
     const {
-      locationing,
-      locationFailed,
+      locationingValue,
+      failedValue,
       onChange,
       onClick
     } = this.props;
     var e = event.nativeEvent;
     if (onClick) onClick(e, value);
-    if (this.$input.value === locationing) return;
+    if (this.$input.value === locationingValue) return;
     // 定位中...
-    this.$input.value = locationing;
+    this.$input.value = locationingValue;
     Bridge.getLocation({
       type: 'gcj02',
       success: (data) => {
@@ -56,13 +56,13 @@ export default class InputLocation extends Component {
           longitude: data.longitude,
           success: (addrs) => {
             // 赋值
-            this.$input.value = addrs.address;
             if (onChange) onChange(e, addrs.address, data);
+            this.$input.value = addrs.address;
           },
           fail: (res) => {
             // 赋值
-            this.$input.value = locationFailed;
             if (onChange) onChange(e, '', data)
+            this.$input.value = failedValue;
             // 提示获取地址失败
             Bridge.showToast(res.errMsg, {mask: false});
           }
@@ -71,7 +71,7 @@ export default class InputLocation extends Component {
       fail: (res) => {
         // 赋值
         if (onChange) onChange(e, '', null)
-        this.$input.value = locationFailed;
+        this.$input.value = failedValue;
         // 提示定位失败
         Bridge.showToast(res.errMsg, {mask: false});
       }
@@ -79,8 +79,8 @@ export default class InputLocation extends Component {
   }
   render() {
     const {
-      locationing,
-      locationFailed,
+      locationingValue,
+      failedValue,
       onChange,
       onClick,
       ...others

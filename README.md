@@ -2063,7 +2063,8 @@ onError = (e, msg) => {
 ### 属性
 ```javascript
 <InputLocation
-  locationingText={定位中显示文字 string, 默认'定位中...'}
+  failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启'}
+  locationingValue={定位中显示文字 string, 默认'定位中...'}
   onClick={点击 func(value, args), 默认无}
   onChange={值改变 func(value, args), 默认无}
   {...others}
