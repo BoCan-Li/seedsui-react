@@ -1,38 +1,26 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, OnOff, Bridge} from '../../src'
-
-const list = [
-  {
-    key: '1',
-    value: '标题标题1'
-  },
-  {
-    key: '2',
-    value: '标题标题2'
-  }
-]
+import {Page, Header, Titlebar, Container, InputText, Bridge} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      checked: false
+      value: '1'
     }
   }
   componentDidMount () {
     Bridge.debug = true;
   }
   onChange = (e, value) => {
+    console.log(value)
     this.setState({
-      value: value
+      value
     })
   }
-  onClick = (e, checked) => {
-    this.setState({
-      checked: !checked
-    })
+  onClear = (...params) => {
+    console.log(...params)
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -40,7 +28,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <OnOff caption="全选" checked={this.state.checked} onClick={this.onClick} onAttribute={{caption: '开'}} offAttribute={{caption: '关'}}/>
+        <InputText clear={this.onClear} value={this.state.value} onChange={this.onChange}/>
       </Container>
     </Page>
   }

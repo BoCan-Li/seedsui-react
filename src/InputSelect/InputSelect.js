@@ -81,7 +81,6 @@ export default class InputSelect extends Component {
   // 点击确定按钮
   onClickSubmit = (e) => {
     const {
-      valueBindProp,
       onChange,
       pickerProps = {}
     } = this.props;
@@ -96,7 +95,6 @@ export default class InputSelect extends Component {
       return;
     }
     // 赋值
-    if (!valueBindProp) this.$input.value = value;
     if (onChange) {
       e.target = this.$input;
       onChange(e, value, options);

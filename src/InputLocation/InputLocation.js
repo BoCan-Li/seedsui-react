@@ -7,12 +7,14 @@ if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 export default class InputLocation extends Component {
   static propTypes = {
-    locationingText: PropTypes.string,
+    locationing: PropTypes.string,
+    locationFailed: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func
   }
   static defaultProps = {
-    locationingText: window._seeds_lang['location'] || '定位中...'
+    locationing: window._seeds_lang['location'] || '定位中...',
+    locationFailed: window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
   }
   constructor(props) {
     super(props);
@@ -27,26 +29,26 @@ export default class InputLocation extends Component {
   }
   onClick = (event, value) => {
     const {
-      valueBindProp,
-      locationingText,
+      locationing,
+      locationFailed,
       onChange,
       onClick
     } = this.props;
     var e = event.nativeEvent;
     if (onClick) onClick(e, value);
-    if (this.$input.value === locationingText) return;
+    if (this.$input.value === locationing) return;
     // 定位中...
-    if (!valueBindProp) {
-      this.$input.value = locationingText;
-    }
+    this.$input.value = locationing;
     Bridge.getLocation({
       type: 'gcj02',
       success: (data) => {
         // 客户端中不需要再getAddress
         if (data.address) {
           // 赋值
-          if (!valueBindProp) this.$input.value = data.address;
-          if (onChange) onChange(e, data.address, data);
+          if (onChange) {
+            onChange(e, data.address, data);
+            this.$input.value = data.address;
+          }
           return;
         }
         Bridge.getAddress({ // 只支持gcj02
@@ -54,12 +56,12 @@ export default class InputLocation extends Component {
           longitude: data.longitude,
           success: (addrs) => {
             // 赋值
-            if (!valueBindProp) this.$input.value = addrs.address;
+            this.$input.value = addrs.address;
             if (onChange) onChange(e, addrs.address, data);
           },
           fail: (res) => {
             // 赋值
-            if (!valueBindProp) this.$input.value = '';
+            this.$input.value = locationFailed;
             if (onChange) onChange(e, '', data)
             // 提示获取地址失败
             Bridge.showToast(res.errMsg, {mask: false});
@@ -68,8 +70,8 @@ export default class InputLocation extends Component {
       },
       fail: (res) => {
         // 赋值
-        if (!valueBindProp) this.$input.value = '';
         if (onChange) onChange(e, '', null)
+        this.$input.value = locationFailed;
         // 提示定位失败
         Bridge.showToast(res.errMsg, {mask: false});
       }
@@ -77,7 +79,8 @@ export default class InputLocation extends Component {
   }
   render() {
     const {
-      locationingText,
+      locationing,
+      locationFailed,
       onChange,
       onClick,
       ...others

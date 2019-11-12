@@ -1972,7 +1972,6 @@ onChange = (e, value) => {
 }
 
 <InputCity
-  valueBindProp
   value={this.state.value}
   onChange={this.onChange}
   placeholder="请选择"
@@ -2033,7 +2032,6 @@ onError = (e, msg) => {
 }
 
 <InputDate
-  valueBindProp
   type="datetime"
   max={new Date().format('YYYY,MM,DD hh&mm')}
   onError={this.onError}
@@ -2086,7 +2084,7 @@ onChange = (e, value) => {
   })
 }
 
-<InputLocation value={this.state.value} placeholder="定位" onChange={this.onChange}/>
+<InputLocation value={this.state.value} placeholder="请点击获取位置信息" onChange={this.onChange}/>
 ```
 
 
@@ -2158,7 +2156,6 @@ onChange = (e, value, option) => {
 
 <InputPicker
   list={this.state.list}
-  valueBindProp
   value={this.state.value}
   onChange={this.onChange}
   placeholder="请选择"
@@ -2282,7 +2279,6 @@ onChange = (e, value, option) => {
 <InputSelect
   list={this.state.list}
   multiple
-  valueBindProp
   value={this.state.value}
   valueForKey={'1-3'}
   onChange={this.onChange}
@@ -2352,7 +2348,6 @@ onError = (e, error) => {
 ```javascript
 <InputText
   type={类型 string, 默认'text'} // 与w3c的type一致: text | number | tel | password
-  valueBindProp={值是否绑定props bool, 默认无} // 为true时只能通过props修改其value
   pre={是否启用自动扩充功能 bool, 默认无}
   // 容器
   onClick={点击容器 func(e, value), 默认无}
@@ -2392,11 +2387,18 @@ onError = (e, error) => {
 ```javascript
 import InputText from 'seedsui-react/lib/InputText';
 
-onChange = (e, value) => {
-  console.log(e, value);
+this.state = {
+  value: '1'
 }
 
-<InputText onChange={this.onChange}/>
+onChange = (e, value) => {
+  console.log(value)
+  this.setState({
+    value
+  })
+}
+
+<InputText clear value={this.state.value} onChange={this.onChange}/>
 ```
 
 
@@ -3345,7 +3347,6 @@ import Notice from 'seedsui-react/lib/Notice';
 
 ## NumBox
 [数字加减框](https://unpkg.com/seedsui-react/src/lib/NumBox/NumBox.js)
-只有valueBindProp模式
 ### 属性
 ```javascript
 <NumBox

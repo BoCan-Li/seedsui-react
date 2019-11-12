@@ -129,7 +129,6 @@ export default class Emoji extends Component {
               ref={(el) => {this.$inputPre = el;}}
               className="emoji-edit-input"
               inputAttribute={{style: {padding: '0'}}}
-              valueBindProp
               value={value}
               onChange={onChange}
               placeholder={placeholder}
