@@ -71,16 +71,13 @@ export default class InputText extends Component {
     e.stopPropagation();
     const {
       onClick,
-      clear,
       disabled,
-      readOnly,
       inputAttribute = {},
       liconAttribute = {},
       riconAttribute = {}
     } = this.props;
     if (disabled) return;
     var target = e.target;
-    console.log(target)
     if (target.classList.contains('clearicon')) {
       this.onClear(e);
       return;
