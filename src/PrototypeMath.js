@@ -131,7 +131,6 @@ Math.Calc = (function () {
     }
     // 截取小数位数
     if (!isNaN(digits)) {
-      console.log(digits)
       if (value.indexOf('.') !== -1 && digits - 0 >= 0 && digits.toString().indexOf('.') === -1) {
         if (digits - 0 === 0) { // 整数
           value = value.substring(0, value.indexOf('.'))
