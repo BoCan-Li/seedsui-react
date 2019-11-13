@@ -20,8 +20,9 @@ export default class Emoji extends Component {
     placeholder: PropTypes.string,
 
     maskAttribute: PropTypes.object,
-    submitAttribute: PropTypes.object,
+    submitProps: PropTypes.object,
     inputProps: PropTypes.object,
+    carrouselProps: PropTypes.object,
     liconAttribute: PropTypes.object,
     licon: PropTypes.node,
 
@@ -37,16 +38,23 @@ export default class Emoji extends Component {
   }
   componentDidUpdate = (prevProps) => {
     // 自动获取焦点
-    if (this.props.autoFocus && prevProps.show !== this.props.show && this.props.show === true && this.$inputPre) {
-      this.$inputPre.$input.focus();
+    if (this.props.autoFocus && prevProps.show !== this.props.show && this.props.show === true && this.$input) {
+      this.$input.focus();
     }
   }
   componentDidMount = () => {
-    if (this.props.autoFocus && this.$inputPre) this.$inputPre.$input.focus();
+    // 输入框
+    this.$inputEl = this.refs.$ComponentInputPre.$el;
+    this.$input = this.refs.$ComponentInputPre.$input;
+    // 提交按钮
+    this.$submit = this.refs.$ComponentSubmit.$el;
+    // 滑动表情框
+    this.$carrousel = this.refs.$ComponentCarrousel.$el;
+    if (this.props.autoFocus && this.$input) this.$input.focus();
     if (this.instance) return
     const {
       maskAttribute = {},
-      submitAttribute = {}
+      submitProps = {}
     } = this.props;
     this.instance = new Instance({
       data: this.props.data,
@@ -55,7 +63,7 @@ export default class Emoji extends Component {
       isClickMaskHide: false,
       onClickMask: maskAttribute.onClick || null,
 
-      onClickSubmit: submitAttribute.onClick || null,
+      onClickSubmit: submitProps.onClick || null,
 
       onChange: this.props.onChange
     });
@@ -107,8 +115,9 @@ export default class Emoji extends Component {
       value,
       placeholder,
       maskAttribute = {},
-      submitAttribute = {},
+      submitProps = {},
       inputProps = {},
+      carrouselProps = {},
       liconAttribute = {},
       licon,
       onChange,
@@ -117,7 +126,7 @@ export default class Emoji extends Component {
 
     // 剔除掉onClick事件, 因为在instance时已经回调了
     maskAttribute = this.filterProps(maskAttribute)
-    submitAttribute = this.filterProps(submitAttribute)
+    submitProps = this.filterProps(submitProps)
 
     return createPortal(
       <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
@@ -126,7 +135,7 @@ export default class Emoji extends Component {
           {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <div className="emoji-edit">
             <InputPre
-              ref={(el) => {this.$inputPre = el;}}
+              ref="$ComponentInputPre"
               className="emoji-edit-input"
               inputAttribute={{style: {padding: '0'}}}
               value={value}
@@ -135,9 +144,9 @@ export default class Emoji extends Component {
               {...inputProps}
             />
             <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
-            <Button {...submitAttribute} className={`emoji-edit-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`} disabled={!value}>{submitAttribute.caption || (window._seeds_lang['submit'] || '提交')}</Button>
+            <Button ref="$ComponentSubmit" {...submitProps} className={`emoji-edit-submit${submitProps.className ? ' ' + submitProps.className : ''}`} disabled={!value}>{submitProps.caption || (window._seeds_lang['submit'] || '提交')}</Button>
           </div>
-          <Carrousel ref={(el) => {this.$carrousel = el;}} pagination className={`carrousel-container emoji-carrousel`} style={{display: 'none'}}>
+          <Carrousel ref="$ComponentCarrousel" {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
             {this.getFaceDOM()}
           </Carrousel>
         </div>

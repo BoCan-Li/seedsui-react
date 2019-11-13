@@ -76,7 +76,7 @@ export default class Carrousel extends Component {
     }
   }
   instance = () => {
-    const instance = new Instance(this.$el, {
+    this.instance = new Instance(this.$el, {
       height: this.props.style && this.props.style.height ? this.props.style.height : null,
       width: this.props.style && this.props.style.width ? this.props.style.width : null,
       stopPropagation: this.props.stopPropagation,
@@ -86,7 +86,6 @@ export default class Carrousel extends Component {
       onClick: this.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
-    this.instance = instance;
   }
   onClick = (s, e) => {
     const index = s.activeIndex;
