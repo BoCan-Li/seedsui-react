@@ -580,7 +580,7 @@ var Bridge = {
     * 拍照、本地选图
     * @param {Object} params
     * {
-    * dir:'',
+    * dir:'目录/年月',
     * localIds:['LocalResource://imageid' + id],
     * tenantId: 'ios必传'
     * }

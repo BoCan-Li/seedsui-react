@@ -660,7 +660,7 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     上传图片
-    @params {dir:'上传路径',localIds:['图片集合'], tenantId: '企业Id', isAI: '1.是 0.不是'}
+    @params {dir:'目录/年月',localIds:['图片集合'], tenantId: '企业Id', isAI: '1.是 0.不是'}
     @return 无
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
