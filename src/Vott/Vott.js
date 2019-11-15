@@ -59,18 +59,15 @@ export default class Vott extends Component {
       data,
       readOnly,
       src,
-      params = {},
-      preview,
-      ...others
+      params = {}
     } = this.props;
-    const instance = new Instance(this.$el, {
+    this.instance = new Instance(this.$el, {
       readOnly: readOnly,
       data: data,
       src: src,
       onSuccess: this.onLoad,
       ...params
     });
-    this.instance = instance;
   }
   onLoad = () => {
     this.load = 1
