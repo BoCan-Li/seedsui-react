@@ -65,7 +65,7 @@ export default class ImgMark extends Component {
   }
   componentDidMount () {
     if (this.instance) return;
-    var instance = new Instance(this.$el, {
+    this.instance = new Instance(this.$canvas, {
       src: this.props.src,
       data: this.props.data,
       isDrawSrc: this.props.isDrawSrc,
@@ -76,7 +76,6 @@ export default class ImgMark extends Component {
       onError: this.onError,
       onSuccess: this.onSuccess
     });
-    this.instance = instance;
   }
   validSrc = false
   onError = () => {
@@ -134,7 +133,7 @@ export default class ImgMark extends Component {
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>
-        <canvas ref={el => {this.$el = el;}} className={`imgmark-wrapper`} style={isDrawSrcStyle}>
+        <canvas ref={el => {this.$canvas = el;}} className={`imgmark-wrapper`} style={isDrawSrcStyle}>
           Canvas画板
         </canvas>
         <div className={`imgmark-error`}>
