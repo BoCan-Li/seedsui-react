@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, InputLocation, Bridge} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, PDFView} from '../../src'
+import pdfsrc from './../assets/pdfview.js';
+// const pictures = ['/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png']
 
 class Demo extends Component {
   constructor(props){
@@ -28,7 +30,8 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputLocation value={this.state.value} placeholder="请点击获取位置信息" onChange={this.onChange}/>
+        <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 2}}/>
+        {/* <PDFView pictures={pictures} params={{rows: 0}}/> */}
       </Container>
     </Page>
   }

@@ -10,6 +10,7 @@ export default class PDFView extends Component {
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
     params: PropTypes.object, // 设置实例化参数
     // params: {
+    //   rows: 5, // 分页, 一页的条数
     //   errorHTML: '文件加载失败', // 加载错误时显示的信息
     //   loadHTML: '加载中', // 加载时显示的信息
     //   nodataHTML: '暂无数据', // 暂无数据
@@ -38,6 +39,8 @@ export default class PDFView extends Component {
       onLoad: (s) => {
         if (params.onLoad) params.onLoad(s)
         if (this.bscroll) {
+          console.log('加载完成, bscroll刷新');
+          this.bscroll.finishPullUp();
           this.bscroll.refresh();
           return;
         }
@@ -47,7 +50,15 @@ export default class PDFView extends Component {
             start: 1,
             min: 1,
             max: 4
+          },
+          probeType: 2,
+          pullUpLoad: {
+            threshold: 10
           }
+        });
+        // 上拉到底部刷新
+        this.bscroll.on('pullingUp', () => {
+          this.instance.addPages();
         });
       }
     });

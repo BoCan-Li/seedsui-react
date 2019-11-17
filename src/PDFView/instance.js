@@ -25,7 +25,9 @@ var PDFView = function (container, params) {
     completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
 
     pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js',
-    pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js'
+    pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js',
+
+    rows: 5,
     /*
     callbacks
     onInit:function(PDFView)
@@ -186,7 +188,14 @@ var PDFView = function (container, params) {
       console.warn('SeedsUI Warn: wrapper为空')
       return
     }
-    if (s.params.pictures && s.params.pictures.length) { // Img加载
+    // 过滤无效的图片
+    if (s.params.pictures) {
+      s.pictures = s.params.pictures.filter(function (picture) {
+        if (picture) return true
+        return false
+      })
+    }
+    if (s.pictures && s.pictures.length) { // Img加载
       s.loadImg()
     } else if (s.params.src) { // PDF加载
       s.loadPDF()
@@ -232,6 +241,7 @@ var PDFView = function (container, params) {
     }
   }
   // 初始化pdf文件
+  s.pdf = null
   s.initPDF = function () {
     // 设置cMapUrl, 解决中文不显示的问题
     if (s.params.cMapUrl) {
@@ -249,37 +259,56 @@ var PDFView = function (container, params) {
       }
     }
     PDFJS.getDocument(param).then(function (pdf) {
-      s.renderPDF(pdf)
+      if (!s.wrapper) return
+
+      s.pdf = pdf // 设置pdf
+      s.total = s.pdf.numPages // 总页数
+
+      s.addPages()
     }).catch(function (error) {
       console.log('SeedsUI: pdf格式不正确')
       console.log(error)
       s.showNoData()
     })
   }
+
   // 加载图片
   s.loadImg = function () {
-    var pictures = s.params.pictures
-    s.total = pictures.length
-    s.completeCount = 0
-    for (var [i, picture] of pictures.entries()) {
-      // 创建页
-      var pageDOM = s.createPage()
-      pageDOM.setAttribute(s.params.pageAttr, i)
-      var img = pageDOM.querySelector('img')
-      // 设置图片路径
-      img.src = picture
-      img.addEventListener('load', s.onLoad, false)
-      img.addEventListener('error', s.onError, false)
-    }
+    s.total = s.pictures.length
+    
+    s.addPages()
   }
-  // 渲染PDF
-  s.renderPDF = function (pdf) {
-    s.completeCount = 0
-    if (!s.wrapper) return
 
-    s.total = pdf.numPages // 总页数
-    for (let i = 1; i <= s.total; i++) {
-      pdf.getPage(i).then((page) => {
+  // 加载下一页, 索引从1开始
+  s.addPages = function () {
+    if (s.page * s.params.rows >= s.total) {
+      console.log('pdf所有页面加载完成, 不需要再加载了')
+      return
+    }
+    s.page++
+    s.completeCount = 0
+    let index = 1 // 起始索引
+    let rows = s.params.rows // 每页显示条数
+    let len = s.total // 结束索引
+    if (rows) { // 如果有rows则走分页
+      len = s.page * rows
+      index = len - rows + 1
+      if (len > s.total) len = s.total
+    }
+    for (let i = index; i <= len; i++) {
+      if (s.pictures) { // 如果有图片, 则认为是图片分页
+        // 创建页
+        var pageDOM = s.createPage()
+        pageDOM.setAttribute(s.params.pageAttr, i)
+        var img = pageDOM.querySelector('img')
+        // 设置图片路径
+        img.src = s.pictures[i - 1]
+        img.addEventListener('load', s.onLoad, false)
+        img.addEventListener('error', s.onError, false)
+        continue;
+      }
+      // pdf分页
+      s.pdf.getPage(i).then((page) => {
         let viewport = page.getViewport(1)
         // 创建页
         let pageDOM = s.createPage()
@@ -307,21 +336,23 @@ var PDFView = function (container, params) {
         let renderTask = page.render(renderContext)
         renderTask.promise.then(() => {
           s.onLoad({target: canvas})
+          // canvas加载完成显示canvas
           s.showPageElement(pageDOM, 'canvas')
         }).catch((err) => {
           s.onLoad({target: canvas}, true)
-          console.log('SeedsUI: 渲染第' + i + '页失败')
+          console.log('SeedsUI: 渲染PDF第' + i + '页失败')
           console.log(err)
         })
       }).catch((err) => {
         s.completeCount++
-        console.log('SeedsUI: 读取第' + i + '页失败')
+        console.log('SeedsUI: 读取PDF第' + i + '页失败')
         console.log(err)
       })
     }
   }
   // 加载完成或失败事件
   s.total = 0 // 总页数
+  s.page = 0 // 当前页数, 因为当执行addPages或者addPages时会先s.page++, 实际页数是从1开始的
   s.completeCount = 0 // 完成页数
   s.onLoad = function (e, isError) {
     var target = e.target // canvas或者img
@@ -342,7 +373,7 @@ var PDFView = function (container, params) {
     if (s.params.onPageLoad) s.params.onPageLoad(s)
     // 全部加载完成回调
     s.completeCount++
-    if (s.completeCount === s.total) {
+    if (s.completeCount === (s.params.rows || s.total)) { // 如果有分页走分页比较
       // Callback onLoad
       if (s.params.onLoad) s.params.onLoad(s)
     }
