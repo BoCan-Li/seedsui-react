@@ -16,7 +16,6 @@ export default class Marquee extends Component {
   static defaultProps = {
     step: 50,
     duration: 300,
-    autoplay: 2000,
     direction: 'top',
     loop: true
   }
@@ -47,11 +46,11 @@ export default class Marquee extends Component {
       end: step * (list.length - 1),
       step,
       duration,
-      delay: autoplay,
+      delay: isNaN(autoplay) ? 2000 : Number(autoplay || 0),
       direction,
       loop
     });
-    if (autoplay) {
+    if (autoplay || isNaN(autoplay)) {
       this.instance.play();
     }
   }

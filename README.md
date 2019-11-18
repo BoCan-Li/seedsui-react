@@ -3173,6 +3173,7 @@ onClick = (...params) => {
 <Marquee
   list={list}
   onClick={this.onClick}
+  autoplay={5000}
   step={48}
   contentAttribute={{
     style: {height: '38px', padding: '5px 0'},
