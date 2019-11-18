@@ -3147,7 +3147,7 @@ import Mark from 'seedsui-react/lib/Mark';
   contentAttribute={单条属性 object, 默认无}
   step={一次移动数值 number, 默认50}
   duration={移动动画时长 number, 默认300}
-  delay={一次移动停留时长 number, 默认2000}
+  autoplay={一次滚动停留时长 number, 默认2000} // 为0时不再滚动
   direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
   loop={是否循环 bool, 默认true}
   onClick={点击 func(item, index), 默认无}
@@ -3998,9 +3998,9 @@ import pdfsrc from './../assets/pdfview.js'
 // 图片
 <PDFView pictures={["/demo/assets/pdfview.png"]}/>
 // PDF文件
-<PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/"/>
+<PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
 // PDFbase64编码
-<PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/"/>
+<PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
 ```
 [返回目录](#component)
 

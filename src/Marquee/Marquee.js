@@ -8,7 +8,7 @@ export default class Marquee extends Component {
     contentAttribute: PropTypes.object,
     step: PropTypes.number,
     duration: PropTypes.number,
-    delay: PropTypes.number,
+    autoplay: PropTypes.number, // 是否自动播放, 播放间隔毫秒数
     direction: PropTypes.string, // top | bottom | left | right
     loop: PropTypes.bool,
     onClick: PropTypes.func
@@ -16,7 +16,7 @@ export default class Marquee extends Component {
   static defaultProps = {
     step: 50,
     duration: 300,
-    delay: 2000,
+    autoplay: 2000,
     direction: 'top',
     loop: true
   }
@@ -36,21 +36,24 @@ export default class Marquee extends Component {
     this.instance.setStart(0);
     this.instance.setEnd(this.props.step * (this.props.list.length - 1));
     this.instance.update();
-    this.instance.play();
+    if (this.props.autoplay) {
+      this.instance.play();
+    }
   }
   init = () => {
-    const {list, step, duration, delay, direction, loop} = this.props;
-    const instance = new Instance(this.$el, {
+    const {list, step, duration, autoplay, direction, loop} = this.props;
+    this.instance = new Instance(this.$el, {
       start: 0,
       end: step * (list.length - 1),
       step,
       duration,
-      delay,
+      delay: autoplay,
       direction,
       loop
     });
-    instance.play();
-    this.instance = instance;
+    if (autoplay) {
+      this.instance.play();
+    }
   }
   // 过滤已经回调的属性
   filterProps = (props) => {
@@ -69,7 +72,7 @@ export default class Marquee extends Component {
       contentAttribute = {},
       step,
       duration,
-      delay,
+      autoplay,
       direction,
       loop,
       onClick,
