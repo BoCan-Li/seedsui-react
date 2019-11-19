@@ -37,6 +37,7 @@ export default class PDFView extends Component {
       cMapUrl,
       ...params,
       onLoad: (s) => {
+        console.log('全部加载完成')
         if (params.onLoad) params.onLoad(s)
         if (this.bscroll) {
           console.log('加载完成, bscroll刷新');

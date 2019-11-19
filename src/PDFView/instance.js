@@ -263,6 +263,7 @@ var PDFView = function (container, params) {
 
       s.pdf = pdf // 设置pdf
       s.total = s.pdf.numPages // 总页数
+      s.rows = s.params.rows > s.total ? s.total : s.params.rows
 
       s.addPages()
     }).catch(function (error) {
@@ -275,20 +276,21 @@ var PDFView = function (container, params) {
   // 加载图片
   s.loadImg = function () {
     s.total = s.pictures.length
+    s.rows = s.params.rows > s.total ? s.total : s.params.rows
     
     s.addPages()
   }
 
   // 加载下一页, 索引从1开始
   s.addPages = function () {
-    if (s.page * s.params.rows >= s.total) {
+    if (s.page * s.rows >= s.total) {
       console.log('pdf所有页面加载完成, 不需要再加载了')
       return
     }
     s.page++
     s.completeCount = 0
     let index = 1 // 起始索引
-    let rows = s.params.rows // 每页显示条数
+    let rows = s.rows // 每页显示条数
     let len = s.total // 结束索引
     if (rows) { // 如果有rows则走分页
       len = s.page * rows
@@ -353,6 +355,7 @@ var PDFView = function (container, params) {
   // 加载完成或失败事件
   s.total = 0 // 总页数
   s.page = 0 // 当前页数, 因为当执行addPages或者addPages时会先s.page++, 实际页数是从1开始的
+  s.rows = 0
   s.completeCount = 0 // 完成页数
   s.onLoad = function (e, isError) {
     var target = e.target // canvas或者img
@@ -373,7 +376,7 @@ var PDFView = function (container, params) {
     if (s.params.onPageLoad) s.params.onPageLoad(s)
     // 全部加载完成回调
     s.completeCount++
-    if (s.completeCount === (s.params.rows || s.total)) { // 如果有分页走分页比较
+    if (s.completeCount === (s.rows || s.total)) { // 如果有分页走分页比较
       // Callback onLoad
       if (s.params.onLoad) s.params.onLoad(s)
     }

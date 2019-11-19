@@ -30,7 +30,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 2}}/>
+        <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/"/>
         {/* <PDFView pictures={pictures} params={{rows: 0}}/> */}
       </Container>
     </Page>
