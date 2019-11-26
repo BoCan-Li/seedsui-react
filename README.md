@@ -135,8 +135,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [InputSelect](#inputselect) 选择框
 - [InputStar](#inputstar) 评分框
 - [InputText](#inputtext) 文本框
-- [InputVerify](#inputverify) 验证码文本框
-- [Verify](#verify) 验证码文本框
 - [Vott](#vott) 图片标注
 - [Jcrop](#jcrop) 图片裁切
 - [Legend](#legend) 标题
@@ -175,7 +173,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Titlebar](#titlebar) 标题栏
 - [Toast](#toast) 提示弹框
 - [Tree](#tree) 树结构
-- [Verify](#verify) 验证码文本框
 
 
 # Utils
