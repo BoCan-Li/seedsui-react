@@ -2236,7 +2236,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 <InputSelect
   // Input
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, option), 默认无}
+  onChange={值改变 func(e, value, options), 默认无}
 
   // Picker
   multiple={是否允许多选 bool, 默认false}
@@ -2269,9 +2269,9 @@ this.state = {
   ]
 }
 
-onChange = (e, value, option) => {
+onChange = (e, value, options) => {
   console.log(e.target)
-  console.log(value, option)
+  console.log(value, options)
   this.setState({
     value: value
   });

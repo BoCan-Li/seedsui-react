@@ -1,24 +1,40 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, PDFView} from '../../src'
-import pdfsrc from './../assets/pdfview.js';
-// const pictures = ['/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png', '/demo/assets/pdfview.png']
+import {Page, Header, Titlebar, Container, Bridge, InputSelect} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: '1'
+      list: [
+        {
+          key: '1',
+          value: '111'
+        },
+        {
+          key: '2',
+          value: '222'
+        },
+        {
+          key: '3',
+          value: '333'
+        }
+      ]
     }
   }
   componentDidMount () {
     Bridge.debug = true;
   }
-  onChange = (e, value) => {
-    console.log(value)
+  onChange = (item) => {
+    console.log(item)
+    let list = Object.clone(this.state.list);
+    for (let [index, li] of list.entries()) {
+      if (li && li.key === item.key) delete list[index];
+    }
+    console.log(list);
     this.setState({
-      value
+      list: list
     })
   }
   onClear = (...params) => {
@@ -30,8 +46,15 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/"/>
-        {/* <PDFView pictures={pictures} params={{rows: 0}}/> */}
+        <InputSelect
+          multiple
+          className="button lg bg-white"
+          inputAttribute={{className: 'text-center color-primary', style: {padding: '7px 0'}}}
+          style={{border$adius: '4px', margin: '10px 12px'}}
+          value={`+添加付费项目`}
+          list={this.state.list}
+          onChange={(e, value, options) => this.onChange(options[0])}
+        />
       </Container>
     </Page>
   }

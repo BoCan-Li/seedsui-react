@@ -47,7 +47,7 @@ export default class Picker extends Component {
       show
     } = this.props;
     if (this.instance) {
-      if (show) {
+      if (show && list.length) {
         this.setDefault();
         this.instance.show();
       } else {

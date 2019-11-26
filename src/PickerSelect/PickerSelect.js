@@ -138,6 +138,8 @@ export default class PickerSelect extends Component {
       optionAttribute = {},
       ...others
     } = this.props;
+    // 如果没有数据, 则不显示
+    if (!list || !list.length) return null;
     // 剔除掉onClick事件, 因为在instance时已经回调了
     maskAttribute = this.filterProps(maskAttribute)
     submitAttribute = this.filterProps(submitAttribute)
@@ -151,7 +153,7 @@ export default class PickerSelect extends Component {
             <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
           </div>
           <div className="pickerselect-wrapper">
-            {list && list.length > 0 && list.map((item, index) => {
+            {list.map((item, index) => {
               return <div key={index} {...optionAttribute} className={`pickerselect-option${optionAttribute.className ? ' ' + optionAttribute.className : ''}`} data-index={index}>
                 <p className="pickerselect-option-caption">{item.value}</p>
                 <i className="pickerselect-option-icon"></i>
