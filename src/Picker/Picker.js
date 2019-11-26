@@ -43,16 +43,16 @@ export default class Picker extends Component {
   }
   componentDidUpdate = () => {
     const {
-      list,
+      list = [],
       show
     } = this.props;
-    if (!list || !list.length) return;
     if (this.instance) {
       if (show) {
         this.setDefault();
         this.instance.show();
+      } else {
+        this.instance.hide()
       }
-      else this.instance.hide()
     } else {
       if (list.length > 0) {
         this.initInstance();

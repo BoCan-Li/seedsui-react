@@ -107,7 +107,7 @@ export default class InputPicker extends Component {
     });
   }
   render() {
-    const {
+    let {
       // Input
       onClick,
       onChange,
@@ -118,6 +118,11 @@ export default class InputPicker extends Component {
       pickerProps = {},
       ...others
     } = this.props;
+    // 过滤非法数据
+    list = list.filter(item => {
+      if (!item || !item.key || !item.value) return false;
+      return true;
+    });
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClickInput}/>,
       <Picker

@@ -46,10 +46,6 @@ export default class InputSelect extends Component {
     } = this.props;
     return value.join(pickerProps.split || ',');
   }
-  // 构建选中项
-  buildOptions = (options) => {
-    return this.props.multiple ? options : options[0]
-  }
   // 点击文本框
   onClickInput = (...parameter) => {
     const {
@@ -87,7 +83,7 @@ export default class InputSelect extends Component {
     // 获取值
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
     const value = this.buildValue(e.activeOptions);
-    const options = this.buildOptions(e.activeOptions);
+    const options = e.activeOptions;
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
       e.target = this.$input;
@@ -123,7 +119,7 @@ export default class InputSelect extends Component {
     });
   }
   render() {
-    const {
+    let {
       // Input
       onClick,
       onChange,
@@ -135,6 +131,11 @@ export default class InputSelect extends Component {
       pickerProps = {},
       ...others
     } = this.props;
+    // 过滤非法数据
+    list = list.filter(item => {
+      if (!item || !item.key || !item.value) return false;
+      return true;
+    });
     return [
       <InputText key="input" ref="$ComponentInputText" {...others} readOnly onClick={this.onClickInput}/>,
       <PickerSelect
