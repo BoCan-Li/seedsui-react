@@ -126,7 +126,7 @@ export default class InputSelect extends Component {
 
       // Picker
       multiple,
-      list,
+      list = [],
       valueForKey,
       pickerProps = {},
       ...others

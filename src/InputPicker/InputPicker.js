@@ -113,7 +113,7 @@ export default class InputPicker extends Component {
       onChange,
 
       // Picker
-      list,
+      list = [],
       valueForKey,
       pickerProps = {},
       ...others

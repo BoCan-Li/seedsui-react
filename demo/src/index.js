@@ -1,59 +1,43 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, InputSelect} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, InputPicker} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
-      list: [
-        {
-          key: '1',
-          value: '111'
-        },
-        {
-          key: '2',
-          value: '222'
-        },
-        {
-          key: '3',
-          value: '333'
-        }
-      ]
+      fee: {"name":"期间","id":"11","value":"2019-11","list":[{"key":"1","value":"2019-01"},{"key":"2","value":"2019-02"},{"key":"3","value":"2019-03"},{"key":"4","value":"2019-04"},{"key":"5","value":"2019-05"},{"key":"6","value":"2019-06"},{"key":"7","value":"2019-07"},{"key":"8","value":"2019-08"},{"key":"9","value":"2019-09"},{"key":"10","value":"2019-10"},{"key":"11","value":"2019-11"},{"key":"12","value":"2019-12"},{"key":"1","value":"2020-01"},{"key":"2","value":"2020-02"},{"key":"3","value":"2020-03"},{"key":"4","value":"2020-04"},{"key":"5","value":"2020-05"},{"key":"6","value":"2020-06"},{"key":"7","value":"2020-07"},{"key":"8","value":"2020-08"},{"key":"9","value":"2020-09"},{"key":"10","value":"2020-10"},{"key":"11","value":"2020-11"},{"key":"12","value":"2020-12"}]}
     }
   }
   componentDidMount () {
     Bridge.debug = true;
   }
-  onChange = (item) => {
-    console.log(item)
-    let list = Object.clone(this.state.list);
-    for (let [index, li] of list.entries()) {
-      if (li && li.key === item.key) delete list[index];
-    }
-    console.log(list);
+  onChange = (e, value, options) => {
+    let item = options[0];
+    let fee = Object.clone(this.state.fee);
+    fee.value = item.value;
+    fee.id = item.id;
     this.setState({
-      list: list
+      fee: fee
     })
   }
   onClear = (...params) => {
     console.log(...params)
   }
   render() {
+    const {fee} = this.state;
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
         <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
       </Header>
       <Container>
-        <InputSelect
-          multiple
-          className="button lg bg-white"
-          inputAttribute={{className: 'text-center color-primary', style: {padding: '7px 0'}}}
-          style={{border$adius: '4px', margin: '10px 12px'}}
-          value={`+添加付费项目`}
-          list={this.state.list}
-          onChange={(e, value, options) => this.onChange(options[0])}
+        <InputPicker
+          value={fee.value}
+          valueForKey={fee.id}
+          list={fee.list}
+          onChange={this.onChange}
+          ricon={<i className="icon shape-arrow-right sm"></i>}
         />
       </Container>
     </Page>

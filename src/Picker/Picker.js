@@ -118,6 +118,7 @@ export default class Picker extends Component {
     const defaultOpt = this.getDefaults();
     let key = '';
     if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
+    console.log(key)
     this.instance.addSlot(list, key, slotAttribute.className || 'text-center');
     if (show && this.instance) {
       this.instance.show()
