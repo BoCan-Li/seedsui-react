@@ -1,7 +1,18 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, Ticket} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, Marquee} from '../../src'
+
+const list = [
+  {
+    key: '1',
+    value: '标题标题1'
+  },
+  {
+    key: '2',
+    value: '标题标题2'
+  }
+];
 
 class Demo extends Component {
   constructor(props){
@@ -26,20 +37,16 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <Ticket onClick={this.onClick} style={{margin: '12px 14px'}} legend={
-            <div className="text-center">
-              <p style={{fontSize: '20px'}}>标题</p>
-              <p style={{fontSize: '12px', marginTop: '4px'}}>满30元可用</p>
-            </div>
-          }
-          containerStyle={{padding: '12px'}}>
-          <div className="flex flex-top" style={{height: '60px'}}>
-            <p className="list-caption nowrap2 flex-1" style={{height: '40px'}}>商品名称 规格</p>
-          </div>
-          <div className="flex">
-            <p className="list-sndcaption font-size-sm flex-1">2017-07-07</p>
-          </div>
-        </Ticket>
+        <Marquee
+          list={list}
+          onClick={this.onClick}
+          autoplay={5000}
+          step={48}
+          contentAttribute={{
+            style: {height: '38px', padding: '5px 0'},
+            className: 'flex flex-center nowrap2'
+          }}
+        />
       </Container>
     </Page>
   }

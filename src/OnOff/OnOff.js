@@ -26,7 +26,7 @@ export default class OnOff extends Component {
       ...others
     } = this.props;
     return (
-      <div {...others} className={`onoff${others.className ? ' ' + others.className : ''}${onAttribute.caption && offAttribute.caption ? '' : ' notext'}${checked ? ' active' : ''}`} data-on={onAttribute.caption || ''} data-off={offAttribute.caption || ''} data-readonly={readOnly} data-disabled={disabled} onClick={(e) => onClick(e, checked)}>
+      <div {...others} className={`onoff${others.className ? ' ' + others.className : ''}${onAttribute.caption && offAttribute.caption ? '' : ' notext'}${checked ? ' active' : ''}`} data-on={onAttribute.caption || ''} data-off={offAttribute.caption || ''} data-readonly={readOnly} data-disabled={disabled} onClick={(e) => {if (onClick) onClick(e, checked)}}>
         <div className="onoff-handle"></div>
       </div>
     );

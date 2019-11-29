@@ -84,7 +84,7 @@ export default class Marquee extends Component {
     return (
       <ul ref={el => {this.$el = el;}} {...others} className={`marquee${others.className ? ' ' + others.className : ''}`}>
         {list && list.map((item, index) => {
-          return <li key={index} {...contentAttribute} className={`marquee-li${contentAttribute.className ? ' ' + contentAttribute.className : ''}`} style={Object.assign({height: step + 'px'}, contentAttribute.style || {})} onClick={(e) => {onClick(e, item, index)}}>{item.value}</li>
+          return <li key={index} {...contentAttribute} className={`marquee-li${contentAttribute.className ? ' ' + contentAttribute.className : ''}`} style={Object.assign({height: step + 'px'}, contentAttribute.style || {})} onClick={(e) => {if (onClick) onClick(e, item, index)}}>{item.value}</li>
         })}
       </ul>
     );
