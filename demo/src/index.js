@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, InputPicker} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, Ticket} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -13,14 +13,8 @@ class Demo extends Component {
   componentDidMount () {
     Bridge.debug = true;
   }
-  onChange = (e, value, options) => {
-    let item = options[0];
-    let fee = Object.clone(this.state.fee);
-    fee.value = item.value;
-    fee.id = item.id;
-    this.setState({
-      fee: fee
-    })
+  onClick = (e) => {
+    console.log(e)
   }
   onClear = (...params) => {
     console.log(...params)
@@ -29,16 +23,23 @@ class Demo extends Component {
     const {fee} = this.state;
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
-        <Titlebar caption="SeedsUI" backButtonAttribute={{onClick: this.onClick}} rButtons={[{iconAttribute: {className: 'icon-ok-fill'}, onClick: this.onSubmit}]}/>
+        <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <InputPicker
-          value={fee.value}
-          valueForKey={fee.id}
-          list={fee.list}
-          onChange={this.onChange}
-          ricon={<i className="icon shape-arrow-right sm"></i>}
-        />
+        <Ticket onClick={this.onClick} style={{margin: '12px 14px'}} legend={
+            <div className="text-center">
+              <p style={{fontSize: '20px'}}>标题</p>
+              <p style={{fontSize: '12px', marginTop: '4px'}}>满30元可用</p>
+            </div>
+          }
+          containerStyle={{padding: '12px'}}>
+          <div className="flex flex-top" style={{height: '60px'}}>
+            <p className="list-caption nowrap2 flex-1" style={{height: '40px'}}>商品名称 规格</p>
+          </div>
+          <div className="flex">
+            <p className="list-sndcaption font-size-sm flex-1">2017-07-07</p>
+          </div>
+        </Ticket>
       </Container>
     </Page>
   }

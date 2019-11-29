@@ -4359,9 +4359,9 @@ onClickTab = (item, index) => {
 ```javascript
 import Ticket from 'seedsui-react/lib/Ticket';
 
-<Ticket onClick={this.onClick} className={disabled ? 'disabled' : ''} style={{margin: '12px 14px'}} legend={
+<Ticket onClick={this.onClick} style={{margin: '12px 14px'}} legend={
     <div className="text-center">
-      <p style={{fontSize: '20px'}}>{item.num}{item.input_unit_name}</p>
+      <p style={{fontSize: '20px'}}>标题</p>
       <p style={{fontSize: '12px', marginTop: '4px'}}>满30元可用</p>
     </div>
   }
@@ -4371,7 +4371,6 @@ import Ticket from 'seedsui-react/lib/Ticket';
   </div>
   <div className="flex">
     <p className="list-sndcaption font-size-sm flex-1">2017-07-07</p>
-    <Price price={item.amount} unit="元" className="normal color-primary"/>
   </div>
 </Ticket>
 ```
