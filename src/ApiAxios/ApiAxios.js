@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // axios 默认配置
 // axios.defaults.timeout = 5000
-axios.defaults.headers.post['Content-Type'] = 'application/jsoncharset=UTF-8'
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 // 构建get请求参数, get请求需要把url和data拼接起来
 function buildGetUrl (url, params) {
