@@ -234,6 +234,10 @@ var Bridge = {
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
+    if (Device.device === 'pc') {
+      window.open(params.url)
+      return
+    }
     if (params.url) window.location.href = params.url
   },
   // 关闭窗口
