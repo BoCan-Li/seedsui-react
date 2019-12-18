@@ -3561,8 +3561,8 @@ import Peg from 'seedsui-react/lib/Peg';
   {...others}
   list={照片列表 array, 默认无} // [{thumb: '', src: ''}]
   uploading={是否上传中 bool, 默认无}
-  onFile={file框onChange事件监听 func, 默认无, 有此属性才会显示上传按钮中的file框}
-  onChoose={点击上传选择 func, 默认无, 有此属性才会显示上传按钮}
+  onFile={file框onChange事件监听 func, 默认无, 有此属性或onChoose属性才会显示上传按钮}
+  onChoose={点击上传选择 func, 默认无, 有此属性或onFile属性才会显示上传按钮}
   onDelete={点击上传选择 func, 默认无, 有此属性才会显示删除按钮}
   onClick={点击一项 func, 默认无}
 />

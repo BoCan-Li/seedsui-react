@@ -61,7 +61,7 @@ export default class Photos extends Component {
         </div>
       })}
       {/* 图片上传: 上传按钮 */}
-      {onChoose && <div className="photos-item photos-upload">
+      {(onChoose || onFile) && <div className="photos-item photos-upload">
         {onFile && <input type="file" name="uploadPic" onChange={this.onFile} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
         {uploading && <div className="photos-upload-loading">
           <div className="photos-upload-loading-icon"></div>
