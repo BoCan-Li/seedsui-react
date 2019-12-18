@@ -744,8 +744,9 @@ var Bridge = {
     【5】根据dms_type=4选择的客户筛选经销商，需要传dms_cm_id、dms_trade_type参数，如果客户是终端，则选择终端所属的经销商，
     如果客户是经销商，则选择上级经销商(（业代：销售订单(又称分销订单)选供货商）)。
     【6】获取当前人所属的经销商的上级经销商
+    setEmployeeId: '1'自动补充semployeeId
   ----------------------------------------------------- */
-  getCustomerMore: function (params = {}) { // {isonline: '1.在线0.离线', selectedIds: 'id,id', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', success([{id: '', name: ''}])}
+  getCustomerMore: function (params = {}) { // {isonline: '1.在线0.离线', selectedIds: 'id,id', setEmployeeId: '1', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', success([{id: '', name: ''}])}
     wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
       if (params.success) params.success(args)
     }, JSON.stringify(Object.assign({hiddenAdd: true}, params)));

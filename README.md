@@ -3552,6 +3552,62 @@ import Peg from 'seedsui-react/lib/Peg';
 
 
 
+## Photos
+[小竖条](https://unpkg.com/seedsui-react/src/lib/Photos/Photos.js)
+### 属性
+```javascript
+<Photos
+  className={图标className string, 默认无, 基础'peg'}
+  {...others}
+  list={照片列表 array, 默认无} // [{thumb: '', src: ''}]
+  uploading={是否上传中 bool, 默认无}
+  onFile={file框onChange事件监听 func, 默认无, 有此属性才会显示上传按钮中的file框}
+  onChoose={点击上传选择 func, 默认无, 有此属性才会显示上传按钮}
+  onDelete={点击上传选择 func, 默认无, 有此属性才会显示删除按钮}
+  onClick={点击一项 func, 默认无}
+/>
+```
+### 示例
+```javascript
+import Photos from 'seedsui-react/lib/Photos';
+this.state = {
+  list: [{
+    id: '1',
+    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+    src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+  },{
+    id: '2',
+    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+    src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+  }]
+}
+onClick = (...params) => {
+  console.log(...params)
+}
+onChoose = (...params) => {
+  console.log(...params)
+}
+onDelete = (...params) => {
+  console.log(...params)
+}
+onFile = (...params) => {
+  console.log(...params)
+}
+
+<Photos
+  list={this.state.list}
+  onFile={this.onFile}
+  onChoose={this.onChoose}
+  onDelete={this.onDelete}
+  onClick={this.onClick}
+/>
+```
+[返回目录](#component)
+
+
+
+
+
 ## Picker
 [滚动选择弹框](https://unpkg.com/seedsui-react/src/lib/Picker/Picker.js)
 ### 属性
