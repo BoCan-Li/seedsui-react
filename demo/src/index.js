@@ -15,11 +15,23 @@ class Demo extends Component {
         id: '2',
         thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
         src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
+      },{
+        id: '2',
+        thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a64767.jpg',
+        src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a64767.jpg'
       }]
     }
   }
   componentDidMount () {
     Bridge.debug = true;
+    Bridge.confirmCaption = '1';
+    setTimeout(() => {
+      Bridge.getLocation({
+        success: (res) => {
+          console.log(res)
+        }
+      });
+    }, 1000);
   }
   onClick = (...params) => {
     console.log(...params)

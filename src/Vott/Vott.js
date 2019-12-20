@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
-import BridgeBrowser from './../Bridge/bridgeBrowser';
+import BridgeBrowser from './../Bridge/browser';
 
 export default class Vott extends Component {
   static propTypes = {

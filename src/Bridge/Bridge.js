@@ -1,23 +1,39 @@
 import Device from './../Device'
-import BridgeBrowser from './bridgeBrowser'
-import BridgeWeixin from './bridgeWeixin'
-import BridgeDinghuo from './bridgeDinghuo'
-import BridgeWaiqin from './bridgeWaiqin'
+import BridgeBase from './base'
+import BridgeBrowser from './browser'
+import BridgeWeixin from './wx'
+import BridgeDinghuo from './dinghuo'
+import BridgeWaiqin from './wq'
 
 
 var Bridge = {}
 if (Device.platform === 'weixin') {
-  Bridge = BridgeWeixin
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeWeixin
+  }
 } else if (Device.platform === 'weixinwork') {
-  Bridge = BridgeWeixin
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeWeixin
+  }
 } else if (Device.platform === 'dinghuo') {
-  Bridge = BridgeDinghuo
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeDinghuo
+  }
   Bridge.config()
 } else if (Device.platform === 'waiqin') {
-  Bridge = BridgeWaiqin
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeWaiqin
+  }
   Bridge.config()
 } else {
-  Bridge = BridgeBrowser
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeBrowser
+  }
 }
 
 export default Bridge

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import Bridge from './../Bridge';
-import BridgeBrowser from './../Bridge/bridgeBrowser';
+import BridgeBrowser from './../Bridge/browser';
 
 if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 

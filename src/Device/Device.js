@@ -241,7 +241,7 @@ var Device = (function () {
     getUrlParameter: getUrlParameter,
     screenWidth: getScreenWidth(),
     screenHeight: getScreenHeight(),
-    compareVersion: function (s1, s2) {
+    compareVersion: function (s1, s2) { // 比较版本号, -1小于 0等于 1大于
       // 不考虑字母
       function s2i(s) {
         return s.split('').reduce(function (a, c) {

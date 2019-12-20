@@ -1,264 +1,17 @@
-import jsonp from './../jsonp';
 import DB from './../DB';
 import Device from './../Device';
-import Toast from './../Toast/instance.js';
-import Alert from './../Alert/instance.js';
-import Loading from './../Loading/instance.js';
 
 if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
 var Bridge = {
   /**
-  * 基础功能:start
-  */
-  debug: false,
-  // 拨打电话
-  tel: function (number) {
-    if (Device.device === 'pc') {
-      this.showToast(window._seeds_lang['hint_only_mobile'] || '此功能仅可在手机中使用')
-      return
-    }
-    if (isNaN(number)) return
-    window.location.href = 'tel:' + number
-  },
-  // 弹出toast
-  toast: null,
-  showToast: function (msg, params = {}) {
-    if (!msg) return
-    if (!this.toast) {
-      // 提示错误
-      this.toast = new Toast({
-        parent: document.body,
-        maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
-        toastClass: 'toast ' + (params.position ? params.position : 'middle'),
-        icon: params.icon || '',
-        html: msg,
-        delay: params.delay || 2000
-      });
-    } else {
-      this.toast.setHTML(msg)
-      this.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
-      this.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
-      this.toast.setIcon(params.icon || '')
-      this.toast.setDelay(params.delay || 2000)
-    }
-    this.toast.show()
-    if (params.success) {
-      setTimeout(() => {
-        params.success()
-      }, params.delay ? Math.round(params.delay / 2) : 1000)
-    }
-  },
-  // 弹出loading
-  loading: null,
-  showLoading: function (params = {}) {
-    if (!this.loading) {
-      this.loading = new Loading({
-        caption: params.caption || (window._seeds_lang['loading'] || '正在加载...'),
-        type: params.type,
-        icon: params.icon || '',
-        maskCss: params.css || null
-      });
-    } else {
-      if (params.caption) this.loading.setCaption(params.caption)
-      if (params.type) this.loading.setType(params.type)
-      if (params.css) this.loading.setMaskCss(params.css)
-      if (params.icon) this.toast.setIcon(params.icon || '')
-      if (params.mask) this.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
-    }
-    this.loading.show()
-  },
-  hideLoading: function () {
-    if (!this.loading) {
-      this.toast.showToast(window._seeds_lang['hint_hideloading_after_showloading'] || 'showLoading后才能hideLoading')
-    } else {
-      this.loading.hide()
-    }
-  },
-  // 弹出Alert
-  alert: null,
-  showAlert: function (msg, params = {}) {
-    if (!this.alert) {
-      this.alert = new Alert({
-        ...params,
-        html: msg,
-        onClickSubmit: function (e) {
-          if (params.success) params.success(e)
-          else e.hide()
-        }
-      });
-    } else {
-      if (params) {
-        this.alert.reset()
-        for (let n in params) {
-          this.alert.params[n] = params[n]
-        }
-        this.alert.updateDOM()
-        this.alert.setHTML(msg)
-      }
-    }
-    this.alert.show()
-  },
-  // 弹出Confirm
-  confirm: null,
-  showConfirm: function (msg, params = {}) {
-    if (!this.confirm) {
-      this.confirm = new Alert({
-        ...params,
-        html: msg,
-        onClickSubmit: function (e) {
-          if (params.success) params.success(e)
-        },
-        onClickCancel: function(e) {
-          if (params.fail) params.fail(e)
-          else e.hide()
-        }
-      })
-    } else {
-      if (params) {
-        this.confirm.reset()
-        for (let n in params) {
-          this.confirm.params[n] = params[n]
-        }
-        this.confirm.updateDOM()
-        if (params.success) this.confirm.setOnClickSubmit(params.success)
-        if (params.fail) this.confirm.setOnClickCancel(params.fail)
-      }
-      this.confirm.setHTML(msg)
-    }
-    this.confirm.show()
-  },
-  /**
-   * 百度地图:获取当前位置名称,只支持gcj02
-   * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
-   * @returns {Object} {address:'地址全称'}
-   */
-  getAddress: function (params = {}) {
-    var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
-    jsonp(url, null, (err, data) => {
-      if (err) {
-        if (params.fail) params.fail({errMsg: `getAddress:${window._seeds_lang['hint_address_failed'] || '获取地址失败, 请稍后重试'}` + err})
-      } else {
-        var addrs = {}
-        if (data.result && data.result.formatted_address) {
-          addrs.address = data.result.formatted_address
-          if (params.success) params.success(addrs)
-        } else {
-          if (params.fail) params.fail({errMsg: `getAddress:${window._seeds_lang['hint_address_failed'] || '获取地址失败, 请稍后重试'}`})
-        }
-      }
-    })
-  },
-  /**
-   * 百度地图:获得天气
-   * @param {Object} params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', success: fn, fail: fn}
-   * @returns {Object} 天气信息results
-   */
-  getWeather: function (params = {}) {
-    var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
-    jsonp(url, null, (err, data) => {
-      if (err) {
-        if (params.fail) params.fail({errMsg: `getWeather:${window._seeds_lang['hint_weather_failed'] || '获取天气失败, 请稍后重试'}` + err})
-      } else {
-        if (data.results && data.results.length) {
-          if (params.success) params.success(data.results)
-        } else {
-          if (params.fail) params.fail({errMsg: `getWeather:${window._seeds_lang['hint_weather_failed'] || '获取天气失败, 请稍后重试'}`})
-        }
-      }
-    })
-  },
-  // 客户端默认返回控制
-  back: function (argHistory, argBackLvl) {
-    // 返回操作对象与返回层级
-    var _history = window.history
-    if (argHistory && argHistory.go) _history = argHistory
-    var _backLvl = argBackLvl || -1
-    
-    // 返回类型
-    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
-    if (isFromApp === '1') { // 关闭当前页面
-      try {
-        Bridge.closeWindow()
-      } catch (error) {
-        console.log(error)
-      }
-    } else if (isFromApp === 'home') { // 返回首页
-      try {
-        Bridge.goHome()
-      } catch (error) {
-        console.log(error)
-      }
-    } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      Bridge.showConfirm(Bridge.confirmCaption || (window._seeds_lang['confirm_quit_page'] || '您确定要离开此页面吗?'), {
-        success: (e) => {
-          e.hide()
-          _history.go(_backLvl)
-        }
-      });
-    } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      Bridge.showConfirm(Bridge.confirmCaption || (window._seeds_lang['confirm_quit_page'] || '您确定要离开此页面吗?'), {
-        success: (e) => {
-          e.hide()
-          Bridge.closeWindow()
-        }
-      });
-    } else if (isFromApp === 'custom') {
-      console.log('自定义')
-    } else { // 返加上一页
-      _history.go(_backLvl)
-    }
-  },
-  // 判断是否是主页
-  isHomePage: function (callback, rule) {
-    if (rule && window.location.href.indexOf(rule) >= 0) {
-      callback(true)
-      return
-    }
-    callback(false)
-  },
-  // 获得版本信息
-  getAppVersion: function () {
-    const ua = navigator.userAgent;
-    var verExp = ua.match(/WqAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
-    if (verExp && verExp[1]) return verExp[1].trim();
-    return '';
-  },
-  // 返回首页
-  goHome: function () {
-    window.history.go(-1)
-  },
-  // 退出到登陆页面
-  logOut: function (msg) {
-    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
-  },
-  // 打开新的窗口
-  openWindow: function (params, callback) {
-    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
-  },
-  // 关闭当前窗
-  closeWindow: function () {
-    wq.wqload.wqClosePage() // eslint-disable-line
-  },
-  // 客户端返回绑定
-  addBackPress: function (callback) {
-    document.addEventListener('backbutton', callback || this.back, false) // eslint-disable-line
-  },
-  // 客户端移除返回绑定
-  removeBackPress: function (callback) {
-    document.removeEventListener('backbutton', callback || this.back, false) // eslint-disable-line
-  },
-  /**
-  * 基础功能:end
-  */
-
-  /**
   * 定制功能
   */
   platform: 'waiqin',
   config: function () {
+    var self = this
     document.addEventListener('deviceready', () => {
-      this.addBackPress()
+      self.addBackPress()
       DB.setSession('bridge_isready', '1')
     })
   },
@@ -360,8 +113,9 @@ var Bridge = {
     @params {src: '视频地址', title: '标题'}
   ----------------------------------------------------- */
   previewVideo: function (params = {}) {
-    if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast('视频播放功能需要升级至6.2.2及以上的客户端', {mask: false})
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
+      self.showToast('视频播放功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqload.wqOpenCustomerPager(JSON.stringify({ // eslint-disable-line
@@ -383,8 +137,9 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒'}
   ----------------------------------------------------- */
   videoRecord: function (params = {}) {
-    if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast(window._seeds_lang['hint_video_record_version'] || '视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
+      self.showToast(window._seeds_lang['hint_video_record_version'] || '视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoRecord((res) => { // eslint-disable-line
@@ -392,7 +147,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoRecord:录制失败'})
-        else Bridge.showToast(window._seeds_lang['hint_video_record_version'] || '录制失败', {mask: false})
+        else self.showToast(window._seeds_lang['hint_video_record_version'] || '录制失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -402,8 +157,9 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: ''}
   ----------------------------------------------------- */
   videoUpload: function (params = {}) {
-    if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast(window._seeds_lang['hint_video_upload_version'] || '视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
+      self.showToast(window._seeds_lang['hint_video_upload_version'] || '视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoUpload((res) => { // eslint-disable-line
@@ -411,7 +167,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
-        else Bridge.showToast(window._seeds_lang['hint_video_upload_failed'] || '上传失败', {mask: false})
+        else self.showToast(window._seeds_lang['hint_video_upload_failed'] || '上传失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -421,8 +177,9 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: '仅在hasUpload=1的情况下返回', hasVideo: '0|1', hasUpload: '0|1}
   ----------------------------------------------------- */
   videoInfo: function (params = {}) {
-    if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast(window._seeds_lang['hint_video_info_version'] || '视频功能需要升级至6.2.2及以上的客户端', {mask: false})
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
+      self.showToast(window._seeds_lang['hint_video_info_version'] || '视频功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoInfo((res) => { // eslint-disable-line
@@ -438,6 +195,7 @@ var Bridge = {
     @return {resultStr:''}
   ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
+    var self = this
     wq.wqhardware.getQrCode((res) => { // eslint-disable-line
       if (res && res.qrCode) {
         var wqRes = res
@@ -445,7 +203,7 @@ var Bridge = {
         if (params && params.success) params.success(wqRes)
       } else {
         if (params.fail) params.fail({errMsg: `scanQRCode:${window._seeds_lang['hint_scan_failed'] || '扫码失败'}, ${window._seeds_lang['hint_try_again_later'] || '请稍后重试'}`})
-        else Bridge.showToast(`scanQRCode:${window._seeds_lang['hint_scan_failed'] || '扫码失败'}, ${window._seeds_lang['hint_try_again_later'] || '请稍后重试'}`, {mask: false})
+        else self.showToast(`scanQRCode:${window._seeds_lang['hint_scan_failed'] || '扫码失败'}, ${window._seeds_lang['hint_try_again_later'] || '请稍后重试'}`, {mask: false})
       }
     })
   },
@@ -476,6 +234,7 @@ var Bridge = {
     }
   ----------------------------------------------------- */
   getLocation: function (params = {}) {
+    var self = this
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
     if (appLocation === 'undefined') {
@@ -493,12 +252,12 @@ var Bridge = {
     }
 
     // 调用定位
-    if (this.locating) return
-    this.locating = true
+    if (self.locating) return
+    self.locating = true
     console.log('调用定位...')
     // 调用定位
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
-      this.locating = false
+      self.locating = false
       if (res && res.wqLatitude) {
         // 格式化为标准的返回信息
         var location = {
@@ -518,7 +277,7 @@ var Bridge = {
         if (params.success) params.success(location)
       } else {
         if (params.fail) params.fail({errMsg: `getLocation: ${window._seeds_lang['hint_location_failed'] || '定位失败,请检查定位权限是否开启'}`})
-        else Bridge.showToast(window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启', {mask: false})
+        else self.showToast(window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -542,6 +301,7 @@ var Bridge = {
     }
   ----------------------------------------------------- */
   getLocationMap: function (params = {}) {
+    var self = this
     wq.wqlocation.getLocationMap((res) => { // eslint-disable-line
       if (res && res.wqLatitude) {
         // 格式化为标准的返回信息
@@ -561,7 +321,7 @@ var Bridge = {
         if (params.success) params.success(location)
       } else {
         if (params.fail) params.fail({errMsg: `getLocationMap:${window._seeds_lang['hint_location_map_failed'] || '定位失败, 请检查外勤365定位权限是否开启'}`})
-        else Bridge.showToast(window._seeds_lang['hint_location_map_failed'] || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
+        else self.showToast(window._seeds_lang['hint_location_map_failed'] || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -664,12 +424,13 @@ var Bridge = {
     @return 无
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
+    var self = this
     if (!params.dir) {
-      Bridge.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录', {mask: false})
+      self.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录', {mask: false})
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      Bridge.showToast(window._seeds_lang['hint_upload_image_must_localIds'] || '没有上传图片地址', {mask: false})
+      self.showToast(window._seeds_lang['hint_upload_image_must_localIds'] || '没有上传图片地址', {mask: false})
       return;
     }
     // 格式化params
@@ -698,8 +459,9 @@ var Bridge = {
     * }
     */
   previewImage: function (argParams) {
+    var self = this
     if (!argParams.urls || !argParams.urls.length) {
-      Bridge.showToast(window._seeds_lang['hint_preview_image_must_urls'] || '没有预览图片地址', {mask: false})
+      self.showToast(window._seeds_lang['hint_preview_image_must_urls'] || '没有预览图片地址', {mask: false})
       return
     }
     // 格式化index
@@ -762,8 +524,9 @@ var Bridge = {
     }, JSON.stringify(params))
   },
   getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
-    if (Device.platformVersion < '6.2.2') {
-      Bridge.showToast(window._seeds_lang['hint_get_customer_area_more_version'] || '此功能需要升级至6.2.2及以上的客户端', {mask: false})
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
+      self.showToast(window._seeds_lang['hint_get_customer_area_more_version'] || '此功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
@@ -814,12 +577,13 @@ var Bridge = {
     @params {ios: {url: '', params: {}}, android: {url: '', params: {}}}默认为打开一个webview页面
   ----------------------------------------------------- */
   openNativePage: function (params = {ios: {}, android: {}}) {
+    var self = this
     if (!params.ios.url) {
-      Bridge.showToast(window._seeds_lang['hint_open_native_page_must_ios_url'] || 'ios参数url不能为空', {mask: false})
+      self.showToast(window._seeds_lang['hint_open_native_page_must_ios_url'] || 'ios参数url不能为空', {mask: false})
       return
     }
     if (!params.android.url) {
-      Bridge.showToast(window._seeds_lang['hint_open_native_page_must_android_url'] || 'android参数url不能为空', {mask: false})
+      self.showToast(window._seeds_lang['hint_open_native_page_must_android_url'] || 'android参数url不能为空', {mask: false})
       return
     }
     window.wq.wqload.wqOpenCustomerPager({
@@ -828,46 +592,6 @@ var Bridge = {
       IOSViewController: params.ios.url,
       IOSParma: params.ios.params
     })
-  },
-  /* 封装图片控件,使用示例见ImgUploader组件
-  bridge.Image({
-    onChooseSuccess: function (imgMap) {},
-  })
-  */
-  Image: function (params = {}) {
-    var s = this
-    var msg = ''
-    // 选择照片
-    s.choose = function (args) {
-      var option = {
-        enableSafe: args.enableSafe || false, // 安全上传,第次只能传一张
-        max: args.max || 5,
-        currentCount: args.currentCount || 0,
-        sourceType: args.sourceType || ['album', 'camera'],
-        sizeType: args.sizeType || ['original', 'compressed'],
-        chooseOptions: args.chooseOptions || {}
-      }
-      /* watermark: {
-        photoType: 'xx', // 水印名称
-        customerName: 'xx', // 客户名
-      } */
-      var count = option.max - option.currentCount
-      if (count <= 0) {
-        msg = (window._seeds_lang['hint_max_upload'] || '最多只能传') + option.max + (window._seeds_lang['photos'] || '张照片')
-        Bridge.showToast(msg)
-        return
-      }
-      // 如果设置了安全上传,则每次只允许上传一张
-      if (option.enableSafe) count = 1
-      Bridge.chooseImage(Object.assign({
-        count: count, // 默认5
-        sizeType: option.sizeType, // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: option.sourceType, // 可以指定来源是相册还是相机，默认二者都有camera|album
-        success: function (res, imgMap) {
-          if(params.onChooseSuccess) params.onChooseSuccess(imgMap, res)
-        }
-      }, option.chooseOptions))
-    }
   }
 }
 
