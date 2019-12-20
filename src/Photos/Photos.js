@@ -15,6 +15,7 @@ export default class Photos extends Component {
   constructor(props) {
     super(props);
   }
+  // 点击整个photos容器
   onClick = (e) => {
     const {list, onChoose, onDelete, onClick} = this.props;
     const target = e.target;
@@ -28,9 +29,20 @@ export default class Photos extends Component {
       if (onChoose) onChoose(e);
     }
   }
+  // 点击file框
   onFile = (e) => {
     if (this.props.onFile) this.props.onFile(e);
     e.target.value = ''; // 防止选择重复图片时不触发
+  }
+  // 图片加载完成
+  onLoad = (e) => {
+    var target = e.target;
+    target.parentNode.setAttribute('data-complete', '1');
+  }
+  // 图片加载失败
+  onError = (e) => {
+    var target = e.target;
+    target.parentNode.setAttribute('data-complete', '0');
   }
   render() {
     const {
@@ -55,9 +67,12 @@ export default class Photos extends Component {
           className={`photos-item${item.className ? ' ' + item.className: ''}`}
           style={Object.assign({backgroundImage: `url(${item.thumb})`}, item.style || {})}
         >
-            {onDelete && <div className="photos-delete">
-              <div className="photos-delete-icon"></div>
-            </div>}
+          <img className="photos-item-img" src={item.thumb} alt="" onLoad={this.onLoad} onError={this.onError}/>
+          <div className="photos-item-error"></div>
+          <div className="photos-item-load"></div>
+          {onDelete && <div className="photos-delete">
+            <div className="photos-delete-icon"></div>
+          </div>}
         </div>
       })}
       {/* 图片上传: 上传按钮 */}
