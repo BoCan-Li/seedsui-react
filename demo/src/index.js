@@ -12,7 +12,7 @@ class Demo extends Component {
     Bridge.debug = true;
   }
   onLoad = (s) => {
-    console.log(s)
+    console.log('宽:' + s.width + ', 高:' + s.height + ' 除以比例' + s.scale + ' 等于宽:' + s.pageWidth +  ' 高:' + s.pageHeight);
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
@@ -21,6 +21,7 @@ class Demo extends Component {
       </Header>
       <Container>
         <PDFView zoom={false} src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3, onLoad: this.onLoad}}/>
+        {/* <PDFView pictures={["/demo/assets/pdfview.png"]} params={{rows: 3, onLoad: this.onLoad}}/> */}
       </Container>
     </Page>
   }

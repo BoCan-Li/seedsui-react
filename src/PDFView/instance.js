@@ -28,6 +28,8 @@ var PDFView = function (container, params) {
     pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js',
 
     rows: 5,
+
+    pageElements: null, // page内子元素
     /*
     callbacks
     onInit:function(PDFView)
@@ -35,6 +37,13 @@ var PDFView = function (container, params) {
     onLoad:function(PDFView)
     */
   }
+  // pageElements = [{
+  //   page: 0,
+  //   x: 0,
+  //   y: 0,
+  //   element: <input/>
+  //   ...其它属性将透传
+  // }]
   params = params || {}
   for (var def in defaults) {
     if (params[def] === undefined) {
@@ -106,8 +115,8 @@ var PDFView = function (container, params) {
   }
   // 计算宽高比例
   s.scale = 1
-  s.updateScale = function (target) {
-    s.scale = s.container.clientWidth / target.width
+  s.updateScale = function () {
+    s.scale = s.container.clientWidth / s.width
   }
   // 互斥显示一页中的指定元素: canvas、img、load、error
   s.showPageElement = function (pageDOM, elementName) {
@@ -298,7 +307,8 @@ var PDFView = function (container, params) {
       if (len > s.total) len = s.total
     }
     for (let i = index; i <= len; i++) {
-      if (s.pictures) { // 如果有图片, 则认为是图片分页
+      // 图片分页
+      if (s.pictures) {
         // 创建页
         var pageDOM = s.createPage()
         pageDOM.setAttribute(s.params.pageAttr, i)
@@ -309,7 +319,7 @@ var PDFView = function (container, params) {
         img.addEventListener('error', s.onError, false)
         continue;
       }
-      // pdf分页
+      // pdf文件分页
       s.pdf.getPage(i).then((page) => {
         let viewport = page.getViewport(1)
         // 创建页
@@ -321,15 +331,15 @@ var PDFView = function (container, params) {
         // 设置canvas的宽高
         canvas.height = viewport.height
         canvas.width = viewport.width
-        s.updateScale(canvas)
-        canvas.style.WebkitTransform = `scale(${s.scale})`
-        canvas.style.WebkitTransformOrigin = `0 0`
-
-        // 设置单页的宽高
+        s.width = canvas.width
+        s.height = canvas.height
+        s.updateScale()
         s.pageWidth = canvas.width * s.scale
         s.pageHeight = canvas.height * s.scale
         pageDOM.style.width = s.pageWidth + 'px'
         pageDOM.style.height = s.pageHeight + 'px'
+        canvas.style.WebkitTransform = `scale(${s.scale})`
+        canvas.style.WebkitTransformOrigin = `0 0`
 
         let renderContext = {
           canvasContext: context,
@@ -338,8 +348,6 @@ var PDFView = function (container, params) {
         let renderTask = page.render(renderContext)
         renderTask.promise.then(() => {
           s.onLoad({target: canvas})
-          // canvas加载完成显示canvas
-          s.showPageElement(pageDOM, 'canvas')
         }).catch((err) => {
           s.onLoad({target: canvas}, true)
           console.log('SeedsUI: 渲染PDF第' + i + '页失败')
@@ -359,6 +367,7 @@ var PDFView = function (container, params) {
   s.completeCount = 0 // 完成页数
   s.onLoad = function (e, isError) {
     var target = e.target // canvas或者img
+    var targetType = target.tagName === 'IMG' ? 'img' : 'canvas'
     var pageDOM = target.parentNode
     var index = pageDOM ? pageDOM.getAttribute(s.params.pageAttr) : 'page'
     // 显示此页Error层
@@ -369,7 +378,14 @@ var PDFView = function (container, params) {
     } else {
       console.log('第' + index + '页加载完成')
       pageDOM && pageDOM.setAttribute(s.params.completeAttr, '1') // 1为加载成功
-      s.showPageElement(target.parentNode, 'img')
+      s.showPageElement(target.parentNode, targetType)
+      if (targetType === 'img') { // 图片类型需要设置原始宽高比例, 以方便外界调用计算
+        s.width = target.naturalWidth
+        s.height = target.naturalHeight
+        s.pageWidth = pageDOM.clientWidth
+        s.pageHeight = pageDOM.clientHeight
+        s.updateScale()
+      }
     }
     s.event = e
     // Callback onPageLoad
