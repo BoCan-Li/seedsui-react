@@ -7,6 +7,7 @@ var PDFView = function (container, params) {
     containerClass: 'pdf-container',
     wrapperClass: 'pdf-wrapper',
     pageClass: 'pdf-page',
+    pageElementClass: 'pdf-page-element',
     canvasClass: 'pdf-page-canvas',
     imgClass: 'pdf-page-img',
     loadClass: 'pdf-page-load',
@@ -102,6 +103,28 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
+  // 渲染页面元素
+  s.renderPageElements = function (index, pageDom) {
+    if (!s.params.pageElements || !s.params.pageElements.length) {
+      return
+    }
+    // 提取此页的元素
+    var elements = []
+    for (var pageElement of s.params.pageElements) {
+      if (pageElement.page === index - 1 && pageElement.HTML && typeof pageElement.HTML === 'string') {
+        elements.push(pageElement)
+      }
+    }
+    // 渲染此页的元素
+    for (var element of elements) {
+      var el = document.createElement('div')
+      el.innerHTML = element.HTML || ''
+      el.setAttribute('style', `position: absolute; top: ${element.x || 0}px; left: ${element.y || 0}px;`)
+      el.setAttribute('class', `${s.params.pageElementClass}`)
+      s.scaleTarget(el)
+      pageDom.appendChild(el)
+    }
+  }
   // base64编码转成流
   s.convertBase64ToBinary = function (base64) {
     var raw = window.atob(base64) // 这个方法在ie内核下无法正常解析。
@@ -117,6 +140,10 @@ var PDFView = function (container, params) {
   s.scale = 1
   s.updateScale = function () {
     s.scale = s.container.clientWidth / s.width
+  }
+  s.scaleTarget = function (target) {
+    target.style.WebkitTransform = `scale(${s.scale})`
+    target.style.WebkitTransformOrigin = `0 0`
   }
   // 互斥显示一页中的指定元素: canvas、img、load、error
   s.showPageElement = function (pageDOM, elementName) {
@@ -338,8 +365,7 @@ var PDFView = function (container, params) {
         s.pageHeight = canvas.height * s.scale
         pageDOM.style.width = s.pageWidth + 'px'
         pageDOM.style.height = s.pageHeight + 'px'
-        canvas.style.WebkitTransform = `scale(${s.scale})`
-        canvas.style.WebkitTransformOrigin = `0 0`
+        s.scaleTarget(canvas)
 
         let renderContext = {
           canvasContext: context,
@@ -379,13 +405,16 @@ var PDFView = function (container, params) {
       console.log('第' + index + '页加载完成')
       pageDOM && pageDOM.setAttribute(s.params.completeAttr, '1') // 1为加载成功
       s.showPageElement(target.parentNode, targetType)
-      if (targetType === 'img') { // 图片类型需要设置原始宽高比例, 以方便外界调用计算
+      // 图片类型需要设置原始宽高比例, 以方便外界调用计算
+      if (targetType === 'img') {
         s.width = target.naturalWidth
         s.height = target.naturalHeight
         s.pageWidth = pageDOM.clientWidth
         s.pageHeight = pageDOM.clientHeight
         s.updateScale()
       }
+      // 渲染对应页的元素
+      s.renderPageElements(index, pageDOM)
     }
     s.event = e
     // Callback onPageLoad

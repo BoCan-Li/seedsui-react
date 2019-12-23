@@ -7,6 +7,16 @@ import {Page, Header, Titlebar, Container, Bridge, PDFView} from '../../src'
 class Demo extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      pageElements: [
+        {
+          page: 0,
+          x: 10,
+          y: 10,
+          HTML: '<input type="text"/>'
+        }
+      ]
+    }
   }
   componentDidMount () {
     Bridge.debug = true;
@@ -20,7 +30,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI"/>
       </Header>
       <Container>
-        <PDFView zoom={false} src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3, onLoad: this.onLoad}}/>
+        <PDFView zoom={false} src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}/>
         {/* <PDFView pictures={["/demo/assets/pdfview.png"]} params={{rows: 3, onLoad: this.onLoad}}/> */}
       </Container>
     </Page>
