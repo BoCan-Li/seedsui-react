@@ -9,6 +9,7 @@ export default class PDFView extends Component {
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
     params: PropTypes.object, // 设置实例化参数
+    zoom: PropTypes.bool, // 是否允许放大缩小
     // params: {
     //   rows: 5, // 分页, 一页的条数
     //   errorHTML: '文件加载失败', // 加载错误时显示的信息
@@ -28,6 +29,7 @@ export default class PDFView extends Component {
       pictures,
       src,
       cMapUrl,
+      zoom,
       params = {}
     } = this.props;
     if (!src && !pictures) return
@@ -39,30 +41,54 @@ export default class PDFView extends Component {
       onLoad: (s) => {
         console.log('全部加载完成')
         if (params.onLoad) params.onLoad(s)
-        if (this.bscroll) {
-          console.log('加载完成, bscroll刷新');
-          this.bscroll.finishPullUp();
-          this.bscroll.refresh();
-          return;
-        }
-        this.bscroll = new BScroll('.pdf-container', {
-          scrollX: true,
-          zoom: {
-            start: 1,
-            min: 1,
-            max: 4
-          },
-          probeType: 2,
-          pullUpLoad: {
-            threshold: 10
+        if (zoom) { // 若允许放大, 使用better-scroll
+          if (this.bscroll) {
+            console.log('加载完成, bscroll刷新');
+            this.bscroll.finishPullUp();
+            this.bscroll.refresh();
+            return;
           }
-        });
-        // 上拉到底部刷新
-        this.bscroll.on('pullingUp', () => {
-          this.instance.addPages();
-        });
+          this.bscroll = new BScroll('.pdf-container', {
+            scrollX: true,
+            zoom: {
+              start: 1,
+              min: 1,
+              max: 4
+            },
+            probeType: 2,
+            pullUpLoad: {
+              threshold: 10
+            }
+          });
+          // 上拉到底部刷新
+          this.bscroll.on('pullingUp', () => {
+            this.instance.addPages();
+          });
+        } else { // 不允许放大, 则使用原生滚动条
+          // 上拉到底部
+          if (!s.container.getAttribute('data-scroll')) {
+            s.container.addEventListener('scroll', this.onScroll, false);
+            s.container.setAttribute('data-scroll', '1');
+          }
+        }
       }
     });
+  }
+  // 当不允许放大缩小使用原生滚动时, 滚动到底部加载下一页
+  onScroll = (e) => {
+    var target = e.target
+    var clientHeight = target.clientHeight
+    var scrollHeight = target.scrollHeight
+    var scrollTop = target === document.body ? document.documentElement.scrollTop : target.scrollTop
+    if (scrollTop + clientHeight >= scrollHeight - 2) {
+      // 刷新
+      if (this.timeout) {
+        window.clearTimeout(this.timeout);
+      }
+      this.timeout = setTimeout(() => {
+        this.instance.addPages();
+      }, 500);
+    }
   }
   componentDidUpdate (prevProps) {
     const {
@@ -93,13 +119,14 @@ export default class PDFView extends Component {
       src,
       cMapUrl,
       params = {},
+      zoom,
       ...others
     } = this.props;
     if (!src && !pictures) {
       return null;
     }
     return (
-      <div className="pdf-container" {...others} ref={(el) => {this.$el = el}}>
+      <div {...others} className={`pdf-container${others.className ? ' ' + others.className : ''}${zoom ? '' : ' scroll'}`} ref={(el) => {this.$el = el}}>
         <div className="pdf-wrapper"></div>
       </div>
     );

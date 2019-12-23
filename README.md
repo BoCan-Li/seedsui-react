@@ -4032,6 +4032,7 @@ import Progress from 'seedsui-react/lib/Progress';
   cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
 
   params={设置实例化参数 object, 默认{}}
+  zoom={是否允许双指放大缩小 bool, 默认true}
   // params: {
   //   errorHTML: '文件加载失败', // 加载错误时显示的信息
   //   loadHTML: '加载中', // 加载时显示的信息
