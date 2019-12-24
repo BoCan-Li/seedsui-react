@@ -9,7 +9,6 @@ export default class PDFView extends Component {
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
     params: PropTypes.object, // 设置实例化参数
-    zoom: PropTypes.bool, // 是否允许放大缩小
     // params: {
     //   rows: 5, // 分页, 一页的条数
     //   errorHTML: '文件加载失败', // 加载错误时显示的信息
@@ -18,11 +17,10 @@ export default class PDFView extends Component {
     //   pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js', // pdf.js库
     //   pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js' // pdf.work.js库
     // }
+    zoom: PropTypes.bool, // 是否允许放大缩小
+    wrapperAttribute: PropTypes.object,
   }
   static defaultProps = {
-  }
-  constructor(props) {
-    super(props);
   }
   instance = () => {
     const {
@@ -127,8 +125,9 @@ export default class PDFView extends Component {
       pictures,
       src,
       cMapUrl,
-      params = {},
+      params,
       zoom,
+      wrapperAttribute = {},
       ...others
     } = this.props;
     if (!src && !pictures) {
@@ -136,7 +135,7 @@ export default class PDFView extends Component {
     }
     return (
       <div {...others} className={`pdf-container${others.className ? ' ' + others.className : ''}${zoom ? '' : ' scroll'}`} ref={(el) => {this.$el = el}}>
-        <div className="pdf-wrapper"></div>
+        <div {...wrapperAttribute} className={`pdf-wrapper${wrapperAttribute.className ? ' ' + wrapperAttribute.className : ''}`}></div>
       </div>
     );
   }

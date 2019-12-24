@@ -191,7 +191,7 @@ var PDFView = function (container, params) {
   // 计算宽高比例
   s.scale = 1
   s.updateScale = function () {
-    s.scale = s.container.clientWidth / s.width
+    s.scale = s.wrapper.clientWidth / s.width
   }
   s.scaleTarget = function (target) {
     target.style.WebkitTransform = `scale(${s.scale})`
@@ -415,7 +415,7 @@ var PDFView = function (container, params) {
         s.updateScale() // 根据 容器宽度 / 实际宽度 获取 s.scale
         s.scaleTarget(canvas)
         // 设置页面宽高
-        s.pageWidth = s.container.clientWidth
+        s.pageWidth = canvas.width * s.scale
         s.pageHeight = canvas.height * s.scale
         pageDOM.style.width = s.pageWidth + 'px'
         pageDOM.style.height = s.pageHeight + 'px'
