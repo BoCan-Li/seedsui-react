@@ -4050,12 +4050,49 @@ import Progress from 'seedsui-react/lib/Progress';
 import PDFView from 'seedsui-react/lib/PDFView';
 import pdfsrc from './../assets/pdfview.js'
 
+this.state = {
+  pageElements: [
+    {
+      page: 1,
+      x: 10,
+      y: 10,
+      HTML: '<input type="text"/>'
+    },{
+      page: 5,
+      x: 10,
+      y: 10,
+      HTML: '<input type="text"/>'
+    }
+  ]
+}
+
+submit = () => {
+  // 格式化为[{page: 0, x: 0, y: 0, value: ''}]
+  let elements = (this.refs.$PDFView.instance.getPageElements() || []).map((element) => {
+    return {
+      page: element.page,
+      x: element.x,
+      y: element.y,
+      value: element.$el ? element.$el.children[0].value || '' : ''
+    }
+  });
+  console.log(elements)
+}
+
 // 图片
 <PDFView pictures={["/demo/assets/pdfview.png"]}/>
 // PDF文件
 <PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
 // PDFbase64编码
 <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
+// PDF表单元素
+<PDFView
+  ref="$PDFView"
+  zoom={false}
+  src={pdfsrc}
+  cMapUrl="/demo/assets/cmaps/"
+  params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}
+/>
 ```
 [返回目录](#component)
 

@@ -7,6 +7,7 @@ var PDFView = function (container, params) {
     containerClass: 'pdf-container',
     wrapperClass: 'pdf-wrapper',
     pageClass: 'pdf-page',
+    pageElementsClass: 'pdf-page-elements',
     pageElementClass: 'pdf-page-element',
     canvasClass: 'pdf-page-canvas',
     imgClass: 'pdf-page-img',
@@ -78,8 +79,18 @@ var PDFView = function (container, params) {
   }
   // 更新params
   s.updateParams = function (params = {}) {
+    // 记录自定义元素是否发生变化
+    var isChangePageElements = false
+    if (JSON.stringify(params.pageElements) !== JSON.stringify(s.params.pageElements)) {
+      isChangePageElements = true
+    }
+    // 更新s.params
     for (var param in params) {
       s.params[param] = params[param]
+    }
+    // 更新自定义元素
+    if (isChangePageElements) {
+      s.updatePageElements()
     }
   }
   // 更新DOM
@@ -94,6 +105,7 @@ var PDFView = function (container, params) {
 
     // 重新加载
     if (s.init) {
+      s.page = 0
       s.wrapper.innerHTML = ''
       s.updateParams(params)
       s.init()
@@ -103,26 +115,66 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
+  // 获取所有元素
+  s.getPageElements = function () {
+    var pagesDOM = s.wrapper.querySelectorAll('.' + s.params.pageClass)
+    // 提取页面中元素
+    var pageElements = []
+    for (let [page, pageDOM] of pagesDOM.entries()) {
+      let elBox = pageDOM.querySelector('.' + s.params.pageElementsClass)
+      for (let elDOM of elBox.querySelectorAll('.' + s.params.pageElementClass)) {
+        pageElements.push({
+          page: page + 1,
+          $el: elDOM
+        })
+      }
+    }
+    // 合并传入的数据再返回
+    return s.params.pageElements.map((pageElement) => {
+      for (let pageEl of pageElements) {
+        if (pageEl.page == pageElement.page) {
+          return Object.assign(pageElement, pageEl)
+        }
+      }
+      return pageElement
+    });
+  }
+  // 更新渲染的所有页面元素
+  s.updatePageElements = function () {
+    var pagesDOM = s.wrapper.querySelectorAll('.' + s.params.pageClass)
+    for (let [page, pageDOM] of pagesDOM.entries()) {
+      s.renderPageElements(page + 1, pageDOM);
+    }
+  }
   // 渲染页面元素
-  s.renderPageElements = function (index, pageDom) {
+  s.renderPageElements = function (page, pageDOM) {
     if (!s.params.pageElements || !s.params.pageElements.length) {
       return
     }
     // 提取此页的元素
     var elements = []
     for (var pageElement of s.params.pageElements) {
-      if (pageElement.page === index - 1 && pageElement.HTML && typeof pageElement.HTML === 'string') {
+      if (pageElement.page == page && pageElement.HTML && typeof pageElement.HTML === 'string') {
         elements.push(pageElement)
       }
     }
+    // 元素容器
+    var pageElementsBox = pageDOM.querySelector('.' + s.params.pageElementsClass)
+    if (!pageElementsBox) {
+      pageElementsBox = document.createElement('div')
+      pageElementsBox.setAttribute('class', s.params.pageElementsClass)
+      pageElementsBox.setAttribute('style', `width:${s.width}px;height:${s.height}px;`)
+      s.scaleTarget(pageElementsBox)
+      pageDOM.appendChild(pageElementsBox)
+    }
+    pageElementsBox.innerHTML = ''
     // 渲染此页的元素
     for (var element of elements) {
       var el = document.createElement('div')
       el.innerHTML = element.HTML || ''
       el.setAttribute('style', `position: absolute; top: ${element.x || 0}px; left: ${element.y || 0}px;`)
       el.setAttribute('class', `${s.params.pageElementClass}`)
-      s.scaleTarget(el)
-      pageDom.appendChild(el)
+      pageElementsBox.appendChild(el)
     }
   }
   // base64编码转成流
@@ -352,20 +404,21 @@ var PDFView = function (container, params) {
         // 创建页
         let pageDOM = s.createPage()
         pageDOM.setAttribute(s.params.pageAttr, i)
+        // 创建canvas
         let canvas = pageDOM.querySelector('canvas')
-
         let context = canvas.getContext('2d')
         // 设置canvas的宽高
         canvas.height = viewport.height
         canvas.width = viewport.width
         s.width = canvas.width
         s.height = canvas.height
-        s.updateScale()
-        s.pageWidth = canvas.width * s.scale
+        s.updateScale() // 根据 容器宽度 / 实际宽度 获取 s.scale
+        s.scaleTarget(canvas)
+        // 设置页面宽高
+        s.pageWidth = s.container.clientWidth
         s.pageHeight = canvas.height * s.scale
         pageDOM.style.width = s.pageWidth + 'px'
         pageDOM.style.height = s.pageHeight + 'px'
-        s.scaleTarget(canvas)
 
         let renderContext = {
           canvasContext: context,
@@ -395,14 +448,14 @@ var PDFView = function (container, params) {
     var target = e.target // canvas或者img
     var targetType = target.tagName === 'IMG' ? 'img' : 'canvas'
     var pageDOM = target.parentNode
-    var index = pageDOM ? pageDOM.getAttribute(s.params.pageAttr) : 'page'
+    var page = pageDOM ? pageDOM.getAttribute(s.params.pageAttr) : 'page'
     // 显示此页Error层
     if (isError) {
-      console.log('第' + index + '页加载失败')
+      console.log('第' + page + '页加载失败')
       pageDOM && pageDOM.setAttribute(s.params.completeAttr, '0') // 0为加载失败
       s.showPageElement(target.parentNode, 'error')
     } else {
-      console.log('第' + index + '页加载完成')
+      console.log('第' + page + '页加载完成')
       pageDOM && pageDOM.setAttribute(s.params.completeAttr, '1') // 1为加载成功
       s.showPageElement(target.parentNode, targetType)
       // 图片类型需要设置原始宽高比例, 以方便外界调用计算
@@ -414,7 +467,7 @@ var PDFView = function (container, params) {
         s.updateScale()
       }
       // 渲染对应页的元素
-      s.renderPageElements(index, pageDOM)
+      s.renderPageElements(page, pageDOM)
     }
     s.event = e
     // Callback onPageLoad

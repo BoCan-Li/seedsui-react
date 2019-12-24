@@ -97,6 +97,7 @@ export default class PDFView extends Component {
       cMapUrl,
       params = {}
     } = this.props;
+    // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
     if ((src && src !== prevProps.src) || (pictures && pictures !== prevProps.pictures)) {
       if (!this.instance) {
         this.instance()
@@ -107,6 +108,14 @@ export default class PDFView extends Component {
           cMapUrl,
           ...params,
         })
+      }
+    }
+    // 如果修改参数的话, 只需要更新参数即可
+    if (JSON.stringify(params) !== JSON.stringify(prevProps.params)) {
+      if (!this.instance) {
+        this.instance()
+      } else {
+        this.instance.updateParams(params)
       }
     }
   }
