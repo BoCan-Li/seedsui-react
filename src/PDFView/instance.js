@@ -132,7 +132,7 @@ var PDFView = function (container, params) {
     // 合并传入的数据再返回
     return s.params.pageElements.map((pageElement) => {
       for (let pageEl of pageElements) {
-        if (pageEl.page == pageElement.page) {
+        if (pageEl.page == pageElement.page) { // eslint-disable-line
           return Object.assign(pageElement, pageEl)
         }
       }
@@ -154,7 +154,7 @@ var PDFView = function (container, params) {
     // 提取此页的元素
     var elements = []
     for (var pageElement of s.params.pageElements) {
-      if (pageElement.page == page && pageElement.HTML && typeof pageElement.HTML === 'string') {
+      if (pageElement.page == page && pageElement.HTML && typeof pageElement.HTML === 'string') { // eslint-disable-line
         elements.push(pageElement)
       }
     }
@@ -333,8 +333,8 @@ var PDFView = function (container, params) {
   s.initPDF = function () {
     // 设置cMapUrl, 解决中文不显示的问题
     if (s.params.cMapUrl) {
-      PDFJS.cMapUrl = s.params.cMapUrl
-      PDFJS.cMapPacked = true
+      PDFJS.cMapUrl = s.params.cMapUrl // eslint-disable-line
+      PDFJS.cMapPacked = true // eslint-disable-line
     }
     // 地址访问, 发请求获取地址
     var param = s.params.src
@@ -346,7 +346,7 @@ var PDFView = function (container, params) {
         data: data
       }
     }
-    PDFJS.getDocument(param).then(function (pdf) {
+    PDFJS.getDocument(param).then(function (pdf) { // eslint-disable-line
       if (!s.wrapper) return
 
       s.pdf = pdf // 设置pdf
