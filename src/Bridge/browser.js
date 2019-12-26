@@ -18,8 +18,47 @@ var Bridge = {
       console.log('config方法仅在微信上工作')
       return
     }
-    DB.setSession('bridge_isready', '1')
     if (params.success) params.success()
+  },
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    return window.navigator.appVersion
+  },
+  // 退出到登陆页面
+  logOut: function logOut() {
+    console.log('logOut方法仅在app上工作');
+  },
+  // 回到主页
+  goHome: function () {
+    window.history.go(-1)
+  },
+  // 打开新的窗口
+  openWindow: function (params = {}) {
+    if (Device.device === 'pc') {
+      window.open(params.url)
+      return
+    }
+    if (params.url) window.location.href = params.url
+  },
+  // 关闭窗口
+  closeWindow: function () {
+    window.history.go(-1)
+  },
+  // 客户端返回绑定
+  addBackPress: function () {
+    console.log('addBackPress方法在浏览器上无法运行')
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function () {
+    console.log('removeBackPress方法在浏览器上无法运行')
   },
   // 视频播放
   previewVideo: function (params = {}) {

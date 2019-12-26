@@ -8,6 +8,56 @@ var Bridge = {
    * 定制功能
    */
   platform: Device.platform,
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    return window.navigator.appVersion
+  },
+  // 返回首页
+  goHome: function () {
+    window.history.go(-1)
+  },
+  // 退出到登陆页面
+  logOut: function logOut() {
+    console.log('logOut方法仅在app上工作');
+  },
+  // 打开新的窗口
+  openWindow: function (params = {}) {
+    if (params.url) window.location.href = params.url
+  },
+  // 关闭窗口
+  closeWindow: function () {
+    wx.closeWindow() // eslint-disable-line
+  },
+  // 客户端返回绑定
+  addBackPress: function (callback) {
+    var self = this
+    if (wx.onHistoryBack) { // eslint-disable-line
+      wx.onHistoryBack(() => { // eslint-disable-line
+        if (callback) {
+          callback()
+        } else {
+          self.back()
+        }
+        return false
+      })
+    }
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function () {
+    if (wx.onHistoryBack) { // eslint-disable-line
+      wx.onHistoryBack(() => { // eslint-disable-line
+        return true
+      })
+    }
+  },
   /**
     * 获取当前地理位置
     * @param {Object} params

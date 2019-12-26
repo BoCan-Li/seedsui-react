@@ -12,7 +12,6 @@ var Bridge = {
     var self = this
     // 返回物理按键绑定
     self.addBackPress()
-    DB.setSession('bridge_isready', '1')
     self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp'])
   },
   // 公共方法，通过桥接调用原生方法公共入口
@@ -118,6 +117,66 @@ var Bridge = {
       }
     }
   },
+  // 判断是否是主页
+  isHomePage: function (callback) {
+    var self = this
+    self.invoke('isHomePage', null, function (data) {
+      if (data.result.toString() === '1') {
+        callback(true)
+      } else {
+        callback(false)
+      }
+    });
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    const ua = navigator.userAgent.toLowerCase();
+    var verExp = ua.match(/dinghuoappversion\/.{0,}(\d+\.\d+\.\d+)/);
+    if (verExp && verExp[1]) return verExp[1].trim();
+    return '';
+  },
+  // 去首页
+  goHome: function (callback) {
+    var self = this
+    self.invoke('goHome', null, callback)
+  },
+  // 退出到登陆页面
+  logOut: function () {
+    var self = this
+    self.invoke('logOut');
+  },
+  // 打开新的窗口
+  openWindow: function (params, callback) {
+    var self = this
+    self.invoke('openWindow', params, callback)
+  },
+  // 关闭当前窗
+  closeWindow: function (callback) {
+    var self = this
+    self.invoke('closeWindow', null, callback)
+  },
+  // 客户端添加返回绑定
+  addBackPress: function (callback) {
+    var self = this
+    try {
+      self.setBackEnable(true);
+      window.addEventListener('onBackPress', callback || self.back);
+      // ios客户端返回按钮绑定(ios不支持onBackPress)
+      self.addIosBackPress(callback)
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function (callback) {
+    var self = this
+    try {
+      self.setBackEnable(false);
+      window.removeEventListener('onBackPress', callback || self.back);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   /**
     * 支付宝支付
     * @param {Object} params {orderInfo: ''}
@@ -163,7 +222,7 @@ var Bridge = {
   },
   /**
     * 修改原生标题
-    * @param {Object} params {title: '自定义标题'}
+    * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
     * @param {Function} callback 回调
     */
   setTitle: function (params, callback) {

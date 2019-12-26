@@ -12,8 +12,48 @@ var Bridge = {
     var self = this
     document.addEventListener('deviceready', () => {
       self.addBackPress()
-      DB.setSession('bridge_isready', '1')
     })
+  },
+  // 判断是否是主页
+  isHomePage: function (callback, rule) {
+    if (rule && window.location.href.indexOf(rule) >= 0) {
+      callback(true)
+      return
+    }
+    callback(false)
+  },
+  // 获得版本信息
+  getAppVersion: function () {
+    const ua = navigator.userAgent;
+    var verExp = ua.match(/WqAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
+    if (verExp && verExp[1]) return verExp[1].trim();
+    return '';
+  },
+  // 返回首页
+  goHome: function () {
+    window.history.go(-1)
+  },
+  // 退出到登陆页面
+  logOut: function (msg) {
+    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
+  },
+  // 打开新的窗口
+  openWindow: function (params, callback) {
+    wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
+  },
+  // 关闭当前窗
+  closeWindow: function () {
+    wq.wqload.wqClosePage() // eslint-disable-line
+  },
+  // 客户端返回绑定
+  addBackPress: function (callback) {
+    var self = this
+    document.addEventListener('backbutton', callback || self.back, false) // eslint-disable-line
+  },
+  // 客户端移除返回绑定
+  removeBackPress: function (callback) {
+    var self = this
+    document.removeEventListener('backbutton', callback || self.back, false) // eslint-disable-line
   },
   /**
     * 支付宝支付
