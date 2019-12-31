@@ -244,3 +244,21 @@ window.String.prototype.safeLvl = function () {
   }
   return Object.values(mode).length
 }
+// 英文占位长度, limit为截取长度
+window.String.prototype.enLength = function (limit) {
+  let strlen = 0
+  let str = ''
+  for (let i = 0; i < this.length; i++) {
+    if (this.charCodeAt(i) > 255) {
+      strlen += 2 // 如果是汉字，则字符串长度加2
+    }
+    else {
+      strlen++
+    }
+    str += this[i]
+    if (strlen === limit) return str
+    if (strlen > limit) return str.substring(0, str.length - 1)
+  }
+  if (limit) return this
+  return strlen
+}
