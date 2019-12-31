@@ -5,6 +5,8 @@ import BScroll from 'better-scroll';
 
 export default class PDFView extends Component {
   static propTypes = {
+    total: PropTypes.number, // 设置总页数后, 将没有分页
+    pageElements: PropTypes.array, // 设置页面中元素, 必须设置total才能使用
     pictures: PropTypes.array, // 图片地址
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
@@ -20,10 +22,16 @@ export default class PDFView extends Component {
     zoom: PropTypes.bool, // 是否允许放大缩小
     wrapperAttribute: PropTypes.object,
   }
+  // pageElements = [{
+  //   page: 1,
+  //   element: <input/>
+  //   ...其它属性将透传
+  // }]
   static defaultProps = {
   }
   instance = () => {
     const {
+      total,
       pictures,
       src,
       cMapUrl,
@@ -32,10 +40,11 @@ export default class PDFView extends Component {
     } = this.props;
     if (!src && !pictures) return
     this.instance = new Instance(this.$el, {
+      ...params,
       pictures,
       src,
       cMapUrl,
-      ...params,
+      rows: total,
       onLoad: (s) => {
         console.log('全部加载完成')
         if (params.onLoad) params.onLoad(s)
@@ -90,6 +99,7 @@ export default class PDFView extends Component {
   }
   componentDidUpdate (prevProps) {
     const {
+      total,
       pictures,
       src,
       cMapUrl,
@@ -101,10 +111,11 @@ export default class PDFView extends Component {
         this.instance()
       } else {
         this.instance.update({
+          ...params,
           pictures,
           src,
           cMapUrl,
-          ...params,
+          rows: total,
         })
       }
     }
@@ -118,14 +129,39 @@ export default class PDFView extends Component {
     }
   }
   componentDidMount () {
+    if (this.props.pageElements && !this.props.total) {
+      console.warn('pageElements: Page中插入元素, 必须设置total才可使用');
+    }
     this.instance()
+  }
+  // 设置total则不分页
+  getTotalDOM = (total, pageElements = [], pageFeatureClass) => {
+    if (!total) return null;
+    const DOM = [];
+    for (let i = 1; i <= total; i++) {
+      let insertDOM = null;
+      for (let pageEl of pageElements) {
+        if (pageEl.page && Number(pageEl.page) === i) insertDOM = pageEl.element;
+      }
+      DOM.push(<div key={i} className={`pdf-page${pageFeatureClass ? ' ' + pageFeatureClass : ''}`}>
+        <canvas className="pdf-page-canvas"></canvas>
+        <img alt="" className="pdf-page-img hide"/>
+        <div className="pdf-page-load hide">加载中</div>
+        <div className="pdf-page-error hide">文件加载失败</div>
+        <div className="pdf-page-nodata hide">暂无数据</div>
+        {insertDOM}
+      </div>);
+    }
+    return DOM;
   }
   render() {
     const {
+      total, // 当设置总页数后, 将不分页
+      pageElements, // Page中插入元素, 必须有total才可使用
       pictures,
       src,
       cMapUrl,
-      params,
+      params = {},
       zoom,
       wrapperAttribute = {},
       ...others
@@ -135,7 +171,9 @@ export default class PDFView extends Component {
     }
     return (
       <div {...others} className={`pdf-container${others.className ? ' ' + others.className : ''}${zoom ? '' : ' scroll'}`} ref={(el) => {this.$el = el}}>
-        <div {...wrapperAttribute} className={`pdf-wrapper${wrapperAttribute.className ? ' ' + wrapperAttribute.className : ''}`}></div>
+        <div {...wrapperAttribute} className={`pdf-wrapper${wrapperAttribute.className ? ' ' + wrapperAttribute.className : ''}`}>
+          {this.getTotalDOM(total, pageElements, params.pageFeatureClass)}
+        </div>
       </div>
     );
   }

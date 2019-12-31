@@ -1,4 +1,5 @@
 import DB from './../DB';
+import Device from './../Device';
 import Preview from './../Preview/instance.js';
 import MediaUtil from './../MediaUtil';
 import FullScreen from './../FullScreen';

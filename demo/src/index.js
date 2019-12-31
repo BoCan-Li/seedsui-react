@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
-import pdfsrc from './../assets/pdfview.js'
+// import pdfsrc from './../assets/pdfview.js'
 
-import {Page, Header, Titlebar, Container, Bridge, PDFView} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, PDFView, Button, Device} from '../../src'
 
 class Demo extends Component {
   constructor(props){
@@ -24,23 +24,22 @@ class Demo extends Component {
     }
   }
   componentDidMount () {
-    Bridge.debug = true;
-    setTimeout(() => {
-      this.setState({
-        pageElements: [
-          {
-            page: 2,
-            x: 10,
-            y: 10,
-            HTML: '<input type="text"/>'
-          },{
-          page: 4,
-          x: 10,
-          y: 10,
-          HTML: '<input type="text"/>'
-        }]
-      })
-    }, 3000);
+    // setTimeout(() => {
+      // this.setState({
+      //   pageElements: [
+      //     {
+      //       page: 2,
+      //       x: 10,
+      //       y: 10,
+      //       HTML: '<input type="text"/>'
+      //     },{
+      //     page: 4,
+      //     x: 10,
+      //     y: 10,
+      //     HTML: '<input type="text"/>'
+      //   }]
+      // })
+    // }, 5000);
   }
   onLoad = (s) => {
     console.log('宽:' + s.width + ', 高:' + s.height + ' 除以比例' + s.scale + ' 等于宽:' + s.pageWidth +  ' 高:' + s.pageHeight);
@@ -57,19 +56,32 @@ class Demo extends Component {
     });
     console.log(elements)
   }
+  hide = () => {
+    Bridge.setTitle({
+      visiable: '0'
+    });
+  }
+  open = () => {
+    Bridge.openWindow({
+      title: 'hh',
+      url: 'http://172.31.0.167:3001?isFromApp=1&sub=1'
+    })
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        <PDFView
+        {Device.getUrlParameter('sub') === '1' && <Button onClick={this.hide}>隐藏标题</Button>}
+        {Device.getUrlParameter('sub') !== '1' && <Button onClick={this.open}>打开新窗口</Button>}
+        {/* <PDFView
           ref="$PDFView"
           zoom={false}
           src={pdfsrc}
           cMapUrl="/demo/assets/cmaps/"
           params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}
-        />
+        /> */}
       </Container>
     </Page>
   }

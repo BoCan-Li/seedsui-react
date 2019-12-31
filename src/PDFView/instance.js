@@ -7,8 +7,9 @@ var PDFView = function (container, params) {
     containerClass: 'pdf-container',
     wrapperClass: 'pdf-wrapper',
     pageClass: 'pdf-page',
-    pageElementsClass: 'pdf-page-elements',
-    pageElementClass: 'pdf-page-element',
+    pageFeatureClass: '',
+    pageElementsClass: 'pdf-page-elements', // 页面中元素盒子
+    pageElementClass: 'pdf-page-element', // 页面中元素盒子中元素
     canvasClass: 'pdf-page-canvas',
     imgClass: 'pdf-page-img',
     loadClass: 'pdf-page-load',
@@ -29,7 +30,7 @@ var PDFView = function (container, params) {
     pdfLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.js',
     pdfWorkLib: '//res.waiqin365.com/d/seedsui/pdfview/pdf.worker.js',
 
-    rows: 5,
+    rows: 5, // 为0时不分页
 
     pageElements: null, // page内子元素
     /*
@@ -40,7 +41,7 @@ var PDFView = function (container, params) {
     */
   }
   // pageElements = [{
-  //   page: 0,
+  //   page: 1,
   //   x: 0,
   //   y: 0,
   //   element: <input/>
@@ -62,20 +63,22 @@ var PDFView = function (container, params) {
   s.container = (typeof container === 'string' && container !== '') ? document.querySelector(container) : container
   if (!s.container) {
     console.warn('SeedsUI Error：未找到Container，请检查传入参数是否正确')
-    return
   }
 
   // Wrapper
-  s.wrapper = null
+  s.wrapper = s.container ? s.container.querySelector('.' + s.params.wrapperClass) : null
   
   // 创建DOM
   s.create = function () {
+    if (!s.container) return
     s.container.innerHTML = ''
+    
+    if (!s.wrapper) {
+      s.wrapper = document.createElement('div')
+      s.wrapper.setAttribute('class', s.params.wrapperClass)
 
-    s.wrapper = document.createElement('div')
-    s.wrapper.setAttribute('class', s.params.wrapperClass)
-
-    s.container.appendChild(s.wrapper)
+      s.container.appendChild(s.wrapper)
+    }
   }
   // 更新params
   s.updateParams = function (params = {}) {
@@ -115,6 +118,40 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
+  // 提供给外部使用的工具方法: 获取pdf信息, params: {success: func(), fail: func()}
+  s.getPDF = function (src, params = {}) {
+    s.loadPDFScript({
+      success: function () {
+        var param = s.getDocumentParam(src)
+        // base64访问, 直接读取data, 不需要发请求
+        if (src.indexOf('data:application/pdf;base64,') === 0) {
+          var data = src.replace('data:application/pdf;base64,', '')
+          data = s.convertBase64ToBinary(data)
+          param = {
+            data: data
+          }
+        }
+        PDFJS.getDocument(param).then(function (pdf) { // eslint-disable-line
+          s.pdf = pdf // 设置pdf
+          s.pdf.getPage(1).then((page) => {
+            let viewport = page.getViewport(1)
+            if (params.success) params.success({
+              total: s.pdf.numPages,
+              width: viewport.width,
+              height: viewport.height
+            })
+          }).catch((err) => {
+            console.log(err)
+            if (params.fail) params.fail({errMsg: '读取PDF页面失败'})
+          })
+        }).catch(function (error) {
+          console.log(error)
+          if (params.fail) params.fail({errMsg: 'pdf格式不正确'})
+        })
+      },
+      fail: params.fail
+    })
+  }
   // 获取所有元素
   s.getPageElements = function () {
     var pagesDOM = s.wrapper.querySelectorAll('.' + s.params.pageClass)
@@ -222,10 +259,13 @@ var PDFView = function (container, params) {
     if (elements[elementName]) elements[elementName].classList.remove(s.params.hideClass)
   }
   // 创建一页
-  s.createPage = function () {
+  s.createPage = function (pageIndex) {
+    // 判断此页是否已经创建
+    var pages = s.wrapper.querySelectorAll('.' + s.params.pageClass)
+    if (pages[pageIndex - 1]) return pages[pageIndex - 1]
     // page容器
     var page = document.createElement('div')
-    page.setAttribute('class', s.params.pageClass)
+    page.setAttribute('class', s.params.pageClass + ' ' + s.params.pageFeatureClass)
     // canvas用于渲染pdf单页, 并生成img
     var canvas = document.createElement('canvas')
     canvas.setAttribute('class', s.params.canvasClass)
@@ -264,7 +304,6 @@ var PDFView = function (container, params) {
     var pageDOM = s.createPage()
     s.showPageElement(pageDOM, 'nodata')
   }
-
   // canvas转成图片
   s.canvasToPng = function (canvas) {
     var dataURL = canvas.toDataURL('image/png', 1.0);
@@ -286,72 +325,91 @@ var PDFView = function (container, params) {
     if (s.pictures && s.pictures.length) { // Img加载
       s.loadImg()
     } else if (s.params.src) { // PDF加载
-      s.loadPDF()
+      s.loadPDFScript({
+        success: s.loadPDF,
+        fail: s.showNoData
+      })
     } else {
       s.showNoData()
     }
   }
   // 加载PDF的库
-  s.loadPDF = function () {
+  s.loadPDFScript = function (params = {}) {
     if (!s.params.pdfLib || !s.params.pdfWorkLib) {
       console.log('SeedsUI: 请先加载pdf资源库')
       return
     }
+    var scriptPdf = document.getElementById('_seedsui_pdfview_lib_')
+    var scriptPdfWork = document.getElementById('_seedsui_pdfview_work_')
+    if (scriptPdf && scriptPdfWork && scriptPdf.getAttribute('data-complete') === '1' && scriptPdfWork.getAttribute('data-complete') === '1') {
+      if (params.success) params.success()
+      return
+    }
     try {
-      var scriptPdf = document.createElement('script')
+      scriptPdf = document.createElement('script')
+      scriptPdf.id = '_seedsui_pdfview_lib_'
       scriptPdf.type = 'text/javascript'
       scriptPdf.src = s.params.pdfLib
       
-      var scriptPdfWork = document.createElement('script')
+      scriptPdfWork = document.createElement('script')
+      scriptPdfWork.id = '_seedsui_pdfview_work_'
       scriptPdfWork.type = 'text/javascript'
       scriptPdfWork.src = s.params.pdfWorkLib
       document.body.appendChild(scriptPdf)
       document.body.appendChild(scriptPdfWork)
       var loadCount = 0
       scriptPdf.onload = function () {
+        scriptPdf.setAttribute('data-complete', '1')
         if (!loadCount) loadCount = 1
         else loadCount++
         if (loadCount === 2) {
-          s.initPDF()
+          if (params.success) params.success()
         }
       }
       scriptPdfWork.onload = function () {
+        scriptPdfWork.setAttribute('data-complete', '1')
         if (!loadCount) loadCount = 1
         else loadCount++
         if (loadCount === 2) {
-          s.initPDF()
+          if (params.success) params.success()
         }
       }
     } catch (error) {
       console.log('SeedsUI: pdfjs库加载失败')
       console.log(error)
-      s.showNoData()
+      if (params.fail) params.fail({errMsg: 'pdfjs库加载失败'})
     }
+  }
+  // 构建PDFJS的参数
+  s.getDocumentParam = function (src) {
+    // 地址访问, 发请求获取地址
+    var param = src
+    // base64访问, 直接读取data, 不需要发请求
+    if (src.indexOf('data:application/pdf;base64,') === 0) {
+      var data = src.replace('data:application/pdf;base64,', '')
+      data = s.convertBase64ToBinary(data)
+      param = {
+        data: data
+      }
+    }
+    return param
   }
   // 初始化pdf文件
   s.pdf = null
-  s.initPDF = function () {
+  s.loadPDF = function () {
     // 设置cMapUrl, 解决中文不显示的问题
     if (s.params.cMapUrl) {
       PDFJS.cMapUrl = s.params.cMapUrl // eslint-disable-line
       PDFJS.cMapPacked = true // eslint-disable-line
     }
     // 地址访问, 发请求获取地址
-    var param = s.params.src
-    // base64访问, 直接读取data, 不需要发请求
-    if (s.params.src.indexOf('data:application/pdf;base64,') === 0) {
-      var data = s.params.src.replace('data:application/pdf;base64,', '')
-      data = s.convertBase64ToBinary(data)
-      param = {
-        data: data
-      }
-    }
+    var param = s.getDocumentParam(s.params.src)
     PDFJS.getDocument(param).then(function (pdf) { // eslint-disable-line
       if (!s.wrapper) return
 
       s.pdf = pdf // 设置pdf
       s.total = s.pdf.numPages // 总页数
-      s.rows = s.params.rows > s.total ? s.total : s.params.rows
+      s.rows = !s.params.rows || s.params.rows > s.total ? s.total : s.params.rows
 
       s.addPages()
     }).catch(function (error) {
@@ -364,7 +422,7 @@ var PDFView = function (container, params) {
   // 加载图片
   s.loadImg = function () {
     s.total = s.pictures.length
-    s.rows = s.params.rows > s.total ? s.total : s.params.rows
+    s.rows = !s.params.rows || s.params.rows > s.total ? s.total : s.params.rows
     
     s.addPages()
   }
@@ -389,7 +447,7 @@ var PDFView = function (container, params) {
       // 图片分页
       if (s.pictures) {
         // 创建页
-        var pageDOM = s.createPage()
+        var pageDOM = s.createPage(i)
         pageDOM.setAttribute(s.params.pageAttr, i)
         var img = pageDOM.querySelector('img')
         // 设置图片路径
@@ -402,7 +460,7 @@ var PDFView = function (container, params) {
       s.pdf.getPage(i).then((page) => {
         let viewport = page.getViewport(1)
         // 创建页
-        let pageDOM = s.createPage()
+        let pageDOM = s.createPage(i)
         pageDOM.setAttribute(s.params.pageAttr, i)
         // 创建canvas
         let canvas = pageDOM.querySelector('canvas')
