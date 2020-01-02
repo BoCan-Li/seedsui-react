@@ -247,18 +247,28 @@ window.String.prototype.safeLvl = function () {
 // 英文占位长度, limit为截取长度
 window.String.prototype.enLength = function (limit) {
   let strlen = 0
-  let str = ''
+  let str = '' // 用于构建截取后的字符串
   for (let i = 0; i < this.length; i++) {
+    // 长度判断
     if (this.charCodeAt(i) > 255) {
       strlen += 2 // 如果是汉字，则字符串长度加2
     }
     else {
       strlen++
     }
+    // 字符串构建
     str += this[i]
-    if (strlen === limit) return str
-    if (strlen > limit) return str.substring(0, str.length - 1)
+    if (strlen === limit) {
+      return str
+    }
+    if (strlen > limit) {
+      return str.substring(0, str.length - 1)
+    }
   }
-  if (limit) return this
+  // 如果设置了截取长度, 则返回字符串
+  if (limit) {
+    return this.toString()
+  }
+  // 返回长度
   return strlen
 }
