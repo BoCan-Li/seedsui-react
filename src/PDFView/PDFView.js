@@ -5,8 +5,7 @@ import BScroll from 'better-scroll';
 
 export default class PDFView extends Component {
   static propTypes = {
-    total: PropTypes.number, // 设置总页数后, 将没有分页
-    pageElements: PropTypes.array, // 设置页面中元素, 必须设置total才能使用
+    insertPageElements: PropTypes.array, // 插入页面元素
     pictures: PropTypes.array, // 图片地址
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
@@ -22,62 +21,138 @@ export default class PDFView extends Component {
     zoom: PropTypes.bool, // 是否允许放大缩小
     wrapperAttribute: PropTypes.object,
   }
-  // pageElements = [{
+  // insertPageElements = [{
   //   page: 1,
   //   element: <input/>
-  //   ...其它属性将透传
   // }]
   static defaultProps = {
   }
-  instance = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      total: 0
+    };
+  }
+  componentDidUpdate (prevProps) {
     const {
-      total,
       pictures,
       src,
       cMapUrl,
+      params = {}
+    } = this.props;
+    // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
+    if ((src && src !== prevProps.src) || (pictures && pictures !== prevProps.pictures)) {
+      if (!this.instance) {
+        this.init()
+      } else {
+        if (this.instance.update) {
+          this.instance.update({
+            ...params,
+            pictures,
+            src,
+            cMapUrl
+          })
+        }
+      }
+    }
+    // 如果修改参数的话, 只需要更新参数即可
+    if (JSON.stringify(params) !== JSON.stringify(prevProps.params)) {
+      if (!this.instance) {
+        this.init()
+      } else {
+        this.instance.updateParams(params)
+      }
+    }
+  }
+  componentDidMount () {
+    this.init()
+  }
+  // 一页加载完成后回调
+  onLoad = (s) => {
+    const {
       zoom,
       params = {}
     } = this.props;
-    if (!src && !pictures) return
+    console.log('全部加载完成')
+    if (params.onLoad) params.onLoad(s)
+    if (zoom) { // 若允许放大, 使用better-scroll
+      if (this.bscroll) {
+        console.log('加载完成, bscroll刷新');
+        this.bscroll.finishPullUp();
+        this.bscroll.refresh();
+        return;
+      }
+      this.bscroll = new BScroll('.pdf-container', {
+        scrollX: true,
+        zoom: {
+          start: 1,
+          min: 1,
+          max: 4
+        },
+        probeType: 2,
+        pullUpLoad: {
+          threshold: 10
+        }
+      });
+      // 上拉到底部刷新
+      this.bscroll.on('pullingUp', () => {
+        this.instance.addPages();
+      });
+    } else { // 不允许放大, 则使用原生滚动条
+      // 上拉到底部
+      if (!s.container.getAttribute('data-scroll')) {
+        s.container.addEventListener('scroll', this.onScroll, false);
+        s.container.setAttribute('data-scroll', '1');
+      }
+    }
+  }
+  init = () => {
+    const {
+      pictures,
+      src,
+      insertPageElements
+    } = this.props;
+    if (!src && !pictures) {
+      console.warn('SeedsUI: PDFView请传入src或者pictures');
+      return;
+    }
+    // 如果设置了插入元素, 则需要通过react Node渲染完成后, 再实例化
+    if (insertPageElements && insertPageElements.length && src) {
+      new Instance().getPDF(src, {
+        success: (pdf) => {
+          this.setState({
+            total: pdf.total
+          }, () => {
+            this.instance(this.state.total);
+          });
+        }
+      });
+    } else if (insertPageElements && insertPageElements.length && pictures) {
+        this.setState({
+          total: pictures.length
+        }, () => {
+          this.instance(this.state.total);
+        });
+    } else {
+      this.instance();
+    }
+  }
+  // 实例化
+  instance = (total) => {
+    const {
+      pictures,
+      src,
+      cMapUrl,
+      params = {}
+    } = this.props;
     this.instance = new Instance(this.$el, {
       ...params,
       pictures,
       src,
       cMapUrl,
-      rows: total,
+      rows: total || 5,
       onLoad: (s) => {
-        console.log('全部加载完成')
-        if (params.onLoad) params.onLoad(s)
-        if (zoom) { // 若允许放大, 使用better-scroll
-          if (this.bscroll) {
-            console.log('加载完成, bscroll刷新');
-            this.bscroll.finishPullUp();
-            this.bscroll.refresh();
-            return;
-          }
-          this.bscroll = new BScroll('.pdf-container', {
-            scrollX: true,
-            zoom: {
-              start: 1,
-              min: 1,
-              max: 4
-            },
-            probeType: 2,
-            pullUpLoad: {
-              threshold: 10
-            }
-          });
-          // 上拉到底部刷新
-          this.bscroll.on('pullingUp', () => {
-            this.instance.addPages();
-          });
-        } else { // 不允许放大, 则使用原生滚动条
-          // 上拉到底部
-          if (!s.container.getAttribute('data-scroll')) {
-            s.container.addEventListener('scroll', this.onScroll, false);
-            s.container.setAttribute('data-scroll', '1');
-          }
-        }
+        this.onLoad(s)
       }
     });
   }
@@ -97,51 +172,26 @@ export default class PDFView extends Component {
       }, 500);
     }
   }
-  componentDidUpdate (prevProps) {
-    const {
-      total,
-      pictures,
-      src,
-      cMapUrl,
-      params = {}
-    } = this.props;
-    // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
-    if ((src && src !== prevProps.src) || (pictures && pictures !== prevProps.pictures)) {
-      if (!this.instance) {
-        this.instance()
-      } else {
-        this.instance.update({
-          ...params,
-          pictures,
-          src,
-          cMapUrl,
-          rows: total,
-        })
-      }
+  // 滚动到页数
+  scrollToPage = (pageIndex) => {
+    if (!pageIndex || isNaN(pageIndex) || Number(pageIndex) < 1) return;
+    const pages = this.$el.querySelectorAll('.pdf-page');
+    const page = pages[Number(pageIndex) - 1];
+    if (!page) return;
+    if (this.bscroll) {
+      this.bscroll.scrollToElement(page);
+    } else {
+      this.$el.scrollTop = page.offsetTop;
     }
-    // 如果修改参数的话, 只需要更新参数即可
-    if (JSON.stringify(params) !== JSON.stringify(prevProps.params)) {
-      if (!this.instance) {
-        this.instance()
-      } else {
-        this.instance.updateParams(params)
-      }
-    }
-  }
-  componentDidMount () {
-    if (this.props.pageElements && !this.props.total) {
-      console.warn('pageElements: Page中插入元素, 必须设置total才可使用');
-    }
-    this.instance()
   }
   // 设置total则不分页
-  getTotalDOM = (total, pageElements = [], pageFeatureClass) => {
+  getTotalDOM = (total, insertPageElements = [], pageFeatureClass) => {
     if (!total) return null;
     const DOM = [];
     for (let i = 1; i <= total; i++) {
-      let insertDOM = null;
-      for (let pageEl of pageElements) {
-        if (pageEl.page && Number(pageEl.page) === i) insertDOM = pageEl.element;
+      let insertDOM = [];
+      for (let pageEl of insertPageElements) {
+        if (pageEl && pageEl.page && Number(pageEl.page) === i && pageEl.element) insertDOM.push(pageEl.element);
       }
       DOM.push(<div key={i} className={`pdf-page${pageFeatureClass ? ' ' + pageFeatureClass : ''}`}>
         <canvas className="pdf-page-canvas"></canvas>
@@ -156,8 +206,7 @@ export default class PDFView extends Component {
   }
   render() {
     const {
-      total, // 当设置总页数后, 将不分页
-      pageElements, // Page中插入元素, 必须有total才可使用
+      insertPageElements, // Page中插入元素
       pictures,
       src,
       cMapUrl,
@@ -170,9 +219,9 @@ export default class PDFView extends Component {
       return null;
     }
     return (
-      <div {...others} className={`pdf-container${others.className ? ' ' + others.className : ''}${zoom ? '' : ' scroll'}`} ref={(el) => {this.$el = el}}>
+      <div ref={(el) => {this.$el = el}} {...others} className={`pdf-container${others.className ? ' ' + others.className : ''}${zoom ? '' : ' scroll'}`}>
         <div {...wrapperAttribute} className={`pdf-wrapper${wrapperAttribute.className ? ' ' + wrapperAttribute.className : ''}`}>
-          {this.getTotalDOM(total, pageElements, params.pageFeatureClass)}
+          {this.getTotalDOM(this.state.total, insertPageElements, params.pageFeatureClass)}
         </div>
       </div>
     );

@@ -62,7 +62,7 @@ var PDFView = function (container, params) {
   // Container
   s.container = (typeof container === 'string' && container !== '') ? document.querySelector(container) : container
   if (!s.container) {
-    console.warn('SeedsUI Error：未找到Container，请检查传入参数是否正确')
+    console.warn('SeedsUI Warn: 未找到Container，请检查传入参数是否正确')
   }
 
   // Wrapper
@@ -311,6 +311,7 @@ var PDFView = function (container, params) {
   }
   // 加载
   s.load = function () {
+    if (!s.container) return;
     if (!s.wrapper) {
       console.warn('SeedsUI Warn: wrapper为空')
       return

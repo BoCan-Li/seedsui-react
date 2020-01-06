@@ -244,16 +244,18 @@ window.String.prototype.safeLvl = function () {
   }
   return Object.values(mode).length
 }
-// 英文占位长度, limit为截取长度
-window.String.prototype.enLength = function (limit) {
+// 英文占位长度, limit为截取长度, character为数字、大写字母等其它类型的自定义比例
+window.String.prototype.enLength = function (limit, character) {
   let strlen = 0
   let str = '' // 用于构建截取后的字符串
   for (let i = 0; i < this.length; i++) {
-    // 长度判断
-    if (this.charCodeAt(i) > 255) {
-      strlen += 2 // 如果是汉字，则字符串长度加2
-    }
-    else {
+    if (this.charCodeAt(i) > 255) { // 长度判断: 如果是汉字，则字符串占用字节数加2
+      strlen += 2
+    } else if (character && character.type === 'number' && this.charCodeAt(i) >= 48 && this.charCodeAt(i) <= 57) { // 自定义长度比例: 如果是数字，则字符串占用字节数加1.3
+      strlen += (character.scale || 1.3)
+    } else if (character && character.type === 'uppercase' && this.charCodeAt(i) >= 65 && this.charCodeAt(i) <= 90) { // 自定义长度比例: 如果是大写英文字母，则字符串占用字节数加1.3
+      strlen += (character.scale || 1.3)
+    } else {
       strlen++
     }
     // 字符串构建
