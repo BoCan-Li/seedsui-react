@@ -4027,8 +4027,7 @@ import Progress from 'seedsui-react/lib/Progress';
 ### 属性
 ```javascript
 <PDFView
-  total={总页数 number, 默认无} // 设置总页数后, 将没有分页
-  pageElements={页面中元素 array, 默认无} // 设置页面中元素, 必须设置total才能使用
+  insertPageElements={页面中元素 array, 默认无} // 设置页面中元素, 必须设置total才能使用
   src={值 string, 默认''} // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
   pictures={图片地址 array, 默认''}
   cMapUrl={设置cMapUrl解决中文不显示的问题 string, 默认无} // cMapUrl: '/demo/assets/cmaps/'
@@ -4055,15 +4054,11 @@ import pdfsrc from './../assets/pdfview.js'
 this.state = {
   pageElements: [
     {
-      page: 1,
-      x: 10,
-      y: 10,
-      HTML: '<input type="text"/>'
+      page: '1',
+      element: <Input/>
     },{
-      page: 5,
-      x: 10,
-      y: 10,
-      HTML: '<input type="text"/>'
+      page: '2',
+      element: <Input/>
     }
   ]
 }
@@ -4093,7 +4088,8 @@ submit = () => {
   zoom={false}
   src={pdfsrc}
   cMapUrl="/demo/assets/cmaps/"
-  params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}
+  insertPageElements={this.state.pageElements}
+  params={{rows: 3, onLoad: this.onLoad}}
 />
 ```
 [返回目录](#component)
