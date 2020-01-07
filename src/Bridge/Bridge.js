@@ -4,7 +4,7 @@ import BridgeBrowser from './browser'
 import BridgeWeixin from './wx'
 import BridgeDinghuo from './dinghuo'
 import BridgeWaiqin from './wq'
-
+import BridgeWaiqinCordova from './cordova'
 
 var Bridge = {}
 if (Device.platform === 'weixin') {
@@ -24,11 +24,18 @@ if (Device.platform === 'weixin') {
   }
   Bridge.config()
 } else if (Device.platform === 'waiqin') {
-  Bridge = {
-    ...BridgeBase,
-    ...BridgeWaiqin
+  if (window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) {
+    Bridge = {
+      ...BridgeBase,
+      ...BridgeWaiqin
+    }
+    Bridge.config()
+  } else {
+    Bridge = {
+      ...BridgeBase,
+      ...BridgeWaiqinCordova
+    }
   }
-  Bridge.config()
 } else {
   Bridge = {
     ...BridgeBase,

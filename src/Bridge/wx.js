@@ -176,34 +176,6 @@ var Bridge = {
         if (params.complete) params.complete(res)
       }
     })
-  },
-  /*
-  * 拍照、本地选图
-  * params：{sourceType:['album:相册', 'camera:拍照'],sizeType:['original:原图', 'compressed:压缩'],count:'最大张数', success:fn, fail:fn, cancel: fn, complete: fn}
-  * 返回选定照片的本地ID列表{localIds:[]'}
-  */
-  chooseImage: function (params) {
-    wx.chooseImage(params) // eslint-disable-line
-  },
-  /*
-  * 上传图片
-  params：{
-    localId: '', // 需要上传的图片的本地ID，由chooseImage接口获得
-    isShowProgressTips: 1, // 默认为1，显示进度提示
-    success: function (res) {
-      var serverId = res.serverId; // 返回图片的服务器端ID
-    }
-  }
-  */
-  uploadImage: function (params) {
-    wx.uploadImage(params) // eslint-disable-line
-  },
-  /*
-  * 图片预览
-  * params：{urls:'需要预览的图片http链接列表',current:'当前显示图片的http链接'}
-  */
-  previewImage: function (params) {
-    wx.previewImage(params) // eslint-disable-line
   }
 }
 
