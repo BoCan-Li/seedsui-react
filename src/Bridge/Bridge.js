@@ -22,19 +22,15 @@ if (Device.platform === 'weixin') {
     ...BridgeBase,
     ...BridgeDinghuo
   }
-  Bridge.config()
 } else if (Device.platform === 'waiqin') {
-  if (window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) {
-    Bridge = {
-      ...BridgeBase,
-      ...BridgeWaiqin
-    }
-    Bridge.config()
-  } else {
-    Bridge = {
-      ...BridgeBase,
-      ...BridgeWaiqinCordova
-    }
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeWaiqinCordova
+  }
+} else if (Device.platform === 'wq') {
+  Bridge = {
+    ...BridgeBase,
+    ...BridgeWaiqin
   }
 } else {
   Bridge = {

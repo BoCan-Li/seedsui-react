@@ -87,4 +87,6 @@ class Demo extends Component {
   }
 }
 
-render(<Demo/>, document.querySelector('#demo'))
+Bridge.ready(() => {
+  render(<Demo/>, document.querySelector('#demo'))
+});

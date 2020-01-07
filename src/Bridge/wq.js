@@ -1,5 +1,4 @@
 import DB from './../DB';
-import Device from './../Device';
 
 if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
 
@@ -7,7 +6,14 @@ var Bridge = {
   /**
    * 定制功能
    */
-  platform: Device.platform,
+  platform: 'wq',
+  config: function () {
+    var self = this
+    /* eslint-disable */
+    wq.config({auth: false})
+    /* eslint-enable */
+    self.addBackPress()
+  },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
     if (rule && window.location.href.indexOf(rule) >= 0) {
@@ -138,6 +144,15 @@ var Bridge = {
         if (params.complete) params.complete(res)
       }
     })
+  },
+  chooseImage: function (params) {
+    wq.chooseImage(params) // eslint-disable-line
+  },
+  uploadImage: function (params) {
+    wq.uploadImage(params) // eslint-disable-line
+  },
+  previewImage: function (params) {
+    wq.previewImage(params) // eslint-disable-line
   }
 }
 

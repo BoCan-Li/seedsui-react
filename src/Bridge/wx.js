@@ -176,6 +176,15 @@ var Bridge = {
         if (params.complete) params.complete(res)
       }
     })
+  },
+  chooseImage: function (params) {
+    wx.chooseImage(params) // eslint-disable-line
+  },
+  uploadImage: function (params) {
+    wx.uploadImage(params) // eslint-disable-line
+  },
+  previewImage: function (params) {
+    wx.previewImage(params) // eslint-disable-line
   }
 }
 

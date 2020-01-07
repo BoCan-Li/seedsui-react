@@ -59,6 +59,7 @@ var Device = (function () {
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('wqappversion') > -1) {
     platform = 'waiqin'
+    if (!window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) platform = 'wq'
     platformMatch = ua.match(/wqappversion\/([\w.]*)/)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else {
@@ -153,7 +154,7 @@ var Device = (function () {
     * @param {Object} options {wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs'}
     */
   function dynamicLoadBridge(callback, options = {}) {
-    if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo') {
+    if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
       if (callback) window.addEventListener('load', callback, false)
       return
     }
@@ -167,7 +168,7 @@ var Device = (function () {
           callback()
         }
       }
-    } else if (platform === 'waiqin' && window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) { // 外勤cordova
+    } else if (platform === 'waiqin') { // 外勤cordova
       script.src = options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       if (callback) {
         script.onload = function () {
@@ -176,7 +177,7 @@ var Device = (function () {
           })
         }
       }
-    } else if (platform === 'waiqin' && !window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) { // 外勤jssdk
+    } else if (platform === 'wq') { // 外勤jssdk
       script.src = options.wqSrc || '//res.waiqin365.com/p/open/js/waiqin365.min.js'
       if (callback) {
         script.onload = function () {
