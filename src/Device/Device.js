@@ -148,47 +148,6 @@ var Device = (function () {
     window.removeEventListener('orientationchange', changeSafeArea, false)
     window.addEventListener('orientationchange', changeSafeArea, false)
   }
-  /**
-    * 动态加载桥接库
-    * @param {Func} callback 加载完成回调
-    * @param {Object} options {wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs'}
-    */
-  function dynamicLoadBridge(callback, options = {}) {
-    if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
-      if (callback) window.addEventListener('load', callback, false)
-      return
-    }
-    var script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.defer = 'defer'
-    if (platform === 'weixin' || platform === 'weixinwork') { // 微信
-      script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.4.0.js'
-      if (callback) {
-        script.onload = function () {
-          callback()
-        }
-      }
-    } else if (platform === 'waiqin') { // 外勤cordova
-      script.src = options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
-      if (callback) {
-        script.onload = function () {
-          document.addEventListener('deviceready', () => {
-            callback()
-          })
-        }
-      }
-    } else if (platform === 'wq') { // 外勤jssdk
-      script.src = options.wqSrc || '//res.waiqin365.com/p/open/js/waiqin365.min.js'
-      if (callback) {
-        script.onload = function () {
-          callback()
-        }
-      }
-    } else if (platform === 'dinghuo') {
-      callback()
-    }
-    if (script.src) document.body.appendChild(script)
-  }
   // 获取地址栏参数
   function getUrlParameter(argName, argSearch) {
     var url = window.location.href
@@ -245,7 +204,6 @@ var Device = (function () {
     ua: ua,
     orientation: window.orientation || '请在真机上测试', // 设备方向0:竖屏,90:左横屏,-90:右横屏
     adapterIPhoneX: adapterIPhoneX, // 适配iPhoneX
-    dynamicLoadBridge: dynamicLoadBridge, // 动态加载桥接库
     getUrlParameter: getUrlParameter,
     screenWidth: getScreenWidth(),
     screenHeight: getScreenHeight(),
