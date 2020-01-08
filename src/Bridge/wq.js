@@ -11,8 +11,10 @@ var Bridge = {
     var self = this
     /* eslint-disable */
     wq.config({auth: false})
+    wq.ready(function(){
+      self.addBackPress()
+    })
     /* eslint-enable */
-    self.addBackPress()
   },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
@@ -36,11 +38,18 @@ var Bridge = {
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
-    if (params.url) window.location.href = params.url
+    wq.openWindow(params) // eslint-disable-line
   },
   // 关闭窗口
   closeWindow: function () {
     wq.closeWindow() // eslint-disable-line
+  },
+  /**
+    * 修改原生标题
+    * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
+    */
+  setTitle: function (params) {
+    wq.setTitle(params)
   },
   // 客户端返回绑定
   addBackPress: function (callback) {
@@ -49,8 +58,10 @@ var Bridge = {
       wq.onHistoryBack(() => { // eslint-disable-line
         if (callback) {
           callback()
+          self.addBackPress()
         } else {
           self.back()
+          self.addBackPress()
         }
         return false
       })

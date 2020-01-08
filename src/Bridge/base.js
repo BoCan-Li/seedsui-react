@@ -248,7 +248,8 @@ var Bridge = {
         }
       }
     } else if (platform === 'wq') { // 外勤jssdk
-      script.src = options.wqSrc || '//res.waiqin365.com/p/open/js/waiqin365.min.js'
+      // 用开发d目录可以使用新功能
+      script.src = options.wqSrc || '//res.waiqin365.com/d/open/js/waiqin365.min.js?v=1.0.1'
       if (callback) {
         script.onload = function () {
           callback()

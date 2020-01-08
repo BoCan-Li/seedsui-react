@@ -63,8 +63,8 @@ class Demo extends Component {
   }
   open = () => {
     Bridge.openWindow({
-      title: 'hh',
-      url: 'http://172.31.0.167:3001?isFromApp=1&sub=1'
+      title: '外勤365',
+      url: 'http://172.31.0.167:3000?isFromApp=1&sub=1'
     })
   }
   render() {

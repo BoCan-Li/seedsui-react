@@ -155,6 +155,15 @@ var Bridge = {
     var self = this
     self.invoke('closeWindow', null, callback)
   },
+  /**
+    * 修改原生标题
+    * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
+    * @param {Function} callback 回调
+    */
+  setTitle: function (params, callback) {
+    var self = this
+    self.invoke('setTitle', params, callback);
+  },
   // 客户端添加返回绑定
   addBackPress: function (callback) {
     var self = this
@@ -219,15 +228,6 @@ var Bridge = {
       return
     }
     self.invoke('qmfpay', params, callback)
-  },
-  /**
-    * 修改原生标题
-    * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
-    * @param {Function} callback 回调
-    */
-  setTitle: function (params, callback) {
-    var self = this
-    self.invoke('setTitle', params, callback);
   },
   /**
     * ios绑定左上角返回按钮
