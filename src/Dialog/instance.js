@@ -7,10 +7,9 @@ var Dialog = function (params) {
     overflowContainer: document.body,
     overflowContainerActiveClass: 'overflow-hidden',
 
-    position: 'middle',
-
     animationAttr: 'data-animation',
     animation: 'fade', // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+    animationClass: 'popup-animation middle',
     duration: 300,
 
     mask: null,
@@ -65,9 +64,8 @@ var Dialog = function (params) {
   // Dialog
   s.createDialog = function () {
     s.dialog = document.createElement('div')
-    s.dialog.classList.add(s.params.dialogClass, s.params.position)
+    s.dialog.setAttribute('class', s.params.dialogClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
     s.dialog.setAttribute('style', s.params.dialogCss)
-    s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
     s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
   }
   s.create = function () {

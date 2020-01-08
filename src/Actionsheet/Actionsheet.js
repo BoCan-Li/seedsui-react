@@ -8,6 +8,8 @@ export default class Actionsheet extends Component {
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool,
+    animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+    duration: PropTypes.number,
 
     list: PropTypes.array, // [{caption: string, onClick: func}]
 
@@ -21,6 +23,7 @@ export default class Actionsheet extends Component {
     onClick: PropTypes.func
   }
   static defaultProps = {
+    animation: 'slideUp',
     cancelCaption: window._seeds_lang['cancel'] || '取消'
   }
   constructor(props) {
@@ -80,6 +83,8 @@ export default class Actionsheet extends Component {
     let {
       portal,
       show,
+      animation,
+      duration,
 
       list,
 
@@ -101,9 +106,56 @@ export default class Actionsheet extends Component {
     optionAttribute = this.filterProps(optionAttribute)
     cancelAttribute = this.filterProps(cancelAttribute)
 
+    // 构建动画
+    let animationClassName = '';
+    switch (animation) {
+      case 'slideLeft':
+        animationClassName = 'popup-animation right-middle';
+        break;
+      case 'slideRight':
+        animationClassName = 'popup-animation left-middle';
+        break;
+      case 'slideUp':
+        animationClassName = 'popup-animation bottom-center';
+        break;
+      case 'slideDown':
+        animationClassName = 'popup-animation top-center';
+        break;
+      case 'zoom':
+        animationClassName = 'popup-animation middle';
+        break;
+      case 'fade':
+        animationClassName = 'popup-animation middle';
+        break;
+      case 'none':
+        animationClassName = '';
+        break;
+      default:
+        animationClassName = 'popup-animation middle';
+    }
+
+    // 动画时长
+    let durationStyle = {};
+    if (typeof duration === 'number') {
+      durationStyle = {
+        WebkitTransitionDuration: duration + 'ms'
+      }
+    }
+
     return createPortal(
-      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask actionsheet-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} onClick={this.onClick}>
-        <div data-animation="slideUp" {...others} className={`actionsheet${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
+      <div
+        ref={(el) => {this.$el = el}}
+        {...maskAttribute}
+        className={`mask actionsheet-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
+        style={Object.assign({}, durationStyle, maskAttribute.style || {})}
+        onClick={this.onClick}
+      >
+        <div
+          data-animation={animation}
+          {...others}
+          className={`actionsheet${animationClassName ? ' ' + animationClassName : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}
+          style={Object.assign({}, durationStyle, others.style || {})}
+        >
           <div {...groupAttribute} className={`actionsheet-group${groupAttribute.className ? ' ' + groupAttribute.className : ''}`}>
             {list && list.map((item, index) => {
               return <a {...optionAttribute} className={`actionsheet-option${optionAttribute.className ? ' ' + optionAttribute.className : ' border-b'}`} key={index} data-index={index}>{item.caption}</a>

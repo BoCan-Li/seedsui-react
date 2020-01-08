@@ -13,6 +13,7 @@ var Alert = function (params) {
     duration: 300,
     animationAttr: 'data-animation',
     animation: 'zoom',
+    animationClass: 'popup-animation middle',
 
     alertClass: 'alert',
     alertActiveClass: 'active',
@@ -82,7 +83,7 @@ var Alert = function (params) {
   }
   s.createAlert = function () {
     s.alert = document.createElement('div')
-    s.alert.setAttribute('class', s.params.alertClass)
+    s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
     s.alert.setAttribute(s.params.animationAttr, s.params.animation)
 
     s.html = document.createElement('div')
@@ -118,7 +119,7 @@ var Alert = function (params) {
   }
   s.updateDOM = function () {
     if (s.alert) {
-      s.alert.setAttribute('class', s.params.alertClass)
+      s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
       s.alert.setAttribute(s.params.animationAttr, s.params.animation)
     }
 

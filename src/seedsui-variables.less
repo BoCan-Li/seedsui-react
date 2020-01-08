@@ -400,8 +400,9 @@ a {
 };
 
 
-// popup-animation 公共弹框动画
+// popup-animation 公共弹框动画(Alert、Dialog、ActionSheet、Popover)
 .popup-animation{
+  position: absolute;
   &[data-animation]{
     transition-duration:@animation-duration;
 	  transition-property:transform,opacity,visibility;
@@ -628,7 +629,7 @@ a {
     box-sizing:border-box;
     width:100%;
     bottom:0;
-    &:extend(.popup-animation all); // 动画, 基于.popup-animation
+    // 动画使用.popup-animation
   }
   
   .actionsheet-option,.actionsheet-cancel{
@@ -670,9 +671,6 @@ a {
   .alert-mask{
     &.active{
       z-index:10;
-      .flex;
-      .flex-middle;
-      .flex-center;
     }
   }
   .alert{
@@ -686,7 +684,7 @@ a {
     background-color:white;
     border-color:@border;
     overflow: hidden;
-    &:extend(.popup-animation all); // 动画, 基于.popup-animation
+    // 动画使用.popup-animation
     h1{
       text-align: center;
       padding: @15px @12px 0 @12px;
@@ -2476,7 +2474,7 @@ a {
     max-width: 100%;
     max-height: 100%;
     overflow: auto;
-    &:extend(.popup-animation all); // 动画, 基于.popup-animation
+    // 动画使用.popup-animation
   }
 }
 
@@ -4797,7 +4795,6 @@ a {
     box-sizing: border-box;
     overflow: hidden;
     background-color: @body-bg;
-    &:extend(.popup-animation all); // 动画, 基于.popup-animation
   }
 }
 
@@ -5313,7 +5310,7 @@ a {
     background-color: white;
     z-index: 10;
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
-    &:extend(.popup-animation all); // 动画, 基于.popup-animation
+    // 动画使用.popup-animation
     &:after {
       content: '';
       position: absolute;

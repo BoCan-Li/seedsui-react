@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import {render} from 'react-dom'
 // import pdfsrc from './../assets/pdfview.js'
 
-import {Page, Header, Titlebar, Container, Bridge, PDFView, Button, Device} from '../../src'
+import {Page, Header, Titlebar, Container, Bridge, PDFView, Button, Device, Popover} from '../../src'
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
+      show: false,
       pageElements: [
         {
           page: 1,
@@ -67,6 +68,13 @@ class Demo extends Component {
       url: 'http://172.31.0.167:3000?isFromApp=1&sub=1'
     })
   }
+  onClick = () => {
+    this.setState((prevState) => {
+      return {
+        show: !prevState.show
+      }
+    })
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
@@ -82,6 +90,22 @@ class Demo extends Component {
           cMapUrl="/demo/assets/cmaps/"
           params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}
         /> */}
+        <Popover
+          show={this.state.show}
+          className={'top-left'}
+          style={{top: 20, left: 20}}
+          duration={0}
+          maskAttribute={{
+            onClick: this.onClick
+          }}
+        >
+          操作操作<br/>
+          操作操作<br/>
+          操作操作<br/>
+          操作操作<br/>
+          操作操作
+        </Popover>
+        <input type="button" value="显隐" onClick={this.onClick}/>
       </Container>
     </Page>
   }

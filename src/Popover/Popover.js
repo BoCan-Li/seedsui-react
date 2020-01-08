@@ -28,14 +28,41 @@ export default class Popover extends Component {
       portal,
       show,
       animation,
+      duration,
       onClick,
       maskAttribute = {},
       children,
       ...others
     } = this.props;
+
+    // 构建动画
+    let animationClassName = '';
+    if (animation !== 'none') {
+      animationClassName = 'popup-animation';
+    }
+
+    // 动画时长
+    let durationStyle = {};
+    if (typeof duration === 'number') {
+      durationStyle = {
+        WebkitTransitionDuration: duration + 'ms'
+      }
+    }
+
     return createPortal(
-      <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask popover-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
-        <div {...others} className={`popover${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} data-animation={animation} onClick={onClick ? onClick : this.onClick}>
+      <div
+        ref={el => {this.$el = el;}}
+        {...maskAttribute}
+        className={`mask popover-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
+        style={Object.assign({}, durationStyle, maskAttribute.style || {})}
+      >
+        <div
+          {...others}
+          className={`popover${animationClassName ? ' ' + animationClassName : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}
+          style={Object.assign({}, durationStyle, others.style || {})}
+          data-animation={animation}
+          onClick={onClick ? onClick : this.onClick}
+        >
           {children && children}
         </div>
       </div>,

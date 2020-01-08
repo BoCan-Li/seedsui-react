@@ -8,6 +8,7 @@ export default class Dialog extends Component {
     show: PropTypes.bool,
     onClick: PropTypes.func,
     animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+    duration: PropTypes.number,
 
     maskAttribute: PropTypes.object,
 
@@ -37,38 +38,58 @@ export default class Dialog extends Component {
       show,
       onClick,
       animation,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+      duration,
 
       maskAttribute = {},
 
       children,
       ...others
     } = this.props;
-    let transformOrigin = 'middle';
+    // 构建动画
+    let animationClassName = '';
     switch (animation) {
       case 'slideLeft':
-        transformOrigin = 'right-middle';
+        animationClassName = 'popup-animation right-middle';
         break;
       case 'slideRight':
-        transformOrigin = 'left-middle';
+        animationClassName = 'popup-animation left-middle';
         break;
       case 'slideUp':
-        transformOrigin = 'bottom-center';
+        animationClassName = 'popup-animation bottom-center';
         break;
       case 'slideDown':
-        transformOrigin = 'top-center';
+        animationClassName = 'popup-animation top-center';
         break;
       case 'zoom':
-        transformOrigin = 'middle';
+        animationClassName = 'popup-animation middle';
         break;
       case 'fade':
-        transformOrigin = 'middle';
+        animationClassName = 'popup-animation middle';
         break;
       default:
-        transformOrigin = 'middle';
+        animationClassName = 'popup-animation middle';
+    }
+    // 动画时长
+    let durationStyle = {};
+    if (typeof duration === 'number') {
+      durationStyle = {
+        WebkitTransitionDuration: duration + 'ms'
+      }
     }
     return createPortal(
-      <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask dialog-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}>
-        <div {...others} className={`dialog${transformOrigin ? ' ' + transformOrigin : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`} onClick={onClick ? onClick : this.onClick} data-animation={animation}>
+      <div
+        ref={el => {this.$el = el;}}
+        {...maskAttribute}
+        className={`mask dialog-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
+        style={Object.assign({}, durationStyle, maskAttribute.style || {})}
+      >
+        <div
+          {...others}
+          className={`dialog${animationClassName ? ' ' + animationClassName : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}
+          style={Object.assign({}, durationStyle, others.style || {})}
+          onClick={onClick ? onClick : this.onClick}
+          data-animation={animation}
+        >
           {children && children}
         </div>
       </div>,

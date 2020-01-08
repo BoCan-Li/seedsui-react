@@ -187,6 +187,8 @@ import Chat from 'seedsui-react/lib/Chat';
 <Actionsheet
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
+  animation={动画 string, 默认'slideUp'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade | none
+  duration={动画时长 number, 默认无}
 
   list={*按钮项 array, 如: [{caption: string}]}
 
@@ -242,6 +244,8 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
   portal={传送dom object, 默认document.getElementById('root')}
   args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
+  animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade | none
+  duration={动画时长 number, 默认无}
 
   maskAttribute={遮罩属性 object, 默认无}
 
@@ -1031,6 +1035,7 @@ onClick = () => {
   show={*显隐 bool, 默认false}
 
   animation={动画 string, 默认'fade'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  duration={动画时长 number, 默认无}
 
   maskAttribute={遮罩属性 object, 默认无} // className: mask dialog-mask
   
@@ -1043,18 +1048,18 @@ onClick = () => {
 ```javascript
 import Dialog from 'seedsui-react/lib/Dialog';
 this.state = {
-  showDialog: false
+  show: false
 }
 onClick = () => {
   this.setState((prevState) => {
     return {
-      showDialog: !prevState.showDialog
+      show: !prevState.show
     }
   })
 }
 <Dialog
   portal={document.body}
-  show={this.state.showDialog}
+  show={this.state.show}
   animation="zoom"
   style={{width: '80%', height: '80%', backgroundColor: 'white', borderRadius: '10px', WebkitTransitionDuration: '200ms'}}
   className="transition-duration-0"
@@ -3853,7 +3858,8 @@ onClick = (e) => {
 <Popover
   portal={传送dom object, 默认document.getElementById('root')}
   show={*显隐 bool, 默认false}
-  animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade | none
+  duration={动画时长 number, 默认无}
   maskAttribute={遮罩属性 object, 默认无} // className: mask popover-mask
   children={容器内容 node, 默认无}
   {...others} // 容器属性
@@ -3866,47 +3872,26 @@ onClick = (e) => {
 import Popover from 'seedsui-react/lib/Popover';
 
 this.state = {
-  popoverStyle: {top: '44px', right: '12px'},
-  popoverClassName: 'top-left',
-  popoverShow: false
+  show: false
 }
 
 // 更多操作
-showPopover = (e) => {
-  if (!e.target) {
-    Bridge.showToast('没有元素, 无法查看更多', {mask: false});
-    return;
-  }
-  const clientRect = e.target.getBoundingClientRect();
-  // 如果超过屏幕的的4/3, 则向上弹
-  const screenHeight = Device.screenHeight;
-  let popoverStyle = {top: Math.Calc.add(clientRect.y, 28) + 'px', left: clientRect.x + 'px'};
-  let popoverClassName = 'top-left';
-  if (clientRect.y / screenHeight > 0.75) {
-    popoverStyle = {bottom: Math.Calc.add(Math.Calc.subtract(screenHeight, clientRect.y), 6) + 'px', left: clientRect.x + 'px'};
-    popoverClassName = 'bottom-left';
-  }
-  this.setState({
-    popoverStyle: popoverStyle,
-    popoverClassName: popoverClassName,
-    popoverShow: true
-  });
-}
-hidePopover = () => {
-  this.setState({
-    popoverShow: false
+onClick = () => {
+  this.setState((prevState) => {
+    return {
+      show: !prevState.show
+    }
   })
 }
 
-
-<input type="button" value="显示" onClick={this.showPopover} style={{position: 'absolute', left: '50%', top: '20px'}}/>
+<input type="button" value="显隐" onClick={this.onClick}/>
 {/* 更多操作 */}
 <Popover
-  show={this.state.popoverShow}
-  className={this.state.popoverClassName}
-  style={this.state.popoverStyle}
+  show={this.state.show}
+  className={'top-left'}
+  style={{top: 20, left: 20}}
   maskAttribute={{
-    onClick: this.hidePopover
+    onClick: this.onClick
   }}
 >
   操作操作<br/>

@@ -11,6 +11,7 @@ var Actionsheet = function (params) {
 
     animationAttr: 'data-animation',
     animation: 'slideUp',
+    animationClass: 'popup-animation bottom-center',
 
     mask: null,
     maskClass: 'mask',
@@ -55,7 +56,7 @@ var Actionsheet = function (params) {
   // Actionsheet
   s.createActionsheet = function () {
     var actionsheet = document.createElement('div')
-    actionsheet.setAttribute('class', s.params.actionsheetClass)
+    actionsheet.setAttribute('class', s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
     actionsheet.setAttribute(s.params.animationAttr, s.params.animation)
     return actionsheet
   }
