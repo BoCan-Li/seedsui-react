@@ -274,3 +274,74 @@ window.String.prototype.enLength = function (limit, character) {
   // 返回长度
   return strlen
 }
+
+
+// 没有换行符的文字换行, limit每页条数
+window.String.prototype.brRow = function (limit, character) {
+  if (!limit) return [this.toString()]
+  let page = 1
+  let rows = limit
+
+  // 分页列表
+  let list = []
+  // 长度数量
+  let count = 0
+  // 字符串的开始和结束截取位置
+  let start = 0
+  let end = 0
+  // 存储没有还满足分页条件时的字符串
+  let temp = ''
+  for (let i = 0; i < this.length; i++) {
+    if (this.charCodeAt(i) > 255) { // 长度判断: 如果是汉字，则字符串占用字节数加2
+      count += 2
+    } else if (character && character.type === 'number' && this.charCodeAt(i) >= 48 && this.charCodeAt(i) <= 57) { // 自定义长度比例: 如果是数字，则字符串占用字节数加1.3
+      count += (character.scale || 1.3)
+    } else if (character && character.type === 'uppercase' && this.charCodeAt(i) >= 65 && this.charCodeAt(i) <= 90) { // 自定义长度比例: 如果是大写英文字母，则字符串占用字节数加1.3
+      count += (character.scale || 1.3)
+    } else {
+      count++
+    }
+    // 存储剩余不足一页的部分
+    temp = this.substring(end)
+    // 长度数量大于分页时开始分页, 例如: rows为2个字符为一页, count3时则开始分页, substring(0, 2), 但这样仅截取了两位, 还多一位
+    if (count > page * rows) {
+      // 结束位置就是游标i
+      end = i
+      // 存储剩余不足一页的部分
+      temp = this.substring(end)
+      // 此条字符串
+      let rowStr = this.substring(start, end)
+      if (rowStr) list.push(rowStr)
+      // 开始位置从此页的结束位置开始
+      start = i
+      page++
+    }
+  }
+  // 如果有没有满足分页条件的剩余字符串时, 加入到list中去
+  if (temp) list.push(temp)
+
+  // 返回分页后的结果
+  if (!list.length) return [this.toString()]
+  return list
+}
+
+// 文字换行
+window.String.prototype.br = function (limit, character) {
+  // 先对br换行
+  var brList = this.split(new RegExp('(\\r|\\n|\\r\\n)', 'g'))
+  if (!brList || !brList.length) brList = [this.toString()]
+  var list = []
+  for (let item of brList) {
+    let rowList = item.brRow(limit, character)
+    // 遍历一条字符返回的分页列表
+    for (let rowItem of rowList) {
+      // 过滤换行符和空值
+      let match = rowItem.match(new RegExp('(\\r|\\n|\\r\\n)', 'g'))
+      if (rowItem && !match) {
+        list.push(rowItem)
+      }
+    }
+  }
+  
+  return list
+}

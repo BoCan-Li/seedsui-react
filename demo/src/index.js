@@ -9,6 +9,7 @@ class Demo extends Component {
     super(props);
     this.state = {
       show: false,
+      value: '',
       pageElements: [
         {
           page: 1,
@@ -41,6 +42,7 @@ class Demo extends Component {
       //   }]
       // })
     // }, 5000);
+    
   }
   onLoad = (s) => {
     console.log('宽:' + s.width + ', 高:' + s.height + ' 除以比例' + s.scale + ' 等于宽:' + s.pageWidth +  ' 高:' + s.pageHeight);
@@ -75,6 +77,12 @@ class Demo extends Component {
       }
     })
   }
+  onChange = (value) => {
+    console.log(value.br(4))
+    this.setState({
+      value: value
+    })
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
@@ -106,6 +114,7 @@ class Demo extends Component {
           操作操作
         </Popover>
         <input type="button" value="显隐" onClick={this.onClick}/>
+        <textarea value={this.state.value} onChange={(e) => this.onChange(e.target.value)}></textarea>
       </Container>
     </Page>
   }
