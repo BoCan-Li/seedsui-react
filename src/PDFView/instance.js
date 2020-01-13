@@ -398,8 +398,13 @@ var PDFView = function (container, params) {
   // 初始化pdf文件
   s.pdf = null
   s.loadPDF = function () {
+    if (!PDFJS) { // eslint-disable-line
+      console.log('SeedsUI: PDFJS未加载')
+      return
+    }
     // 设置cMapUrl, 解决中文不显示的问题
     if (s.params.cMapUrl) {
+      PDFJS.disableRange = true // eslint-disable-line
       PDFJS.cMapUrl = s.params.cMapUrl // eslint-disable-line
       PDFJS.cMapPacked = true // eslint-disable-line
     }
