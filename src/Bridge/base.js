@@ -261,7 +261,14 @@ var Bridge = {
       self.config()
     }
     if (script.src) document.body.appendChild(script)
-  }
+  },
+  /**
+    * 修改原生标题
+    * @param {Object} params {title: '自定义标题'}
+    */
+  setTitle: function (params) {
+    if (params.title) document.title = params.title
+  },
   /**
    * 基础功能:end
    */

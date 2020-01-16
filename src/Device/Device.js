@@ -155,6 +155,7 @@ var Device = (function () {
     var params = {}
     // 如果url中包含?说明有参数
     if (url.indexOf('?') !== -1) {
+      if (!argName) return '?' + url.split('?')[1]
       // 获取所有参数options: 如?a=1&b=2转为['a=1','b=2']
       var options = url.split('?')[1].split('&')
       if (options.length) {

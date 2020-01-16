@@ -194,12 +194,17 @@ export default class PDFView extends Component {
         if (pageEl && pageEl.page && Number(pageEl.page) === i && pageEl.element) insertDOM.push(pageEl.element);
       }
       DOM.push(<div key={i} className={`pdf-page${pageFeatureClass ? ' ' + pageFeatureClass : ''}`}>
-        <canvas className="pdf-page-canvas"></canvas>
+        <div className="pdf-page-draw">
+          <canvas className="pdf-page-canvas"></canvas>
+          <img className="pdf-page-img" alt=""/>
+          <div className="pdf-page-elements">
+            {insertDOM}
+          </div>
+        </div>
         <img alt="" className="pdf-page-img hide"/>
-        <div className="pdf-page-load hide">加载中</div>
+        <div className="pdf-page-load">加载中</div>
         <div className="pdf-page-error hide">文件加载失败</div>
         <div className="pdf-page-nodata hide">暂无数据</div>
-        {insertDOM}
       </div>);
     }
     return DOM;

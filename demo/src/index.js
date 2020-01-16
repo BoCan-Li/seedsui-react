@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
-// import pdfsrc from './../assets/pdfview.js'
+import pdfsrc from './../assets/pdfview.js'
 
 import {Page, Header, Titlebar, Container, Bridge, PDFView, Button, Device, Popover} from '../../src'
 
@@ -15,12 +15,12 @@ class Demo extends Component {
           page: 1,
           x: 10,
           y: 10,
-          HTML: '<input type="text"/>'
+          HTML: '<input key="1" type="text"/>'
         },{
-          page: 5,
+          page: 6,
           x: 10,
           y: 10,
-          HTML: '<input type="text"/>'
+          HTML: '<input key="1" type="text"/>'
         }
       ]
     }
@@ -89,15 +89,22 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
+      <iframe src="https://www.baidu.com/" width="100%" height="100px" frameBorder="0">
+      <p>Your browser does not support iframes.</p>
+      </iframe>
         {Device.getUrlParameter('sub') === '1' && <Button onClick={this.hide}>隐藏标题</Button>}
         {Device.getUrlParameter('sub') !== '1' && <Button onClick={this.open}>打开新窗口</Button>}
-        {/* <PDFView
+        <PDFView
           ref="$PDFView"
           zoom={false}
           src={pdfsrc}
           cMapUrl="/demo/assets/cmaps/"
-          params={{rows: 3, onLoad: this.onLoad, pageElements: this.state.pageElements}}
-        /> */}
+          params={{
+            rows: 3, onLoad: this.onLoad,
+            pageElements: this.state.pageElements
+          }}
+          // insertPageElements={this.state.pageElements}
+        />
         <Popover
           show={this.state.show}
           className={'top-left'}
