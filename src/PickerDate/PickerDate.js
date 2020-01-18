@@ -57,11 +57,11 @@ export default class PickerDate extends Component {
       locale = {}
     } = this.context;
     this.instance.updateParams({
-      yyUnit: locale['unit_year'] || '年',
-      MMUnit: locale['unit_month'] || '月',
-      ddUnit: locale['unit_date'] || '日',
-      hhUnit: locale['unit_hour'] || '时',
-      mmUnit: locale['unit_minute'] || '分'
+      yyUnit: typeof locale['unit_year'] === 'string' ? locale['unit_year'] : '年',
+      MMUnit: typeof locale['unit_month'] === 'string' ? locale['unit_month'] : '月',
+      ddUnit: typeof locale['unit_date'] === 'string' ? locale['unit_date'] : '日',
+      hhUnit: typeof locale['unit_hour'] === 'string' ? locale['unit_hour'] : '时',
+      mmUnit: typeof locale['unit_minute'] === 'string' ? locale['unit_minute'] : '分'
     });
     const def = this.getDefault();
     this.instance.setDefaults(def);

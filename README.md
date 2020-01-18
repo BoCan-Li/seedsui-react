@@ -105,6 +105,7 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Carrousel](#carrousel) 轮播
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
+- [ConfigProvider](#configprovider) 全局配置
 - [Container](#container) page主体
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
@@ -949,6 +950,60 @@ onClick = (e, checked) => {
 <Checkbox caption="全选" checked={this.state.checked} onClick={this.onClick}/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+## ConfigProvider
+[复选框](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/ConfigProvider.js)
+### 属性
+```javascript
+<ConfigProvider
+  locale={国际化配置文件 object, 默认无}
+  localeLanguage={国际化语言名称 string, 默认无} // 可选项为: zh_CN, en_US, 如想要自定义国际化文件, 使用locale属性
+  portal={弹框传送dom object, 默认无}
+  children={子元素 node, 默认无}
+  {...others}
+/>
+```
+[locale格式](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/zh_CN.js)
+
+### 示例
+```javascript
+import InputDate from 'seedsui-react/lib/InputDate';
+import ConfigProvider from 'seedsui-react/lib/ConfigProvider';
+
+this.state = {
+  theme: 'zh_CN'
+}
+
+useZh = () => {
+  this.setState({
+    theme: 'zh_CN'
+  });
+}
+useEn = () => {
+  this.setState({
+    theme: 'en_US'
+  });
+}
+
+<input type="button" value="英文" onClick={this.useEn}/>
+<input type="button" value="中文" onClick={this.useZh}/>
+<ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
+  <InputDate type="datetime"/>
+</ConfigProvider>
+
+```
+[返回目录](#component)
+
+
+
+
 
 
 

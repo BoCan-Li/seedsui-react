@@ -168,24 +168,24 @@ class Demo extends Component {
     //   locale: zh
     // }
     this.state = {
-      theme: en
+      theme: 'zh_CN'
     }
   }
   componentDidMount () {
   }
   useZh = () => {
     this.setState({
-      theme: zh
+      theme: 'zh_CN'
     });
   }
   useEn = () => {
     this.setState({
-      theme: en
+      theme: 'en_US'
     });
   }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
-      <ConfigProvider portal={document.getElementById('demo')} locale={this.state.theme}>
+      <ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
