@@ -1,4 +1,6 @@
-window._seeds_lang = {
+let lang = null;
+
+const local = {
   'cancel': '取消',
   'ok': '确定',
   'finish': '完成',
@@ -75,3 +77,18 @@ window._seeds_lang = {
   'hint_for_example_address': '例如“江苏省南京市建邺区”',
   'no_data': '暂无数据'
 }
+
+export default (key) => {
+  try {
+    if (localStorage.getItem('_seeds_lang')) {
+      _seeds_lang = JSON.parse(localStorage.getItem('_seeds_lang'))
+    } else {
+      _seeds_lang = local
+    }
+  } catch (error) {
+    console.log(error)
+    _seeds_lang = local
+  }
+  return _seeds_lang[key]
+}
+

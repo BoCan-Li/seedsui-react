@@ -95,6 +95,7 @@ export { default as ApiAxios } from './ApiAxios';
 export { default as BackboneRoute } from './BackboneRoute'; // 不常用
 export { default as CanvasUtil } from './CanvasUtil'; // 不常用
 export { default as Clipboard } from './Clipboard';
+export { default as ConfigProvider } from './ConfigProvider'; // 不常用
 export { default as Vott } from './Vott'; // 不常用
 export { default as DB } from './DB';
 export { default as Device } from './Device';

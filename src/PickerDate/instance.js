@@ -1,7 +1,5 @@
 import Picker from './../Picker/instance.js';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 var PickerDate = function (params) {
   // 参数改写
   var onDateClickSubmit = params.onClickSubmit
@@ -40,11 +38,11 @@ var PickerDate = function (params) {
     minYear: nowDate.getFullYear() - 10, // 1950
     maxYear: nowDate.getFullYear() + 10, // 2050
 
-    yyUnit: window._seeds_lang['unit_year'] || '年',
-    MMUnit: window._seeds_lang['unit_month'] || '月',
-    ddUnit: window._seeds_lang['unit_date'] || '日',
-    hhUnit: window._seeds_lang['unit_hour'] || '时',
-    mmUnit: window._seeds_lang['unit_minute'] || '分',
+    yyUnit: '年',
+    MMUnit: '月',
+    ddUnit: '日',
+    hhUnit: '时',
+    mmUnit: '分',
 
     onClickSubmit: function (e) {
       e.activeText = getActiveText(e.activeOptions)
@@ -76,6 +74,12 @@ var PickerDate = function (params) {
 
   function trim (str) {
     return str.replace(/(^\s*)|(\s*$)/g, '')
+  }
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
   }
   // 设置默认值
   s.setDefaultYear = function (yearKey) {
@@ -126,46 +130,7 @@ var PickerDate = function (params) {
   }
   s.updateDetault()
 
-  // 年
-  s.years = []
-  if (s.params.yearsData) {
-    s.years = s.params.yearsData
-  } else {
-    for (var yyyy = s.params.minYear; yyyy <= s.params.maxYear; yyyy++) {
-      s.years.push({
-        'key': '' + yyyy,
-        'value': s.params.isSimpleYear ? yyyy.toString().substring(2, 4) + s.params.yyUnit : yyyy + s.params.yyUnit
-      })
-    }
-  }
-  // 月
-  s.months = []
-  if (s.params.monthsData) {
-    s.months = s.params.monthsData
-  } else {
-    for (var MM = 1; MM <= 12; MM++) {
-      var _MM = MM.toString().length === 1 ? '0' + MM : MM
-      s.months.push({
-        'key': '' + _MM,
-        'value': _MM + s.params.MMUnit
-      })
-    }
-  }
-  // 日
-  s.days = []
-  var currentMaxday = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0).getDate()
-  if (s.params.daysData) {
-    s.days = Object.clone(s.params.daysData)
-  } else {
-    for (var dd = 1; dd <= currentMaxday; dd++) {
-      var _dd = dd.toString().length === 1 ? '0' + dd : dd
-      s.days.push({
-        'key': '' + _dd,
-        'value': _dd + s.params.ddUnit
-      })
-    }
-  }
-
+  // 从非自定义日数据的自然日中更新
   function updateDaysForDefault (year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
     var currentLastDay = s.days[s.days.length - 1]['key']
@@ -182,6 +147,8 @@ var PickerDate = function (params) {
       s.days.splice(s.days.length - spliceCount, spliceCount)
     }
   }
+
+  // 从自定义的日数据daysData中更新
   function updateDaysForCustom (year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
     var currentLastDay = s.days[s.days.length - 1]['key']
@@ -199,6 +166,8 @@ var PickerDate = function (params) {
       }
     }
   }
+
+  // 变换月时更新总天数
   function updateDays (year, month, defaultDay) {
     if (s.params.daysData) {
       updateDaysForCustom(year, month)
@@ -208,34 +177,6 @@ var PickerDate = function (params) {
     var defaultKey = defaultDay
     if (s.days.length < defaultDay) defaultKey = s.days[s.days.length - 1]['key']
     s.replaceSlot(2, s.days, defaultKey, s.params.dayClass) // 修改第三项
-  }
-
-  // 时
-  s.hours = []
-  if (s.params.hoursData) {
-    s.hours = s.params.hoursData
-  } else {
-    for (var hh = 0; hh <= 23; hh++) {
-      var _hh = hh.toString().length === 1 ? '0' + hh : hh
-      s.hours.push({
-        'key': '' + _hh,
-        'value': _hh + s.params.hhUnit
-      })
-    }
-  }
-
-  // 分
-  s.minutes = []
-  if (s.params.minutesData) {
-    s.minutes = s.params.minutesData
-  } else {
-    for (var mm = 0; mm <= 59; mm++) {
-      var _mm = mm.toString().length === 1 ? '0' + mm : mm
-      s.minutes.push({
-        'key': '' + _mm,
-        'value': _mm + s.params.mmUnit
-      })
-    }
   }
 
   /* ----------------
@@ -275,17 +216,83 @@ var PickerDate = function (params) {
 
   // 添加数据
   function addMonthSlot () {
+    // 年
+    s.years = []
+    if (s.params.yearsData) {
+      s.years = s.params.yearsData
+    } else {
+      for (var yyyy = s.params.minYear; yyyy <= s.params.maxYear; yyyy++) {
+        s.years.push({
+          'key': '' + yyyy,
+          'value': s.params.isSimpleYear ? yyyy.toString().substring(2, 4) + s.params.yyUnit : yyyy + s.params.yyUnit
+        })
+      }
+    }
     s.addSlot(s.years, s.params.defaultYear, s.params.yearClass)
+
+    // 月
+    s.months = []
+    if (s.params.monthsData) {
+      s.months = s.params.monthsData
+    } else {
+      for (var MM = 1; MM <= 12; MM++) {
+        var _MM = MM.toString().length === 1 ? '0' + MM : MM
+        s.months.push({
+          'key': '' + _MM,
+          'value': _MM + s.params.MMUnit
+        })
+      }
+    }
     s.addSlot(s.months, s.params.defaultMonth, s.params.monthClass)
   }
 
   function addDateSlot () {
     addMonthSlot()
+    // 日
+    s.days = []
+    var currentMaxday = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0).getDate()
+    if (s.params.daysData) {
+      s.days = Object.clone(s.params.daysData)
+    } else {
+      for (var dd = 1; dd <= currentMaxday; dd++) {
+        var _dd = dd.toString().length === 1 ? '0' + dd : dd
+        s.days.push({
+          'key': '' + _dd,
+          'value': _dd + s.params.ddUnit
+        })
+      }
+    }
     s.addSlot(s.days, s.params.defaultDay, s.params.dayClass)
   }
 
   function addTimeSlot () {
+    // 时
+    s.hours = []
+    if (s.params.hoursData) {
+      s.hours = s.params.hoursData
+    } else {
+      for (var hh = 0; hh <= 23; hh++) {
+        var _hh = hh.toString().length === 1 ? '0' + hh : hh
+        s.hours.push({
+          'key': '' + _hh,
+          'value': _hh + s.params.hhUnit
+        })
+      }
+    }
     s.addSlot(s.hours, s.params.defaultHour, s.params.hourClass)
+    // 分
+    s.minutes = []
+    if (s.params.minutesData) {
+      s.minutes = s.params.minutesData
+    } else {
+      for (var mm = 0; mm <= 59; mm++) {
+        var _mm = mm.toString().length === 1 ? '0' + mm : mm
+        s.minutes.push({
+          'key': '' + _mm,
+          'value': _mm + s.params.mmUnit
+        })
+      }
+    }
     s.addSlot(s.minutes, s.params.defaultMinute, s.params.minuteClass)
   }
 

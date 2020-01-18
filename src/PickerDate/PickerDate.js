@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class PickerDate extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object,
     data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
@@ -29,8 +32,8 @@ export default class PickerDate extends Component {
     timeSplit: ':',
     type: 'date'
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount = () => {
     this.initInstance()
@@ -42,18 +45,32 @@ export default class PickerDate extends Component {
   componentDidUpdate = () => {
     if (this.instance) {
       if (this.props.show) {
-        this.setDefault();
+        this.update();
         this.instance.show();
       }
       else this.instance.hide()
     }
   }
-  setDefault = () => {
+  update = () => {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
+    this.instance.updateParams({
+      yyUnit: locale['unit_year'] || '年',
+      MMUnit: locale['unit_month'] || '月',
+      ddUnit: locale['unit_date'] || '日',
+      hhUnit: locale['unit_hour'] || '时',
+      mmUnit: locale['unit_minute'] || '分'
+    });
     const def = this.getDefault();
     this.instance.setDefaults(def);
     this.instance.update();
   }
   getDefault = () => {
+    const {
+      locale = {}
+    } = this.context;
     const {split, timeSplit, type, onError} = this.props;
     var defaultValue = this.props.valueForKey || this.props.value;
     var now = new Date();
@@ -72,7 +89,7 @@ export default class PickerDate extends Component {
       // 如果不是合法的日期格式
       const e = this.instance ? this.instance : {};
       if (!defaultValue || !defaultValue.isDate(split)) {
-        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}`});
+        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}`});
       } else {
         let dateValues = defaultValue.split(split)
         defaultYear = dateValues[0]
@@ -82,7 +99,7 @@ export default class PickerDate extends Component {
     } else if (type === 'month') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isMonth(split)) {
-        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
+        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
       } else {
         let monthValues = defaultValue.split(split)
         defaultYear = monthValues[0]
@@ -91,7 +108,7 @@ export default class PickerDate extends Component {
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isDateTime(split, timeSplit)) {
-        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
+        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
       } else {
         let values = defaultValue.split(' ')
         let dateValues = values[0].split(split || '-')
@@ -105,7 +122,7 @@ export default class PickerDate extends Component {
     } else if (type === 'time') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isTime(split, timeSplit)) {
-        if (onError) onError(e, {msg: `${window._seeds_lang['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
+        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
       } else {
         let timeValues = defaultValue.split(timeSplit || ':')
         defaultHour = timeValues[0]
@@ -121,6 +138,9 @@ export default class PickerDate extends Component {
     }
   }
   getData = () => {
+    const {
+      locale = {}
+    } = this.context;
     // 自定义数据
     var yearsData = null
     var monthsData = null
@@ -132,7 +152,7 @@ export default class PickerDate extends Component {
         yearsData = this.props.data.year.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (window._seeds_lang['unit_year'] || '年')
+            'value': '' + n + (locale['unit_year'] || '年')
           }
         })
       }
@@ -140,7 +160,7 @@ export default class PickerDate extends Component {
         monthsData = this.props.data.month.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (window._seeds_lang['unit_month'] || '月')
+            'value': '' + n + (locale['unit_month'] || '月')
           }
         })
       }
@@ -148,7 +168,7 @@ export default class PickerDate extends Component {
         daysData = this.props.data.day.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (window._seeds_lang['unit_date'] || '日')
+            'value': '' + n + (locale['unit_date'] || '日')
           }
         })
       }
@@ -156,7 +176,7 @@ export default class PickerDate extends Component {
         hoursData = this.props.data.hour.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (window._seeds_lang['unit_hour'] || '时')
+            'value': '' + n + (locale['unit_hour'] || '时')
           }
         })
       }
@@ -164,7 +184,7 @@ export default class PickerDate extends Component {
         minutesData = this.props.data.minute.map((n) => {
           return {
             'key': '' + n,
-            'value': '' + n + (window._seeds_lang['unit_minute'] || '分')
+            'value': '' + n + (locale['unit_minute'] || '分')
           }
         })
       }
@@ -178,6 +198,10 @@ export default class PickerDate extends Component {
     }
   }
   initInstance = () => {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     var data = this.getData();
     var def = this.getDefault();
     // render数据
@@ -215,7 +239,12 @@ export default class PickerDate extends Component {
         if (submitAttribute.onClick) submitAttribute.onClick(e);
       },
       onHid: (e) => {
-      }
+      },
+      yyUnit: locale['unit_year'] || '年',
+      MMUnit: locale['unit_month'] || '月',
+      ddUnit: locale['unit_date'] || '日',
+      hhUnit: locale['unit_hour'] || '时',
+      mmUnit: locale['unit_minute'] || '分'
     })
     if (show && this.instance) {
       setTimeout(function(){
@@ -234,6 +263,9 @@ export default class PickerDate extends Component {
     return propsed;
   }
   render() {
+    const {
+      locale = {}
+    } = this.context;
     let {
       portal,
       data,
@@ -259,8 +291,8 @@ export default class PickerDate extends Component {
       <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
         <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
           <div className="picker-header">
-            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
-            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (locale['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (locale['finish'] || '完成')}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">
@@ -270,7 +302,7 @@ export default class PickerDate extends Component {
           </div>
         </div>
       </div>,
-      portal || document.getElementById('root') || document.body
+      portal || this.context.portal || document.getElementById('root') || document.body
     );
   }
 }

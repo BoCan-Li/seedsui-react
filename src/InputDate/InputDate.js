@@ -1,12 +1,15 @@
 // require PrototypeDate.js和PrototypeString.js
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerDate from './../PickerDate';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class InputDate extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     // Input
     min: PropTypes.string, // YYYY-MM-DD
@@ -24,8 +27,8 @@ export default class InputDate extends Component {
   static defaultProps = {
     type: 'date'
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       show: false
     };
@@ -41,6 +44,9 @@ export default class InputDate extends Component {
   }
   // 日期纠正
   correctDate = (val) => {
+    const {
+      locale = {}
+    } = this.context;
     const {type, min, max, onError, pickerProps = {}} = this.props;
     const split = pickerProps.split || '-';
     const timeSplit = pickerProps.timeSplit || ':';
@@ -52,25 +58,25 @@ export default class InputDate extends Component {
     if (min && (min.isDateTime(split, timeSplit) || min.isDate(split) || min.isMonth(split) || min.isTime(timeSplit))) {
       if (type === 'date' && selectDate.compareDate(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'month' && selectDate.compareMonth(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'time' && selectDate.compareTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
@@ -79,25 +85,25 @@ export default class InputDate extends Component {
     if (max && (max.isDateTime(split, timeSplit) || max.isDate(split) || max.isMonth(split) || max.isTime(timeSplit))) {
       if (type === 'date' && selectDate.compareDate(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'month' && selectDate.compareMonth(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'time' && selectDate.compareTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {msg: (window._seeds_lang['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {msg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
@@ -191,10 +197,9 @@ export default class InputDate extends Component {
       pickerProps = {},
       ...others
     } = this.props;
-    return [
-      <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClickInput}/>,
+    return <Fragment>
+      <InputText ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClickInput}/>
       <PickerDate
-        key="pickerdate"
         ref="$ComponentPicker"
         {...pickerProps}
         maskAttribute={{
@@ -214,6 +219,6 @@ export default class InputDate extends Component {
         value={this.$input ? this.$input.value : this.props.value} 
         show={pickerProps.show === undefined ? this.state.show : pickerProps.show}
       />
-    ];
+    </Fragment>;
   }
 }
