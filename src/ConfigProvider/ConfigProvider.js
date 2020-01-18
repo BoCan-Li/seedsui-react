@@ -33,6 +33,10 @@ export default class ConfigProvider extends Component {
           break;
       }
     }
+    // 如果有locale的话, 则放入内存中, 开放给getLocaleValue使用
+    if (locale) {
+      localStorage.setItem('_seedsui_locale', JSON.stringify(locale))
+    }
     return {
       locale: locale,
       localeLanguage: localeLanguage,

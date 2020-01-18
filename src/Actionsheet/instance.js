@@ -1,6 +1,5 @@
 // Actionsheet
 var Actionsheet = function (params) {
-  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* ------------------
   Model
   ------------------ */
@@ -22,7 +21,7 @@ var Actionsheet = function (params) {
     groupClass: 'actionsheet-group',
     optionClass: 'actionsheet-option',
     buttonCancelClass: 'actionsheet-cancel',
-    buttonCancelHTML: window._seeds_lang['cancel'] || '取消',
+    buttonCancelHTML: '取消', // 实例化时需要国际化
     data: [] // [{text: '', handler: func()}]
     /*
     Callbacks:

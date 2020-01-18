@@ -263,6 +263,7 @@ export default class PickerDate extends Component {
     return propsed;
   }
   render() {
+    // 全局配置
     const {
       locale = {}
     } = this.context;

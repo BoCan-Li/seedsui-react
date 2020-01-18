@@ -1,6 +1,5 @@
 // Alert 提示框
 var Alert = function (params) {
-  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
@@ -24,8 +23,8 @@ var Alert = function (params) {
 
     caption: '',
     html: '',
-    buttonSubmitHTML: window._seeds_lang['ok'] || '确定',
-    buttonCancelHTML: window._seeds_lang['cancel'] || '取消',
+    buttonSubmitHTML: '确定', // 实例化时需要国际化
+    buttonCancelHTML: '取消', // 实例化时需要国际化
 
     isClickMaskHide: false,
     /*
@@ -117,33 +116,53 @@ var Alert = function (params) {
     s.mask.appendChild(s.alert)
     s.parent.appendChild(s.mask)
   }
+  // 更新DOM
   s.updateDOM = function () {
+    // 容器
     if (s.alert) {
       s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
       s.alert.setAttribute(s.params.animationAttr, s.params.animation)
     }
-
+    // 内容
     if (s.html) {
       s.html.setAttribute('class', s.params.contentClass)
       s.html.innerHTML = s.params.html
     }
-
+    // 标题
     if (s.caption && s.params.caption) s.caption.innerHTML = s.params.caption
-
+    // 按钮容器
     if (s.buttonBox) {
       s.buttonBox.setAttribute('class', s.params.handlerClass)
     }
-
+    // 如果有属性, 却没有确定按钮, 则创建一个
+    if (s.params.onClickSubmit && !s.buttonSubmit) {
+      s.buttonSubmit = s.createButtonSubmit()
+      s.buttonBox.appendChild(s.buttonSubmit)
+    }
+    // 确定按钮
     if (s.buttonSubmit) {
       s.buttonSubmit.innerHTML = s.params.buttonSubmitHTML
       s.buttonSubmit.setAttribute('class', s.params.buttonSubmitClass)
     }
-    
+    // 如果有属性, 却没有取消按钮, 则创建一个
+    if (s.params.onClickCancel && !s.buttonCancel) {
+      s.buttonCancel = s.createButtonCancel()
+      s.buttonBox.insertBefore(s.buttonCancel, s.buttonSubmit)
+    }
+    // 取消按钮
     if (s.buttonCancel) {
       s.buttonCancel.innerHTML = s.params.buttonCancelHTML
       s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
     }
   }
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    s.updateDOM()
+  }
+  // DOM获取与创建
   s.update = function () {
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask) {
@@ -206,27 +225,6 @@ var Alert = function (params) {
     s.params = defaults
     s.updateDOM()
   }
-  // 动态设置
-  s.setHTML = function (html) {
-    s.html.innerHTML = html
-  }
-  s.setCaption = function (caption) {
-    s.caption.innerHTML = caption
-  }
-  s.setOnClick = function (fn) {
-    s.params.onClick = fn
-  }
-  s.setOnClickSubmit = function (fn) {
-    s.params.onClickSubmit = fn
-  }
-  s.setOnClickCancel = function (fn) {
-    // 如果没有取消按钮，创建一个
-    if (!s.params.onClickCancel) {
-      s.buttonCancel = s.createButtonCancel()
-      s.buttonBox.insertBefore(s.buttonCancel, s.buttonSubmit)
-    }
-    s.params.onClickCancel = fn
-  }
   /* --------------------
   Control
   -------------------- */
@@ -257,24 +255,12 @@ var Alert = function (params) {
       else s.hide()
     }
   }
-  s.setOnClick = function (fn) {
-    s.params.onClick = fn
-  }
-  s.setOnClickSubmit = function (fn) {
-    s.params.onClickSubmit = fn
-  }
-  s.setOnClickCancel = function (fn) {
-    s.params.onClickCancel = fn
-  }
   s.onClickMask = function (e) {
     if (e.target === s.mask) {
       s.event = e
       if (s.params.onClickMask) s.params.onClickMask(s)
       if (s.params.isClickMaskHide) s.hide()
     }
-  }
-  s.setOnClickMask = function (fn) {
-    s.params.onClickMask = fn
   }
   s.onTransitionEnd = function (e) {
     if (e && e.propertyName === 'visibility') return

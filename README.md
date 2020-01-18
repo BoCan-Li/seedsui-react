@@ -206,8 +206,17 @@ import Chat from 'seedsui-react/lib/Chat';
 ### 示例
 ```javascript
 import Actionsheet from 'seedsui-react/lib/Actionsheet';
+this.state = {
+  show: false;
+}
 onClick = (e, item, index) => {
   console.log(e, item, index)
+}
+show = (...param) => {
+  console.log(...param)
+  this.setState({
+    show: true
+  });
 }
 hide = (...param) => {
   console.log(...param)

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class Actionsheet extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool,
@@ -23,11 +26,10 @@ export default class Actionsheet extends Component {
     onClick: PropTypes.func
   }
   static defaultProps = {
-    animation: 'slideUp',
-    cancelCaption: window._seeds_lang['cancel'] || '取消'
+    animation: 'slideUp'
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount = () => {
   }
@@ -80,6 +82,10 @@ export default class Actionsheet extends Component {
     return propsed;
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     let {
       portal,
       show,
@@ -92,7 +98,7 @@ export default class Actionsheet extends Component {
       groupAttribute = {},
       optionAttribute = {},
       
-      cancelCaption,
+      cancelCaption = locale['cancel'] || '取消',
       cancelAttribute = {},
 
       onClick,
@@ -164,7 +170,7 @@ export default class Actionsheet extends Component {
           {showCancel && <a {...cancelAttribute} className={`actionsheet-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
         </div>
       </div>,
-      portal || document.getElementById('root') || document.body
+      portal || this.context.portal || document.getElementById('root') || document.body
     );
   }
 }

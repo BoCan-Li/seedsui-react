@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, InputDate, ConfigProvider} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, Actionsheet, ConfigProvider} from '../../src';
 
 const zh = {
   'cancel': '取消',
@@ -168,7 +168,8 @@ class Demo extends Component {
     //   locale: zh
     // }
     this.state = {
-      theme: 'zh_CN'
+      theme: 'zh_CN',
+      show: false
     }
   }
   componentDidMount () {
@@ -183,20 +184,54 @@ class Demo extends Component {
       theme: 'en_US'
     });
   }
+  onClick = () => {
+    Bridge.showConfirm('2', {
+      success: () => {
+        Bridge.tel('12341234')
+      },
+      fail: (e) => {
+        console.log(-1)
+        e.hide()
+      }
+    });
+  }
+  hide = (...param) => {
+    console.log(...param)
+    this.setState({
+      show: false
+    });
+  }
+  show = (...param) => {
+    console.log(...param)
+    this.setState({
+      show: true
+    });
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
-      <ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        <input type="button" value="英文" onClick={this.useEn}/>
+      <input type="button" value="英文" onClick={this.useEn}/>
         <input type="button" value="中文" onClick={this.useZh}/>
-        <div style={{margin: 20}}>
-      </div>
-        <InputDate type="datetime"/>
+        <input type="button" value="显示" onClick={this.show}/>
+        <ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
+
+        <Actionsheet
+  show={this.state.show}
+  list={[{caption: '菜单1'}, {caption: '菜单2'}]}
+  onClick={this.onClick}
+  cancelAttribute={{
+    onClick: this.hide
+  }}
+  maskAttribute={{
+    onClick: this.hide
+  }}
+/>
+</ConfigProvider>
       </Container>
-      </ConfigProvider>
+      
     </Page>
   }
 }

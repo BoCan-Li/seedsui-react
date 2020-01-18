@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class Alert extends Component {
   static propTypes = {
     portal: PropTypes.object,
@@ -29,16 +27,18 @@ export default class Alert extends Component {
     children: PropTypes.node,
   }
   static defaultProps = {
-    animation: 'zoom',
-    submitCaption: window._seeds_lang['ok'] || '确定',
-    cancelCaption: window._seeds_lang['cancel'] || '取消',
+    animation: 'zoom'
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount = () => {
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       portal,
       show,
@@ -54,10 +54,10 @@ export default class Alert extends Component {
 
       contentAttribute = {},
 
-      submitCaption,
+      submitCaption = locale['ok'] || '确定',
       submitAttribute = {},
 
-      cancelCaption,
+      cancelCaption = locale['cancel'] || '取消',
       cancelAttribute = {},
 
       children,
@@ -122,7 +122,7 @@ export default class Alert extends Component {
           </div>
         </div>
       </div>,
-      this.props.portal || document.getElementById('root') || document.body
+      portal || this.context.portal || document.getElementById('root') || document.body
     );
   }
 }
