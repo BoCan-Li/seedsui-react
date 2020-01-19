@@ -70,7 +70,7 @@ var Alert = function (params) {
   s.buttonCancel = null
   // Mask
   s.updateMask = function () {
-    if (!s.mask) {
+    if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
     }
     s.mask.setAttribute('class', s.params.maskClass)
@@ -143,7 +143,7 @@ var Alert = function (params) {
   }
 
   // 创建DOM
-  s.create = function () {
+  s.createDOM = function () {
     s.updateMask()
     s.updateAlert()
     s.updateCaption()
@@ -170,17 +170,18 @@ var Alert = function (params) {
   }
   // DOM获取与创建
   s.update = function () {
-    // 获取DOM
+    // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask) {
+    if (s.mask && s.mask.tagName) {
       if (!s.alert) s.alert = s.mask.querySelector('.' + s.params.alertClass)
       if (!s.caption) s.caption = s.alert.querySelector('h1')
       if (!s.content) s.content = s.alert.querySelector('.' + s.params.contentClass)
       if (!s.handler) s.handler = s.alert.querySelector('.' + s.params.handlerClass)
       if (!s.buttonSubmit) s.buttonSubmit = s.alert.querySelector('.' + s.params.buttonSubmitClass)
       if (!s.buttonCancel) s.buttonCancel = s.alert.querySelector('.' + s.params.buttonCancelClass)
+      s.updateDOM()
     } else {
-      s.create()
+      s.createDOM()
     }
   }
   s.update()

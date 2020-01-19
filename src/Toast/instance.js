@@ -39,7 +39,7 @@ var Toast = function (params) {
   s.wrapper = null
   // Mask
   s.updateMask = function () {
-    if (!s.mask) {
+    if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
     }
     s.mask.setAttribute('class', s.params.maskClass)
@@ -50,6 +50,7 @@ var Toast = function (params) {
       s.toast = document.createElement('div')
     }
     s.toast.setAttribute('class', s.params.toastClass)
+    s.toast.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
   // Wrapper
   s.updateWrapper = function () {
@@ -79,7 +80,7 @@ var Toast = function (params) {
   }
 
   // 创建DOM
-  s.create = function () {
+  s.createDOM = function () {
     s.updateMask()
     s.updateToast()
     s.updateWrapper()
@@ -103,19 +104,17 @@ var Toast = function (params) {
 
   // DOM获取与创建
   s.update = function () {
-    // 获取DOM
+    // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask) {
+    if (s.mask && s.mask.tagName) {
       s.toast = s.mask.querySelector('.' + s.params.toastClass)
       s.wrapper = s.mask.querySelector('.' + s.params.wrapperClass)
       s.caption = s.mask.querySelector('.' + s.params.captionClass)
       s.icon = s.mask.querySelector('.' + s.params.iconClass)
+      s.updateDOM()
     } else {
-      s.create()
+      s.createDOM()
     }
-    s.toast.style.webkitTransitionDuration = s.params.duration + 'ms'
-    // 更新DOM
-    s.updateDOM()
   }
   s.update()
 

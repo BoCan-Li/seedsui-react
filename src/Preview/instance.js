@@ -76,7 +76,7 @@ var Preview = function (params) {
   s.container = null
   s.img = null
   s.createPreview = function (img, layerHTML) {
-    if (!s.mask) {
+    if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
       s.mask.setAttribute('class', s.params.maskClass)
 

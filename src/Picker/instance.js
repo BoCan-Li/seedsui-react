@@ -142,7 +142,7 @@ var Picker = function (params) {
   s.create = function () {
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
 
-    if (s.mask) {
+    if (s.mask && s.mask.tagName) {
       s.picker = s.mask.querySelector('.' + s.params.pickerClass)
       s.header = s.mask.querySelector('.' + s.params.headerClass)
       s.headerSubmit = s.mask.querySelector('.' + s.params.headerSubmitClass)

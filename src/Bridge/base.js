@@ -35,8 +35,8 @@ var Bridge = {
         maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
         toastClass: 'toast ' + (params.position ? params.position : 'middle'),
         icon: params.icon || '',
-        html: msg,
-        delay: params.delay || 2000
+        delay: params.delay || 2000,
+        html: msg
       })
     } else {
       self.toast.updateParams({
@@ -61,17 +61,16 @@ var Bridge = {
     var self = this
     if (!self.loading) {
       self.loading = new Loading({
+        ...params,
         caption: params.caption || (getLocaleValue('loading') || '正在加载...'),
-        type: params.type,
-        icon: params.icon || '',
-        maskCss: params.css || null
+        maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       });
     } else {
-      if (params.caption) self.loading.setCaption(params.caption)
-      if (params.type) self.loading.setType(params.type)
-      if (params.css) self.loading.setMaskCss(params.css)
-      if (params.icon) self.loading.setIcon(params.icon || '')
-      if (params.mask) self.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
+      self.loading.updateParams({
+        ...params,
+        caption: params.caption || (getLocaleValue('loading') || '正在加载...'),
+        maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
+      })
     }
     self.loading.show()
   },

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class Loading extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object, // 传送至DOM
     type: PropTypes.string, // floating | filling | custom
@@ -17,20 +20,23 @@ export default class Loading extends Component {
     children: PropTypes.node
   }
   static defaultProps = {
-    caption: window._seeds_lang['loading'] || '正在加载...',
     type: 'floating'
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       portal,
       type,
       maskAttribute = {},
       iconAttribute,
       captionAttribute = {},
-      caption,
+      caption = locale['loading'] || '正在加载...',
       children,
       ...others
     } = this.props;
@@ -69,7 +75,7 @@ export default class Loading extends Component {
           {content}
           {children}
         </div>,
-        portal || document.getElementById('root') || document.body
+        portal || this.context.portal || document.getElementById('root') || document.body
       )
     }
     return (

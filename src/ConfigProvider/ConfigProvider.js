@@ -26,10 +26,16 @@ export default class ConfigProvider extends Component {
     if (localeLanguage) {
       switch (localeLanguage) {
         case 'zh_CN':
-          locale = require('./zh_CN.js').default;
+          locale = {
+            ...require('./zh_CN.js').default,
+            ...locale
+          }
           break;
         case 'en_US':
-          locale = require('./en_US.js').default;
+          locale = {
+            ...require('./en_US.js').default,
+            ...locale
+          }
           break;
       }
     }

@@ -12,13 +12,19 @@ class Demo extends Component {
     //   locale: zh
     // }
     this.state = {
-      theme: 'zh_CN',
+      theme: 'en_US',
       show: false
     }
   }
   componentDidMount () {
+    Bridge.showLoading({
+      mask: false
+    });
     Bridge.showToast('hh', {mask: false});
     setTimeout(() => {
+      Bridge.showLoading({
+        mask: false
+      });
       Bridge.showToast('11', {mask: false});
     }, 1000);
   }
@@ -76,7 +82,7 @@ class Demo extends Component {
       <input type="button" value="英文" onClick={this.useEn}/>
         <input type="button" value="中文" onClick={this.useZh}/>
         <input type="button" value="显示" onClick={this.show}/>
-        <ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
+        <ConfigProvider locale={{'hh': '111'}} portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
 
         <Actionsheet
   show={this.state.show}

@@ -47,22 +47,26 @@ var Actionsheet = function (params) {
   s.group
   s.options = []
   // Mask
-  s.createMask = function () {
-    var mask = document.createElement('div')
-    mask.setAttribute('class', s.params.maskClass + ' ' + s.params.maskFeatureClass)
-    return mask
+  s.updateMask = function () {
+    if (!s.mask || !s.mask.tagName) {
+      s.mask = document.createElement('div')
+    }
+    s.mask.setAttribute('class', s.params.maskClass + ' ' + s.params.maskFeatureClass)
   }
   // Actionsheet
-  s.createActionsheet = function () {
-    var actionsheet = document.createElement('div')
-    actionsheet.setAttribute('class', s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
-    actionsheet.setAttribute(s.params.animationAttr, s.params.animation)
-    return actionsheet
+  s.updateActionsheet = function () {
+    if (!s.actionsheet || !s.actionsheet.tagName) {
+      s.actionsheet = document.createElement('div')
+    }
+    s.actionsheet.setAttribute('class', s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
+    s.actionsheet.setAttribute(s.params.animationAttr, s.params.animation)
   }
   // Group
-  s.createGroup = function () {
-    var group = document.createElement('div')
-    group.setAttribute('class', s.params.groupClass)
+  s.updateGroup = function () {
+    if (!s.group || !s.group.tagName) {
+      s.group = document.createElement('div')
+    }
+    s.group.setAttribute('class', s.params.groupClass)
     // Options
     s.options = []
     for (var [i, opt] of s.params.data.entries()) { // eslint-disable-line
@@ -71,44 +75,31 @@ var Actionsheet = function (params) {
       option.setAttribute('data-index', i)
       option.innerHTML = opt.text
       s.options.push(option)
-      group.appendChild(option)
+      s.group.appendChild(option)
     }
-    return group
   }
-  // Options
-  s.createOptions = function (appendToEl) {
-    
-  }
-  // buttonCancel
-  s.createButtonCancel = function () {
-    // 创建取消按钮
-    if (!s.params.buttonCancelHTML) {
-      return 0
+  // ButtonCancel
+  s.updateButtonCancel = function () {
+    if (!s.buttonCancel || !s.buttonCancel.tagName) {
+      s.buttonCancel = document.createElement('a')
     }
-    var buttonCancel = document.createElement('a')
-    buttonCancel.setAttribute('class', s.params.buttonCancelClass)
-    buttonCancel.innerHTML = s.params.buttonCancelHTML
-    return buttonCancel
+    s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
+    s.buttonCancel.innerHTML = s.params.buttonCancelHTML
   }
 
   s.create = function () {
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask) {
+    if (s.mask && s.mask.tagName) {
       s.actionsheet = s.mask.querySelector('.' + s.params.actionsheetClass)
       s.group = s.mask.querySelector('.' + s.params.groupClass)
       s.options = [].slice.call(s.mask.querySelectorAll('.' + s.params.optionClass))
-      /* eslint-disable */
-      // for (var i = 0, option; option = s.options[i++];) {
-      //   option.handler = option.getAttribute('handler')
-      // }
-      /* eslint-enable */
       s.buttonCancel = s.mask.querySelector('.' + s.params.buttonCancelClass)
       return
     }
-    s.mask = s.createMask()
-    s.actionsheet = s.createActionsheet()
-    s.group = s.createGroup()
-    s.buttonCancel = s.createButtonCancel()
+    s.updateMask()
+    s.updateActionsheet()
+    s.updateGroup()
+    s.updateButtonCancel()
     s.actionsheet.appendChild(s.group)
     s.actionsheet.appendChild(s.buttonCancel)
     s.mask.appendChild(s.actionsheet)

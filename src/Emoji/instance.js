@@ -48,7 +48,7 @@ var Emoji = function (params) {
 
 	// Mask
   s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-  if (!s.mask) {
+  if (!s.mask || !s.mask.tagName) {
     console.log('SeedsUI Error：未找到Emoji的mask元素，请检查传入参数是否正确')
     return
 	}

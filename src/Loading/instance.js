@@ -1,6 +1,5 @@
 // Loading 进度条
 var Loading = function (params) {
-  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
@@ -13,12 +12,13 @@ var Loading = function (params) {
     maskActiveClass: 'active',
     loadingClass: 'loading',
     loadingActiveClass: 'active',
+    captionClass: 'caption',
 
     types: ['floating', 'filling', 'custom'],
     type: 'floating', // floating流光 | filling填料环 | custom自定义
     iconClass: 'loading-custom-icon',
     icon: '', // 传入icon的class
-    caption: window._seeds_lang['loading'] || '正在加载...'
+    caption: '正在加载...' // 实例化时需要国际化
   }
   params = params || {}
   for (var def in defaults) {
@@ -33,16 +33,20 @@ var Loading = function (params) {
   s.loading = null
   
   // Mask
-  s.createMask = function () {
-    var mask = document.createElement('div')
-    mask.setAttribute('class', s.params.maskClass)
-    mask.setAttribute('style', s.params.maskCss)
-    return mask
+  s.updateMask = function () {
+    if (!s.mask || !s.mask.tagName) {
+      s.mask = document.createElement('div')
+    }
+    s.mask.setAttribute('class', s.params.maskClass)
+    s.mask.setAttribute('style', s.params.maskCss)
   }
+
   // Loading
-  s.createLoading = function () {
-    var loading = document.createElement('div')
-    loading.setAttribute('class', s.params.loadingClass + ' loading-floating animated')
+  s.updateLoading = function () {
+    if (!s.loading) {
+      s.loading = document.createElement('div')
+    }
+    s.loading.setAttribute('class', s.params.loadingClass + ' loading-floating animated')
     // 流光loading-floating
     var html = '<div class="loading-floating-icon">' +
         '<div class="loading-floating-blade"></div>' +
@@ -58,69 +62,74 @@ var Loading = function (params) {
         '<div class="loading-floating-blade"></div>' +
         '<div class="loading-floating-blade"></div>' +
       '</div>' +
-    '<div class="loading-floating-caption caption">' + s.params.caption + '</div>';
+    '<div class="loading-floating-caption ' + s.params.captionClass + '">' + s.params.caption + '</div>';
     if (s.params.type === 'filling') { // 填料环loading-filling
-      loading.setAttribute('class', s.params.loadingClass + ' loading-filling')
+      s.loading.setAttribute('class', s.params.loadingClass + ' loading-filling')
       html = '<div class="loading-filling-icon"></div>'+
-      '<div class="loading-filling-caption caption">' + s.params.caption + '</div>';
+      '<div class="loading-filling-caption ' + s.params.captionClass + '">' + s.params.caption + '</div>';
     } else if (s.params.type === 'custom') { // 自定义样式,icon
-      loading.setAttribute('class', s.params.loadingClass + ' loading-custom')
-      html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption caption">' + s.params.caption + '</p>'
+      s.loading.setAttribute('class', s.params.loadingClass + ' loading-custom')
+      html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption ' + s.params.captionClass + '">' + s.params.caption + '</p>'
     }
-    loading.innerHTML = html
-    return loading
+    s.loading.innerHTML = html
+    s.caption = s.loading.querySelector('.' + s.params.captionClass)
+    s.icon = s.loading.querySelector('.' + s.params.iconClass)
   }
-  s.create = function () {
-    s.mask = s.createMask()
-    s.loading = s.createLoading()
+
+  // Caption
+  s.updateCaption = function () {
+    if (s.caption) {
+      s.caption.innerHTML = s.params.caption
+    }
+  }
+
+  // Icon
+  s.updateIcon = function () {
+    if (s.icon) {
+      s.icon.className = s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : '')
+    }
+  }
+
+  // 创建DOM
+  s.createDOM = function () {
+    s.updateMask()
+    s.updateLoading()
+    s.updateCaption()
+    s.updateIcon()
     s.mask.appendChild(s.loading)
     s.parent.appendChild(s.mask)
   }
+
+  // 更新DOM
+  s.updateDOM = function () {
+    s.updateMask()
+    s.updateLoading()
+    s.updateCaption()
+    s.updateIcon()
+  }
+
   s.update = function () {
+    // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask) {
+    if (s.mask && s.mask.tagName) {
       s.loading = s.mask.querySelector('.' + s.params.loadingClass)
+      s.updateDOM()
     } else {
-      s.create()
+      s.createDOM()
     }
   }
   s.update()
 
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    s.updateDOM()
+  }
   /* --------------------
   Method
   -------------------- */
-  s.setMaskCss = function (css) {
-    if (css) s.params.maskCss = css
-    s.mask.setAttribute('style', s.params.maskCss)
-  }
-  s.setMaskClassName = function (className) {
-    if (className) s.params.maskClass = className
-    s.mask.setAttribute('class', s.params.maskClass)
-  }
-  s.setType = function (type) {
-    if (s.params.type === type || s.params.types.indexOf(type) === -1) return
-    s.params.type = type
-    s.loading = s.createLoading()
-  }
-  s.setCaption = function (caption) {
-    if (!caption) return
-    s.params.caption = caption
-    var captionEl = s.loading.querySelector('.caption')
-    if (captionEl) {
-      captionEl.innerHTML = caption
-    }
-  }
-  s.setIcon = function (className) {
-    s.params.icon = className
-    var icon = s.loading.querySelector('.' + s.params.iconClass)
-    if (icon) {
-      icon.className = s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : '')
-    }
-  }
-  s.setHTML = function (html) {
-    s.mask.innerHTML = html
-  }
-
   s.showMask = function () {
     s.mask.classList.add(s.params.maskActiveClass)
   }
