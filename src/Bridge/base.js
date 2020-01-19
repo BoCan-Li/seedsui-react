@@ -37,13 +37,16 @@ var Bridge = {
         icon: params.icon || '',
         html: msg,
         delay: params.delay || 2000
-      });
+      })
     } else {
-      self.toast.setHTML(msg)
-      self.toast.setMaskClassName('mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''))
-      self.toast.setToastClassName('toast ' + (params.position ? params.position : 'middle'))
-      self.toast.setIcon(params.icon || '')
-      self.toast.setDelay(params.delay || 2000)
+      self.toast.updateParams({
+        ...params,
+        maskClass: 'mask toast-mask' + (params.mask === false ? ' toast-propagation' : ''),
+        toastClass: 'toast ' + (params.position ? params.position : 'middle'),
+        icon: params.icon || '',
+        delay: params.delay || 2000,
+        html: msg
+      })
     }
     self.toast.show()
     if (params.success) {
@@ -67,7 +70,7 @@ var Bridge = {
       if (params.caption) self.loading.setCaption(params.caption)
       if (params.type) self.loading.setType(params.type)
       if (params.css) self.loading.setMaskCss(params.css)
-      if (params.icon) self.toast.setIcon(params.icon || '')
+      if (params.icon) self.loading.setIcon(params.icon || '')
       if (params.mask) self.loading.setMaskClassName('mask loading-mask ' + (params.mask === false ? ' loading-propagation' : ''))
     }
     self.loading.show()

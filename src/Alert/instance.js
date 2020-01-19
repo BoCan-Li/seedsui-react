@@ -64,90 +64,54 @@ var Alert = function (params) {
   // Alert | Mask
   s.mask = null
   s.alert = null
-  s.html = null
-  s.buttonBox = null
+  s.content = null
+  s.handler = null
   s.buttonSubmit = null
   s.buttonCancel = null
   // Mask
-  s.createMask = function () {
-    s.mask = document.createElement('div')
+  s.updateMask = function () {
+    if (!s.mask) {
+      s.mask = document.createElement('div')
+    }
     s.mask.setAttribute('class', s.params.maskClass)
+    s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
   // Alert
-  s.createButton = function (html, className) {
+  s.updateAlert = function () {
+    if (!s.alert) {
+      s.alert = document.createElement('div')
+    }
+    s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
+    s.alert.setAttribute(s.params.animationAttr, s.params.animation)
+    s.alert.style.webkitTransitionDuration = s.params.duration + 'ms'
+  }
+  // Content
+  s.updateContent = function () {
+    if (!s.content) {
+      s.content = document.createElement('div')
+    }
+    s.content.setAttribute('class', s.params.contentClass)
+    s.content.innerHTML = s.params.html
+  }
+  // Handler
+  s.updateHandler = function () {
+    if (!s.handler) {
+      s.handler = document.createElement('div')
+    }
+    s.handler.setAttribute('class', s.params.handlerClass)
+  }
+  function createButton (html, className) {
     var button = document.createElement('a')
     button.setAttribute('class', className)
     button.innerHTML = html
     return button
   }
-  s.createAlert = function () {
-    s.alert = document.createElement('div')
-    s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
-    s.alert.setAttribute(s.params.animationAttr, s.params.animation)
-
-    s.html = document.createElement('div')
-    s.html.setAttribute('class', s.params.contentClass)
-    s.html.innerHTML = s.params.html
-
-    s.buttonBox = document.createElement('div')
-    s.buttonBox.setAttribute('class', s.params.handlerClass)
-
-    // 如果有取消按钮
-    if (s.params.onClickCancel) {
-      s.buttonCancel = s.createButton(s.params.buttonCancelHTML, s.params.buttonCancelClass)
-      s.buttonBox.appendChild(s.buttonCancel)
-    }
-    s.buttonSubmit = s.createButton(s.params.buttonSubmitHTML, s.params.buttonSubmitClass)
-
-    s.buttonBox.appendChild(s.buttonSubmit)
-
-    if (s.params.caption && s.params.caption !== '') {
-      s.caption = document.createElement('h1')
-      s.caption.innerHTML = s.params.caption
-      s.alert.appendChild(s.caption)
-    }
-
-    s.alert.appendChild(s.html)
-    s.alert.appendChild(s.buttonBox)
-  }
-  s.create = function () {
-    s.createMask()
-    s.createAlert()
-    s.mask.appendChild(s.alert)
-    s.parent.appendChild(s.mask)
-  }
-  // 更新DOM
-  s.updateDOM = function () {
-    // 容器
-    if (s.alert) {
-      s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
-      s.alert.setAttribute(s.params.animationAttr, s.params.animation)
-    }
-    // 内容
-    if (s.html) {
-      s.html.setAttribute('class', s.params.contentClass)
-      s.html.innerHTML = s.params.html
-    }
-    // 标题
-    if (s.caption && s.params.caption) s.caption.innerHTML = s.params.caption
-    // 按钮容器
-    if (s.buttonBox) {
-      s.buttonBox.setAttribute('class', s.params.handlerClass)
-    }
-    // 如果有属性, 却没有确定按钮, 则创建一个
-    if (s.params.onClickSubmit && !s.buttonSubmit) {
-      s.buttonSubmit = s.createButtonSubmit()
-      s.buttonBox.appendChild(s.buttonSubmit)
-    }
-    // 确定按钮
-    if (s.buttonSubmit) {
-      s.buttonSubmit.innerHTML = s.params.buttonSubmitHTML
-      s.buttonSubmit.setAttribute('class', s.params.buttonSubmitClass)
-    }
+  // ButtonCancel
+  s.updateButtonCancel = function () {
     // 如果有属性, 却没有取消按钮, 则创建一个
     if (s.params.onClickCancel && !s.buttonCancel) {
-      s.buttonCancel = s.createButtonCancel()
-      s.buttonBox.insertBefore(s.buttonCancel, s.buttonSubmit)
+      s.buttonCancel = createButton(s.params.buttonCancelHTML, s.params.buttonCancelClass)
+      s.handler.insertBefore(s.buttonCancel, s.buttonSubmit)
     }
     // 取消按钮
     if (s.buttonCancel) {
@@ -155,27 +119,80 @@ var Alert = function (params) {
       s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
     }
   }
-  // 更新params
-  s.updateParams = function (params = {}) {
-    for (var param in params) {
-      s.params[param] = params[param]
+  // ButtonSubmit
+  s.updateButtonSubmit = function () {
+    // 如果有属性, 却没有确定按钮, 则创建一个
+    if (s.params.onClickSubmit && !s.buttonSubmit) {
+      s.buttonSubmit = createButton(s.params.buttonSubmitHTML, s.params.buttonSubmitClass)
+      s.handler.appendChild(s.buttonSubmit)
     }
-    s.updateDOM()
+    // 确定按钮
+    if (s.buttonSubmit) {
+      s.buttonSubmit.innerHTML = s.params.buttonSubmitHTML
+      s.buttonSubmit.setAttribute('class', s.params.buttonSubmitClass)
+    }
+  }
+  // Caption
+  s.updateCaption = function () {
+    if (!s.caption) {
+      s.caption = document.createElement('h1')
+    }
+    if (s.params.caption && s.params.caption !== '') {
+      s.caption.innerHTML = s.params.caption
+    }
+  }
+
+  // 创建DOM
+  s.create = function () {
+    s.updateMask()
+    s.updateAlert()
+    s.updateCaption()
+    s.updateContent()
+    s.updateHandler()
+    s.updateButtonCancel()
+    s.updateButtonSubmit()
+
+    s.mask.appendChild(s.alert)
+    s.parent.appendChild(s.mask)
+    s.alert.appendChild(s.caption)
+    s.alert.appendChild(s.content)
+    s.alert.appendChild(s.handler)
+  }
+  // 更新DOM
+  s.updateDOM = function () {
+    s.updateMask()
+    s.updateAlert()
+    s.updateCaption()
+    s.updateContent()
+    s.updateHandler()
+    s.updateButtonCancel()
+    s.updateButtonSubmit()
   }
   // DOM获取与创建
   s.update = function () {
+    // 获取DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask) {
       if (!s.alert) s.alert = s.mask.querySelector('.' + s.params.alertClass)
+      if (!s.caption) s.caption = s.alert.querySelector('h1')
+      if (!s.content) s.content = s.alert.querySelector('.' + s.params.contentClass)
+      if (!s.handler) s.handler = s.alert.querySelector('.' + s.params.handlerClass)
       if (!s.buttonSubmit) s.buttonSubmit = s.alert.querySelector('.' + s.params.buttonSubmitClass)
       if (!s.buttonCancel) s.buttonCancel = s.alert.querySelector('.' + s.params.buttonCancelClass)
     } else {
       s.create()
     }
-    s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
-    s.alert.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
   s.update()
+
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.updateDOM()
+  }
   /* --------------------
   Method
   -------------------- */

@@ -38,83 +38,97 @@ var Toast = function (params) {
   s.toast = null
   s.wrapper = null
   // Mask
-  s.createMask = function () {
-    var mask = document.createElement('div')
-    mask.setAttribute('class', s.params.maskClass)
-    return mask
+  s.updateMask = function () {
+    if (!s.mask) {
+      s.mask = document.createElement('div')
+    }
+    s.mask.setAttribute('class', s.params.maskClass)
   }
-  s.createToast = function () {
-    var toast = document.createElement('div')
-    toast.setAttribute('class', s.params.toastClass)
-    return toast
+  // Toast
+  s.updateToast = function () {
+    if (!s.toast) {
+      s.toast = document.createElement('div')
+    }
+    s.toast.setAttribute('class', s.params.toastClass)
   }
-  s.createToastWrapper = function () {
-    var wrapper = document.createElement('div')
-    wrapper.setAttribute('class', s.params.wrapperClass)
-    return wrapper
+  // Wrapper
+  s.updateWrapper = function () {
+    if (!s.wrapper) {
+      s.wrapper = document.createElement('div')
+    }
+    s.wrapper.setAttribute('class', s.params.wrapperClass)
   }
-  s.createToastIcon = function () {
-    var icon = document.createElement('span')
-    if (!s.params.icon) return icon
-    icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
-    return icon
+  // Icon
+  s.updateIcon = function () {
+    if (!s.icon) {
+      s.icon = document.createElement('span')
+    }
+    if (!s.params.icon) {
+      s.icon.setAttribute('class', '')
+    } else {
+      s.icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
+    }
   }
-  s.createToastCaption = function () {
-    var caption = document.createElement('span')
-    caption.setAttribute('class', s.params.captionClass)
-    if (s.params.html) caption.innerHTML = s.params.html
-    return caption
+  // Caption
+  s.updateCaption = function () {
+    if (!s.caption) {
+      s.caption = document.createElement('span')
+    }
+    s.caption.setAttribute('class', s.params.captionClass)
+    if (s.params.html) s.caption.innerHTML = s.params.html
   }
+
+  // 创建DOM
   s.create = function () {
-    s.mask = s.createMask()
-    s.toast = s.createToast()
-    s.wrapper = s.createToastWrapper()
-    s.caption = s.createToastCaption()
-    s.icon = s.createToastIcon()
+    s.updateMask()
+    s.updateToast()
+    s.updateWrapper()
+    s.updateCaption()
+    s.updateIcon()
     if (s.icon) s.wrapper.appendChild(s.icon)
     s.wrapper.appendChild(s.caption)
     s.toast.appendChild(s.wrapper)
     s.mask.appendChild(s.toast)
     s.parent.appendChild(s.mask)
   }
+
+  // 更新DOM
+  s.updateDOM = function () {
+    s.updateMask()
+    s.updateToast()
+    s.updateWrapper()
+    s.updateCaption()
+    s.updateIcon()
+  }
+
+  // DOM获取与创建
   s.update = function () {
+    // 获取DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask) {
       s.toast = s.mask.querySelector('.' + s.params.toastClass)
       s.wrapper = s.mask.querySelector('.' + s.params.wrapperClass)
+      s.caption = s.mask.querySelector('.' + s.params.captionClass)
+      s.icon = s.mask.querySelector('.' + s.params.iconClass)
     } else {
       s.create()
     }
     s.toast.style.webkitTransitionDuration = s.params.duration + 'ms'
+    // 更新DOM
+    s.updateDOM()
   }
   s.update()
 
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    s.updateDOM()
+  }
   /* --------------------
   Method
   -------------------- */
-  s.setMaskClassName = function (className) {
-    s.params.maskClass = className
-    s.mask.setAttribute('class', s.params.maskClass)
-  }
-  s.setToastClassName = function (className) {
-    s.params.toastClass = className
-    s.toast.setAttribute('class', s.params.toastClass)
-  }
-  s.setIcon = function (className) {
-    s.params.icon = className
-    if (s.params.icon) {
-      s.icon.setAttribute('class', s.params.iconClass + (s.params.icon ? ' ' + s.params.icon : ''))
-    } else {
-      s.icon.setAttribute('class', '')
-    }
-  }
-  s.setDelay = function (delay) {
-    s.params.delay = delay
-  }
-  s.setHTML = function (html) {
-    s.caption.innerHTML = html
-  }
-
   s.showMask = function () {
     s.mask.classList.add(s.params.maskActiveClass)
   }
