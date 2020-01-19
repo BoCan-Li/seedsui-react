@@ -4,6 +4,11 @@ import Instance from './instance.js';
 import BridgeBrowser from './../Bridge/browser';
 
 export default class Vott extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     data: PropTypes.array, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
     readOnly: PropTypes.bool, // 是否只读
@@ -28,8 +33,8 @@ export default class Vott extends Component {
   // }
   static defaultProps = {
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
@@ -97,6 +102,10 @@ export default class Vott extends Component {
     }});
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       data,
       readOnly,
@@ -113,7 +122,7 @@ export default class Vott extends Component {
         </div>
         <div className={`vott-error`}>
           <div className={`vott-error-icon`}></div>
-          <div className={`vott-error-caption`}>{window._seeds_lang['hint_image_failed_to_load'] || '图片加载失败'}</div>
+          <div className={`vott-error-caption`}>{locale['hint_image_failed_to_load'] || '图片加载失败'}</div>
         </div>
       </div>
     );

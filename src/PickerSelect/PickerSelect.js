@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class PickerSelect extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object,
     multiple: PropTypes.bool, // 是否允许多选
@@ -29,8 +32,8 @@ export default class PickerSelect extends Component {
   static defaultProps = {
     split: ','
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount = () => {
   }
@@ -123,6 +126,10 @@ export default class PickerSelect extends Component {
     return propsed;
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     let {
       portal,
       multiple,
@@ -149,8 +156,8 @@ export default class PickerSelect extends Component {
       <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} onClick={this.onClick}>
         <div {...others} className={`pickerselect${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
           <div className="picker-header">
-            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
-            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (locale['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{cancelAttribute.caption || (locale['finish'] || '完成')}</a>
           </div>
           <div className="pickerselect-wrapper">
             {list.map((item, index) => {

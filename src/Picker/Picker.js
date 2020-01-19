@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class Picker extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object,
     list: PropTypes.array, // [{key: '', value: ''}]
@@ -27,8 +30,8 @@ export default class Picker extends Component {
   }
   static defaultProps = {
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount = () => {
     const {
@@ -134,6 +137,10 @@ export default class Picker extends Component {
     return propsed;
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     let {
       portal,
       list,
@@ -155,8 +162,8 @@ export default class Picker extends Component {
       <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
         <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
           <div className="picker-header">
-            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['cancel'] || '取消')}</a>
-            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (window._seeds_lang['finish'] || '完成')}</a>
+            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (locale['cancel'] || '取消')}</a>
+            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (locale['finish'] || '完成')}</a>
           </div>
           <div className="picker-wrapper">
             <div className="picker-layer">

@@ -2,21 +2,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class InputSafe extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     value: PropTypes.string
   }
   static defaultProps = {
     value: ''
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount () {
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       value,
       ...others
@@ -25,15 +32,15 @@ export default class InputSafe extends Component {
     return <ul {...others} className={`input-safe lvl${lvl}${others.className ? ' ' + others.className : ''}`}> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{window._seeds_lang['low'] || '弱'}</span>
+        <span className="input-safe-caption">{locale['low'] || '弱'}</span>
       </li> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{window._seeds_lang['medium'] || '中'}</span>
+        <span className="input-safe-caption">{locale['medium'] || '中'}</span>
       </li> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{window._seeds_lang['strong'] || '强'}</span>
+        <span className="input-safe-caption">{locale['strong'] || '强'}</span>
       </li> 
     </ul>;
   }

@@ -1,6 +1,7 @@
 // BaiduMap 百度地图使用库
+import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
+
 var BaiduMap = function (id, params) {
-  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   if (!document.querySelector('#' + id)) {
     console.log('SeedsUI Error：未找到BaiduMap的DOM对象，请检查id是否存在')
     return
@@ -159,18 +160,18 @@ var BaiduMap = function (id, params) {
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
     var boundary = new BMap.Boundary()
     if (!options.area) {
-      console.warn(`${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`)
+      console.warn(`${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}area, ${getLocaleValue('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
       options.onError && options.onError({
-        errMsg: `${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}area, ${window._seeds_lang['hint_for_example_address'] || '例如“江苏省南京市建邺区”'}`
+        errMsg: `${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}area, ${getLocaleValue('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`
       })
       return
     }
     boundary.get(options.area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(`${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`)
+        console.warn(`${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`)
         options.onError && options.onError({
-          errMsg: `${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}area`
+          errMsg: `${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`
         })
         return
       }
@@ -211,9 +212,9 @@ var BaiduMap = function (id, params) {
       s.map.addOverlay(polygon) // 添加覆盖物
       options.onSuccess && options.onSuccess(polygon)
     } else {
-      console.warn(`drawPolygon: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${window._seeds_lang['or'] || '或者'}{points: []}`)
+      console.warn(`drawPolygon: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${getLocaleValue('or') || '或者'}{points: []}`)
       options.onError && options.onError({
-        errMsg: `drawPolygon: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{polygon: {}}${window._seeds_lang['or'] || '或者'}{points: []}`
+        errMsg: `drawPolygon: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${getLocaleValue('or') || '或者'}{points: []}`
       })
     }
     return polygon
@@ -229,9 +230,9 @@ var BaiduMap = function (id, params) {
   // 绘制Label
   s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}
     if (!options.point) {
-      console.warn(`drawLabel: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      console.warn(`drawLabel: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`)
       options.onError && options.onError({
-        errMsg: `drawLabel: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`
+        errMsg: `drawLabel: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`
       })
       return
     }
@@ -248,16 +249,16 @@ var BaiduMap = function (id, params) {
   // 绘制标记
   s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, styleOptions: {}}
     if (!options.point) {
-      console.warn(`drawMarker: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`)
+      console.warn(`drawMarker: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`)
       options.onError && options.onError({
-        errMsg: `drawMarker: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{point: }`
+        errMsg: `drawMarker: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`
       })
       return
     }
     if (!options.point.lng || !options.point.lat) {
-      console.warn(`drawMarker: ${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`)
+      console.warn(`drawMarker: ${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`)
       options.onError && options.onError({
-        errMsg: `drawMarker: ${window._seeds_lang['hint_pass_in_correct_parameters'] || '请传入正确的参数'}{point: {lng: ,lat: }}`
+        errMsg: `drawMarker: ${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`
       })
       return
     }
@@ -283,22 +284,22 @@ var BaiduMap = function (id, params) {
   // 添加右键菜单
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
-      console.warn(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}overlay`)
+      console.warn(`addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}overlay`)
       options.onError && options.onError({
-        errMsg: `addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}overlay`
+        errMsg: `addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}overlay`
       })
       return
     }
     if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn(`addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
+      console.warn(`addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
       options.onError && options.onError({
-        errMsg: `addContextMenu: ${window._seeds_lang['hint_pass_in_parameters'] || '请传入参数'}{menus: [{text: "", handler: func()}]}`
+        errMsg: `addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`
       })
       return
     }
     var markerMenu = new BMap.ContextMenu()
     for (let [index, opt] of options.menus.entries()) {
-      markerMenu.addItem(new BMap.MenuItem(opt.text || (window._seeds_lang['menu'] || '菜单'), function () {
+      markerMenu.addItem(new BMap.MenuItem(opt.text || (getLocaleValue('menu') || '菜单'), function () {
         opt.handler(opt, index)
       }))
     }

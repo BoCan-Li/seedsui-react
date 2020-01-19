@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, InputLocation, Actionsheet, ConfigProvider, Emoji} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, InputLocation, InputSafe, ConfigProvider, InputDate, InputCity} from '../../src';
 
 
 class Demo extends Component {
@@ -89,26 +89,8 @@ class Demo extends Component {
         <input type="button" value="中文" onClick={this.useZh}/>
         <input type="button" value="显示" onClick={this.show}/>
         <ConfigProvider locale={{'hh': '111'}} portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
-        <Emoji
-  autoFocus
-  show={this.state.showEmoji}
-  onChange={this.onChange}
-  value={this.state.value}
-  maskAttribute={{onClick: this.toggleEmoji}}
-/>
-<input type="button" value="显隐" onClick={this.toggleEmoji}/>
-          <InputLocation/>
-        {/* <Actionsheet
-  show={this.state.show}
-  list={[{caption: '菜单1', id: '1'}, {caption: '菜单2', id: '2'}]}
-  onClick={this.onClick}
-  cancelAttribute={{
-    onClick: this.hide
-  }}
-  maskAttribute={{
-    onClick: this.hide
-  }}
-/> */}
+          <InputDate placeholder="date"/>
+          <InputCity/>
 </ConfigProvider>
       </Container>
       

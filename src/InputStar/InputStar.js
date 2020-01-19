@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Star from './../Star';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class InputStar extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     min: PropTypes.number,
     max: PropTypes.number,
@@ -20,16 +23,20 @@ export default class InputStar extends Component {
     min: 0,
     max: 5
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   onChange (e, argNum) {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {value, min, onChange, onError} = this.props;
     let num = argNum;
     if (num < min) {
       if (onError) {
         onError(e, {
-          msg: `${window._seeds_lang['hint_cannot_be_less_than'] || '不能小于'}${min}${window._seeds_lang['star'] || '颗星'}`,
+          msg: `${locale['hint_cannot_be_less_than'] || '不能小于'}${min}${locale['star'] || '颗星'}`,
           select: num,
           min: min,
           value: min
