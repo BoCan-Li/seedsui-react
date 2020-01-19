@@ -169,7 +169,7 @@ export default class PickerSelect extends Component {
           </div>
         </div>
       </div>,
-      portal || document.getElementById('root') || document.body
+      portal || this.context.portal || document.getElementById('root') || document.body
     );
   }
 }

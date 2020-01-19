@@ -6,13 +6,15 @@ export default class ConfigProvider extends Component {
     locale: PropTypes.object,
     localeLanguage: PropTypes.string,
     portal: PropTypes.object,
+    onChange: PropTypes.func,
     children: PropTypes.any
   }
 
   static childContextTypes = {
     locale: PropTypes.object,
     localeLanguage: PropTypes.string,
-    portal: PropTypes.object
+    portal: PropTypes.object,
+    onChange: PropTypes.func
   }
 
   getChildContext() {
@@ -20,8 +22,7 @@ export default class ConfigProvider extends Component {
       locale,
       localeLanguage,
       portal,
-      children,
-      ...others
+      onChange
     } = this.props;
     if (localeLanguage) {
       switch (localeLanguage) {
@@ -44,10 +45,10 @@ export default class ConfigProvider extends Component {
       localStorage.setItem('_seedsui_locale', JSON.stringify(locale))
     }
     return {
-      locale: locale,
-      localeLanguage: localeLanguage,
-      portal: portal,
-      ...others
+      locale,
+      localeLanguage,
+      portal,
+      onChange
     }
   }
 

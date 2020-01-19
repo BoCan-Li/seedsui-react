@@ -79,6 +79,9 @@ class Demo extends Component {
       show: true
     });
   }
+  changeConfig = () => {
+    console.log('111111111')
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
@@ -88,7 +91,7 @@ class Demo extends Component {
       <input type="button" value="英文" onClick={this.useEn}/>
         <input type="button" value="中文" onClick={this.useZh}/>
         <input type="button" value="显示" onClick={this.show}/>
-        <ConfigProvider locale={{'hh': '111'}} portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
+        <ConfigProvider onChange={this.changeConfig} locale={{'hh': '111'}} portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
           <InputDate placeholder="date"/>
           <InputCity/>
 </ConfigProvider>
