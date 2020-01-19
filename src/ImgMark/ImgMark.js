@@ -4,9 +4,12 @@ import Instance from './instance.js';
 import Bridge from './../Bridge';
 import BridgeBrowser from './../Bridge/browser';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class ImgMark extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     // 数据源
     data: PropTypes.array, // [{strokeStyle: '', lineWidth: '', setLineDash: [], x1: '', y1: '', x2: '', y2: ''}]
@@ -36,8 +39,8 @@ export default class ImgMark extends Component {
     height: 300,
     preview: true
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
@@ -88,7 +91,7 @@ export default class ImgMark extends Component {
     var layer = '' // 绘制的base64编码
     if (this.props.preview) {
       if (!this.validSrc) {
-        Bridge.showToast(`${window._seeds_lang['hint_image_failed_to_load'] || '图片加载失败'}, ${window._seeds_lang['cannot_preview'] || '无法预览'}`, {mask: false});
+        Bridge.showToast(`${locale['hint_image_failed_to_load'] || '图片加载失败'}, ${locale['cannot_preview'] || '无法预览'}`, {mask: false});
         return;
       }
       if (this.props.isDrawSrc) { // 绘制背景
@@ -108,6 +111,10 @@ export default class ImgMark extends Component {
     if (this.props.onClick) this.props.onClick(layer)
   }
   render() {
+     // 全局配置
+     const {
+      locale = {}
+    } = this.context;
     const {
       data,
       src,
@@ -138,7 +145,7 @@ export default class ImgMark extends Component {
         </canvas>
         <div className={`imgmark-error`}>
           <div className={`imgmark-error-icon`}></div>
-          <div className={`imgmark-error-caption`}>{window._seeds_lang['hint_image_failed_to_load'] || '图片加载失败'}</div>
+          <div className={`imgmark-error-caption`}>{locale['hint_image_failed_to_load'] || '图片加载失败'}</div>
         </div>
         {/* 内容 */}
         {children}

@@ -32,6 +32,7 @@ export default class InputSelect extends Component {
     if (this.refs.$ComponentInputText && this.refs.$ComponentInputText.$el && this.refs.$ComponentInputText.$input) {
       this.$el = this.refs.$ComponentInputText.$el;
       this.$input = this.refs.$ComponentInputText.$input;
+      this.$ComponentInputText = this.refs.$ComponentInputText;
     }
     this.$picker = this.refs.$ComponentPicker;
   }

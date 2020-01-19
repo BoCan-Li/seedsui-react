@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, Actionsheet, ConfigProvider} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, InputLocation, Actionsheet, ConfigProvider, Emoji} from '../../src';
 
 
 class Demo extends Component {
@@ -13,20 +13,26 @@ class Demo extends Component {
     // }
     this.state = {
       theme: 'en_US',
-      show: false
+      show: false,
+      showEmoji: false,
+  value: ''
     }
   }
   componentDidMount () {
-    Bridge.showLoading({
-      mask: false
-    });
-    Bridge.showToast('hh', {mask: false});
-    setTimeout(() => {
-      Bridge.showLoading({
-        mask: false
-      });
-      Bridge.showToast('11', {mask: false});
-    }, 1000);
+  }
+  onChange = (e, value) => {
+    console.log(e)
+    console.log(value)
+    this.setState({
+      value: value
+    })
+  }
+  toggleEmoji = () => {
+    this.setState((prevState) => {
+      return {
+        showEmoji: !prevState.showEmoji
+      }
+    })
   }
   useZh = () => {
     this.setState({
@@ -83,8 +89,16 @@ class Demo extends Component {
         <input type="button" value="中文" onClick={this.useZh}/>
         <input type="button" value="显示" onClick={this.show}/>
         <ConfigProvider locale={{'hh': '111'}} portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
-
-        <Actionsheet
+        <Emoji
+  autoFocus
+  show={this.state.showEmoji}
+  onChange={this.onChange}
+  value={this.state.value}
+  maskAttribute={{onClick: this.toggleEmoji}}
+/>
+<input type="button" value="显隐" onClick={this.toggleEmoji}/>
+          <InputLocation/>
+        {/* <Actionsheet
   show={this.state.show}
   list={[{caption: '菜单1', id: '1'}, {caption: '菜单2', id: '2'}]}
   onClick={this.onClick}
@@ -94,7 +108,7 @@ class Demo extends Component {
   maskAttribute={{
     onClick: this.hide
   }}
-/>
+/> */}
 </ConfigProvider>
       </Container>
       

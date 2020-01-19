@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 
 export default class Alert extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool,

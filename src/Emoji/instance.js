@@ -137,11 +137,7 @@ var Emoji = function (params) {
 		var valueAfter = value.substr(s.cursorOffset, value.length)
 		var valueInsert = emojiName
 		s.cursorOffset = s.cursorOffset + emojiName.length
-		s.textarea.value = valueBefore + valueInsert + valueAfter
-		// 设置光标位置
-		// s.textarea.focus()
-		// s.setCaretPosition(s.textarea, s.cursorOffset)
-		return s.textarea.value;
+		return valueBefore + valueInsert + valueAfter
 	}
 	// 删除表情文字
 	s.deleteFace = function () {
@@ -164,11 +160,7 @@ var Emoji = function (params) {
 			valueBefore = valueBefore.substring(0, valueBefore.length - 1)
 		}
 		s.cursorOffset = valueBefore.length
-		s.textarea.value = valueBefore + valueAfter
-		// 设置光标位置
-		// s.textarea.focus()
-		// s.setCaretPosition(s.textarea, s.cursorOffset)
-		return s.textarea.value;
+		return valueBefore + valueAfter
 	}
 	// 设置光标位置
   s.setCaretPosition = function (input, pos) {
@@ -215,10 +207,19 @@ var Emoji = function (params) {
     s.events(false)
 	}
 	s.onClick = function (e) {
-		var target = e.target;
+		s.event = e
+		var target = e.target
     if (target.classList.contains(s.params.faceClass)) { // 点击表情
-      var value = s.insertFace(target.getAttribute(s.params.faceNameAttr))
-			if (s.params.onChange) s.params.onChange(value, s)
+			var value = s.insertFace(target.getAttribute(s.params.faceNameAttr))
+			s.event = e
+			if (s.params.onChange) {
+				s.params.onChange(s, value)
+			} else {
+				s.textarea.value = value
+				// 设置光标位置
+				s.textarea.focus()
+				s.setCaretPosition(s.textarea, s.cursorOffset)
+			}
 		} else if (target.classList.contains(s.params.iconClass)) { // 点击展开收缩图标
 			if (s.carrousel.style.display === 'none') {
 				setTimeout(() => {
@@ -232,13 +233,21 @@ var Emoji = function (params) {
 				s.icon.classList.remove('active')
 			}
 		} else if (target.classList.contains(s.params.maskClass)) { // 点击遮罩
-			if (s.params.onClickMask) s.params.onClickMask(s, e)
+			if (s.params.onClickMask) s.params.onClickMask(s)
       if (s.params.isClickMaskHide) s.hide()
 		} else if (target.classList.contains(s.params.submitClass)) { // 点击提交
-			if (s.params.onClickSubmit) s.params.onClickSubmit(s.textarea.value, s, e)
+			if (s.params.onClickSubmit) s.params.onClickSubmit(s, s.textarea.value)
       if (s.params.isClickMaskHide) s.hide()
 		} else if (target.classList.contains(s.params.deleteClass)) { // 点击删除
-			s.deleteFace()
+			var value = s.deleteFace()
+			if (s.params.onChange) {
+				s.params.onChange(s, value)
+			} else {
+				s.textarea.value = value
+				// 设置光标位置
+				s.textarea.focus()
+				s.setCaretPosition(s.textarea, s.cursorOffset)
+			}
 		} else if (target.tagName === 'TEXTAREA') { // 点击文本框
 			s.icon.classList.remove('active')
 			s.carrousel.style.display = 'none'

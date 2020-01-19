@@ -8,6 +8,7 @@ export default class InputTel extends Component {
   componentDidMount () {
     this.$el = this.refs.$ComponentInputText.$el;
     this.$input = this.refs.$ComponentInputText.$input;
+    this.$ComponentInputText = this.refs.$ComponentInputText;
   }
   render() {
     return <InputText ref="$ComponentInputText" {...this.props} type="tel"/>;

@@ -252,7 +252,6 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 ```javascript
 <Alert
   portal={传送dom object, 默认document.getElementById('root')}
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   show={*显隐 bool, 默认false}
   animation={动画 string, 默认'zoom'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade | none
   duration={动画时长 number, 默认无}
@@ -930,7 +929,7 @@ import Chat from 'seedsui-react/lib/Chat';
 <Checkbox
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'checkbox-box'}
-  onClick={点击复选框 func(checked, args)}
+  onClick={点击复选框 func(e, checked)}
 
   name={复选框name string, 默认无}
   value={复选框value string, 默认无}
@@ -1308,14 +1307,13 @@ onChangeDropdown = (tabs) => {
 ```javascript
 <Emoji
   portal={弹出框传送至dom object, 默认document.getElementById('root')}
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   autoFocus={自动获取焦点 bool, 默认false}
 
   value={值 string, 默认''}
   placeholder={占位文字 string, 默认''}
 
   isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
-  onClickMask={点击遮罩 func(s)}
+  onClickMask={点击遮罩 func(e)}
 
   maskStyle={遮罩style object, 默认无}
   maskClassName={遮罩className string, 默认无, 基础'mask emoji-mask'}
@@ -1325,8 +1323,8 @@ onChangeDropdown = (tabs) => {
 
   icon={图标dom node, 默认无}
   
-  onChange={值变化 func(value, args)}
-  onSubmit={提交 func(value, args)}
+  onChange={值变化 func(e, value)}
+  onSubmit={提交 func(e, value)}
 />
 ```
 ### 示例
@@ -1338,7 +1336,7 @@ this.state = {
   value: ''
 }
 
-onChange = (value) => {
+onChange = (e, value) => {
   this.setState({
     value: value
   })
@@ -1411,9 +1409,7 @@ import Container from 'seedsui-react/lib/Container';
 ### 属性
 ```javascript
 <Group
-  style={卡片style object, 默认无}
   className={卡片className string, 默认'border-tb', 基础'group'}
-  onClick={点击 func(args)}
   {...others}
 >
 分组
@@ -2131,8 +2127,8 @@ onError = (e, msg) => {
 <InputLocation
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启'}
   locationingValue={定位中显示文字 string, 默认'定位中...'}
-  onClick={点击 func(value, args), 默认无}
-  onChange={值改变 func(value, args), 默认无}
+  onClick={点击 func(e, value), 默认无}
+  onChange={值改变 func(e, value), 默认无}
   {...others}
 />
 ```
@@ -2249,7 +2245,6 @@ onChange = (e, value, option) => {
 ### 属性
 ```javascript
 <InputRange
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
   style={容器style object, 默认无}
   className={容器className string, 默认无}
   value={值 string | number, 默认'0'}
@@ -2257,15 +2252,15 @@ onChange = (e, value, option) => {
   max={最小值 string | number, 默认'100'}
   step={步进值 string | number, 默认'1'}
   disabled={是否禁用 bool, 默认false}
-  onChange={值改变 func(value, args), 默认无}
+  onChange={值改变 func(e, value), 默认无}
 />
 ```
 ### 示例
 ```javascript
 import InputRange from 'seedsui-react/lib/InputRange';
 
-onChangeRange = (value, args) => {
-  console.log(value, args);
+onChangeRange = (e, value) => {
+  console.log(e, value);
 }
 
 <InputRange onChange={this.onChangeRange}/>
@@ -4367,7 +4362,6 @@ onClickMask = () => {
 ```javascript
 <Star
   className={图标className string, 默认无, 基础'star'}
-  onClick={点击 func(args), 默认无}
   {...others}
 />
 ```

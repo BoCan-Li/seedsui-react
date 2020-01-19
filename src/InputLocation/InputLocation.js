@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class InputLocation extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     locationingValue: PropTypes.string,
     failedValue: PropTypes.string,
     onClick: PropTypes.func,
     onChange: PropTypes.func
   }
-  static defaultProps = {
-    locationingValue: window._seeds_lang['location'] || '定位中...',
-    failedValue: window._seeds_lang['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
-  }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount () {
     this.$el = null;
@@ -25,12 +24,17 @@ export default class InputLocation extends Component {
     if (this.refs.$ComponentInputText && this.refs.$ComponentInputText.$el && this.refs.$ComponentInputText.$input) {
       this.$el = this.refs.$ComponentInputText.$el;
       this.$input = this.refs.$ComponentInputText.$input;
+      this.$ComponentInputText = this.refs.$ComponentInputText;
     }
   }
   onClick = (event, value) => {
+    // 全局配置
     const {
-      locationingValue,
-      failedValue,
+      locale = {}
+    } = this.context;
+    const {
+      locationingValue = locale['location'] || '定位中...',
+      failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
       onChange,
       onClick
     } = this.props;
@@ -78,9 +82,13 @@ export default class InputLocation extends Component {
     });
   }
   render() {
+    // 全局配置
     const {
-      locationingValue,
-      failedValue,
+      locale = {}
+    } = this.context;
+    const {
+      locationingValue = locale['location'] || '定位中...',
+      failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
       onChange,
       onClick,
       ...others
