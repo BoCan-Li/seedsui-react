@@ -1,5 +1,6 @@
 // DragCircle 下拉刷新, 圆圈转动样式, 用于copy到Dragrefresh组件中
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
+import getLocaleValue from './../ConfigProvider/getLocaleValue.js' // 国际化数据
+
 var DragCircle = {
   // 实体交互
   onPull: function (e) {
@@ -15,7 +16,7 @@ var DragCircle = {
     topContainer.style.height = e.params.threshold + 'px';
     if (topIcon) topIcon.classList.remove('df-pull-icon-down');
     if (topIcon) topIcon.classList.add('df-pull-icon-loading');
-    topCaption.innerHTML = window._seeds_lang['refreshing'] || '正在刷新...';
+    topCaption.innerHTML = getLocaleValue('refreshing') || '正在刷新...';
   },
   onHideTop: function (e) {
     var topContainer = e.topContainer;

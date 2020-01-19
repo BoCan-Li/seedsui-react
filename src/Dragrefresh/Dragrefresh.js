@@ -4,9 +4,12 @@ import Notice from './../Notice';
 import Instance from './instance.js';
 import ImgLazy from './../ImgLazy';
 
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
-
 export default class Dragrefresh extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     threshold: PropTypes.number, // 头部下拉的触发位置
     end: PropTypes.number, // 头部下拉的结束位置
@@ -36,13 +39,10 @@ export default class Dragrefresh extends Component {
     onClickBottomError: PropTypes.func,
   }
   static defaultProps = {
-    showNotice: true,
-    bottomLoadingCaption: (window._seeds_lang['loading'] || '正在加载...'),
-    bottomNoDataCaption: (window._seeds_lang['no_more_data'] || '没有更多数据了'),
-    bottomErrorCaption: (window._seeds_lang['refreshing_failed'] || '加载失败, 请稍后再试')
+    showNotice: true
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
   }
   componentDidMount () {
     this.init();
@@ -55,6 +55,10 @@ export default class Dragrefresh extends Component {
   }
   // 实例化
   init = () => {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {onScroll} = this.props;
     var instance = new Instance({
       threshold: this.props.threshold,
@@ -77,10 +81,10 @@ export default class Dragrefresh extends Component {
         if (!e.isLoading) {
           if (e.touches.currentPosY >= e.params.threshold) {
             if (topIcon) topIcon.classList.add('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = window._seeds_lang['release'] || '释放立即刷新'
+            if (topCaption) topCaption.innerHTML = locale['release'] || '释放立即刷新'
           } else {
             if (topIcon) topIcon.classList.remove('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = window._seeds_lang['pull_down'] || '下拉可以刷新'
+            if (topCaption) topCaption.innerHTML = locale['pull_down'] || '下拉可以刷新'
           }
         }
       },
@@ -91,7 +95,7 @@ export default class Dragrefresh extends Component {
         topContainer.style.height = e.params.threshold + 'px';
         if (topIcon) topIcon.classList.remove('df-pull-icon-down')
         if (topIcon) topIcon.classList.add('df-pull-icon-loading')
-        if (topCaption) topCaption.innerHTML = window._seeds_lang['refreshing'] || '正在刷新...'
+        if (topCaption) topCaption.innerHTML = locale['refreshing'] || '正在刷新...'
       },
       onHideTop: (e) => {
         var topContainer = e.topContainer;
@@ -169,6 +173,10 @@ export default class Dragrefresh extends Component {
     if (this.props.lazyLoad) this.lazyLoad();
   }
   render() {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       threshold,
       end,
@@ -190,20 +198,21 @@ export default class Dragrefresh extends Component {
       onScroll,
 
       // 底部加载中
-      bottomLoadingCaption,
+      bottomLoadingCaption = locale['loading'] || '正在加载...',
       // 底部加载完成
-      bottomNoDataCaption,
+      bottomNoDataCaption = locale['no_more_data'] || '没有更多数据了',
       // 底部加载错误
-      bottomErrorCaption,
+      bottomErrorCaption = locale['refreshing_failed'] || '加载失败, 请稍后再试',
       onClickBottomError,
       ...others
     } = this.props;
+
     return (
       <div ref={(el) => {this.$el = el;}} {...others} className={`container${others.className ? ' ' + others.className : ''}`}>
         {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
-            <div className="df-pull-caption">{window._seeds_lang['pull_down'] || '下拉可以刷新'}</div>
+            <div className="df-pull-caption">{locale['pull_down'] || '下拉可以刷新'}</div>
           </div>
         </div>}
         {this.props.children}

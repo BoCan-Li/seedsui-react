@@ -1,6 +1,5 @@
 // Calendar 日历 (require PrototypeDate.js)
 var Calendar = function (container, params) {
-  if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
   /* --------------------
   Model
   -------------------- */
