@@ -1,7 +1,5 @@
-import DB from './../DB';
-import Device from './../Device';
-
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
+import DB from './../DB'
+import Device from './../Device'
 
 var Bridge = {
   /**

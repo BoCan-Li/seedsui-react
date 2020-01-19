@@ -1,7 +1,6 @@
-import DB from './../DB';
-import Device from './../Device';
-
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
+import DB from './../DB'
+import Device from './../Device'
+import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
 
 var Bridge = {
   /**
@@ -402,15 +401,15 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!params.dir) {
-      self.showToast(window._seeds_lang['hint_upload_image_must_dir'] || '没有上传目录', {mask: false})
+      self.showToast(getLocaleValue('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      self.showToast(window._seeds_lang['hint_upload_image_must_localIds'] || '没有上传图片地址', {mask: false})
+      self.showToast(getLocaleValue('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
       return
     }
     if (!params.tenantId) {
-      self.showToast(window._seeds_lang['hint_upload_image_must_tenantId'] || '没有上传企业id', {mask: false})
+      self.showToast(getLocaleValue('hint_upload_image_must_tenantId') || '没有上传企业id', {mask: false})
       return
     }
     // 上传不能包含'LocalResource://imageid'
@@ -438,7 +437,7 @@ var Bridge = {
   previewImage: function (params) {
     var self = this
     if (!params.urls || !params.urls.length) {
-      self.showToast(window._seeds_lang['hint_preview_image_must_urls'] || '没有预览图片地址', {mask: false})
+      self.showToast(getLocaleValue('hint_preview_image_must_urls') || '没有预览图片地址', {mask: false})
       return
     }
     self.invoke('previewImage', params)

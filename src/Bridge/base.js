@@ -1,12 +1,9 @@
-import jsonp from './../jsonp';
-import Device from './../Device';
-import Toast from './../Toast/instance.js';
-import Alert from './../Alert/instance.js';
-import Loading from './../Loading/instance.js';
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js';
-
-
-if (!window._seeds_lang) window._seeds_lang = {} // 国际化数据
+import jsonp from './../jsonp'
+import Device from './../Device'
+import Toast from './../Toast/instance.js'
+import Alert from './../Alert/instance.js'
+import Loading from './../Loading/instance.js'
+import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
 
 var Bridge = {
   /**
