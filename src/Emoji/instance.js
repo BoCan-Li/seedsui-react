@@ -28,9 +28,9 @@ var Emoji = function (params) {
 		carrouselClass: 'emoji-carrousel'
 		/*
     callbacks
-		onChange:function(value, s, e)
-		onClickMask: function(s, e)
-		onClickSubmit: function(value, s, e)
+		onChange:function(s, value)
+		onClickMask: function(s)
+		onClickSubmit: function(s, value)
     */
   }
   params = params || {}

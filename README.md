@@ -974,8 +974,8 @@ onClick = (e, checked) => {
   locale={国际化配置文件 object, 默认无}
   localeLanguage={国际化语言名称 string, 默认无} // 可选项为: zh_CN, en_US, 如想要自定义国际化文件, 使用locale属性
   portal={弹框传送dom object, 默认无}
+  onChange={修改回调 func, 默认无}
   children={子元素 node, 默认无}
-  {...others}
 />
 ```
 [locale格式](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/zh_CN.js)

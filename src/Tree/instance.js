@@ -409,22 +409,22 @@ var Tree = function (container, params) {
   }
   // 点击树
   s.onClickTree = function (e) {
+    s.event = e
     // 点击树
     s.targetLi = null
     s.targetLine = null
-    s.target = e.target
 
-    if (s.target.classList.contains(s.params.lineClass)) { // 点击二级
+    if (e.target.classList.contains(s.params.lineClass)) { // 点击二级
       s.targetLine = s.target
-      s.targetLi = s.target.parentNode
-    } else if (s.target.classList.contains(s.params.iconClass) ||
-      s.target.classList.contains(s.params.titleClass)) { // 点击三级
-      s.targetLine = s.target.parentNode
-      s.targetLi = s.target.parentNode.parentNode
+      s.targetLi = e.target.parentNode
+    } else if (e.target.classList.contains(s.params.iconClass) ||
+      e.target.classList.contains(s.params.titleClass)) { // 点击三级
+      s.targetLine = e.target.parentNode
+      s.targetLi = e.target.parentNode.parentNode
     }
-    if (s.target.classList.contains(s.params.buttonAddClass)) { // 点击添加
+    if (e.target.classList.contains(s.params.buttonAddClass)) { // 点击添加
       s.onClickBtnAdd(e)
-    } else if (s.target.classList.contains(s.params.buttonDelClass)) { // 点击删除
+    } else if (e.target.classList.contains(s.params.buttonDelClass)) { // 点击删除
       s.onClickBtnDel(e)
     } else if (s.targetLine) { // 点击其它元素,但s.targetLine存在的情况下
       // 展开与收缩
@@ -450,6 +450,7 @@ var Tree = function (container, params) {
   }
   // 点击添加按钮
   s.onClickBtnAdd = function (e) {
+    s.event = e
     var elLine = e.target.parentNode
     // 删除子级
     var elLines = elLine.parentNode.querySelectorAll('.' + s.params.lineClass)
@@ -480,8 +481,8 @@ var Tree = function (container, params) {
   }
   // 点击删除按钮
   s.onClickBtnDel = function (e) {
+    s.event = e
     s.option = e.target.parentNode
-    s.target = e.target
     // 选中选中项
     var id = s.option.getAttribute(s.params.idAttr)
     var opts = s.selected[id]
