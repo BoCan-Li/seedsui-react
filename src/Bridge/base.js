@@ -5,6 +5,9 @@ import Alert from './../Alert/instance.js'
 import Loading from './../Loading/instance.js'
 import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
 
+// 防止绑定事件时this指向window, 所以全局加一个变量用于存储this
+window._bridge_self = null
+
 var Bridge = {
   /**
   * 基础功能:start
@@ -180,7 +183,8 @@ var Bridge = {
   },
   // 客户端默认返回控制
   back: function (argHistory, argBackLvl) {
-    var self = this
+    // 因为有可能是监听绑定, this指向有可能是window, 所以需要指定self
+    var self = _bridge_self
     // 返回操作对象与返回层级
     var _history = window.history
     if (argHistory && argHistory.go) _history = argHistory

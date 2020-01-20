@@ -39,4 +39,7 @@ if (Device.platform === 'weixin') {
   }
 }
 
+// 防止绑定事件时this指向window, 所以全局加一个变量用于存储this
+window._bridge_self = Bridge
+
 export default Bridge

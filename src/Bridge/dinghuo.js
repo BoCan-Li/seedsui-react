@@ -53,7 +53,7 @@ var Bridge = {
               }
             }
           })
-        }, false);
+        }, false)
       }
     }
   },
@@ -85,9 +85,9 @@ var Bridge = {
         self.setup(function(bridge) {
           events.forEach((eventName) => {
             bridge.registerHandler(eventName, () => {
-                const event = new CustomEvent(eventName);
+                const event = new CustomEvent(eventName)
                 // 分发事件
-                window.dispatchEvent(event);
+                window.dispatchEvent(event)
             })
           })
         })
@@ -97,9 +97,9 @@ var Bridge = {
         if (window.WebViewJavascriptBridge) {
           events.forEach((eventName) => {
             window.WebViewJavascriptBridge.registerHandler(eventName, () => {
-              const event = new CustomEvent(eventName);
+              const event = new CustomEvent(eventName)
               // 分发事件
-              window.dispatchEvent(event);
+              window.dispatchEvent(event)
             })
           })
         } else {
@@ -126,14 +126,14 @@ var Bridge = {
       } else {
         callback(false)
       }
-    });
+    })
   },
   // 获得版本信息
   getAppVersion: function () {
-    const ua = navigator.userAgent.toLowerCase();
-    var verExp = ua.match(/dinghuoappversion\/.{0,}(\d+\.\d+\.\d+)/);
-    if (verExp && verExp[1]) return verExp[1].trim();
-    return '';
+    const ua = navigator.userAgent.toLowerCase()
+    var verExp = ua.match(/dinghuoappversion\/.{0,}(\d+\.\d+\.\d+)/)
+    if (verExp && verExp[1]) return verExp[1].trim()
+    return ''
   },
   // 去首页
   goHome: function (callback) {
@@ -143,7 +143,7 @@ var Bridge = {
   // 退出到登陆页面
   logOut: function () {
     var self = this
-    self.invoke('logOut');
+    self.invoke('logOut')
   },
   // 打开新的窗口
   openWindow: function (params, callback) {
@@ -162,28 +162,28 @@ var Bridge = {
     */
   setTitle: function (params, callback) {
     var self = this
-    self.invoke('setTitle', params, callback);
+    self.invoke('setTitle', params, callback)
   },
   // 客户端添加返回绑定
   addBackPress: function (callback) {
     var self = this
     try {
-      self.setBackEnable(true);
-      window.addEventListener('onBackPress', callback || self.back);
+      self.setBackEnable(true)
+      window.addEventListener('onBackPress', callback || self.back)
       // ios客户端返回按钮绑定(ios不支持onBackPress)
       self.addIosBackPress(callback)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   },
   // 客户端移除返回绑定
   removeBackPress: function (callback) {
     var self = this
     try {
-      self.setBackEnable(false);
-      window.removeEventListener('onBackPress', callback || self.back);
+      self.setBackEnable(false)
+      window.removeEventListener('onBackPress', callback || self.back)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   },
   /**
@@ -236,7 +236,7 @@ var Bridge = {
     */
   onHistoryBack: function (callback) {
     var self = this
-    self.invoke('onHistoryBack', null, callback);
+    self.invoke('onHistoryBack', null, callback)
   },
   // ios客户端返回按钮绑定, ios不支持addBackPress
   addIosBackPress: function (callback) {
@@ -260,7 +260,7 @@ var Bridge = {
     */
   shareText: function (params, callback) {
     var self = this
-    self.invoke('shareText', params, callback);
+    self.invoke('shareText', params, callback)
   },
   /**
     * 获取订货包名
@@ -272,7 +272,7 @@ var Bridge = {
       callback({})
       return
     }
-    self.invoke('getIdentification', null, callback);
+    self.invoke('getIdentification', null, callback)
   },
   /* -----------------------------------------------------
     文件操作
@@ -424,7 +424,7 @@ var Bridge = {
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     if (params.isAI) uploadParams.isAI = params.isAI
-    self.invoke('uploadImage', uploadParams);
+    self.invoke('uploadImage', uploadParams)
   },
   /**
     * 图片预览
@@ -450,12 +450,12 @@ var Bridge = {
   setBackEnable: function (flag) {
     var self = this
     if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
-      self.invoke('setBackEnable', flag);
+      self.invoke('setBackEnable', flag)
     }
   },
   // 获取图片前缀
   getImagePrefix: function () {
-    return 'LocalResource://imageid';
+    return 'LocalResource://imageid'
   },
   // 下载图片
   downloadImage: function () {
@@ -472,7 +472,7 @@ var Bridge = {
   // 获取登陆信息
   loginInfo: function (callback) {
     var self = this
-    self.invoke('getLoginInfo', null, callback);
+    self.invoke('getLoginInfo', null, callback)
   },
   // 根据key获取登陆信息
   getLoginInfo (key, callback) {
@@ -489,7 +489,7 @@ var Bridge = {
   // 修改原生角标
   changeBadgeNum: function (count) {
     var self = this
-    self.invoke('setBadgeNum', {key: count});
+    self.invoke('setBadgeNum', {key: count})
   }
 }
 
