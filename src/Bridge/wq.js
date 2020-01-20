@@ -133,6 +133,7 @@ var Bridge = {
    * 返回：{resultStr:''}
    * */
   scanQRCode (params = {}) {
+    var self = this
     wq.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],
@@ -142,7 +143,6 @@ var Bridge = {
         params.success(res)
       },
       fail: function (res) {
-        var self = this
         if (params.fail) params.fail(res)
         else self.showToast(res.errMsg, {mask: false})
       },

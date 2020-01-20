@@ -427,6 +427,7 @@ var Bridge = {
   },
   // 获取当前地理位置带地图
   getLocationMap: function (params = {}) {
+    var self = this
     if (!self.debug) {
       self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在微信或APP中使用', {mask: false})
       if (params.fail) params.fail({errMsg: `getLocationMap:${getLocaleValue('hint_only_wqapp') || '此功能仅可在微信或APP中使用'}`})

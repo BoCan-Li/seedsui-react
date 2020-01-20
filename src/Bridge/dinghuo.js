@@ -78,6 +78,7 @@ var Bridge = {
 
   // 注册事件
   registerHandler: function (events) {
+    var self = this
     if (typeof window !== 'undefined') {
       if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
         /* eslint-disable */
@@ -88,7 +89,7 @@ var Bridge = {
                 // 分发事件
                 window.dispatchEvent(event);
             })
-          });
+          })
         })
         /* eslint-enable */
       } else if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
@@ -99,19 +100,19 @@ var Bridge = {
               const event = new CustomEvent(eventName);
               // 分发事件
               window.dispatchEvent(event);
-            });
-          });
+            })
+          })
         } else {
           document.addEventListener(
             'WebViewJavascriptBridgeReady', () => {
               events.forEach((eventName) => {
                 window.WebViewJavascriptBridge.registerHandler(eventName, () => {
-                  const event = new CustomEvent(eventName);
+                  const event = new CustomEvent(eventName)
                   // 分发事件
-                  window.dispatchEvent(event);
-                });
-              });
-            }, false);
+                  window.dispatchEvent(event)
+                })
+              })
+            }, false)
         }
       }
     }
@@ -447,6 +448,7 @@ var Bridge = {
     @params true:监听 | false:取消监听
   ----------------------------------------------------- */
   setBackEnable: function (flag) {
+    var self = this
     if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
       self.invoke('setBackEnable', flag);
     }
