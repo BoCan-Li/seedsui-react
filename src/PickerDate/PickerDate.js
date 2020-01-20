@@ -89,7 +89,7 @@ export default class PickerDate extends Component {
       // 如果不是合法的日期格式
       const e = this.instance ? this.instance : {};
       if (!defaultValue || !defaultValue.isDate(split)) {
-        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}`});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}`});
       } else {
         let dateValues = defaultValue.split(split)
         defaultYear = dateValues[0]
@@ -99,7 +99,7 @@ export default class PickerDate extends Component {
     } else if (type === 'month') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isMonth(split)) {
-        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
       } else {
         let monthValues = defaultValue.split(split)
         defaultYear = monthValues[0]
@@ -108,7 +108,7 @@ export default class PickerDate extends Component {
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isDateTime(split, timeSplit)) {
-        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
       } else {
         let values = defaultValue.split(' ')
         let dateValues = values[0].split(split || '-')
@@ -122,7 +122,7 @@ export default class PickerDate extends Component {
     } else if (type === 'time') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isTime(split, timeSplit)) {
-        if (onError) onError(e, {msg: `${locale['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
       } else {
         let timeValues = defaultValue.split(timeSplit || ':')
         defaultHour = timeValues[0]

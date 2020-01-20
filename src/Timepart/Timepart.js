@@ -66,10 +66,10 @@ export default class Timepart extends Component {
       },
       onContain: (e) => {
         clickCount = 0;
-        if (this.props.onError) this.props.onError({msg: '已包含其它时间段'});
+        if (this.props.onError) this.props.onError({errMsg: '已包含其它时间段'});
       },
       onCross: (e) => {
-        if (this.props.onError) this.props.onError({msg: '与其它时间段相交'});
+        if (this.props.onError) this.props.onError({errMsg: '与其它时间段相交'});
       },
       onClickProgress: (s) => {
         if (s.target.classList.contains('active')) {
