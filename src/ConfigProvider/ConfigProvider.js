@@ -25,19 +25,28 @@ export default class ConfigProvider extends Component {
       onChange
     } = this.props;
     if (localeLanguage) {
+      let defaultLocale = null;
       switch (localeLanguage) {
-        case 'zh_CN':
+        case 'zh_CN': {
+          defaultLocale = require('./zh_CN.js');
+          // 防止没有用babel-plugin-add-module-exports自动加上default
+          if (defaultLocale.default) defaultLocale = defaultLocale.default;
           locale = {
-            ...require('./zh_CN.js').default,
+            ...defaultLocale,
             ...locale
           }
           break;
-        case 'en_US':
+        }
+        case 'en_US': {
+          defaultLocale = require('./en_US.js');
+          // 防止没有用babel-plugin-add-module-exports自动加上default
+          if (defaultLocale.default) defaultLocale = defaultLocale.default;
           locale = {
-            ...require('./en_US.js').default,
+            ...defaultLocale,
             ...locale
           }
           break;
+        }
       }
     }
     // 如果有locale的话, 则放入内存中, 开放给getLocaleValue使用

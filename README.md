@@ -3413,48 +3413,39 @@ import Notice from 'seedsui-react/lib/Notice';
 ### 属性
 ```javascript
 <NumBox
-  args={事件参数 any, 如: [1,2, '$event'], '$event'代表点击元素的e}
-  changeFocus={是否点击加減时获取焦点 bool, 默认无}
-  // 容器
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'numbox bordered'}
+  disabled={是否禁用 bool, 默认无}
+
+  // 加减号
+  plusAttribute={加号属性 object, 默认无} // className默认为'numbox-button numbox-button-minus'
+  minusAttribute={减号属性 object, 默认无} // className默认为'numbox-button numbox-button-plus'
+
   // 文本框
-  inputStyle={文本框style object, 默认无}
-  inputClassName={文本框className string, 默认无, 基础'numbox-input'}
+  inputAttribute={文本框属性 object, 默认无} // className默认为'numbox-input'
   value={值 string | number, 默认无}
   digits={文本框截取小数 string | number, 默认无}
   max={最大值 string | number, 默认无}
   min={最小值 string | number, 默认无}
   placeholder={占位符 string, 默认''}
-  name={文本框name string, 默认无}
   maxLength={输入长度 string, 默认'16'}
-  disabled={是否禁用 bool, 默认无}
   readOnly={是否只读 bool, 默认无}
   required={是否必填 bool, 默认true} // 如果设置必填,则框内一定有值,默认为最小值或者0
+
+  // 自动获取焦点
+  autoFocus={渲染时自动获取焦点 bool, 默认false}
+  autoSelect={渲染时自动选中 bool, 默认false}
+
   // 左右图标
   licon={左图标 node, 默认无}
-  liconSrc={左图标地址 node, 默认无}
-  liconClassName={左图标className string, 默认无, 基础'licon'}
-  liconStyle={左图标style object, 默认无}
-  onClickLicon={点击左图标 func(args), 默认无}
-  liconLazyLoad={左图标懒人加载 bool, 默认无}
-
+  liconAttribute={左图标属性 object, 默认无}
   ricon={右图标 node, 默认无}
-  riconSrc={右图标地址 node, 默认无}
-  riconClassName={右图标className string, 默认无, 基础'ricon'}
-  riconStyle={右图标style object, 默认无}
-  onClickRicon={点击右图标 func(args), 默认无}
-  riconLazyLoad={右图标懒人加载 bool, 默认无}
+  riconAttribute={右图标属性 object, 默认无}
 
   // 清除按钮
-  clear={清除 bool | func('', args), 默认无}
-  clearClassName={清除图标className string, 默认'ricon close-icon-clear size18'} // 见Close组件
-  clearStyle={清除图标style object, 默认无}
+  clear={清除 bool | func(e, ''), 默认无}
+  clearAttribute={清除图标属性 object, 默认无}
+
   // events
   onClick={点击容器 func(e), 默认无}
-  onClickMinus={点击减 func(value, args), 默认无}
-  onClickPlus={点击加 func(value, args), 默认无}
-  onClickInput={点击文本框 func(e), 默认无}
   onChange={值发生变化 func(value, args), 默认无}
   onBlur={失去焦点 func(value, args), 默认无}
   onFocus={获取焦点 func(value, args), 默认无}
@@ -3470,8 +3461,7 @@ this.state = {
   value: ''
 }
 
-onChangeNum = (val, args) => {
-  console.log(val, args)
+onChangeNum = (e, val) => {
   this.setState({
     value: val
   })
@@ -3480,9 +3470,11 @@ onChangeNum = (val, args) => {
 <NumBox
   className="lg"
   digits={2}
+  min={0}
+  max={4}
+  required
   value={this.state.value}
   onChange={this.onChangeNum}
-  args={['arg1', 'arg2']}
 />
 ```
 [返回目录](#component)

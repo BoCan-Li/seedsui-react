@@ -55,7 +55,8 @@ export default class InputText extends Component {
     ]),
     clearAttribute: PropTypes.object,
     // 右侧内容
-    rcaption: PropTypes.node
+    rcaption: PropTypes.node,
+    onError: PropTypes.func
   }
   static defaultProps = {
     type: 'text',
@@ -274,24 +275,17 @@ export default class InputText extends Component {
       rcaption,
       ...othres
     } = this.props;
-    // 判断是否显示清空按钮
-    let showClear = false;
-    if (value && !readOnly && !disabled) {
-      showClear = true;
-    } else {
-      showClear = false;
-    }
     // 剔除掉onClick事件, 因为在容器onClick已经回调了
     liconAttribute = this.filterProps(liconAttribute)
     riconAttribute = this.filterProps(riconAttribute)
     clearAttribute = this.filterProps(clearAttribute)
     return (<div ref={(el) => {this.$el = el;}} {...othres} className={`input-text-box${othres.className ? ' ' + othres.className : ''}`} onClick={this.onClick}>
         {licon && licon}
-        {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+        {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
         {this.getInputDOM()}
         {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-        {clear && <i {...clearAttribute} className={`icon clearicon${showClear ? '' : ' hide'}${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
-        {riconAttribute && <i {...riconAttribute} className={`icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
+        {clear && value && !readOnly && !disabled && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+        {riconAttribute && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
       </div>);
