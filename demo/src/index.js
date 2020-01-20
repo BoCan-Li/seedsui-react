@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, NumBox} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, PDFView} from '../../src';
 
 
 class Demo extends Component {
@@ -24,15 +24,7 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        <NumBox
-          className="lg"
-          digits={2}
-          min={0}
-          max={4}
-          required
-          value={this.state.value}
-          onChange={this.onChangeNum}
-        />
+        <PDFView src={'/demo/assets/pdfview.pdf'} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
       </Container>
       
     </Page>
