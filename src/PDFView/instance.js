@@ -481,6 +481,7 @@ var PDFView = function (container, params) {
       s.pdf = pdf // 设置pdf
       s.total = s.pdf.numPages // 总页数
       s.rows = !s.params.rows || s.params.rows > s.total ? s.total : s.params.rows
+      console.log('是否一次性加载' + (s.rows === s.total))
 
       s.addPages()
     }).catch(function (error) {
@@ -494,7 +495,7 @@ var PDFView = function (container, params) {
   s.loadImg = function () {
     s.total = s.pictures.length
     s.rows = !s.params.rows || s.params.rows > s.total ? s.total : s.params.rows
-    
+    console.log('是否一次性加载' + (s.rows === s.total))
     s.addPages()
   }
 

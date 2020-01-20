@@ -138,7 +138,7 @@ export default class PDFView extends Component {
     }
   }
   // 实例化
-  instance = (total) => {
+  instance = (rows) => {
     const {
       pictures,
       src,
@@ -150,7 +150,7 @@ export default class PDFView extends Component {
       pictures,
       src,
       cMapUrl,
-      rows: total || 5,
+      rows: rows || params.rows,
       onLoad: (s) => {
         this.onLoad(s)
       }
