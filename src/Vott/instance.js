@@ -40,7 +40,7 @@ var Vott = function (container, params) {
     /*
     callbacks
     onClick:function(s)
-    onSuccess:function(s)
+    success:function(s)
     onError:function(s)
     */
   }
@@ -162,7 +162,7 @@ var Vott = function (container, params) {
     // 渲染多边形
     s.draw(s.params.data)
     // Callback
-    if (s.params.onSuccess) s.params.onSuccess(s)
+    if (s.params.success) s.params.success(s)
     // 增加事件
     if (!s.params.readOnly) {
       s.detach()

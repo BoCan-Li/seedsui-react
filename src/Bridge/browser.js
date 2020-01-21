@@ -132,9 +132,9 @@ var Bridge = {
       self.preview = new Preview({
         src: src,
         layerHTML: layerHTML,
-        onSuccess: function (s) {
+        success: function (s) {
           s.show()
-          if (params.onSuccess) params.onSuccess(s)
+          if (params.success) params.success(s)
         },
         onError: function () {
           self.showToast(`${getLocaleValue('invalid_image_src') || '图片地址无效'}`, {mask: false})

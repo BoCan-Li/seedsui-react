@@ -76,14 +76,14 @@ export default class ImgMark extends Component {
       lineWidth: this.props.lineWidth,
       quality: this.props.quality,
       onError: this.onError,
-      onSuccess: this.onSuccess
+      success: this.success
     });
   }
   validSrc = false
   onError = () => {
     this.validSrc = false
   }
-  onSuccess = () => {
+  success = () => {
     this.validSrc = true
   }
   onClick = () => {

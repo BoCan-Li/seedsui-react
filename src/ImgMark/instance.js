@@ -18,7 +18,7 @@ var Imgmark = function (container, params) {
 
     /*
     Callbacks:
-    onSuccess: function(Imgmark)
+    success: function(Imgmark)
     onError: function(Imgmark)
     */
   }
@@ -117,7 +117,7 @@ var Imgmark = function (container, params) {
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
     s.container.style.WebkitTransformOrigin = `0 0`
     // Callback
-    if (s.params.onSuccess) s.params.onSuccess(s)
+    if (s.params.success) s.params.success(s)
   }
   s.onError = function () {
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)

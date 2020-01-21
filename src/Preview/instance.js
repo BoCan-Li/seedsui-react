@@ -33,7 +33,7 @@ var Preview = function (params) {
     Callbacks:
     onClick: function(Preview)
     onClickBack: function(Preview)
-    onSuccess: function(Preview)
+    success: function(Preview)
     onError: function(Preview)
     onShowSuccess: function(Preview)
     onShowError: function(Preview)
@@ -174,7 +174,7 @@ var Preview = function (params) {
         s.container.style.backgroundColor = '#000'
       }, 100)
       // Callback
-      if (s.params.onSuccess) s.params.onSuccess(s)
+      if (s.params.success) s.params.success(s)
     }, false)
     img.addEventListener('error', function () {
       s.validSrc = false // 图片地址无效

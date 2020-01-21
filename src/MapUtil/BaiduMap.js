@@ -157,7 +157,7 @@ var BaiduMap = function (id, params) {
     return polygons
   }
   // 绘制省市区域
-  s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, onSuccess: func(), onError: func()}
+  s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, success: func(), onError: func()}
     var boundary = new BMap.Boundary()
     if (!options.area) {
       console.warn(`${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}area, ${getLocaleValue('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
@@ -183,7 +183,7 @@ var BaiduMap = function (id, params) {
         polygonsPath = polygonsPath.concat(polygons[i].getPath())
       }
       // s.map.setViewport(pointArray) //调整视野
-      options.onSuccess && options.onSuccess({...res, polygons, polygonsPath})
+      options.success && options.success({...res, polygons, polygonsPath})
     })
     return boundary
   }
@@ -210,7 +210,7 @@ var BaiduMap = function (id, params) {
     }
     if (polygon) {
       s.map.addOverlay(polygon) // 添加覆盖物
-      options.onSuccess && options.onSuccess(polygon)
+      options.success && options.success(polygon)
     } else {
       console.warn(`drawPolygon: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${getLocaleValue('or') || '或者'}{points: []}`)
       options.onError && options.onError({
@@ -243,7 +243,7 @@ var BaiduMap = function (id, params) {
     var label = new BMap.Label(JSON.stringify(options.point), opts) // 创建文本标注对象
     label.setStyle(options.styleOptions || s.params.labelStyleOptions);
     s.map.addOverlay(label)
-    options.onSuccess && options.onSuccess(label)
+    options.success && options.success(label)
     return label
   }
   // 绘制标记
@@ -278,7 +278,7 @@ var BaiduMap = function (id, params) {
       }
     )
     s.map.addOverlay(marker)
-    options.onSuccess && options.onSuccess(marker)
+    options.success && options.success(marker)
     return marker
   }
   // 添加右键菜单

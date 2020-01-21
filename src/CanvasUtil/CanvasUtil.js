@@ -44,7 +44,7 @@ var CanvasUtil = {
       ctx.drawImage(img, opts.x, opts.y, opts.width, opts.height, 0, 0, opts.width, opts.height)
       // 成功回调
       try {
-        if (opts.onSuccess) opts.onSuccess(canvas.toDataURL(suffix, quality))
+        if (opts.success) opts.success(canvas.toDataURL(suffix, quality))
       } catch (error) {
         if (opts.onError) opts.onError(error)
       }

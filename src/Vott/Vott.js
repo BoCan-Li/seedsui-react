@@ -70,7 +70,7 @@ export default class Vott extends Component {
       readOnly: readOnly,
       data: data,
       src: src,
-      onSuccess: this.onLoad,
+      success: this.onLoad,
       ...params
     });
   }
@@ -84,7 +84,7 @@ export default class Vott extends Component {
     if (!this.props.readOnly || !this.props.preview || !this.load) return
     var svg = this.instance.svg;
     var previewHTML = `<div class="preview-layer">${svg.outerHTML}</div>`;
-    BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML, onSuccess: (s) => {
+    BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML, success: (s) => {
       var layer = s.container.querySelector('.preview-layer');
       svg = s.container.querySelector('.vott-svg');
       svg.style.backgroundImage = 'initial';

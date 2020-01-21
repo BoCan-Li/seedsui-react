@@ -193,7 +193,7 @@ var Handsign = function (container, params) {
       var pos = s.calcPosition(width, height, imgP) // 画布上放置xy坐标
       s.ctx.drawImage(img, sx, sy, swidth, sheight, pos.x, pos.y, width, height)
       // 成功回调
-      if (opts.onSuccess) opts.onSuccess()
+      if (opts.success) opts.success()
     }
   }
   // 绘制文字
