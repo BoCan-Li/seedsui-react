@@ -246,6 +246,11 @@ var Bridge = {
           callback()
         }
       }
+      if (self.error) {
+        script.onerror = function () {
+          self.error({errMsg: '微信js加载失败'})
+        }
+      }
     } else if (platform === 'waiqin') { // 外勤cordova
       script.src = options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       if (callback) {
@@ -256,6 +261,11 @@ var Bridge = {
           })
         }
       }
+      if (self.error) {
+        script.onerror = function () {
+          self.error({errMsg: '外勤cordova加载失败'})
+        }
+      }
     } else if (platform === 'wq') { // 外勤jssdk
       // 用开发d目录可以使用新功能
       script.src = options.wqSrc || '//res.waiqin365.com/d/open/js/waiqin365.min.js?v=1.0.1'
@@ -263,6 +273,11 @@ var Bridge = {
         script.onload = function () {
           callback()
           self.config()
+        }
+      }
+      if (self.error) {
+        script.onerror = function () {
+          self.error({errMsg: '外勤js加载失败'})
         }
       }
     } else if (platform === 'dinghuo') {
