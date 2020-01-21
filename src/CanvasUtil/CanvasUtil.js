@@ -46,7 +46,7 @@ var CanvasUtil = {
       try {
         if (opts.success) opts.success(canvas.toDataURL(suffix, quality))
       } catch (error) {
-        if (opts.onError) opts.onError(error)
+        if (opts.fail) opts.fail({errMsg: error})
       }
     }, false)
   }

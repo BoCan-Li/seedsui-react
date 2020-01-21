@@ -111,7 +111,7 @@ Math.Calc = (function () {
   }
   // 矫正数字, 常用于输入过程中矫正, 可以为空串
   function correctNumber (argNumstr, options) {
-    const {max, min, digits, maxLength, required, onError} = options
+    const {max, min, digits, maxLength, required, fail} = options
     if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
       // 非空校验
       if (required) return min ? '' + min : '0'
@@ -120,14 +120,14 @@ Math.Calc = (function () {
     var value = String(argNumstr || '')
     // 最大值
     if (!isNaN(max) && value - max > 0) {
-      // callback onError
-      if (onError) onError({errMsg: getLocaleValue('hint_cannot_be_greater_than') || '不能大于' + max})
+      // callback fail
+      if (fail) fail({errMsg: getLocaleValue('hint_cannot_be_greater_than') || '不能大于' + max})
       return '' + max
     }
     // 最小值
     if (!isNaN(min) && value - min < 0) {
-      // callback onError
-      if (onError) onError({errMsg: getLocaleValue('hint_cannot_be_less_than') || '不能小于' + min})
+      // callback fail
+      if (fail) fail({errMsg: getLocaleValue('hint_cannot_be_less_than') || '不能小于' + min})
       return '' + min
     }
     // 截取小数位数
@@ -152,15 +152,15 @@ Math.Calc = (function () {
   }
   // 矫正手机号码, 用于输入过程中矫正
   function correctPhone (argPhone, options) {
-    const {onError} = options;
+    const {fail} = options;
     let value = argPhone;
     // 如果输入的不是一个正整数，则转为正整数
     if (isNaN(value)) {
       const result = value.match(/[0-9]{1,}/);
       if (result) value = result[0];
       else value = '';
-      // callback onError
-      if (onError) onError({errMsg: getLocaleValue('hint_must_number') || '必须要输入数字哦'});
+      // callback fail
+      if (fail) fail({errMsg: getLocaleValue('hint_must_number') || '必须要输入数字哦'});
     }
     return value;
   }

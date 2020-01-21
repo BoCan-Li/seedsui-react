@@ -34,7 +34,7 @@ var Preview = function (params) {
     onClick: function(Preview)
     onClickBack: function(Preview)
     success: function(Preview)
-    onError: function(Preview)
+    fail: function(Preview)
     onShowSuccess: function(Preview)
     onShowError: function(Preview)
     */
@@ -176,10 +176,11 @@ var Preview = function (params) {
       // Callback
       if (s.params.success) s.params.success(s)
     }, false)
-    img.addEventListener('error', function () {
+    img.addEventListener('error', function (e) {
       s.validSrc = false // 图片地址无效
+      s.event = e
       // Callback
-      if (s.params.onError) s.params.onError(s)
+      if (s.params.fail) s.params.fail({errMsg: '', event: e})
     }, false)
   }
   s.update()

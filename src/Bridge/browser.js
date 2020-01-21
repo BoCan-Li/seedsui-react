@@ -110,7 +110,6 @@ var Bridge = {
         serverId: new Date().getTime()
       }
       if (params.success) params.success(res)
-      // if (params.fail) params.fail(res)
     }, 1000)
   },
   // 图片预览
@@ -136,7 +135,7 @@ var Bridge = {
           s.show()
           if (params.success) params.success(s)
         },
-        onError: function () {
+        fail: function () {
           self.showToast(`${getLocaleValue('invalid_image_src') || '图片地址无效'}`, {mask: false})
         }
       })

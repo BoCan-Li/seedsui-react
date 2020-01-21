@@ -75,12 +75,12 @@ export default class ImgMark extends Component {
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
       quality: this.props.quality,
-      onError: this.onError,
+      fail: this.fail,
       success: this.success
     });
   }
   validSrc = false
-  onError = () => {
+  fail = () => {
     this.validSrc = false
   }
   success = () => {

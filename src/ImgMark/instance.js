@@ -19,7 +19,7 @@ var Imgmark = function (container, params) {
     /*
     Callbacks:
     success: function(Imgmark)
-    onError: function(Imgmark)
+    fail: function(Imgmark)
     */
   }
   params = params || {}
@@ -119,12 +119,13 @@ var Imgmark = function (container, params) {
     // Callback
     if (s.params.success) s.params.success(s)
   }
-  s.onError = function () {
+  s.onError = function (e) {
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.container.classList.remove(s.params.activeClass)
+    s.event = e
     // Callback
-    if (s.params.onError) s.params.onError(s)
+    if (s.params.fail) s.params.fail({errMsg: '', event: e})
   }
   // 主函数
   s.init = function () {

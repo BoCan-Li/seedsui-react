@@ -21,7 +21,7 @@ function buildGetUrl (url, params) {
 
 // 封装成Api类
 const Api = {
-  onError: function (error) {
+  fail: function (error) {
     console.warn(error)
   },
   setBaseURL: function (baseURL) {
@@ -73,7 +73,7 @@ axios.interceptors.response.use(response => {
   }
   return result
 }, error => {
-  if (Api.onError) Api.onError(error)
+  if (Api.fail) Api.fail({errMsg: error})
   return Promise.reject(error)
 })
 

@@ -122,7 +122,7 @@ var Bridge = {
           if (params.success) params.success(e)
         },
         onClickCancel: function(e) {
-          if (params.fail) params.fail(e)
+          if (params.fail) params.fail({errMsg: '', event: e})
           else e.hide()
         }
       })

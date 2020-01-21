@@ -10,7 +10,7 @@ export default class Timepart extends Component {
     times: PropTypes.array, // [{className: string, startTime: 'hh:ss', endTime: 'hh:ss', data: string, cover: bool}]
 
     onChange: PropTypes.func, // onChange(times)
-    onError: PropTypes.func
+    fail: PropTypes.func
   }
   static defaultProps = {
     startTime: '07:00',
@@ -66,10 +66,10 @@ export default class Timepart extends Component {
       },
       onContain: (e) => {
         clickCount = 0;
-        if (this.props.onError) this.props.onError({errMsg: '已包含其它时间段'});
+        if (this.props.fail) this.props.fail({errMsg: '已包含其它时间段'});
       },
       onCross: (e) => {
-        if (this.props.onError) this.props.onError({errMsg: '与其它时间段相交'});
+        if (this.props.fail) this.props.fail({errMsg: '与其它时间段相交'});
       },
       onClickProgress: (s) => {
         if (s.target.classList.contains('active')) {
@@ -119,7 +119,7 @@ export default class Timepart extends Component {
       times,
 
       onChange,
-      onError,
+      fail,
       ...others
     } = this.props;
     return (

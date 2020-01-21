@@ -61,7 +61,7 @@ var Clipboard = {
     if (success) {
       if (params && params.success) params.success(params.successMsg || (getLocaleValue('copied_to_the_clipboard') || '复制到剪贴板成功'))
     } else {
-      if (params && params.onError) params.onError(params.errorMsg || (getLocaleValue('unable_to_access_clipboard') || '当前设备不允许访问剪贴板'))
+      if (params && params.fail) params.fail({errMsg: params.errorMsg || (getLocaleValue('unable_to_access_clipboard') || '当前设备不允许访问剪贴板')})
     }
   }
 }

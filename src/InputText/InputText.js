@@ -56,7 +56,7 @@ export default class InputText extends Component {
     clearAttribute: PropTypes.object,
     // 右侧内容
     rcaption: PropTypes.node,
-    onError: PropTypes.func
+    fail: PropTypes.func
   }
   static defaultProps = {
     type: 'text',
@@ -122,8 +122,8 @@ export default class InputText extends Component {
     }
     // 输入时只校验最大值、小数点、最大长度、返回错误
     if (type === 'number') {
-      const {max, digits, onError} = this.props;
-      value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError});
+      const {max, digits, fail} = this.props;
+      value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, fail});
     }
     // onChange
     if (onChange) onChange(e, value);
