@@ -47,29 +47,15 @@ var Preview = function (params) {
   }
   var s = this
   s.params = params
-  /* ----------------------
-  Model Method
-  ---------------------- */
-  s.setSrc = function (src) {
-    if (src) {
-      s.params.src = src
+
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
     }
+    s.update()
   }
-  s.setLayerHTML = function (layerHTML) {
-    if (layerHTML) {
-      s.params.layerHTML = layerHTML
-    }
-  }
-  s.setOnSuccess = function (onSuccess) {
-    if (onSuccess) {
-      s.params.onSuccess = onSuccess
-    }
-  }
-  s.setOnError = function (onError) {
-    if (onError) {
-      s.params.onError = onError
-    }
-  }
+  
   // 创建预览层
   s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
   s.header = null

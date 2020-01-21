@@ -382,7 +382,7 @@ var Carrousel = function (container, params) {
         // 上一页
         s.activeIndexTruth--
       }
-      s.slideTo(s.activeIndexTruth)
+      s.slideToTruth(s.activeIndexTruth)
     }
 
     // 清空滑动方向
@@ -411,13 +411,13 @@ var Carrousel = function (container, params) {
     if (s.params.loop) {
       index += s.params.slidesPerView
     }
-    s.slideTo(index)
+    s.slideToTruth(index)
   }
   s.onClickPrev = function (e) {
-    s.slideTo(s.activeIndexTruth - 1)
+    s.slideToTruth(s.activeIndexTruth - 1)
   }
   s.onClickNext = function (e) {
-    s.slideTo(s.activeIndexTruth + 1)
+    s.slideToTruth(s.activeIndexTruth + 1)
   }
   /* --------------------
   Autoplay
@@ -429,7 +429,7 @@ var Carrousel = function (container, params) {
       if (s.activeIndexTruth >= s.max) {
         s.activeIndexTruth = 0
       }
-      s.slideTo(s.activeIndexTruth)
+      s.slideToTruth(s.activeIndexTruth)
     }, s.params.autoplay)
   }
 
@@ -447,7 +447,14 @@ var Carrousel = function (container, params) {
     s.touches.posX = -s.activeIndexTruth * s.slideWidth
     s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
   }
+  // slideIndex为索引位置
   s.slideTo = function (slideIndex, speed, runCallbacks) {
+    if (isNaN(slideIndex)) return
+    // 获取真实位置
+    s.slideToTruth(Number(slideIndex || 0) + Number(s.params.slidesPerView || 0), speed, runCallbacks)
+  }
+  // slideIndex为真实的位置(loop时真实位置与索引位置不一样)
+  s.slideToTruth = function (slideIndex, speed, runCallbacks) {
     var duration = isNaN(speed) ? s.params.duration : speed
     if (slideIndex >= 0) {
       s.activeIndexTruth = slideIndex
@@ -493,7 +500,7 @@ var Carrousel = function (container, params) {
     }, duration)
   }
   // 更改params
-  s.setParams = function (params) {
+  s.updateParams = function (params) {
     for (var n in params) {
       s.params[n] = params[n]
     }

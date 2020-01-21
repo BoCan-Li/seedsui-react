@@ -617,23 +617,49 @@ import Card from 'seedsui-react/lib/Card';
 ```
 ### 示例
 ```javascript
-import Calendar from 'seedsui-react/lib/Calendar';
-// 轮播页
-onCarrouselChange = (e) => {
-  this.props.changeActiveTab(e.activeIndex);
-  if (e.activeIndex === 1) { // 加载第二页内容
-    if (!this.sndLoaded) {
-      this.loadSnd(false);
-      this.sndLoaded = true;
-    }
+import Carrousel from 'seedsui-react/lib/Carrousel';
+
+const imgList1 = [
+  {
+    bg: 'http://thumbs.dreamstime.com/b/%E5%A4%A9%E9%99%85%E6%B5%B7%E6%B5%B7%E6%B4%8B%E5%92%8C%E8%93%9D%E5%A4%A9%E8%83%8C%E6%99%AF%E5%AE%89%E9%9D%99-100160983.jpg'
+  },
+  {
+    bg: 'http://photo.tuchong.com/24951/f/32312037.jpg'
   }
+]
+const imgList2 = [
+  {
+    bg: 'http://youimg1.c-ctrip.com/target/tg/616/052/178/ceeddf2de3a74df184bcacc9e6b3123c.jpg'
+  },
+  {
+    bg: 'http://img1.cache.netease.com/catchpic/4/45/45F29E5ABA21EBBE1E8B50C2FA6D8EB4.jpg'
+  }
+]
+
+this.state = {
+  imgList: imgList1
 }
-<Carrousel style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.props.tabActiveIndex}>
+onCarrouselChange = async (e) => {
+  console.log(e.activeIndex)
+  await this.setState({
+    activeIndex: e.activeIndex
+  });
+  console.log(e);
+}
+// 轮播页
+<Carrousel style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.state.activeIndex}>
   <Page>第一页</Page>
   <Page>第二页</Page>
 </Carrousel>
 // 轮播图
-<Carrousel list={imgsList} style={{height: document.getElementById('root').clientWidth + 'px'}} pagination loop/>
+<Carrousel
+  list={this.state.imgList}
+  style={{height: '300px'}}
+  pagination
+  loop
+  activeIndex={this.state.activeIndex}
+  onChange={this.onCarrouselChange}
+/>
 ```
 [返回目录](#component)
 
@@ -1211,6 +1237,10 @@ import Group from 'seedsui-react/lib/Group';
 ```javascript
 import Handsign from 'seedsui-react/lib/Handsign';
 
+this.state = {
+  lineWidth: 3
+}
+
 save = () => {
   if (this.$handsign.instance.blank()) {
     console.log('空白');
@@ -1223,6 +1253,11 @@ save = () => {
   const sign_pic = this.$handsign.instance.save();
   console.log(sign_pic);
 }
+strokeStrong = () => {
+  this.setState({
+    lineWidth: 10
+  })
+}
 clear = () => {
   this.$handsign.instance.clear()
 }
@@ -1230,8 +1265,15 @@ drawBg = () => {
   this.$handsign.instance.drawBackgroundColor('#ff8800')
 }
 
-<Handsign ref={(el) => {this.$handsign = el;}} width={300} strokeStyle="#c72a1d" height={300}/>
+<Handsign
+  ref={(el) => {this.$handsign = el;}}
+  width={300}
+  strokeStyle="#c72a1d"
+  lineWidth={this.state.lineWidth}
+  height={300}
+/>
 <input type="button" value="绘制背景" onClick={this.drawBg}/>
+<input type="button" value="变粗" onClick={this.strokeStrong}/>
 <input type="button" value="保存" onClick={this.save}/>
 <input type="button" value="清除" onClick={this.clear}/>
 ```
@@ -2639,7 +2681,7 @@ convertData = (skuList) => {
       style: 'stroke:red;',
       className: 'default',
       id: 'default',
-      custom: '自定义default'
+      custom: '自定义属性'
     }
   })
 }
@@ -2647,7 +2689,7 @@ convertData = (skuList) => {
 <Vott
   ref={el => {this.$vott = el}}
   style={{height: '700px'}}
-  data={this.convertData(result.skuList)}
+  data={this.state.data}
   readOnly={this.state.readOnly}
   src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
   params={this.state.params}

@@ -34,27 +34,11 @@ var Handsign = function (container, params) {
   }
   // 标识是否绘制过
   s.isDrew = false
-  /* ----------------------
-  Model Method
-  ---------------------- */
-  s.setStrokeStyle = function (strokeStyle) {
-    if (strokeStyle) {
-      s.params.strokeStyle = strokeStyle
-    }
-  }
-  s.setLineWidth = function (lineWidth) {
-    if (lineWidth) {
-      s.params.lineWidth = lineWidth
-    }
-  }
-  s.setSuffix = function (suffix) {
-    if (suffix) {
-      s.params.suffix = suffix
-    }
-  }
-  s.setQuality = function (quality) {
-    if (quality) {
-      s.params.quality = quality
+
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
     }
   }
   /* ----------------------

@@ -39,18 +39,18 @@ export default class Vott extends Component {
   componentDidUpdate (prevProps) {
     if (this.instance) {
       if (prevProps.params !== this.props.params) {
-        this.instance.setParams(this.props.params);
+        this.instance.updateParams(this.props.params);
       }
       if (prevProps.readOnly !== this.props.readOnly) {
         this.instance.setReadOnly(this.props.readOnly);
       }
       if (prevProps.src !== this.props.src) {
-        this.instance.setParams({src: this.props.src});
+        this.instance.updateParams({src: this.props.src});
         this.load = 0
         this.instance.update();
       }
       if (prevProps.data !== this.props.data) {
-        this.instance.setParams({data: this.props.data});
+        this.instance.updateParams({data: this.props.data});
         this.load = 0
         this.instance.update();
       }

@@ -56,7 +56,7 @@ var Vott = function (container, params) {
   // Params
   s.params = params
   // 更改params
-  s.setParams = function (params) {
+  s.updateParams = function (params) {
     for (var n in params) {
       s.params[n] = params[n]
     }

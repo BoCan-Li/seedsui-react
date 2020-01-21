@@ -44,25 +44,24 @@ export default class ImgMark extends Component {
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
+      let params = {}
       if (prevProps.isDrawSrc !== this.props.isDrawSrc) {
-        this.instance.setIsDrawSrc(this.props.isDrawSrc);
-        this.instance.update();
+        params.isDrawSrc = this.props.isDrawSrc;
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
-        this.instance.setStrokeStyle(this.props.strokeStyle);
-        this.instance.update();
+        params.strokeStyle = this.props.strokeStyle;
       }
       if (prevProps.lineWidth !== this.props.lineWidth) {
-        this.instance.setLineWidth(this.props.lineWidth);
-        this.instance.update();
+        params.lineWidth = this.props.lineWidth;
       }
       if (prevProps.quality !== this.props.quality) {
-        this.instance.setQuality(this.props.quality);
-        this.instance.update();
+        params.quality = this.props.quality;
       }
       if (prevProps.data !== this.props.data) {
-        this.instance.setData(this.props.data);
-        this.instance.update();
+        params.data = this.props.data;
+      }
+      if (Object.getOwnPropertyNames(params) && Object.getOwnPropertyNames(params).length) {
+        this.instance.updateParams(params);
       }
     }
   }

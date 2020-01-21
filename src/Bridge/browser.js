@@ -141,9 +141,10 @@ var Bridge = {
         }
       })
     } else {
-      self.preview.setSrc(src)
-      self.preview.setLayerHTML(layerHTML)
-      self.preview.update()
+      self.preview.updateParams({
+        src: src,
+        layerHTML: layerHTML
+      })
     }
     return self.preview
   },

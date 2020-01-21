@@ -1,3 +1,5 @@
+// require (PrototypeArray.js equals)
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
@@ -60,9 +62,10 @@ export default class Carrousel extends Component {
       this.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
     }
     if (this.props.stopPropagation !== prevProps.stopPropagation) {
-      this.instance.setParams({stopPropagation: this.props.stopPropagation});
+      this.instance.updateParams({stopPropagation: this.props.stopPropagation});
     }
     if (!this.props.list.equals(prevProps.list)) {
+      console.log(1)
       this.update();
     }
   }

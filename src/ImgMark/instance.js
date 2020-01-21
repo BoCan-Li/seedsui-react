@@ -45,49 +45,7 @@ var Imgmark = function (container, params) {
     endX: 0,
     endY: 0
   }
-  /* ----------------------
-  Model Method
-  ---------------------- */
-  s.setData = function (data) {
-    if (data) {
-      s.params.data = data
-    }
-  }
-  s.setStrokeStyle = function (strokeStyle) {
-    if (strokeStyle) {
-      s.params.strokeStyle = strokeStyle
-    }
-  }
-  s.setLineWidth = function (lineWidth) {
-    if (lineWidth) {
-      s.params.lineWidth = lineWidth
-    }
-  }
-  s.setSuffix = function (suffix) {
-    if (suffix) {
-      s.params.suffix = suffix
-    }
-  }
-  s.setQuality = function (quality) {
-    if (quality) {
-      s.params.quality = quality
-    }
-  }
-  s.setIsDrawSrc = function (isDrawSrc) {
-    if (isDrawSrc) {
-      s.params.isDrawSrc = isDrawSrc
-    }
-  }
-  s.setOnSuccess = function (onSuccess) {
-    if (onSuccess) {
-      s.params.onSuccess = onSuccess
-    }
-  }
-  s.setOnError = function (onError) {
-    if (onError) {
-      s.params.onError = onError
-    }
-  }
+
   /* ----------------------
   Method
   ---------------------- */
@@ -133,6 +91,13 @@ var Imgmark = function (container, params) {
       img.addEventListener('load', s.onLoad, false)
       img.addEventListener('error', s.onError, false)
     }
+  }
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    s.update()
   }
   /* ----------------------
   Events
