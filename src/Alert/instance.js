@@ -170,6 +170,9 @@ var Alert = function (params) {
   }
   // DOM获取与创建
   s.update = function () {
+    if (s.mask && s.alert) {
+      s.updateDOM()
+    }
     // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask && s.mask.tagName) {
