@@ -244,7 +244,7 @@ hide = (...param) => {
 ### 建议
 Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api直接调用:
 * alert框:Bridge.showAlert(msg)代替
-* confirm框:Bridge.showConfirm(msg, {onSuccess: fn, onError: fn})代替
+* confirm框:Bridge.showConfirm(msg, {success: fn, fail: fn})代替
 
 详见[Bridge 桥接库](#bridge) 桥接库
 
@@ -508,7 +508,7 @@ import Button from 'seedsui-react/lib/Button';
   nextHTML={右箭头html string, 默认'&gt'}
   onChange={选中日期发生变化 func(date)}
   onClick={点击 func(date)}
-  onError={非法操作,如选择禁用日期 func(date)}
+  fail={非法操作,如选择禁用日期 func(date)}
 />
 ```
 ### 示例
@@ -1062,7 +1062,7 @@ loadData = () => {
   portal={弹出框传送至dom object, 默认document.getElementById('root')}
   top={头部距离 number, 默认0}
   disabled={是否禁用 bool, 默认false}
-  onChange={选中菜单发生变化 func([{id: '', caption: ''}])}
+  onChange={选中菜单发生变化 func(e, [{id: '', caption: ''}])}
   list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
 />
 ```
@@ -1874,7 +1874,7 @@ onChange = (e, value) => {
   max={最大值 func(e, value), 默认无} // YYYY-MM-DD
   onClick={点击文本框 func(e, value), 默认无}
   onChange={值改变 func(e, value, option), 默认无}
-  onError={错误 func(e, {msg: '', select: '', min: '', value: ''}), 默认无}
+  fail={错误 func(e, {msg: '', select: '', min: '', value: ''}), 默认无}
 
   // Picker
   valueForKey={选中key用split分割 string, 默认无}
@@ -1897,7 +1897,7 @@ onChange = (e, value) => {
     value: value
   });
 }
-onError = (e, msg) => {
+fail = (e, msg) => {
   console.log(e)
   console.log(msg);
 }
@@ -1905,7 +1905,7 @@ onError = (e, msg) => {
 <InputDate
   type="datetime"
   max={new Date().format('YYYY,MM,DD hh&mm')}
-  onError={this.onError}
+  fail={this.fail}
   value={this.state.value}
   onChange={this.onChange}
   placeholder="请选择"
@@ -2179,7 +2179,7 @@ onChange = (e, value, options) => {
   max={最大值 number, 默认5}
   value={值 number, 默认0}
   onChange={值改变 func(value), 默认无}
-  onError={超出限制错误 func(e, {msg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}), 默认无}
+  fail={超出限制错误 func(e, {msg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}), 默认无}
   {...others} // 容器属性
 />
 ```
@@ -2196,7 +2196,7 @@ onChange = (e, value) => {
     value
   })
 }
-onError = (e, error) => {
+fail = (e, error) => {
   console.log(error)
 }
 
@@ -2204,7 +2204,7 @@ onError = (e, error) => {
   min={3}
   value={this.state.value}
   onChange={this.onChange}
-  onError={this.onError}
+  fail={this.fail}
 />
 ```
 [返回目录](#component)
@@ -2742,7 +2742,7 @@ onSubmit = () => {
   CanvasUtil.cropImg({
     src: this.state.src,
     ...this.state.pos,
-    onSuccess: function (base64) {
+    success: function (base64) {
       console.log(base64)
     }
   });
@@ -3258,7 +3258,7 @@ import Notice from 'seedsui-react/lib/Notice';
   onChange={值发生变化 func(e, value), 默认无}
   onBlur={失去焦点 func(e, value), 默认无}
   onFocus={获取焦点 func(e, value), 默认无}
-  onError={值发生变化 func({errMsg:''}), 默认无}
+  fail={值发生变化 func({errMsg:''}), 默认无}
   {...others}
 />
 ```
@@ -3629,7 +3629,7 @@ onClickMask = () => {
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
 
-  onError={错误 func(e, {errMsg: ''}), 默认无}
+  fail={错误 func(e, {errMsg: ''}), 默认无}
 />
 ```
 ### 示例
@@ -4363,7 +4363,7 @@ const timeList = [
   // [{className: string, startTime: 'hh:ss', endTime: 'hh:ss', data: string, cover: bool}], 其中cover指允许覆盖显示
 
   onChange={选中发生变化 func(times:array), 默认无}
-  onError={发生冲突错误 func({errMsg:''}), 默认无}
+  fail={发生冲突错误 func({errMsg:''}), 默认无}
 />
 ```
 ### 示例
@@ -4470,33 +4470,21 @@ showMsg = (msg) => {
 ### 属性
 ```javascript
 <Tree
-  // 容器
-  style={树容器style object, 默认无}
-  className={树容器className string, 默认无, 基础'tree-box'}
-  // 树
-  treeStyle={树style object, 默认无}
-  treeClassName={树className string, 默认无, 基础'tree'}
-
+  treeAttribute={树属性 object, 默认无} // 基础className为tree
+  
   multiple={是否需要多选 bool, 默认true} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
   bar={选中项聚合展现栏 string | node, 默认无}
   selected={选中项 array, 默认无} // 格式 [{id: '', name: '', parentid: ''}]
   list={列表项 array, 默认无} // [{id: '', name: '', parentid: ''}]
 
-  buttonAddHTML={添加按钮 string, 默认无}
-  buttonAddClassName={添加按钮className string, 默认无}
-  buttonAddSrc={添加按钮src string, 默认无}
-  onClickAdd={点击添加按钮 func({id:'', name: '', parentid: ''}, s), 默认无}
-
-  buttonDelHTML={添加按钮 string, 默认无}
-  buttonDelClassName={添加按钮className string, 默认无}
-  buttonDelSrc={添加按钮src string, 默认无}
-  onClickDel={点击添加按钮 func({id:'', name: '', parentid: ''}, s), 默认无}
+  buttonAddAttribute={添加按钮属性 object, 默认无} // {className: '', onClick: func()}
+  buttonDelAttribute={删除按钮属性 object, 默认无} // {className: '', onClick: func()}
 
   onClickLastChild={点击底层节点 func(s), 默认无}
 
-  onClick={点击节点 func(e, item, isActived, isExtand, childrenCount), 默认无}
-  onData={数据加载时,可修改dom func(option), 默认无}
+  onClick={点击节点 func(s, item, isActived, isExtend, childrenCount), 默认无}
+  onData={数据加载时,可修改dom func(option), 默认无} // 通过修改option.html塞入按钮前
 />
 ```
 ### 示例
@@ -4902,22 +4890,22 @@ drawRed = () => {
   this.mapUtil.drawBoundary({
     area: '江苏省南京市',
     styleOptions: redMapStyle,
-    onSuccess: (res) => {
+    success: (res) => {
       redMap['red-nanjing'] = res.polygons;
       this.mapUtil.map.setViewport(res.polygonsPath);
     },
-    onError: (msg) => {
+    fail: (msg) => {
       alert(msg)
     }
   });
   this.mapUtil.drawBoundary({
     area: '江苏省镇江市',
     styleOptions: redMapStyle,
-    onSuccess: (res) => {
+    success: (res) => {
       redMap['red-zhengjiang'] = res.polygons;
       this.mapUtil.map.setViewport(res.polygonsPath);
     },
-    onError: (msg) => {
+    fail: (msg) => {
       alert(msg)
     }
   });
@@ -4928,7 +4916,7 @@ drawBlue = (e) => {
   var id = 'blue-' + new Date().getTime();
   const shape = this.mapUtil.drawPolygon({
     polygon: polygon,
-    onSuccess: () => {
+    success: () => {
       // 判断多边形是否合法
       if (GeoUtil.isPolygon(
           polygon.so.map(point => {
@@ -4973,7 +4961,7 @@ drawBlue = (e) => {
       //   return polygons;
       // }
     },
-    onError: (msg) => {
+    fail: (msg) => {
       alert(msg)
     }
   });

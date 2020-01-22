@@ -13,7 +13,8 @@ var Dialog = function (params) {
     duration: 300,
 
     mask: null,
-    wrapper: null,
+    wrapper: null, // wrapper为注入内容, 必须存在实体DOM, 否则不能工作, 并且在没有parent的情况下, dialog将渲染于wrapper同级
+    parent: null,
 
     maskClass: 'mask dialog-mask',
     maskActiveClass: 'active',
@@ -55,48 +56,96 @@ var Dialog = function (params) {
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
 
   // Mask
-  s.createMask = function () {
-    s.mask = document.createElement('div')
+  s.updateMask = function () {
+    if (!s.mask || !s.mask.tagName) {
+      s.mask = document.createElement('div')
+    }
     s.mask.setAttribute('class', s.params.maskClass)
     s.mask.setAttribute('style', s.params.maskCss)
+    s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
-
+  // Wrapper
+  s.updateWrapper = function () {
+    // wrapper为注入内容, 必须存在实体DOM, 否则不能工作
+    s.wrapper = typeof s.params.wrapper === 'string' ? document.querySelector(s.params.wrapper) : s.params.wrapper
+  }
+  // Parent
+  s.updateParent = function () {
+    s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
+    // 没有parent的情况下, 取出wrapper的父级
+    if (!s.parent && s.wrapper) {
+      s.parent = s.wrapper.parentNode
+    }
+  }
   // Dialog
-  s.createDialog = function () {
-    s.dialog = document.createElement('div')
+  s.updateDialog = function () {
+    if (!s.dialog) {
+      s.dialog = document.createElement('div')
+    }
     s.dialog.setAttribute('class', s.params.dialogClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
     s.dialog.setAttribute('style', s.params.dialogCss)
     s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
+    s.dialog.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
-  s.create = function () {
-    // 获取wrapper
-    s.wrapper = typeof s.params.wrapper === 'string' ? document.querySelector(s.params.wrapper) : s.params.wrapper
-    if (!s.wrapper) return
-    // 确定父级
-    s.parent = s.wrapper.parentNode
-    // 插入Dialog
-    s.createDialog()
-    s.parent.insertBefore(s.dialog, s.wrapper)
-    s.dialog.appendChild(s.wrapper)
-    // 插入遮罩
-    s.createMask()
-    s.mask.appendChild(s.dialog)
-    s.parent.appendChild(s.mask)
-    // 源容器显示
-    s.wrapper.style.display = 'block'
+  // 创建DOM
+  s.createDOM = function () {
+    // 先取出父级
+    s.updateWrapper()
+    s.updateParent()
+    if (s.parent) {
+      // Dialog
+      s.updateDialog()
+      s.parent.insertBefore(s.dialog, s.wrapper)
+      s.dialog.appendChild(s.wrapper)
+
+      // Mask
+      s.updateMask()
+      s.mask.appendChild(s.dialog)
+      s.parent.appendChild(s.mask)
+
+      // 显示
+      s.wrapper.style.display = 'block'
+    } else {
+      console.warn('SeedsUI Dialog: 没有父级, 请检查wrapper是否存在, 或者传入正确的parent')
+    }
   }
+  // 更新DOM
+  s.updateDOM = function () {
+    // 先取出父级
+    s.updateWrapper()
+    s.updateParent()
+    if (s.parent) {
+      // Dialog
+      s.updateDialog()
+      // Mask
+      s.updateMask()
+    } else {
+      console.warn('SeedsUI Dialog: 没有父级, 请检查wrapper是否存在, 或者传入正确的parent')
+    }
+  }
+
+  // Dialog
   s.update = function () {
+    if (s.mask && s.wrapper && s.dialog) {
+      s.updateDOM()
+    }
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask && s.mask.tagName) {
       s.dialog = s.mask.querySelector('.' + s.params.dialogClass)
+      s.updateDOM()
     } else {
-      s.create()
+      s.createDOM()
     }
-    // 动画时长
-    s.mask.style.webkitTransitionDuration = s.params.duration + 'ms'
-    s.dialog.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
   s.update()
+
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    s.update()
+  }
   /* -------------------------
   Method
   ------------------------- */

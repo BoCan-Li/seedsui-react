@@ -103,7 +103,7 @@ export default class Dropdown extends Component {
       dialogShow: false
     });
     // 触发onChange事件
-    if (this.props.onChange) this.props.onChange(tabbar);
+    if (this.props.onChange) this.props.onChange(e, tabbar);
   }
   render() {
     const {
