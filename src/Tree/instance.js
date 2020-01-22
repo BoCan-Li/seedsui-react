@@ -1,4 +1,4 @@
-// Tree 树结构 (require PrototypeArray.js)
+// Tree 树结构 (require PrototypeArray.js PrototypeString.js addClass)
 var Tree = function (container, params) {
   function getElementByParent (parent, selector) {
     return (typeof selector === 'string' && selector !== '') ? parent.querySelector(selector) : selector
@@ -25,12 +25,12 @@ var Tree = function (container, params) {
     arrowClass: 'tree-icon-arrow',
     iconClass: 'tree-icon', // 左侧图标
 
-    buttonAddHTML: '',
-    buttonAddClass: 'tree-button-add',
-    buttonAddSrc: '',
-    buttonDelHTML: '',
-    buttonDelClass: 'tree-button-del',
-    buttonDelSrc: '',
+    buttonAddHTML: '', // HTML添加按钮
+    buttonAddClass: 'tree-button-add', // 默认添加按钮
+    buttonAddSrc: '', // 图标添加按钮
+    buttonDelHTML: '', // HTML删除按钮
+    buttonDelClass: 'tree-button-del', // 默认删除按钮
+    buttonDelSrc: '', // 图标删除按钮
 
     idAttr: 'data-id',
     parentidAttr: 'data-parentid',
@@ -127,7 +127,7 @@ var Tree = function (container, params) {
         if (addBtnHTML && !addBtnHTML.hasClass(s.params.buttonAddClass)) addBtnHTML.addClass(s.params.buttonAddClass)
         if (delBtnHTML && !delBtnHTML.hasClass(s.params.buttonDelClass)) delBtnHTML.addClass(s.params.buttonDelClass)
         // 合成html
-        btnHTML = addBtnHTML + delBtnHTML;
+        btnHTML = addBtnHTML + delBtnHTML
       // }
     }
 

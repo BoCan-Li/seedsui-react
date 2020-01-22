@@ -5,8 +5,7 @@ import Instance from './instance.js';
 
 export default class Tree extends Component {
   static propTypes = {
-    treeStyle: PropTypes.object,
-    treeClassName: PropTypes.string,
+    treeAttribute: PropTypes.object,
     
     multiple: PropTypes.bool, // 是否需要多选
     checkbox: PropTypes.bool, // 是否可选
@@ -17,15 +16,8 @@ export default class Tree extends Component {
     selected: PropTypes.array, // [{id: '', name: '', parentid: ''}]
     list: PropTypes.array, // [{id: '', name: '', parentid: ''}]
 
-    buttonAddHTML: PropTypes.string,
-    buttonAddClassName: PropTypes.string,
-    buttonAddSrc: PropTypes.string,
-    onClickAdd: PropTypes.func,
-
-    buttonDelHTML: PropTypes.string,
-    buttonDelClassName: PropTypes.string,
-    buttonDelSrc: PropTypes.string,
-    onClickDel: PropTypes.func,
+    buttonAddAttribute: PropTypes.object, // {className: '', onClick: func()}
+    buttonDelAttribute: PropTypes.object, // {className: '', onClick: func()}
 
     onClickLastChild: PropTypes.func,
 
@@ -65,9 +57,11 @@ export default class Tree extends Component {
   componentDidMount = () => {
     if (this.instance) return;
     const {
-      multiple, checkbox, bar,
-      buttonAddHTML, buttonAddClassName, buttonAddSrc, onClickAdd,
-      buttonDelHTML, buttonDelClassName, buttonDelSrc, onClickDel,
+      multiple,
+      checkbox,
+      bar,
+      buttonAddAttribute = {},
+      buttonDelAttribute = {},
       onClickLastChild,
       onData
     } = this.props;
@@ -81,14 +75,10 @@ export default class Tree extends Component {
       multiple,
       checkbox,
       bar,
-      buttonAddHTML,
-      buttonAddClassName,
-      buttonAddSrc,
-      onClickAdd,
-      buttonDelHTML,
-      buttonDelClassName,
-      buttonDelSrc,
-      onClickDel,
+      buttonAddClass: buttonAddAttribute.className,
+      onClickAdd: buttonAddAttribute.onClick,
+      buttonDelClass: buttonDelAttribute.className,
+      onClickDel: buttonDelAttribute.onClick,
       onClickLastChild, // 没有子节点
       onClick: this.onClick,
       onData: onData
@@ -136,8 +126,7 @@ export default class Tree extends Component {
   }
   render() {
     const {
-      treeStyle,
-      treeClassName,
+      treeAttribute = {},
       
       multiple,
       checkbox,
@@ -145,15 +134,8 @@ export default class Tree extends Component {
       selected,
       list,
 
-      buttonAddHTML,
-      buttonAddClassName,
-      buttonAddSrc,
-      onClickAdd,
-
-      buttonDelHTML,
-      buttonDelClassName,
-      buttonDelSrc,
-      onClickDel,
+      buttonAddAttribute,
+      buttonDelAttribute,
 
       onClickLastChild,
 
@@ -163,7 +145,7 @@ export default class Tree extends Component {
     } = this.props;
     return (
       <div ref={(el) => {this.$el = el}} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
-        <ul ref={(el) => {this.$tree = el}} className={`tree${treeClassName ? ' ' + treeClassName : ''}`} style={treeStyle}></ul>
+        <ul ref={(el) => {this.$tree = el}} {...treeAttribute} className={`tree${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
       </div>
     );
   }
