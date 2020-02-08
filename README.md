@@ -802,6 +802,34 @@ useEn = () => {
 </ConfigProvider>
 
 ```
+
+### 组件调用示例
+```javascript
+// 国际化
+static contextTypes = {
+  locale: PropTypes.object
+}
+render() {
+  // 国际化
+  const {
+    locale = {}
+  } = this.context;
+
+  console.log(locale);
+  return (
+    <div></div>
+  );
+}
+
+```
+
+### 非组件中调用
+```javascript
+import locale from 'seedsui-react/lib/locale';
+
+locale('hint_only_mobile')
+```
+
 [返回目录](#component)
 
 
