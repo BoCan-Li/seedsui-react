@@ -1,4 +1,4 @@
-import getLocaleValue from './ConfigProvider/getLocaleValue.js' // 国际化
+import locale from './locale' // 国际化
 
 /* -------------------
 解决加减乘除精度
@@ -121,13 +121,13 @@ Math.Calc = (function () {
     // 最大值
     if (!isNaN(max) && value - max > 0) {
       // callback fail
-      if (fail) fail({errMsg: getLocaleValue('hint_cannot_be_greater_than') || '不能大于' + max})
+      if (fail) fail({errMsg: locale('hint_cannot_be_greater_than') || '不能大于' + max})
       return '' + max
     }
     // 最小值
     if (!isNaN(min) && value - min < 0) {
       // callback fail
-      if (fail) fail({errMsg: getLocaleValue('hint_cannot_be_less_than') || '不能小于' + min})
+      if (fail) fail({errMsg: locale('hint_cannot_be_less_than') || '不能小于' + min})
       return '' + min
     }
     // 截取小数位数
@@ -160,7 +160,7 @@ Math.Calc = (function () {
       if (result) value = result[0];
       else value = '';
       // callback fail
-      if (fail) fail({errMsg: getLocaleValue('hint_must_number') || '必须要输入数字哦'});
+      if (fail) fail({errMsg: locale('hint_must_number') || '必须要输入数字哦'});
     }
     return value;
   }

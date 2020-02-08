@@ -1,5 +1,5 @@
-// 此库主要用于非组件的js中, 使用getLocaleValue('key')获取value值
-export default (key) => {
+// 此库主要用于非组件的js中, 使用locale('key')获取value值
+export default function (key) {
   let locale = {}
   try {
     if (localStorage.getItem('_seedsui_locale')) {
@@ -8,6 +8,6 @@ export default (key) => {
   } catch (error) {
     console.log(error)
   }
-  return locale[key] || ''
+  if (key) return locale[key] || ''
+  return locale
 }
-

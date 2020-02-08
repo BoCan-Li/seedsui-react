@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class ConfigProvider extends Component {
   static propTypes = {
     locale: PropTypes.object,
-    localeLanguage: PropTypes.string,
+    language: PropTypes.string,
     portal: PropTypes.object,
     onChange: PropTypes.func,
     children: PropTypes.any
@@ -12,7 +12,7 @@ export default class ConfigProvider extends Component {
 
   static childContextTypes = {
     locale: PropTypes.object,
-    localeLanguage: PropTypes.string,
+    language: PropTypes.string,
     portal: PropTypes.object,
     onChange: PropTypes.func
   }
@@ -20,15 +20,15 @@ export default class ConfigProvider extends Component {
   getChildContext() {
     let {
       locale,
-      localeLanguage,
+      language,
       portal,
       onChange
     } = this.props;
-    if (localeLanguage) {
+    if (language) {
       let defaultLocale = null;
-      switch (localeLanguage) {
+      switch (language) {
         case 'zh_CN': {
-          defaultLocale = require('./zh_CN.js');
+          defaultLocale = require('./../locale/zh_CN.js');
           // 防止没有用babel-plugin-add-module-exports自动加上default
           if (defaultLocale.default) defaultLocale = defaultLocale.default;
           locale = {
@@ -38,7 +38,7 @@ export default class ConfigProvider extends Component {
           break;
         }
         case 'en_US': {
-          defaultLocale = require('./en_US.js');
+          defaultLocale = require('./../locale/en_US.js');
           // 防止没有用babel-plugin-add-module-exports自动加上default
           if (defaultLocale.default) defaultLocale = defaultLocale.default;
           locale = {
@@ -55,7 +55,7 @@ export default class ConfigProvider extends Component {
     }
     return {
       locale,
-      localeLanguage,
+      language,
       portal,
       onChange
     }

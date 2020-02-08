@@ -1,5 +1,5 @@
 // Clipboard 剪贴板
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js' // 国际化数据
+import locale from './../locale' // 国际化数据
 
 var Clipboard = {
   // 选择元素的内容
@@ -59,9 +59,9 @@ var Clipboard = {
     }
   
     if (success) {
-      if (params && params.success) params.success(params.successMsg || (getLocaleValue('copied_to_the_clipboard') || '复制到剪贴板成功'))
+      if (params && params.success) params.success(params.successMsg || (locale('copied_to_the_clipboard') || '复制到剪贴板成功'))
     } else {
-      if (params && params.fail) params.fail({errMsg: params.errorMsg || (getLocaleValue('unable_to_access_clipboard') || '当前设备不允许访问剪贴板')})
+      if (params && params.fail) params.fail({errMsg: params.errorMsg || (locale('unable_to_access_clipboard') || '当前设备不允许访问剪贴板')})
     }
   }
 }

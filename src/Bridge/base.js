@@ -3,7 +3,7 @@ import Device from './../Device'
 import Toast from './../Toast/instance.js'
 import Alert from './../Alert/instance.js'
 import Loading from './../Loading/instance.js'
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
+import locale from './../locale'
 
 // 防止绑定事件时this指向window, 所以全局加一个变量用于存储this
 window._bridge_self = null
@@ -17,7 +17,7 @@ var Bridge = {
   tel: function (number) {
     var self = this
     if (Device.device === 'pc') {
-      self.showToast(getLocaleValue('hint_only_mobile') || '此功能仅可在手机中使用', {mask: false})
+      self.showToast(locale('hint_only_mobile') || '此功能仅可在手机中使用', {mask: false})
       return
     }
     if (isNaN(number)) return
@@ -62,13 +62,13 @@ var Bridge = {
     if (!self.loading) {
       self.loading = new Loading({
         ...params,
-        caption: params.caption || (getLocaleValue('loading') || '正在加载...'),
+        caption: params.caption || (locale('loading') || '正在加载...'),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       });
     } else {
       self.loading.updateParams({
         ...params,
-        caption: params.caption || (getLocaleValue('loading') || '正在加载...'),
+        caption: params.caption || (locale('loading') || '正在加载...'),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       })
     }
@@ -77,7 +77,7 @@ var Bridge = {
   hideLoading: function () {
     var self = this
     if (!self.loading) {
-      self.toast.showToast(getLocaleValue('hint_hideloading_after_showloading') || 'showLoading后才能hideLoading')
+      self.toast.showToast(locale('hint_hideloading_after_showloading') || 'showLoading后才能hideLoading')
     } else {
       self.loading.hide()
     }
@@ -90,8 +90,8 @@ var Bridge = {
       self.alert = new Alert({
         ...params,
         html: msg,
-        buttonSubmitHTML: getLocaleValue('ok') || '确定', // 实例化时需要国际化
-        buttonCancelHTML: getLocaleValue('cancel') || '取消', // 实例化时需要国际化
+        buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
+        buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
           else e.hide()
@@ -101,8 +101,8 @@ var Bridge = {
       if (params) {
         self.alert.reset()
         self.alert.updateParams({
-          buttonSubmitHTML: getLocaleValue('ok') || '确定', // 实例化时需要国际化
-          buttonCancelHTML: getLocaleValue('cancel') || '取消', // 实例化时需要国际化
+          buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
+          buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
           ...params,
           html: msg,
         })
@@ -130,8 +130,8 @@ var Bridge = {
       if (params) {
         self.confirm.reset()
         self.confirm.updateParams({
-          buttonSubmitHTML: getLocaleValue('ok') || '确定', // 实例化时需要国际化
-          buttonCancelHTML: getLocaleValue('cancel') || '取消', // 实例化时需要国际化
+          buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
+          buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
           ...params,
           html: msg,
           onClickSubmit: params.success,
@@ -150,14 +150,14 @@ var Bridge = {
     var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getAddress:${getLocaleValue('hint_address_failed') || '获取地址失败, 请稍后重试'}` + err})
+        if (params.fail) params.fail({errMsg: `getAddress:${locale('hint_address_failed') || '获取地址失败, 请稍后重试'}` + err})
       } else {
         var addrs = {}
         if (data.result && data.result.formatted_address) {
           addrs.address = data.result.formatted_address
           if (params.success) params.success(addrs)
         } else {
-          if (params.fail) params.fail({errMsg: `getAddress:${getLocaleValue('hint_address_failed') || '获取地址失败, 请稍后重试'}`})
+          if (params.fail) params.fail({errMsg: `getAddress:${locale('hint_address_failed') || '获取地址失败, 请稍后重试'}`})
         }
       }
     })
@@ -171,12 +171,12 @@ var Bridge = {
     var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getWeather:${getLocaleValue('hint_weather_failed') || '获取天气失败, 请稍后重试'}` + err})
+        if (params.fail) params.fail({errMsg: `getWeather:${locale('hint_weather_failed') || '获取天气失败, 请稍后重试'}` + err})
       } else {
         if (data.results && data.results.length) {
           if (params.success) params.success(data.results)
         } else {
-          if (params.fail) params.fail({errMsg: `getWeather:${getLocaleValue('hint_weather_failed') || '获取天气失败, 请稍后重试'}`})
+          if (params.fail) params.fail({errMsg: `getWeather:${locale('hint_weather_failed') || '获取天气失败, 请稍后重试'}`})
         }
       }
     })
@@ -205,14 +205,14 @@ var Bridge = {
         console.log(error)
       }
     } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      self.showConfirm(self.confirmCaption || (getLocaleValue('confirm_quit_page') || '您确定要离开此页面吗?'), {
+      self.showConfirm(self.confirmCaption || (locale('confirm_quit_page') || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           _history.go(_backLvl)
         }
       });
     } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      self.showConfirm(self.confirmCaption || (getLocaleValue('confirm_quit_page') || '您确定要离开此页面吗?'), {
+      self.showConfirm(self.confirmCaption || (locale('confirm_quit_page') || '您确定要离开此页面吗?'), {
         success: (e) => {
           e.hide()
           self.closeWindow()

@@ -1,6 +1,6 @@
 import DB from './../DB'
 import Device from './../Device'
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
+import locale from './../locale'
 
 var Bridge = {
   /**
@@ -178,7 +178,7 @@ var Bridge = {
   videoRecord: function (params = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(getLocaleValue('hint_video_record_version') || '视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
+      self.showToast(locale('hint_video_record_version') || '视频录制功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoRecord((res) => { // eslint-disable-line
@@ -186,7 +186,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoRecord:录制失败'})
-        else self.showToast(getLocaleValue('hint_video_record_version') || '录制失败', {mask: false})
+        else self.showToast(locale('hint_video_record_version') || '录制失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -198,7 +198,7 @@ var Bridge = {
   videoUpload: function (params = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(getLocaleValue('hint_video_upload_version') || '视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
+      self.showToast(locale('hint_video_upload_version') || '视频上传功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoUpload((res) => { // eslint-disable-line
@@ -206,7 +206,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
-        else self.showToast(getLocaleValue('hint_video_upload_failed') || '上传失败', {mask: false})
+        else self.showToast(locale('hint_video_upload_failed') || '上传失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -218,14 +218,14 @@ var Bridge = {
   videoInfo: function (params = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(getLocaleValue('hint_video_info_version') || '视频功能需要升级至6.2.2及以上的客户端', {mask: false})
+      self.showToast(locale('hint_video_info_version') || '视频功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqjnc.videoInfo((res) => { // eslint-disable-line
       if (res.result === '1') {
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: `videoInfo:${getLocaleValue('hint_video_info_failed') || '未查到此视频信息'}`})
+        if (params.fail) params.fail({errMsg: `videoInfo:${locale('hint_video_info_failed') || '未查到此视频信息'}`})
       }
     }, JSON.stringify(params))
   },
@@ -241,8 +241,8 @@ var Bridge = {
         wqRes.resultStr = res.qrCode
         if (params && params.success) params.success(wqRes)
       } else {
-        if (params.fail) params.fail({errMsg: `scanQRCode:${getLocaleValue('hint_scan_failed') || '扫码失败'}, ${getLocaleValue('hint_try_again_later') || '请稍后重试'}`})
-        else self.showToast(`scanQRCode:${getLocaleValue('hint_scan_failed') || '扫码失败'}, ${getLocaleValue('hint_try_again_later') || '请稍后重试'}`, {mask: false})
+        if (params.fail) params.fail({errMsg: `scanQRCode:${locale('hint_scan_failed') || '扫码失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`})
+        else self.showToast(`scanQRCode:${locale('hint_scan_failed') || '扫码失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`, {mask: false})
       }
     })
   },
@@ -315,8 +315,8 @@ var Bridge = {
         if (params.cache) DB.setCookie('app_location', JSON.stringify(location) , params.cache || 60)
         if (params.success) params.success(location)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocation: ${getLocaleValue('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
-        else self.showToast(getLocaleValue('hint_location_failed') || '定位失败, 请检查定位权限是否开启', {mask: false})
+        if (params.fail) params.fail({errMsg: `getLocation: ${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
+        else self.showToast(locale('hint_location_failed') || '定位失败, 请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -359,8 +359,8 @@ var Bridge = {
         }
         if (params.success) params.success(location)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocationMap:${getLocaleValue('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启'}`})
-        else self.showToast(getLocaleValue('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
+        if (params.fail) params.fail({errMsg: `getLocationMap:${locale('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启'}`})
+        else self.showToast(locale('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
@@ -465,11 +465,11 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!params.dir) {
-      self.showToast(getLocaleValue('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
+      self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return;
     }
     if (!params.localIds || Object.isEmptyObject(params.localIds)) {
-      self.showToast(getLocaleValue('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
+      self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
       return;
     }
     // 格式化params
@@ -500,7 +500,7 @@ var Bridge = {
   previewImage: function (argParams) {
     var self = this
     if (!argParams.urls || !argParams.urls.length) {
-      self.showToast(getLocaleValue('hint_preview_image_must_urls') || '没有预览图片地址', {mask: false})
+      self.showToast(locale('hint_preview_image_must_urls') || '没有预览图片地址', {mask: false})
       return
     }
     // 格式化index
@@ -565,7 +565,7 @@ var Bridge = {
   getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(getLocaleValue('hint_get_customer_area_more_version') || '此功能需要升级至6.2.2及以上的客户端', {mask: false})
+      self.showToast(locale('hint_get_customer_area_more_version') || '此功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
     }
     wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
@@ -618,11 +618,11 @@ var Bridge = {
   openNativePage: function (params = {ios: {}, android: {}}) {
     var self = this
     if (!params.ios.url) {
-      self.showToast(getLocaleValue('hint_open_native_page_must_ios_url') || 'ios参数url不能为空', {mask: false})
+      self.showToast(locale('hint_open_native_page_must_ios_url') || 'ios参数url不能为空', {mask: false})
       return
     }
     if (!params.android.url) {
-      self.showToast(getLocaleValue('hint_open_native_page_must_android_url') || 'android参数url不能为空', {mask: false})
+      self.showToast(locale('hint_open_native_page_must_android_url') || 'android参数url不能为空', {mask: false})
       return
     }
     window.wq.wqload.wqOpenCustomerPager({

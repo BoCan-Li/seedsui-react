@@ -3,7 +3,7 @@ import Device from './../Device'
 import Preview from './../Preview/instance.js'
 import MediaUtil from './../MediaUtil'
 import FullScreen from './../FullScreen'
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
+import locale from './../locale'
 
 var Bridge = {
   /**
@@ -83,7 +83,7 @@ var Bridge = {
   chooseImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     var res = {
@@ -97,13 +97,13 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
       return
     }
     self.showLoading()
     setTimeout(() => {
       self.hideLoading()
-      self.showToast(getLocaleValue('uploaded_completed') || '上传完成', {mask: false})
+      self.showToast(locale('uploaded_completed') || '上传完成', {mask: false})
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
@@ -118,12 +118,12 @@ var Bridge = {
   previewImage: function (params = {}) {
     var self = this;
     if (!params.urls || !params.urls.length) {
-      self.showToast(`urls${getLocaleValue('wrong_parameter') || '参数不正确'}, ${getLocaleValue('cannot_preview') || '无法预览'}`, {mask: false})
+      self.showToast(`urls${locale('wrong_parameter') || '参数不正确'}, ${locale('cannot_preview') || '无法预览'}`, {mask: false})
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      self.showToast(`index${getLocaleValue('wrong_parameter') || '参数不正确'}, ${getLocaleValue('cannot_preview') || '无法预览'}`, {mask: false})
+      self.showToast(`index${locale('wrong_parameter') || '参数不正确'}, ${locale('cannot_preview') || '无法预览'}`, {mask: false})
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -136,7 +136,7 @@ var Bridge = {
           if (params.success) params.success(s)
         },
         fail: function () {
-          self.showToast(`${getLocaleValue('invalid_image_src') || '图片地址无效'}`, {mask: false})
+          self.showToast(`${locale('invalid_image_src') || '图片地址无效'}`, {mask: false})
         }
       })
     } else {
@@ -170,7 +170,7 @@ var Bridge = {
   getContactMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success([
@@ -187,7 +187,7 @@ var Bridge = {
   getContact: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -279,7 +279,7 @@ var Bridge = {
   getCustomerMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     const result = []
@@ -295,7 +295,7 @@ var Bridge = {
   getCustomer: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -306,7 +306,7 @@ var Bridge = {
   getCustomerType: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -317,7 +317,7 @@ var Bridge = {
   getCustomerAreaMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success([
@@ -334,7 +334,7 @@ var Bridge = {
   getCustomerArea: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -345,12 +345,12 @@ var Bridge = {
   // 部门插件
   getDepartmentMore: function (params) {
     var self = this
-    self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+    self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
   },
   getDepartment: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     params.success({
@@ -362,7 +362,7 @@ var Bridge = {
   getGoods: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
       return
     }
     if (params.success) params.success({
@@ -392,9 +392,9 @@ var Bridge = {
   getLocation: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
       setTimeout(() => {
-        if (params.fail) params.fail({errMsg: `getLocation:${getLocaleValue('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用'}`})
+        if (params.fail) params.fail({errMsg: `getLocation:${locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用'}`})
       }, 1000)
       return
     }
@@ -429,8 +429,8 @@ var Bridge = {
   getLocationMap: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_wqapp') || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `getLocationMap:${getLocaleValue('hint_only_wqapp') || '此功能仅可在微信或APP中使用'}`})
+      self.showToast(locale('hint_only_wqapp') || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `getLocationMap:${locale('hint_only_wqapp') || '此功能仅可在微信或APP中使用'}`})
       return
     }
     setTimeout(function () {
@@ -445,8 +445,8 @@ var Bridge = {
   scanQRCode: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(getLocaleValue('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `scanQRCode:${getLocaleValue('hint_scan_failed') || '扫码失败'}, ${getLocaleValue('hint_try_again_later') || '请稍后重试'}`})
+      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `scanQRCode:${locale('hint_scan_failed') || '扫码失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`})
       return
     }
     setTimeout(function () {

@@ -764,8 +764,8 @@ onClick = (e, checked) => {
 ### 属性
 ```javascript
 <ConfigProvider
-  locale={国际化配置文件 object, 默认无}
-  localeLanguage={国际化语言名称 string, 默认无} // 可选项为: zh_CN, en_US, 如想要自定义国际化文件, 使用locale属性
+  language={国际化语言名称 string, 默认无} // 可选项为: zh_CN, en_US, 如想要自定义国际化文件, 使用locale属性
+  locale={国际化配置文件 object, 默认无} // 此属性会覆盖language国际化文件中的字段
   portal={弹框传送dom object, 默认无}
   onChange={修改回调 func, 默认无}
   children={子元素 node, 默认无}
@@ -776,26 +776,28 @@ onClick = (e, checked) => {
 ### 示例
 ```javascript
 import InputDate from 'seedsui-react/lib/InputDate';
+import zhCN from 'seedsui-react/lib/locale/zh_CN';
+import enUS from 'seedsui-react/lib/locale/en_US';
 import ConfigProvider from 'seedsui-react/lib/ConfigProvider';
 
 this.state = {
-  theme: 'zh_CN'
+  locale: zhCN
 }
 
 useZh = () => {
   this.setState({
-    theme: 'zh_CN'
+    locale: zhCN
   });
 }
 useEn = () => {
   this.setState({
-    theme: 'en_US'
+    locale: enUS
   });
 }
 
 <input type="button" value="英文" onClick={this.useEn}/>
 <input type="button" value="中文" onClick={this.useZh}/>
-<ConfigProvider portal={document.getElementById('demo')} localeLanguage={this.state.theme}>
+<ConfigProvider portal={document.getElementById('demo')} locale={this.state.locale}>
   <InputDate type="datetime"/>
 </ConfigProvider>
 

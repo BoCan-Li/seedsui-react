@@ -1,5 +1,5 @@
 // BaiduMap 百度地图使用库
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js'
+import locale from './../locale'
 
 var BaiduMap = function (id, params) {
   if (!document.querySelector('#' + id)) {
@@ -160,18 +160,18 @@ var BaiduMap = function (id, params) {
   s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, success: func(), fail: func()}
     var boundary = new BMap.Boundary()
     if (!options.area) {
-      console.warn(`${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}area, ${getLocaleValue('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
+      console.warn(`${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
       options.fail && options.fail({
-        errMsg: `${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}area, ${getLocaleValue('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`
+        errMsg: `${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`
       })
       return
     }
     boundary.get(options.area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(`${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`)
+        console.warn(`${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`)
         options.fail && options.fail({
-          errMsg: `${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`
+          errMsg: `${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`
         })
         return
       }
@@ -212,9 +212,9 @@ var BaiduMap = function (id, params) {
       s.map.addOverlay(polygon) // 添加覆盖物
       options.success && options.success(polygon)
     } else {
-      console.warn(`drawPolygon: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${getLocaleValue('or') || '或者'}{points: []}`)
+      console.warn(`drawPolygon: ${locale('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${locale('or') || '或者'}{points: []}`)
       options.fail && options.fail({
-        errMsg: `drawPolygon: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${getLocaleValue('or') || '或者'}{points: []}`
+        errMsg: `drawPolygon: ${locale('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${locale('or') || '或者'}{points: []}`
       })
     }
     return polygon
@@ -230,9 +230,9 @@ var BaiduMap = function (id, params) {
   // 绘制Label
   s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}
     if (!options.point) {
-      console.warn(`drawLabel: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`)
+      console.warn(`drawLabel: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`)
       options.fail && options.fail({
-        errMsg: `drawLabel: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`
+        errMsg: `drawLabel: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`
       })
       return
     }
@@ -249,16 +249,16 @@ var BaiduMap = function (id, params) {
   // 绘制标记
   s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, styleOptions: {}}
     if (!options.point) {
-      console.warn(`drawMarker: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`)
+      console.warn(`drawMarker: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`)
       options.fail && options.fail({
-        errMsg: `drawMarker: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{point: }`
+        errMsg: `drawMarker: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`
       })
       return
     }
     if (!options.point.lng || !options.point.lat) {
-      console.warn(`drawMarker: ${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`)
+      console.warn(`drawMarker: ${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`)
       options.fail && options.fail({
-        errMsg: `drawMarker: ${getLocaleValue('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`
+        errMsg: `drawMarker: ${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`
       })
       return
     }
@@ -284,22 +284,22 @@ var BaiduMap = function (id, params) {
   // 添加右键菜单
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
-      console.warn(`addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}overlay`)
+      console.warn(`addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}overlay`)
       options.fail && options.fail({
-        errMsg: `addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}overlay`
+        errMsg: `addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}overlay`
       })
       return
     }
     if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn(`addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
+      console.warn(`addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
       options.fail && options.fail({
-        errMsg: `addContextMenu: ${getLocaleValue('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`
+        errMsg: `addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`
       })
       return
     }
     var markerMenu = new BMap.ContextMenu()
     for (let [index, opt] of options.menus.entries()) {
-      markerMenu.addItem(new BMap.MenuItem(opt.text || (getLocaleValue('menu') || '菜单'), function () {
+      markerMenu.addItem(new BMap.MenuItem(opt.text || (locale('menu') || '菜单'), function () {
         opt.handler(opt, index)
       }))
     }

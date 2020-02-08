@@ -1,7 +1,7 @@
 // Vott (require GeoUtil)
 import GeoUtil from '../GeoUtil'
 
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js' // 国际化
+import locale from './../locale' // 国际化
 
 var Vott = function (container, params) {
   /* --------------------
@@ -177,7 +177,7 @@ var Vott = function (container, params) {
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.svg.classList.remove(s.params.activeClass)
     // Callback
-    if (s.params.fail) s.params.fail({errMsg: `${getLocaleValue('invalid_image_src') || '图片地址无效'}`, event: e})
+    if (s.params.fail) s.params.fail({errMsg: `${locale('invalid_image_src') || '图片地址无效'}`, event: e})
   }
   // 更新DOM
   s.update = function () {

@@ -1,5 +1,5 @@
 // CanvasUtil canvas操作
-import getLocaleValue from './../ConfigProvider/getLocaleValue.js' // 国际化数据
+import locale from './../locale' // 国际化数据
 
 var CanvasUtil = {
   cropImg: function (opts = {}) {
@@ -11,17 +11,17 @@ var CanvasUtil = {
       return errMsg
     }
     if (isNaN(opts.y)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${getLocaleValue('method') || '方法'}y${getLocaleValue('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}y${locale('wrong_parameter') || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.width)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${getLocaleValue('method') || '方法'}width${getLocaleValue('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}width${locale('wrong_parameter') || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.height)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${getLocaleValue('method') || '方法'}width${getLocaleValue('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}width${locale('wrong_parameter') || '参数不正确'}`
       console.warn(errMsg)
       return errMsg
     }
