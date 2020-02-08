@@ -4,6 +4,11 @@ import Instance from './instance.js';
 import BScroll from 'better-scroll';
 
 export default class PDFView extends Component {
+  // 全局配置
+  static contextTypes = {
+    locale: PropTypes.object,
+    portal: PropTypes.object
+  }
   static propTypes = {
     insertPageElements: PropTypes.array, // 插入页面元素
     pictures: PropTypes.array, // 图片地址
@@ -27,8 +32,8 @@ export default class PDFView extends Component {
   // }]
   static defaultProps = {
   }
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       total: 0
     };
@@ -139,6 +144,10 @@ export default class PDFView extends Component {
   }
   // 实例化
   instance = (rows) => {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
     const {
       pictures,
       src,
@@ -146,6 +155,9 @@ export default class PDFView extends Component {
       params = {}
     } = this.props;
     this.instance = new Instance(this.$el, {
+      loadHTML: locale['in_loading'] || '加载中',
+      errorHTML: locale['hint_file_failed_to_load'] || '文件加载失败',
+      nodataHTML: locale['no_data'] || '暂无数据',
       ...params,
       pictures,
       src,
@@ -186,6 +198,13 @@ export default class PDFView extends Component {
   }
   // 设置total则不分页
   getTotalDOM = (total, insertPageElements = [], pageFeatureClass) => {
+    // 全局配置
+    const {
+      locale = {}
+    } = this.context;
+    const {
+      params = {},
+    } = this.props;
     if (!total) return null;
     const DOM = [];
     for (let i = 1; i <= total; i++) {
@@ -202,9 +221,9 @@ export default class PDFView extends Component {
           </div>
         </div>
         <img alt="" className="pdf-page-img hide"/>
-        <div className="pdf-page-load">加载中</div>
-        <div className="pdf-page-error hide">文件加载失败</div>
-        <div className="pdf-page-nodata hide">暂无数据</div>
+        <div className="pdf-page-load">{params.loadHTML !== undefined ? params.loadHTML : (locale['in_loading'] || '加载中')}</div>
+        <div className="pdf-page-error hide">{params.errorHTML !== undefined ? params.errorHTML : (locale['hint_file_failed_to_load'] || '文件加载失败')}</div>
+        <div className="pdf-page-nodata hide">{params.nodataHTML !== undefined ? params.nodataHTML : (locale['no_date'] || '暂无数据')}</div>
       </div>);
     }
     return DOM;

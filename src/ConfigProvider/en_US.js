@@ -35,6 +35,8 @@ export default {
   'hint_invalid_date': 'Invalid Date',
   'star': 'Star',
   'loading': 'Loading...',
+  'in_loading': 'Loading',
+  'hint_file_failed_to_load': 'File failed to load',
   'hint_hideloading_after_showloading': 'showLoading后才能hideLoading',
   'hint_address_failed': 'Address failed',
   'hint_location_failed': 'Location failed',

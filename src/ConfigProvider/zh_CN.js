@@ -35,6 +35,8 @@ export default {
   'hint_invalid_date': '无效的日期格式',
   'star': '颗星',
   'loading': '正在加载...',
+  'in_loading': '加载中',
+  'hint_file_failed_to_load': '文件加载失败',
   'hint_hideloading_after_showloading': 'showLoading后才能hideLoading',
   'hint_address_failed': '获取地址失败, 请稍后重试',
   'hint_location_failed': '定位失败, 请检查定位权限是否开启',
