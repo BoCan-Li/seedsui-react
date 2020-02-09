@@ -4272,7 +4272,7 @@ import Sticker from 'seedsui-react/lib/Sticker';
   //     sndcaption: string,
   //     active: bool,
   
-  //     attributes: object // tab属性
+  //     attribute: object // tab属性
   //     style: object
   //   }
   // ]

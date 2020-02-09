@@ -31,7 +31,7 @@ export default class Tabbar extends Component {
     //     sndcaption: string,
     //     active: bool,
 
-    //     attributes: object // tab属性
+    //     attribute: object // tab属性
     //   }
     // ]
     exceptOnClickActive: true,
@@ -94,7 +94,7 @@ export default class Tabbar extends Component {
     }
     // 遍历
     return list.map((item, index) => {
-      const {icon, iconActive, ricon, riconActive, name, caption, sndcaption, active, attributes = {}, style = {}} = item;
+      const {icon, iconActive, ricon, riconActive, name, caption, sndcaption, active, attribute = {}, style = {}} = item;
       let isActive = (active || activeIndex === index);
       let liconDOM = null;
       if (icon) {
@@ -104,7 +104,7 @@ export default class Tabbar extends Component {
       if (ricon) {
         riconDOM = this.getIconDOM(ricon, riconActive, isActive);
       }
-      return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} data-index={index} key={index} {...attributes}>
+      return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} data-index={index} key={index} {...attribute}>
         {liconDOM && liconDOM}
         <div className="tab-content">
           <div {...captionAttribute} className={`tab-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption || name}</div>
