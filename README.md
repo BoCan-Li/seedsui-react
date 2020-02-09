@@ -1094,6 +1094,9 @@ loadData = () => {
   disabled={是否禁用 bool, 默认false}
   onChange={选中菜单发生变化 func(e, [{id: '', caption: ''}])}
   list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+  tabbarProps={Tabbar组件弹框属性 object, 默认无}
+  dialogProps={Dialog组件弹框属性 object, 默认无}
+  menutiledProps={MenuTiled组件弹框属性 object, 默认无}
 />
 ```
 ### 示例
@@ -4257,6 +4260,7 @@ import Sticker from 'seedsui-react/lib/Sticker';
 <Tabbar
   style={容器style object, 默认无}
   className={容器className string, 默认'tabbar-line tabbar-line-width70 border-b'} // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
+  contentAttribute={标题图标容器属性 object, 默认无} // className: 'tab-content'
   captionAttribute={标题属性 object, 默认无} // className: 'tab-caption'
   sndcaptionAttribute={副属性 object, 默认无} // className: 'tab-sndcaption'
   list={列表 array, 默认无, 格式如下:}

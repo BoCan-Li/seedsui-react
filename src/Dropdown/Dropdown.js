@@ -10,7 +10,10 @@ export default class Dropdown extends Component {
     top: PropTypes.number,
     disabled: PropTypes.bool,
     onChange: PropTypes.func,
-    list: PropTypes.array // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+    list: PropTypes.array, // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+    tabbarProps: PropTypes.object,
+    dialogProps: PropTypes.object,
+    menutiledProps: PropTypes.object,
   }
   static defaultProps = {
     list: []
@@ -108,11 +111,13 @@ export default class Dropdown extends Component {
   render() {
     const {
       portal,
-      top,
+      // top,
       disabled,
-      onChange,
-      list,
-      ...others
+      // onChange,
+      // list,
+      tabbarProps = {},
+      dialogProps = {},
+      menutiledProps = {}
     } = this.props;
     const DOM = [<Tabbar
       key="tabbar"
@@ -123,20 +128,22 @@ export default class Dropdown extends Component {
       onClick={this.onClickTab}
       activeIndex={this.state.tabbarActiveIndex}
       className="tabbar-dropdown tabbar-tiled border-b"
-      {...others}
+      {...tabbarProps}
     />];
     DOM.push(<Dialog
       key="dialog"
-      portal={this.props.portal}
+      portal={portal}
       maskAttribute={{onClick: this.onClickMask, style: {top: this.state.top + 'px'}}}
       animation="slideDown"
       style={{width: '100%'}}
       show={this.state.dialogShow}
+      {...dialogProps}
     >
       <MenuTiled
         list={this.state.menus}
         selectedId={this.state.menusSelectedId}
         onClick={this.onClickMenu}
+        {...menutiledProps}
       />
     </Dialog>);
     return DOM;

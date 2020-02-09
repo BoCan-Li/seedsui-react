@@ -6,6 +6,7 @@ export default class Tabbar extends Component {
     style: PropTypes.object,
     className: PropTypes.string, // tabbar-line | tabbar-rect | tabbar-lump | tabbar-dropdown | tabbar-footer
 
+    contentAttribute: PropTypes.object,
     captionAttribute: PropTypes.object,
     sndcaptionAttribute: PropTypes.object,
 
@@ -84,7 +85,7 @@ export default class Tabbar extends Component {
     return icon;
   }
   getTabsDOM = () => {
-    const {list, activeIndex, captionAttribute = {}, sndcaptionAttribute = {}} = this.props;
+    const {list, activeIndex, contentAttribute = {}, captionAttribute = {}, sndcaptionAttribute = {}} = this.props;
     // tabStyle高度
     var tabStyle = {};
     if (this.props.style && this.props.style.height) {
@@ -106,7 +107,7 @@ export default class Tabbar extends Component {
       }
       return (<li className={`tab${isActive ? ' active' : ''}`} style={Object.assign(tabStyle, style || {})} data-index={index} key={index} {...attribute}>
         {liconDOM && liconDOM}
-        <div className="tab-content">
+        <div className="tab-content" {...contentAttribute}>
           <div {...captionAttribute} className={`tab-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption || name}</div>
           {sndcaption && <div {...sndcaptionAttribute} className={`tab-sndcaption${sndcaptionAttribute.className ? ' ' + sndcaptionAttribute.className : ''}`}>{sndcaption}</div>}
         </div>
