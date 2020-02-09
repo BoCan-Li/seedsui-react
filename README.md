@@ -823,7 +823,7 @@ render() {
 
 ```
 
-### 非组件中调用
+### 非组件中调用(不建议使用, 因为只能在全局只有一个ConfigProvider时才能这样用)
 ```javascript
 import locale from 'seedsui-react/lib/locale';
 

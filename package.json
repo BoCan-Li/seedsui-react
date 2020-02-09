@@ -1,6 +1,6 @@
 {
   "name": "seedsui-react",
-  "version": "2.9.5",
+  "version": "2.9.6",
   "description": "seedsui-react React component",
   "main": "lib/index.js",
   "module": "es/index.js",
