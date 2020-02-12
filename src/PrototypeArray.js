@@ -176,6 +176,34 @@ window.Array.prototype.getFlattenTreeDescendants = function (id, parentIdName, n
   return descendants
 }
 
+// 根据id, 取出此id的上级节点数据, 即[{id: '', name: '', parentid: ''}]
+window.Array.prototype.getFlattenTreeParent = function (parentId, parentIdName, nodeIdName) {
+  var list = this
+  var parents = []
+  for (var i = 0, node; node = list[i++];) { // eslint-disable-line
+    if (parentId && node[nodeIdName || 'id'] === parentId.toString()) {
+      parents.push(node)
+    }
+  }
+  return parents
+}
+
+// 根据id, 取出此id的前代节点数据, 即[{id: '', name: '', parentid: ''}]
+window.Array.prototype.getFlattenTreePredecessors = function (parentId, parentIdName, nodeIdName) {
+  var list = this
+  var predecessors = []
+  function buildParent (list, parentId) {
+    for (var i = 0, node; node = list[i++];) { // eslint-disable-line
+      if (parentId && node[nodeIdName || 'id'] === parentId.toString()) {
+        predecessors.push(node)
+        buildParent(list, node[parentIdName || 'parentid'])
+      }
+    }
+  }
+  buildParent(list, parentId)
+  return predecessors
+}
+
 // 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
 window.Array.prototype.getFlattenTreeNode = function (id, parentIdName, nodeIdName) {
   var list = this
