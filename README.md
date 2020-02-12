@@ -4858,7 +4858,12 @@ onSubmit = () => {
 
 ## MapUtil
 [地图工具](https://unpkg.com/seedsui-react/src/lib/MapUtil/BaiduMap.js)
-### 方法
+### 引入库
+```html
+<!--加载鼠标绘制工具-->
+<!-- <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" /> -->
+```
 
 ### 示例
 ```javascript
@@ -4912,6 +4917,8 @@ componentDidMount () {
 
 // 添加鼠标绘制工具监听事件，用于获取绘制结果
 initMap = () => {
+  // 创建鼠标绘制管理类
+  this.mapUtil.createDrawingManager();
   if (this.mapUtil && this.mapUtil.drawingManager) {
     this.mapUtil.showScale();
     this.mapUtil.showNavigation();
