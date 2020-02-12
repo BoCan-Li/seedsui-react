@@ -4860,6 +4860,7 @@ onSubmit = () => {
 [地图工具](https://unpkg.com/seedsui-react/src/lib/MapUtil/BaiduMap.js)
 ### 引入库
 ```html
+<script src="http://api.map.baidu.com/api?v=2.0&ak=&s=1"></script>
 <!--加载鼠标绘制工具-->
 <!-- <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" /> -->
