@@ -29,7 +29,23 @@ const Api = {
   },
   request: function (url, params = {}) {
     // 设置method
-    var method = params.method === 'get' ? 'get' : 'post'
+    var method = params.method
+    if (method !== 'get' && method !== 'post' && method !== 'jsonp') method = 'get'
+    // 如果是jsonp, 则其它参数都没有意义了
+    if (method === 'jsonp') {
+      return new Promise((resolve, reject) => {
+        window.jsonCallBack = (result) => {
+          resolve(result)
+        }
+        var JSONP = document.createElement('script')
+        JSONP.type = 'text/javascript'
+        JSONP.src = `${url}&callback=jsonCallBack`
+        document.getElementsByTagName('head')[0].appendChild(JSONP)
+        setTimeout(() => {
+          document.getElementsByTagName('head')[0].removeChild(JSONP)
+        }, 500)
+      })
+    }
     // 设置头
     var head = params.head || {}
     // 设置options
@@ -49,7 +65,7 @@ const Api = {
   post: function (url, params = {}) {
     return this.request(url, Object.assign({}, params, {method: 'post'}))
   },
-  get: function (url, params) {
+  get: function (url, params = {}) {
     return this.request(url, Object.assign({}, params ,{method: 'get'}))
   },
   all: function (requests) { // requests: [{url: '', params: {}}]
@@ -57,6 +73,9 @@ const Api = {
       return this.request(request.url, request.params)
     })
     return axios.all(methods)
+  },
+  jsonp: function (url, params = {}) {
+    return this.request(url, Object.assign({}, params, {method: 'jsonp'}))
   }
 }
 
