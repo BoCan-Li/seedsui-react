@@ -59,9 +59,14 @@ var FullScreen = {
     return this
   },
   // 切换
-  toggle: function (el) {
-    if (this.isFull()) this.exit()
-    else this.enter(el)
+  toggle: function (el, handler) {
+    if (this.isFull()) {
+      this.exit()
+      handler(false)
+    } else {
+      this.enter(el)
+      handler(true)
+    }
   },
   // 监听
   addHandler: function (element, handler) {
