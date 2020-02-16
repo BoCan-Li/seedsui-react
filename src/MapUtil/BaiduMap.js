@@ -41,23 +41,86 @@ var BaiduMap = function (id, params) {
 
   // Params
   s.params = params
-  
-  s.map = null
-  s.drawingManager = null
+  // 常量
+  /* eslint-disable */
   const {
-    BMap, BMapLib,
+    BMap, BMapLib = {},
     BMAP_ANCHOR_BOTTOM_LEFT, BMAP_ANCHOR_BOTTOM_RIGHT, BMAP_ANCHOR_TOP_RIGHT,
-    BMAP_DRAWING_POLYGON, BMAP_NAVIGATION_CONTROL_ZOOM
+    BMAP_DRAWING_POLYGON, BMAP_NAVIGATION_CONTROL_ZOOM,
+    BMAP_STATUS_SUCCESS, BMAP_STATUS_TIMEOUT, BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED,
+    BMAP_ANCHOR_TOP_LEFT, BMAP_NAVIGATION_CONTROL_LARGE
   } = window
+  /* eslint-enable */
+  // 鼠标绘制管理实例
+  s.drawingManager = null
+  // 地图实例
+  s.map = new BMap.Map(id)
+  if (!s.map) return
+  /**
+    * 获取当前地理位置
+    * @param {Object} params
+    * params: {
+    *   type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    *   cache {Number}: 默认10分钟缓存防重复定位, 单位毫秒
+    *   success {Function}: function ({
+    *     latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度',
+    *     province: '省', city: '市', district: '区', street: '街道', address: '详情地址'
+    *   }),
+    *   fail {Function}: function ()
+    * }
+    */
+  s.getLocation = function (options = {}) {
+    console.log('调用定位...')
+    var geolocation = new BMap.Geolocation()
+    geolocation.getCurrentPosition(function (res) {
+      if (!res) { // 如果返回结果为null的话, 则返回
+        console.log('没有开启定位权限')
+        if (options.fail) options.fail(`${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`)
+        return
+      }
+      const status = this.getStatus()
+      if (status === BMAP_STATUS_SUCCESS) { // 定位成功
+        const result = {
+          errMsg: `${locale('hint_location_success') || '定位成功'}`,
+          latitude: res.point.lat,
+          longitude: res.point.lng,
+          speed: null,
+          accuracy: null,
+          province: res.address.province,
+          city: res.address.city,
+          district: res.address.district,
+          street: res.address.street,
+          streetNumber: res.address.street_number
+        }
+        result.address = (result.province || '') + (result.city ? ' ,' + result.city : '') + (result.district ? ' ,' + result.district : '') + (result.street ? ' ,' + result.street : '')
+        if (options.success) options.success(result)
+      } else if (status === BMAP_STATUS_TIMEOUT) { // 定位超时
+        console.log('定位超时')
+        options.fail({errMsg: `${locale('hint_location_timeout') || '定位超时'}`})
+      } else {
+        console.log('定位失败')
+        // BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED
+        if (options.fail) options.fail(`${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`)
+      }
+    }, {
+      enableHighAccuracy: true, // 是否要求浏览器获取最佳效果，同浏览器定位接口参数。默认为false
+      timeout: 5000, // 超时事件，单位为毫秒。默认为10秒
+      maximumAge: options.cache || 60000, // 允许返回指定事件内的缓存结果，单位为毫秒。如果为0，则每次请求都获取最新的定位结果。默认为10分钟
+      SDKLocation: false // 是否开启SDK辅助定位
+    })
 
-  // 渲染地图
-  s.createMap = function () {
-    s.map = new BMap.Map('map')
-    s.map.centerAndZoom(new BMap.Point(116.404, 39.915), 12) // 初始化地图,设置中心点坐标和地图级别
-    s.map.setCurrentCity('北京') // 设置地图显示的城市 此项是必须设置的
-    s.map.enableScrollWheelZoom(true) //开启鼠标滚轮缩放
+    // 添加定位控件
+    // var geolocationControl = new BMap.GeolocationControl()
+    // geolocationControl.addEventListener('locationSuccess', function (res) {
+    //   // e.addressComponent.province
+    //   console.log(res)
+    //   if (options.success) options.success({errMsg: res.message})
+    // })
+    // geolocationControl.addEventListener('locationError', function (res) {
+    //   if (options.fail) options.fail({errMsg: res.message})
+    // })
+    // s.map.addControl(geolocationControl)
   }
-  s.createMap()
 
   // 创建鼠标绘制管理类
   s.createDrawingManager = function () {
@@ -73,17 +136,109 @@ var BaiduMap = function (id, params) {
       rectangleOptions: s.params.styleOptions // 矩形的样式
     })
   }
-  s.createDrawingManager()
 
-  /* --------------------
-  多边形算法工具类
-  -------------------- */
-  
-  /* --------------------
-  Method
-  -------------------- */
-  // 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
-  s.formatPoints = function (points) {
+  /**
+    * 地图显示城市
+    * @param {String || Point} center 地名或者坐标点, 默认北京的坐标
+    * @param {Number} zoom 如果center为地名时可以忽略此参数, 如果是坐标点则需要设置它3-19级, 默认18级
+    * @return {Void}
+    */
+  s.centerAndZoom = function (options = {}) {
+    if (!options.center && !options.currentPosition) {
+      return
+    }
+    // 默认定位到北京
+    let center = new BMap.Point(118.787066, 32.007779)
+    let zoom = options.zoom || 12
+    s.map.centerAndZoom(center, zoom)
+    // 设置自动定位
+    if (options.currentPosition) {
+      s.getLocation({
+        success: (res) => {
+          if (res.longitude && res.latitude) {
+            center = new BMap.Point(res.longitude, res.latitude)
+          }
+          s.map.centerAndZoom(center, zoom)
+        },
+        fail: () => {
+          s.map.centerAndZoom(center, zoom)
+        }
+      })
+    }
+  }
+  /**
+    * 自动切换到有覆盖物的视图
+    * @return {Void}
+    */
+  s.centerToOverlays = function () {
+    var overlays = s.map.getOverlays()
+    var points = []
+    for(var i = 0; i < overlays.length; i++) {
+      var overlay = overlays[i]
+      if (overlay instanceof BMap.Polygon) { // 多边形
+        points = points.concat(overlay.getPath())
+      } else if (overlay instanceof BMap.Marker) { // 标记
+        points = points.concat(overlay.point)
+      }
+    }
+    s.map.setViewport(points)
+  }
+
+  /**
+    * 本地搜索
+    * @param {String} city 城市名称
+    * @param {Number} lvl 地图显示级别
+    * @return {Void}
+    */
+  s.search = function (options = {}) {
+    const local = new BMap.LocalSearch(s.map, {
+      pageCapacity: options.rows || 20,
+      onSearchComplete: function (results) {
+        // 判断状态是否正确
+        if (local.getStatus() === BMAP_STATUS_SUCCESS) {
+          var res = []
+          for (var i = 0; i < results.getCurrentNumPois(); i ++){
+            const item = results.getPoi(i);
+            res.push({
+              id: item.uid,
+              title: item.title,
+              address: item.address,
+              point: item.point,
+              tel: item.phoneNumber,
+              mobile: item.phoneNumber,
+              city: item.city,
+              province: item.province,
+              postcode: item.postcode,
+              isAccurate: item.isAccurate,
+              tags: item.tags
+            });
+          }
+          if (options.success) options.success({code: '1', data: {list: res}});
+        } else {
+          if (options.fail) options.fail({code: '0', message: '查询失败'})
+        }
+      },
+      panel: options.panelId || null // 结果面板id
+    })
+    local.search(options.keyword)
+    return local
+  }
+  /**
+    * px转坐标, 老版的百度地图不是用坐标而是px
+    * @param {Object} px {x: , y: }
+    * @return {Point} 格式{lng: , lat: }
+    */
+  s.pxToPoint = function (px) {
+    if (!px) return null
+    return new BMap.MercatorProjection().pointToLngLat(new BMap.Pixel(px.x, px.y))
+  }
+
+  /**
+    * 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
+    * @param {Points} points 点集合, 格式[[lng, lat], [lng, lat]]
+    * @return {Points} 格式[{lng: '', lat: ''}]
+    */
+  s.pointsToPoints = function (points) {
     if (!points || !Array.isArray(points)) return []
     if (JSON.stringify(points).indexOf('lng') !== -1) return points
     if (!Array.isArray(points[0]) || !points[0][0] || !points[0][1]) return []
@@ -99,13 +254,228 @@ var BaiduMap = function (id, params) {
       }
     })
   }
-  // 显示放大缩小控件
-  s.showScale = function () {
-    s.map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT}))
+  /**
+    * 通俗偏移量转为Size对象
+    * @param {Object} wh {
+        width: 0,
+        height: 0
+      }
+    * @return {Size} 表示一个矩形区域的大小
+    */
+  s.whToSize = function (wh = {}) {
+    if (wh instanceof BMap.Size) {
+      return wh
+    }
+    if (wh && !isNaN(wh.width) && !isNaN(wh.height)) {
+      return new BMap.Size(wh.width, wh.height)
+    }
+    return null
   }
-  // 显示标尺控件
-  s.showNavigation = function () {
-    s.map.addControl(new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_ZOOM}))
+  /**
+    * 两个值的数字字符串可转成Size, 可用于背景位置或者背景大小
+    * @param {Object} str '0 0'
+    * @param {Number} defaultWidth 默认宽度
+    * @param {Number} defaultHeight 默认高度
+    * @return {Size} 表示一个矩形区域的大小
+    */
+  s.stringToSize = function (str, defaultWidth = 0, defaultHeight = 0) {
+    let wh = str.split(' ')
+    let w = defaultWidth
+    let h = defaultHeight
+    if (wh.length > 1) {
+      w = wh[0]
+      h = wh[1]
+    } else {
+      w = wh[0]
+    }
+    if (isNaN(w)) w = defaultWidth
+    if (isNaN(h)) h = defaultHeight
+    return s.whToSize({width: w, height: h})
+  }
+  /**
+    * html转成InfoWindow
+    * @param {String} html
+    * @param {InfoWindowOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b8
+    * @return {InfoWindow} 窗口信息
+    */
+  s.htmlToInfoWindow = function (html, options) {
+    if (!html) return null
+    return new BMap.InfoWindow(html, options)
+  }
+  /**
+    * 根据背景url()取出中间的url
+    * @param {String} backgroundImage 'url()'
+    * @return {String} 返回url
+    */
+  s.getUrlByBackgroundImage = function (backgroundImage = '') {
+    let match = backgroundImage.match(/^url\((.+)\)$/)
+    if (match && match.length && match[1]) {
+      return match[1]
+    }
+    return ''
+  }
+  /**
+    * 通俗style对象转成Icon对象
+    * @param {Object} style {
+        marginTop: 0, // 图标的定位点相对于图标左上角的偏移值
+        marginLeft: 0,
+        width: 16,
+        height: 24,
+        backgroundPosition: 'x y', // 仅支持x与y组合的方式控制位置
+        backgroundSize: 'width height', // 仅支持宽高大小
+        backgroundImage: 'url()',
+      }
+    * @return {Size} 表示一个矩形区域的大小
+    */
+  s.styleToIcon = function (style = {}, infoStyle = {}) {
+    // marginTop和marginLeft
+    let anchor = s.whToSize({width: style.marginTop || 0, height: style.marginLeft || 0})
+    // width和height
+    let width = style.width || 16
+    let height = style.height || 24
+    let size = s.whToSize({width: width, height: height})
+    // backgroundPosition
+    let imageOffset = null
+    if (style.backgroundPosition) {
+      imageOffset = s.stringToSize(style.backgroundPosition)
+    }
+    // backgroundSize
+    let imageSize = s.whToSize({width: width, height: height})
+    if (style.backgroundSize) {
+      imageSize = s.stringToSize(style.backgroundSize, width, height)
+    }
+    // backgroundImage
+    let imageUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII='
+    if (style.backgroundImage) {
+      imageUrl = s.getUrlByBackgroundImage(style.backgroundImage)
+    }
+
+    // window容器的marginTop和marginLeft
+    let infoWindowAnchor = s.whToSize({width: infoStyle.marginLeft || 0, height: infoStyle.marginTop || 0})
+
+    return new BMap.Icon(imageUrl, size, {
+      anchor: anchor,
+      size: size,
+      imageOffset: imageOffset,
+      imageSize: imageSize,
+      imageUrl: imageUrl,
+      infoWindowAnchor: infoWindowAnchor
+    })
+  }
+  /**
+    * 通俗偏移量转为Size对象
+    * @param {Object} point {
+        lng: ,
+        lat: 
+      }
+    * @return {Point} 表示一个矩形区域的大小
+    */
+  s.pointToPoint = function (point = {}) {
+    if (point instanceof BMap.Point) {
+      return point
+    }
+    if (point && point.lng && point.lat) {
+      return new BMap.Point(point.lng, point.lat)
+    }
+    return null
+  }
+  /**
+    * 通俗位置转换成百度认识的位置字段
+    * @param {String} position 通俗位置
+    * @return {ControlAnchor} 百度位置字段
+    */
+  s.positionToAnchor = function (position) {
+    // 位置
+    let anchor = null
+    switch (position) {
+      case 'top-left':
+        anchor = BMAP_ANCHOR_TOP_LEFT
+        break
+      case 'top-right':
+        anchor = BMAP_ANCHOR_TOP_RIGHT
+        break
+      case 'bottom-left':
+        anchor = BMAP_ANCHOR_BOTTOM_LEFT
+        break
+      case 'bottom-right':
+        anchor = BMAP_ANCHOR_BOTTOM_RIGHT
+        break
+      default:
+        anchor = BMAP_ANCHOR_TOP_LEFT
+    }
+    return anchor
+  }
+  /**
+    * 显示距离比例控件
+    * @param {Object} options {
+    * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
+    * offset {Object}: {width: Number, height: Number} 
+    * success {Function}: function(ScaleControl)
+    * }
+    */
+  s.showDistance = function (options = {}) {
+    // 位置
+    const anchor = s.positionToAnchor(options.position)
+    // 偏移量
+    let offset = s.whToSize(options.offset)
+    // 实例
+    const scaleControl = new BMap.ScaleControl({
+      anchor: anchor,
+      offset: offset
+    })
+    s.map.addControl(scaleControl)
+    // Return
+    return scaleControl
+  }
+  /**
+    * 显示缩放控件
+    * @param {Object} options {
+    * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
+    * offset {Object}: {width: Number, height: Number} 
+    * success {Function}: function(NavigationControl)
+    * }
+    */
+  s.showNavigation = function (options = {}) {
+    // 位置
+    let anchor = s.positionToAnchor(options.position)
+    // 偏移量
+    let offset = s.whToSize(options.offset)
+    // 类型
+    let type = null
+    switch (options.type) {
+      case 'zoom':
+        type = BMAP_NAVIGATION_CONTROL_ZOOM
+        break
+      case 'large':
+        type = BMAP_NAVIGATION_CONTROL_LARGE
+        break
+      default:
+        type = BMAP_NAVIGATION_CONTROL_LARGE
+    }
+    // 是否显示级别提示信息
+    const showZoomInfo = options.showZoomInfo || false
+    // 定位按钮, 启用会多出个定位按钮
+    let enableGeolocation = false
+    if (typeof options.enableGeolocation === 'boolean') {
+      enableGeolocation = options.enableGeolocation
+    }
+    // 实例
+    const navigationControl = new BMap.NavigationControl({
+      anchor: anchor,
+      offset: offset,
+      type: type,
+      showZoomInfo: showZoomInfo,
+      enableGeolocation: enableGeolocation
+    })
+    s.map.addControl(navigationControl)
+    // Return
+    return navigationControl
+  }
+  /**
+    * 清除覆盖物
+    */
+  s.clearOverlays = function () {
+    s.map.clearOverlays()
   }
   // 启用手动绘制
   // 设置当前的绘制模式，参数DrawingType，为5个可选常量: 
@@ -126,21 +496,10 @@ var BaiduMap = function (id, params) {
       s.drawingManager.setDrawingMode(type || BMAP_DRAWING_POLYGON) // 默认多边形
     }
   }
-  // 自动切换到有覆盖物的视图
-  s.autoViewport = function () {
-    var overlays = s.map.getOverlays()
-    var points = []
-    for(var i = 0; i < overlays.length; i++) {
-      var overlay = overlays[i];
-      if(overlay instanceof BMap.Polygon) {
-        points = points.concat(overlay.getPath())
-      }
-    }
-    s.map.setViewport(points)
-  }
+  
   // 点转多边形points:[[lng, lat], [lng, lat]]
   s.pointsToPolygon = function (argPoints) {
-    var points = s.formatPoints(argPoints);
+    var points = s.pointsToPoints(argPoints);
     var ps = []
     for (var point of points) {
       ps.push(new BMap.Point(point.lng, point.lat))
@@ -206,7 +565,7 @@ var BaiduMap = function (id, params) {
       // 设置矢量图标填充透明度,opacity范围0~1
       polygon.setFillOpacity(options.styleOptions.fillOpacity || s.params.styleOptions.fillOpacity)
     } else if (Array.isArray(options.points) && options.points.length) {
-      polygon = new BMap.Polygon(s.formatPoints(options.points), options.styleOptions || s.params.styleOptions)
+      polygon = new BMap.Polygon(s.pointsToPoints(options.points), options.styleOptions || s.params.styleOptions)
     }
     if (polygon) {
       s.map.addOverlay(polygon) // 添加覆盖物
@@ -243,42 +602,53 @@ var BaiduMap = function (id, params) {
     var label = new BMap.Label(JSON.stringify(options.point), opts) // 创建文本标注对象
     label.setStyle(options.styleOptions || s.params.labelStyleOptions);
     s.map.addOverlay(label)
-    options.success && options.success(label)
     return label
   }
-  // 绘制标记
-  s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, styleOptions: {}}
-    if (!options.point) {
-      console.warn(`drawMarker: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`)
-      options.fail && options.fail({
-        errMsg: `drawMarker: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`
-      })
-      return
-    }
-    if (!options.point.lng || !options.point.lat) {
-      console.warn(`drawMarker: ${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`)
-      options.fail && options.fail({
-        errMsg: `drawMarker: ${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}{point: {lng: ,lat: }}`
-      })
-      return
-    }
-    var point = new BMap.Point(options.point.lng, options.point.lat)
-    var marker = new BMap.Marker(point,
+
+  
+  /**
+    * 绘制标记
+    * @param {Object} options {
+        point {Point}: {lng: ,lat: },
+        marker {Object}: 
+        {
+          offset: {width: , height: }
+          icon: {backgroundImage: url(), backgroundSize: ''}
+          enableMassClear: Boolean	是否在调用map.clearOverlays清除此覆盖物，默认为true
+          enableDragging: Boolean	是否启用拖拽，默认为false
+          enableClicking: Boolean	是否响应点击事件。默认为true
+          raiseOnDrag: Boolean	拖拽标注时，标注是否开启离开地图表面效果。默认为false
+          draggingCursor: String	拖拽标注时的鼠标指针样式。此属性值需遵循CSS的cursor属性规范
+          rotation: Number	旋转角度
+          shadow: Icon	阴影图标
+          title: String	鼠标移到marker上的显示内容
+        },
+        info {}
+    * }
+    * @return {Marker} 标记对象
+    */
+  s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, marker: {}, info: {}}
+    // 绘制位置
+    const point = s.pointToPoint(options.point)
+    if (!point) return
+    // 绘制图标
+    if (!options.marker) options.marker = {}
+    if (!options.info) options.info = {}
+    const {offset, iconStyle, ...markerOptions} = options.marker
+    const marker = new BMap.Marker(point,
       {
-        icon: new BMap.Icon(
-          options.icon || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII=',
-          new BMap.Size(16,24),
-          {
-            imageSize: new BMap.Size(16, 24) // 设置偏移量
-          }
-        )
-      },
-      {
-        offset: new BMap.Size(8, 12)
+        offset: s.whToSize(offset),
+        icon: s.styleToIcon(iconStyle, options.info.style),
+        ...markerOptions
       }
     )
     s.map.addOverlay(marker)
-    options.success && options.success(marker)
+    // 点击显示弹框
+    if (options.onClick) {
+      marker.addEventListener('click', function (e) {
+        options.onClick(e)
+      })
+    }
     return marker
   }
   // 添加右键菜单
@@ -306,6 +676,20 @@ var BaiduMap = function (id, params) {
     overlay.addContextMenu(markerMenu)
     return markerMenu
   }
+  // 渲染地图
+  s.initMap = function () {
+    // 缩放导航
+    if (s.params.navigation) {
+      s.showNavigation(s.params.navigation)
+    }
+    // 中心位置
+    if (s.params.center) {
+      s.centerAndZoom(s.params.center)
+    }
+    // 开启鼠标滚轮缩放
+    s.map.enableScrollWheelZoom(true)
+  }
+  s.initMap()
 }
 
 export default BaiduMap

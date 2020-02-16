@@ -109,9 +109,9 @@ Math.Calc = (function () {
     })
     return n1
   }
-  // 矫正数字, 常用于输入过程中矫正, 可以为空串
+  // 矫正数字, 常用于输入过程中矫正, 可以为空串, valid为true时将校验为合法的数字: 001将转成1返回
   function correctNumber (argNumstr, options) {
-    const {max, min, digits, maxLength, required, fail} = options
+    const {max, min, digits, maxLength, required, fail, valid = true} = options
     if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
       // 非空校验
       if (required) return min ? '' + min : '0'
@@ -144,8 +144,8 @@ Math.Calc = (function () {
     if (maxLength && value && value.length > maxLength) {
       value = value.substring(0, maxLength)
     }
-    // 转成Number类型, 防止001的情况, 小数不能转, 因为有可能是1.0001的情况
-    if (value.indexOf('.') === -1) {
+    // 转成Number类型, 把001转成1; 小数不能转, 因为输入到1.0的情况会转成1
+    if (valid && value.indexOf('.') === -1) {
       return '' + Number(value)
     }
     return '' + value
