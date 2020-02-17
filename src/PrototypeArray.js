@@ -226,7 +226,6 @@ window.Array.prototype.getFlattenTreeNode = function (id, parentIdName, nodeIdNa
 window.Array.prototype.deepTree = function (parentIdName, nodeIdName) {
   var list = this
   if (!Array.isArray(list) || !list.length) return list
-  if (!list[0].hasOwnProperty(parentIdName || 'parentid')) return list
 
   // 深度化, 修改trees
   function _buildTreeToDeep (item) {
