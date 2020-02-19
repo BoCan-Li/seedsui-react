@@ -636,8 +636,9 @@ const imgList2 = [
   }
 ]
 
-this.state = {
-  imgList: imgList1
+state = {
+  imgList: imgList1,
+  activeIndex: 0,
 }
 onCarrouselChange = async (e) => {
   console.log(e.activeIndex)
@@ -646,10 +647,13 @@ onCarrouselChange = async (e) => {
   });
   console.log(e);
 }
+<Button onClick={() => this.setState({activeIndex: 0})}>第1页</Button>
 // 轮播页
 <Carrousel style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.state.activeIndex}>
   <Page>第一页</Page>
   <Page>第二页</Page>
+  <Page>第三页</Page>
+  <Page>第四页</Page>
 </Carrousel>
 // 轮播图
 <Carrousel
@@ -933,7 +937,7 @@ onClick = () => {
 ### 示例
 ```javascript
 import Dialog from 'seedsui-react/lib/Dialog';
-this.state = {
+state = {
   show: false
 }
 onClick = () => {

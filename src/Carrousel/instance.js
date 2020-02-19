@@ -476,7 +476,7 @@ var Carrousel = function (container, params) {
       s.activeIndexTruth = s.max - s.params.slidesPerView
     }
 
-    // 更新class
+    // 更新class和s.activeIndex
     s.updateClasses()
     // 移动至index
     moveToIndex(duration)
