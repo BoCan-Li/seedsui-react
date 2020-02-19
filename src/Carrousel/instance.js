@@ -451,7 +451,11 @@ var Carrousel = function (container, params) {
   s.slideTo = function (slideIndex, speed, runCallbacks) {
     if (isNaN(slideIndex)) return
     // 获取真实位置
-    s.slideToTruth(Number(slideIndex || 0) + Number(s.params.slidesPerView || 0), speed, runCallbacks)
+    var index = slideIndex
+    if (s.params.loop) {
+      index = Number(slideIndex || 0) + Number(s.params.slidesPerView || 0)
+    }
+    s.slideToTruth(index, speed, runCallbacks)
   }
   // slideIndex为真实的位置(loop时真实位置与索引位置不一样)
   s.slideToTruth = function (slideIndex, speed, runCallbacks) {

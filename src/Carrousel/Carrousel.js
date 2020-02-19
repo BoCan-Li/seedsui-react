@@ -65,7 +65,6 @@ export default class Carrousel extends Component {
       this.instance.updateParams({stopPropagation: this.props.stopPropagation});
     }
     if (!this.props.list.equals(prevProps.list)) {
-      console.log(1)
       this.update();
     }
   }
@@ -89,6 +88,7 @@ export default class Carrousel extends Component {
       onClick: this.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
+    if (this.props.activeIndex) this.instance.slideTo(this.props.activeIndex || 0);
   }
   onClick = (s, e) => {
     const index = s.activeIndex;
