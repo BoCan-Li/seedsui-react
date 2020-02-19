@@ -134,7 +134,7 @@ export default class InputSelect extends Component {
     } = this.props;
     // 过滤非法数据
     list = list.filter(item => {
-      if (!item || !item.key || !item.value) return false;
+      if (!item || (!item.key && !item.value)) return false;
       return true;
     });
     return [
