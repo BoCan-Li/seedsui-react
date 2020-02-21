@@ -10,7 +10,7 @@ export default class PDFView extends Component {
     portal: PropTypes.object
   }
   static propTypes = {
-    insertPageElements: PropTypes.array, // 插入页面元素
+    insertPageElements: PropTypes.array, // 插入页面元素, 有此属性时将不分页
     pictures: PropTypes.array, // 图片地址
     src: PropTypes.string, // pdf地址或data:application/pdf;base64,开头的base64pdf流文件
     cMapUrl: PropTypes.string, // 设置cMapUrl, 解决中文不显示的问题
