@@ -95,6 +95,24 @@ window.Array.prototype.toStringOption = function () {
     return item
   })
 }
+// 获取相同值的索引, 例如: [1,1,2,2] 返回: [[0, 1], [2, 3]]
+window.Array.prototype.sameIndexs = function () {
+  var arr = this
+  // 去重得出分组值
+  var group = [...new Set(arr)]
+  // 归类, 得到重复索引, [[重复索引], []]
+  var groupIndexs = []
+  for (let groupValue of group) {
+    var subGroupIndexs = []
+    for (let [index, arrValue] of arr.entries()) {
+      if (groupValue === arrValue) {
+        subGroupIndexs.push(index)
+      }
+    }
+    groupIndexs.push(subGroupIndexs)
+  }
+  return groupIndexs
+}
 
 /* -----------------------------------------------------
   树数据扁平化, 将树的children拉平
