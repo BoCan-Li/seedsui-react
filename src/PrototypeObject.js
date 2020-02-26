@@ -327,6 +327,17 @@ Object.equals = function (object1, object2) { // 用window.Object.prototype.equa
   return true
 }
 
+// 单位转成数字, 如: 12px返回12
+Object.getUnitNum = function (unit) {
+  if (typeof unit === 'number') {
+    return unit
+  }
+  if (typeof unit !== 'string') {
+    return null
+  }
+  return unit.pxNum()
+}
+
 /* -------------------
 SeedsUI组件: 获取参数
 @params e => 事件对象

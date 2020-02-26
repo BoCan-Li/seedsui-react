@@ -1,5 +1,7 @@
 // BaiduMap 百度地图使用库
-import locale from './../locale'
+// 引入 PrototypeObject.js: Object.getUnitNum
+// 引入 PrototypeString.js: Object.getUnitNum方法中使用pxNum()
+import locale from 'locale'
 
 var BaiduMap = function (id, params) {
   if (!document.querySelector('#' + id)) {
@@ -139,16 +141,18 @@ var BaiduMap = function (id, params) {
 
   /**
     * 地图显示城市
-    * @param {String || Point} center 地名或者坐标点, 默认北京的坐标
-    * @param {Number} zoom 如果center为地名时可以忽略此参数, 如果是坐标点则需要设置它3-19级, 默认18级
+    * @param {Object} options {
+    *  {String || Point} center 地名或者坐标点, 默认北京的坐标
+    *  {Number} zoom 如果center为地名时可以忽略此参数, 如果是坐标点则需要设置它3-19级, 默认18级
+    * }
     * @return {Void}
     */
   s.centerAndZoom = function (options = {}) {
     if (!options.center && !options.currentPosition) {
       return
     }
-    // 默认定位到北京
-    let center = new BMap.Point(118.787066, 32.007779)
+    // 默认定位到南京
+    let center = options.center || new BMap.Point(118.787066, 32.007779)
     let zoom = options.zoom || 12
     s.map.centerAndZoom(center, zoom)
     // 设置自动定位
@@ -232,7 +236,6 @@ var BaiduMap = function (id, params) {
     if (!px) return null
     return new BMap.MercatorProjection().pointToLngLat(new BMap.Pixel(px.x, px.y))
   }
-
   /**
     * 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
     * @param {Points} points 点集合, 格式[[lng, lat], [lng, lat]]
@@ -272,25 +275,24 @@ var BaiduMap = function (id, params) {
     return null
   }
   /**
-    * 两个值的数字字符串可转成Size, 可用于背景位置或者背景大小
-    * @param {Object} str '0 0'
-    * @param {Number} defaultWidth 默认宽度
-    * @param {Number} defaultHeight 默认高度
-    * @return {Size} 表示一个矩形区域的大小
+    * 两个值的数字字符串转成宽高数字
+    * @param {Object} position '0 0'
+    * @return {Object} {width: 0, height: 0}
     */
-  s.stringToSize = function (str, defaultWidth = 0, defaultHeight = 0) {
-    let wh = str.split(' ')
-    let w = defaultWidth
-    let h = defaultHeight
+  s.positionToWh = function (position) {
+    let wh = position.split(' ')
+    let w = null
+    let h = null
     if (wh.length > 1) {
-      w = wh[0]
-      h = wh[1]
-    } else {
-      w = wh[0]
+      w = Object.getUnitNum(wh[0])
+      h = Object.getUnitNum(wh[1])
+    } else { // 只有一个值
+      w = Object.getUnitNum(wh[0])
     }
-    if (isNaN(w)) w = defaultWidth
-    if (isNaN(h)) h = defaultHeight
-    return s.whToSize({width: w, height: h})
+    return {
+      width: w || 0,
+      height: h || 0
+    }
   }
   /**
     * html转成InfoWindow
@@ -329,20 +331,26 @@ var BaiduMap = function (id, params) {
     */
   s.styleToIcon = function (style = {}, infoStyle = {}) {
     // marginTop和marginLeft
-    let anchor = s.whToSize({width: style.marginTop || 0, height: style.marginLeft || 0})
+    let marginTop = Object.getUnitNum(style.marginTop)
+    let marginLeft = Object.getUnitNum(style.marginLeft)
+    let anchor = s.whToSize({width: marginTop || 0, height: marginLeft || 0})
     // width和height
-    let width = style.width || 16
-    let height = style.height || 24
+    let width = Object.getUnitNum(style.width)
+    let height = Object.getUnitNum(style.height)
+    if (!width) width = 16
+    if (!height) height = 24
     let size = s.whToSize({width: width, height: height})
     // backgroundPosition
     let imageOffset = null
     if (style.backgroundPosition) {
-      imageOffset = s.stringToSize(style.backgroundPosition)
+      let bgWh = s.s.positionToWh(style.backgroundPosition)
+      imageOffset = s.whToSize({width: bgWh.width, height: bgWh.height})
     }
     // backgroundSize
     let imageSize = s.whToSize({width: width, height: height})
     if (style.backgroundSize) {
-      imageSize = s.stringToSize(style.backgroundSize, width, height)
+      let bgWh = s.s.positionToWh(style.backgroundSize)
+      imageOffset = s.whToSize({width: bgWh.width || width, height: bgWh.height || height})
     }
     // backgroundImage
     let imageUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII='

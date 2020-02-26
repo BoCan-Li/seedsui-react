@@ -345,3 +345,12 @@ window.String.prototype.br = function (limit, character) {
   
   return list
 }
+
+// 取出单位中的数字, 如12px, 返回12
+window.String.prototype.pxNum = function () {
+  var match = this.match(/^([+-]?(0|([1-9][0-9]*))(\.[0-9]+)?)/igm)
+  if (match && match[0]) {
+    return Number(match[0])
+  }
+  return null
+}
