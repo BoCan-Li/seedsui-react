@@ -183,7 +183,7 @@ var Handsign = function (container, params) {
     var img = new Image()
     img.crossOrigin = 'Anonymous'
     img.src = imgSrc
-    img.onload = function () {
+    img.onload = function (e) {
       var sx = 0 // 剪切的 x 坐标
       var sy = 0 // 剪切的 y 坐标
       var width = imgW || img.width // 使用的图像宽度
@@ -193,7 +193,10 @@ var Handsign = function (container, params) {
       var pos = s.calcPosition(width, height, imgP) // 画布上放置xy坐标
       s.ctx.drawImage(img, sx, sy, swidth, sheight, pos.x, pos.y, width, height)
       // 成功回调
-      if (opts.success) opts.success()
+      if (opts.success) opts.success({event: e})
+    }
+    img.onerror = function (err) {
+      if (opts.fail) opts.fail({errMsg: '非法的图片格式', event: err})
     }
   }
   // 绘制文字
