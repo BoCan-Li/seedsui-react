@@ -3717,10 +3717,11 @@ onClickMask = () => {
 ### 属性
 ```javascript
 <Player
+  portal={弹窗传送dom object, 默认document.getElementById('root')}
   src={视频播放地址 string, 默认无}
+  maskAttribute={弹窗遮罩属性, 默认无} // className video-mask
+  videoAttribute={video元素属性, 默认无}
   poster={封面图片地址 string, 默认无}
-  videoAttribute={video元素属性, 默认无} // className player-thumbnail-video
-  onClick={点击视频 func(e), 默认无}
   children={视频容器内子元素 node, 默认无}
   {...others}  // 容器属性
 />
@@ -3729,18 +3730,11 @@ onClickMask = () => {
 ```javascript
 import Player from 'seedsui-react/lib/Player';
 
-onClick = (e) => {
-  console.log(e.target)
-  var src = e.target.getAttribute('data-src');
-  Bridge.previewVideo({src: src});
-}
-
 <Player
-  data-src='https://www.w3school.com.cn/i/movie.ogg'
-  src={'https://www.w3school.com.cn/i/movie.ogg'}
-  poster={`https://www.w3school.com.cn/sp/tiy-retina.jpg`}
-  onClick={this.onClick}
-/>
+  src={`//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/voice.mp4`}
+  style={{width: '319px'}}>
+  <img alt="" src="//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/page2.png" style={{width: '319px'}}/>
+</Player>
 ```
 [返回目录](#component)
 

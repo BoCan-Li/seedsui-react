@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Handsign} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player} from '../../src';
 import zhCN from '../../src/locale/zh_CN';
 import enUS from '../../src/locale/en_US';
 
@@ -13,13 +13,6 @@ class Demo extends Component {
     }
   }
   componentDidMount () {
-    const handsign = this.refs.$handsign.instance;
-    handsign.drawImg('http://image.waiqin365.com/8958085892090750662/bbs/202002/1L9GhyjLrdjhUfq6dthtGp8W1FVzLw8bIA-PJu14rTJ-VC2RdWJyWsPTZjz3zFe3X.jpg');
-    console.log(handsign)
-    setTimeout(() => {
-      const str = handsign.save();
-      console.log(str)
-    }, 1000);
   }
   useZh = () => {
     this.setState({
@@ -42,7 +35,11 @@ class Demo extends Component {
         <ConfigProvider portal={document.getElementById('demo')} locale={this.state.locale}>
           <InputDate type="datetime"/>
         </ConfigProvider>
-        <Handsign ref="$handsign" width={300} height={300}/>
+        <Player
+          src={`//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/voice.mp4`}
+          style={{width: '319px'}}>
+          <img alt="" src="//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/page2.png" style={{width: '319px'}}/>
+        </Player>
       </Container>
       
     </Page>
