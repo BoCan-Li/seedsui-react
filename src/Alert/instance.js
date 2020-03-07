@@ -91,13 +91,18 @@ var Alert = function (params) {
   s.updateContent = function () {
     if (!s.content) {
       s.content = document.createElement('div')
-      s.alert.appendChild(s.content)
+      if (s.handler) {
+        s.alert.insertBefore(s.content, s.handler)
+      } else {
+        s.alert.appendChild(s.content)
+      }
     }
     s.content.setAttribute('class', s.params.contentClass)
     if (s.params.html) {
       s.content.innerHTML = s.params.html
     } else {
       s.alert.removeChild(s.content)
+      s.content = null
     }
   }
   // Handler
@@ -144,10 +149,13 @@ var Alert = function (params) {
   s.updateCaption = function () {
     if (!s.caption) {
       s.caption = document.createElement('h1')
-      s.alert.appendChild(s.caption)
+      s.alert.insertBefore(s.caption, s.alert.childNodes[0])
     }
     if (s.params.caption && s.params.caption !== '') {
       s.caption.innerHTML = s.params.caption
+    } else {
+      s.alert.removeChild(s.caption)
+      s.caption = null
     }
   }
 
@@ -156,8 +164,8 @@ var Alert = function (params) {
     s.updateMask()
     s.updateAlert()
     s.updateCaption()
-    s.updateContent()
     s.updateHandler()
+    s.updateContent()
     s.updateButtonCancel()
     s.updateButtonSubmit()
   }
@@ -166,8 +174,8 @@ var Alert = function (params) {
     s.updateMask()
     s.updateAlert()
     s.updateCaption()
-    s.updateContent()
     s.updateHandler()
+    s.updateContent()
     s.updateButtonCancel()
     s.updateButtonSubmit()
   }
