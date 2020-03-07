@@ -99,7 +99,6 @@ var Bridge = {
       });
     } else {
       if (params) {
-        self.alert.reset()
         self.alert.updateParams({
           buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
           buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
@@ -128,14 +127,18 @@ var Bridge = {
       })
     } else {
       if (params) {
-        self.confirm.reset()
         self.confirm.updateParams({
           buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
           buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
           ...params,
           html: msg,
-          onClickSubmit: params.success,
-          onClickCancel: params.fail
+          onClickSubmit: function (e) {
+            if (params.success) params.success(e)
+          },
+          onClickCancel: function(e) {
+            if (params.fail) params.fail({errMsg: '', event: e})
+            else e.hide()
+          }
         })
       }
     }

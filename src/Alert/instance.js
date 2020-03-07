@@ -18,8 +18,10 @@ var Alert = function (params) {
     alertActiveClass: 'active',
     contentClass: 'alert-content',
     handlerClass: 'alert-handler',
-    buttonSubmitClass: 'alert-submit button',
-    buttonCancelClass: 'alert-cancel button',
+    buttonSubmitClass: 'alert-submit',
+    buttonSubmitExtendClass: 'button',
+    buttonCancelClass: 'alert-cancel',
+    buttonCancelExtendClass: 'button',
 
     caption: '',
     html: '',
@@ -58,9 +60,7 @@ var Alert = function (params) {
   if (params.overflowContainer) {
     s.params.overflowContainer = params.overflowContainer
   }
-  // Parent | OverflowContainer
-  s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
-  s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+
   // Alert | Mask
   s.mask = null
   s.alert = null
@@ -68,8 +68,17 @@ var Alert = function (params) {
   s.handler = null
   s.buttonSubmit = null
   s.buttonCancel = null
+
+  // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
+  if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+
   // Mask
   s.updateMask = function () {
+    if (!s.parent) {
+      console.log('没有parent')
+      return
+    }
+    if (!s.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
       s.parent.appendChild(s.mask)
@@ -79,6 +88,11 @@ var Alert = function (params) {
   }
   // Alert
   s.updateAlert = function () {
+    if (!s.mask) {
+      s.updateMask()
+      console.log('没有mask')
+    }
+    s.alert = s.mask.querySelector('.' + s.params.alertClass)
     if (!s.alert) {
       s.alert = document.createElement('div')
       s.mask.appendChild(s.alert)
@@ -89,6 +103,7 @@ var Alert = function (params) {
   }
   // Content
   s.updateContent = function () {
+    s.content = s.alert.querySelector('.' + s.params.contentClass)
     if (!s.content) {
       s.content = document.createElement('div')
       if (s.handler) {
@@ -107,6 +122,11 @@ var Alert = function (params) {
   }
   // Handler
   s.updateHandler = function () {
+    if (!s.alert) {
+      console.log('没有alert')
+      s.updateAlert()
+    }
+    s.handler = s.alert.querySelector('.' + s.params.handlerClass)
     if (!s.handler) {
       s.handler = document.createElement('div')
       s.alert.appendChild(s.handler)
@@ -121,32 +141,46 @@ var Alert = function (params) {
   }
   // ButtonCancel
   s.updateButtonCancel = function () {
+    if (!s.handler) {
+      console.log('没有handler')
+      s.updateHandler()
+    }
+    s.buttonCancel = s.alert.querySelector('.' + s.params.buttonCancelClass)
+    var className = s.params.buttonCancelClass + ' ' + s.params.buttonCancelExtendClass
+    
     // 如果有属性, 却没有取消按钮, 则创建一个
     if (s.params.onClickCancel && !s.buttonCancel) {
-      s.buttonCancel = createButton(s.params.buttonCancelHTML, s.params.buttonCancelClass)
-      s.handler.insertBefore(s.buttonCancel, s.buttonSubmit)
+      s.buttonCancel = createButton(s.params.buttonCancelHTML, className)
+      if (s.buttonSubmit) {
+        s.handler.insertBefore(s.buttonCancel, s.buttonSubmit)
+      } else {
+        s.handler.appendChild(s.buttonCancel)
+      }
     }
     // 取消按钮
     if (s.buttonCancel) {
       s.buttonCancel.innerHTML = s.params.buttonCancelHTML
-      s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
+      s.buttonCancel.setAttribute('class', className)
     }
   }
   // ButtonSubmit
   s.updateButtonSubmit = function () {
+    s.buttonSubmit = s.alert.querySelector('.' + s.params.buttonSubmitClass)
+    var className = s.params.buttonSubmitClass + ' ' + s.params.buttonSubmitExtendClass
     // 如果有属性, 却没有确定按钮, 则创建一个
     if (s.params.onClickSubmit && !s.buttonSubmit) {
-      s.buttonSubmit = createButton(s.params.buttonSubmitHTML, s.params.buttonSubmitClass)
+      s.buttonSubmit = createButton(s.params.buttonSubmitHTML, className)
       s.handler.appendChild(s.buttonSubmit)
     }
     // 确定按钮
     if (s.buttonSubmit) {
       s.buttonSubmit.innerHTML = s.params.buttonSubmitHTML
-      s.buttonSubmit.setAttribute('class', s.params.buttonSubmitClass)
+      s.buttonSubmit.setAttribute('class', className)
     }
   }
   // Caption
   s.updateCaption = function () {
+    s.caption = s.alert.querySelector('h1')
     if (!s.caption) {
       s.caption = document.createElement('h1')
       s.alert.insertBefore(s.caption, s.alert.childNodes[0])
@@ -159,18 +193,19 @@ var Alert = function (params) {
     }
   }
 
-  // 创建DOM
-  s.createDOM = function () {
-    s.updateMask()
-    s.updateAlert()
-    s.updateCaption()
-    s.updateHandler()
-    s.updateContent()
-    s.updateButtonCancel()
-    s.updateButtonSubmit()
-  }
   // 更新DOM
-  s.updateDOM = function () {
+  s.update = function () {
+    // Parent | OverflowContainer
+    s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
+    s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+    if (!s.parent) {
+      console.log('没有parent')
+      return
+    }
+    if (!s.overflowContainer) {
+      console.log('没有parent')
+      return
+    }
     s.updateMask()
     s.updateAlert()
     s.updateCaption()
@@ -178,25 +213,6 @@ var Alert = function (params) {
     s.updateContent()
     s.updateButtonCancel()
     s.updateButtonSubmit()
-  }
-  // DOM获取与创建
-  s.update = function () {
-    if (s.mask && s.alert) {
-      s.updateDOM()
-    }
-    // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
-    if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask && s.mask.tagName) {
-      if (!s.alert) s.alert = s.mask.querySelector('.' + s.params.alertClass)
-      if (!s.caption) s.caption = s.alert.querySelector('h1')
-      if (!s.content) s.content = s.alert.querySelector('.' + s.params.contentClass)
-      if (!s.handler) s.handler = s.alert.querySelector('.' + s.params.handlerClass)
-      if (!s.buttonSubmit) s.buttonSubmit = s.alert.querySelector('.' + s.params.buttonSubmitClass)
-      if (!s.buttonCancel) s.buttonCancel = s.alert.querySelector('.' + s.params.buttonCancelClass)
-      s.updateDOM()
-    } else {
-      s.createDOM()
-    }
   }
   s.update()
 
@@ -206,7 +222,7 @@ var Alert = function (params) {
       s.params[param] = params[param]
     }
     // 更新DOM
-    s.updateDOM()
+    s.update()
   }
   /* --------------------
   Method
@@ -251,11 +267,6 @@ var Alert = function (params) {
   }
   s.destroy = function () {
     s.destroyMask()
-  }
-  // 重置数据
-  s.reset = function () {
-    s.params = defaults
-    s.updateDOM()
   }
   /* --------------------
   Control

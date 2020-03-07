@@ -11,19 +11,30 @@ export default class IndexBar extends Component {
   static defaultProps = {
     indexs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   }
-  constructor(props) {
-    super(props);
-  }
-  componentDidUpdate = (prevProps) => {
-    if (this.props.overflowContainer !== prevProps.overflowContainer) {
-      this.instance.setOverflowContainer(this.props.overflowContainer);
-    }
+  componentDidUpdate = () => {
+    const {
+      overflowContainer,
+      parent,
+      indexs
+    } = this.props;
+    const $overflowContainer = overflowContainer || this.$el.parentNode;
+    this.instance.updateParams({
+      overflowContainer: $overflowContainer,
+      parent: parent || document.body,
+      indexs: indexs
+    })
   }
   componentDidMount () {
-    const overflowContainer = this.$el.parentNode;
+    const {
+      overflowContainer,
+      parent,
+      indexs
+    } = this.props;
+    const $overflowContainer = overflowContainer || this.$el.parentNode;
     var instance = new Instance({
-      overflowContainer: this.props.overflowContainer || overflowContainer,
-      parent: this.props.parent || document.body
+      overflowContainer: $overflowContainer,
+      parent: parent || document.body,
+      indexs: indexs
     });
     this.instance = instance;
   }
@@ -36,7 +47,7 @@ export default class IndexBar extends Component {
     } = this.props;
     return (<div ref={el => {this.$el = el;}} {...others} className={`indexbar${others.className ? ' ' + others.className : ''}`}>
       {indexs.map((index, i) => {
-        return <a key={`btn${i}`}>{index}</a>
+        return <a href=";" key={`btn${i}`}>{index}</a>
       })}
     </div>);
   }

@@ -34,52 +34,51 @@ var Indexbar = function (params) {
 
 	// Bar
 	s.bar = null
-	s.createBar = function () {
-		var bar = document.createElement('div')
-		bar.setAttribute('class', s.params.barClass)
-		return bar
+	s.updateBar = function () {
+		s.bar = s.parent.querySelector('.' + s.params.barClass)
+		if (!s.bar) {
+			s.bar = document.createElement('div')
+			s.bar.setAttribute('class', s.params.barClass)
+			s.parent.appendChild(s.bar)
+		}
 	}
-	s.createIndexs = function () {
-		var indexs = []
+	s.updateIndexs = function () {
+		s.bar.innerHTML = ''
+		s.indexs = []
 		s.params.indexs.forEach(function (n) {
 			var index = document.createElement('a')
 			index.innerHTML = n
-			indexs.push(index)
+			s.indexs.push(index)
+			s.bar.appendChild(index)
 		})
-		return indexs
 	}
 
 	// ToolTip
-	s.tooltip = null
-	s.createToolTip = function () {
-		var div = document.createElement('div')
-		div.setAttribute('class', s.params.tooltipClass)
-		return div
+	s.updateToolTip = function () {
+		s.tooltip = s.parent.querySelector('.' + s.params.tooltipClass)
+		if (!s.tooltip) {
+			s.tooltip = document.createElement('div')
+			s.tooltip.setAttribute('class', s.params.tooltipClass)
+			s.bar.parentNode.insertBefore(s.tooltip, s.bar.nextSibling)
+		}
 	}
 
 	// Indexs
 	s.update = function () {
-		s.bar = s.parent.querySelector('.' + s.params.barClass)
-    if (!s.bar) {
-			s.bar = s.createBar()
-			s.indexs = s.createIndexs()
-			s.indexs.forEach(function (n) {
-				s.bar.appendChild(n)
-			})
-			s.parent.appendChild(s.bar)
-		}
-		// tooltip必须在bar的后面, 否则active显示样式将不生效
-		s.tooltip = s.parent.querySelector('.' + s.params.tooltipClass)
-		if (!s.tooltip) {
-			s.tooltip = s.createToolTip()
-			s.bar.parentNode.insertBefore(s.tooltip, s.bar.nextSibling)
-		}
+		s.updateBar()
+		s.updateIndexs()
+		s.updateToolTip()
   }
 	s.update()
-
-	// Tooltip
-	s.tooltip = s.parent.querySelector('.' + s.params.tooltipClass)
-
+	
+	// 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.update()
+  }
 	/* -----------------------
 	Method
 	----------------------- */
@@ -105,7 +104,7 @@ var Indexbar = function (params) {
 		currentHTML = current.innerHTML
 		s.tooltip.innerHTML = currentHTML
 		// 对应滚动容器中的目标元素
-		var target = s.overflowContainer.querySelector('[' + s.params.indexAttr + '=' + currentHTML + ']')
+		var target = s.overflowContainer.querySelector('[' + s.params.indexAttr + '="' + currentHTML + '"]')
 		if (!target) return
 		// 移动位置
 		if (target) s.overflowContainer.scrollTop = target.offsetTop
