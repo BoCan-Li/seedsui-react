@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player, InputText} from '../../src';
 import zhCN from '../../src/locale/zh_CN';
 import enUS from '../../src/locale/en_US';
 
@@ -40,6 +40,9 @@ class Demo extends Component {
           style={{width: '319px'}}>
           <img alt="" src="//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/page2.png" style={{width: '319px'}}/>
         </Player>
+        <div onClick={() => Bridge.showConfirm('1', {caption: 'hh'})}>
+          <InputText placeholder="hh"/>
+        </div>
       </Container>
       
     </Page>

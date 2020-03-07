@@ -69,7 +69,6 @@ export default class InputText extends Component {
   }
   // 点击容器
   onClick = (e) => {
-    e.stopPropagation();
     const {
       onClick,
       disabled,
@@ -81,21 +80,28 @@ export default class InputText extends Component {
     var target = e.target;
     if (target.classList.contains('clearicon')) {
       this.onClear(e);
+      e.stopPropagation();
       return;
     }
     if (target.classList.contains('licon') && liconAttribute.onClick) {
       liconAttribute.onClick(e, this.$input.value);
+      e.stopPropagation();
       return;
     }
     if (target.classList.contains('ricon') && riconAttribute.onClick) {
       riconAttribute.onClick(e, this.$input.value);
+      e.stopPropagation();
       return;
     }
     if (target.classList.contains('input-text') && inputAttribute.onClick) {
       inputAttribute.onClick(e, this.$input.value);
+      e.stopPropagation();
       return;
     }
-    if (onClick) onClick(e, this.$input.value);
+    if (onClick) {
+      onClick(e, this.$input.value);
+      e.stopPropagation();
+    }
   }
   // 自动扩充功能
   preAutoSize = () => {
