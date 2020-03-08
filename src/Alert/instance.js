@@ -92,7 +92,7 @@ var Alert = function (params) {
       s.updateMask()
       console.log('没有mask')
     }
-    s.alert = s.mask.querySelector('.' + s.params.alertClass)
+    if (!s.alert) s.alert = s.mask.querySelector('.' + s.params.alertClass)
     if (!s.alert) {
       s.alert = document.createElement('div')
       s.mask.appendChild(s.alert)
@@ -103,7 +103,7 @@ var Alert = function (params) {
   }
   // Content
   s.updateContent = function () {
-    s.content = s.alert.querySelector('.' + s.params.contentClass)
+    if (!s.content) s.content = s.alert.querySelector('.' + s.params.contentClass)
     if (!s.content) {
       s.content = document.createElement('div')
       if (s.handler) {
@@ -126,7 +126,7 @@ var Alert = function (params) {
       console.log('没有alert')
       s.updateAlert()
     }
-    s.handler = s.alert.querySelector('.' + s.params.handlerClass)
+    if (!s.handler) s.handler = s.alert.querySelector('.' + s.params.handlerClass)
     if (!s.handler) {
       s.handler = document.createElement('div')
       s.alert.appendChild(s.handler)
@@ -145,7 +145,7 @@ var Alert = function (params) {
       console.log('没有handler')
       s.updateHandler()
     }
-    s.buttonCancel = s.alert.querySelector('.' + s.params.buttonCancelClass)
+    if (!s.buttonCancel) s.buttonCancel = s.handler.querySelector('.' + s.params.buttonCancelClass)
     var className = s.params.buttonCancelClass + ' ' + s.params.buttonCancelExtendClass
     
     // 如果有属性, 却没有取消按钮, 则创建一个
@@ -165,7 +165,11 @@ var Alert = function (params) {
   }
   // ButtonSubmit
   s.updateButtonSubmit = function () {
-    s.buttonSubmit = s.alert.querySelector('.' + s.params.buttonSubmitClass)
+    if (!s.handler) {
+      console.log('没有handler')
+      s.updateHandler()
+    }
+    if (!s.buttonSubmit) s.buttonSubmit = s.handler.querySelector('.' + s.params.buttonSubmitClass)
     var className = s.params.buttonSubmitClass + ' ' + s.params.buttonSubmitExtendClass
     // 如果有属性, 却没有确定按钮, 则创建一个
     if (s.params.onClickSubmit && !s.buttonSubmit) {

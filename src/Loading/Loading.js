@@ -75,7 +75,7 @@ export default class Loading extends Component {
           {content}
           {children}
         </div>,
-        portal || this.context.portal || document.getElementById('root') || document.body
+        portal
       )
     }
     return (

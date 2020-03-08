@@ -13,6 +13,10 @@ class Demo extends Component {
     }
   }
   componentDidMount () {
+    Bridge.showToast('hh', {position: 'bottom'});
+    setTimeout(() => {
+      Bridge.showToast('yy', {position: 'bottom'});
+    }, 1000);
   }
   useZh = () => {
     this.setState({
@@ -40,7 +44,7 @@ class Demo extends Component {
           style={{width: '319px'}}>
           <img alt="" src="//res.waiqin365.com/d/waiqin365_h5/leaflet/voice/page2.png" style={{width: '319px'}}/>
         </Player>
-        <div onClick={() => Bridge.showAlert('1')}>
+        <div onClick={() => Bridge.showConfirm('1')}>
           <InputText placeholder="hh"/>
         </div>
       </Container>

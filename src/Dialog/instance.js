@@ -76,6 +76,7 @@ var Dialog = function (params) {
     if (!s.parent && s.wrapper) {
       s.parent = s.wrapper.parentNode
     }
+    if (!s.overflowContainer) s.overflowContainer = s.parent
   }
   // Dialog
   s.updateDialog = function () {

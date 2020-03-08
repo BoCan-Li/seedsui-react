@@ -41,6 +41,11 @@ var Actionsheet = function (params) {
   // Parent | OverflowContainer
   s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
   s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  if (!s.parent) {
+		console.warn('SeedsUI Error: IndexBar控件缺少parent')
+		return
+	}
+	if (!s.overflowContainer) s.overflowContainer = s.parent
   // Actionsheet | Mask
   s.actionsheet
   s.mask
@@ -48,26 +53,45 @@ var Actionsheet = function (params) {
   s.options = []
   // Mask
   s.updateMask = function () {
+    if (!s.parent) {
+      console.log('没有parent')
+      return
+    }
+    if (!mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
+      s.parent.appendChild(s.mask)
     }
     s.mask.setAttribute('class', s.params.maskClass + ' ' + s.params.maskFeatureClass)
   }
   // Actionsheet
   s.updateActionsheet = function () {
+    if (!s.mask) {
+      s.updateMask()
+      console.log('没有mask')
+    }
+    if (!s.actionsheet) s.actionsheet = s.mask.querySelector('.' + s.params.actionsheetClass)
     if (!s.actionsheet || !s.actionsheet.tagName) {
       s.actionsheet = document.createElement('div')
+      s.mask.appendChild(s.actionsheet)
     }
     s.actionsheet.setAttribute('class', s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
     s.actionsheet.setAttribute(s.params.animationAttr, s.params.animation)
   }
   // Group
   s.updateGroup = function () {
+    if (!s.actionsheet) {
+      s.updateActionsheet()
+      console.log('没有actionsheet')
+    }
+    if (!s.group) s.group = s.mask.querySelector('.' + s.params.groupClass)
     if (!s.group || !s.group.tagName) {
       s.group = document.createElement('div')
+      s.actionsheet.appendChild(s.group)
     }
     s.group.setAttribute('class', s.params.groupClass)
     // Options
+    s.group.innerHTML = ''
     s.options = []
     for (var [i, opt] of s.params.data.entries()) { // eslint-disable-line
       var option = document.createElement('a')
@@ -80,33 +104,35 @@ var Actionsheet = function (params) {
   }
   // ButtonCancel
   s.updateButtonCancel = function () {
+    if (!s.actionsheet) {
+      s.updateActionsheet()
+      console.log('没有actionsheet')
+    }
+    if (!s.buttonCancel) s.buttonCancel = s.mask.querySelector('.' + s.params.buttonCancelClass)
     if (!s.buttonCancel || !s.buttonCancel.tagName) {
       s.buttonCancel = document.createElement('a')
+      s.actionsheet.appendChild(s.buttonCancel)
     }
     s.buttonCancel.setAttribute('class', s.params.buttonCancelClass)
     s.buttonCancel.innerHTML = s.params.buttonCancelHTML
   }
 
-  s.create = function () {
-    if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
-    if (s.mask && s.mask.tagName) {
-      s.actionsheet = s.mask.querySelector('.' + s.params.actionsheetClass)
-      s.group = s.mask.querySelector('.' + s.params.groupClass)
-      s.options = [].slice.call(s.mask.querySelectorAll('.' + s.params.optionClass))
-      s.buttonCancel = s.mask.querySelector('.' + s.params.buttonCancelClass)
-      return
-    }
+  s.update = function () {
     s.updateMask()
     s.updateActionsheet()
     s.updateGroup()
     s.updateButtonCancel()
-    s.actionsheet.appendChild(s.group)
-    s.actionsheet.appendChild(s.buttonCancel)
-    s.mask.appendChild(s.actionsheet)
-    s.parent.appendChild(s.mask)
   }
-  s.create()
+  s.update()
 
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.update()
+  }
   /* ------------------
   Method
   ------------------ */
