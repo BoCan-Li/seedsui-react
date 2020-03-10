@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance';
-import './fixtable.css';
 
 export default class FixTable extends Component {
   static propTypes = {
