@@ -1194,6 +1194,29 @@ toggleEmoji = () => {
 
 
 
+## FixTable
+[表情弹出输入框](https://unpkg.com/seedsui-react/src/lib/FixTable/FixTable.js)
+### 属性
+```javascript
+<FixTable
+  thead={头部dom node, 默认无}
+  tbody={身体dom node, 默认无}
+  theadFixed={固定头部 bool, 默认true}
+  columnFixed={固定左列 number, 默认0}
+/>
+```
+### 示例
+```javascript
+import FixTable from 'seedsui-react/lib/FixTable';
+
+<FixTable
+  thead={thead}
+  tbody={tbody}
+/>
+```
+[返回目录](#component)
+
+
 ## Footer
 [底部内容](https://unpkg.com/seedsui-react/src/lib/Footer/Footer.js)
 , 通常与Page、Header、Container一起使用
