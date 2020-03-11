@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player, InputText} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player, InputText, Carrousel} from '../../src';
 import zhCN from '../../src/locale/zh_CN';
 import enUS from '../../src/locale/en_US';
 
@@ -13,10 +13,6 @@ class Demo extends Component {
     }
   }
   componentDidMount () {
-    Bridge.showToast('hh', {position: 'bottom'});
-    setTimeout(() => {
-      Bridge.showToast('yy', {position: 'bottom'});
-    }, 1000);
   }
   useZh = () => {
     this.setState({
@@ -47,6 +43,23 @@ class Demo extends Component {
         <div onClick={() => Bridge.showConfirm('1')}>
           <InputText placeholder="hh"/>
         </div>
+        <Carrousel pagination>
+          <div style={{paddingBottom: '20px'}}>
+            <ul className="menus">
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/ffxy.png" className="width-full height-full" /></i><p>付费协议</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/hetong.png" className="width-full height-full" /></i><p>我的合同</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/hdzx.png" className="width-full height-full" /></i><p>活动查询</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/mendian_collect.png" className="width-full height-full" /></i><p>收藏商品</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/mendian_often_buy.png" className="width-full height-full" /></i><p>常购商品</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/duizhangdan.png" className="width-full height-full" /></i><p>对账单</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/mendian_task.png" className="width-full height-full" /></i><p>奖励任务</p></li>
+              <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/feedback.png" className="width-full height-full" /></i><p>投诉反馈</p></li>
+            </ul>
+          </div>
+          <ul className="menus">
+            <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/quanhuishou.png" className="width-full height-full" /></i><p>券回收查询</p></li>
+          </ul>
+        </Carrousel>
       </Container>
       
     </Page>

@@ -101,7 +101,7 @@ export default class Carrousel extends Component {
         return className;
       }
     }
-    return (list.length > 0 ? 'carrousel-container' : 'carrousel-page') + (className ? ' ' + className : '');
+    return 'carrousel-container' + (className ? ' ' + className : '');
   }
   getSlideStyle = (item) => {
     const {slideAttribute} = this.props;
