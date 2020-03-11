@@ -3001,6 +3001,84 @@ a {
 
 
 
+
+
+// FixTable
+.setFixtable() {
+  // 固定头部表格
+  .fixtable{
+    overflow:hidden;
+    font-size: 13px;
+    
+    color:#1a1a1a;
+  }
+  .fixtable, .fixtable-scroller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  // 全局设置
+  .fixtable table {
+    table-layout:fixed
+  }
+  .fixtable tr{
+    height: 37px;
+  }
+  .fixtable th {
+    font-weight: normal;
+  }
+  .fixtable td, .fixtable th{
+    border-left: 0 none;
+    border-right: 0 none;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    padding:0 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    border-color: #d9d9d9;
+  }
+  // 固定容器
+  .fixtable-fixed{
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .fixtable-fixed-head thead{
+    background-color: #E8EAEB;
+  }
+  .fixtable-fixed-head td, .fixtable-fixed-head th{
+    word-wrap: break-word; // 防止td宽度无效的问题
+  }
+  .fixtable-fixed-head tbody td {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  // 滚动容器
+  .fixtable-scroller{
+    overflow: hidden;
+    background-color: white;
+  }
+
+  // 底部
+  .fixtable-scroller-bottom{
+    padding: 20px 0;
+    text-align: center;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 // Filter
 .setFilter(){
   .before-filter-sepia,.before-filter-grayscale,.before-filter-blur,.before-filter-invert,.before-filter-saturate,.before-filter-contrast,.before-filter-brightness,.before-filter-hue-rotate,.before-filter-drop-shadow{
