@@ -201,7 +201,7 @@ var EventUtil = (function () {
       window.addEventListener('devicemotion', _shakeEventHandler, false)
     }
     function detach () {
-      window.removeEventListener('devicemotion', _shakeEventHandler, false);
+      window.removeEventListener('devicemotion', _shakeEventHandler, false)
     }
     // 添加或移除事件
     if (isDetach) {
@@ -210,6 +210,7 @@ var EventUtil = (function () {
       attach()
     }
   }
+  
   /**
     * 返回
     */
@@ -314,6 +315,37 @@ var EventUtil = (function () {
     },
     target: function (e) {
       return e.target || e.srcElement
+    },
+    eventClass: function (type) {
+      switch (type) {
+        case 'click': // Dispatching of 'click' appears to not work correctly in Safari. Use 'mousedown' or 'mouseup' instead.
+        case 'mousedown':
+        case 'mouseup':
+          return 'MouseEvents'
+
+        case 'focus':
+        case 'change':
+        case 'blur':
+        case 'select':
+          return 'HTMLEvents'
+        default:
+          return ''
+      }
+    },
+    trigger(element, type = 'click') {
+      if (document.createEvent) {
+        var eventClass = this.eventClass(type)
+        if (!eventClass) {
+          console.warn(`事件不支持${type}`)
+        }
+        var evt = document.createEvent(eventClass)
+        evt.initEvent(type, true, false)
+        element.dispatchEvent(evt)
+      } else if (document.createEventObject) {
+        element.fireEvent(`on${type}`)
+      } else if (typeof element.onclick == 'function') {
+        element[`on${type}`]()
+      }
     }
   }
 })()
