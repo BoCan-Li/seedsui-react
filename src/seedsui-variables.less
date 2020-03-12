@@ -7368,6 +7368,77 @@ a {
 
 
 
+
+
+
+
+// 全屏播放器
+.setVideoFull(){
+  .videofull-page{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: #000;
+    .flex;
+    .flex-bottom;
+  }
+  .videofull-caption,.videofull-close{
+    z-index: 999;
+  }
+  .videofull-caption{
+    .flex;
+    .flex-middle;
+    .flex-center;
+    height: 32px;
+    border-radius: 16px;
+    padding: 0 12px;
+    background-color: rgba(255,255,255,0.30);
+    color: white;
+  }
+  .videofull-close{
+    .flex;
+    .flex-middle;
+    .flex-center;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    background-color: rgba(255,255,255,0.30);
+    color: white;
+    &:before{
+      content: '';
+      display: block;
+      height: 15px;
+      width: 1px;
+      background-color: white;
+      transform: rotate(-45deg) translateX(1px);
+    }
+    &:after{
+      content: '';
+      display: block;
+      height: 15px;
+      width: 1px;
+      background-color: white;
+      transform: rotate(45deg) translateX(-1px);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // vott图片标注系统
 .setVott(){
   .vott-container{

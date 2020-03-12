@@ -4877,6 +4877,63 @@ onSubmit = () => {
 
 
 
+
+
+
+
+
+
+## VideoFull
+[提示弹框](https://unpkg.com/seedsui-react/src/lib/VideoFull/VideoFull.js)
+
+### 属性
+```javascript
+<VideoFull
+  poster={封面图片地址 string, 默认无}
+  m3u8={m3u8视频地址 string, 默认无}
+  flv={flv视频地址 string, 默认无}
+  mp4={mp4视频地址 string, 默认无}
+  autoPlay={自动播放 string, 默认无, 仅pc端支持}
+  libSrc={TCPlayer库地址 string, 默认'//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.3.2.js'}
+/>
+```
+### 示例
+```javascript
+import VideoFull from 'seedsui-react/lib/VideoFull';
+
+<Page className="flex flex-vertical" style={{backgroundColor: 'black'}}>
+  <Header className="flex flex-right" style={{position: 'relative', padding: '16px'}}>
+    <div className="videofull-caption">312</div>
+    <div className="videofull-close" onClick={this.back} style={{marginLeft: '16px'}}></div>
+  </Header>
+  <Container className="flex-1" style={{position: 'relative', top: 'auto', bottom: 'auto'}}>
+    {src && <VideoFull
+      ref="$video"
+      poster={poster}
+      mp4={src}/>}
+  </Container>
+</Page >
+```
+[返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## MapUtil
 [地图工具](https://unpkg.com/seedsui-react/src/lib/MapUtil/BaiduMap.js)
 ### 引入库

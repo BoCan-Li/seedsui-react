@@ -337,15 +337,22 @@ var EventUtil = (function () {
         var eventClass = this.eventClass(type)
         if (!eventClass) {
           console.warn(`事件不支持${type}`)
+          return false
         }
         var evt = document.createEvent(eventClass)
         evt.initEvent(type, true, false)
         element.dispatchEvent(evt)
-      } else if (document.createEventObject) {
-        element.fireEvent(`on${type}`)
-      } else if (typeof element.onclick == 'function') {
-        element[`on${type}`]()
+        return true
       }
+      if (document.createEventObject) {
+        element.fireEvent(`on${type}`)
+        return true
+      }
+      if (typeof element.onclick == 'function') {
+        element[`on${type}`]()
+        return true
+      }
+      return false
     }
   }
 })()
