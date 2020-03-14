@@ -3482,13 +3482,12 @@ import Peg from 'seedsui-react/lib/Peg';
 ### 属性
 ```javascript
 <Photos
-  className={图标className string, 默认无, 基础'peg'}
   {...others}
-  list={照片列表 array, 默认无} // [{thumb: '', src: ''}]
+  list={照片列表 array, 默认无} // [{thumb: '', src: '', children: node}]
+  upload={上传按钮覆盖的dom node, 默认无}
   uploading={是否上传中 bool, 默认无}
-  onFile={file框onChange事件监听 func, 默认无, 有此属性或onChoose属性才会显示上传按钮}
-  onChoose={点击上传选择 func, 默认无, 有此属性或onFile属性才会显示上传按钮}
-  onDelete={点击上传选择 func, 默认无, 有此属性才会显示删除按钮}
+  onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
+  onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
   onClick={点击一项 func, 默认无}
 />
 ```
@@ -3513,9 +3512,6 @@ onChoose = (...params) => {
   console.log(...params)
 }
 onDelete = (...params) => {
-  console.log(...params)
-}
-onFile = (...params) => {
   console.log(...params)
 }
 
