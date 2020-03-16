@@ -2005,7 +2005,7 @@ fail = (e, msg) => {
 ```javascript
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
-this.state = {
+state = {
   value: ''
 }
 

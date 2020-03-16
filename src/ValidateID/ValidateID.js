@@ -12,7 +12,7 @@ var ValidateID = (function () {
           // long number not allowed
           id = id.toString()
           if (id.length > 15) {
-            this.error('长数字存在精度问题，请使用字符串传值！')
+            if (this.fail) this.fail('长数字存在精度问题，请使用字符串传值！')
             return false
           }
           break

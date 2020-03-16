@@ -419,7 +419,7 @@ var Bridge = {
     console.log('调用定位...')
     setTimeout(() => {
       self.locating = false
-      var res = {longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0'}
+      var res = {longitude:'118.7347', latitude:'31.98114', speed:'0.0', accuracy:'3.0.0'}
       // 将位置信息存储到cookie中60秒
       if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
       if (params.success) params.success(res)

@@ -3,11 +3,12 @@
 // 引入 PrototypeString.js: Object.getUnitNum方法中使用toNumber()
 import locale from './../locale'
 
+/**
+  * 初始化百度地图
+  * @param {String} id 用于s.map = new BMap.Map(id)
+  * @param {Object} params 见defaults
+  */
 var BaiduMap = function (id, params) {
-  if (!document.querySelector('#' + id)) {
-    console.log('SeedsUI Error：未找到BaiduMap的DOM对象，请检查id是否存在')
-    return
-  }
   /* --------------------
   Model
   -------------------- */
@@ -56,8 +57,10 @@ var BaiduMap = function (id, params) {
   // 鼠标绘制管理实例
   s.drawingManager = null
   // 地图实例
-  s.map = new BMap.Map(id)
-  if (!s.map) return
+  s.map = null
+  if (id) {
+    s.map = new BMap.Map(id)
+  }
   /**
     * 获取当前地理位置
     * @param {Object} params
@@ -187,7 +190,49 @@ var BaiduMap = function (id, params) {
     }
     s.map.setViewport(points)
   }
-
+  /**
+    * 坐标转换
+    * @param {Array} points [[lng, lat], [lng, lat]]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Promise} result: {status: 0 成功, points 百度坐标}
+    */
+  s.formatPoints = function (points, type = 'gcj02') {
+    return new Promise((resolve) => {
+      points = points.map((point) => {
+        return new BMap.Point(point[0], point[1])
+      })
+      var convertor = new BMap.Convertor()
+      if (type === 'wgs84') {
+        convertor.translate(points, 1, 5, (result) => {
+          resolve(result)
+        })
+      } else if (type === 'gcj02') {
+        convertor.translate(points, 3, 5, (result) => {
+          resolve(result)
+        })
+      } else {
+        resolve({status: -1, points: points})
+      }
+    })
+  }
+  /**
+    * 地址逆解析
+    * @param {Array} point [lng, lat]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Promise} result: {status: 0 成功, points 百度坐标}
+    */
+  s.getAddress = function (point, type) {
+    return new Promise(async (resolve) => {
+      // 格式化坐标
+      const fmtResult =  await s.formatPoints([point], type)
+      if (fmtResult.status !== 0) return
+      // 逆解析
+      var geocoder = new BMap.Geocoder()
+      geocoder.getLocation(fmtResult.points[0], (result) => {
+        resolve(result)
+      })
+    })
+  }
   /**
     * 本地搜索
     * @param {String} city 城市名称
@@ -686,6 +731,7 @@ var BaiduMap = function (id, params) {
   }
   // 渲染地图
   s.initMap = function () {
+    if (!s.map || !BMap) return
     // 缩放导航
     if (s.params.navigation) {
       s.showNavigation(s.params.navigation)

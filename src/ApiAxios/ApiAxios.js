@@ -1,4 +1,4 @@
-// require (PrototypeObject.js)
+// require (PrototypeObject.js), 使用了isEmptyObject、params
 import axios from 'axios'
 
 // axios 默认配置

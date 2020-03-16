@@ -45,7 +45,7 @@ export default class InputLocation extends Component {
     this.$input.value = locationingValue;
     Bridge.getLocation({
       type: 'gcj02',
-      success: (data) => {
+      success: async (data) => {
         // 客户端中不需要再getAddress
         if (data.address) {
           // 赋值
@@ -55,22 +55,17 @@ export default class InputLocation extends Component {
           }
           return;
         }
-        Bridge.getAddress({ // 只支持gcj02
+        const result = await Bridge.getAddress({ // 只支持gcj02
           latitude: data.latitude,
-          longitude: data.longitude,
-          success: (addrs) => {
-            // 赋值
-            if (onChange) onChange(e, addrs.address, data);
-            this.$input.value = addrs.address;
-          },
-          fail: (res) => {
-            // 赋值
-            if (onChange) onChange(e, '', data)
-            this.$input.value = failedValue;
-            // 提示获取地址失败
-            Bridge.showToast(res.errMsg, {mask: false});
-          }
+          longitude: data.longitude
         });
+        const address = result.address
+        if (address) {
+          this.$input.value = address
+        } else {
+          this.$input.value = failedValue
+        }
+        if (onChange) onChange(e, address, result);
       },
       fail: (res) => {
         // 赋值

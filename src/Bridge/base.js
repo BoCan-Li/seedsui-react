@@ -1,5 +1,6 @@
 import jsonp from './../jsonp'
 import Device from './../Device'
+import MapUtil from './../MapUtil'
 import Toast from './../Toast/instance.js'
 import Alert from './../Alert/instance.js'
 import Loading from './../Loading/instance.js'
@@ -145,24 +146,16 @@ var Bridge = {
     self.confirm.show()
   },
   /**
-    * 百度地图:获取当前位置名称,只支持gcj02
+    * 百度地图:获取当前位置名称
     * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
-    * @returns {Object} {address:'地址全称'}
+    * @param {String} type 'wgs84 | gcj02', 默认gcj02
+    * @return {Promise} result: {status: 0 成功, points 百度坐标}
     */
-  getAddress: function (params = {}) {
-    var url = 'https://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=' + params.latitude + ',' + params.longitude + '&output=json&pois=1&ak=IlfRglMOvFxapn5eGrmAj65H&ret_coordtype=gcj02ll'
-    jsonp(url, null, (err, data) => {
-      if (err) {
-        if (params.fail) params.fail({errMsg: `getAddress:${locale('hint_address_failed') || '获取地址失败, 请稍后重试'}` + err})
-      } else {
-        var addrs = {}
-        if (data.result && data.result.formatted_address) {
-          addrs.address = data.result.formatted_address
-          if (params.success) params.success(addrs)
-        } else {
-          if (params.fail) params.fail({errMsg: `getAddress:${locale('hint_address_failed') || '获取地址失败, 请稍后重试'}`})
-        }
-      }
+  getAddress: function (params = {}, type = 'gcj02') {
+    return new Promise(async (resolve) => {
+      const mapUtil = new MapUtil()
+      const result = await mapUtil.getAddress([params.longitude, params.latitude], type)
+      resolve(result)
     })
   },
   /**
@@ -249,9 +242,9 @@ var Bridge = {
           callback()
         }
       }
-      if (self.error) {
+      if (options.fail) {
         script.onerror = function () {
-          self.error({errMsg: '微信js加载失败'})
+          options.fail({errMsg: '微信js加载失败'})
         }
       }
     } else if (platform === 'waiqin') { // 外勤cordova
@@ -264,9 +257,9 @@ var Bridge = {
           })
         }
       }
-      if (self.error) {
+      if (options.fail) {
         script.onerror = function () {
-          self.error({errMsg: '外勤cordova加载失败'})
+          options.fail({errMsg: '外勤cordova加载失败'})
         }
       }
     } else if (platform === 'wq') { // 外勤jssdk
@@ -278,9 +271,9 @@ var Bridge = {
           self.config()
         }
       }
-      if (self.error) {
+      if (options.fail) {
         script.onerror = function () {
-          self.error({errMsg: '外勤js加载失败'})
+          options.fail({errMsg: '外勤js加载失败'})
         }
       }
     } else if (platform === 'dinghuo') {

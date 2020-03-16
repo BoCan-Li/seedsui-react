@@ -338,6 +338,31 @@ Object.getUnitNum = function (unit) {
   return unit.toNumber()
 }
 
+// 动态加载script的方法, attrs: [{defer: 'defer}]
+Object.loadScript = function (id, src, attrs = []) {
+  return new Promise((resolve) => {
+    if (!document.getElementById(id)) { // 没有bmap, 需要加载库
+      var script = document.createElement('script')
+      if (id) script.id = id
+      script.src = src
+      for (let attr of attrs) {
+        for (let n in attr) {
+          script[n] = attr[n]
+        }
+      }
+      document.body.appendChild(script)
+      script.onload = function () {
+        resolve(script)
+      }
+      script.onerror = function () {
+        resolve(false)
+      }
+    } else {
+      resolve(true)
+    }
+  })
+}
+
 /* -------------------
 SeedsUI组件: 获取参数
 @params e => 事件对象
