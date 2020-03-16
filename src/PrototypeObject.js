@@ -335,7 +335,7 @@ Object.getUnitNum = function (unit) {
   if (typeof unit !== 'string') {
     return null
   }
-  return unit.pxNum()
+  return unit.toNumber()
 }
 
 /* -------------------

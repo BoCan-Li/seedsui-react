@@ -28,6 +28,7 @@ export { default as Dot } from './Dot';
 export { default as Dragrefresh } from './Dragrefresh';
 export { default as Dropdown } from './Dropdown';
 export { default as Emoji } from './Emoji'; // 不常用
+export { default as FixTable } from './FixTable'; // 不常用
 export { default as Footer } from './Footer';
 export { default as Group } from './Group';
 export { default as Handsign } from './Handsign'; // 不常用
@@ -59,6 +60,7 @@ export { default as Mark } from './Mark';
 export { default as Marquee } from './Marquee';
 export { default as MenuTiled } from './MenuTiled';
 export { default as MenuTree } from './MenuTree';
+export { default as VideoFull } from './VideoFull'; // 不常用
 export { default as Notice } from './Notice';
 export { default as NumBox } from './NumBox';
 export { default as OnOff } from './OnOff';
@@ -70,10 +72,12 @@ export { default as Photos } from './Photos'; // 不常用
 export { default as Picker } from './Picker';
 export { default as PickerCity } from './PickerCity';
 export { default as PickerDate } from './PickerDate';
-export { default as Player } from './Player';
+export { default as Player } from './Player'; // 不常用
+export { default as PlayerDialog } from './Player/PlayerDialog'; // 不常用
 export { default as Popover } from './Popover';
 export { default as Preview } from './Preview'; // 不常用
 export { default as Progress } from './Progress';
+export { default as QRCode } from './QRCode'; // 不常用
 export { default as Radio } from './Radio';
 export { default as PickerSelect } from './PickerSelect';
 export { default as Star } from './Star';

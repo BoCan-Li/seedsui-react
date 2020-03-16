@@ -219,16 +219,7 @@ window.String.prototype.isTag = function () {
   }
   return false
 }
-// 获取指定后缀的数值(允许是小数和整数),例如:'44px'.getUnitValue() / '44em'.getUnitValue('em')
-window.String.prototype.getUnitValue = function (argSuffix) {
-  // 默认后缀为px
-  var suffix = argSuffix || 'px'
-  var patt=new RegExp('^[+-]?(0|([1-9][0-9]*))(.[0-9]?)' + suffix + '$');
-  if (patt.test(this)) {
-    return this.substring(0, this.indexOf(suffix))
-  }
-  return 0
-}
+
 // 密码等级
 String.charType = function (char) {
   if (char >= 48 && char <= 57) return 'number' // 数字
@@ -347,7 +338,7 @@ window.String.prototype.br = function (limit, character) {
 }
 
 // 取出单位中的数字, 如12px, 返回12
-window.String.prototype.pxNum = function () {
+window.String.prototype.toNumber = function () {
   var match = this.match(/^([+-]?(0|([1-9][0-9]*))(\.[0-9]+)?)/igm)
   if (match && match[0]) {
     return Number(match[0])

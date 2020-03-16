@@ -1,18 +1,34 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 
-import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player, InputText, Carrousel} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, ConfigProvider, InputDate, Player, InputText, Carrousel, QRCode} from '../../src';
 import zhCN from '../../src/locale/zh_CN';
 import enUS from '../../src/locale/en_US';
+
+const Logo = {
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  width: '50px',
+  height: '50px',
+  marginLeft: '-25px',
+  marginTop: '-25px',
+}
 
 class Demo extends Component {
   constructor(props){
     super(props);
     this.state = {
+      color: {color: 'green'},
       locale: zhCN
     }
   }
   componentDidMount () {
+    setTimeout(() => {
+      this.setState({
+        color: {color: 'red'}
+      })
+    }, 3000);
   }
   useZh = () => {
     this.setState({
@@ -60,6 +76,9 @@ class Demo extends Component {
             <li><i className="icon size40 bg-no-img"><img src="https://image-test.waiqin365.com/emserver/icon/quanhuishou.png" className="width-full height-full" /></i><p>券回收查询</p></li>
           </ul>
         </Carrousel>
+        <QRCode style={this.state.color} text="https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E5%9B%BE%E7%89%87&hs=2&pn=0&spn=0&di=7040&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&ie=utf-8&oe=utf-8&cl=2&lm=-1&cs=1035415831%2C1465727770&os=2036467054%2C2328224179&simid=4030878874%2C470441821&adpicid=0&lpn=0&ln=30&fr=ala&fm=&sme=&cg=&bdtype=0&oriquery=%E5%9B%BE%E7%89%87&objurl=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3F4_z%26e3B6zan0c_z%26e3Bv54AzdH3FkkfAzdH3Fp5rtv_z%26e3Bwfrx%3Ft1%3Dd8ln08c&gsm=1&islist=&querylist=">
+          <img style={Logo} alt="" src="//res.waiqin365.com/d/dinghuo365/logo.png"/>
+        </QRCode>
       </Container>
       
     </Page>

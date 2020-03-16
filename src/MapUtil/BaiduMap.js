@@ -1,6 +1,6 @@
 // BaiduMap 百度地图使用库
 // 引入 PrototypeObject.js: Object.getUnitNum
-// 引入 PrototypeString.js: Object.getUnitNum方法中使用pxNum()
+// 引入 PrototypeString.js: Object.getUnitNum方法中使用toNumber()
 import locale from './../locale'
 
 var BaiduMap = function (id, params) {
