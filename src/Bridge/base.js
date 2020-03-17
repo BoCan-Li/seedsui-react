@@ -154,6 +154,10 @@ var Bridge = {
   getAddress: function (params = {}, type = 'gcj02') {
     return new Promise(async (resolve) => {
       const mapUtil = new MapUtil()
+      if (!window.BMap) {
+        resolve(null)
+        return
+      }
       const result = await mapUtil.getAddress([params.longitude, params.latitude], type)
       resolve(result)
     })
@@ -223,7 +227,7 @@ var Bridge = {
   /**
     * 动态加载桥接库
     * @param {Func} callback 加载完成回调
-    * @param {Object} options {wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs'}
+    * @param {Object} options {wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs', fail: func({errMsg: ''})}
     */
   ready: function (callback, options = {}) {
     var self = this

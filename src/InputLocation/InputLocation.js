@@ -59,20 +59,20 @@ export default class InputLocation extends Component {
           latitude: data.latitude,
           longitude: data.longitude
         });
-        const address = result.address
+        const address = result && result.address ? result.address : ''
+        if (onChange) onChange(e, address, result);
         if (address) {
           this.$input.value = address
         } else {
           this.$input.value = failedValue
         }
-        if (onChange) onChange(e, address, result);
       },
       fail: (res) => {
         // 赋值
         if (onChange) onChange(e, '', null)
         this.$input.value = failedValue;
         // 提示定位失败
-        Bridge.showToast(res.errMsg, {mask: false});
+        // Bridge.showToast(res.errMsg, {mask: false});
       }
     });
   }

@@ -731,7 +731,11 @@ var BaiduMap = function (id, params) {
   }
   // 渲染地图
   s.initMap = function () {
-    if (!s.map || !BMap) return
+    if (!BMap) {
+      console.error('请先引入百度地图api: <script src="//api.map.baidu.com/api?v=3.0&ak=xxx&s=1"></script>')
+      return
+    }
+    if (!s.map) return
     // 缩放导航
     if (s.params.navigation) {
       s.showNavigation(s.params.navigation)

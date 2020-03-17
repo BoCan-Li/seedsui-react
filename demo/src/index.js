@@ -38,7 +38,7 @@ function loadBd(){
   window.BMap_loadScriptTime = (new Date).getTime();
   document.write('<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200311111417"></script>');
 }
-loadBd();
+// loadBd();
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))
 });
