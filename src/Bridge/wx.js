@@ -6,6 +6,7 @@ var Bridge = {
    * 定制功能
    */
   platform: Device.platform,
+  invoke: wx.invoke, // eslint-disable-line
   // 判断是否是主页
   isHomePage: function (callback, rule) {
     if (rule && window.location.href.indexOf(rule) >= 0) {

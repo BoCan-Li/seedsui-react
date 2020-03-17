@@ -94,6 +94,26 @@ var Bridge = {
       if (callback) callback(result)
     }, null, JSON.stringify(params))
   },
+  /**
+    * 分享文本
+    * @param {Object} params
+    * {
+    * title: '标题(仅ios支持)',
+    * desc: '副标题(仅ios支持)',
+    * link: '链接(仅ios支持)',
+    * text: '文本(安卓只支持发送文本)',
+    * }
+    * @param {Function} callback 回调
+    */
+   shareText: function (params, callback) {
+    wq.wqsocial.wqWXSocialWithUrl((result) => { // eslint-disable-line
+      if (callback) callback(result)
+    }, JSON.stringify({
+      title: params.title,
+      url: params.link,
+      description: params.desc
+    }))
+  },
   /* -----------------------------------------------------
     文件操作
   ----------------------------------------------------- */

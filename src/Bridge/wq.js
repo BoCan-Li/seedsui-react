@@ -5,6 +5,7 @@ var Bridge = {
    * 定制功能
    */
   platform: 'wq',
+  invoke: wq.invoke, // eslint-disable-line
   config: function () {
     var self = this
     /* eslint-disable */

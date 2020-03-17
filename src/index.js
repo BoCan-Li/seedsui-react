@@ -79,6 +79,7 @@ export { default as Preview } from './Preview'; // 不常用
 export { default as Progress } from './Progress';
 export { default as QRCode } from './QRCode'; // 不常用
 export { default as Radio } from './Radio';
+export { default as Share } from './Share'; // 不常用
 export { default as PickerSelect } from './PickerSelect';
 export { default as Star } from './Star';
 export { default as Stencil } from './Stencil'; // 不常用

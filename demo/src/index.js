@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, InputLocation, ApiAxios} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, InputLocation, ApiAxios, Share} from '../../src';
 
 
 class Demo extends Component {
@@ -29,7 +29,7 @@ class Demo extends Component {
       <Container>
         <InputLocation value={this.state.value} placeholder="请点击获取位置信息" onChange={this.onChange}/>
       </Container>
-      
+      <Share className="button lg primary" config={config}>分享</Share>
     </Page>
   }
 }
