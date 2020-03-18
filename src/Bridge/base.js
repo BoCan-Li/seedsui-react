@@ -232,14 +232,14 @@ var Bridge = {
   ready: function (callback, options = {}) {
     var self = this
     var platform = self.platform
-    if (platform !== 'weixin' && platform !== 'weixinwork' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
+    if (platform !== 'wechat' && platform !== 'wework' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
       if (callback) window.addEventListener('load', callback, false)
       return
     }
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.defer = 'defer'
-    if (platform === 'weixin' || platform === 'weixinwork') { // 微信
+    if (platform === 'wechat' || platform === 'wework') { // 微信
       script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.4.0.js'
       if (callback) {
         script.onload = function () {

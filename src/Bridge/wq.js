@@ -5,7 +5,7 @@ var Bridge = {
    * 定制功能
    */
   platform: 'wq',
-  invoke: wq.invoke, // eslint-disable-line
+  invoke: window.wq && window.wq.invoke ? window.wq.invoke : () => {console.log('不支持invoke')},
   config: function () {
     var self = this
     /* eslint-disable */

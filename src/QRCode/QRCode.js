@@ -33,7 +33,7 @@ class QRCode extends Component {
       text,
       style = {}
     } = this.props;
-    this.instance = new Instance(this.$img, {
+    this.instance = new Instance(this.$el, {
       text: text || '',
       width: Object.getUnitNum(style.width || 230),
       height: Object.getUnitNum(style.width || 230),
@@ -52,7 +52,6 @@ class QRCode extends Component {
     if (!text) return null;
     return (
       <span ref={(el) => {this.$el = el}} style={style} {...others}  className={`qrcode${others.className ? ' ' + others.className : ''}`}>
-        <span ref={(el) => {this.$img = el}}></span>
         {children}
       </span>
     );

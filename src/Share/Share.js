@@ -36,7 +36,7 @@ function Share({
     <div {...others} onClick={handlerClick}>
       {children}
       {/* 微信, 点击显示提示弹窗 */}
-      {Bridge.platform === 'weixin' && <ShareTip
+      {Bridge.platform === 'wechat' && <ShareTip
           show={show}
           config={config}
           originConfig={originConfig}
@@ -44,7 +44,7 @@ function Share({
         />
       }
       {/* 企业微信和外勤客户端JSBridge, 点击显示选择弹窗 */}
-      {(Bridge.platform === 'weixinwork' || Bridge.platform === 'wq') && !type && <ShareChoose
+      {(Bridge.platform === 'wework' || Bridge.platform === 'wq') && !type && <ShareChoose
           show={show}
           config={config}
           shareTo={shareTo}
@@ -52,7 +52,7 @@ function Share({
         />
       }
       {/* 企业微信和外勤客户端JSBridge, 单项显示 */}
-      {(Bridge.platform === 'weixinwork' || Bridge.platform === 'wq') && type && <ShareType
+      {(Bridge.platform === 'wework' || Bridge.platform === 'wq') && type && <ShareType
         type={type}
         config={config}
       />}

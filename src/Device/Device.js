@@ -38,15 +38,15 @@ var Device = (function () {
   if (device === 'pc') {
     platform = 'browser'
   } else if (ua.indexOf('wxwork') > -1) {
-    platform = 'weixinwork'
+    platform = 'wework'
     platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('micromessenger') > -1) {
-    platform = 'weixin'
+    platform = 'wechat'
     platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('miniprogram') > -1) {
-    platform = 'weixinminiprogram'
+    platform = 'miniprogram'
     platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('mqqbrowser') > -1) {
