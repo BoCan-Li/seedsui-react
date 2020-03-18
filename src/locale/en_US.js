@@ -77,5 +77,8 @@ export default {
   'or': 'or',
   'menu': 'menu',
   'hint_for_example_address': 'Example “江苏省南京市建邺区”',
-  'no_data': 'No data'
+  'no_data': 'No data',
+  'wechat_friend': 'Wechat friend',
+  'wework_friend': 'Wework friend',
+  'wechat_moments': 'Wechat moments'
 }

@@ -3,13 +3,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerDate from './../PickerDate';
+import Context from '../../src/Context/instance.js';
 
 export default class InputDate extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     // Input
     min: PropTypes.string, // YYYY-MM-DD

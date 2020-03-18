@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
+import Context from '../../src/Context/instance.js';
 
 function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp', onHide, maskAttribute = {}, ...others }) {
   // 点击
@@ -57,7 +58,7 @@ function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp'
       animationClassName = 'popup-animation middle';
   }
   // context
-  const contextPortal = null; // useContext(PortalContext) || 
+  const context =  useContext(Context) || {};
   // 返回列表
   if (!shareTo || !shareTo.length) return null
   return createPortal(
@@ -71,15 +72,15 @@ function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp'
           return <div className="share-item" key={index}>
             <i className={`share-icon ${share}`}></i>
             <p className="share-caption">
-              {share === 'wechat' && '微信好友'}
-              {share === 'wework' && '企业微信好友'}
-              {share === 'moments' && '微信朋友圈'}
+              {share === 'wechat' && context.locale['wechat_friend']}
+              {share === 'wework' && context.locale['wework_friend']}
+              {share === 'moments' && context.locale['wechat_moments']}
             </p>
           </div>
         })}
       </div>
     </div>,
-    portal || contextPortal || document.getElementById('root') || document.body
+    portal || context.portal || document.getElementById('root') || document.body
   );
 }
 

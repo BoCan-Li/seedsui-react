@@ -784,7 +784,7 @@ import zhCN from 'seedsui-react/lib/locale/zh_CN';
 import enUS from 'seedsui-react/lib/locale/en_US';
 import ConfigProvider from 'seedsui-react/lib/ConfigProvider';
 
-this.state = {
+state = {
   locale: zhCN
 }
 
