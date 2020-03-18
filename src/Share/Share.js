@@ -32,6 +32,9 @@ function Share({
       setShow(true)
     }
   }
+  if (Bridge.platform !== 'wework' && Bridge.platform !== 'wechat' && Bridge.platform !== 'wq' && Bridge.platform !== 'dinghuo' && Bridge.platform !== 'waiqin') {
+    return null;
+  }
   return (
     <div {...others} onClick={handlerClick}>
       {children}
