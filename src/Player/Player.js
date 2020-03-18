@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayerDialog from './PlayerDialog';
+import Context from '../../src/Context/instance.js';
 
 export default class Player extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     portal: PropTypes.object,
     src: PropTypes.string,

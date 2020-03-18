@@ -1,13 +1,10 @@
 // require PrototypeString.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Context from '../../src/Context/instance.js';
 
 export default class InputSafe extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     value: PropTypes.string
   }

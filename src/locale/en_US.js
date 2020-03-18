@@ -80,5 +80,9 @@ export default {
   'no_data': 'No data',
   'wechat_friend': 'Wechat friend',
   'wework_friend': 'Wework friend',
-  'wechat_moments': 'Wechat moments'
+  'wechat_moments': 'Wechat moments',
+  'sharetip_click_on_the_top_right': 'Click on the top right',
+  'sharetip_click': 'Click',
+  'sharetip_sent_to_friend_or': 'sent to friend or',
+  'sharetip_share_to_moments': 'share to moments',
 }

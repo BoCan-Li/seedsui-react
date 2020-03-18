@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import Notice from './../Notice';
 import Instance from './instance.js';
 import ImgLazy from './../ImgLazy';
+import Context from '../../src/Context/instance.js';
 
 export default class Dragrefresh extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     threshold: PropTypes.number, // 头部下拉的触发位置
     end: PropTypes.number, // 头部下拉的结束位置

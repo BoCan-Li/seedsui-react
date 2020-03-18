@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
+import Context from '../../src/Context/instance.js';
 
 function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {}, onHide }) {
   // 生命周期
@@ -64,22 +65,22 @@ function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {},
     }
   }
   // context
-  const contextPortal = null; // useContext(PortalContext) || 
+  const context = useContext(Context) || {};
   return createPortal(
     <div className={`mask share-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} {...maskAttribute} onClick={handlerClick}>
       <div className="share-tip-arrow"></div>
       <div className={`share-tip`}>
-        <p>1.点击右上角</p>
+        <p>1.{context.locale['sharetip_click_on_the_top_right'] || '点击右上角'}</p>
         <p>
-          2.点击
-          <img alt="" src="https://img11.360buyimg.com/jdphoto/s40x40_jfs/t1/35965/17/691/472/5cac50b9E361b21d5/e4382d0bb30e4114.png"/>
-          发送给朋友或
-          <img alt="" src="https://img11.360buyimg.com/jdphoto/s42x42_jfs/t1/18600/16/14988/1794/5cac50b9E10d2024d/6675b7460c377bfe.png"/>
-          分享给朋友圈
+          2.{context.locale['sharetip_click'] || '点击'}
+          <img alt="" src="//res.waiqin365.com/d/seedsui/share/tip_friend.png"/>
+          {context.locale['sharetip_sent_to_friend_or'] || '发送给朋友或'}
+          <img alt="" src="//res.waiqin365.com/d/seedsui/share/tip_moments.png"/>
+          {context.locale['sharetip_share_to_moments'] || '分享给朋友圈'}
         </p>
       </div>
     </div>,
-    portal || contextPortal || document.getElementById('root') || document.body
+    portal || context.portal || document.getElementById('root') || document.body
   );
 }
 

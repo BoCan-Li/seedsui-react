@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import Bridge from './../Bridge';
 import BridgeBrowser from './../Bridge/browser';
+import Context from '../../src/Context/instance.js';
 
 export default class ImgMark extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     // 数据源
     data: PropTypes.array, // [{strokeStyle: '', lineWidth: '', setLineDash: [], x1: '', y1: '', x2: '', y2: ''}]

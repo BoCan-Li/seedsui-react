@@ -6,13 +6,10 @@ import InputPre from './../InputPre';
 import Button from './../Button';
 import Instance from './instance.js';
 import data from './instance.data.js';
+import Context from '../../src/Context/instance.js';
 
 export default class Emoji extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     portal: PropTypes.object,
     show: PropTypes.bool, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show

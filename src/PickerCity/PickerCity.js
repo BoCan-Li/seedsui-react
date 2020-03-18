@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import data from './instance.data.js';
 import Instance from './instance.js';
+import Context from '../../src/Context/instance.js';
 
 export default class PickerCity extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     portal: PropTypes.object,
     data: PropTypes.array,

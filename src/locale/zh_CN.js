@@ -80,5 +80,9 @@ export default {
   'no_data': '暂无数据',
   'wechat_friend': '微信好友',
   'wework_friend': '企业微信好友',
-  'wechat_moments': '微信朋友圈'
+  'wechat_moments': '微信朋友圈',
+  'sharetip_click_on_the_top_right': '点击右上角',
+  'sharetip_click': '点击',
+  'sharetip_sent_to_friend_or': '发送给朋友或',
+  'sharetip_share_to_moments': '分享给朋友圈',
 }

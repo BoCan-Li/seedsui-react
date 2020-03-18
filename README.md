@@ -763,8 +763,12 @@ onClick = (e, checked) => {
 
 
 
-## ConfigProvider
-[复选框](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/ConfigProvider.js)
+## ConfigProvider(已废弃)
+[全局配置](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/ConfigProvider.js)
+### 说明
+```
+此属性于react16.3发布新的context后已废弃, 不建议继续使用
+```
 ### 属性
 ```javascript
 <ConfigProvider
@@ -880,6 +884,91 @@ import Container from 'seedsui-react/lib/Container';
 </Page>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+## Context
+[全局配置](https://unpkg.com/seedsui-react/src/lib/Context/Context.js)
+### 属性
+```javascript
+<Context
+  language={国际化语言名称 string, 默认无} // 可选项为: zh_CN, en_US, 如想要自定义国际化文件, 使用locale属性
+  locale={国际化配置文件 object, 默认无} // 此属性会覆盖language国际化文件中的字段
+  portal={弹框传送dom object, 默认无}
+  children={子元素 node, 默认无}
+/>
+```
+[locale格式](https://unpkg.com/seedsui-react/src/lib/Context/zh_CN.js)
+
+### 示例
+```javascript
+import InputDate from 'seedsui-react/lib/InputDate';
+import zhCN from 'seedsui-react/lib/locale/zh_CN';
+import enUS from 'seedsui-react/lib/locale/en_US';
+import Context from 'seedsui-react/lib/Context';
+
+state = {
+  locale: zhCN
+}
+
+useZh = () => {
+  this.setState({
+    locale: zhCN
+  });
+}
+useEn = () => {
+  this.setState({
+    locale: enUS
+  });
+}
+
+<input type="button" value="英文" onClick={this.useEn}/>
+<input type="button" value="中文" onClick={this.useZh}/>
+<Context portal={document.getElementById('demo')} locale={this.state.locale}>
+  <InputDate type="datetime"/>
+</Context>
+
+```
+
+### 组件调用示例
+```javascript
+// 国际化
+static contextTypes = {
+  locale: PropTypes.object
+}
+render() {
+  // 国际化
+  const {
+    locale = {}
+  } = this.context;
+
+  console.log(locale);
+  return (
+    <div></div>
+  );
+}
+
+```
+
+### 非组件中调用(不建议使用, 因为只能在全局只有一个ConfigProvider时才能这样用)
+```javascript
+import locale from 'seedsui-react/lib/locale';
+
+locale('hint_only_mobile')
+```
+
+[返回目录](#component)
+
+
+
+
 
 
 

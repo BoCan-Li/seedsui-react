@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
+import Context from '../../src/Context/instance.js';
 
 export default class Loading extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     portal: PropTypes.object, // 传送至DOM
     type: PropTypes.string, // floating | filling | custom

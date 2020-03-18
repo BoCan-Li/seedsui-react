@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import BridgeBrowser from './../Bridge/browser';
+import Context from '../../src/Context/instance.js';
 
 export default class Vott extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     data: PropTypes.array, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
     readOnly: PropTypes.bool, // 是否只读

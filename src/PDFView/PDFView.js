@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import BScroll from 'better-scroll';
+import Context from '../../src/Context/instance.js';
 
 export default class PDFView extends Component {
-  // 全局配置
-  static contextTypes = {
-    locale: PropTypes.object,
-    portal: PropTypes.object
-  }
+  static contextType = Context;
   static propTypes = {
     insertPageElements: PropTypes.array, // 插入页面元素, 有此属性时将不分页
     pictures: PropTypes.array, // 图片地址
