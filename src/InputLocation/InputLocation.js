@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class InputLocation extends Component {
   static contextType = Context;

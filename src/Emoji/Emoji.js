@@ -6,7 +6,7 @@ import InputPre from './../InputPre';
 import Button from './../Button';
 import Instance from './instance.js';
 import data from './instance.data.js';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class Emoji extends Component {
   static contextType = Context;

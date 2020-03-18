@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Instance from './instance.js';
 import Bridge from './../Bridge';
 import BridgeBrowser from './../Bridge/browser';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class ImgMark extends Component {
   static contextType = Context;

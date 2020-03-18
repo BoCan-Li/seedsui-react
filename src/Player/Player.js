@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayerDialog from './PlayerDialog';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class Player extends Component {
   static contextType = Context;

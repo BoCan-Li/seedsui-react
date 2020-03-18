@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerDate from './../PickerDate';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class InputDate extends Component {
   static contextType = Context;

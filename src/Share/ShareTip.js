@@ -1,7 +1,7 @@
 import React, {useEffect, useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {}, onHide }) {
   // 生命周期

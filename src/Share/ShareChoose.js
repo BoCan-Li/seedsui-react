@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp', onHide, maskAttribute = {}, ...others }) {
   // 点击

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Star from './../Star';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class InputStar extends Component {
   static contextType = Context;

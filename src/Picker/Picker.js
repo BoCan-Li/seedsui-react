@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class Picker extends Component {
   static contextType = Context;

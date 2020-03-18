@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Notice from './../Notice';
 import Instance from './instance.js';
 import ImgLazy from './../ImgLazy';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class Dragrefresh extends Component {
   static contextType = Context;

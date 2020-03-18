@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
 import data from './instance.data.js';
 import Instance from './instance.js';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class PickerCity extends Component {
   static contextType = Context;

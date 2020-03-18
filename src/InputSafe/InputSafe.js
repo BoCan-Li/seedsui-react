@@ -1,7 +1,7 @@
 // require PrototypeString.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Context from '../../src/Context/instance.js';
+import Context from '../Context/instance.js';
 
 export default class InputSafe extends Component {
   static contextType = Context;
