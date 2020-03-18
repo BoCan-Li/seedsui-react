@@ -25,9 +25,10 @@ export default class InputStar extends Component {
   }
   onChange (e, argNum) {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {value, min, onChange, fail} = this.props;
     let num = argNum;
     if (num < min) {

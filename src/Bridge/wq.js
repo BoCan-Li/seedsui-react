@@ -5,7 +5,19 @@ var Bridge = {
    * 定制功能
    */
   platform: 'wq',
-  invoke: window.wq && window.wq.invoke ? window.wq.invoke : () => {console.log('不支持invoke')},
+  // 自定义操作
+  invoke: function (api, params, callback) {
+    /* eslint-disable */
+    if (!wq.invoke) {
+      console.log('没有wq.invoke的方法')
+      return
+    }
+    wq.invoke(api, params, function (res) {
+        callback && callback(res)
+    })
+    /* eslint-enable */
+  },
+  // 配置鉴权
   config: function () {
     var self = this
     /* eslint-disable */

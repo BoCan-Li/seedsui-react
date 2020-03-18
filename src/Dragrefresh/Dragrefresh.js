@@ -53,9 +53,10 @@ export default class Dragrefresh extends Component {
   // 实例化
   init = () => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {onScroll} = this.props;
     var instance = new Instance({
       threshold: this.props.threshold,
@@ -171,9 +172,10 @@ export default class Dragrefresh extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       threshold,
       end,

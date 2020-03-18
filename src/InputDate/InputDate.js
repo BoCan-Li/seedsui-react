@@ -42,9 +42,10 @@ export default class InputDate extends Component {
   }
   // 日期纠正
   correctDate = (val) => {
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {type, min, max, fail, pickerProps = {}} = this.props;
     const split = pickerProps.split || '-';
     const timeSplit = pickerProps.timeSplit || ':';

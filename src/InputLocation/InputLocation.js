@@ -26,9 +26,10 @@ export default class InputLocation extends Component {
   }
   onClick = (event, value) => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       locationingValue = locale['location'] || '定位中...',
       failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
@@ -75,9 +76,10 @@ export default class InputLocation extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       locationingValue = locale['location'] || '定位中...',
       failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',

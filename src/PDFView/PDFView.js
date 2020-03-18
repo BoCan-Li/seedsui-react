@@ -142,9 +142,10 @@ export default class PDFView extends Component {
   // 实例化
   instance = (rows) => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       pictures,
       src,
@@ -196,9 +197,10 @@ export default class PDFView extends Component {
   // 设置total则不分页
   getTotalDOM = (total, insertPageElements = [], pageFeatureClass) => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       params = {},
     } = this.props;

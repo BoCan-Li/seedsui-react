@@ -105,8 +105,9 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Carrousel](#carrousel) 轮播
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
-- [ConfigProvider](#configprovider) 全局配置
+- [ConfigProvider](#configprovider) 全局配置(已废弃)
 - [Container](#container) page主体
+- [Context](#context) 全局配置
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
 - [Dot](#dot) 小点点
@@ -763,12 +764,11 @@ onClick = (e, checked) => {
 
 
 
-## ConfigProvider(已废弃)
+
+## ConfigProvider
 [全局配置](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/ConfigProvider.js)
 ### 说明
-```
-此属性于react16.3发布新的context后已废弃, 不建议继续使用
-```
+此组件已废弃,此属性于react16.3发布新的context后已废弃, 建议使用[Context](#context)代替
 ### 属性
 ```javascript
 <ConfigProvider
@@ -779,7 +779,7 @@ onClick = (e, checked) => {
   children={子元素 node, 默认无}
 />
 ```
-[locale格式](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/zh_CN.js)
+[locale格式](https://unpkg.com/seedsui-react/src/lib/locale/zh_CN.js)
 
 ### 示例
 ```javascript
@@ -905,7 +905,7 @@ import Container from 'seedsui-react/lib/Container';
   children={子元素 node, 默认无}
 />
 ```
-[locale格式](https://unpkg.com/seedsui-react/src/lib/Context/zh_CN.js)
+[locale格式](https://unpkg.com/seedsui-react/src/lib/locale/zh_CN.js)
 
 ### 示例
 ```javascript
@@ -939,12 +939,10 @@ useEn = () => {
 
 ### 组件调用示例
 ```javascript
-// 国际化
-static contextTypes = {
-  locale: PropTypes.object
-}
+import Context from 'seedsui-react/lib/Context/instance.js';
+static contextType = Context;
+// class类
 render() {
-  // 国际化
   const {
     locale = {}
   } = this.context;
@@ -954,7 +952,11 @@ render() {
     <div></div>
   );
 }
-
+// hooks
+function () => {
+  const context = useContext(Context) || {};
+  console.log(context)
+}
 ```
 
 ### 非组件中调用(不建议使用, 因为只能在全局只有一个ConfigProvider时才能这样用)
@@ -965,6 +967,10 @@ locale('hint_only_mobile')
 ```
 
 [返回目录](#component)
+
+
+
+
 
 
 

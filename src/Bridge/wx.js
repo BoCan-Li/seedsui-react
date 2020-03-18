@@ -6,7 +6,18 @@ var Bridge = {
    * 定制功能
    */
   platform: Device.platform,
-  invoke: window.wx && window.wx.invoke ? window.wx.invoke : () => {console.log('不支持invoke')},
+  // 自定义操作
+  invoke: function (api, params, callback) {
+    /* eslint-disable */
+    if (!wx.invoke) {
+      console.log('没有wx.invoke的方法')
+      return
+    }
+    wx.invoke(api, params, function (res) {
+        callback && callback(res)
+    })
+    /* eslint-enable */
+  },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
     if (rule && window.location.href.indexOf(rule) >= 0) {

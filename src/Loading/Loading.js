@@ -24,9 +24,10 @@ export default class Loading extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       portal,
       type,

@@ -50,9 +50,10 @@ export default class PickerDate extends Component {
   }
   update = () => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     this.instance.updateParams({
       yyUnit: typeof locale['unit_year'] === 'string' ? locale['unit_year'] : '年',
       MMUnit: typeof locale['unit_month'] === 'string' ? locale['unit_month'] : '月',
@@ -65,9 +66,10 @@ export default class PickerDate extends Component {
     this.instance.update();
   }
   getDefault = () => {
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {split, timeSplit, type, fail} = this.props;
     var defaultValue = this.props.valueForKey || this.props.value;
     var now = new Date();
@@ -135,9 +137,10 @@ export default class PickerDate extends Component {
     }
   }
   getData = () => {
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     // 自定义数据
     var yearsData = null
     var monthsData = null
@@ -196,9 +199,10 @@ export default class PickerDate extends Component {
   }
   initInstance = () => {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     var data = this.getData();
     var def = this.getDefault();
     // render数据
@@ -261,9 +265,10 @@ export default class PickerDate extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     let {
       portal,
       data,

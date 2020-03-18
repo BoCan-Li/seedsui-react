@@ -107,10 +107,11 @@ export default class ImgMark extends Component {
     if (this.props.onClick) this.props.onClick(layer)
   }
   render() {
-     // 全局配置
-     const {
+    // 全局配置
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       data,
       src,

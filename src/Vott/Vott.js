@@ -100,9 +100,10 @@ export default class Vott extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     const {
       data,
       readOnly,

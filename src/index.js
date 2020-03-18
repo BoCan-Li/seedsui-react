@@ -21,7 +21,9 @@ export { default as Card } from './Card';
 export { default as Carrousel } from './Carrousel';
 export { default as Chat } from './Chat';
 export { default as Checkbox } from './Checkbox';
+export { default as ConfigProvider } from './ConfigProvider'; // 不常用
 export { default as Container } from './Container';
+export { default as Context } from './Context'; // 不常用
 export { default as Counter } from './Counter'; // 不常用
 export { default as Dialog } from './Dialog';
 export { default as Dot } from './Dot';
@@ -61,6 +63,7 @@ export { default as Marquee } from './Marquee';
 export { default as MenuTiled } from './MenuTiled';
 export { default as MenuTree } from './MenuTree';
 export { default as VideoFull } from './VideoFull'; // 不常用
+export { default as Vott } from './Vott'; // 不常用
 export { default as Notice } from './Notice';
 export { default as NumBox } from './NumBox';
 export { default as OnOff } from './OnOff';
@@ -100,8 +103,6 @@ export { default as ApiAxios } from './ApiAxios';
 export { default as BackboneRoute } from './BackboneRoute'; // 不常用
 export { default as CanvasUtil } from './CanvasUtil'; // 不常用
 export { default as Clipboard } from './Clipboard';
-export { default as ConfigProvider } from './ConfigProvider'; // 不常用
-export { default as Vott } from './Vott'; // 不常用
 export { default as DB } from './DB';
 export { default as Device } from './Device';
 export { default as EditUtil } from './EditUtil'; // 不常用

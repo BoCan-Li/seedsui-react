@@ -135,9 +135,10 @@ export default class Picker extends Component {
   }
   render() {
     // 全局配置
-    const {
+    let {
       locale = {}
     } = this.context;
+    if (!locale) locale = {}
     let {
       portal,
       list,
