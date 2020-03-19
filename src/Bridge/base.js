@@ -122,7 +122,8 @@ var Bridge = {
           if (params.success) params.success(e)
         },
         onClickCancel: function(e) {
-          if (params.fail) params.fail({errMsg: '', event: e})
+          e.errMsg = ''
+          if (params.fail) params.fail(e)
           else e.hide()
         }
       })
@@ -137,7 +138,8 @@ var Bridge = {
             if (params.success) params.success(e)
           },
           onClickCancel: function(e) {
-            if (params.fail) params.fail({errMsg: '', event: e})
+            e.errMsg = ''
+            if (params.fail) params.fail(e)
             else e.hide()
           }
         })

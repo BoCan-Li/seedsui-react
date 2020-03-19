@@ -11,6 +11,17 @@ class Demo extends Component {
     super(props);
   }
   async componentDidMount () {
+    Bridge.showConfirm('支付尚未成功, 确认离开吗?', {
+      success: (e) => {
+        e.hide();
+      },
+      fail: (e) => {
+        e.hide();
+      },
+      buttonSubmitHTML: '继续支付',
+      buttonSubmitClass: 'alert-submit button color-primary',
+      buttonCancelHTML: '确认离开'
+    })
   }
   state = {
     language: 'zh_CN'
