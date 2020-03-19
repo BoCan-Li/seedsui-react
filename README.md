@@ -162,7 +162,6 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Progress](#progress) 进度条
 - [PDFView](#pdfview) PDF文件预览
 - [Radio](#radio) 单选框
-- [RouteComment](#routecomment) 评价路由
 - [SearchBoard](#searchboard) 搜索面板
 - [PickerSelect](#pickerselect) 选择弹框
 - [Star](#star) 星星
@@ -769,6 +768,32 @@ onClick = (e, checked) => {
 [全局配置](https://unpkg.com/seedsui-react/src/lib/ConfigProvider/ConfigProvider.js)
 ### 说明
 此组件已废弃,此属性于react16.3发布新的context后已废弃, 建议使用[Context](#context)代替
+### 过渡方案
+搜索
+```javascript
+static contextTypes = {
+```
+改为
+```javascript
+import Context from 'seedsui-react/lib/Context/instance.js';
+static contextType = Context;
+```
+搜索
+```javascript
+const {
+  locale = {}
+} = this.context;
+或
+const {locale} = this.context;
+```
+改为
+```javascript
+let {
+  locale = {}
+} = this.context;
+if (!locale) locale = {}
+```
+
 ### 属性
 ```javascript
 <ConfigProvider
@@ -943,9 +968,10 @@ import Context from 'seedsui-react/lib/Context/instance.js';
 static contextType = Context;
 // class类
 render() {
-  const {
+  let {
     locale = {}
   } = this.context;
+  if (!locale) locale = {}
 
   console.log(locale);
   return (
@@ -959,7 +985,7 @@ function () => {
 }
 ```
 
-### 非组件中调用(不建议使用, 因为只能在全局只有一个ConfigProvider时才能这样用)
+### 非组件中调用(因为只能在全局只有一个Context时才能这样用, 所以建议自己写一个js的国际化读取库)
 ```javascript
 import locale from 'seedsui-react/lib/locale';
 
@@ -4176,63 +4202,72 @@ onClick = (e, checked) => {
 
 
 
-## RouteComment
-[评价路由](https://unpkg.com/seedsui-react/src/lib/RouteComment/RouteComment.js)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Share
+[单选框](https://unpkg.com/seedsui-react/src/lib/Share/Share.js)
 ### 属性
 ```javascript
-<RouteComment
-  title={标题 string, 默认'填写意见'}
-  placeholder={占位符 string, 默认'点击输入'}
-
-  buttons={操作按钮 array, 默认无, 示例如下:}
-  /*
-  [{
-    valid: PropTypes.bool,
-    caption: PropTypes.node,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    onClick={点击事件 func(value, item, index)}
-  }]
-  */
-  children={子元素 node, 默认无}
+<Share
+  children={内容 node, 默认无}
+  type={单项显示 string, 默认无} // wework企业微信和wq外勤客户端JSBridge才生效
+  shareTo={多项选择显示 string, 默认['wechat', 'wework', 'moments']} // wework企业微信和wq外勤客户端JSBridge, 并且没有设置type属性时才生效
+  config={分享配置 string, 默认{
+    title: '', // 分享标题
+    desc: '', // 分享描述
+    link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl: '', // 分享图标
+  }}
+  originConfig={组件移除时还原分享配置 string, 默认无} // 仅wechat微信中才生效
+  {...others}
 />
 ```
+### 说明
+此控件支持wechat微信、wework企业微信、dinghuo订货APP、wq外勤APP(JSBridge)、waiqin外勤APP(cordova), 其它平台不显示
+
 ### 示例
 ```javascript
-import {Route, withRouter} from 'react-router';
-import RouteComment from 'seedsui-react/lib/RouteComment';
+import Share from 'seedsui-react/lib/Share';
 
-onClickCancel = (value, item, index) => {
-  console.log(value, item, index);
-}
-onClickSubmit = (value, item, index) => {
-  console.log(value, item, index);
-}
 
-<Route
-  path={`${this.props.match.path}/approverPop`}
-  render={() => <RouteComment
-    buttons={[
-      {
-        valid: false,
-        className: 'lg bg-white',
-        caption: '取消',
-        onClick: this.onClickCancel
-      },
-      {
-        valid: false,
-        className: 'lg primary',
-        caption: '提交',
-        onClick: this.onClickSubmit
-      }
-    ]}
-    maxLength="100"
-    title="审批"
-    placeholder="请填写审批意见"
-  />}
-/>
+<Share className="button lg primary"/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4588,7 +4623,7 @@ import Timepart from 'seedsui-react/lib/Timepart';
 
   backButtonAttribute={返回按钮属性 object, 默认无} // 设置默认返回按钮的样式及属性
   // {caption: string, className: string, style: object, icon: node, iconAttribute: object}
-  children={}
+  children={自定义内容 node, 默认无}
   {...others}
 >
 如果此处写了内容, 将代替caption
