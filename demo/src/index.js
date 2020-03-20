@@ -38,20 +38,6 @@ class Demo extends Component {
               <li><i className="icon size40 bg-no-img">
                 <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_task.png)`, backgroundSize: '100%'}}></div></i><p>奖励任务</p></li>
             </ul>
-          </div>,
-          <div style={{paddingBottom: '20px'}}>
-            <ul className="menus">
-              <li><i className="icon size40 bg-no-img">
-                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/quanhuishou.png)`, backgroundSize: '100%'}}></div></i><p>券回收查询</p></li>
-              <li><i className="icon size40 bg-no-img">
-                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/ffxy.png)`, backgroundSize: '100%'}}></div></i><p>付费协议</p></li>
-              <li><i className="icon size40 bg-no-img">
-                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/sale_return.png)`, backgroundSize: '100%'}}></div></i><p>销售退货</p></li>
-              <li><i className="icon size40 bg-no-img">
-                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
-              <li><i className="icon size40 bg-no-img">
-                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
-            </ul>
           </div>
         ]
       })

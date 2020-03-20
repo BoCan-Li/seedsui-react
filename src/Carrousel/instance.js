@@ -77,6 +77,7 @@ var Carrousel = function (container, params) {
   s.pagination = getElementByParent(s.container, s.params.pagination)
   s.bullets = []
   s.updateBullets = function () {
+    s.pagination = getElementByParent(s.container, s.params.pagination)
     if (!s.pagination) return
 
     s.bullets = []
