@@ -24,9 +24,6 @@ export default class Handsign extends Component {
   }
   componentDidUpdate (prevProps) {
     if (this.instance) {
-      
-    }
-    if (this.instance) {
       let params = {}
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
         params.strokeStyle = this.props.strokeStyle;

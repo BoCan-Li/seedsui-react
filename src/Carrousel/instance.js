@@ -1,5 +1,4 @@
-// Carrousel 滑动控件(require Device.js)
-import Device from './../Device'
+// Carrousel 滑动控件
 
 var Carrousel = function (container, params) {
   function getPureChildren (children, className) {
@@ -27,8 +26,8 @@ var Carrousel = function (container, params) {
     duration: '300',
     height: null, // 固定高度
     width: null, // 固定宽度
-    imglazyQuery: '.carrousel-lazy', // 图片懒加载
-    imgLoadAttr: 'data-load-src',
+    imgLoadAttr: 'data-load-src', // 图片懒加载
+    imgLoadSrc: '', // 默认图地址
 
     // loop
     loop: false,
@@ -139,6 +138,9 @@ var Carrousel = function (container, params) {
     }
     /* eslint-enable */
   }
+  /* --------------------
+  Method
+  -------------------- */
   // Touch信息
   s.touches = {
     direction: 0,
@@ -153,6 +155,67 @@ var Carrousel = function (container, params) {
     diffX: 0,
     diffY: 0,
     posX: 0
+  }
+  function moveToIndex (speed) {
+    s.wrapper.style.webkitTransitionDuration = speed + 'ms'
+    s.touches.posX = -s.activeIndexTruth * s.slideWidth
+    s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
+  }
+  // slideIndex为索引位置
+  s.slideTo = function (slideIndex, speed, runCallbacks) {
+    if (isNaN(slideIndex)) return
+    // 获取真实位置
+    var index = slideIndex
+    if (s.params.loop) {
+      index = Number(slideIndex || 0) + Number(s.params.slidesPerView || 0)
+    }
+    s.slideToTruth(index, speed, runCallbacks)
+  }
+  // slideIndex为真实的位置(loop时真实位置与索引位置不一样)
+  s.slideToTruth = function (slideIndex, speed, runCallbacks) {
+    var duration = isNaN(speed) ? s.params.duration : speed
+    if (slideIndex >= 0) {
+      s.activeIndexTruth = slideIndex
+    }
+    // 索引不能小于0
+    if (s.activeIndexTruth < 0) {
+      s.activeIndexTruth = 0
+    }
+    // 索引不能大于slide总数
+    if (s.activeIndexTruth > s.max - 1) {
+      s.activeIndexTruth = s.max - 1
+    }
+    // 一页多屏，索引不能露出空白区域
+    if (s.params.slidesPerView > 1 && s.activeIndexTruth > s.max - params.slidesPerView) {
+      s.activeIndexTruth = s.max - s.params.slidesPerView
+    }
+
+    // 更新class和s.activeIndex
+    s.updateClasses()
+    // 移动至index
+    moveToIndex(duration)
+    // 移动位置并触发回调onSlideChangeEnd
+    setTimeout(function () {
+      s.wrapper.style.webkitTransitionDuration = '0ms'
+      // callback onSlideChangeEnd
+      s.target = s.slides[s.activeIndexTruth]
+      if (s.params.onSlideChangeEnd && runCallbacks !== false) s.params.onSlideChangeEnd(s)
+      // 循环的情况
+      if (s.params.loop) {
+        if (s.touches.posX === 0) {
+          s.activeIndexTruth = s.max - s.params.slidesPerView * 2
+          // console.log('最左侧，应跳转到：'+s.activeIndexTruth)
+          moveToIndex(0)
+          return
+        }
+        if (Number(-s.touches.posX) + Number(s.width) >= Number(s.wrapperWidth)) {
+          s.activeIndexTruth = s.params.slidesPerView
+          // console.log('最右侧，应跳转到：'+s.activeIndexTruth)
+          moveToIndex(0)
+          return
+        }
+      }
+    }, duration)
   }
   /* --------------------
   Update
@@ -184,6 +247,34 @@ var Carrousel = function (container, params) {
     }
     s.bullets[s.activeIndex].classList.add(s.params.bulletActiveClass)
   }
+  // 获取屏幕宽度
+  function getScreenWidth () {
+    if (window.innerWidth) return window.innerWidth
+    if (window.screen.width) return window.screen.width
+    if (window.screen.availWidth) return window.screen.availWidth
+  }
+
+  // 执行update时先清空没有设置的宽高
+  s.resetSize = function () {
+    // Container
+    if (!s.params.width) s.container.style.width = ''
+    if (!s.params.height) s.container.style.height = ''
+    // Wrapper
+    s.wrapper.style.width = ''
+    if (!s.params.height) s.wrapper.style.height = ''
+    // Slide
+    s.slides.forEach(function (n, i, a) {
+      if (!s.params.width) n.style.width = ''
+      if (!s.params.height) n.style.height = ''
+    })
+    // dupSlide
+    s.dupSlides.forEach(function (n, i, a) {
+      if (!s.params.width) n.style.width = ''
+      if (!s.params.height) n.style.height = ''
+    })
+  }
+
+  // 更新宽度
   s.updateWidth = function () {
     if (s.params.width && !isNaN(s.params.width)) {
       s.width = s.params.width
@@ -192,7 +283,7 @@ var Carrousel = function (container, params) {
     } else if (/(\d+)px/.test(s.container.style.width)) {
       s.width = /(\d+)px/.exec(s.container.style.width)[1]
     } else {
-      s.width = (s.container.clientWidth ? s.container.clientWidth : Device.screenWidth)
+      s.width = (s.container.clientWidth ? s.container.clientWidth : getScreenWidth())
     }
     s.container.style.width = s.width + 'px'
     // Slide width
@@ -212,6 +303,8 @@ var Carrousel = function (container, params) {
       n.style.width = s.slideWidth + 'px'
     })
   }
+  
+  // 更新高度
   s.updateHeight = function () {
     if (s.params.height && !isNaN(s.params.height)) {
       s.height = s.params.height
@@ -269,9 +362,19 @@ var Carrousel = function (container, params) {
     }
   }
   s.updateLazyImg = function () {
-    imgs = this.container.querySelectorAll(s.params.imglazyQuery)
+    imgs = s.container.querySelectorAll('[' + s.params.imgLoadAttr + ']')
     for (var i = 0; i < imgs.length; i++) {
       var src = imgs[i].getAttribute(s.params.imgLoadAttr)
+      if (!src) continue
+      // 先显示默认图
+      if (s.params.imgLoadSrc) {
+        if (imgs[i].tagName === 'IMG') {
+          imgs[i].src = s.params.imgLoadSrc
+        } else {
+          imgs[i].style.backgroundImage = 'url(' + s.params.imgLoadSrc + ')'
+        }
+      }
+      // 加载完成后再显示
       cacheImgs[i] = new Image()
       cacheImgs[i].index = i
       cacheImgs[i].src = src
@@ -281,11 +384,29 @@ var Carrousel = function (container, params) {
 
   // 更新
   s.update = function () {
+    s.activeIndex = 0
+    s.activeIndexTruth = s.params.slidesPerView
     s.updateSlides()
     s.updateBullets()
     s.createLoop()
+    // 尺寸更新
+    s.resetSize()
+    // 更新尺寸和active样式
     s.updateContainerSize()
-    if (s.params.imglazyQuery) s.updateLazyImg()
+    // 图片懒加载
+    s.updateLazyImg()
+    // active到第一项
+    if (s.touches && s.touches.posX) {
+      s.slideTo(0, 0)
+    }
+  }
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.update()
   }
   s.update()
   if (s.slides.length <= 0) {
@@ -439,76 +560,7 @@ var Carrousel = function (container, params) {
     }
   }
 
-  /* --------------------
-  Method
-  -------------------- */
-  function moveToIndex (speed) {
-    s.wrapper.style.webkitTransitionDuration = speed + 'ms'
-    s.touches.posX = -s.activeIndexTruth * s.slideWidth
-    s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
-  }
-  // slideIndex为索引位置
-  s.slideTo = function (slideIndex, speed, runCallbacks) {
-    if (isNaN(slideIndex)) return
-    // 获取真实位置
-    var index = slideIndex
-    if (s.params.loop) {
-      index = Number(slideIndex || 0) + Number(s.params.slidesPerView || 0)
-    }
-    s.slideToTruth(index, speed, runCallbacks)
-  }
-  // slideIndex为真实的位置(loop时真实位置与索引位置不一样)
-  s.slideToTruth = function (slideIndex, speed, runCallbacks) {
-    var duration = isNaN(speed) ? s.params.duration : speed
-    if (slideIndex >= 0) {
-      s.activeIndexTruth = slideIndex
-    }
-    // 索引不能小于0
-    if (s.activeIndexTruth < 0) {
-      s.activeIndexTruth = 0
-    }
-    // 索引不能大于slide总数
-    if (s.activeIndexTruth > s.max - 1) {
-      s.activeIndexTruth = s.max - 1
-    }
-    // 一页多屏，索引不能露出空白区域
-    if (s.params.slidesPerView > 1 && s.activeIndexTruth > s.max - params.slidesPerView) {
-      s.activeIndexTruth = s.max - s.params.slidesPerView
-    }
-
-    // 更新class和s.activeIndex
-    s.updateClasses()
-    // 移动至index
-    moveToIndex(duration)
-    // 移动位置并触发回调onSlideChangeEnd
-    setTimeout(function () {
-      s.wrapper.style.webkitTransitionDuration = '0ms'
-      // callback onSlideChangeEnd
-      s.target = s.slides[s.activeIndexTruth]
-      if (s.params.onSlideChangeEnd && runCallbacks !== false) s.params.onSlideChangeEnd(s)
-      // 循环的情况
-      if (s.params.loop) {
-        if (s.touches.posX === 0) {
-          s.activeIndexTruth = s.max - s.params.slidesPerView * 2
-          // console.log('最左侧，应跳转到：'+s.activeIndexTruth)
-          moveToIndex(0)
-          return
-        }
-        if (Number(-s.touches.posX) + Number(s.width) >= Number(s.wrapperWidth)) {
-          s.activeIndexTruth = s.params.slidesPerView
-          // console.log('最右侧，应跳转到：'+s.activeIndexTruth)
-          moveToIndex(0)
-          return
-        }
-      }
-    }, duration)
-  }
-  // 更改params
-  s.updateParams = function (params) {
-    for (var n in params) {
-      s.params[n] = params[n]
-    }
-  }
+  
   // 主函数
   s.init = function () {
     // s.update()

@@ -649,7 +649,7 @@ onCarrouselChange = async (e) => {
 }
 <Button onClick={() => this.setState({activeIndex: 0})}>第1页</Button>
 // 轮播页
-<Carrousel style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.state.activeIndex}>
+<Carrousel className="carrousel-page" style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.state.activeIndex}>
   <Page>第一页</Page>
   <Page>第二页</Page>
   <Page>第三页</Page>

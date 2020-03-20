@@ -125,7 +125,7 @@ export default class PDFView extends Component {
           this.setState({
             total: pdf.total
           }, () => {
-            this.instance(this.state.total);
+            this.updateInstance(this.state.total);
           });
         }
       });
@@ -133,14 +133,14 @@ export default class PDFView extends Component {
         this.setState({
           total: pictures.length
         }, () => {
-          this.instance(this.state.total);
+          this.updateInstance(this.state.total);
         });
     } else {
-      this.instance();
+      this.updateInstance();
     }
   }
   // 实例化
-  instance = (rows) => {
+  updateInstance = (rows) => {
     // 全局配置
     let {
       locale = {}

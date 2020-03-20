@@ -42,7 +42,7 @@ export default class Carrousel extends Component {
     prevAttribute: {},
     nextAttribute: {},
     stopPropagation: false, // 设置为false解决与FastClick插件touch事件冲突的问题
-    activeIndex: 0,
+    activeIndex: 0, // 默认选中第几块
     page: 0,
     loop: false,
     pagination: false,
@@ -58,26 +58,17 @@ export default class Carrousel extends Component {
     super(props);
   }
   componentDidUpdate = (prevProps) => {
-    if (this.instance && this.instance.activeIndex !== this.props.activeIndex) {
-      this.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
-    }
-    if (this.props.stopPropagation !== prevProps.stopPropagation) {
-      this.instance.updateParams({stopPropagation: this.props.stopPropagation});
-    }
-    if (!this.props.list.equals(prevProps.list)) {
+    if (!this.instance) return
+    // 只有list或children发生变化时才更新
+    if (!this.props.list.equals(prevProps.list)) { // list变化
       this.update();
+    } else if ((this.props.children || []).length !== (prevProps.children || []).length) { // children变化
+      this.update();
+    } else if (this.instance.activeIndex !== this.props.activeIndex) {
+      this.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
     }
   }
   componentDidMount = () => {
-    this.instance();
-    // 轮播图片, 自适应的情况下, 高度需要计算
-    if (!(this.props.style && this.props.style.height) && this.props.list.length && this.props.delay) {
-      setTimeout(() => {
-        this.instance.updateContainerSize();
-      }, this.props.delay);
-    }
-  }
-  instance = () => {
     this.instance = new Instance(this.$el, {
       height: this.props.style && this.props.style.height ? this.props.style.height : null,
       width: this.props.style && this.props.style.width ? this.props.style.width : null,
@@ -85,15 +76,35 @@ export default class Carrousel extends Component {
       autoplay: this.props.autoplay,
       slidesPerView: this.props.slidesPerView,
       loop: this.props.loop,
+      imgLoadSrc: this.props.defaultSrc,
       onClick: this.onClick,
       onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
     });
     if (this.props.activeIndex) this.instance.slideTo(this.props.activeIndex || 0);
+    // 轮播图片, 自适应的情况下, 高度需要计算
+    if (!(this.props.style && this.props.style.height) && this.props.list.length && this.props.delay) {
+      setTimeout(() => {
+        this.instance.updateContainerSize();
+      }, this.props.delay);
+    }
   }
+  update = () => {
+    this.instance.updateParams({
+      height: this.props.style && this.props.style.height ? this.props.style.height : null,
+      width: this.props.style && this.props.style.width ? this.props.style.width : null,
+      stopPropagation: this.props.stopPropagation,
+      autoplay: this.props.autoplay,
+      slidesPerView: this.props.slidesPerView,
+      loop: this.props.loop,
+      imgLoadSrc: this.props.defaultSrc
+    });
+  }
+  // 点击轮播
   onClick = (s, e) => {
     const index = s.activeIndex;
     if (this.props.onClick) this.props.onClick(this.props.list[index], index, s, e);
   }
+  // 如果className没有carrousel-container或者carrousel-page, 则补充一个
   getCarrouselClassName = () => {
     const {className, list} = this.props;
     if (className) {
@@ -103,27 +114,13 @@ export default class Carrousel extends Component {
     }
     return 'carrousel-container' + (className ? ' ' + className : '');
   }
+  // 如果项中包含bg属性, 则加入到style中
   getSlideStyle = (item) => {
-    const {slideAttribute} = this.props;
+    const {slideAttribute, defaultSrc} = this.props;
     if (item.bg) {
-      return Object.assign({backgroundImage: `url(${this.props.defaultSrc})`}, slideAttribute.style);
+      return Object.assign({backgroundImage: `url(${defaultSrc ? defaultSrc : item.bg})`}, slideAttribute.style);
     }
     return slideAttribute.style;
-  }
-  update = () => {
-    // 更新为默认图片
-    const imgs = this.$el.querySelectorAll('.carrousel-lazy');
-    for (var i = 0; i < imgs.length; i++) {
-      var imgTarget = imgs[i];
-      if (!imgTarget) continue;
-      if (imgTarget.tagName === 'IMG') {
-        imgTarget.src = this.props.defaultSrc;
-      } else {
-        imgTarget.style.backgroundImage = 'url(' + this.props.defaultSrc + ')';
-      }
-    }
-    // 更新Carrousel
-    if (this.instance) this.instance.update();
   }
   render() {
     const {
@@ -135,7 +132,6 @@ export default class Carrousel extends Component {
       prevAttribute = {}, 
       nextAttribute = {},
       stopPropagation,
-      activeIndex,
 
       loop,
       autoplay,
@@ -149,6 +145,7 @@ export default class Carrousel extends Component {
       delay,
 
       children,
+      activeIndex,
       ...others
     } = this.props;
     const childrenArr = React.Children.toArray(children);
@@ -157,8 +154,8 @@ export default class Carrousel extends Component {
       <div className="carrousel-wrapper">
         {/* 轮播图 */}
         {list.length > 0 && list.map((item, index) => {
-          return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}${item.bg ? ' carrousel-lazy' : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={item.bg}>
-            {item.img && <img className="carrousel-slide-img carrousel-lazy" alt="" src={defaultSrc} data-load-src={item.img}/>}
+          return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={defaultSrc ? item.bg : null}>
+            {item.img && <img className="carrousel-slide-img" alt="" src={defaultSrc ? defaultSrc : item.img} data-load-src={defaultSrc ? item.img : null}/>}
             {item.caption && <div className="carrousel-summary">
               {item.iconAttribute && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
               <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>

@@ -45,7 +45,7 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function logOut() {
-    console.log('logOut方法仅在app上工作');
+    wq.invoke('logout')
   },
   // 打开新的窗口
   openWindow: function (params = {}) {

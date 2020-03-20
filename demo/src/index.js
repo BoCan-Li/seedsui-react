@@ -1,61 +1,106 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, InputDate, Bridge, ConfigProvider, Share} from '../../src';
-import Context from '../../src/Context';
-import zhCN from '../../src/locale/zh_CN';
-import enUS from '../../src/locale/en_US';
+import {Page, Header, Titlebar, Container, Bridge, Carrousel} from '../../src';
 
 class Demo extends Component {
   constructor(props){
     super(props);
   }
   async componentDidMount () {
-    Bridge.showConfirm('支付尚未成功, 确认离开吗?', {
-      success: (e) => {
-        e.hide();
-      },
-      fail: (e) => {
-        e.hide();
-      },
-      buttonSubmitHTML: '继续支付',
-      buttonSubmitClass: 'alert-submit button color-primary',
-      buttonCancelHTML: '确认离开'
-    })
   }
   state = {
-    language: 'zh_CN'
+    show: false,
+    menus: []
   }
   
-  useZh = () => {
-    this.setState({
-      language: 'zh_CN'
-    });
-  }
-  useEn = () => {
-    this.setState({
-      language: 'en_US'
-    });
-  }
-  
-  render() {
-    let config = {
-      title: `订货分享标题`, // 分享标题
-      desc: `订货分享副标题`, // 分享描述
-      link: `${window.location.origin}/_react_/inviteRegister`, // 分享链接
-      imgUrl: 'http://res.waiqin365.com/d/wework/icon/logo.png' // 分享封面
+  changeMenus = (show) => {
+    if (show) {
+      this.setState({
+        show: show,
+        menus: [
+          <div style={{paddingBottom: '20px'}}>
+            <ul className="menus">
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/quanhuishou.png)`, backgroundSize: '100%'}}></div></i><p>券回收查询</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/ffxy.png)`, backgroundSize: '100%'}}></div></i><p>付费协议</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/sale_return.png)`, backgroundSize: '100%'}}></div></i><p>销售退货</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_often_buy.png)`, backgroundSize: '100%'}}></div></i><p>常购商品</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/duizhangdan.png)`, backgroundSize: '100%'}}></div></i><p>对账单</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_task.png)`, backgroundSize: '100%'}}></div></i><p>奖励任务</p></li>
+            </ul>
+          </div>,
+          <div style={{paddingBottom: '20px'}}>
+            <ul className="menus">
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/quanhuishou.png)`, backgroundSize: '100%'}}></div></i><p>券回收查询</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/ffxy.png)`, backgroundSize: '100%'}}></div></i><p>付费协议</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/sale_return.png)`, backgroundSize: '100%'}}></div></i><p>销售退货</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
+              <li><i className="icon size40 bg-no-img">
+                <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
+            </ul>
+          </div>
+        ]
+      })
+    } else {
+      this.setState({
+        show: show,
+        menus: [<div style={{paddingBottom: '20px'}}>
+          <ul className="menus">
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
+          </ul>
+        </div>,
+        <div style={{paddingBottom: '20px'}}>
+          <ul className="menus">
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
+          </ul>
+        </div>,
+        <div style={{paddingBottom: '20px'}}>
+          <ul className="menus">
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/hdzx.png)`, backgroundSize: '100%'}}></div></i><p>活动查询</p></li>
+            <li><i className="icon size40 bg-no-img">
+              <div className="bg-transparent width-full height-full" style={{backgroundImage: `url(https://image-test.waiqin365.com/emserver/icon/mendian_collect.png)`, backgroundSize: '100%'}}></div></i><p>收藏商品</p></li>
+          </ul>
+        </div>]
+      });
     }
+  }
+
+  render() {
+    const {
+      menus
+    } = this.state;
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        <input type="button" value="英文" onClick={this.useEn}/>
-        <input type="button" value="中文" onClick={this.useZh}/>
-        <Context portal={document.getElementById('demo')} language={this.state.language}>
-          <InputDate type="datetime"/>
-          <Share className="button lg primary" config={config}>分享</Share>
-        </Context>
+        {menus.length && <Carrousel pagination={menus.length > 1} style={{backgroundColor: 'red'}}>
+          {menus.map((menu) => {
+            return menu
+          })}
+        </Carrousel>}
+        <input type="button" onClick={() => this.changeMenus(!this.state.show)} value="修改"/>
       </Container>
     </Page>
   }

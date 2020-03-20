@@ -54,9 +54,6 @@ export default class Vott extends Component {
     }
   }
   componentDidMount () {
-    this.instance()
-  }
-  instance = () => {
     const {
       data,
       readOnly,
