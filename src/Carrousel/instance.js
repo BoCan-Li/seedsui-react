@@ -238,7 +238,10 @@ var Carrousel = function (container, params) {
     for (i = 0; i < s.slides.length; i++) {
       s.slides[i].classList.remove(s.params.slideActiveClass)
     }
-    s.slides[s.activeIndex].classList.add(s.params.slideActiveClass)
+    if (!s.slides[s.activeIndex]) {
+      s.activeIndex = 0
+    }
+    if (s.slides[s.activeIndex]) s.slides[s.activeIndex].classList.add(s.params.slideActiveClass)
 
     //  Pagination
     if (!s.pagination) return
@@ -385,7 +388,10 @@ var Carrousel = function (container, params) {
   // 更新
   s.update = function () {
     s.activeIndex = 0
-    s.activeIndexTruth = s.params.slidesPerView
+    s.activeIndexTruth = 0
+    if (s.params.loop) {
+      s.activeIndexTruth = s.params.slidesPerView
+    }
     s.updateSlides()
     s.updateBullets()
     s.createLoop()
