@@ -1,4 +1,5 @@
 import DB from './../DB'
+import locale from './../locale'
 
 var Bridge = {
   /**
@@ -45,7 +46,7 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function logOut() {
-    wq.invoke('logout')
+    wq.invoke('logout') // eslint-disable-line
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
@@ -60,7 +61,7 @@ var Bridge = {
     * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
     */
   setTitle: function (params) {
-    wq.setTitle(params)
+    wq.setTitle(params) // eslint-disable-line
   },
   // 客户端返回绑定
   addBackPress: function (callback) {
@@ -168,19 +169,46 @@ var Bridge = {
     })
   },
   chooseImage: function (params) {
+    console.log(params)
     wq.chooseImage(params) // eslint-disable-line
   },
   /**
-    * 拍照、本地选图
+    * 照片上传, ios测试环境无法上传
     * @param {Object} params
     * {
-    * uploadDir:'目录/年月',
-    * localIds:[],
-    * tenantId: ''
+      uploadDir: '目录/年月',
+      tenantId: 'ios必传'
+      localId: 'localId',
+      success: func(res)
     * }
     */
   uploadImage: function (params) {
-    wq.uploadImage(params) // eslint-disable-line
+    var uploadParams = Object.clone(params)
+    var self = this
+    if (!params.uploadDir) {
+      self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
+      return
+    }
+    if (!params.localId) {
+      self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
+      return
+    }
+    if (params.tenantId) uploadParams.tenantId = params.tenantId
+    if (params.isAI) uploadParams.isAI = params.isAI
+    // 构建成功回调的参数
+    uploadParams.success = function () {
+      if (params.success) {
+        params.success({
+          errMsg: 'uploadImage:ok',
+          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+          serverId: params.serverId,
+          tenantId: params.tenantId
+        })
+      }
+    }
+    console.log('外勤WK内核上传')
+    console.log(uploadParams)
+    wq.uploadImage(uploadParams) // eslint-disable-line
   },
   previewImage: function (params) {
     wq.previewImage(params) // eslint-disable-line

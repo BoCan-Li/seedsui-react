@@ -517,7 +517,7 @@ var Bridge = {
       url: params.uploadDir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
-    console.log('外勤Cordova上传', uploadParams)
+    console.log('外勤Cordova内核上传', uploadParams)
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
     // 截取路径
     var serverId = params.localId.substring(params.localId.lastIndexOf('/') + 1, params.localId.length)
