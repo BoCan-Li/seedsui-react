@@ -375,10 +375,10 @@ var Bridge = {
     * 拍照、本地选图
     * @param {Object} params
     * {
-    * sourceType:['album:相册', 'camera:拍照'],
-    * sizeType:['original:原图', 'compressed:压缩'],
-    * count:'最大张数',
-    * success({localIds:['LocalResource://imageid'+id]})
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success({localIds:['LocalResource://imageid'+id]})
     * }
     */
   chooseImage: function (params) {
@@ -391,12 +391,13 @@ var Bridge = {
     })
   },
   /**
-    * 拍照、本地选图
+    * 照片上传, ios测试环境无法上传
     * @param {Object} params
     * {
-    * uploadDir:'目录/年月',
-    * localIds:['LocalResource://imageid' + id],
-    * tenantId: 'ios必传'
+      uploadDir: '目录/年月',
+      tenantId: 'ios必传'
+      localId: 'localId',
+      success: func(res)
     * }
     */
   uploadImage: function (params = {}) {
@@ -405,7 +406,7 @@ var Bridge = {
       self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return
     }
-    if (!params.localIds || Object.isEmptyObject(params.localIds)) {
+    if (!params.localId) {
       self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
       return
     }
@@ -414,17 +415,27 @@ var Bridge = {
       return
     }
     // 上传不能包含'LocalResource://imageid'
-    params.localIds = params.localIds.map(function (localId) {
-      return localId.replace(new RegExp('LocalResource://imageid'), '')
-    })
+    if (params.localId.indexOf('LocalResource://imageid') !== -1) {
+      params.localId = params.localId.replace(/LocalResource:\/\/imageid/igm, '')
+    }
+    // ios判断: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
     // 格式化params
     var uploadParams = {
-      localIds: params.localIds,
+      tenantId: params.tenantId,
+      localIds: [params.localId],
       uploadDir: params.uploadDir
     }
-    if (params.tenantId) uploadParams.tenantId = params.tenantId
     if (params.isAI) uploadParams.isAI = params.isAI
-    self.invoke('uploadImage', uploadParams)
+    console.log('订货客户端上传', uploadParams)
+    self.invoke('uploadImage', uploadParams) // 安卓没有回调, ios回调返回{result: true}
+    if (params.success) {
+      params.success({
+        errMsg: 'uploadImage:ok',
+        path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+        serverId: params.localId,
+        tenantId: params.tenantId
+      })
+    }
   },
   /**
     * 图片预览
