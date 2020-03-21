@@ -479,12 +479,17 @@ var Bridge = {
   },
   /* -----------------------------------------------------
     上传图片
-    @params {dir:'目录/年月',localIds:['图片集合'], tenantId: '企业Id', isAI: '1.是 0.不是'}
+    @params {
+      uploadDir:'目录/年月',
+      localIds:['图片集合'],
+      tenantId: '企业Id',
+      isAI: '1.是 0.不是'
+    }
     @return 无
   ----------------------------------------------------- */
   uploadImage: function (params = {}) {
     var self = this
-    if (!params.dir) {
+    if (!params.uploadDir) {
       self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return;
     }
@@ -503,7 +508,7 @@ var Bridge = {
         }
         return {path: item}
       }),
-      url: params.dir
+      url: params.uploadDir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line

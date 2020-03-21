@@ -170,6 +170,15 @@ var Bridge = {
   chooseImage: function (params) {
     wq.chooseImage(params) // eslint-disable-line
   },
+  /**
+    * 拍照、本地选图
+    * @param {Object} params
+    * {
+    * uploadDir:'目录/年月',
+    * localIds:[],
+    * tenantId: ''
+    * }
+    */
   uploadImage: function (params) {
     wq.uploadImage(params) // eslint-disable-line
   },

@@ -394,14 +394,14 @@ var Bridge = {
     * 拍照、本地选图
     * @param {Object} params
     * {
-    * dir:'目录/年月',
+    * uploadDir:'目录/年月',
     * localIds:['LocalResource://imageid' + id],
     * tenantId: 'ios必传'
     * }
     */
   uploadImage: function (params = {}) {
     var self = this
-    if (!params.dir) {
+    if (!params.uploadDir) {
       self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return
     }
@@ -420,7 +420,7 @@ var Bridge = {
     // 格式化params
     var uploadParams = {
       localIds: params.localIds,
-      uploadDir: params.dir
+      uploadDir: params.uploadDir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     if (params.isAI) uploadParams.isAI = params.isAI
