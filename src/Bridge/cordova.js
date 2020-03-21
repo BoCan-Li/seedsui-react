@@ -393,10 +393,11 @@ var Bridge = {
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       isAI: '1',
       watermark: {
-        caption: '标题',
+        photoType: '标题',
         customerName: '客户',
         submitName: '提交人',
-        offsetLocation: 'lat118.730515, lng31.982473 // 位置算偏差
+        cmLocation: 'lat118.730515, lng31.982473',
+        isAiPicCheck: '1' // AI识别的图片
       },
       success({localIds:[src]})
     * }
@@ -443,14 +444,8 @@ var Bridge = {
     // viewId 临时目录,不能重复
     chooseParams.viewId = '' + new Date().getTime()
     // 水印相关: photoType | customerName | submitName | cmLocation | isAiPicCheck | selectItems
-    if (params.watermark) {
-      chooseParams.watermark = {
-        photoType: params.watermark.caption || '', // 编号
-        customerName: params.watermark.customerName || '', // 客户
-        submitName: params.watermark.submitName || '', // 提交人
-        cmLocation: params.watermark.offsetLocation || '', // lat118.730515, lng31.982473 位置算偏差
-        isAiPicCheck: chooseParams.isAI, // 是否是AI识别的图片
-      }
+    if (chooseParams.watermark && chooseParams.isAI) {
+      chooseParams.watermark.isAiPicCheck = chooseParams.isAI
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line

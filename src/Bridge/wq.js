@@ -175,26 +175,12 @@ var Bridge = {
       count: 1, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      watermark: {
-        caption: '标题',
-        customerName: '客户',
-        submitName: '提交人',
-        offsetLocation: 'lat118.730515, lng31.982473 // 位置算偏差
-      },
+      watermark: ['第一行', '第二行'],
       success({localIds:[src]})
     * }
     */
   chooseImage: function (params) {
-    // 构建水印
-    var chooseParams = Object.params(params)
-    if (params.watermark) {
-      chooseParams.watermark = []
-      if (params.watermark.caption) chooseParams.watermark.push(params.watermark.caption)
-      if (params.watermark.customerName) chooseParams.watermark.push(params.watermark.customerName)
-      if (params.watermark.submitName) chooseParams.watermark.push(params.watermark.submitName)
-      if (params.watermark.offsetLocation) chooseParams.watermark.push(params.watermark.offsetLocation)
-    }
-    console.log('外勤WK内核chooseImage', chooseParams)
+    console.log('外勤WK内核chooseImage', params)
     wq.chooseImage(params) // eslint-disable-line
   },
   /**
@@ -202,7 +188,7 @@ var Bridge = {
     * @param {Object} params
     * {
       uploadDir: '目录/年月',
-      tenantId: 'ios必传'
+      tenantId: '企业id'
       localId: 'localId',
       success: func(res)
     * }
