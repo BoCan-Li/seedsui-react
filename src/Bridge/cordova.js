@@ -416,6 +416,16 @@ var Bridge = {
       }
     ]
   ----------------------------------------------------- */
+  /**
+    * 拍照、本地选图
+    * @param {Object} params
+    * {
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success({localIds:[src]})
+    * }
+    */
   chooseImage: function (argParams) {
     var params = Object.clone(argParams)
     // 格式化sourceType
@@ -439,18 +449,23 @@ var Bridge = {
         pwidth = '750'
       }
     }
-    if (pwidth) params.pwidth = pwidth
+    if (pwidth) {
+      params.pwidth = pwidth
+      delete params.sizeType
+    }
     // 格式化count
     var max = 5
     if (argParams && argParams.count) {
       max = argParams.count
       params.max = '' + max
+      delete params.count
+    }
+    // success
+    if (params.success) {
+      delete params.success
     }
     // viewId 临时目录,不能重复
     params.viewId = '' + new Date().getTime()
-    if (argParams && argParams.viewId) {
-      params.viewId = argParams.viewId;
-    }
     // 水印相关: photoType | customerName | submitName | cmLocation | selectItems
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
       if (argParams && argParams.success) {
@@ -458,60 +473,62 @@ var Bridge = {
         var res = {
           sourceType: operation === '0' ? 'camera' : 'album',
           errMsg: 'chooseImage:ok',
-          results: result,
-          localIds: []
+          localIds: result.map((item) => {
+            return item.src
+          }),
+          originRes: result
         }
-        // 格式化返回结果[{src:地址, path: base64: name: 文件名}] 为 imgMap{path: {serverId: '', sourceType: ''} }
-        var imgMap = {}
-        for (var i = 0, item; item = result[i++];) { // eslint-disable-line
-          imgMap[item.name] = {
-            serverId: '',
-            name: item.name,
-            sourceType: res.sourceType,
-            base64: item.path,
-            src: item.src
-          }
-          res.localIds.push(item.name)
-        }
-        argParams.success(res, imgMap)
+        argParams.success(res)
       }
     }, null, JSON.stringify(params))
   },
-  /* -----------------------------------------------------
-    上传图片
-    @params {
-      uploadDir:'目录/年月',
-      localIds:['图片集合'],
-      tenantId: '企业Id',
-      isAI: '1.是 0.不是'
-    }
-    @return 无
-  ----------------------------------------------------- */
+  /**
+    * 照片上传
+    * @param {Object} params
+    * {
+      uploadDir: '目录/年月',
+      tenantId: ''
+      localId: 'src',
+      success: func(res)
+    * }
+    */
   uploadImage: function (params = {}) {
     var self = this
     if (!params.uploadDir) {
       self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
       return;
     }
-    if (!params.localIds || Object.isEmptyObject(params.localIds)) {
+    if (!params.localId || Object.isEmptyObject(params.localId)) {
       self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
       return;
     }
+    let filePathList = [{
+      path: params.localId
+    }]
+    if (params.isAI === '1') {
+      filePathList = [{
+        isAI: params.isAI,
+        path: params.localeId
+      }]
+    }
     // 格式化params
     var uploadParams = {
-      filePathList: params.localIds.map((item) => {
-        if (params.isAI) {
-          return {
-            isAI: params.isAI,
-            path: item
-          }
-        }
-        return {path: item}
-      }),
+      filePathList: filePathList,
       url: params.uploadDir
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
+    console.log('外勤Cordova上传', uploadParams)
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
+    // 截取路径
+    var serverId = params.localId.substring(params.localId.lastIndexOf('/') + 1, params.localId.length)
+    if (params.success) {
+      params.success({
+        errMsg: 'uploadImage:ok',
+        path: `${params.uploadDir}/${serverId}`, // 前后不带/, 并且不带企业参数的上传路径
+        serverId: serverId,
+        tenantId: params.tenantId
+      })
+    }
   },
   /**
     * 图片预览

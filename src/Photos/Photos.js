@@ -16,14 +16,14 @@ export default class Photos extends Component {
   onClick = (e) => {
     const {list, onChoose, onDelete, onClick} = this.props;
     const target = e.target;
-    if (target.classList.contains('photos-item')) { // 点击照片
+    if (target.classList.contains('photos-upload')) { // 点击添加
+      if (onChoose) onChoose(e);
+    } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
       if (index && onClick) onClick(e, list[index], Number(index));
     } else if (target.classList.contains('photos-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
       if (index && onDelete) onDelete(e, list[index], Number(index));
-    } else if (target.classList.contains('photos-upload')) { // 点击添加
-      if (onChoose) onChoose(e);
     }
   }
   // 点击file框
