@@ -168,8 +168,33 @@ var Bridge = {
       }
     })
   },
+  /**
+    * 拍照、本地选图
+    * @param {Object} params
+    * {
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      watermark: {
+        caption: '标题',
+        customerName: '客户',
+        submitName: '提交人',
+        offsetLocation: 'lat118.730515, lng31.982473 // 位置算偏差
+      },
+      success({localIds:[src]})
+    * }
+    */
   chooseImage: function (params) {
-    console.log(params)
+    // 构建水印
+    var chooseParams = Object.params(params)
+    if (params.watermark) {
+      chooseParams.watermark = []
+      if (params.watermark.caption) chooseParams.watermark.push(params.watermark.caption)
+      if (params.watermark.customerName) chooseParams.watermark.push(params.watermark.customerName)
+      if (params.watermark.submitName) chooseParams.watermark.push(params.watermark.submitName)
+      if (params.watermark.offsetLocation) chooseParams.watermark.push(params.watermark.offsetLocation)
+    }
+    console.log('外勤WK内核chooseImage', chooseParams)
     wq.chooseImage(params) // eslint-disable-line
   },
   /**

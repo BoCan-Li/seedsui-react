@@ -384,38 +384,6 @@ var Bridge = {
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
-  /* -----------------------------------------------------
-    拍照选图: 转为与微信的api一致, 原api如下:
-    @params {
-      isAI: '1.是 0.不是'
-      "operation": 1, // 操作：0：拍照；1，相册； 2：拍照/相册。
-      "max": 2,
-      "pwidth": 2, // 照片宽度
-      "viewId": 41236, // 页面控件ID
-      "photoType": "考勤", // 水印: 项目模块
-      "customerName": "客户名", // 水印: 客户名
-      "submitName": "提交人", // 水印: 提交人
-      "cmLocation": "门店位置", // 水印: 用于计算偏差
-      "selectItems": [ // 水印: 已有图片的路径和id
-        {
-          "id": "1211aa",
-          "path": "sdcard/"
-        },
-        {
-          "id": "2145aa",
-          "path": "sdcard//www.baidu.co"
-        }
-      ]
-    }
-    @return [
-      {
-        "path": "data:image/png;base64,/9j/Q...",
-        "id": "3500",
-        "name": "xxx.jpg",
-        "src": "/storage/emulated/0/iMobii/data/camera/waiqin365@zhangkong8585235895/files/20150909090153661_26873987_ALBUM.jpg"
-      }
-    ]
-  ----------------------------------------------------- */
   /**
     * 拍照、本地选图
     * @param {Object} params
@@ -423,52 +391,70 @@ var Bridge = {
       count: 1, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      isAI: '1',
+      watermark: {
+        caption: '标题',
+        customerName: '客户',
+        submitName: '提交人',
+        offsetLocation: 'lat118.730515, lng31.982473 // 位置算偏差
+      },
       success({localIds:[src]})
     * }
     */
-  chooseImage: function (argParams) {
-    var params = Object.clone(argParams)
+  chooseImage: function (params) {
+    var chooseParams = Object.clone(params)
+    if (params.isAI !== '1') delete chooseParams.isAI
     // 格式化sourceType
     var operation = '2'
-    if (argParams && argParams.sourceType) {
-      if (argParams.sourceType.indexOf('album') >= 0 && argParams.sourceType.indexOf('camera') >= 0) {
+    if (params && params.sourceType) {
+      if (params.sourceType.indexOf('album') >= 0 && params.sourceType.indexOf('camera') >= 0) {
         operation = '2'
-      } else if (argParams.sourceType.indexOf('album') >= 0) {
+      } else if (params.sourceType.indexOf('album') >= 0) {
         operation = '1'
       } else {
         operation = '0'
       }
-      params.operation = operation
+      chooseParams.operation = operation
     }
     // 格式化sizeType
     var pwidth = null
-    if (argParams && argParams.sizeType) {
-      if (!isNaN(argParams.sizeType)) {
-        pwidth = argParams.sizeType
-      } else if (argParams.sizeType.indexOf('compressed') >= 0) {
+    if (params && params.sizeType) {
+      if (!isNaN(params.sizeType)) {
+        pwidth = params.sizeType
+      } else if (params.sizeType.indexOf('compressed') >= 0) {
         pwidth = '750'
       }
     }
     if (pwidth) {
-      params.pwidth = pwidth
-      delete params.sizeType
+      chooseParams.pwidth = pwidth
+      delete chooseParams.sizeType
     }
     // 格式化count
     var max = 5
-    if (argParams && argParams.count) {
-      max = argParams.count
-      params.max = '' + max
-      delete params.count
+    if (params && params.count) {
+      max = params.count
+      chooseParams.max = '' + max
+      delete chooseParams.count
     }
     // success
-    if (params.success) {
-      delete params.success
+    if (chooseParams.success) {
+      delete chooseParams.success
     }
     // viewId 临时目录,不能重复
-    params.viewId = '' + new Date().getTime()
-    // 水印相关: photoType | customerName | submitName | cmLocation | selectItems
+    chooseParams.viewId = '' + new Date().getTime()
+    // 水印相关: photoType | customerName | submitName | cmLocation | isAiPicCheck | selectItems
+    if (params.watermark) {
+      chooseParams.watermark = {
+        photoType: params.watermark.caption || '', // 编号
+        customerName: params.watermark.customerName || '', // 客户
+        submitName: params.watermark.submitName || '', // 提交人
+        cmLocation: params.watermark.offsetLocation || '', // lat118.730515, lng31.982473 位置算偏差
+        isAiPicCheck: chooseParams.isAI, // 是否是AI识别的图片
+      }
+    }
+    console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
-      if (argParams && argParams.success) {
+      if (params && params.success) {
         // 格式化返回结果
         var res = {
           sourceType: operation === '0' ? 'camera' : 'album',
@@ -478,9 +464,9 @@ var Bridge = {
           }),
           originRes: result
         }
-        argParams.success(res)
+        params.success(res)
       }
-    }, null, JSON.stringify(params))
+    }, null, JSON.stringify(chooseParams))
   },
   /**
     * 照片上传

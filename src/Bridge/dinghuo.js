@@ -378,12 +378,30 @@ var Bridge = {
       count: 1, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      watermark: {
+        caption: '标题',
+        submitName: '提交人',
+        customerName: '客户',
+        offsetLocation: 'lat118.730515, lng31.982473, // 位置算偏差
+      }
       success({localIds:['LocalResource://imageid'+id]})
     * }
     */
   chooseImage: function (params) {
+    // 构建水印
+    var chooseParams = Object.params(params)
+    if (params.watermark) {
+      chooseParams.watermark = {
+        orderNo: params.watermark.caption || '', // 编号
+        submitName: params.watermark.submitName || '', // 提交人
+        customerName: params.watermark.customerName || '', // 客户
+        cmLocation: params.watermark.offsetLocation || '', // lat118.730515, lng31.982473 位置算偏差
+        isWaterMark: '1', // 是否启用水印
+      }
+    }
     var self = this
-    self.invoke('chooseImage', params, function (res) {
+    console.log('订货chooseImage', chooseParams)
+    self.invoke('chooseImage', chooseParams, function (res) {
       res.localIds = res.localIds.map(function (id) {
         return 'LocalResource://imageid' + id
       })
