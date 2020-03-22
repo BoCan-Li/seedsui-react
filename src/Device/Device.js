@@ -37,16 +37,16 @@ var Device = (function () {
   var platformMatch = null
   if (device === 'pc') {
     platform = 'browser'
+  } else if (ua.indexOf('miniprogram') > -1) {
+    platform = 'miniprogram'
+    platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('wxwork') > -1) {
     platform = 'wework'
     platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('micromessenger') > -1) {
     platform = 'wechat'
-    platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else if (ua.indexOf('miniprogram') > -1) {
-    platform = 'miniprogram'
     platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
     if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
   } else if (ua.indexOf('mqqbrowser') > -1) {
@@ -195,6 +195,7 @@ var Device = (function () {
     os: os,
     osVersion: osVersion,
     platform: platform,
+    
     platformVersion: platformVersion,
     appleDevice: getAppleDevice(),
     // 应用程序判断

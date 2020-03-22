@@ -7,12 +7,7 @@ import BridgeWaiqin from './wq'
 import BridgeWaiqinCordova from './cordova'
 
 var Bridge = {}
-if (Device.platform === 'wechat') {
-  Bridge = {
-    ...BridgeBase,
-    ...BridgeWeixin
-  }
-} else if (Device.platform === 'wework') {
+if (Device.platform === 'wechat' || Device.platform === 'wework' || Device.platform === 'miniprogram') {
   Bridge = {
     ...BridgeBase,
     ...BridgeWeixin
