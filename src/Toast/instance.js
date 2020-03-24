@@ -114,8 +114,8 @@ var Toast = function (params) {
     s.updateMask()
     s.updateToast()
     s.updateWrapper()
-    s.updateCaption()
     s.updateIcon()
+    s.updateCaption()
   }
 
   s.update()

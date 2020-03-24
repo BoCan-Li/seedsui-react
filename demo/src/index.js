@@ -8,6 +8,12 @@ class Demo extends Component {
     super(props);
   }
   async componentDidMount () {
+    Bridge.showConfirm('您确定要离开此页面吗?', {
+      success: (e) => {
+        e.hide()
+        _history.go(_backLvl)
+      }
+    });
   }
   state = {
     show: false,
