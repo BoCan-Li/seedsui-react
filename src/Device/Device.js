@@ -35,37 +35,39 @@ var Device = (function () {
   var platform = ''
   var platformVersion = ''
   var platformMatch = null
-  if (device === 'pc') {
-    platform = 'browser'
-  } else if (ua.indexOf('miniprogram') > -1) {
-    platform = 'miniprogram'
-    platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else if (ua.indexOf('wxwork') > -1) {
-    platform = 'wework'
-    platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else if (ua.indexOf('micromessenger') > -1) {
-    platform = 'wechat'
-    platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else if (ua.indexOf('mqqbrowser') > -1) {
-    platform = 'qq'
-  } else if (ua.indexOf('ucbrowser') > -1) {
-    platform = 'uc'
-  } else if (ua.indexOf('dinghuoappversion') > -1) {
-    platform = 'dinghuo'
-    platformMatch = ua.match(/dinghuoappversion\/\s*([0-9.]+)/)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else if (ua.indexOf('wqappversion') > -1) {
-    platform = 'waiqin'
-    if (!window.sessionStorage.getItem('seedsui_bridge_wq_cordova_enable')) platform = 'wq'
-    platformMatch = ua.match(/wqappversion\/([\w.]*)/)
-    if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-  } else {
-    platform = 'browser'
+  function updatePlatform () {
+    if (device === 'pc') {
+      platform = 'browser'
+    } else if (ua.indexOf('miniprogram') > -1) {
+      platform = 'miniprogram'
+      platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+    } else if (ua.indexOf('wxwork') > -1) {
+      platform = 'wework'
+      platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
+      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+    } else if (ua.indexOf('micromessenger') > -1) {
+      platform = 'wechat'
+      platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+    } else if (ua.indexOf('mqqbrowser') > -1) {
+      platform = 'qq'
+    } else if (ua.indexOf('ucbrowser') > -1) {
+      platform = 'uc'
+    } else if (ua.indexOf('dinghuoappversion') > -1) {
+      platform = 'dinghuo'
+      platformMatch = ua.match(/dinghuoappversion\/\s*([0-9.]+)/)
+      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+    } else if (ua.indexOf('wqappversion') > -1) {
+      platform = 'waiqin'
+      if (!window.localStorage.getItem('seedsui_bridge_wq_cordova_enable')) platform = 'wq'
+      platformMatch = ua.match(/wqappversion\/([\w.]*)/)
+      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+    } else {
+      platform = 'browser'
+    }
   }
-
+  updatePlatform()
 
   // 获得苹果机型
   function appleModel() { // 获取设备型号
@@ -195,7 +197,6 @@ var Device = (function () {
     os: os,
     osVersion: osVersion,
     platform: platform,
-    
     platformVersion: platformVersion,
     appleDevice: getAppleDevice(),
     // 应用程序判断
