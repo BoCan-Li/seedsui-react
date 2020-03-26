@@ -58,15 +58,17 @@ var Device = (function () {
       platform = 'dinghuo'
       platformMatch = ua.match(/dinghuoappversion\/\s*([0-9.]+)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-    } else if (ua.indexOf('wqappversion') > -1) { // 外勤cordova内核
-      platform = 'wq' // 如果要设置waiqin, 请强制设置, 后期再改成新的校验
-      if (window.localStorage.getItem('_seedsui_bridge_wq_cordova_enable_')) platform = 'waiqin'
+    } else if (ua.indexOf('wqappversion') > -1) {
+      // 外勤cordova内核
+      platform = 'wq' // 此处值应当为waiqin, 下个版本可以改掉
+      if (window.localStorage.getItem('_seedsui_bridge_wq_cordova_enable_')) platform = 'waiqin' // 此处为兼容代码, 下个版本删除此行
+      
       platformMatch = ua.match(/wqappversion\/([\w.]*)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
-    } else if (ua.indexOf('waiqin365') > -1) { // 外勤jsbridge内核(新校验, 暂未支持)
-      platform = 'wq'
-      platformMatch = ua.match(/waiqin365\/([\w.]*)/)
-      if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+      // JsBridge内核
+      if (ua.indexOf('waiqin365') > -1) {
+        platform = 'wq'
+      }
     } else {
       platform = 'browser'
     }
