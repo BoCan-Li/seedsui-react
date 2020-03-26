@@ -10,24 +10,30 @@ function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp'
     e.stopPropagation()
     if (target.classList.contains('wechat')) { // 微信
       Bridge.invoke('shareWechatMessage', config, function (res) {
-        if (res.err_msg === 'shareWechatMessage:ok') {
+        if (res.errMsg === 'shareWechatMessage:ok') {
           console.log('分享成功')
+        } else {
+          console.log('分享失败')
         }
       })
     } else if (target.classList.contains('wework')) { // 企业微信
       Bridge.invoke('shareAppMessage', config, function (res) {
-        if (res.err_msg === 'shareAppMessage:ok') {
+        if (res.errMsg === 'shareAppMessage:ok') {
           console.log('分享成功')
+        } else {
+          console.log('分享失败')
         }
       })
     } else if (target.classList.contains('moments')) { // 朋友圈
       Bridge.invoke('shareTimeline', config, function (res) {
-        if (res.err_msg === 'shareTimeline:ok') {
+        if (res.errMsg === 'shareTimeline:ok') {
           console.log('分享成功')
+        } else {
+          console.log('分享失败')
         }
       })
     } else {
-      if (onHide) onHide(e);
+      if (onHide) onHide(e)
     }
   }
   // 构建动画
