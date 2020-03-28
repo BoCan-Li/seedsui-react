@@ -416,6 +416,7 @@ var Bridge = {
         operation = '0'
       }
       chooseParams.operation = operation
+      delete chooseParams.sourceType
     }
     // 格式化sizeType
     var pwidth = null
@@ -441,11 +442,20 @@ var Bridge = {
     if (chooseParams.success) {
       delete chooseParams.success
     }
+    // fail
+    if (chooseParams.fail) {
+      delete chooseParams.fail
+    }
     // viewId 临时目录,不能重复
     chooseParams.viewId = '' + new Date().getTime()
     // 水印相关: photoType | customerName | submitName | cmLocation | isAiPicCheck | selectItems
-    if (chooseParams.watermark && chooseParams.isAI) {
-      chooseParams.watermark.isAiPicCheck = chooseParams.isAI
+    if (params.watermark) {
+      if (params.watermark.photoType) chooseParams.photoType = params.watermark.photoType
+      if (params.watermark.customerName) chooseParams.customerName = params.watermark.customerName
+      if (params.watermark.submitName) chooseParams.submitName = params.watermark.submitName
+      if (params.watermark.isAiPicCheck) chooseParams.isAiPicCheck = params.watermark.isAiPicCheck
+      if (params.watermark.selectItems) chooseParams.selectItems = params.watermark.selectItems
+      delete chooseParams.watermark
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
