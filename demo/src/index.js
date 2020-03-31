@@ -1,19 +1,13 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, Carrousel} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, Carrousel, InputLocation} from '../../src';
 
 class Demo extends Component {
   constructor(props){
     super(props);
   }
   async componentDidMount () {
-    Bridge.showConfirm('您确定要离开此页面吗?', {
-      success: (e) => {
-        e.hide()
-        _history.go(_backLvl)
-      }
-    });
   }
   state = {
     show: false,
@@ -93,6 +87,7 @@ class Demo extends Component {
           })}
         </Carrousel>}
         <input type="button" onClick={() => this.changeMenus(!this.state.show)} value="修改"/>
+        <InputLocation/>
       </Container>
     </Page>
   }

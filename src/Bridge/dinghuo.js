@@ -382,7 +382,7 @@ var Bridge = {
         orderNo: '编号',
         submitName: '提交人',
         customerName: '客户',
-        cmLocation: 'lat118.730515, lng31.982473',
+        cmLocation: '31.982473, 118.730515',
         isWaterMark: '1', // 是否启用水印
       },
       success({localIds:['LocalResource://imageid'+id]})
