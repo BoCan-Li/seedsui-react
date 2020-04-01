@@ -36,6 +36,7 @@ export { default as ImgMark } from './ImgMark';
 export { default as IndexBar } from './IndexBar';
 export { default as InputArea } from './InputArea';
 export { default as InputCity } from './InputCity';
+export { default as InputDistrict } from './InputDistrict';
 export { default as InputColor } from './InputColor'; // 不常用
 export { default as InputDate } from './InputDate';
 export { default as InputLocation } from './InputLocation';
@@ -68,6 +69,7 @@ export { default as Peg } from './Peg'; // 不常用
 export { default as Picker } from './Picker';
 export { default as PickerCity } from './PickerCity';
 export { default as PickerDate } from './PickerDate';
+export { default as PickerDistrict } from './PickerDistrict';
 export { default as Player } from './Player';
 export { default as Popover } from './Popover';
 export { default as Preview } from './Preview'; // 不常用

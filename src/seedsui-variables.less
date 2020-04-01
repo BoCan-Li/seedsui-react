@@ -5320,6 +5320,88 @@ a {
 
 
 
+
+
+
+// PickerDistrict街道选择
+.setPickerDistrict(){
+  .picker-district-mask{} // 遮罩, 基于.mask
+  // .actionsheet-mask{} // 遮罩, 基于.mask
+  .picker-district{
+    .flex;
+    .flex-vertical;
+    position:absolute;
+    height: 400px;
+    border-radius: 4px 4px 0 0;
+
+    box-sizing:border-box;
+    width:100%;
+    bottom:0;
+    background-color: white;
+    // 动画使用.popup-animation
+  }
+  .picker-district-header{
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: @font-size-lg;
+  }
+  .picker-district-tabbar{
+    .flex;
+    margin: 0 12px;
+  }
+  .picker-district-tab{
+    height: 32px;
+    line-height: 32px;
+    margin-right: 20px;
+    &.active{
+      border-bottom: 2px solid @primary-bg;
+      font-weight: 500;
+    }
+  }
+  .picker-district-body{
+    .flex-1;
+    overflow: auto;
+    padding: 10px 12px;
+  }
+  .picker-district-option{
+    .flex;
+    .flex-middle;
+    height: 40px;
+    line-height: 40px;
+    &.active {
+      .picker-district-option-icon{
+        display: block;
+      }
+      .picker-district-option-caption{
+        font-weight: 500;
+      }
+    }
+  }
+  .picker-district-option-caption{
+    .flex-1;
+  }
+  .picker-district-option-icon{
+    color: @primary-bg;
+    font-family: 'iconfont';
+    &:extend(.icon-ok-fill all);
+    display: none;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    font-size: 14px;
+    margin-right: 4px;
+  }
+}
+
+
+
+
+
+
+
+
+
 // Player播放控件
 .setPlayer(){
   // 视频弹窗, 基于.mask
