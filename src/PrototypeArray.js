@@ -142,7 +142,7 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
       }
       temp = item.children.concat(temp)
     } else {
-      item.isBottom = true
+      item.isLeaf = true
     }
     // 删除此项children
     delete item.children
@@ -260,7 +260,7 @@ window.Array.prototype.deepTree = function (parentIdName, nodeIdName) {
         _buildTreeToDeep(child)
       }
     } else {
-      item.isBottom = true
+      item.isLeaf = true
     }
   }
   var trees = list.getFlattenTreeRoots(parentIdName, nodeIdName)
