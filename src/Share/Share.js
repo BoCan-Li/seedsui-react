@@ -17,6 +17,12 @@ function Share({
   originConfig,
   ...others
 }) {
+  if (Bridge.platform !== 'wework' && Bridge.platform !== 'wechat' && Bridge.platform !== 'wq' && Bridge.platform !== 'dinghuo' && Bridge.platform !== 'waiqin') {
+    return null;
+  }
+  if (!config || !config.link) {
+    return null;
+  }
   // 定义state
   const [show, setShow] = useState(false);
   // 显隐弹窗
@@ -31,9 +37,6 @@ function Share({
     } else {
       setShow(true)
     }
-  }
-  if (Bridge.platform !== 'wework' && Bridge.platform !== 'wechat' && Bridge.platform !== 'wq' && Bridge.platform !== 'dinghuo' && Bridge.platform !== 'waiqin') {
-    return null;
   }
   return (
     <div {...others} onClick={handlerClick}>

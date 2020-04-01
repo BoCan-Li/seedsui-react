@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import InputText from './../InputText';
 import PickerCity from './../PickerCity';
@@ -119,10 +119,9 @@ export default class InputCity extends Component {
       pickerProps = {},
       ...others
     } = this.props;
-    return [
-      <InputText key="input" ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClickInput}/>,
+    return <Fragment>
+      <InputText ref="$ComponentInputText" {...others} type="text" readOnly onClick={this.onClickInput}/>
       <PickerCity
-        key="pickercity"
         ref="$ComponentPicker"
         {...pickerProps}
         maskAttribute={{
@@ -142,6 +141,6 @@ export default class InputCity extends Component {
         value={this.$input ? this.$input.value : this.props.value}
         show={pickerProps.show === undefined ? this.state.show : pickerProps.show}
       />
-    ];
+    </Fragment>
   }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, Carrousel, InputLocation} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, Carrousel, InputLocation, InputCity} from '../../src';
 
 class Demo extends Component {
   constructor(props){
@@ -88,6 +88,7 @@ class Demo extends Component {
         </Carrousel>}
         <input type="button" onClick={() => this.changeMenus(!this.state.show)} value="修改"/>
         <InputLocation/>
+        <InputCity/>
       </Container>
     </Page>
   }
