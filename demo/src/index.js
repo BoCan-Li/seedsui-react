@@ -10,11 +10,15 @@ class Demo extends Component {
   async componentDidMount () {
   }
   state = {
-    show: false,
-    menus: []
+    value: ''
   }
   
-
+  onChange = (e, value) => {
+    console.log(e.event)
+    this.setState({
+      value: value
+    });
+  }
   render() {
     return <Page ref={(el) => {this.$page = el}}>
       <Header>
@@ -22,7 +26,18 @@ class Demo extends Component {
       </Header>
       <Container>
         {/* <InputLocation placeholder="地址"/> */}
-        <InputDistrict placeholder="地址"/>
+        <InputDistrict
+          value={this.state.value}
+          onChange={this.onChange}
+          placeholder="请选择"
+          className="border-b"
+          value="江苏省-南京市-建邺区"
+          pickerProps={{
+            maskAttribute: {
+              style: {zIndex: '11'}
+            }
+          }}
+        />
       </Container>
     </Page>
   }

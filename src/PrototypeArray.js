@@ -141,6 +141,8 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
         item.children[c][parentIdName || 'parentid'] = item[nodeIdName || 'id']
       }
       temp = item.children.concat(temp)
+    } else {
+      item.isBottom = true
     }
     // 删除此项children
     delete item.children
@@ -257,6 +259,8 @@ window.Array.prototype.deepTree = function (parentIdName, nodeIdName) {
       for (var i = 0, child; child = children[i++];) { // eslint-disable-line
         _buildTreeToDeep(child)
       }
+    } else {
+      item.isBottom = true
     }
   }
   var trees = list.getFlattenTreeRoots(parentIdName, nodeIdName)
