@@ -109,7 +109,7 @@ function formUpload (url, originFile) {
 // 封装成Api类
 const Api = {
   fail: function (error) {
-    console.warn(error)
+    console.warn({error})
   },
   setBaseURL: function (baseURL) {
     axios.defaults.baseURL = baseURL
@@ -184,7 +184,7 @@ axios.interceptors.response.use(response => {
   }
   return result
 }, error => {
-  if (Api.fail) Api.fail({errMsg: error})
+  if (Api.fail) Api.fail(error)
   return Promise.reject(error)
 })
 
