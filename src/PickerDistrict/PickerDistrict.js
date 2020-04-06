@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 import treeData from './instance.data.js';
@@ -27,45 +27,94 @@ function PickerDistrict({
 }) {
   // context
   const context = useContext(Context) || {};
-  // flattenData
-  if (JSON.stringify(data).indexOf(dataFormat.childName) !== -1) {
-    flattenData = data.flattenTree(dataFormat.parentName, dataFormat.keyName)
+  // 全局配置变量
+  let parentProperty = dataFormat.parentName || 'parentid';
+  let keyProperty = dataFormat.keyName || 'key';
+  let valueProperty = dataFormat.valueName || 'value';
+  let childProperty = dataFormat.childName || 'children';
+  // 页签和列表
+  let [tabs, setTabs] = useState([])
+  let [tabIndex, setTabIndex] = useState(0)
+  let [list, setList] = useState([])
+  // 获取父节点下所有的子节点
+  function getParentList (parentid) {
+    if (!parentid || parentid === '-1') {
+      return data;
+    }
+    let parent = data.getDeepTreeNode(parentid, parentProperty, keyProperty)
+    return parent[childProperty]
   }
-  // 根据key或者name获取tabs
-  function getTabs (values, propertyName) {
+  // 根据key或者name获取tabs, property用于区分是key还是value比较
+  function getTabs (values, property) {
     if (!values || !values.length) return null
-    if (!propertyName) return null
+    if (property !== keyProperty || property !== valueProperty) property = valueProperty
+    // 如果values是中文, 属性则使用value比较, 如果是其它的
     var tabs = []
     var levels = 0 // 层级
-    function getRow (list, value) {
+    function getRow (parentid, list, value) {
       for (let item of list) {
         // 模糊匹配
-        if (item[propertyName].indexOf(value) > -1 || value.indexOf(item[propertyName]) > -1) {
-          tabs.push(item)
-          const children = flattenData.getFlattenTreeChildren(item[dataFormat.keyName], dataFormat.parentName)
+        if (item[property].indexOf(value) > -1 || value.indexOf(item[property]) > -1) {
+          tabs.push({
+            [parentProperty]: parentid,
+            ...item
+          })
+          const children = item[childProperty];
           // 下一层级
           levels++
           if (values[levels]) {
-            console.log(children, values[levels])
-            getRow(children, values[levels])
+            getRow(item[keyProperty], children, values[levels])
           }
         }
       }
     }
-    const root = flattenData.getFlattenTreeRoots(dataFormat.parentName, dataFormat.keyName)
-    getRow(root, values[0])
+    getRow('', data, values[0])
     // 如果省市区不对,则返回空
     return tabs
   }
-  // 选中值
-  let tabs = [];
+  // 初始化tabs
+  let initTabs = [];
   if (valueForKey) {
-    tabs = getTabs(valueForKey.split(split || '-'), dataFormat.keyName)
+    initTabs = getTabs(valueForKey.split(split || '-'), keyProperty)
   } else if (value) {
-    tabs = getTabs(value.split(split || '-'), dataFormat.valueName)
+    initTabs = getTabs(value.split(split || '-'), valueProperty)
   }
-  tabs.push({[dataFormat.keyName]: '', [dataFormat.valueName]: '请选择'});
-  console.log(tabs)
+  if (initTabs && initTabs.length) {
+    initTabs[initTabs.length - 1][valueProperty] = '请选择'
+  } else {
+    initTabs[initTabs.length - 1] = {
+      [parentProperty]: '',
+      [keyProperty]: '',
+      [valueProperty]: '请选择'
+    }
+  }
+  // 初始化列表
+  let initList = getParentList(initTabs[initTabs.length - 1][parentProperty] || '')
+
+  useEffect(() => {
+    setTabs(initTabs)
+    setTabIndex(initTabs.length - 1)
+    setList(initList)
+  }, [data]);
+
+  // 点击面板
+  function onClickPanel (e) {
+    e.stopPropagation()
+  }
+  // 点击tab
+  function onClickTab (tab, index) {
+    let parents = getParentList(tab[parentProperty])
+    if (parents) {
+      setTabIndex(index)
+      setList(parents)
+    }
+  }
+  // 点击选项
+  function onClickOption (option) {
+    if (option[childProperty]) {
+      setList(option[childProperty])
+    }
+  }
   return createPortal(
     <div
       {...maskAttribute}
@@ -75,92 +124,25 @@ function PickerDistrict({
         data-animation="slideUp"
         {...others}
         className={`picker-district${others.className ? ' ' + others.className : ' popup-animation bottom-center'}${show ? ' active' : ''}`}
+        onClick={onClickPanel}
       >
         <div className="picker-district-header">
-          请选择
+          请选择所在地区
         </div>
         <div className="picker-district-tabbar">
           {tabs.map((tab, index) => {
-            return <div className={`picker-district-tab${index === tabs.length - 1 ? ' active' : ''}`} key={index}>
-              {tab[dataFormat.valueName]}
+            return <div onClick={() => onClickTab(tab, index)} className={`picker-district-tab${index === tabIndex ? ' active' : ''}`} key={index}>
+              {tab[valueProperty]}
             </div>
           })}
         </div>
         <div className="picker-district-body">
-          {/* {data && data.map((item) => {
-            return <div className={`picker-district-option${item[dataFormat.keyName] ? ' active' : ''}`}>
+          {list && list.map((item, index) => {
+            return <div key={index} onClick={() => onClickOption(item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
-              <div className="picker-district-option-caption">{item[dataFormat.keyName]}</div>
+              <div className="picker-district-option-caption">{item[valueProperty]}</div>
             </div>
-          })} */}
-          {/* <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div>
-          <div className="picker-district-option">
-            <div className="picker-district-option-caption">中华人民共和国</div>
-            <div className="picker-district-option-icon"></div>
-          </div> */}
+          })}
         </div>
       </div>
     </div>,

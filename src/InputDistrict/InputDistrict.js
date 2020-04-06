@@ -69,6 +69,7 @@ function InputDistrict({
   return <Fragment>
     <InputText
     // ref="$ComponentInputText"
+      value={value}
       {...others} type="text" readOnly onClick={onClickInput}
     />
     <PickerDistrict

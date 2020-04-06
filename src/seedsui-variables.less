@@ -5373,7 +5373,7 @@ a {
     .flex;
     .flex-vertical;
     position:absolute;
-    height: 400px;
+    height: 460px;
     border-radius: 4px 4px 0 0;
 
     box-sizing:border-box;
@@ -5383,8 +5383,8 @@ a {
     // 动画使用.popup-animation
   }
   .picker-district-header{
-    height: 40px;
-    line-height: 40px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
     font-size: @font-size-lg;
   }
@@ -5398,7 +5398,7 @@ a {
     margin-right: 20px;
     &.active{
       border-bottom: 2px solid @primary-bg;
-      font-weight: 500;
+      font-weight: 600;
     }
   }
   .picker-district-body{
@@ -5411,12 +5411,15 @@ a {
     .flex-middle;
     height: 40px;
     line-height: 40px;
+    *{
+      pointer-events: none;
+    }
     &.active {
       .picker-district-option-icon{
         display: block;
       }
       .picker-district-option-caption{
-        font-weight: 500;
+        font-weight: 600;
       }
     }
   }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, InputLocation, InputDistrict} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, InputDistrict} from '../../src';
 
 class Demo extends Component {
   constructor(props){
@@ -26,13 +26,6 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        <InputLocation
-          placeholder="地址"
-          value={this.state.value}
-          // readOnly={false}
-          onChange={this.onChange}
-          style={{padding: '0 10px'}}
-        />
         <InputDistrict
           value={this.state.value}
           onChange={this.onChange}
