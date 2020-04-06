@@ -9,11 +9,17 @@ export default class InputLocation extends Component {
   static propTypes = {
     locationingValue: PropTypes.string,
     failedValue: PropTypes.string,
+    value: PropTypes.string,
+    placeholder: PropTypes.string,
+    readOnly: PropTypes.bool,
     onClick: PropTypes.func,
     onChange: PropTypes.func
   }
   constructor(props, context) {
     super(props, context);
+    this.state = {
+      status: '1'
+    }
   }
   componentDidMount () {
     this.$el = null;
@@ -31,16 +37,37 @@ export default class InputLocation extends Component {
     } = this.context;
     if (!locale) locale = {}
     const {
-      locationingValue = locale['location'] || '定位中...',
-      failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
+      readOnly,
       onChange,
       onClick
     } = this.props;
+    // 正在定位不允许操作
+    const {
+      status
+    } = this.state;
+    if (status === '-1') {
+      return;
+    }
+
+    // 非只读状态下, 点击错误面板, 允许手动输入位置
+    if (!readOnly && status === '0') {
+      this.setState({
+        status: '1'
+      })
+      return;
+    }
+
     var e = event.nativeEvent;
     if (onClick) onClick(e, value);
-    if (this.$input.value === locationingValue) return;
+    // 如果非只读, 则仅允许点击图标定位
+    if (!readOnly && !e.target.classList.contains('input-location-icon')) {
+      return;
+    }
+    
     // 定位中...
-    this.$input.value = locationingValue;
+    this.setState({
+      status: '-1'
+    })
     Bridge.getLocation({
       type: 'gcj02',
       success: async (data) => {
@@ -49,7 +76,9 @@ export default class InputLocation extends Component {
           // 赋值
           if (onChange) {
             onChange(e, data.address, data);
-            this.$input.value = data.address;
+            this.setState({
+              status: '1'
+            })
           }
           return;
         }
@@ -60,15 +89,21 @@ export default class InputLocation extends Component {
         const address = result && result.address ? result.address : ''
         if (onChange) onChange(e, address, result);
         if (address) {
-          this.$input.value = address
+          this.setState({
+            status: '1'
+          })
         } else {
-          this.$input.value = failedValue
+          this.setState({
+            status: '0'
+          })
         }
       },
       fail: (res) => {
         // 赋值
         if (onChange) onChange(e, '', null)
-        this.$input.value = failedValue;
+        this.setState({
+          status: '0'
+        })
         // 提示定位失败
         // Bridge.showToast(res.errMsg, {mask: false});
       }
@@ -83,10 +118,33 @@ export default class InputLocation extends Component {
     const {
       locationingValue = locale['location'] || '定位中...',
       failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
-      onChange,
+      value,
+      placeholder,
+      readOnly = true,
       onClick,
+      onChange,
       ...others
     } = this.props;
-    return <InputText ref="$ComponentInputText" {...others} readOnly onClick={this.onClick}/>;
+    // 定位状态
+    const {
+      status
+    } = this.state;
+    let statusDOM = null;
+    if (status === '-1') {
+      statusDOM = <div className="input-text input-location">{locationingValue}</div>
+    } else if (status === '0') {
+      statusDOM = <div className="input-text input-location-error">{failedValue}</div>;
+    }
+    return <InputText
+      ref="$ComponentInputText"
+      value={status === '1' ? value : ''}
+      placeholder={status === '1' ? placeholder : ''}
+      riconAttribute={{className: 'input-location-icon size24'}}
+      readOnly={readOnly}
+      onClick={this.onClick}
+      onChange={onChange}
+      children={statusDOM}
+      {...others}
+    />;
   }
 }

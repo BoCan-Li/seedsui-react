@@ -8,6 +8,7 @@ class Demo extends Component {
     super(props);
   }
   async componentDidMount () {
+    // Bridge.debug = true
   }
   state = {
     value: ''
@@ -25,7 +26,12 @@ class Demo extends Component {
         <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
       </Header>
       <Container>
-        {/* <InputLocation placeholder="地址"/> */}
+        <InputLocation
+          placeholder="地址"
+          value={this.state.value}
+          readOnly={false}
+          onChange={this.onChange}
+        />
         <InputDistrict
           value={this.state.value}
           onChange={this.onChange}
@@ -42,12 +48,12 @@ class Demo extends Component {
     </Page>
   }
 }
-// function loadBd(){
-//   window.BMAP_PROTOCOL = "https";
-//   window.BMap_loadScriptTime = (new Date).getTime();
-//   document.write('<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200311111417"></script>');
-// }
-// loadBd();
+function loadBd(){
+  window.BMAP_PROTOCOL = "https";
+  window.BMap_loadScriptTime = (new Date).getTime();
+  document.write('<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200311111417"></script>');
+}
+loadBd();
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))
 });

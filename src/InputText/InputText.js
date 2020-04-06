@@ -56,6 +56,8 @@ export default class InputText extends Component {
     clearAttribute: PropTypes.object,
     // 右侧内容
     rcaption: PropTypes.node,
+    // 子内容
+    children: PropTypes.node,
     fail: PropTypes.func
   }
   static defaultProps = {
@@ -279,6 +281,8 @@ export default class InputText extends Component {
       clearAttribute = {},
       // 右侧内容
       rcaption,
+      // 子内容
+      children,
       ...othres
     } = this.props;
     // 剔除掉onClick事件, 因为在容器onClick已经回调了
@@ -294,6 +298,7 @@ export default class InputText extends Component {
         {riconAttribute && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
+        {children && children}
       </div>);
   }
 }
