@@ -293,12 +293,12 @@ export default class InputText extends Component {
         {licon && licon}
         {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
         {this.getInputDOM()}
+        {children && children}
         {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
         {clear && value && !readOnly && !disabled && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
         {riconAttribute && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
         {ricon && ricon}
         {rcaption && rcaption}
-        {children && children}
       </div>);
   }
 }

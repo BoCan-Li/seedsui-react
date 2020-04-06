@@ -8,7 +8,7 @@ class Demo extends Component {
     super(props);
   }
   async componentDidMount () {
-    // Bridge.debug = true
+    Bridge.debug = true
   }
   state = {
     value: ''
@@ -29,8 +29,9 @@ class Demo extends Component {
         <InputLocation
           placeholder="地址"
           value={this.state.value}
-          readOnly={false}
+          // readOnly={false}
           onChange={this.onChange}
+          style={{padding: '0 10px'}}
         />
         <InputDistrict
           value={this.state.value}

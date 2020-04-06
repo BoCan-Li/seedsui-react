@@ -3447,11 +3447,10 @@ a {
 
 // InputLocation定位
 .setInputLocation(){
-  .input-location, .input-location-error{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 24px;
+  // .input-location, .input-location-error{
+  // }
+  .input-location{
+    color: @sub;
   }
   .input-location-error{
     color: @cancel-bg;
@@ -3460,6 +3459,21 @@ a {
     width: 24px;
     height: 24px;
     background-image: url(//res.waiqin365.com/d/dinghuo365/location.png);
+  }
+  @keyframes rotate360 {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .input-location-icon-active{
+    animation-name: rotate360;
+    animation-duration: 500ms;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
   }
 }
 

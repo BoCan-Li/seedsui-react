@@ -2115,10 +2115,8 @@ fail = (e, msg) => {
 ### 属性
 ```javascript
 <InputLocation
-  failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启'}
-  locationingValue={定位中显示文字 string, 默认'定位中...'}
-  value={值 string | number, 默认''}
-  placeholder={占位符 string, 默认''}
+  failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
+  locationingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   readOnly={文本是否只读 bool, 默认true} // 改为false: 允许手动修改位置信息, 并只能点击定位图标定位
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}

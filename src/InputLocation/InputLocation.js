@@ -9,8 +9,6 @@ export default class InputLocation extends Component {
   static propTypes = {
     locationingValue: PropTypes.string,
     failedValue: PropTypes.string,
-    value: PropTypes.string,
-    placeholder: PropTypes.string,
     readOnly: PropTypes.bool,
     onClick: PropTypes.func,
     onChange: PropTypes.func
@@ -37,7 +35,7 @@ export default class InputLocation extends Component {
     } = this.context;
     if (!locale) locale = {}
     const {
-      readOnly,
+      readOnly = true,
       onChange,
       onClick
     } = this.props;
@@ -63,7 +61,6 @@ export default class InputLocation extends Component {
     if (!readOnly && !e.target.classList.contains('input-location-icon')) {
       return;
     }
-    
     // 定位中...
     this.setState({
       status: '-1'
@@ -118,14 +115,12 @@ export default class InputLocation extends Component {
     const {
       locationingValue = locale['location'] || '定位中...',
       failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
-      value,
-      placeholder,
       readOnly = true,
       onClick,
       onChange,
       ...others
     } = this.props;
-    // 定位状态
+    // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
     const {
       status
     } = this.state;
@@ -137,9 +132,8 @@ export default class InputLocation extends Component {
     }
     return <InputText
       ref="$ComponentInputText"
-      value={status === '1' ? value : ''}
-      placeholder={status === '1' ? placeholder : ''}
-      riconAttribute={{className: 'input-location-icon size24'}}
+      riconAttribute={{className: `input-location-icon size24${status === '-1' ? ' input-location-icon-active' : ''}`}}
+      inputAttribute={{className: statusDOM ? 'hide-important' : ''}} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
       readOnly={readOnly}
       onClick={this.onClick}
       onChange={onChange}
