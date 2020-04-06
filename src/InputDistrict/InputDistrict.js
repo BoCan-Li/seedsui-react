@@ -42,15 +42,7 @@ function InputDistrict({
     setShow(!show);
   }
   // 点击确定按钮
-  function onClickSubmit (e) {
-    // 获取值
-    const value = e.activeText;
-    const options = e.activeOptions;
-    // 确定按钮回调
-    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      pickerProps.submitAttribute.onClick(e, value, options);
-      return;
-    }
+  function onClickSubmit (e, value, options) {
     // 赋值
     if (onChange) {
       onChange(e, value, options);
@@ -60,10 +52,6 @@ function InputDistrict({
   }
   // 点击取消按钮
   function onClickCancel (e) {
-    if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
-      pickerProps.cancelAttribute.onClick(e);
-      return;
-    }
     setShow(!show);
   }
   return <Fragment>

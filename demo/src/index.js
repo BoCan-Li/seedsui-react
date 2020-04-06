@@ -14,8 +14,8 @@ class Demo extends Component {
     value: ''
   }
   
-  onChange = (e, value) => {
-    console.log(e.event)
+  onChange = (e, value, options) => {
+    console.log(e, value, options)
     this.setState({
       value: value
     });

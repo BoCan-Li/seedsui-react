@@ -109,11 +109,47 @@ function PickerDistrict({
       setList(parents)
     }
   }
-  // 点击选项
-  function onClickOption (option) {
-    if (option[childProperty]) {
-      setList(option[childProperty])
+  // 构建选中项
+  function getOptions (lastOption) {
+    let options = Object.clone(tabs)
+    options[options.length - 1] = lastOption
+    return options
+  }
+  function getOptionsStr (options) {
+    let val = [];
+    for (let option of options) {
+      val.push(option[valueProperty])
     }
+    return val.join(split)
+  }
+  // 点击选项
+  function onClickOption (e, option) {
+    if (!option[childProperty] || !option[childProperty].length) {
+      let options = getOptions(option)
+      let optionsStr = getOptionsStr(options)
+      if (submitAttribute && submitAttribute.onClick) {
+        submitAttribute.onClick(e, optionsStr, options)
+      }
+      return;
+    }
+    // 截取tabs
+    let tabLen = tabIndex + 1
+    let spliceTabs = Object.clone(tabs).splice(0, tabLen)
+    // 修改当前选中项
+    spliceTabs[tabIndex] = option;
+    // 补充请选择的空项
+    spliceTabs.push({
+      [parentProperty]: '',
+      [keyProperty]: '',
+      [valueProperty]: '请选择'
+    });
+    console.log(spliceTabs)
+
+    setTabs(spliceTabs)
+    setTabIndex(tabLen)
+    
+    // 设置下级list
+    setList(option[childProperty])
   }
   return createPortal(
     <div
@@ -138,7 +174,7 @@ function PickerDistrict({
         </div>
         <div className="picker-district-body">
           {list && list.map((item, index) => {
-            return <div key={index} onClick={() => onClickOption(item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
+            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
               <div className="picker-district-option-caption">{item[valueProperty]}</div>
             </div>
