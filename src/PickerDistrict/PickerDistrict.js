@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 import treeData from './instance.data.js';
-let flattenData = []
 
 function PickerDistrict({
     portal,
@@ -15,7 +14,7 @@ function PickerDistrict({
     },
     split = '-',
 
-    type = 'district', // district | city
+    type = '', // province | city | district | street
     show,
     value, // '北京-东城区'
     valueForKey, // '110000-110101'
@@ -25,9 +24,10 @@ function PickerDistrict({
     cancelAttribute = {},
     ...others
 }) {
+  // 声明ref
+  const refList = useRef(null);
   // context
   const context = useContext(Context) || {};
-  // 全局配置变量
   let parentProperty = dataFormat.parentName || 'parentid';
   let keyProperty = dataFormat.keyName || 'key';
   let valueProperty = dataFormat.valueName || 'value';
@@ -36,6 +36,17 @@ function PickerDistrict({
   let [tabs, setTabs] = useState([])
   let [tabIndex, setTabIndex] = useState(0)
   let [list, setList] = useState([])
+  // 设置列表, 如果类型为省时, 则不显示直辖市, 类型为市时, 则不显示直辖市的区
+  function isLeaf () { // 判断点击的是否是底层
+    if (type === 'province') {
+      if (tabIndex === 0) return true;
+    } else if (type === 'city') {
+      if (tabIndex === 1) return true;
+    } else if (type === 'district') {
+      if (tabIndex === 2) return true;
+    }
+    return false;
+  }
   // 获取父节点下所有的子节点
   function getParentList (parentid) {
     if (!parentid || parentid === '-1') {
@@ -45,17 +56,18 @@ function PickerDistrict({
     return parent[childProperty]
   }
   // 根据key或者name获取tabs, property用于区分是key还是value比较
+  let initTabs = [];
   function getTabs (values, property) {
     if (!values || !values.length) return null
     if (property !== keyProperty || property !== valueProperty) property = valueProperty
     // 如果values是中文, 属性则使用value比较, 如果是其它的
-    var tabs = []
+    initTabs = []
     var levels = 0 // 层级
     function getRow (parentid, list, value) {
       for (let item of list) {
         // 模糊匹配
         if (item[property].indexOf(value) > -1 || value.indexOf(item[property]) > -1) {
-          tabs.push({
+          initTabs.push({
             [parentProperty]: parentid,
             ...item
           })
@@ -70,10 +82,9 @@ function PickerDistrict({
     }
     getRow('', data, values[0])
     // 如果省市区不对,则返回空
-    return tabs
+    return initTabs
   }
   // 初始化tabs
-  let initTabs = [];
   if (valueForKey) {
     initTabs = getTabs(valueForKey.split(split || '-'), keyProperty)
   } else if (value) {
@@ -96,6 +107,17 @@ function PickerDistrict({
     setTabIndex(initTabs.length - 1)
     setList(initList)
   }, [data]);
+
+  // 如果列表发生变化, 则查找选中项
+  useEffect(() => {
+    if (!refList || !refList.current) {
+      return;
+    }
+    let activeEl = refList.current.querySelector('.active')
+    if (activeEl) {
+      refList.current.scrollTop = activeEl.offsetTop - activeEl.clientHeight * 2 - 20;
+    }
+  }, [list]);
 
   // 点击面板
   function onClickPanel (e) {
@@ -122,28 +144,41 @@ function PickerDistrict({
     }
     return val.join(split)
   }
+  // 提交
+  function onSubmit (e, option) {
+    let options = getOptions(option)
+    let optionsStr = getOptionsStr(options)
+    if (submitAttribute && submitAttribute.onClick) {
+      submitAttribute.onClick(e, optionsStr, options)
+    }
+  }
   // 点击选项
   function onClickOption (e, option) {
     if (!option[childProperty] || !option[childProperty].length) {
-      let options = getOptions(option)
-      let optionsStr = getOptionsStr(options)
-      if (submitAttribute && submitAttribute.onClick) {
-        submitAttribute.onClick(e, optionsStr, options)
-      }
+      onSubmit(e, option);
       return;
     }
     // 截取tabs
     let tabLen = tabIndex + 1
     let spliceTabs = Object.clone(tabs).splice(0, tabLen)
+
     // 修改当前选中项
     spliceTabs[tabIndex] = option;
+
+    // 如果设置类型为省市区, 则直接提交
+    if (isLeaf()) {
+      setTabs(spliceTabs)
+      tabs = spliceTabs; // 因为useState是异步的, 直接提交会提交上一次的值
+      onSubmit(e, option);
+      return;
+    }
+
     // 补充请选择的空项
     spliceTabs.push({
       [parentProperty]: '',
       [keyProperty]: '',
       [valueProperty]: '请选择'
     });
-    console.log(spliceTabs)
 
     setTabs(spliceTabs)
     setTabIndex(tabLen)
@@ -172,7 +207,7 @@ function PickerDistrict({
             </div>
           })}
         </div>
-        <div className="picker-district-body">
+        <div className="picker-district-body" ref={refList}>
           {list && list.map((item, index) => {
             return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>

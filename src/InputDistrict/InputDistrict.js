@@ -10,7 +10,7 @@ function InputDistrict({
 
     // Picker
     valueForKey,
-    type = 'district', // 'district' | 'city'
+    type = '', // province | city | district | street
     pickerProps = {
       maskAttribute: {},
       submitAttribute: {}
@@ -37,12 +37,14 @@ function InputDistrict({
   function onClickMask (e) {
     if (pickerProps && pickerProps.maskAttribute && pickerProps.maskAttribute.onClick) {
       pickerProps.maskAttribute.onClick(e);
-      return;
     }
     setShow(!show);
   }
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
+    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
+      pickerProps.submitAttribute.onClick(e);
+    }
     // 赋值
     if (onChange) {
       onChange(e, value, options);
@@ -52,13 +54,19 @@ function InputDistrict({
   }
   // 点击取消按钮
   function onClickCancel (e) {
+    if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
+      pickerProps.cancelAttribute.onClick(e);
+    }
     setShow(!show);
   }
   return <Fragment>
     <InputText
     // ref="$ComponentInputText"
       value={value}
-      {...others} type="text" readOnly onClick={onClickInput}
+      {...others}
+      type="text"
+      readOnly
+      onClick={onClickInput}
     />
     <PickerDistrict
       // ref="$ComponentPicker"

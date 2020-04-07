@@ -11,12 +11,12 @@ class Demo extends Component {
     Bridge.debug = true
   }
   state = {
-    value: ''
+    value: '江苏省-南京市-建邺区'
   }
   
-  onChange = (e, value, options) => {
-    console.log(e, value, options)
-    this.setState({
+  onChange = async (e, value, options) => {
+    console.log(value)
+    await this.setState({
       value: value
     });
   }
@@ -31,7 +31,7 @@ class Demo extends Component {
           onChange={this.onChange}
           placeholder="请选择"
           className="border-b"
-          value="江苏省-南京市-建邺区"
+          value={this.state.value}
           pickerProps={{
             maskAttribute: {
               style: {zIndex: '11'}
