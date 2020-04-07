@@ -2166,6 +2166,28 @@ fail = (e, msg) => {
 ```javascript
 import InputDistrict from 'seedsui-react/lib/InputDistrict';
 
+// 获取街道
+function getStreet (districtId) {
+  return new Promise((resolve) => {
+    Bridge.showLoading();
+    setTimeout(() => {
+      Bridge.hideLoading();
+      resolve([
+        {
+          "parentid": districtId,
+          "value": "街道1",
+          "key": "1",
+        },
+        {
+          "parentid": districtId,
+          "value": "街道2",
+          "key": "2",
+        }
+      ])
+    }, 500);
+  })
+}
+
 state = {
   value: ''
 }
@@ -2183,10 +2205,7 @@ onChange = (e, value) => {
   placeholder="请选择"
   className="border-b"
   pickerProps={{
-    split: ',',
-    maskAttribute: {
-      style: {zIndex: '11'}
-    }
+    getStreet: getStreet
   }}
 />
 ```
@@ -4007,18 +4026,41 @@ import Player from 'seedsui-react/lib/Player';
   data={数据源 array, 默认内置数据源}
   dataFormat={数据源格式化 object, 默认如注释} // {keyName: 'key', valueName: 'value', childName: 'children'}
   split={分隔符 string, 默认'-'}
-  type={类型 string, 默认'district'} // district | city
+  type={类型 string, 默认''} // province | city | district | street
   show={*显隐 bool, 默认false}
   value={值 string, 默认无} // '北京-东城区'
   valueForKey={选中key string, 默认无} // '110000-110101'
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
+  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
 />
 ```
 ### 示例
 ```javascript
 import PickerDistrict from 'seedsui-react/lib/PickerDistrict';
+
+// 获取街道
+function getStreet (districtId) {
+  return new Promise((resolve) => {
+    Bridge.showLoading();
+    setTimeout(() => {
+      Bridge.hideLoading();
+      resolve([
+        {
+          "parentid": districtId,
+          "value": "街道1",
+          "key": "1",
+        },
+        {
+          "parentid": districtId,
+          "value": "街道2",
+          "key": "2",
+        }
+      ])
+    }, 500);
+  })
+}
 
 onClickSubmit = (e, value) => {
   console.log(value);
@@ -4049,6 +4091,7 @@ onClickMask = () => {
   maskAttribute={{
     onClick: this.onClickMask
   }}
+  getStreet={getStreet}
 />
 ```
 [返回目录](#component)
