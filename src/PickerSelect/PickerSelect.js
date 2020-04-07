@@ -75,6 +75,17 @@ export default class PickerSelect extends Component {
       return [];
     }
   }
+  // 构建值
+  buildValue = (options) => {
+    if (!this.props.multiple) return options[0].value;
+    const value = options.map((item) => {
+      return item.value;
+    });
+    const {
+      pickerProps =  {}
+    } = this.props;
+    return value.join(pickerProps.split || ',');
+  }
   // 点击遮罩
   onClick = (e) => {
     const {
@@ -93,7 +104,9 @@ export default class PickerSelect extends Component {
       if (!multiple && submitAttribute.onClick) {
         e.activeOptions = [list[index]];
         e.activeIndex = [Number(index)];
-        submitAttribute.onClick(e);
+        const value = this.buildValue(e.activeOptions);
+        const options = e.activeOptions;
+        submitAttribute.onClick(e, value, options);
       } else {
         e.target.classList.toggle('active');
       }
@@ -107,7 +120,9 @@ export default class PickerSelect extends Component {
       });
       e.activeOptions = selected;
       e.activeIndex = selectedIndex;
-      if (submitAttribute.onClick) submitAttribute.onClick(e);
+      const value = this.buildValue(e.activeOptions);
+      const options = e.activeOptions;
+      if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
     } else if (e.target.classList.contains('picker-cancel')) { // 点击取消按钮
       if (cancelAttribute.onClick) cancelAttribute.onClick(e);
     }

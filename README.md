@@ -123,9 +123,10 @@ import Chat from 'seedsui-react/lib/Chat';
 - [ImgLazy](#imglazy) 懒人加载
 - [IndexBar](#imguploader) 侧边索引栏
 - [InputArea](#inputarea) 多行文本框
-- [InputCity](#inputcity) 城市选择
+- [InputCity](#inputcity) 城市选择(即将废弃, 使用InputDistrict代替)
 - [InputColor](#inputcolor) 颜色选择框
 - [InputDate](#inputdate) 日期选择
+- [InputDistrict](#inputdistrict) 区域选择
 - [InputLocation](#inputlocation) 定位
 - [InputNumber](#inputnumber) 数字输入框
 - [InputPassword](#inputpassword) 密码框
@@ -155,8 +156,9 @@ import Chat from 'seedsui-react/lib/Chat';
 - [PagePull](#pagepull) 可推动页面
 - [Peg](#peg) 小竖条
 - [Picker](#picker) 滚动选择弹框
-- [PickerCity](#pickercity) 城市选择弹框
+- [PickerCity](#pickercity) 城市选择弹框(即将废弃, 使用PickerDistrict代替)
 - [PickerDate](#pickerdate) 日期选择弹框
+- [PickerDistrict](#pickerdistrict) 区域选择弹框
 - [Player](#player) 视频播放器
 - [Popover](#popover) 箭头弹框
 - [Progress](#progress) 进度条
@@ -2040,9 +2042,35 @@ onChange = (e, value) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## InputColor
 [颜色选择框](https://unpkg.com/seedsui-react/src/lib/InputColor/InputColor.js)
 , 其它属性用法与[InputText 文本框](#inputtext) 组件一致
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## InputDate
 [日期选择框](https://unpkg.com/seedsui-react/src/lib/InputDate/InputDate.js)
@@ -2102,6 +2130,70 @@ fail = (e, msg) => {
   }}
 />
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## InputDistrict
+[区域选择框](https://unpkg.com/seedsui-react/src/lib/InputDistrict/InputDistrict.js)
+, 其它属性用法与[InputText 文本框](#inputtext) 组件一致, 基于[PickerDistrict 区域选择弹框](#pickerdistrict)组件
+### 属性
+```javascript
+<InputDistrict
+  // Input
+  onClick={点击文本框 func(e, value), 默认无}
+  onChange={值改变 func(e, value, option), 默认无}
+
+  // Picker
+  valueForKey={选中key用split分割 string, 默认无}
+  type={城市类型 string, 默认''} // province | city | district | street
+  pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
+
+  {...others} // InputText组件
+/>
+```
+### 示例
+```javascript
+import InputDistrict from 'seedsui-react/lib/InputDistrict';
+
+state = {
+  value: ''
+}
+
+onChange = (e, value) => {
+  console.log(e.event)
+  this.setState({
+    value: value
+  });
+}
+
+<InputDistrict
+  value={this.state.value}
+  onChange={this.onChange}
+  placeholder="请选择"
+  className="border-b"
+  pickerProps={{
+    split: ',',
+    maskAttribute: {
+      style: {zIndex: '11'}
+    }
+  }}
+/>
+```
+[返回目录](#component)
+
+
+
 
 
 
@@ -2182,7 +2274,7 @@ onChange = (e, value) => {
 ```javascript
 import InputPicker from 'seedsui-react/lib/InputPicker';
 
-this.state = {
+state = {
   value: '333',
   list: [
     {
@@ -3690,8 +3782,7 @@ this.state = {
   pickerList: []
 }
 
-onClickSubmit = (e) => {
-  const value = e.activeOptions[0].value;
+onClickSubmit = (e, value) => {
   console.log(value);
   this.hidePicker();
 }
@@ -3735,6 +3826,11 @@ onClick = () => {
 
 
 
+
+
+
+
+
 ## PickerCity
 [城市选择弹框](https://unpkg.com/seedsui-react/src/lib/PickerCity/PickerCity.js)
 , 基于[Picker 滚动选择弹框](#picker)组件
@@ -3758,8 +3854,7 @@ onClick = () => {
 ```javascript
 import PickerCity from 'seedsui-react/lib/PickerCity';
 
-onClickSubmit = (e) => {
-  const value = e.activeOptions[0].value;
+onClickSubmit = (e, value) => {
   console.log(value);
   this.setState({
     show: !this.state.show
@@ -3794,6 +3889,15 @@ onClickMask = () => {
 
 
 
+
+
+
+
+
+
+
+
+
 ## PickerDate
 [日期选择弹框](https://unpkg.com/seedsui-react/src/lib/PickerDate/PickerDate.js)
 , 基于[Picker 滚动选择弹框](#picker)组件
@@ -3818,8 +3922,7 @@ onClickMask = () => {
 ```javascript
 import PickerDate from 'seedsui-react/lib/PickerDate';
 
-onClickSubmit = (e) => {
-  const value = e.activeOptions[0].value;
+onClickSubmit = (e, value) => {
   console.log(value);
   this.setState({
     show: !this.state.show
@@ -3882,6 +3985,80 @@ import Player from 'seedsui-react/lib/Player';
 </Player>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+## PickerDistrict
+[区域选择弹框](https://unpkg.com/seedsui-react/src/lib/PickerDistrict/PickerDistrict.js)
+### 属性
+```javascript
+<PickerDistrict
+  portal={传送dom object, 默认document.getElementById('root')}
+  data={数据源 array, 默认内置数据源}
+  dataFormat={数据源格式化 object, 默认如注释} // {keyName: 'key', valueName: 'value', childName: 'children'}
+  split={分隔符 string, 默认'-'}
+  type={类型 string, 默认'district'} // district | city
+  show={*显隐 bool, 默认false}
+  value={值 string, 默认无} // '北京-东城区'
+  valueForKey={选中key string, 默认无} // '110000-110101'
+  maskAttribute={遮罩属性 object, 默认无}
+  submitAttribute={确定按钮属性 object, 默认无}
+  cancelAttribute={取消按钮属性 object, 默认无}
+/>
+```
+### 示例
+```javascript
+import PickerDistrict from 'seedsui-react/lib/PickerDistrict';
+
+onClickSubmit = (e, value) => {
+  console.log(value);
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickCancel = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+onClickMask = () => {
+  this.setState({
+    show: !this.state.show
+  });
+}
+
+<PickerDistrict
+  value=""
+  show={this.state.show}
+  submitAttribute={{
+    onClick: this.onClickSubmit
+  }}
+  cancelAttribute={{
+    onClick: this.onClickCancel
+  }}
+  maskAttribute={{
+    onClick: this.onClickMask
+  }}
+/>
+```
+[返回目录](#component)
+
+
+
+
+
+
+
 
 
 
@@ -4352,8 +4529,7 @@ searchGoods = (value) => {
 ```javascript
 import PickerSelect from 'seedsui-react/lib/PickerSelect';
 
-onClickSubmit = (e) => {
-  const value = e.activeOptions[0].value;
+onClickSubmit = (e, value) => {
   console.log(value);
   this.setState({
     show: !this.state.show

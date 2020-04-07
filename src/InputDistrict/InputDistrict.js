@@ -43,7 +43,7 @@ function InputDistrict({
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      pickerProps.submitAttribute.onClick(e);
+      pickerProps.submitAttribute.onClick(e, value, options);
     }
     // 赋值
     if (onChange) {

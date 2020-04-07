@@ -237,7 +237,9 @@ export default class PickerDate extends Component {
         if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        if (submitAttribute.onClick) submitAttribute.onClick(e);
+        const value = e.activeText;
+        const options = e.activeOptions;
+        if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
       },
       onHid: (e) => {
       },

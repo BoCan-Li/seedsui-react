@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 import treeData from './instance.data.js';
+let streets = [] // 街道临时存储
 
 function PickerDistrict({
     portal,
@@ -22,6 +23,9 @@ function PickerDistrict({
     maskAttribute = {},
     submitAttribute = {},
     cancelAttribute = {},
+
+    // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
+    getStreet,
     ...others
 }) {
   // 声明ref
@@ -32,6 +36,7 @@ function PickerDistrict({
   let keyProperty = dataFormat.keyName || 'key';
   let valueProperty = dataFormat.valueName || 'value';
   let childProperty = dataFormat.childName || 'children';
+  
   // 页签和列表
   let [tabs, setTabs] = useState([])
   let [tabIndex, setTabIndex] = useState(0)
@@ -48,7 +53,7 @@ function PickerDistrict({
     return false;
   }
   // 获取父节点下所有的子节点
-  function getParentList (parentid) {
+  function getParentChildren (parentid) {
     if (!parentid || parentid === '-1') {
       return data;
     }
@@ -60,7 +65,6 @@ function PickerDistrict({
   function getTabs (values, property) {
     if (!values || !values.length) return null
     if (property !== keyProperty || property !== valueProperty) property = valueProperty
-    // 如果values是中文, 属性则使用value比较, 如果是其它的
     initTabs = []
     var levels = 0 // 层级
     function getRow (parentid, list, value) {
@@ -74,7 +78,7 @@ function PickerDistrict({
           const children = item[childProperty];
           // 下一层级
           levels++
-          if (values[levels]) {
+          if (values[levels] && children) {
             getRow(item[keyProperty], children, values[levels])
           }
         }
@@ -84,25 +88,27 @@ function PickerDistrict({
     // 如果省市区不对,则返回空
     return initTabs
   }
-  // 初始化tabs
-  if (valueForKey) {
-    initTabs = getTabs(valueForKey.split(split || '-'), keyProperty)
-  } else if (value) {
-    initTabs = getTabs(value.split(split || '-'), valueProperty)
-  }
-  if (initTabs && initTabs.length) {
-    initTabs[initTabs.length - 1][valueProperty] = '请选择'
-  } else {
-    initTabs[initTabs.length - 1] = {
-      [parentProperty]: '',
-      [keyProperty]: '',
-      [valueProperty]: '请选择'
-    }
-  }
-  // 初始化列表
-  let initList = getParentList(initTabs[initTabs.length - 1][parentProperty] || '')
 
+  // 数据初始化
   useEffect(() => {
+    console.log('地区初始化')
+    // 初始化tabs
+    if (valueForKey) {
+      initTabs = getTabs(valueForKey.split(split || '-'), keyProperty)
+    } else if (value) {
+      initTabs = getTabs(value.split(split || '-'), valueProperty)
+    }
+    if (initTabs && initTabs.length) {
+      initTabs[initTabs.length - 1][valueProperty] = '请选择'
+    } else {
+      initTabs[0] = {
+        [parentProperty]: '',
+        [keyProperty]: '',
+        [valueProperty]: '请选择'
+      }
+    }
+    // 初始化列表
+    let initList = getParentChildren(initTabs[initTabs.length - 1][parentProperty] || '')
     setTabs(initTabs)
     setTabIndex(initTabs.length - 1)
     setList(initList)
@@ -125,10 +131,17 @@ function PickerDistrict({
   }
   // 点击tab
   function onClickTab (tab, index) {
-    let parents = getParentList(tab[parentProperty])
-    if (parents) {
+    // 点击街道
+    if (tab.isStreet && streets && streets.length) {
       setTabIndex(index)
-      setList(parents)
+      setList(streets)
+      return
+    }
+    // 点击非街道
+    let children = getParentChildren(tab[parentProperty])
+    if (children) {
+      setTabIndex(index)
+      setList(children)
     }
   }
   // 构建选中项
@@ -153,11 +166,7 @@ function PickerDistrict({
     }
   }
   // 点击选项
-  function onClickOption (e, option) {
-    if (!option[childProperty] || !option[childProperty].length) {
-      onSubmit(e, option);
-      return;
-    }
+  async function onClickOption (e, option) {
     // 截取tabs
     let tabLen = tabIndex + 1
     let spliceTabs = Object.clone(tabs).splice(0, tabLen)
@@ -169,6 +178,39 @@ function PickerDistrict({
     if (isLeaf()) {
       setTabs(spliceTabs)
       tabs = spliceTabs; // 因为useState是异步的, 直接提交会提交上一次的值
+      onSubmit(e, option);
+      return;
+    }
+
+    // 没有children, 并且有街道请求, 则获取街道
+    if (!option[childProperty] || !option[childProperty].length) {
+      if (!option.isStreet && getStreet) {
+        streets = await getStreet(option[keyProperty])
+        // 返回街道为空直接提交
+        if (!streets || !streets.length) {
+          setTabs(spliceTabs)
+          onSubmit(e, option);
+          return
+        }
+        // 增加街道标识
+        streets = (streets || []).map((street) => {
+          street.isStreet = true
+          return street
+        })
+        setList(streets)
+        // 设置tabs
+        // spliceTabs[spliceTabs.length - 1][valueProperty] = option[valueProperty]
+        spliceTabs.push({
+          [parentProperty]: option[keyProperty],
+          [keyProperty]: '',
+          [valueProperty]: '请选择'
+        })
+        setTabs(spliceTabs)
+        setTabIndex(spliceTabs.length - 1)
+        return
+      }
+      // 街道直接提交
+      setTabs(spliceTabs)
       onSubmit(e, option);
       return;
     }

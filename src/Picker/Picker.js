@@ -109,7 +109,9 @@ export default class Picker extends Component {
         if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        if (submitAttribute.onClick) submitAttribute.onClick(e);
+        const value = e.activeOptions[0].value;
+        const options = e.activeOptions;
+        if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
       },
       onHid: (e) => {
       }

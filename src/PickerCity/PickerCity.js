@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {createPortal} from 'react-dom';
-import data from './instance.data.js';
+import data from './../PickerDistrict/instance.data.js';
 import Instance from './instance.js';
 import Context from '../Context/instance.js';
 
@@ -127,7 +127,9 @@ export default class PickerCity extends Component {
         if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        if (submitAttribute.onClick) submitAttribute.onClick(e);
+        const value = e.activeText;
+        const options = e.activeOptions;
+        if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
       },
       onHid: (e) => {
       }

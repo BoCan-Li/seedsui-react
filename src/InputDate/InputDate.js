@@ -139,16 +139,14 @@ export default class InputDate extends Component {
     });
   }
   // 点击确定按钮
-  onClickSubmit = (e) => {
+  onClickSubmit = (e, value, options) => {
     const {
       onChange,
       pickerProps = {}
     } = this.props;
     // 获取值
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
-    const value = this.correctDate(e.activeText); // 如果发生错误的话, 将返回false
-    if (value === false) return;
-    const options = e.activeOptions;
+    value = this.correctDate(value); // 如果发生错误的话, 将返回false
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
       e.target = this.$input;

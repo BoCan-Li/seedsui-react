@@ -1,7 +1,30 @@
 import React, {Component} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, InputDistrict} from '../../src';
+import {Page, Header, Titlebar, Container, Bridge, InputDistrict, ApiAxios} from '../../src';
+
+// 获取街道
+function getStreet (districtId) {
+  return new Promise((resolve) => {
+    Bridge.showLoading();
+    setTimeout(() => {
+      Bridge.hideLoading();
+      resolve([])
+      // resolve([
+      //   {
+      //     "parentid": districtId,
+      //     "value": "街道1",
+      //     "key": "1",
+      //   },
+      //   {
+      //     "parentid": districtId,
+      //     "value": "街道2",
+      //     "key": "2",
+      //   }
+      // ])
+    }, 500);
+  })
+}
 
 class Demo extends Component {
   constructor(props){
@@ -11,7 +34,7 @@ class Demo extends Component {
     Bridge.debug = true
   }
   state = {
-    value: '江苏省-南京市-建邺区'
+    value: ''
   }
   
   onChange = async (e, value, options) => {
@@ -28,14 +51,13 @@ class Demo extends Component {
       <Container>
         <InputDistrict
           value={this.state.value}
+          // type="district"
           onChange={this.onChange}
           placeholder="请选择"
           className="border-b"
           value={this.state.value}
           pickerProps={{
-            maskAttribute: {
-              style: {zIndex: '11'}
-            }
+            getStreet: getStreet
           }}
         />
       </Container>

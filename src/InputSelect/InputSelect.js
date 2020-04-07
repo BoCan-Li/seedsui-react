@@ -36,17 +36,6 @@ export default class InputSelect extends Component {
     }
     this.$picker = this.refs.$ComponentPicker;
   }
-  // 构建值
-  buildValue = (options) => {
-    if (!this.props.multiple) return options[0].value;
-    const value = options.map((item) => {
-      return item.value;
-    });
-    const {
-      pickerProps =  {}
-    } = this.props;
-    return value.join(pickerProps.split || ',');
-  }
   // 点击文本框
   onClickInput = (...parameter) => {
     const {
@@ -76,15 +65,13 @@ export default class InputSelect extends Component {
     });
   }
   // 点击确定按钮
-  onClickSubmit = (e) => {
+  onClickSubmit = (e, value, options) => {
     const {
       onChange,
       pickerProps = {}
     } = this.props;
     // 获取值
     if (!this.$input) this.$input = this.refs.$ComponentInputText.$input;
-    const value = this.buildValue(e.activeOptions);
-    const options = e.activeOptions;
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
       e.target = this.$input;
