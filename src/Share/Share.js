@@ -18,9 +18,11 @@ function Share({
   ...others
 }) {
   if (Bridge.platform !== 'wework' && Bridge.platform !== 'wechat' && Bridge.platform !== 'wq' && Bridge.platform !== 'dinghuo' && Bridge.platform !== 'waiqin') {
+    console.log('Share: 此平台无法使用分享功能')
     return null;
   }
   if (!config || !config.link) {
+    console.log('Share: 没有设置config')
     return null;
   }
   // 定义state

@@ -4474,7 +4474,16 @@ onClick = (e, checked) => {
 import Share from 'seedsui-react/lib/Share';
 
 
-<Share className="button lg primary"/>
+<Share
+  config={{
+    title: '标题', // 分享标题
+    desc: '副标题', // 分享描述
+    link: 'https://www.waiqin365.com/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl: 'https://www.waiqin365.com/p/v3/assets/LOGO2.png', // 分享图标
+  }}
+  className="button lg primary">
+  分享
+</Share>
 ```
 [返回目录](#component)
 
