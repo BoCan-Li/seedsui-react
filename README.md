@@ -4033,7 +4033,7 @@ import Player from 'seedsui-react/lib/Player';
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
-  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
+  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象, resolve([key: "", value: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则停留在选择页面不进行选择操作
 />
 ```
 ### 示例

@@ -9,19 +9,20 @@ function getStreet (districtId) {
     Bridge.showLoading();
     setTimeout(() => {
       Bridge.hideLoading();
-      resolve([])
-      // resolve([
-      //   {
-      //     "parentid": districtId,
-      //     "value": "街道1",
-      //     "key": "1",
-      //   },
-      //   {
-      //     "parentid": districtId,
-      //     "value": "街道2",
-      //     "key": "2",
-      //   }
-      // ])
+      resolve([
+        {
+          "parentid": districtId,
+          "value": "街道1",
+          "key": "1",
+        },
+        {
+          "parentid": districtId,
+          "value": "街道2",
+          "key": "2",
+        }
+      ])
+      // resolve([])
+      // resolve('错误')
     }, 500);
   })
 }

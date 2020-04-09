@@ -186,10 +186,14 @@ function PickerDistrict({
     if (!option[childProperty] || !option[childProperty].length) {
       if (!option.isStreet && getStreet) {
         streets = await getStreet(option[keyProperty])
+        // 如果返回不是数组, 则认为返回错误
+        if (streets instanceof Array === false) {
+          return
+        }
         // 返回街道为空直接提交
         if (!streets || !streets.length) {
           setTabs(spliceTabs)
-          onSubmit(e, option);
+          onSubmit(e, option)
           return
         }
         // 增加街道标识
