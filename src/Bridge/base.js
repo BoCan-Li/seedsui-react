@@ -77,9 +77,7 @@ var Bridge = {
   },
   hideLoading: function () {
     var self = this
-    if (!self.loading) {
-      self.toast.showToast(locale('hint_hideloading_after_showloading') || 'showLoading后才能hideLoading')
-    } else {
+    if (self.loading) {
       self.loading.hide()
     }
   },
