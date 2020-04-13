@@ -35,7 +35,7 @@ class Demo extends Component {
     Bridge.debug = true
   }
   state = {
-    value: ''
+    value: '广东-揭阳'
   }
   
   onChange = async (e, value, options) => {
@@ -57,9 +57,9 @@ class Demo extends Component {
           placeholder="请选择"
           className="border-b"
           value={this.state.value}
-          pickerProps={{
-            getStreet: getStreet
-          }}
+          // pickerProps={{
+          //   getStreet: getStreet
+          // }}
         />
       </Container>
     </Page>

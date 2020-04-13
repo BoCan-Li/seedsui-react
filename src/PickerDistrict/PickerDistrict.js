@@ -174,10 +174,12 @@ function PickerDistrict({
     // 修改当前选中项
     spliceTabs[tabIndex] = option;
 
+    // 因为useState是异步的, 直接提交会提交上一次的值
+    tabs = spliceTabs;
+
     // 如果设置类型为省市区, 则直接提交
     if (isLeaf()) {
       setTabs(spliceTabs)
-      tabs = spliceTabs; // 因为useState是异步的, 直接提交会提交上一次的值
       onSubmit(e, option);
       return;
     }
