@@ -124,21 +124,28 @@ export default class InputLocation extends Component {
     const {
       status
     } = this.state;
+    // 计算class, 防止重要class被覆盖
+    let inputClassName = (others.inputAttribute || {}).className || '';
+    let riconClassName = (others.riconAttribute || {}).className || '';
+    if (!riconClassName) {
+      riconClassName = 'input-location-icon size24'
+    }
+    // 加载和错误面板, 显示这些面板时将会隐藏文本框, 样式必须与文本框一致
     let statusDOM = null;
     if (status === '-1') {
-      statusDOM = <div className="input-text input-location">{locationingValue}</div>
+      statusDOM = <div className={`input-text ${inputClassName} input-location`} style={(others.inputAttribute || {}).style || ''}>{locationingValue}</div>
     } else if (status === '0') {
-      statusDOM = <div className="input-text input-location-error">{failedValue}</div>;
+      statusDOM = <div className={`input-text ${inputClassName} input-location-error`} style={(others.inputAttribute || {}).style || ''}>{failedValue}</div>;
     }
     return <InputText
       ref="$ComponentInputText"
-      riconAttribute={{className: `input-location-icon size24${status === '-1' ? ' input-location-icon-active' : ''}`}}
-      inputAttribute={{className: statusDOM ? 'hide-important' : ''}} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
       readOnly={readOnly}
       onClick={this.onClick}
       onChange={onChange}
       children={statusDOM}
       {...others}
+      riconAttribute={Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
+      inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important ' + inputClassName : inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
     />;
   }
 }
