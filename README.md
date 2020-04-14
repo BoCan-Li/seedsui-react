@@ -3063,7 +3063,7 @@ onSubmit = () => {
   list={列表 array, 默认无, 示例如下:}
   // [{
   //   container: node,
-  //   lButtons: [{value: '按钮文字', className: 'warn', style: object}],
+  //   lButtons: [{value: '按钮文字', className: 'warn', style: object}], // className默认
   //   rButtons: 同lButtons
   // }]
   style={容器style object, 默认无}

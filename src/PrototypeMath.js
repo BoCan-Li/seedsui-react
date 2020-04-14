@@ -111,7 +111,7 @@ Math.Calc = (function () {
   }
   // 矫正数字, 常用于输入过程中矫正, 可以为空串, valid为true时将校验为合法的数字: 001将转成1返回
   function correctNumber (argNumstr, options) {
-    const {max, min, digits, maxLength, required, fail, valid = true} = options
+    const {max, min, digits, maxLength, required, fail, valid = true} = (options || {})
     if (argNumstr === '' || isNaN(argNumstr) || min - max >= 0) {
       // 非空校验
       if (required) return min ? '' + min : '0'
