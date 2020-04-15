@@ -392,10 +392,39 @@ var Bridge = {
   getLocation: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
-      setTimeout(() => {
-        if (params.fail) params.fail({errMsg: `getLocation:${locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用'}`})
-      }, 1000)
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            var res = {errMsg: 'getLocation:ok', longitude: position.coords.longitude, latitude: position.coords.latitude, speed:'0.0', accuracy:'3.0.0'}
+            if (params.success) params.success(res)
+          },
+          (error) => {
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_PERMISSION_DENIED') || '定位失败,用户拒绝请求地理定位'}`})
+                break;
+              case error.POSITION_UNAVAILABLE:
+                if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_POSITION_UNAVAILABLE') || '定位失败,位置信息是不可用'}`})
+                break;
+              case error.TIMEOUT:
+                if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_TIMEOUT') || '定位失败,请求获取用户位置超时'}`})
+                break;
+              case error.UNKNOWN_ERROR:
+                if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_UNKNOWN_ERROR') || '定位失败,定位系统失效'}`})
+                break;
+              default:
+                if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed') || '定位失败'}`})
+            }
+          },
+          {
+            enableHighAcuracy: true, // 指示浏览器获取高精度的位置，默认为false  
+            timeout: 5000, // 指定获取地理位置的超时时间，默认不限时，单位为毫秒  
+            maximumAge: 2000 // 最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置。  
+          }
+        )
+      } else {
+        if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_not_supported') || '当前浏览器不支持定位'}`})
+      }
       return
     }
     // 先从cookie中读取位置信息
@@ -419,7 +448,7 @@ var Bridge = {
     console.log('调用定位...')
     setTimeout(() => {
       self.locating = false
-      var res = {longitude:'118.7347', latitude:'31.98114', speed:'0.0', accuracy:'3.0.0'}
+      var res = {errMsg: 'getLocation:ok', longitude:'118.7347', latitude:'31.98114', speed:'0.0', accuracy:'3.0.0'}
       // 将位置信息存储到cookie中60秒
       if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
       if (params.success) params.success(res)
