@@ -1,57 +1,35 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useState, useEffect, forwardRef } from 'react';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 import Context from '../Context/instance.js';
 
-export default class InputLocation extends Component {
-  static contextType = Context;
-  static propTypes = {
-    locationingValue: PropTypes.string,
-    failedValue: PropTypes.string,
-    readOnly: PropTypes.bool,
-    onClick: PropTypes.func,
-    onChange: PropTypes.func
+// 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
+const InputLocation = forwardRef(({
+  loadingValue,
+  failedValue,
+  readOnly = true,
+  onClick,
+  onChange,
+  ...others
+}, ref) =>  {
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+  if (!loadingValue || typeof loadingValue !== 'string') {
+    loadingValue = locale['location'] || '定位中...';
   }
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      status: '1'
-    }
+  if (!failedValue || typeof failedValue !== 'string') {
+    failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
   }
-  componentDidMount () {
-    this.$el = null;
-    this.$input = null;
-    if (this.refs.$ComponentInputText && this.refs.$ComponentInputText.$el && this.refs.$ComponentInputText.$input) {
-      this.$el = this.refs.$ComponentInputText.$el;
-      this.$input = this.refs.$ComponentInputText.$input;
-      this.$ComponentInputText = this.refs.$ComponentInputText;
-    }
-  }
-  onClick = (event, value) => {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    const {
-      readOnly = true,
-      onChange,
-      onClick
-    } = this.props;
+
+  const [status, setStatus] = useState('1') // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
+  function click (event, value) {
     // 正在定位不允许操作
-    const {
-      status
-    } = this.state;
     if (status === '-1') {
       return;
     }
-
     // 非只读状态下, 点击错误面板, 允许手动输入位置
     if (!readOnly && status === '0') {
-      this.setState({
-        status: '1'
-      })
+      setStatus('1');
       return;
     }
 
@@ -62,9 +40,7 @@ export default class InputLocation extends Component {
       return;
     }
     // 定位中...
-    this.setState({
-      status: '-1'
-    })
+    setStatus('-1')
     Bridge.getLocation({
       type: 'gcj02',
       success: async (data) => {
@@ -73,9 +49,7 @@ export default class InputLocation extends Component {
           // 赋值
           if (onChange) {
             onChange(e, data.address, data);
-            this.setState({
-              status: '1'
-            })
+            setStatus('1')
           }
           return;
         }
@@ -86,66 +60,44 @@ export default class InputLocation extends Component {
         const address = result && result.address ? result.address : ''
         if (onChange) onChange(e, address, result);
         if (address) {
-          this.setState({
-            status: '1'
-          })
+          setStatus('1')
         } else {
-          this.setState({
-            status: '0'
-          })
+          setStatus('0')
         }
       },
       fail: (res) => {
         // 赋值
         if (onChange) onChange(e, '', null)
-        this.setState({
-          status: '0'
-        })
+        setStatus('0')
         // 提示定位失败
         // Bridge.showToast(res.errMsg, {mask: false});
       }
     });
   }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    const {
-      locationingValue = locale['location'] || '定位中...',
-      failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启',
-      readOnly = true,
-      onClick,
-      onChange,
-      ...others
-    } = this.props;
-    // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
-    const {
-      status
-    } = this.state;
-    // 计算class, 防止重要class被覆盖
-    let inputClassName = (others.inputAttribute || {}).className || '';
-    let riconClassName = (others.riconAttribute || {}).className || '';
-    if (!riconClassName) {
-      riconClassName = 'input-location-icon size24'
-    }
-    // 加载和错误面板, 显示这些面板时将会隐藏文本框, 样式必须与文本框一致
-    let statusDOM = null;
-    if (status === '-1') {
-      statusDOM = <div className={`input-text ${inputClassName} input-location`} style={(others.inputAttribute || {}).style || ''}>{locationingValue}</div>
-    } else if (status === '0') {
-      statusDOM = <div className={`input-text ${inputClassName} input-location-error`} style={(others.inputAttribute || {}).style || ''}>{failedValue}</div>;
-    }
-    return <InputText
-      ref="$ComponentInputText"
-      readOnly={readOnly}
-      onClick={this.onClick}
-      onChange={onChange}
-      children={statusDOM}
-      {...others}
-      riconAttribute={Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
-      inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important ' + inputClassName : inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
-    />;
+
+  // 计算class, 防止重要class被覆盖
+  let inputClassName = (others.inputAttribute || {}).className || '';
+  let riconClassName = (others.riconAttribute || {}).className || '';
+  if (!riconClassName) {
+    riconClassName = 'input-location-icon size24'
   }
-}
+  // 加载和错误面板, 显示这些面板时将会隐藏文本框, 样式必须与文本框一致
+  let statusDOM = null;
+  if (status === '-1') {
+    statusDOM = <div className={`input-text ${inputClassName} input-location`} style={(others.inputAttribute || {}).style || {}}>{loadingValue}</div>
+  } else if (status === '0') {
+    statusDOM = <div className={`input-text ${inputClassName} input-location-error`} style={(others.inputAttribute || {}).style || {}}>{failedValue}</div>;
+  }
+  return <InputText
+    ref={ref}
+    readOnly={readOnly}
+    onClick={click}
+    onChange={onChange}
+    children={statusDOM}
+    {...others}
+    riconAttribute={Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
+    inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important ' + inputClassName : inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
+  />;
+})
+
+export default InputLocation

@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef, forwardRef } from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 import treeData from './instance.data.js';
 let streets = [] // 街道临时存储
 
-function PickerDistrict({
+const PickerDistrict = forwardRef(({
     portal,
     data = treeData,
     dataFormat = {
@@ -27,9 +27,9 @@ function PickerDistrict({
     // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
     getStreet,
     ...others
-}) {
+}, ref) => {
   // 声明ref
-  const refList = useRef(null);
+  const refElBody = useRef(null);
   // context
   const context = useContext(Context) || {};
   let parentProperty = dataFormat.parentName || 'parentid';
@@ -116,12 +116,12 @@ function PickerDistrict({
 
   // 如果列表发生变化, 则查找选中项
   useEffect(() => {
-    if (!refList || !refList.current) {
+    if (!refElBody || !refElBody.current) {
       return;
     }
-    let activeEl = refList.current.querySelector('.active')
+    let activeEl = refElBody.current.querySelector('.active')
     if (activeEl) {
-      refList.current.scrollTop = activeEl.offsetTop - activeEl.clientHeight * 2 - 20;
+      refElBody.current.scrollTop = activeEl.offsetTop - activeEl.clientHeight * 2 - 20;
     }
   }, [list]);
 
@@ -236,6 +236,7 @@ function PickerDistrict({
   }
   return createPortal(
     <div
+      ref={ref}
       {...maskAttribute}
       className={`mask picker-district-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
     >
@@ -255,7 +256,7 @@ function PickerDistrict({
             </div>
           })}
         </div>
-        <div className="picker-district-body" ref={refList}>
+        <div className="picker-district-body" ref={refElBody}>
           {list && list.map((item, index) => {
             return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
@@ -267,6 +268,6 @@ function PickerDistrict({
     </div>,
     portal || context.portal || document.getElementById('root') || document.body
   );
-}
+})
 
 export default PickerDistrict;

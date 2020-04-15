@@ -393,26 +393,36 @@ var Bridge = {
     var self = this
     if (!self.debug) {
       if (navigator.geolocation){
+        // 调用定位
+        if (self.locating) return
+        self.locating = true
+        console.log('调用定位...')
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            self.locating = false
             var res = {errMsg: 'getLocation:ok', longitude: position.coords.longitude, latitude: position.coords.latitude, speed:'0.0', accuracy:'3.0.0'}
             if (params.success) params.success(res)
           },
           (error) => {
+            self.locating = false
             switch(error.code) {
               case error.PERMISSION_DENIED:
                 if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_PERMISSION_DENIED') || '定位失败,用户拒绝请求地理定位'}`})
                 break;
               case error.POSITION_UNAVAILABLE:
+                console.log(`${locale('hint_location_failed_POSITION_UNAVAILABLE') || '定位失败,位置信息是不可用'}`)
                 if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_POSITION_UNAVAILABLE') || '定位失败,位置信息是不可用'}`})
                 break;
               case error.TIMEOUT:
+                console.log(`${locale('hint_location_failed_TIMEOUT') || '定位失败,位置信息是不可用'}`)
                 if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_TIMEOUT') || '定位失败,请求获取用户位置超时'}`})
                 break;
               case error.UNKNOWN_ERROR:
+                console.log(`${locale('hint_location_failed_UNKNOWN_ERROR') || '定位失败,位置信息是不可用'}`)
                 if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_UNKNOWN_ERROR') || '定位失败,定位系统失效'}`})
                 break;
               default:
+                console.log(`${locale('hint_location_failed') || '定位失败'}`)
                 if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed') || '定位失败'}`})
             }
           },
@@ -423,6 +433,7 @@ var Bridge = {
           }
         )
       } else {
+        console.log(`${locale('hint_location_failed_not_supported') || '当前浏览器不支持定位'}`)
         if (params.fail) params.fail({errMsg: `getLocation:fail ${locale('hint_location_failed_not_supported') || '当前浏览器不支持定位'}`})
       }
       return

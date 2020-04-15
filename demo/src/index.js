@@ -1,7 +1,15 @@
-import React, {Component} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
-import {Page, Header, Titlebar, Container, Bridge, InputDistrict, ApiAxios} from '../../src';
+import {
+  Page,
+  Header,
+  Titlebar,
+  Container,
+  Bridge,
+  InputDistrict,
+  InputLocation
+} from '../../src';
 
 // 获取街道
 function getStreet (districtId) {
@@ -27,43 +35,48 @@ function getStreet (districtId) {
   })
 }
 
-class Demo extends Component {
-  constructor(props){
-    super(props);
-  }
-  async componentDidMount () {
-    Bridge.debug = true
-  }
-  state = {
-    value: '广东-揭阳'
-  }
+function Demo () {
+  const refComponentInputDistrict = useRef();
+  const refComponentInputLocation = useRef();
+
+  const [value, setValue] = useState('广东-揭阳');
   
-  onChange = async (e, value, options) => {
+  function onChange (e, value, options) {
     console.log(value)
-    await this.setState({
-      value: value
-    });
+    setValue(value);
   }
-  render() {
-    return <Page ref={(el) => {this.$page = el}}>
-      <Header>
-        <Titlebar caption="SeedsUI" rButtons={[{caption: '确定', onClick: this.submit}]}/>
-      </Header>
-      <Container>
-        <InputDistrict
-          value={this.state.value}
-          // type="district"
-          onChange={this.onChange}
-          placeholder="请选择"
-          className="border-b"
-          value={this.state.value}
-          // pickerProps={{
-          //   getStreet: getStreet
-          // }}
-        />
-      </Container>
-    </Page>
-  }
+
+  useEffect(() => {
+    Bridge.debug = true
+    console.log(refComponentInputDistrict)
+    console.log(refComponentInputLocation)
+  }, [])
+
+  return <Page>
+    <Header>
+      <Titlebar caption="SeedsUI"/>
+    </Header>
+    <Container>
+      <InputDistrict
+        ref={refComponentInputDistrict}
+        id="ID-PickerDistrict"
+        value={value}
+        // type="district"
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
+        value={value}
+        pickerProps={{
+          getStreet: getStreet
+        }}
+      />
+      <InputLocation
+        ref={refComponentInputLocation}
+        value={value}
+        onChange={onChange}
+      />
+    </Container>
+  </Page>
 }
 function loadBd(){
   window.BMAP_PROTOCOL = "https";
@@ -71,6 +84,7 @@ function loadBd(){
   document.write('<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200311111417"></script>');
 }
 loadBd();
+
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))
 });

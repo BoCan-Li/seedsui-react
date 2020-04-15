@@ -1,33 +1,33 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, forwardRef, Fragment, createRef, useImperativeHandle } from 'react';
 import InputText from './../InputText';
 import PickerDistrict from './../PickerDistrict';
 
-function InputDistrict({
-    // Input
-    value,
-    onClick,
-    onChange,
+// 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
+const InputDistrict = forwardRef(({
+  // Input
+  value,
+  onClick,
+  onChange,
 
-    // Picker
-    valueForKey,
-    type = '', // province | city | district | street
-    pickerProps = {
-      maskAttribute: {},
-      submitAttribute: {}
-    },
-    ...others
-}) {
+  // Picker
+  valueForKey,
+  type = '', // province | city | district | street
+  pickerProps = {
+    maskAttribute: {},
+    submitAttribute: {}
+  },
+  ...others
+}, ref) =>  {
+  // 创建ref, useRef每次都会返回相同的引用, 所以用createRef
+  const refComponentInputText = createRef(null)
+  const refComponentPicker = createRef(null)
+  useImperativeHandle(ref, () => ({
+    refComponentInputText: refComponentInputText,
+    refComponentPicker: refComponentPicker
+  }));
+
   let [show, setShow] = useState(false);
-  useEffect(() => {
-    // this.$el = null;
-    // this.$input = null;
-    // if (this.refs.$ComponentInputText && this.refs.$ComponentInputText.$el && this.refs.$ComponentInputText.$input) {
-    //   this.$el = this.refs.$ComponentInputText.$el;
-    //   this.$input = this.refs.$ComponentInputText.$input;
-    //   this.$ComponentInputText = this.refs.$ComponentInputText;
-    // }
-    // this.$picker = this.refs.$ComponentPicker;
-  });
+
   // 点击文本框
   function onClickInput (...parameter) {
     if (onClick) onClick(...parameter);
@@ -61,7 +61,7 @@ function InputDistrict({
   }
   return <Fragment>
     <InputText
-    // ref="$ComponentInputText"
+      ref={refComponentInputText}
       value={value}
       {...others}
       type="text"
@@ -69,7 +69,7 @@ function InputDistrict({
       onClick={onClickInput}
     />
     <PickerDistrict
-      // ref="$ComponentPicker"
+      ref={refComponentPicker}
       {...pickerProps}
       maskAttribute={{
         ...pickerProps.maskAttribute,
@@ -89,6 +89,6 @@ function InputDistrict({
       show={pickerProps.show === undefined ? show : pickerProps.show}
     />
   </Fragment>
-}
+})
 
 export default InputDistrict
