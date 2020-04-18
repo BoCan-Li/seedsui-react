@@ -1325,16 +1325,173 @@ toggleEmoji = () => {
   thead={头部dom node, 默认无}
   tbody={身体dom node, 默认无}
   theadFixed={固定头部 bool, 默认true}
-  columnFixed={固定左列 number, 默认0}
+  leftFixed={左列固定 array, 默认[]}
+  rightFixed={右列固定 array, 默认[]}
+  onBottomRefresh={底部刷新 func, 默认无}
+  {...others}
 />
 ```
 ### 示例
 ```javascript
 import FixTable from 'seedsui-react/lib/FixTable';
 
+const thead = (<thead>
+  <tr>
+    <th>Full Name</th>
+    <th>Age</th>
+    <th>Column 1</th>
+    <th>Column 2</th>
+    <th>Column 3</th>
+    <th>Column 4</th>
+    <th>Column 5</th>
+    <th>Column 6</th>
+    <th>Column 7</th>
+    <th>Column 8</th>
+    <th>Action</th>
+  </tr>
+</thead>);
+
+const tbody = (<tbody>
+  <tr>
+    <td>Edrward 0</td>
+    <td>32</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td>London Park no. 0</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 1</td>
+    <td>32</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td>London Park no. 1</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 2</td>
+    <td>32</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td>London Park no. 2</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 3</td>
+    <td>32</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td>London Park no. 3</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 4</td>
+    <td>32</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td>London Park no. 4</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 5</td>
+    <td>32</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td>London Park no. 5</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 6</td>
+    <td>32</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td>London Park no. 6</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 7</td>
+    <td>32</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td>London Park no. 7</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 8</td>
+    <td>32</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td>London Park no. 8</td>
+    <td><a>action</a></td>
+  </tr>
+  <tr>
+    <td>Edrward 9</td>
+    <td>32</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td>London Park no. 9</td>
+    <td><a>action</a></td>
+  </tr>
+</tbody>);
+
 <FixTable
+  style={{height: '300px'}}
   thead={thead}
   tbody={tbody}
+  theadFixed={true}
+  leftFixed={[1]}
+  rightFixed={[0, 1]}
+  onBottomRefresh={() => console.log('到底了')}
 />
 ```
 [返回目录](#component)

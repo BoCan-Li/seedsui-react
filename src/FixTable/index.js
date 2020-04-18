@@ -1,62 +1,77 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Instance from './instance';
+import React, { createRef, forwardRef, useImperativeHandle, useEffect } from 'react';
+import Instance from './instance.js';
 
-export default class FixTable extends Component {
-  static propTypes = {
-    thead: PropTypes.node,
-    tbody: PropTypes.node,
-    theadFixed: PropTypes.bool,
-    columnFixed: PropTypes.number,
-    onBottomRefresh: PropTypes.func
+// 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
+const FixTable = forwardRef(({
+  thead,
+  tbody,
+  theadFixed = false,
+  leftFixed = [],
+  rightFixed = [],
+  onBottomRefresh,
+  ...others
+}, ref) =>  {
+  const refEl = createRef(null)
+  useImperativeHandle(ref, () => ({
+    refEl: refEl
+  }));
+
+  useEffect(() => {
+    if (!refEl || !refEl.current) return;
+    Instance.updateContainerSize(refEl.current, leftFixed, rightFixed);
+  }, [leftFixed, rightFixed])
+
+  function scroll (e) {
+    if (!onBottomRefresh) return;
+    var container = e.target;
+    var clientHeight = container.clientHeight // || window.innerHeight
+    var scrollHeight = container.scrollHeight
+    var scrollTop = container === document.body ? document.documentElement.scrollTop : container.scrollTop
+    // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
+    if (scrollTop + clientHeight >= scrollHeight - 2) {
+      onBottomRefresh()
+    }
   }
-  static defaultProps = {
-  }
-  componentDidMount () {
-    if (this.instance) return;
-    const {
-      onBottomRefresh
-    } = this.props;
-    this.instance = new Instance(this.$el, {
-      onBottomRefresh: onBottomRefresh
-    });
-  }
-  render() {
-    const {
-      thead,
-      tbody,
-      theadFixed = true,
-      columnFixed = 0,
-      onBottomRefresh,
-      ...others
-    } = this.props;
-    if (!thead || !tbody) return null;
-    return (
-      <div ref={el => { this.$el = el; }} {...others} className={'fixtable wrap' + (others.className ? ' ' + others.className : '')}>
-        <div className="fixtable-scroller">
-          <table className="fixtable-scroller-table" cellSpacing="0">
-            {thead}
-            {tbody}
-          </table>
-          {onBottomRefresh && <div className="fixtable-scroller-bottom">
-            <div className="fixtable-bottom-loading"></div>
-            <div className="fixtable-bottom-caption">正在加载...</div>
-          </div>}
-        </div>
-        {/* 固定头部 */}
-        {theadFixed && <div className="fixtable-fixed">
-          <table className="fixtable-fixed-head" cellSpacing="0">
-            {thead}
-            {tbody}
-          </table>
-        </div>}
-        {/* 固定左列 */}
-        {columnFixed && <div className="fixtable-fixed">
-          <table className="fixtable-fixed-column" cellSpacing="0">
-            {tbody}
-          </table>
-        </div>}
-      </div>
-    );
-  }
-}
+
+  if (!thead || !tbody) return null;
+  return (
+    <div ref={refEl} {...others} className={'fixtable' + (others.className ? ' ' + others.className : '')} onScroll={scroll}>
+      <table className={`fixtable-thead${theadFixed ? ' fixed' : ''}`}>
+        <colgroup></colgroup>
+        {/* <colgroup>
+          <col style="width: 100px; min-width: 100px;">
+          <col style="width: 100px; min-width: 100px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 100px; min-width: 100px;">
+        </colgroup> */}
+        {thead}
+      </table>
+      <table className="fixtable-tbody">
+        <colgroup></colgroup>
+        {/* <colgroup>
+          <col style="width: 100px; min-width: 100px;">
+          <col style="width: 100px; min-width: 100px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 150px; min-width: 150px;">
+          <col style="width: 100px; min-width: 100px;">
+        </colgroup> */}
+        {tbody}
+      </table>
+    </div>
+  );
+})
+
+export default FixTable

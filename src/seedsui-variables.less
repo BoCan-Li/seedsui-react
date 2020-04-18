@@ -3002,23 +3002,17 @@ a {
 
 // FixTable
 .setFixtable() {
-  // 固定头部表格
+  // 表格整体样式
   .fixtable{
-    overflow:hidden;
-    font-size: 13px;
-    
-    color:#1a1a1a;
+    overflow: auto;
+    table{
+      border-right: 1px solid @border;
+      border-bottom: 1px solid @border;
+      border-collapse:collapse;
+    }
   }
-  .fixtable, .fixtable-scroller {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  // 全局设置
-  .fixtable table {
-    table-layout:fixed
+  .fixtable.wrap{
+    word-wrap: break-word; // 防止td宽度无效的问题
   }
   .fixtable tr{
     height: 37px;
@@ -3026,44 +3020,42 @@ a {
   .fixtable th {
     font-weight: normal;
   }
+  // 线框
   .fixtable td, .fixtable th{
-    border-left: 0 none;
-    border-right: 0 none;
-    border-style: solid;
-    border-width: 0 1px 1px 0;
-    padding:0 10px;
+    border-left: 1px solid @border;
+    border-top: 1px solid @border;
+
+    padding: 0 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
 
     border-color: #d9d9d9;
   }
-  // 固定容器
-  .fixtable-fixed{
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
+  .fixtable tr td:nth-child(1), .fixtable tr th:nth-child(1) {
+    border-left: 0px
   }
-  .fixtable-fixed-head thead{
+  // 两个表格都使用fixed布局
+  .fixtable-thead, .fixtable-tbody{
+    table-layout: fixed;
+    min-width: 100%;
+  }
+  // thead
+  .fixtable-thead{
+    z-index: 1;
+  }
+  .fixtable-thead thead th, .fixtable-thead thead td{
     background-color: #E8EAEB;
   }
-  .fixtable-fixed-head td, .fixtable-fixed-head th{
-    word-wrap: break-word; // 防止td宽度无效的问题
+  .fixtable-thead.fixed{
+    position: sticky;
+    top: 0px;
   }
-  .fixtable-fixed-head tbody td {
-    visibility: hidden;
-    pointer-events: none;
+  // tbody
+  .fixtable-tbody{
+    z-index: 0;
   }
-  // 滚动容器
-  .fixtable-scroller{
-    overflow: hidden;
+  .fixtable-tbody tbody th, .fixtable-tbody tbody td{
     background-color: white;
-  }
-
-  // 底部
-  .fixtable-scroller-bottom{
-    padding: 20px 0;
-    text-align: center;
   }
 }
 
