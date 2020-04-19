@@ -38,6 +38,12 @@ export default {
   //     height: height
   //   }
   // },
+  sortFixedNums: function (fixedNums) {
+    function sortNumber(a, b) {
+      return a - b
+    }
+    return fixedNums.sort(sortNumber)
+  },
   colsWidth: [],
   // 设置容器尺寸
   updateContainerSize: function (container, leftFixed, rightFixed) {
@@ -66,7 +72,6 @@ export default {
       colgroup.innerHTML = colHTML;
     });
     // 左右固定
-    
     var thead = theadTable.querySelector('thead')
     var tbody = tbodyTable.querySelector('tbody')
     if (Array.isArray(leftFixed) && leftFixed.length) {
@@ -89,6 +94,7 @@ export default {
   },
   // 固定td, position: 'left || right'
   fixedTd: function (position, tr, fixedNums) {
+    fixedNums = this.sortFixedNums(fixedNums)
     if (!tr) return
     let colsWidth = this.colsWidth
     var tds = tr.children
@@ -101,7 +107,14 @@ export default {
     }
     tds.forEach((td, colNum) => {
       if (fixedNums.indexOf(colNum) !== -1) {
-        td.classList.add([position], 'sticky') 
+        td.classList.add('sticky')
+        if (colNum === fixedNums[fixedNums.length - 1]) {
+          if (position === 'left') {
+            td.classList.add(`left-last`)
+          } else if (position === 'right') {
+            td.classList.add(`right-first`)
+          }
+        }
         // 计算位置, 遍历位置数*宽度
         let beforeWidth = 0
         if (colNum > 0) {
@@ -115,6 +128,33 @@ export default {
     // 如果是右侧固定, 完成后需要反转回来
     if (position === 'right') {
       this.colsWidth.reverse()
+    }
+  },
+  // 滚动修改左右滚动样式, 和底部加载
+  onScroll: function (container, onBottomRefresh) {
+    // 左右滚动样式, 为了显隐投影
+    var scrollLeft = container === document.body ? document.documentElement.scrollLeft : container.scrollLeft
+    var clientWidth = container.clientWidth
+    var scrollWidth = container.scrollWidth
+    if (clientWidth !== scrollWidth) { // 有滚动条的情况
+      if (scrollLeft + clientWidth >= scrollWidth) { // 最右边
+        container.classList.remove('fixtable-ping-right')
+        container.classList.add('fixtable-ping-left')
+      } else if (scrollLeft === 0) { // 最左边
+        container.classList.remove('fixtable-ping-left')
+        container.classList.add('fixtable-ping-right')
+      } else {
+        container.classList.add('fixtable-ping-left')
+        container.classList.add('fixtable-ping-right')
+      }
+    }
+    // 滚动到底部事件
+    if (!onBottomRefresh) return
+    var clientHeight = container.clientHeight
+    var scrollHeight = container.scrollHeight
+    var scrollTop = container === document.body ? document.documentElement.scrollTop : container.scrollTop
+    if (scrollTop + clientHeight >= scrollHeight - 2) {
+      onBottomRefresh()
     }
   }
 }
