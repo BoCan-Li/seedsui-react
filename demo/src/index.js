@@ -240,7 +240,7 @@ function Demo () {
     </Header>
     <Container>
       <FixTable
-        style={{height: '300px'}}
+        // style={{height: '300px'}}
         thead={thead}
         tbody={tbody}
         theadFixed={true}
