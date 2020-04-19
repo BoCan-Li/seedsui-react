@@ -3010,6 +3010,22 @@ a {
       border-bottom: 1px solid @border;
       border-collapse:collapse;
     }
+    // td固定定位
+    .sticky{
+      position: sticky;
+    }
+    // 左边投影
+    &.fixtable-ping-left{
+      .left:last-child {
+        background-color: red;
+      }
+    }
+    // 右边投影
+    &.fixtable-ping-right{
+      .right:first-child {
+        background-color: red;
+      }
+    }
   }
   .fixtable.wrap{
     word-wrap: break-word; // 防止td宽度无效的问题

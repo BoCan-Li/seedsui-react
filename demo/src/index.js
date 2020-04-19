@@ -244,8 +244,8 @@ function Demo () {
         thead={thead}
         tbody={tbody}
         theadFixed={true}
-        leftFixed={[0]}
-        rightFixed={[0]}
+        leftFixed={[0, 1]}
+        rightFixed={[0, 1]}
         onBottomRefresh={() => console.log('到底了')}
         ref={refComponentInputDistrict}
       />

@@ -101,7 +101,7 @@ export default {
     }
     tds.forEach((td, colNum) => {
       if (fixedNums.indexOf(colNum) !== -1) {
-        td.style.position = 'sticky'
+        td.classList.add([position], 'sticky') 
         // 计算位置, 遍历位置数*宽度
         let beforeWidth = 0
         if (colNum > 0) {

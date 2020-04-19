@@ -9,6 +9,7 @@ const FixTable = forwardRef(({
   leftFixed = [],
   rightFixed = [],
   onBottomRefresh,
+  children,
   ...others
 }, ref) =>  {
   const refEl = createRef(null)
@@ -18,16 +19,29 @@ const FixTable = forwardRef(({
 
   useEffect(() => {
     if (!refEl || !refEl.current) return;
+    console.log('计算尺寸')
     Instance.updateContainerSize(refEl.current, leftFixed, rightFixed);
-  }, [leftFixed, rightFixed])
+  }, [leftFixed, rightFixed, tbody])
 
   function scroll (e) {
-    if (!onBottomRefresh) return;
     var container = e.target;
-    var clientHeight = container.clientHeight // || window.innerHeight
+    // 左右滚动样式, 为了显隐投影
+    var scrollLeft = container === document.body ? document.documentElement.scrollLeft : container.scrollLeft
+    var clientWidth = container.clientWidth
+    var scrollWidth = container.scrollWidth
+    if (scrollLeft + clientWidth >= scrollWidth) { // 最右边
+      container.classList.remove('fixtable-ping-right')
+    } else if (scrollLeft === 0) { // 最左边
+      container.classList.remove('fixtable-ping-left')
+    } else {
+      container.classList.add('fixtable-ping-left')
+      container.classList.add('fixtable-ping-right')
+    }
+    // 滚动到底部事件
+    if (!onBottomRefresh) return;
+    var clientHeight = container.clientHeight
     var scrollHeight = container.scrollHeight
     var scrollTop = container === document.body ? document.documentElement.scrollTop : container.scrollTop
-    // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
     if (scrollTop + clientHeight >= scrollHeight - 2) {
       onBottomRefresh()
     }
@@ -70,6 +84,7 @@ const FixTable = forwardRef(({
         </colgroup> */}
         {tbody}
       </table>
+      {children}
     </div>
   );
 })

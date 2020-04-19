@@ -1328,6 +1328,7 @@ toggleEmoji = () => {
   leftFixed={左列固定 array, 默认[]}
   rightFixed={右列固定 array, 默认[]}
   onBottomRefresh={底部刷新 func, 默认无}
+  children={底部元素 node, 默认无}
   {...others}
 />
 ```
