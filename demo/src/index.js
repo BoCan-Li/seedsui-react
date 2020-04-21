@@ -8,41 +8,8 @@ import {
   Container,
   Bridge,
   FixTable,
-  InputLocation
+  ListPull
 } from '../../src';
-
-{/* <table style="table-layout: fixed;">
-<colgroup>
-  <col style="width: 100px; min-width: 100px;">
-  <col style="width: 100px; min-width: 100px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 150px; min-width: 150px;">
-  <col style="width: 100px; min-width: 100px;">
-</colgroup>
-</table>
-*/}
-
-{/* <table style="width: 1500px; min-width: 100%; table-layout: fixed;">
-  <colgroup>
-    <col style="width: 100px; min-width: 100px;">
-    <col style="width: 100px; min-width: 100px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col style="width: 150px; min-width: 150px;">
-    <col>
-    <col style="width: 100px; min-width: 100px;">
-  </colgroup>
-</table> */}
 
 const thead = (<thead>
   <tr>
@@ -193,29 +160,28 @@ const tbody = (<tbody>
     </tr>
   </tbody>);
 
-// 获取街道
-function getStreet (districtId) {
-  return new Promise((resolve) => {
-    Bridge.showLoading();
-    setTimeout(() => {
-      Bridge.hideLoading();
-      resolve([
-        {
-          "parentid": districtId,
-          "value": "街道1",
-          "key": "1",
-        },
-        {
-          "parentid": districtId,
-          "value": "街道2",
-          "key": "2",
-        }
-      ])
-      // resolve([])
-      // resolve('错误')
-    }, 500);
-  })
-}
+const listpull = [
+  {
+    container: <p style={{height: '50px'}}>内容</p>,
+    lButtons: [
+      {caption: '未读', className: 'info', style: {padding: '0 12px'}}
+    ],
+    rButtons: [
+      {caption: '收藏', className: 'warn', style: {padding: '0 12px'}},
+      {caption: '删除', className: 'cancel', style: {padding: '0 12px'}}
+    ],
+  },
+  {
+    container: <p style={{height: '50px'}}>内容</p>,
+    lButtons: [
+      {caption: '未读', className: 'info', style: {padding: '0 12px'}}
+    ],
+    rButtons: [
+      {caption: '收藏', className: 'warn', style: {padding: '0 12px'}},
+      {caption: '删除', className: 'cancel', style: {padding: '0 12px'}}
+    ],
+  }
+]
 
 function Demo () {
   const refComponentInputDistrict = useRef();
@@ -233,12 +199,29 @@ function Demo () {
     console.log(refComponentInputDistrict)
     console.log(refComponentInputLocation)
   }, [])
+  function onShowedLeft (s) {
+    var target = s.target.previousElementSibling.children[0];
+    if (target.innerHTML === '未读') {
+      target.classList.add('disabled');
+      target.innerHTML = '已读';
+    } else {
+      target.classList.remove('disabled');
+      target.innerHTML = '未读';
+    }
+    s.hide();
+  }
+  
+  function onClickListPull (item, index, option, s) {
+    console.log(item, index, option)
+    s.hide()
+  }
 
   return <Page>
     <Header>
       <Titlebar caption="SeedsUI"/>
     </Header>
     <Container>
+      <ListPull ref={refComponentInputLocation} list={listpull} onClick={onClickListPull} onShowedLeft={onShowedLeft}/>
       <FixTable
         // style={{height: '300px'}}
         thead={thead}

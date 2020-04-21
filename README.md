@@ -3226,7 +3226,7 @@ onSubmit = () => {
   // }]
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'list-pull'}
-  onClick={点击列表 func(item, index, btn), 默认无}
+  onClick={点击列表 func(item, index, option, s), 默认无}
   onShowedLeft={左侧显示 func(s), 默认无}
   onShowedRight={右侧显示 func(s), 默认无}
 />
@@ -3235,32 +3235,31 @@ onSubmit = () => {
 ```javascript
 import ListPull from 'seedsui-react/lib/ListPull';
 
-this.state = {
-  listpull: [
-    {
-      container: <p style={{height: '50px'}}>内容</p>,
-      lButtons: [
-        {value: '未读', className: 'info', style: {padding: '0 12px'}}
-      ],
-      rButtons: [
-        {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
-        {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
-      ],
-    },
-    {
-      container: <p style={{height: '50px'}}>内容</p>,
-      lButtons: [
-        {value: '未读', className: 'info', style: {padding: '0 12px'}}
-      ],
-      rButtons: [
-        {value: '收藏', className: 'warn', style: {padding: '0 12px'}},
-        {value: '删除', className: 'cancel', style: {padding: '0 12px'}}
-      ],
-    }
-  ]
-}
 
-onShowedLeft = (s) => {
+const listpull = [
+  {
+    container: <p style={{height: '50px'}}>内容</p>,
+    lButtons: [
+      {caption: '未读', className: 'info', style: {padding: '0 12px'}}
+    ],
+    rButtons: [
+      {caption: '收藏', className: 'warn', style: {padding: '0 12px'}},
+      {caption: '删除', className: 'cancel', style: {padding: '0 12px'}}
+    ],
+  },
+  {
+    container: <p style={{height: '50px'}}>内容</p>,
+    lButtons: [
+      {caption: '未读', className: 'info', style: {padding: '0 12px'}}
+    ],
+    rButtons: [
+      {caption: '收藏', className: 'warn', style: {padding: '0 12px'}},
+      {caption: '删除', className: 'cancel', style: {padding: '0 12px'}}
+    ],
+  }
+]
+
+function onShowedLeft (s) {
   var target = s.target.previousElementSibling.children[0];
   if (target.innerHTML === '未读') {
     target.classList.add('disabled');
@@ -3272,11 +3271,12 @@ onShowedLeft = (s) => {
   s.hide();
 }
 
-onClickListPull = (item, index, btn) => {
-  console.log(item, index, btn)
+function onClickListPull (item, index, option, s) {
+  console.log(item, index, option)
+  s.hide()
 }
 
-<ListPull list={this.state.listpull} onClick={this.onClickListPull} onShowedLeft={this.onShowedLeft}/>
+<ListPull list={listpull} onClick={onClickListPull} onShowedLeft={funonShowedLeft}/>
 ```
 [返回目录](#component)
 
