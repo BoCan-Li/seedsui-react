@@ -37,7 +37,7 @@ var ListPull = function (container, params) {
 	/* -----------------------
 	Method
 	----------------------- */
-	s.hide = function (target) {
+	s.hide = function (target) { // target为handler区域(s.params.handlerClass)
 		if (!target) {
 			var actives = s.container.querySelectorAll('.' + s.params.activeClass)
 			if (actives.length > 0) target = actives[0]
@@ -110,7 +110,7 @@ var ListPull = function (container, params) {
 		s.touches.startY = e.touches[0].clientY
 		s.leftClientWidth = 0
 		s.rightClientWidth = 0
-		// 如果点击时有展开的列表项，并且点击的是handler区域, 则先收缩
+		// 如果点击时有展开的列表项，并且点击的是handler区域(s.params.handlerClass), 则先收缩
 		var actives = s.container.querySelectorAll('.' + s.params.activeClass)
 		if (actives.length > 0) {
 			if (e.target.classList.contains(s.params.handlerClass)) {
@@ -169,8 +169,6 @@ var ListPull = function (container, params) {
 			if (!e.target.classList.contains(s.params.handlerClass) || s.leftClientWidth || s.rightClientWidth) {
 				// Callback onClick
 				if (s.params.onClick) s.params.onClick(s)
-			} else {
-				s.hide(e.target)
 			}
 		} else if (s.leftClientWidth || s.rightClientWidth) { // 滑动
 			if (Math.abs(s.touches.diffX) > s.params.threshold) {

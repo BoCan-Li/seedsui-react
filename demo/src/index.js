@@ -213,7 +213,7 @@ function Demo () {
   
   function onClickListPull (item, index, option, s) {
     console.log(item, index, option)
-    s.hide()
+    // s.hide()
   }
 
   return <Page>
