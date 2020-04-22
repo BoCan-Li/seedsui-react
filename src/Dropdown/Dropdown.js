@@ -1,151 +1,124 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useState, createRef } from 'react';
 import Tabbar from './../Tabbar';
 import Dialog from './../Dialog';
 import MenuTiled from './../MenuTiled';
 
-export default class Dropdown extends Component {
-  static propTypes = {
-    portal: PropTypes.object, // 传送到DOM
-    top: PropTypes.number,
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-    list: PropTypes.array, // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
-    tabbarProps: PropTypes.object,
-    dialogProps: PropTypes.object,
-    menutiledProps: PropTypes.object,
-  }
-  static defaultProps = {
-    list: []
-  }
-  constructor(props) {
-    super(props);
-    this.state = {
-      tabbarActiveIndex: -1,
-      tabbar: [],
-      menusSelectedId: '',
-      menus: [],
-      top: 0,
-      dialogShow: false
-    };
-  }
-  componentDidUpdate = (prevProps) => {
-    if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
-      this.refresh();
-    }
-  }
-  componentDidMount = () => {
-    // 计算距离头部
-    let top = this.props.top;
-    if (!top) {
-      top = this.$tabbar.$el.offsetTop + 40;
-    }
-    this.setState({
-      top
-    });
-    // 更新数据
-    this.refresh();
-  }
-  refresh = () => {
-    // tabbar 和 MenuTiled
-    const tabbar = [];
-    for (let item of this.props.list) {
-      tabbar.push({
+function Dropdown ({
+  top,
+  disabled,
+  onChange,
+  listRoot, // 一级标题, 有可能id相同但名称不同 [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+  list, // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+  tabbarProps = {},
+  dialogProps = {},
+  menutiledProps = {}
+}) {
+  const refElTabbar = createRef(null)
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [tabs, setTabs] = useState([]);
+  const [selectedId, setSelectedId] = useState('');
+  const [menus, setMenus] = useState([]);
+  const [offsetTop, setOffsetTop] = useState(0);
+  const [show, setShow] = useState(false);
+
+  function refresh () {
+    if (!list) return;
+    // Tabbar 和 MenuTiled
+    const newTabs = [];
+    for (let item of list) {
+      newTabs.push({
         id: item.id,
         name: item.name,
         ricon: <span className='icon tab-icon shape-triangle-down'></span>
       });
     };
-    this.setState({
-      tabbar,
-    });
+    setTabs(newTabs);
   }
-  onClickTab = (e, item, index) => {
-    if (this.state.tabbarActiveIndex >= 0) {
-      this.setState({
-        // 设置弹框的数据
-        menusSelectedId: this.state.tabbar[index].id,
-        menus: this.props.list[index].data,
-        // 隐藏弹框
-        tabbarActiveIndex: -1,
-        dialogShow: false
-      });
-    } else {
-      this.setState({
-        // 设置弹框的数据
-        menusSelectedId: this.state.tabbar[index].id,
-        menus: this.props.list[index].data,
-        // 显示弹框
-        tabbarActiveIndex: index,
-        dialogShow: true
-      });
+
+  useEffect(() => {
+    // 计算距离头部
+    let maskTop = top;
+    if (!maskTop) {
+      maskTop = refElTabbar.current.offsetTop + 40;
+    }
+    setOffsetTop(maskTop);
+    // 更新数据
+    refresh();
+  }, []) // eslint-disable-line
+
+  useEffect(() => {
+    refresh()
+  }, [list]) // eslint-disable-line
+  
+  function onClickTab (e, item, index) {
+    setSelectedId(tabs[index].id);
+    setMenus(list[index].data);
+    if (activeIndex >= 0) { // 隐藏弹框
+      setActiveIndex(-1);
+      setShow(false);
+    } else { // 显示弹框
+      setActiveIndex(index);
+      setShow(true);
     }
   }
-  onClickMask = () => {
-    this.setState({
-      tabbarActiveIndex: -1,
-      dialogShow: false
-    });
+  function onClickMask () {
+    setActiveIndex(-1);
+    setShow(false);
   }
-  onClickMenu = (e, item) => {
+  // 构建新数据
+  function buildList (newTabs) {
+    let newList = Object.clone(list);
+    newTabs.forEach((item, index) => {
+      newList[index].id = item.id;
+      newList[index].name = listRoot && listRoot[index] && listRoot[index].id === item.id ? listRoot[index].name : item.name;
+    });
+    return newList;
+  }
+  function onClickMenu (e, item, items) {
     if (item.children && item.children.length > 0) return;
-    const tabbar = this.state.tabbar;
-    const activeIndex = this.state.tabbarActiveIndex;
+    const newTabs = Object.clone(tabs);
     // 如果选中的标题是全部,则显示原始标题,例如:点击分类,选择全部,则应当显示分类
-    if (item.id === this.props.list[activeIndex].id) {
-      tabbar[activeIndex].id = this.props.list[activeIndex].id;
-      tabbar[activeIndex].name = this.props.list[activeIndex].name;
+    if (item.id === list[activeIndex].id) {
+      newTabs[activeIndex].id = list[activeIndex].id;
+      newTabs[activeIndex].name = list[activeIndex].name;
     // 设置选中的标题显示在tabbar上
     } else {
-      tabbar[activeIndex].id = item.id;
-      tabbar[activeIndex].name = item.name;
+      newTabs[activeIndex].id = item.id;
+      newTabs[activeIndex].name = item.name;
     }
-    this.setState({
-      tabbar: tabbar,
-      tabbarActiveIndex: -1,
-      dialogShow: false
-    });
+    setActiveIndex(-1);
+    setShow(false);
     // 触发onChange事件
-    if (this.props.onChange) this.props.onChange(e, tabbar);
+    if (onChange) onChange(e, buildList(newTabs));
   }
-  render() {
-    const {
-      portal,
-      // top,
-      disabled,
-      // onChange,
-      // list,
-      tabbarProps = {},
-      dialogProps = {},
-      menutiledProps = {}
-    } = this.props;
-    const DOM = [<Tabbar
-      key="tabbar"
-      disabled={disabled}
-      ref={el => {this.$tabbar = el}}
-      exceptOnClickActive={false}
-      list={this.state.tabbar}
-      onClick={this.onClickTab}
-      activeIndex={this.state.tabbarActiveIndex}
-      className="tabbar-dropdown tabbar-tiled border-b"
-      {...tabbarProps}
-    />];
-    DOM.push(<Dialog
-      key="dialog"
-      portal={portal}
-      maskAttribute={{onClick: this.onClickMask, style: {top: this.state.top + 'px'}}}
-      animation="slideDown"
-      style={{width: '100%'}}
-      show={this.state.dialogShow}
-      {...dialogProps}
-    >
-      <MenuTiled
-        list={this.state.menus}
-        selectedId={this.state.menusSelectedId}
-        onClick={this.onClickMenu}
-        {...menutiledProps}
+  return (
+    <Fragment>
+      <Tabbar
+        disabled={disabled}
+        ref={refElTabbar}
+        exceptOnClickActive={false}
+        list={tabs}
+        onClick={onClickTab}
+        activeIndex={activeIndex}
+        className="tabbar-dropdown tabbar-tiled border-b"
+        {...tabbarProps}
       />
-    </Dialog>);
-    return DOM;
-  }
+      <Dialog
+        maskAttribute={{onClick: onClickMask, style: {top: offsetTop + 'px'}}}
+        animation="slideDown"
+        style={{width: '100%'}}
+        show={show}
+        {...dialogProps}
+      >
+        <MenuTiled
+          list={menus}
+          selectedId={selectedId}
+          onClick={onClickMenu}
+          {...menutiledProps}
+        />
+      </Dialog>
+    </Fragment>
+  )
 }
+
+export default Dropdown

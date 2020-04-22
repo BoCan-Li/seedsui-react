@@ -9,7 +9,8 @@ var MenuTiled = function (container, params) {
     slotClass: 'menutiled-slot',
     slotSubClass: 'menutiled-slot-sub',
     tagClass: 'menutiled-tag',
-    moreClass: 'menutiled-more',
+    iconMoreClass: 'menutiled-icon-more',
+    iconCheckedClass: 'menutiled-icon-checked',
     activeClass: 'active',
     extendClass: 'extend',
 
@@ -51,7 +52,7 @@ var MenuTiled = function (container, params) {
     for (var i = 0, option; option = list[i++];) { // eslint-disable-line
       html += '<div data-index="' + i + '" data-id="' + option.id + '" class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
       '<p class="menutiled-tag-font">' + option.name + '</p>' +
-      (option.children && option.children.length > 0 ? '<i class="menutiled-more"></i>' : '<i class="menutiled-select"></i>') +
+      (option.children && option.children.length > 0 ? '<i class="' + s.params.iconMoreClass + '"></i>' : '<i class="' + s.params.iconChecked + '"></i>') +
       '</div>'
     }
     slot.innerHTML = html

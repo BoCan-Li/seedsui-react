@@ -14,7 +14,7 @@ const ListPull = forwardRef(({
   const refEl = createRef(null)
   const instance = createRef(null)
   useImperativeHandle(ref, () => ({
-    $el: refEl,
+    refEl: refEl,
     instance: instance
   }));
 

@@ -1216,10 +1216,10 @@ loadData = () => {
 ### 属性
 ```javascript
 <Dropdown
-  portal={弹出框传送至dom object, 默认document.getElementById('root')}
   top={头部距离 number, 默认0}
   disabled={是否禁用 bool, 默认false}
   onChange={选中菜单发生变化 func(e, [{id: '', caption: ''}])}
+  listRoot={一级菜单 array, 默认无} // 一级标题, 有可能和数据的id相同但名称不同
   list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
   tabbarProps={Tabbar组件弹框属性 object, 默认无}
   dialogProps={Dialog组件弹框属性 object, 默认无}
@@ -1231,7 +1231,123 @@ loadData = () => {
 import Dropdown from 'seedsui-react/lib/Dropdown';
 
 this.state = {
-  items: [{"id":"","name":"分类","data":[{"id":"","name":"全部","children":[]},{"id":"7938034417512813758","name":"饮料","children":[{"id":"4622400720177680517","name":"碳酸饮料"},{"id":"5800049423243362222","name":"茶饮料"},{"id":"5789432343240798823","name":"功能饮料"},{"id":"6413548566139705252","name":"饮用水"},{"id":"6936207795217715766","name":"中草药饮料"},{"id":"8746408135758103957","name":"蛋白质饮料"},{"id":"7268945622944992066","name":"果味饮料"},{"id":"9138462844675316911","name":"咖啡"}]},{"id":"7746459719734369628","name":"零食","children":[{"id":"9134066222295231258","name":"蜜饯果干"},{"id":"5394487194098598325","name":"坚果炒货"},{"id":"9070533848545878912","name":"早餐面包"},{"id":"5240328190253910837","name":"糖巧果冻"}]}]},{"id":"","name":"品牌","data":[{"id":"","name":"全部"},{"id":"其他","name":"其他"},{"id":"美汁源","name":"美汁源"},{"id":"可口","name":"可口"},{"id":"宏宝莱","name":"宏宝莱"},{"id":"康师傅","name":"康师傅"},{"id":"百事","name":"百事"},{"id":"卫岗","name":"卫岗"},{"id":"蒙牛","name":"蒙牛"},{"id":"伊利","name":"伊利"},{"id":"三只松鼠","name":"三只松鼠"}]},{"id":"","name":"筛选","data":[{"id":"","name":"全部"},{"id":"new","name":"新品"},{"id":"importance","name":"重点"}]}]
+  root: [
+    {
+      "id": "",
+      "name": "分类",
+    },
+    {
+      "id": "",
+      "name": "品牌",
+    },
+    {
+      "id": "",
+      "name": "筛选",
+    }
+  ],
+  items: [{
+    "id": "",
+    "name": "分类",
+    "data": [{
+      "id": "",
+      "name": "全部",
+      "children": []
+    }, {
+      "id": "7938034417512813758",
+      "name": "饮料",
+      "children": [{
+        "id": "4622400720177680517",
+        "name": "碳酸饮料"
+      }, {
+        "id": "5800049423243362222",
+        "name": "茶饮料"
+      }, {
+        "id": "5789432343240798823",
+        "name": "功能饮料"
+      }, {
+        "id": "6413548566139705252",
+        "name": "饮用水"
+      }, {
+        "id": "6936207795217715766",
+        "name": "中草药饮料"
+      }, {
+        "id": "8746408135758103957",
+        "name": "蛋白质饮料"
+      }, {
+        "id": "7268945622944992066",
+        "name": "果味饮料"
+      }, {
+        "id": "9138462844675316911",
+        "name": "咖啡"
+      }]
+    }, {
+      "id": "7746459719734369628",
+      "name": "零食",
+      "children": [{
+        "id": "9134066222295231258",
+        "name": "蜜饯果干"
+      }, {
+        "id": "5394487194098598325",
+        "name": "坚果炒货"
+      }, {
+        "id": "9070533848545878912",
+        "name": "早餐面包"
+      }, {
+        "id": "5240328190253910837",
+        "name": "糖巧果冻"
+      }]
+    }]
+  }, {
+    "id": "",
+    "name": "品牌",
+    "data": [{
+      "id": "",
+      "name": "全部"
+    }, {
+      "id": "其他",
+      "name": "其他"
+    }, {
+      "id": "美汁源",
+      "name": "美汁源"
+    }, {
+      "id": "可口",
+      "name": "可口"
+    }, {
+      "id": "宏宝莱",
+      "name": "宏宝莱"
+    }, {
+      "id": "康师傅",
+      "name": "康师傅"
+    }, {
+      "id": "百事",
+      "name": "百事"
+    }, {
+      "id": "卫岗",
+      "name": "卫岗"
+    }, {
+      "id": "蒙牛",
+      "name": "蒙牛"
+    }, {
+      "id": "伊利",
+      "name": "伊利"
+    }, {
+      "id": "三只松鼠",
+      "name": "三只松鼠"
+    }]
+  }, {
+    "id": "",
+    "name": "筛选",
+    "data": [{
+      "id": "",
+      "name": "全部"
+    }, {
+      "id": "new",
+      "name": "新品"
+    }, {
+      "id": "importance",
+      "name": "重点"
+    }]
+  }]
 };
 
 onChangeDropdown = (tabs) => {
@@ -1246,7 +1362,7 @@ onChangeDropdown = (tabs) => {
 }
 
 <Header>
-  <Dropdown list={this.state.items} onChange={this.onChangeDropdown}/>
+  <Dropdown list={this.state.items} listRoot={this.state.root} onChange={this.onChangeDropdown}/>
 </Header>
 ```
 [返回目录](#component)
@@ -3521,11 +3637,11 @@ onClick = (...params) => {
 ### 属性
 ```javascript
 <MenuTiled
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'marquee'}
   list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
   selectedId={默认选中项的id string, 默认无}
-  onClick={点击 func(s, item, isActived, isExtand: true展开 | false收缩, childrenCount), 默认无}
+  selected={选中集合 array, 默认无} // [{id: '1',caption: '测试数据1'}]
+  onClick={点击 func(e, item, list), 默认无} // 回调里返回的list为格式化后的list
+  {...others}
 />
 ```
 ### 示例

@@ -14,7 +14,7 @@ const FixTable = forwardRef(({
 }, ref) =>  {
   const refEl = createRef(null)
   useImperativeHandle(ref, () => ({
-    $el: refEl.current
+    refEl: refEl
   }));
 
   useEffect(() => {

@@ -1,64 +1,95 @@
 // require PrototypeArray.js
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Instance from './instance.js';
+import React, { useEffect, useState, forwardRef } from 'react';
 
-export default class MenuTiled extends Component {
-  static propTypes = {
-    selectedId: PropTypes.string, // 默认选中项的id
-    onClick: PropTypes.func,
+const slotClass = 'menutiled-slot';
+const slotSubClass = 'menutiled-slot-sub';
+const tagClass = 'menutiled-tag';
+const tagFontClass = 'menutiled-tag-font';
+const iconMoreClass = 'menutiled-icon-more';
+const iconSelectClass = 'menutiled-icon-checked';
+const activeClass = 'active';
 
-    list: PropTypes.array
-  }
-  /* list: [{
-    id: '',
-    name: '',
-    active: false,
-    children
-  }] */
-  static defaultProps = {
-  }
-  constructor(props) {
-    super(props);
-  }
-  componentDidUpdate = (prevProps) => {
-    if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
-      if (this.props.list && this.props.list.length) {
-        this.instance.setSelectedId(this.props.selectedId)
-        var list = Object.clone(this.props.list);
-        if (JSON.stringify(list).indexOf('"children"') === -1) {
-          list = list.deepTree()
-        }
-        this.instance.setData(list)
-      } else {
-        this.instance.setData([])
-      }
-    }
-  }
-  componentDidMount = () => {
-    if (this.instance) return;
-    var list = Object.clone(this.props.list);
+const MenuTiled = forwardRef(({
+  selectedId, // 默认选中项的id
+  selected, // [{id: '', name: ''}]
+  onClick,
+
+  list,
+  // list: [{
+  //   id: '',
+  //   name: '',
+  //   children: []
+  // }]
+  ...others
+}, ref) =>  {
+  const [viewGroups, setViewGroups] = useState(null); // 分组显示数据
+  let [data, setData] = useState(list) // 将list转换成标准格式
+
+  // 格式化列表数据
+  function fmtList () {
+    if (!list || !list.length) return [];
     if (JSON.stringify(list).indexOf('"children"') === -1) {
-      list = list.deepTree()
+      var newList = Object.clone(list);
+      return newList.deepTree()
     }
-    const instance = new Instance(this.$el, {
-      data: list,
-      selectedId: this.props.selectedId,
-      onClick: this.onClick
-    });
-    this.instance = instance;
+    return list;
   }
-  onClick = (s, item, isActived, isExtend) => {
-    // childrenCount
-    var childrenCount = item.children && item.children.length ? item.children.length : 0;
+  useEffect(() => {
+    data = fmtList() // eslint-disable-line
+    setData(data)
+    setViewGroups([data])
+  }, [list])
 
-    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
+  // 点击选项
+  function click (e) {
+    if (e.target.classList.contains(tagClass)) { // 点击项
+      // 选中点击行
+      // const row = Number(e.target.getAttribute('data-index') || 0);
+      const id = e.target.getAttribute('data-id');
+      const item = data.getDeepTreeNode(id);
+      // 删除后面的层级
+      const hierarchy = Number(e.target.getAttribute('data-hierarchy') || 0);
+      let newViewGroups = Object.clone(viewGroups);
+      newViewGroups.splice(hierarchy + 1)
+      // 如果有子级, 添加子级
+      if (item.children && item.children.length) {
+        // 添加子级
+        if (!newViewGroups[hierarchy + 1]) newViewGroups[hierarchy + 1] = [];
+        newViewGroups[hierarchy + 1] = item.children;
+      } else if (onClick) { // 叶子节点点击触发
+        onClick(e, item, data)
+      }
+      setViewGroups(newViewGroups);
+    }
   }
-  render() {
-    const {selectedId, onClick, list, ...others} = this.props;
-    return (
-      <div ref={el => {this.$el = el;}} {...others} className={`menutiled${others.className ? ' ' + others.className : ''}`}>
+  
+  // 判断是否选中
+  function isSelected (id) {
+    if (selectedId === id) return true;
+    // selected判断
+    if (!selected || !selected.length) return false;
+    for (let option of selected) {
+      if (option.id === id) return true;
+    }
+    return false;
+  }
+
+  return (
+    <div ref={ref} {...others} className={`menutiled${others.className ? ' ' + others.className : ''}`} onClick={click}>
+      <div className="menutiled-wrapper">
+        {(viewGroups || []).map((group, groupIndex) => {
+          return <div key={groupIndex} className={`${groupIndex ? slotSubClass : slotClass}`}>
+            {group.map((option, optionIndex) => {
+              return  <div key={optionIndex} data-index={optionIndex} data-hierarchy={groupIndex} data-id={option.id} className={`menutiled-tag${isSelected(option.id) ? ' ' + activeClass : ''}`}>
+                <p className={tagFontClass}>{option.name}</p>
+                {option.children && option.children.length > 0 ? <i className={iconMoreClass}></i> : <i className={iconSelectClass}></i>}
+              </div>
+            })}
+          </div>
+        })}
       </div>
-    );
-  }
-}
+    </div>
+  );
+})
+
+export default MenuTiled
