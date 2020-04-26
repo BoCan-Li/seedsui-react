@@ -2567,23 +2567,20 @@ onChange = (e, value) => {
 ```javascript
 import InputPicker from 'seedsui-react/lib/InputPicker';
 
-state = {
-  value: '333',
-  list: [
-    {
-      key: '1',
-      value: '111'
-    },
-    {
-      key: '2',
-      value: '222'
-    },
-    {
-      key: '3',
-      value: '333'
-    }
-  ]
-}
+const list = [
+  {
+    key: '1',
+    value: '111'
+  },
+  {
+    key: '2',
+    value: '222'
+  },
+  {
+    key: '3',
+    value: '333'
+  }
+];
 
 onChange = (e, value, option) => {
   console.log(e.target)
@@ -2594,7 +2591,7 @@ onChange = (e, value, option) => {
 }
 
 <InputPicker
-  list={this.state.list}
+  list={list}
   value={this.state.value}
   onChange={this.onChange}
   placeholder="请选择"
@@ -4005,17 +4002,16 @@ import Peg from 'seedsui-react/lib/Peg';
 ### 示例
 ```javascript
 import Photos from 'seedsui-react/lib/Photos';
-this.state = {
-  list: [{
-    id: '1',
-    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
-    src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
-  },{
-    id: '2',
-    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-    src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-  }]
-}
+const list = [{
+  id: '1',
+  thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+},{
+  id: '2',
+  thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
+}];
+
 onClick = (...params) => {
   console.log(...params)
 }
