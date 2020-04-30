@@ -36,11 +36,6 @@ var Device = (function () {
   var platformVersion = ''
   var platformMatch = null
   function updatePlatform () {
-    // 因为652之前的客户端wq和waiqin内核ua一样, 无法区分, 所以通过外部传入_device_wq_platform变量区分外勤还是订货
-    if (window._device_wq_platform && ua.indexOf('wqappversion') > -1) {
-      platform = window._device_wq_platform
-      return
-    }
     if (device === 'pc') {
       platform = 'browser'
     } else if (ua.indexOf('miniprogram') > -1) {
@@ -69,6 +64,10 @@ var Device = (function () {
       // JsBridge内核
       if (ua.indexOf('waiqin365') > -1) {
         platform = 'wq'
+      }
+      // 临时纠错: 因为652之前的客户端wq和waiqin内核ua一样, 无法区分, 所以通过外部传入_device_wq_platform变量区分外勤还是订货
+      if (window._device_wq_platform && ua.indexOf('wqappversion') > -1) {
+        platform = window._device_wq_platform
       }
       // 外勤版本号
       platformMatch = ua.match(/wqappversion\/([\w.]*)/)

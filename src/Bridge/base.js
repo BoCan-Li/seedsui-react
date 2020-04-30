@@ -291,7 +291,7 @@ var Bridge = {
     * @param {Object} params {title: '自定义标题'}
     */
   setTitle: function (params) {
-    if (params.title) document.title = params.title
+    if (params && params.title) document.title = params.title
   },
   /**
    * 基础功能:end

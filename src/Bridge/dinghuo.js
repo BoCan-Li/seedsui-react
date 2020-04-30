@@ -162,7 +162,7 @@ var Bridge = {
     */
   setTitle: function (params, callback) {
     var self = this
-    if (params.title) document.title = params.title
+    if (params && params.title) document.title = params.title
     self.invoke('setTitle', params, callback)
   },
   // 客户端添加返回绑定
