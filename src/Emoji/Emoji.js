@@ -1,84 +1,74 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect, useContext, createRef, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
-import InputPre from './../InputPre';
+import InputPre from './../InputText';
 import Button from './../Button';
 import Instance from './instance.js';
-import data from './instance.data.js';
+import emojiData from './instance.data.js';
 import Context from '../Context/instance.js';
 
-export default class Emoji extends Component {
-  static contextType = Context;
-  static propTypes = {
-    portal: PropTypes.object,
-    show: PropTypes.bool, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
-    data: PropTypes.object,
+const Emoji = forwardRef(({
+  portal,
+  show, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
+  data = emojiData,
 
-    autoFocus: PropTypes.bool,
-    value: PropTypes.string,
-    placeholder: PropTypes.string,
+  autoFocus = false,
+  value,
+  placeholder,
 
-    maskAttribute: PropTypes.object,
-    submitProps: PropTypes.object,
-    inputProps: PropTypes.object,
-    carrouselProps: PropTypes.object,
-    liconAttribute: PropTypes.object,
-    licon: PropTypes.node,
+  maskAttribute = {},
+  submitProps = {},
+  inputProps = {},
+  carrouselProps = {},
+  liconAttribute,
+  licon,
 
-    onChange: PropTypes.func
-  }
-  static defaultProps = {
-    autoFocus: false,
-    data: data
-  }
-  constructor(props, context) {
-    super(props, context);
-  }
-  componentDidUpdate = (prevProps) => {
-    // 自动获取焦点
-    if (this.props.autoFocus && prevProps.show !== this.props.show && this.props.show === true && this.$input) {
-      this.$input.focus();
+  onChange,
+  ...others
+}, ref) =>  {
+  const refElMask = createRef(null)
+  const refEl = createRef(null)
+  const refElIcon = createRef(null)
+  const refElSubmit = createRef(null)
+  const instance = createRef(null)
+  const refComponentInputText = createRef(null)
+  const refComponentCarrousel = createRef(null)
+  // 自动获取焦点
+  useEffect(() => {
+    let refInput = refComponentInputText.current.refElInput.current;
+    if (autoFocus) {
+      refInput.focus();
     }
-  }
-  componentDidMount = () => {
-    // 输入框
-    this.$inputEl = this.refs.$ComponentInputPre.$el;
-    this.$input = this.refs.$ComponentInputPre.$input;
-    // 提交按钮
-    this.$submit = this.refs.$ComponentSubmit.$el;
-    // 滑动表情框
-    this.$carrousel = this.refs.$ComponentCarrousel.$el;
-    if (this.props.autoFocus && this.$input) this.$input.focus();
-    if (this.instance) return
-    const {
-      maskAttribute = {},
-      submitProps = {},
-      onChange
-    } = this.props;
-    this.instance = new Instance({
-      data: this.props.data,
+  }, [show]);
 
-      mask: this.$el,
+  // 初始化
+  useEffect(() => {
+    // 输入框
+    let refElInput = refComponentInputText.current.refElInput.current;
+    let refFnPreAutoSize = refComponentInputText.current.refFnPreAutoSize;
+    if (autoFocus && refElInput) refElInput.focus();
+    if (instance.current) return
+    instance.current = new Instance({
+      data: data,
+
+      mask: refElMask.current,
       isClickMaskHide: false,
       onClickMask: maskAttribute.onClick ? (s) => maskAttribute.onClick(s.event) : null,
 
       onClickSubmit: submitProps.onClick ? (s, value) => submitProps.onClick(s.event, value) : null,
 
       onChange: (s, value) => {
-        if (onChange) {
+        if (refElInput && refElInput.nextSibling.tagName === 'PRE' && onChange) {
           onChange(s.event, value)
           // 自增高
-          if (this.refs.$ComponentInputPre && this.refs.$ComponentInputPre.$ComponentInputText) {
-            this.refs.$ComponentInputPre.$ComponentInputText.preAutoSize()
-          }
+          refFnPreAutoSize(refElInput, refElInput.nextSibling);
         }
       }
     });
-  }
+  }, []) // eslint-disable-line
+
   // 表情
-  getFaceDOM = () => {
-    const {data} = this.props;
+  function getFaceDOM () {
     // icons分页变量
     const icons = [];
     let page = 0;
@@ -104,7 +94,7 @@ export default class Emoji extends Component {
     });
   }
   // 过滤已经回调的属性
-  filterProps = (props) => {
+  function filterProps (props) {
     if (!props) return props;
     var propsed = {}
     for (let n in props) {
@@ -114,56 +104,40 @@ export default class Emoji extends Component {
     }
     return propsed;
   }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    let {
-      portal,
-      show,
-      data,
-      autoFocus,
-      value,
-      placeholder = locale['say_something'] || '说点什么吧...',
-      maskAttribute = {},
-      submitProps = {},
-      inputProps = {},
-      carrouselProps = {},
-      liconAttribute,
-      licon,
-      onChange,
-      ...others
-    } = this.props;
 
-    // 剔除掉onClick事件, 因为在instance时已经回调了
-    maskAttribute = this.filterProps(maskAttribute)
-    submitProps = this.filterProps(submitProps)
-    return createPortal(
-      <div ref={el => {this.$el = el;}} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
-        <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
-          <div className="emoji-edit">
-            {licon}
-            {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
-            <InputPre
-              ref="$ComponentInputPre"
-              className="emoji-edit-input"
-              inputAttribute={{style: {padding: '0'}}}
-              value={value}
-              onChange={onChange}
-              placeholder={placeholder}
-              {...inputProps}
-            />
-            <i ref={(el) => {this.$icon = el;}} className={`icon emoji-edit-icon`}></i>
-            <Button ref="$ComponentSubmit" {...submitProps} className={`emoji-edit-submit${submitProps.className ? ' ' + submitProps.className : ''}`} disabled={!value}>{submitProps.caption || (locale['submit'] || '提交')}</Button>
-          </div>
-          <Carrousel ref="$ComponentCarrousel" {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
-            {this.getFaceDOM()}
-          </Carrousel>
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+
+
+  // 剔除掉onClick事件, 因为在instance时已经回调了
+  maskAttribute = filterProps(maskAttribute)
+  submitProps = filterProps(submitProps)
+  return createPortal(
+    <div ref={refElMask} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
+      <div ref={refEl} {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
+        <div className="emoji-edit">
+          {licon}
+          {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+          <InputPre
+            ref={refComponentInputText}
+            className="emoji-edit-input"
+            inputAttribute={{style: {padding: '0'}}}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder || locale['say_something'] || '说点什么吧...'}
+            {...inputProps}
+          />
+          <i ref={refElIcon} className={`icon emoji-edit-icon`}></i>
+          <Button ref={refElSubmit} {...submitProps} className={`emoji-edit-submit${submitProps.className ? ' ' + submitProps.className : ''}`} disabled={!value}>{submitProps.caption || (locale['submit'] || '提交')}</Button>
         </div>
-      </div>,
-      portal || this.context.portal || document.getElementById('root') || document.body
-    );
-  }
-}
+        <Carrousel ref={refComponentCarrousel} {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
+          {getFaceDOM()}
+        </Carrousel>
+      </div>
+    </div>,
+    portal || context.portal || document.getElementById('root') || document.body
+  );
+})
+
+export default Emoji

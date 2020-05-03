@@ -1381,7 +1381,6 @@ onChangeDropdown = (tabs) => {
   value={值 string, 默认''}
   placeholder={占位文字 string, 默认''}
 
-  isClickMaskHide={是否点击遮罩隐藏 bool, 默认true}
   onClickMask={点击遮罩 func(e)}
 
   maskStyle={遮罩style object, 默认无}
@@ -1400,33 +1399,25 @@ onChangeDropdown = (tabs) => {
 ```javascript
 import Emoji from 'seedsui-react/lib/Emoji';
 
-this.state = {
-  showEmoji: false,
-  value: ''
+const [show, setShow] = useState(false);
+const [value, setValue] = useState('');
+
+function onChange (e, value) {
+  setValue(value);
 }
 
-onChange = (e, value) => {
-  this.setState({
-    value: value
-  })
-}
-
-toggleEmoji = () => {
-  this.setState((prevState) => {
-    return {
-      showEmoji: !prevState.showEmoji
-    }
-  })
+function toggleEmoji () {
+  setShow(!show);
 }
 
 <Emoji
   autoFocus
-  show={this.state.showEmoji}
-  onChange={this.onChange}
-  value={this.state.value}
-  maskAttribute={{onClick: this.toggleEmoji}}
+  show={show}
+  onChange={onChange}
+  value={value}
+  maskAttribute={{onClick: toggleEmoji}}
 />
-<input type="button" value="显隐" onClick={this.toggleEmoji}/>
+<input type="button" value="显隐" onClick={toggleEmoji}/>
 ```
 [返回目录](#component)
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
 import {
@@ -7,7 +7,7 @@ import {
   Titlebar,
   Container,
   Bridge,
-  Photos
+  Emoji
 } from '../../src';
 
 const list = [{
@@ -21,53 +21,33 @@ const list = [{
 }];
 
 function Demo () {
-  const refComponentInputDistrict = useRef();
-  const refComponentInputLocation = useRef();
+  const refComponent = useRef();
 
-  const [value, setValue] = useState('广东-揭阳');
-  
-  function onChange (e, value, options) {
-    console.log(options)
+  const [show, setShow] = useState(false);
+  const [value, setValue] = useState('');
+
+  function onChange (e, value) {
     setValue(value);
   }
-  function onChoose() {
-    console.log(1)
-  }
 
-  function click (e, item) {
-    console.log(item);
+  function toggleEmoji () {
+    setShow(!show);
   }
-
-  useEffect(() => {
-    Bridge.debug = true
-    console.log(refComponentInputDistrict)
-    console.log(refComponentInputLocation)
-  }, [])
 
   return <Page>
     <Header>
       <Titlebar caption="SeedsUI"/>
     </Header>
     <Container>
-      <Photos
-        uploading={true}
-        list={list}
+      <Emoji
+        autoFocus
+        show={show}
         onChange={onChange}
-        onChoose={onChoose}
-        onClick={click}
-        // 显示ai上传图
-        upload={<i
-          className="width-full height-full"
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            backgroundSize: 'cover',
-            backgroundColor: 'white',
-            backgroundImage: `url(//res.waiqin365.com/d/dinghuo365/aipic.png)`
-          }}
-          ></i>}
+        value={value}
+        ref={refComponent}
+        maskAttribute={{onClick: toggleEmoji}}
       />
+      <input type="button" value="显隐" onClick={toggleEmoji}/>
     </Container>
   </Page>
 }
