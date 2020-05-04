@@ -45,7 +45,7 @@ function Demo () {
         onChange={onChange}
         value={value}
         ref={refComponent}
-        maskAttribute={{onClick: toggleEmoji}}
+        maskAttribute={{onClick: () => setShow(false)}}
       />
       <input type="button" value="显隐" onClick={toggleEmoji}/>
     </Container>

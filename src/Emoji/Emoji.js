@@ -1,7 +1,7 @@
 import React, {useEffect, useContext, createRef, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
-import InputPre from './../InputText';
+import InputPre from './../InputPre';
 import Button from './../Button';
 import Instance from './instance.js';
 import emojiData from './instance.data.js';
@@ -26,42 +26,43 @@ const Emoji = forwardRef(({
   onChange,
   ...others
 }, ref) =>  {
-  const refElMask = createRef(null)
-  const refEl = createRef(null)
-  const refElIcon = createRef(null)
-  const refElSubmit = createRef(null)
   const instance = createRef(null)
-  const refComponentInputText = createRef(null)
-  const refComponentCarrousel = createRef(null)
   // 自动获取焦点
   useEffect(() => {
-    let refInput = refComponentInputText.current.refElInput.current;
-    if (autoFocus) {
-      refInput.focus();
+    let elInput = ref.current.querySelector('.input-pre');
+    if (autoFocus && elInput && show) {
+      elInput.focus();
     }
   }, [show]);
 
+  // 自动扩充功能
+  function preAutoSize (target, preTarget) {
+    target.style.height = preTarget.clientHeight + 'px';
+  }
   // 初始化
   useEffect(() => {
     // 输入框
-    let refElInput = refComponentInputText.current.refElInput.current;
-    let refFnPreAutoSize = refComponentInputText.current.refFnPreAutoSize;
-    if (autoFocus && refElInput) refElInput.focus();
+    let elInput = ref.current.querySelector('.input-pre');
+    if (!elInput) return;
+    let elPre = elInput.nextElementSibling;
+    if (elPre.tagName !== 'PRE') return;
+    if (autoFocus && elInput) elInput.focus();
     if (instance.current) return
     instance.current = new Instance({
       data: data,
-
-      mask: refElMask.current,
+      mask: ref.current,
       isClickMaskHide: false,
-      onClickMask: maskAttribute.onClick ? (s) => maskAttribute.onClick(s.event) : null,
-
-      onClickSubmit: submitProps.onClick ? (s, value) => submitProps.onClick(s.event, value) : null,
-
+      onClickMask: (s) => {
+        if (maskAttribute.onClick) maskAttribute.onClick(s.event)
+      },
+      onClickSubmit: (s) => {
+        if (submitProps.onClick) submitProps.onClick(s.event)
+      },
       onChange: (s, value) => {
-        if (refElInput && refElInput.nextSibling.tagName === 'PRE' && onChange) {
+        if (onChange) {
           onChange(s.event, value)
           // 自增高
-          refFnPreAutoSize(refElInput, refElInput.nextSibling);
+          preAutoSize(elInput, elPre);
         }
       }
     });
@@ -96,13 +97,20 @@ const Emoji = forwardRef(({
   // 过滤已经回调的属性
   function filterProps (props) {
     if (!props) return props;
-    var propsed = {}
-    for (let n in props) {
-      if (n !== 'onClick') {
-        propsed[n] = props[n]
-      }
-    }
+    var propsed = Object.clone(props);
+    if (propsed && propsed.onClick) delete propsed.onClick
+    // for (let n in props) {
+    //   if (n !== 'onClick') {
+    //     propsed[n] = props[n]
+    //   }
+    // }
     return propsed;
+  }
+
+  // 过滤已经回调的属性
+  function filterProps (props) {
+    const {onClick, ...otherProps} = props;
+    return {...otherProps};
   }
 
   // context
@@ -111,16 +119,15 @@ const Emoji = forwardRef(({
 
 
   // 剔除掉onClick事件, 因为在instance时已经回调了
-  maskAttribute = filterProps(maskAttribute)
-  submitProps = filterProps(submitProps)
+  const otherMaskAttribute = filterProps(maskAttribute);
+  const otherSubmitProps = filterProps(submitProps);
   return createPortal(
-    <div ref={refElMask} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
-      <div ref={refEl} {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
+    <div ref={ref} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
+      <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
         <div className="emoji-edit">
           {licon}
           {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <InputPre
-            ref={refComponentInputText}
             className="emoji-edit-input"
             inputAttribute={{style: {padding: '0'}}}
             value={value}
@@ -128,10 +135,10 @@ const Emoji = forwardRef(({
             placeholder={placeholder || locale['say_something'] || '说点什么吧...'}
             {...inputProps}
           />
-          <i ref={refElIcon} className={`icon emoji-edit-icon`}></i>
-          <Button ref={refElSubmit} {...submitProps} className={`emoji-edit-submit${submitProps.className ? ' ' + submitProps.className : ''}`} disabled={!value}>{submitProps.caption || (locale['submit'] || '提交')}</Button>
+          <i className={`icon emoji-edit-icon`}></i>
+          <Button {...otherSubmitProps} className={`emoji-edit-submit${otherSubmitProps.className ? ' ' + otherSubmitProps.className : ''}`} disabled={!value}>{otherSubmitProps.caption || (locale['submit'] || '提交')}</Button>
         </div>
-        <Carrousel ref={refComponentCarrousel} {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
+        <Carrousel {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
           {getFaceDOM()}
         </Carrousel>
       </div>

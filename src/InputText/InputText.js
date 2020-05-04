@@ -1,4 +1,6 @@
-import React, {forwardRef, createRef, useImperativeHandle} from 'react';
+import React, {forwardRef} from 'react';
+
+let elInput = null
 
 const InputText = forwardRef(({
   type = 'text', // 类型: text | number | tel | password
@@ -37,18 +39,10 @@ const InputText = forwardRef(({
   fail,
   ...others
 }, ref) =>  {
-  const refEl = createRef(null)
-  const refElInput = createRef(null)
-  const refElPre = createRef(null)
-  useImperativeHandle(ref, () => ({
-    refEl: refEl,
-    refElInput: refElInput,
-    refElPre: refElPre,
-    refFnPreAutoSize: preAutoSize
-  }));
-
   // 点击容器
   function click (e) {
+    let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
+    if (!elInput) return;
     if (disabled) return;
     var target = e.target;
     if (target.classList.contains('clearicon')) {
@@ -57,22 +51,22 @@ const InputText = forwardRef(({
       return;
     }
     if (target.classList.contains('licon') && liconAttribute.onClick) {
-      liconAttribute.onClick(e, refElInput.current.value);
+      liconAttribute.onClick(e, elInput.current.value);
       e.stopPropagation();
       return;
     }
     if (target.classList.contains('ricon') && riconAttribute.onClick) {
-      riconAttribute.onClick(e, refElInput.current.value);
+      riconAttribute.onClick(e, elInput.current.value);
       e.stopPropagation();
       return;
     }
     if (target.classList.contains('input-text') && inputAttribute.onClick) {
-      inputAttribute.onClick(e, refElInput.current.value);
+      inputAttribute.onClick(e, elInput.current.value);
       e.stopPropagation();
       return;
     }
     if (onClick) {
-      onClick(e, refElInput.current.value);
+      onClick(e, elInput.current.value);
       e.stopPropagation();
     }
   }
@@ -86,8 +80,11 @@ const InputText = forwardRef(({
     var val = target.value;
     // 自动扩充功能
     if (pre) {
-      refElPre.current.children[0].innerText = val;
-      preAutoSize(refElInput.current, refElPre.current);
+      let elPre = target.nextElementSibling;
+      if (elPre.tagName === 'PRE') {
+        elPre.children[0].innerText = val;
+        preAutoSize(target, elPre);
+      }
     }
     // 最大长度
     if (maxLength && val && val.length > maxLength) {
@@ -123,7 +120,7 @@ const InputText = forwardRef(({
   }
   // 点击清除
   function onClear (e) {
-    refElInput.current.focus();
+    elInput.current.focus();
     // 赋值
     if (clear && typeof clear === 'function') clear(e, '');
     if (onChange) {
@@ -162,17 +159,17 @@ const InputText = forwardRef(({
         }
       }
       return (<div {...inputAttribute} className={`input-pre-box${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}>
-        <textarea ref={refElInput} autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus}></textarea>
-        <pre ref={refElPre} style={{left: preLeft, right: preRight}}><span>{value}</span></pre>
+        <textarea autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} className={`input-pre`} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus}></textarea>
+        <pre style={{left: preLeft, right: preRight}}><span>{value}</span></pre>
       </div>);
     }
     // textarea类型
     if (type === 'textarea') {
       // 如果值绑定属性,则只有通过父组件的prop来改变值
-      return <textarea ref={refElInput} {...inputAttribute} autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus} className={`input-area${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}></textarea>;
+      return <textarea {...inputAttribute} autoFocus={autoFocus} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus} className={`input-area${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}></textarea>;
     }
     // 其它类型
-    return <input ref={refElInput} {...inputAttribute} max={max} min={min} autoFocus={autoFocus} type={type} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus} className={`input-text${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>;
+    return <input {...inputAttribute} max={max} min={min} autoFocus={autoFocus} type={type} value={value} maxLength={maxLength} readOnly={readOnly} disabled={disabled} placeholder={placeholder} onChange={change} onBlur={blur} onFocus={focus} className={`input-text${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}/>;
   }
 
   // 过滤已经回调的属性
@@ -191,7 +188,7 @@ const InputText = forwardRef(({
   liconAttribute = filterProps(liconAttribute)
   riconAttribute = filterProps(riconAttribute)
   clearAttribute = filterProps(clearAttribute)
-  return (<div ref={refEl} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
+  return (<div ref={ref} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
       {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
       {getInputDOM()}
