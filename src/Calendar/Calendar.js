@@ -14,7 +14,7 @@ export default class Calendar extends Component {
     nextHTML: PropTypes.string, // 右箭头
     onChange: PropTypes.func,
     onClick: PropTypes.func,
-    fail: PropTypes.func
+    onError: PropTypes.func
   }
   static defaultProps = {
     type: 'month',
@@ -27,7 +27,7 @@ export default class Calendar extends Component {
   }
   componentDidMount () {
     if (this.instance) return
-    const {type, titleFormat, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onClick, fail} = this.props;
+    const {type, titleFormat, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onClick, onError} = this.props;
     var instance = new Instance(this.$el, {
       viewType: type,
       titleFormat: titleFormat,
@@ -40,7 +40,7 @@ export default class Calendar extends Component {
       nextHTML: nextHTML,
       onChange: onChange,
       onClick: onClick,
-      fail: fail
+      onError: onError // func(e, err)
     });
     this.instance = instance;
   }

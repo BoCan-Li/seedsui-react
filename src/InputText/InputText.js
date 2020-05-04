@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef} from 'react';
+import React, {forwardRef} from 'react';
 
 const InputText = forwardRef(({
   type = 'text', // 类型: text | number | tel | password
@@ -37,7 +37,6 @@ const InputText = forwardRef(({
   fail,
   ...others
 }, ref) =>  {
-  ref = useRef(null)
   // 点击容器
   function click (e) {
     let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
@@ -50,22 +49,22 @@ const InputText = forwardRef(({
       return;
     }
     if (target.classList.contains('licon') && liconAttribute.onClick) {
-      liconAttribute.onClick(e, elInput.current.value);
+      liconAttribute.onClick(e, elInput.value);
       e.stopPropagation();
       return;
     }
     if (target.classList.contains('ricon') && riconAttribute.onClick) {
-      riconAttribute.onClick(e, elInput.current.value);
+      riconAttribute.onClick(e, elInput.value);
       e.stopPropagation();
       return;
     }
     if (target.classList.contains('input-text') && inputAttribute.onClick) {
-      inputAttribute.onClick(e, elInput.current.value);
+      inputAttribute.onClick(e, elInput.value);
       e.stopPropagation();
       return;
     }
     if (onClick) {
-      onClick(e, elInput.current.value);
+      onClick(e, elInput.value);
       e.stopPropagation();
     }
   }
@@ -119,7 +118,9 @@ const InputText = forwardRef(({
   }
   // 点击清除
   function onClear (e) {
-    elInput.current.focus();
+    let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
+    if (!elInput) return;
+    elInput.focus();
     // 赋值
     if (clear && typeof clear === 'function') clear(e, '');
     if (onChange) {

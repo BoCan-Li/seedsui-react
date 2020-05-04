@@ -32,7 +32,6 @@ const Carrousel = forwardRef(({
   children, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
   ...others
 }, ref) =>  {
-  // const refEl = useRef(null)
   ref = useRef(null)
   const childrenArr = React.Children.toArray(children);
   const instance = useRef(null)

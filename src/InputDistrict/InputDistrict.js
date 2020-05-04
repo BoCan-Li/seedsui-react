@@ -53,6 +53,7 @@ const InputDistrict = forwardRef(({
   }
   return <Fragment>
     <InputText
+      ref={ref}
       value={value}
       {...others}
       type="text"

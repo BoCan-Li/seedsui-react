@@ -1,16 +1,8 @@
-import React, { Component } from 'react';
+import React, { forwardRef } from 'react';
 import InputText from './../InputText';
 
-export default class InputNumber extends Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount () {
-    this.$el = this.refs.$ComponentInputText.$el;
-    this.$input = this.refs.$ComponentInputText.$input;
-    this.$ComponentInputText = this.refs.$ComponentInputText;
-  }
-  render() {
-    return <InputText ref="$ComponentInputText" {...this.props} type="number"/>;
-  }
-}
+const InputNumber = forwardRef(({...props}, ref) =>  {
+    return <InputText ref={ref} {...props} type="number"/>;
+})
+
+export default InputNumber

@@ -53,7 +53,7 @@ var Calendar = function (container, params) {
     onTransitionEnd:function(Calendar)// 动画结束
     onHorizontalTransitionEnd:function(Calendar)// 横滑动画结束
     onVerticalTransitionEnd:function(Calendar)// 竖滑动画结束
-    fail:function(msg) // 错误回调
+    onError:function(s, msg) // 错误回调
     */
   }
   params = params || {}
@@ -422,7 +422,7 @@ var Calendar = function (container, params) {
     if (s.params.disableBeforeDate && s.activeDate < s.params.disableBeforeDate) {
       var msg = '禁止访问' + s.params.disableBeforeDate.format('YYYY年MM月DD日') + '前的日期'
       console.log('SeedsUI Warn：' + msg)
-      if (s.params.fail) s.params.fail({errMsg: msg})
+      if (s.params.onError) s.params.onError(s, {errMsg: msg})
       s.activeDate.nextMonth()
       s.draw()
       return
@@ -430,7 +430,7 @@ var Calendar = function (container, params) {
     if (s.params.disableAfterDate && s.activeDate > s.params.disableAfterDate) {
       msg = '禁止访问' + s.params.disableAfterDate.format('YYYY年MM月DD日') + '后的日期'
       console.log('SeedsUI Warn：' + msg)
-      if (s.params.fail) s.params.fail({errMsg: msg})
+      if (s.params.onError) s.params.onError(s, {errMsg: msg})
       s.activeDate.prevMonth()
       s.draw()
       return

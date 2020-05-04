@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
 import {
@@ -7,25 +7,50 @@ import {
   Titlebar,
   Container,
   Bridge,
-  Emoji,
-  InputText
+  InputDate
 } from '../../src';
 
 
-function Demo () {
-  const refComponent = useRef();
+const list = [
+  {
+    key: '1',
+    value: '111'
+  },
+  {
+    key: '2',
+    value: '222'
+  },
+  {
+    key: '3',
+    value: '333'
+  }
+];
 
-  const [show, setShow] = useState(false);
+function Demo () {
+  const refComponent = useRef(null);
+  const refComponent2 = useRef(null);
+
   const [value, setValue] = useState('');
-  const [show2, setShow2] = useState(false);
   const [value2, setValue2] = useState('');
 
-  function onChange (e, value) {
-    console.log(1)
+  useEffect(() => {
+    console.log(refComponent)
+    console.log(refComponent2)
+  }, [])
+
+  function onChange (e, value, option) {
+    console.log(e.target)
+    console.log(value, option)
     setValue(value);
   }
-  function onChange2 (e, value) {
+  function onChange2 (e, value, option) {
+    console.log(e.target)
+    console.log(value, option)
     setValue2(value);
+  }
+  function onFail (e, msg) {
+    console.log(e)
+    console.log(msg);
   }
 
   return <Page>
@@ -33,26 +58,21 @@ function Demo () {
       <Titlebar caption="SeedsUI"/>
     </Header>
     <Container>
-      {show && <Emoji
-        autoFocus
-        carrouselProps={{id: 'id1'}}
-        onChange={onChange}
+      <InputDate
+        ref={refComponent}
         value={value}
-        ref={refComponent}
-        maskAttribute={{onClick: () => setShow(false)}}
-      />}
-      {show2 && <Emoji
-        carrouselProps={{id: 'id2', loop: true}}
-        autoFocus
-        onChange={onChange2}
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
+      />
+      <InputDate
+        max={new Date().format('YYYY-MM-DD')}
+        ref={refComponent2}
         value={value2}
-        ref={refComponent}
-        maskAttribute={{onClick: () => setShow2(false)}}
-      />}
-      <input type="button" value="显示1" onClick={() => setShow(true)}/>
-      <p>{value}</p>
-      <input type="button" value="显示2" onClick={() => setShow2(true)}/>
-      <p>{value2}</p>
+        onChange={onChange2}
+        placeholder="请选择"
+        fail={onFail}
+      />
     </Container>
   </Page>
 }

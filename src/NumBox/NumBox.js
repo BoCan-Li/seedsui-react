@@ -51,7 +51,7 @@ export default class NumBox extends Component {
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
-    fail: PropTypes.func
+    onError: PropTypes.func
   }
   static defaultProps = {
     maxLength: '16'
@@ -118,14 +118,19 @@ export default class NumBox extends Component {
       }
     }
   }
+  error = (err) => {
+    if (this.props.onError) {
+      this.props.onError({target: this.$el}, err)
+    }
+  }
   // 修改值
   onChange = (e) => {
     if (e.target.validity.badInput) {
       e.target.value = '';
     }
     // 输入时只校验最大值、小数点、最大长度、返回错误
-    const {max, digits, maxLength, fail} = this.props;
-    var value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, fail});
+    const {max, digits, maxLength} = this.props;
+    var value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError: error});
     if (this.props.onChange) this.props.onChange(e, value);
   };
   // 点击文本框, 逢0清空
@@ -277,7 +282,7 @@ export default class NumBox extends Component {
       onChange,
       onBlur,
       onFocus,
-      fail,
+      onError,
       ...others
     } = this.props;
     // 剔除掉onClick事件, 因为在容器onClick已经回调了

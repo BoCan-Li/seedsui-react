@@ -138,7 +138,7 @@ var Picker = function (params) {
   }
 
   // 创建DOM
-  s.create = function () {
+  s.update = function () {
     if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
 
     if (s.mask && s.mask.tagName) {
@@ -177,7 +177,15 @@ var Picker = function (params) {
       if (andriodExp[1] < '5.0') s.mask.setAttribute('onTouchStart', '')
     }
   }
-  s.create()
+  s.update()
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.update()
+  }
   /* ------------------------
   Method
   ------------------------ */

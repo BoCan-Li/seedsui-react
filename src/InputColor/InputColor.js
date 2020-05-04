@@ -1,16 +1,8 @@
-import React, { Component } from 'react';
+import React, { forwardRef } from 'react';
 import InputText from './../InputText';
 
-export default class InputColor extends Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount () {
-    this.$el = this.refs.$ComponentInputText.$el;
-    this.$input = this.refs.$ComponentInputText.$input;
-    this.$ComponentInputText = this.refs.$ComponentInputText;
-  }
-  render() {
-    return <InputText ref="$ComponentInputText" {...this.props} type="color"/>;
-  }
-}
+const InputColor = forwardRef(({...props}, ref) =>  {
+    return <InputText ref={ref} {...props} type="color"/>;
+})
+
+export default InputColor

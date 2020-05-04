@@ -17,7 +17,7 @@ const Emoji = forwardRef(({
   placeholder,
 
   maskAttribute = {},
-  submitProps = {},
+  submitAttribute = {},
   inputProps = {},
   carrouselProps = {},
   liconAttribute,
@@ -27,6 +27,7 @@ const Emoji = forwardRef(({
   ...others
 }, ref) =>  {
   ref = useRef(null)
+  let [tempValue, setTempValue] = useState(value);
   const instance = useRef(null)
   // 自动扩充功能
   function preAutoSize (target, preTarget) {
@@ -40,24 +41,25 @@ const Emoji = forwardRef(({
     let elPre = elInput.nextElementSibling;
     if (elPre.tagName !== 'PRE') return;
     if (autoFocus && elInput) elInput.focus();
-    console.log(elInput.value)
     instance.current = new Instance({
       data: data,
       mask: ref.current,
       isClickMaskHide: false,
-      onClickMask: (s) => {
-        if (maskAttribute.onClick) maskAttribute.onClick(s.event)
-      },
-      onClickSubmit: (s) => {
-        if (submitProps.onClick) submitProps.onClick(s.event)
-      },
-      onChange: (s, value) => {
-        if (onChange) {
-          onChange(s.event, value)
-          // 自增高
-          preAutoSize(elInput, elPre);
-        }
-      }
+      // onClickMask: (s) => {
+      //   if (maskAttribute.onClick) maskAttribute.onClick(s.event)
+      // },
+      // onClickSubmit: (s) => {
+      //   if (submitAttribute.onClick) {
+      //     submitAttribute.onClick(s.event, tempValue)
+      //   }
+      // },
+      // onChange: (s, val) => { // 点击表情
+      //   setTempValue(val)
+      //   // 自增高
+      //   preAutoSize(elInput, elPre);
+      //   // 触发onChange
+      //   if (onChange) onChange(s, val)
+      // }
     });
     // 如果初始化就有值, 则设置光标位置和自增高
     if (elInput.value) {
@@ -67,6 +69,39 @@ const Emoji = forwardRef(({
       preAutoSize(elInput, elPre);
     }
   }, []) // eslint-disable-line
+
+  useEffect(() => {
+    setTempValue(value);
+  }, [value])
+
+  // 因为synchronization模式, 每次组件在render的时候都生成了一份本次render的state、function、effects, 这些与之前或者之后的render没关系, 所以当值发生变化时需要即时的更新回调
+  useEffect(() => {
+    // 输入框
+    let elInput = ref.current.querySelector('.input-pre');
+    if (!elInput) return;
+    let elPre = elInput.nextElementSibling;
+    if (elPre.tagName !== 'PRE') return;
+    instance.current.updateParams({
+      onClickMask: (s) => {
+        if (maskAttribute.onClick) maskAttribute.onClick(s.event)
+      },
+      onClickSubmit: (s) => {
+        if (submitAttribute.onClick) {
+          submitAttribute.onClick(s.event, tempValue)
+        } else if (onChange) {
+          // 触发onChange
+          if (onChange) onChange(s, tempValue)
+        }
+      },
+      onChange: (s, val) => { // 点击表情
+        setTempValue(val)
+        // 自增高
+        preAutoSize(elInput, elPre);
+        // 触发onChange
+        if (onChange) onChange(s, val)
+      }
+    })
+  }, [tempValue])
 
   // 表情
   function getFaceDOM () {
@@ -101,6 +136,10 @@ const Emoji = forwardRef(({
     return {...otherProps};
   }
 
+  function change (e, val) {
+    setTempValue(val)
+  }
+
   // context
   const context = useContext(Context) || {};
   const locale = context.locale || {};
@@ -108,7 +147,7 @@ const Emoji = forwardRef(({
 
   // 剔除掉onClick事件, 因为在instance时已经回调了
   const otherMaskAttribute = filterProps(maskAttribute);
-  const otherSubmitProps = filterProps(submitProps);
+  const otherSubmitAttribute = filterProps(submitAttribute);
   return createPortal(
     <div ref={ref} {...maskAttribute} className={`mask emoji-mask active${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
@@ -117,13 +156,13 @@ const Emoji = forwardRef(({
           {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <InputPre
             className="emoji-edit-input"
-            value={value}
-            onChange={onChange}
+            value={tempValue}
             placeholder={placeholder || locale['say_something'] || '说点什么吧...'}
             {...inputProps}
+            onChange={change}
           />
           <i className={`icon emoji-edit-icon`}></i>
-          <Button {...otherSubmitProps} className={`emoji-edit-submit${otherSubmitProps.className ? ' ' + otherSubmitProps.className : ''}`} disabled={!value}>{otherSubmitProps.caption || (locale['submit'] || '提交')}</Button>
+          <Button {...otherSubmitAttribute} className={`emoji-edit-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`} disabled={!tempValue}>{otherSubmitAttribute.caption || (locale['submit'] || '提交')}</Button>
         </div>
         <Carrousel
           {...carrouselProps}

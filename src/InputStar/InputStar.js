@@ -13,7 +13,7 @@ export default class InputStar extends Component {
       PropTypes.number
     ]),
     onChange: PropTypes.func,
-    fail: PropTypes.func // ({e, {errMsg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}})
+    onError: PropTypes.func // ({e, {errMsg: '错误信息', select: '当前选中', min: '最小值', value: '矫正后的值'}})
   }
   static defaultProps = {
     value: 0,
@@ -29,11 +29,11 @@ export default class InputStar extends Component {
       locale = {}
     } = this.context;
     if (!locale) locale = {}
-    const {value, min, onChange, fail} = this.props;
+    const {value, min, onChange, onError} = this.props;
     let num = argNum;
     if (num < min) {
-      if (fail) {
-        fail({
+      if (onError) {
+        onError(e, {
           errMsg: `${locale['hint_cannot_be_less_than'] || '不能小于'}${min}${locale['star'] || '颗星'}`,
           select: num,
           min: min,
@@ -51,7 +51,7 @@ export default class InputStar extends Component {
       min,
       value,
       onChange,
-      fail,
+      onError,
       ...others
     } = this.props;
     const stars = [];

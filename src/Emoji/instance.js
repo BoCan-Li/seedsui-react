@@ -84,6 +84,12 @@ var Emoji = function (params) {
     console.log('SeedsUI Error：未找到Emoji的carrousel元素，请检查传入参数是否正确')
     return
 	}
+	// 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+  }
   /* --------------------
   Method
 	-------------------- */

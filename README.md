@@ -1404,18 +1404,13 @@ function onChange (e, value) {
   setValue(value);
 }
 
-function toggleEmoji () {
-  setShow(!show);
-}
-
-<Emoji
+{show && <Emoji
   autoFocus
-  show={show}
   onChange={onChange}
   value={value}
-  maskAttribute={{onClick: toggleEmoji}}
-/>
-<input type="button" value="显隐" onClick={toggleEmoji}/>
+  maskAttribute={{onClick: () => setShow(false)}}
+/>}
+<input type="button" value="显隐" onClick={() => setShow(true)}/>
 ```
 [返回目录](#component)
 
@@ -2277,28 +2272,21 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 ```javascript
 import InputCity from 'seedsui-react/lib/InputCity';
 
-this.state = {
-  value: ''
-}
 
-onChange = (e, value) => {
-  console.log(e.event)
-  this.setState({
-    value: value
-  });
+const [value, setValue] = useState('');
+
+function onChange (e, value, option) {
+  console.log(e.target)
+  console.log(value, option)
+  setValue(value);
 }
 
 <InputCity
-  value={this.state.value}
-  onChange={this.onChange}
+  ref={refComponent}
+  value={value}
+  onChange={onChange}
   placeholder="请选择"
   className="border-b"
-  pickerProps={{
-    split: ',',
-    maskAttribute: {
-      style: {zIndex: '11'}
-    }
-  }}
 />
 ```
 [返回目录](#component)
@@ -2369,14 +2357,14 @@ onChange = (e, value) => {
     value: value
   });
 }
-fail = (e, msg) => {
+function onFail (e, msg) {
   console.log(e)
   console.log(msg);
 }
 
 <InputDate
   type="datetime"
-  max={new Date().format('YYYY,MM,DD hh&mm')}
+  max={new Date().format('YYYY-MM-DD')}
   fail={this.fail}
   value={this.state.value}
   onChange={this.onChange}
@@ -2571,26 +2559,21 @@ const list = [
   }
 ];
 
-onChange = (e, value, option) => {
+const [value, setValue] = useState('');
+
+function onChange (e, value, option) {
   console.log(e.target)
   console.log(value, option)
-  this.setState({
-    value: value
-  });
+  setValue(value);
 }
 
-<InputPicker
+<InputCity
+  ref={refComponent}
   list={list}
-  value={this.state.value}
-  onChange={this.onChange}
+  value={value}
+  onChange={onChange}
   placeholder="请选择"
   className="border-b"
-  pickerProps={{
-    maskAttribute: {
-      style: {zIndex: '11'},
-      className: "bg-white"
-    }
-  }}
 />
 ```
 [返回目录](#component)
