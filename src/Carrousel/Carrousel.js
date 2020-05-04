@@ -1,112 +1,98 @@
-// require (PrototypeArray.js equals)
-
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// require (PrototypeArray.js), 使用了equals
+import React, { forwardRef, useRef, useEffect } from 'react';
 import Instance from './instance.js';
 
-export default class Carrousel extends Component {
-  static propTypes = {
-    style: PropTypes.object, // 设置容器Style
-    className: PropTypes.string, // 设置容器className
+const Carrousel = forwardRef(({
+  style, // 设置容器Style
+  className, // 设置容器className
 
-    slideAttribute: PropTypes.object,
+  slideAttribute = {},
 
-    pagination: PropTypes.oneOfType([  // 是否显示小点点
-      PropTypes.bool,
-      PropTypes.node
-    ]),
-    paginationAttribute: PropTypes.object,
+  // 是否显示小点点
+  pagination = false,
+  paginationAttribute = {},
 
-    prevAttribute: PropTypes.object,
-    nextAttribute: PropTypes.object,
+  prevAttribute = {},
+  nextAttribute = {},
 
-    stopPropagation: PropTypes.bool, // 是否阻止点击事件的传播, 设置为false解决与FastClick插件touch事件冲突的问题
-    activeIndex: PropTypes.number, // 默认选中第几块
+  stopPropagation = false, // 是否阻止点击事件的传播, 设置为false解决与FastClick插件touch事件冲突的问题
+  activeIndex, // 默认选中第几块
 
-    loop: PropTypes.bool, // 是否循环显示
-    autoplay: PropTypes.number, // 是否自动播放
-    slidesPerView: PropTypes.number, // 一屏显示几块,默认1块
-    defaultSrc: PropTypes.string, // 默认图片
-    list: PropTypes.array, // [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
-    enableOnChange: PropTypes.bool, // 手动调用slideTo方法是否触发onChange事件回调
-    speed: PropTypes.number, // 动画过渡的速度
-    onClick: PropTypes.func, // func(s, e)
-    onChange: PropTypes.func,
-    delay: PropTypes.number, // 延迟初始化秒数
+  loop = false, // 是否循环显示
+  autoplay = 0, // 是否自动播放
+  slidesPerView = 1, // 一屏显示几块,默认1块
+  defaultSrc = '//res.waiqin365.com/d/seedsui/carrousel/default.png', // 默认图片
+  list = [], // [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
+  enableOnChange = true, // 手动调用slideTo方法是否触发onChange事件回调
+  speed = 300, // 动画过渡的速度
+  onClick, // func(s, e)
+  onChange,
+  delay = 500, // 延迟初始化秒数
 
-    children: PropTypes.node, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
+  children, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
+  ...others
+}, ref) =>  {
+  // const refEl = useRef(null)
+  ref = useRef(null)
+  const childrenArr = React.Children.toArray(children);
+  const instance = useRef(null)
+
+  function slideToIndex () {
+    // 设置选中项
+    let len = childrenArr.length || (list || []).length;
+    if (isNaN(activeIndex) && activeIndex <= len - 1) {
+      instance.current.slideTo(activeIndex, 0, false)
+    }
   }
-  static defaultProps = {
-    slideAttribute: {},
-    paginationAttribute: {},
-    prevAttribute: {},
-    nextAttribute: {},
-    stopPropagation: false, // 设置为false解决与FastClick插件touch事件冲突的问题
-    activeIndex: 0, // 默认选中第几块
-    page: 0,
-    loop: false,
-    pagination: false,
-    autoplay: 0,
-    slidesPerView: 1,
-    list: [],
-    defaultSrc: '//res.waiqin365.com/d/seedsui/carrousel/default.png',
-    enableOnChange: true,
-    speed: 300,
-    delay: 500,
+
+  function update () {
+    if (!instance.current || !instance.current.updateParams) return
+    instance.current.updateParams({
+      height: style && style.height ? style.height : null,
+      width: style && style.width ? style.width : null,
+      stopPropagation: stopPropagation,
+      autoplay: autoplay,
+      slidesPerView: slidesPerView,
+      loop: loop,
+      imgLoadSrc: defaultSrc
+    });
+    // 设置选中项
+    slideToIndex()
   }
-  constructor(props) {
-    super(props);
-  }
-  componentDidUpdate = (prevProps) => {
-    if (!this.instance) return
+  useEffect(() => {
     // 只有list或children发生变化时才更新
-    if (!this.props.list.equals(prevProps.list)) { // list变化
-      this.update();
-    } else if ((this.props.children || []).length !== (prevProps.children || []).length) { // children变化
-      this.update();
-    } else if (this.instance.activeIndex !== this.props.activeIndex) {
-      this.instance.slideTo(this.props.activeIndex, this.props.speed, this.props.enableOnChange);
-    }
-  }
-  componentDidMount = () => {
-    this.instance = new Instance(this.$el, {
-      height: this.props.style && this.props.style.height ? this.props.style.height : null,
-      width: this.props.style && this.props.style.width ? this.props.style.width : null,
-      stopPropagation: this.props.stopPropagation,
-      autoplay: this.props.autoplay,
-      slidesPerView: this.props.slidesPerView,
-      loop: this.props.loop,
-      imgLoadSrc: this.props.defaultSrc,
-      onClick: this.onClick,
-      onSlideChangeEnd: this.props.onChange ? this.props.onChange : null
+    update();
+  }, [list, children, activeIndex]);
+
+  useEffect(() => {
+    if (!ref || !ref.current) return
+    instance.current = new Instance(ref.current, {
+      height: style && style.height ? style.height : null,
+      width: style && style.width ? style.width : null,
+      stopPropagation: stopPropagation,
+      autoplay: autoplay,
+      slidesPerView: slidesPerView,
+      loop: loop,
+      imgLoadSrc: defaultSrc,
+      onClick: onClick,
+      onSlideChangeEnd: onChange ? onChange : null
     });
-    if (this.props.activeIndex) this.instance.slideTo(this.props.activeIndex || 0);
     // 轮播图片, 自适应的情况下, 高度需要计算
-    if (!(this.props.style && this.props.style.height) && this.props.list.length && this.props.delay) {
+    if (!(style && style.height) && list.length && delay) {
       setTimeout(() => {
-        this.instance.updateContainerSize();
-      }, this.props.delay);
+        instance.current.updateContainerSize();
+        slideToIndex()
+      }, delay);
     }
-  }
-  update = () => {
-    this.instance.updateParams({
-      height: this.props.style && this.props.style.height ? this.props.style.height : null,
-      width: this.props.style && this.props.style.width ? this.props.style.width : null,
-      stopPropagation: this.props.stopPropagation,
-      autoplay: this.props.autoplay,
-      slidesPerView: this.props.slidesPerView,
-      loop: this.props.loop,
-      imgLoadSrc: this.props.defaultSrc
-    });
-  }
+  }, [])
+
   // 点击轮播
-  onClick = (s, e) => {
+  function onClick (s, e) {
     const index = s.activeIndex;
-    if (this.props.onClick) this.props.onClick(this.props.list[index], index, s, e);
+    if (onClick) onClick(list[index], index, s, e);
   }
   // 如果className没有carrousel-container或者carrousel-page, 则补充一个
-  getCarrouselClassName = () => {
-    const {className, list} = this.props;
+  function getCarrouselClassName () {
     if (className) {
       if (className.indexOf('carrousel-container') !== -1 || className.indexOf('carrousel-page') !== -1) {
         return className;
@@ -115,65 +101,49 @@ export default class Carrousel extends Component {
     return 'carrousel-container' + (className ? ' ' + className : '');
   }
   // 如果项中包含bg属性, 则加入到style中
-  getSlideStyle = (item) => {
-    const {slideAttribute, defaultSrc} = this.props;
+  function getSlideStyle (item) {
     if (item.bg) {
       return Object.assign({backgroundImage: `url(${defaultSrc ? defaultSrc : item.bg})`}, slideAttribute.style);
     }
     return slideAttribute.style;
   }
-  render() {
-    const {
-      className,
-      style,
-      slideAttribute = {},
-      pagination,
-      paginationAttribute = {},
-      prevAttribute = {}, 
-      nextAttribute = {},
-      stopPropagation,
 
-      loop,
-      autoplay,
-      slidesPerView,
-      defaultSrc,
-      list,
-      enableOnChange,
-      speed,
-      onClick,
-      onChange,
-      delay,
-
-      children,
-      activeIndex,
-      ...others
-    } = this.props;
-    const childrenArr = React.Children.toArray(children);
-    return (
-      <div ref={el => {this.$el = el}} className={this.getCarrouselClassName()} style={style} {...others}>
-      <div className="carrousel-wrapper">
-        {/* 轮播图 */}
-        {list.length > 0 && list.map((item, index) => {
-          return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}`} style={this.getSlideStyle(item)} key={index} data-load-src={defaultSrc ? item.bg : null}>
-            {item.img && <img className="carrousel-slide-img" alt="" src={defaultSrc ? defaultSrc : item.img} data-load-src={defaultSrc ? item.img : null}/>}
-            {item.caption && <div className="carrousel-summary">
-              {item.iconAttribute && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
-              <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>
-                {item.caption}
-              </span>
-            </div>}
-          </div>
-          })}
-        {/* 轮播页 */}
-        {list.length === 0 && childrenArr && childrenArr.map((item, index) => {
-          return <div className="carrousel-slide" key={index}>{item}</div>
+  return (
+    <div ref={ref} className={getCarrouselClassName()} style={style} {...others}>
+    <div className="carrousel-wrapper">
+      {/* 轮播图 */}
+      {list.length > 0 && list.map((item, index) => {
+        return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}`} style={getSlideStyle(item)} key={index} data-load-src={defaultSrc ? item.bg : null}>
+          {item.img && <img className="carrousel-slide-img" alt="" src={defaultSrc ? defaultSrc : item.img} data-load-src={defaultSrc ? item.img : null}/>}
+          {item.caption && <div className="carrousel-summary">
+            {item.iconAttribute && <i {...item.iconAttribute} className={`icon carrousel-summary-icon${item.iconAttribute.className ? ' ' + item.iconAttribute.className : ''}`}></i>}
+            <span className="nowrap carrousel-summary-caption" style={{marginRight: '20px'}}>
+              {item.caption}
+            </span>
+          </div>}
+        </div>
         })}
-      </div>
-      {pagination === true && <div {...paginationAttribute} className={`carrousel-pagination${paginationAttribute.className ? ' ' + paginationAttribute.className : ''}`}></div>}
-      {pagination && pagination !== true && pagination}
-      {list.length > 1 && <div {...prevAttribute} className={`carrousel-prev${prevAttribute.className ? ' ' + prevAttribute.className : ''}`}></div>}
-      {list.length > 1 && <div {...nextAttribute} className={`carrousel-next${nextAttribute.className ? ' ' + nextAttribute.className : ''}`}></div>}
-      </div>
-    );
-  }
-}
+      {/* 轮播页 */}
+      {list.length === 0 && childrenArr && childrenArr.map((item, index) => {
+        return <div className="carrousel-slide" key={index}>{item}</div>
+      })}
+    </div>
+    {pagination === true && <div {...paginationAttribute} className={`carrousel-pagination${paginationAttribute.className ? ' ' + paginationAttribute.className : ''}`}></div>}
+    {pagination && pagination !== true && pagination}
+    {list.length > 1 && <div {...prevAttribute} className={`carrousel-prev${prevAttribute.className ? ' ' + prevAttribute.className : ''}`}></div>}
+    {list.length > 1 && <div {...nextAttribute} className={`carrousel-next${nextAttribute.className ? ' ' + nextAttribute.className : ''}`}></div>}
+    </div>
+  );
+})
+
+export default Carrousel
+// export default React.memo(Carrousel, (prevProps, nextProps) => {
+//   if (prevProps.activeIndex !== nextProps.activeIndex) return false;
+//   // 列表或者子元素一致则不要触发更新
+//   const prevChildren = React.Children.toArray(prevProps.children) || [];
+//   const nextChildren = React.Children.toArray(nextProps.children) || [];
+//   if ((prevProps.list || []).length === (nextProps.list || []).length && prevChildren.length === nextChildren.length && (prevProps.list || []).equals((prevProps.list || []))) {
+//     return true;
+//   }
+//   return false;
+// })

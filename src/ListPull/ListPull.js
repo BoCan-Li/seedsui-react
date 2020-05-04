@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, createRef, useImperativeHandle } from 'react';
+import React, { useEffect, forwardRef, useRef } from 'react';
 import Instance from './instance';
 import Button from './../Button';
 
@@ -10,17 +10,12 @@ const ListPull = forwardRef(({
   onShowedRight,
   ...others
 }, ref) =>  {
-  // 创建ref, useRef每次都会返回相同的引用, 所以用createRef
-  const refEl = createRef(null)
-  const instance = createRef(null)
-  useImperativeHandle(ref, () => ({
-    refEl: refEl,
-    instance: instance
-  }));
+  ref = useRef(null)
+  const instance = useRef(null)
 
   useEffect(() => {
-    if (!refEl || !refEl.current) return;
-    instance.current = new Instance(refEl.current, {
+    if (!ref || !ref.current) return;
+    instance.current = new Instance(ref.current, {
       onClick: (s) => {
         const e = s.event;
         const index = e.target.getAttribute('data-index');
@@ -43,7 +38,7 @@ const ListPull = forwardRef(({
   }, []) // eslint-disable-line
   
   return (
-    <ul ref={refEl} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
+    <ul ref={ref} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
       {list.map((item, index) => {
         return <li key={`button${index}`} data-index={`${index}`} className="border-b list-pull-li">
           {item.lButtons && item.lButtons.length && <div className="list-pull-left">

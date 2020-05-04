@@ -409,11 +409,18 @@ var Carrousel = function (container, params) {
   }
   // 更新params
   s.updateParams = function (params = {}) {
+    // 记录之前的选项
+    var prevActiveIndex = s.activeIndex;
     for (var param in params) {
       s.params[param] = params[param]
     }
     // 更新DOM
     s.update()
+    // 滑动到之前选中项
+    if (prevActiveIndex < s.slides.length) {
+      s.activeIndex = prevActiveIndex
+      s.slideTo(prevActiveIndex, 0, 0)
+    }
   }
   s.update()
   if (s.slides.length <= 0) {

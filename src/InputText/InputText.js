@@ -1,6 +1,4 @@
-import React, {forwardRef} from 'react';
-
-let elInput = null
+import React, {forwardRef, useRef} from 'react';
 
 const InputText = forwardRef(({
   type = 'text', // 类型: text | number | tel | password
@@ -39,6 +37,7 @@ const InputText = forwardRef(({
   fail,
   ...others
 }, ref) =>  {
+  ref = useRef(null)
   // 点击容器
   function click (e) {
     let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
@@ -188,6 +187,7 @@ const InputText = forwardRef(({
   liconAttribute = filterProps(liconAttribute)
   riconAttribute = filterProps(riconAttribute)
   clearAttribute = filterProps(clearAttribute)
+
   return (<div ref={ref} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
       {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}

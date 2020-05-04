@@ -638,20 +638,22 @@ const imgList2 = [
   }
 ]
 
-state = {
-  imgList: imgList1,
-  activeIndex: 0,
+const [list, setList] = useState(imgList1);
+const [activeIndex, setActiveIndex] = useState(0);
+
+onCarrouselChange = async (s) => {
+  setActiveIndex(s.activeIndex)
 }
-onCarrouselChange = async (e) => {
-  console.log(e.activeIndex)
-  await this.setState({
-    activeIndex: e.activeIndex
-  });
-  console.log(e);
-}
-<Button onClick={() => this.setState({activeIndex: 0})}>第1页</Button>
+
+<Button onClick={() => setActiveIndex(0)}>第1页</Button>
+<Button onClick={() => setList(imgList2)}>换列表</Button>
 // 轮播页
-<Carrousel className="carrousel-page" style={{top: '84px'}} onChange={this.onCarrouselChange} activeIndex={this.state.activeIndex}>
+<Carrousel
+  className="carrousel-page"
+  style={{top: '84px'}}
+  onChange={(s) => setActiveIndex(s.activeIndex)}
+  activeIndex={activeIndex}
+>
   <Page>第一页</Page>
   <Page>第二页</Page>
   <Page>第三页</Page>
@@ -659,12 +661,12 @@ onCarrouselChange = async (e) => {
 </Carrousel>
 // 轮播图
 <Carrousel
-  list={this.state.imgList}
+  list={list}
   style={{height: '300px'}}
   pagination
   loop
-  activeIndex={this.state.activeIndex}
-  onChange={this.onCarrouselChange}
+  activeIndex={activeIndex}
+  onChange={(s) => setActiveIndex(s.activeIndex)}
 />
 ```
 [返回目录](#component)
@@ -1230,22 +1232,21 @@ loadData = () => {
 ```javascript
 import Dropdown from 'seedsui-react/lib/Dropdown';
 
-this.state = {
-  root: [
-    {
-      "id": "",
-      "name": "分类",
-    },
-    {
-      "id": "",
-      "name": "品牌",
-    },
-    {
-      "id": "",
-      "name": "筛选",
-    }
-  ],
-  items: [{
+const [root, setRoot] = useState([
+  {
+    "id": "",
+    "name": "分类",
+  },
+  {
+    "id": "",
+    "name": "品牌",
+  },
+  {
+    "id": "",
+    "name": "筛选",
+  }
+]);
+const [items, setItems] = useState([{
     "id": "",
     "name": "分类",
     "data": [{
@@ -1347,22 +1348,19 @@ this.state = {
       "id": "importance",
       "name": "重点"
     }]
-  }]
-};
+  }]);
 
-onChangeDropdown = (tabs) => {
-  var items = Object.clone(this.state.items);
-  tabs.forEach((item, index) => {
-    items[index].id = item.id;
-    items[index].name = item.name;
-  });
-  this.setState({
-    items: items
-  })
-}
+function onChange (e, tabs) {
+    var newItems = Object.clone(items);
+    tabs.forEach((item, index) => {
+      newItems[index].id = item.id;
+      newItems[index].name = item.name;
+    });
+    setItems(newItems)
+  }
 
 <Header>
-  <Dropdown list={this.state.items} listRoot={this.state.root} onChange={this.onChangeDropdown}/>
+  <Dropdown list={items} listRoot={root} onChange={onChange}/>
 </Header>
 ```
 [返回目录](#component)

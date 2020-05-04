@@ -174,8 +174,31 @@ var Emoji = function (params) {
 				input.focus()
 				input.setSelectionRange(pos, pos)
 			} else {
+				var value = input.value
 				input.focus()
+				input.value = ''
+				input.value = value
 			}
+		}
+	}
+	s.showCarrousel = function () {
+		// 解决ios12输入法遮挡的问题
+		s.textarea.disabled = true
+		setTimeout(() => {
+			s.carrousel.style.display = 'block'
+			s.icon.classList.add('active')
+		}, 100)
+	}
+	s.hideCarrousel = function () {
+		s.carrousel.style.display = 'none'
+		s.icon.classList.remove('active')
+		s.textarea.disabled = false
+	}
+	s.toggleCarrousel = function () {
+		if (s.carrousel.style.display === 'none') {
+			s.showCarrousel()
+		} else {
+			s.hideCarrousel()
 		}
 	}
   /* --------------------
@@ -221,17 +244,7 @@ var Emoji = function (params) {
 				s.setCaretPosition(s.textarea, s.cursorOffset)
 			}
 		} else if (target.classList.contains(s.params.iconClass)) { // 点击展开收缩图标
-			if (s.carrousel.style.display === 'none') {
-				setTimeout(() => {
-					s.carrousel.style.display = 'block'
-					s.icon.classList.add('active')
-				}, 100)
-				// 解决ios12输入法遮挡的问题
-				s.textarea.disabled = true
-			} else {
-				s.carrousel.style.display = 'none'
-				s.icon.classList.remove('active')
-			}
+			s.toggleCarrousel()
 		} else if (target.classList.contains(s.params.maskClass)) { // 点击遮罩
 			if (s.params.onClickMask) s.params.onClickMask(s)
       if (s.params.isClickMaskHide) s.hide()

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, createRef } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Tabbar from './../Tabbar';
 import Dialog from './../Dialog';
 import MenuTiled from './../MenuTiled';
@@ -13,7 +13,7 @@ function Dropdown ({
   dialogProps = {},
   menutiledProps = {}
 }) {
-  const refElTabbar = createRef(null)
+  const refElTabbar = useRef(null)
   const [activeIndex, setActiveIndex] = useState(-1);
   const [tabs, setTabs] = useState([]);
   const [selectedId, setSelectedId] = useState('');
@@ -35,15 +35,29 @@ function Dropdown ({
     setTabs(newTabs);
   }
 
+  function getMaskTop () {
+    return new Promise((resolve) => {
+      // 计算距离头部
+      let maskTop = top;
+      if (!maskTop) {
+        setTimeout(() => {
+          maskTop = refElTabbar.current.offsetTop + 40;
+          resolve(maskTop)
+        }, 100);
+      } else {
+        resolve(maskTop)
+      }
+    })
+  }
+
   useEffect(() => {
-    // 计算距离头部
-    let maskTop = top;
-    if (!maskTop) {
-      maskTop = refElTabbar.current.offsetTop + 40;
+    async function fetchData () {
+      let maskTop = await getMaskTop();
+      setOffsetTop(maskTop);
+      // 更新数据
+      refresh();
     }
-    setOffsetTop(maskTop);
-    // 更新数据
-    refresh();
+    fetchData();
   }, []) // eslint-disable-line
 
   useEffect(() => {

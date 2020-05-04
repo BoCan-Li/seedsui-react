@@ -7,31 +7,25 @@ import {
   Titlebar,
   Container,
   Bridge,
-  Emoji
+  Emoji,
+  InputText
 } from '../../src';
 
-const list = [{
-  id: '1',
-  thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
-  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
-},{
-  id: '2',
-  thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-}];
 
 function Demo () {
   const refComponent = useRef();
 
   const [show, setShow] = useState(false);
   const [value, setValue] = useState('');
+  const [show2, setShow2] = useState(false);
+  const [value2, setValue2] = useState('');
 
   function onChange (e, value) {
+    console.log(1)
     setValue(value);
   }
-
-  function toggleEmoji () {
-    setShow(!show);
+  function onChange2 (e, value) {
+    setValue2(value);
   }
 
   return <Page>
@@ -39,15 +33,26 @@ function Demo () {
       <Titlebar caption="SeedsUI"/>
     </Header>
     <Container>
-      <Emoji
+      {show && <Emoji
         autoFocus
-        show={show}
+        carrouselProps={{id: 'id1'}}
         onChange={onChange}
         value={value}
         ref={refComponent}
         maskAttribute={{onClick: () => setShow(false)}}
-      />
-      <input type="button" value="显隐" onClick={toggleEmoji}/>
+      />}
+      {show2 && <Emoji
+        carrouselProps={{id: 'id2', loop: true}}
+        autoFocus
+        onChange={onChange2}
+        value={value2}
+        ref={refComponent}
+        maskAttribute={{onClick: () => setShow2(false)}}
+      />}
+      <input type="button" value="显示1" onClick={() => setShow(true)}/>
+      <p>{value}</p>
+      <input type="button" value="显示2" onClick={() => setShow2(true)}/>
+      <p>{value2}</p>
     </Container>
   </Page>
 }

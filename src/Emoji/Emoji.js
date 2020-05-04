@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, createRef, forwardRef} from 'react';
+import React, {useEffect, useContext, useRef, forwardRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
@@ -9,7 +9,7 @@ import Context from '../Context/instance.js';
 
 const Emoji = forwardRef(({
   portal,
-  show, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
+  // show, // ios内核必须隐藏, 不能移除dom, 弹出时才不会有bug, 所以必须用show
   data = emojiData,
 
   autoFocus = false,
@@ -26,15 +26,8 @@ const Emoji = forwardRef(({
   onChange,
   ...others
 }, ref) =>  {
-  const instance = createRef(null)
-  // 自动获取焦点
-  useEffect(() => {
-    let elInput = ref.current.querySelector('.input-pre');
-    if (autoFocus && elInput && show) {
-      elInput.focus();
-    }
-  }, [show]);
-
+  ref = useRef(null)
+  const instance = useRef(null)
   // 自动扩充功能
   function preAutoSize (target, preTarget) {
     target.style.height = preTarget.clientHeight + 'px';
@@ -47,7 +40,7 @@ const Emoji = forwardRef(({
     let elPre = elInput.nextElementSibling;
     if (elPre.tagName !== 'PRE') return;
     if (autoFocus && elInput) elInput.focus();
-    if (instance.current) return
+    console.log(elInput.value)
     instance.current = new Instance({
       data: data,
       mask: ref.current,
@@ -66,6 +59,13 @@ const Emoji = forwardRef(({
         }
       }
     });
+    // 如果初始化就有值, 则设置光标位置和自增高
+    if (elInput.value) {
+      instance.current.cursorOffset = elInput.value.length - 1
+      instance.current.setCaretPosition(elInput, instance.current.cursorOffset)
+      // 自增高
+      preAutoSize(elInput, elPre);
+    }
   }, []) // eslint-disable-line
 
   // 表情
@@ -94,18 +94,6 @@ const Emoji = forwardRef(({
       </div>
     });
   }
-  // 过滤已经回调的属性
-  function filterProps (props) {
-    if (!props) return props;
-    var propsed = Object.clone(props);
-    if (propsed && propsed.onClick) delete propsed.onClick
-    // for (let n in props) {
-    //   if (n !== 'onClick') {
-    //     propsed[n] = props[n]
-    //   }
-    // }
-    return propsed;
-  }
 
   // 过滤已经回调的属性
   function filterProps (props) {
@@ -122,14 +110,13 @@ const Emoji = forwardRef(({
   const otherMaskAttribute = filterProps(maskAttribute);
   const otherSubmitProps = filterProps(submitProps);
   return createPortal(
-    <div ref={ref} {...maskAttribute} className={`mask emoji-mask${show ? ' active' : ''}${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
+    <div ref={ref} {...maskAttribute} className={`mask emoji-mask active${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
         <div className="emoji-edit">
           {licon}
           {liconAttribute && <i {...liconAttribute} className={`icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
           <InputPre
             className="emoji-edit-input"
-            inputAttribute={{style: {padding: '0'}}}
             value={value}
             onChange={onChange}
             placeholder={placeholder || locale['say_something'] || '说点什么吧...'}
@@ -138,7 +125,12 @@ const Emoji = forwardRef(({
           <i className={`icon emoji-edit-icon`}></i>
           <Button {...otherSubmitProps} className={`emoji-edit-submit${otherSubmitProps.className ? ' ' + otherSubmitProps.className : ''}`} disabled={!value}>{otherSubmitProps.caption || (locale['submit'] || '提交')}</Button>
         </div>
-        <Carrousel {...carrouselProps} pagination className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`} style={{display: 'none'}}>
+        <Carrousel
+          {...carrouselProps}
+          pagination
+          className={`carrousel-container emoji-carrousel${carrouselProps.className ? ' ' + carrouselProps.className : ''}`}
+          style={Object.assign({display: 'none'}, carrouselProps.style)}
+        >
           {getFaceDOM()}
         </Carrousel>
       </div>

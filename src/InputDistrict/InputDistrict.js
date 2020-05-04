@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, Fragment, createRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, Fragment } from 'react';
 import InputText from './../InputText';
 import PickerDistrict from './../PickerDistrict';
 
@@ -18,14 +18,6 @@ const InputDistrict = forwardRef(({
   },
   ...others
 }, ref) =>  {
-  // 创建ref, useRef每次都会返回相同的引用, 所以用createRef
-  const refComponentInputText = createRef(null)
-  const refComponentPicker = createRef(null)
-  useImperativeHandle(ref, () => ({
-    refComponentInputText: refComponentInputText,
-    refComponentPicker: refComponentPicker
-  }));
-
   let [show, setShow] = useState(false);
 
   // 点击文本框
@@ -61,7 +53,6 @@ const InputDistrict = forwardRef(({
   }
   return <Fragment>
     <InputText
-      ref={refComponentInputText}
       value={value}
       {...others}
       type="text"
@@ -69,7 +60,6 @@ const InputDistrict = forwardRef(({
       onClick={onClickInput}
     />
     <PickerDistrict
-      ref={refComponentPicker}
       {...pickerProps}
       maskAttribute={{
         ...pickerProps.maskAttribute,
