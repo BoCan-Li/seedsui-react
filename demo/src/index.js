@@ -68,16 +68,16 @@ function Demo () {
   const refComponent = useRef(null);
   const refComponent2 = useRef(null);
 
-  const [list, setList] = useState(list2);
+  const [list, setList] = useState(list1);
   const [value, setValue] = useState('');
   const [value2, setValue2] = useState('');
 
   useEffect(() => {
     console.log(refComponent)
     console.log(refComponent2)
-    // setTimeout(() => {
-    //   setList(list2);
-    // }, 3000);
+    setTimeout(() => {
+      setList(list2);
+    }, 3000);
   }, [])
 
   function onChange (e, value, option) {

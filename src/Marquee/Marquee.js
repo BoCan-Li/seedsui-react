@@ -31,9 +31,10 @@ const Marquee = forwardRef(({
 
   function update () {
     if (!instance.current) return;
-    instance.current.setStart(0);
-    instance.current.setEnd(step * (list.length - 1));
-    instance.current.update();
+    instance.current.updateParams({
+      start: 0,
+      end: step * (list.length - 1)
+    });
     if (autoplay) {
       instance.current.play();
     }

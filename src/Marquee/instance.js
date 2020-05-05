@@ -32,30 +32,23 @@ var Marquee = function (container, params) {
   s.interval =  null
   // 循环
   s.updateLoop = function () {
+    // 删除复制出来的div
     var dups = [].slice.call(s.container.querySelectorAll('.' + s.params.duplicateClass))
     dups.forEach(function (item) {
       s.container.removeChild(item)
     })
+    // 添加新复制的div
     if (s.params.loop) {
       var beforeDupContainer = s.container.cloneNode(true)
       var afterDupContainer = s.container.cloneNode(true)
       beforeDupContainer.classList.add(s.params.duplicateClass)
       afterDupContainer.classList.add(s.params.duplicateClass)
+      beforeDupContainer.style = ''
+      afterDupContainer.style = ''
       s.container.insertBefore(beforeDupContainer, s.container.firstElementChild)
       s.container.appendChild(afterDupContainer)
     }
   }
-  // 设置开始位置
-  s.setStart = function (start) {
-    s.params.start = start
-  }
-  // 设置结束位置
-  s.setEnd = function (end) {
-    s.params.end = end
-  }
-  /* --------------------
-  Method
-  -------------------- */
   // 设置动画时长
   s.setDuration = function (duration) {
     s.container.style.webkitTransitionDuration = duration + 'ms'
@@ -65,7 +58,7 @@ var Marquee = function (container, params) {
     switch (s.params.direction) {
       case 'top':
         s.container.style.webkitTransform = 'translate(0px, ' + pos + 'px)'
-        break;
+        break
       default:
         s.container.style.webkitTransform = 'translate(0px, ' + pos + 'px)'
     }
@@ -96,6 +89,17 @@ var Marquee = function (container, params) {
     if (s.interval) window.clearInterval(s.interval)
   }
   s.update()
+  // 更新params
+  s.updateParams = function (params = {}) {
+    for (var param in params) {
+      s.params[param] = params[param]
+    }
+    // 更新DOM
+    s.update()
+  }
+  /* --------------------
+  Method
+  -------------------- */
   // 播放
   s.play = function () {
     if (s.interval) window.clearInterval(s.interval)
@@ -122,7 +126,7 @@ var Marquee = function (container, params) {
           window.clearInterval(s.interval)
         }
       }
-    }, s.params.delay);
+    }, s.params.delay)
   }
   s.pause = function () {
     window.clearInterval(s.interval)
