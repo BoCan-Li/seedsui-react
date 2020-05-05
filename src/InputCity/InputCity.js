@@ -1,4 +1,4 @@
-import React, {forwardRef, useState, Fragment} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useState, Fragment} from 'react';
 import InputText from './../InputText';
 import PickerCity from './../PickerCity';
 
@@ -13,6 +13,10 @@ const InputCity = forwardRef(({
   pickerProps = {},
   ...others
 }, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const [show, setShow] = useState(false)
   // 点击文本框
   function onClickInput (...parameter) {
@@ -29,7 +33,7 @@ const InputCity = forwardRef(({
   }
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
-    if (ref.current) e.target = ref.current
+    if (refEl.current) e.target = refEl.current
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
       pickerProps.submitAttribute.onClick(e, value, options);
@@ -52,7 +56,7 @@ const InputCity = forwardRef(({
   }
 
   return <Fragment>
-    <InputText ref={ref} {...others} type="text" readOnly onClick={onClickInput}/>
+    <InputText ref={refEl} {...others} type="text" readOnly onClick={onClickInput}/>
     <PickerCity
       {...pickerProps}
       maskAttribute={{

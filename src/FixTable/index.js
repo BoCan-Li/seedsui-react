@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import Instance from './instance.js';
 
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
@@ -12,13 +12,16 @@ const FixTable = forwardRef(({
   children,
   ...others
 }, ref) =>  {
-  ref = useRef(null)
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
 
   useEffect(() => {
-    if (!ref || !ref.current) return;
+    if (!refEl || !refEl.current) return;
     console.log('计算尺寸')
-    Instance.updateContainerSize(ref.current, leftFixed, rightFixed);
-    Instance.onScroll(ref.current, onBottomRefresh)
+    Instance.updateContainerSize(refEl.current, leftFixed, rightFixed);
+    Instance.onScroll(refEl.current, onBottomRefresh)
   }, [leftFixed, rightFixed, tbody])
 
   function scroll (e) {
@@ -27,7 +30,7 @@ const FixTable = forwardRef(({
 
   if (!thead || !tbody) return null;
   return (
-    <div ref={ref} {...others} className={'fixtable' + (others.className ? ' ' + others.className : '')} onScroll={scroll}>
+    <div ref={refEl} {...others} className={'fixtable' + (others.className ? ' ' + others.className : '')} onScroll={scroll}>
       <table className={`fixtable-thead${theadFixed ? ' fixed' : ''}`}>
         <colgroup></colgroup>
         {/* <colgroup>

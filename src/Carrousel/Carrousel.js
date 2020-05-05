@@ -1,5 +1,5 @@
 // require (PrototypeArray.js), 使用了equals
-import React, { forwardRef, useRef, useEffect } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 import Instance from './instance.js';
 
 const Carrousel = forwardRef(({
@@ -32,7 +32,10 @@ const Carrousel = forwardRef(({
   children, // 轮播页,例<Carrousel><div>第1页</div></Carrousel>
   ...others
 }, ref) =>  {
-  ref = useRef(null)
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const childrenArr = React.Children.toArray(children);
   const instance = useRef(null)
 
@@ -64,8 +67,8 @@ const Carrousel = forwardRef(({
   }, [list, children, activeIndex]);
 
   useEffect(() => {
-    if (!ref || !ref.current) return
-    instance.current = new Instance(ref.current, {
+    if (!refEl || !refEl.current) return
+    instance.current = new Instance(refEl.current, {
       height: style && style.height ? style.height : null,
       width: style && style.width ? style.width : null,
       stopPropagation: stopPropagation,
@@ -108,7 +111,7 @@ const Carrousel = forwardRef(({
   }
 
   return (
-    <div ref={ref} className={getCarrouselClassName()} style={style} {...others}>
+    <div ref={refEl} className={getCarrouselClassName()} style={style} {...others}>
     <div className="carrousel-wrapper">
       {/* 轮播图 */}
       {list.length > 0 && list.map((item, index) => {

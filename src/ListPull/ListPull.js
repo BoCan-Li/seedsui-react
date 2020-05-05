@@ -1,21 +1,24 @@
-import React, { useEffect, forwardRef, useRef } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import Instance from './instance';
 import Button from './../Button';
 
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const ListPull = forwardRef(({
-  list, // [{container: node, lButtons: [{value: '按钮文字', className: 'warn', style: object}], rButtons: 同lButtons}]
+  list, // [{container: node, lButtons: [{caption: '按钮文字', className: 'warn', style: object}], rButtons: 同lButtons}]
   onClick,
   onShowedLeft,
   onShowedRight,
   ...others
 }, ref) =>  {
-  ref = useRef(null)
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const instance = useRef(null)
 
   useEffect(() => {
-    if (!ref || !ref.current) return;
-    instance.current = new Instance(ref.current, {
+    if (!refEl || !refEl.current) return;
+    instance.current = new Instance(refEl.current, {
       onClick: (s) => {
         const e = s.event;
         const index = e.target.getAttribute('data-index');
@@ -38,7 +41,7 @@ const ListPull = forwardRef(({
   }, []) // eslint-disable-line
   
   return (
-    <ul ref={ref} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
+    <ul ref={refEl} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
       {list.map((item, index) => {
         return <li key={`button${index}`} data-index={`${index}`} className="border-b list-pull-li">
           {item.lButtons && item.lButtons.length && <div className="list-pull-left">

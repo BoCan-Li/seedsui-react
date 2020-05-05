@@ -9,9 +9,9 @@ const PickerDistrict = forwardRef(({
     data = treeData,
     dataFormat = {
       parentName: 'parentid',
-      keyName: 'key',
-      valueName: 'value',
-      childName: 'children'
+      idPropertyName: 'id',
+      namePropertyName: 'name',
+      childPropertyName: 'children'
     },
     split = '-',
 
@@ -33,9 +33,9 @@ const PickerDistrict = forwardRef(({
   // context
   const context = useContext(Context) || {};
   let parentProperty = dataFormat.parentName || 'parentid';
-  let keyProperty = dataFormat.keyName || 'key';
-  let valueProperty = dataFormat.valueName || 'value';
-  let childProperty = dataFormat.childName || 'children';
+  let keyProperty = dataFormat.idPropertyName || 'id';
+  let valueProperty = dataFormat.namePropertyName || 'name';
+  let childProperty = dataFormat.childPropertyName || 'children';
   
   // 页签和列表
   let [tabs, setTabs] = useState([])

@@ -1,4 +1,4 @@
-// 此库主要用于非组件的js中, 使用locale('key')获取value值
+// 此库主要用于非组件的js中, 使用locale('id')获取value值
 export default function (key) {
   let locale = {}
   try {

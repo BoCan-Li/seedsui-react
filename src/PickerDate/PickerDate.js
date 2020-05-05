@@ -1,77 +1,65 @@
 // require PrototypeDate.js和PrototypeString.js
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { forwardRef, useEffect, useRef, useContext, useImperativeHandle } from 'react';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
 import Context from '../Context/instance.js';
 
-export default class PickerDate extends Component {
-  static contextType = Context;
-  static propTypes = {
-    portal: PropTypes.object,
-    data: PropTypes.object, // {year: [], month: [], day: [], hour: [], minute: []}
-    split: PropTypes.string,
-    timeSplit: PropTypes.string,
+const PickerDate = forwardRef(({
+  portal,
+  data, // {year: [], month: [], day: [], hour: [], minute: []}
+  split = '-',
+  timeSplit = ':',
 
-    type: PropTypes.string, // date | month | time | datetime
-    show: PropTypes.bool,
-    value: PropTypes.string, // '2018-02-26'
-    valueForKey: PropTypes.string, // '2018-02-26'
+  type = 'date', // date | month | time | datetime
+  show = false,
+  value, // '2018-02-26'
+  valueForKey, // '2018-02-26'
 
-    maskAttribute: PropTypes.object,
-    submitAttribute: PropTypes.object,
-    cancelAttribute: PropTypes.object,
+  maskAttribute = {},
+  submitAttribute = {},
+  cancelAttribute = {},
 
-    fail: PropTypes.func
-  }
-  static defaultProps = {
-    split: '-',
-    timeSplit: ':',
-    type: 'date'
-  }
-  constructor(props, context) {
-    super(props, context);
-  }
-  componentDidMount = () => {
-    this.initInstance()
-  }
-  shouldComponentUpdate = (nextProps) => {
-    if (nextProps.show === this.props.show) return false;
-    return true;
-  }
-  componentDidUpdate = () => {
-    if (this.instance) {
-      if (this.props.show) {
-        this.update();
-        this.instance.show();
+  onError,
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  const instance = useRef(null)
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+
+  useEffect(() => {
+    initInstance()
+  }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (instance.current) {
+      if (show) {
+        update();
+        instance.current.show();
+      } else {
+        instance.current.hide()
       }
-      else this.instance.hide()
     }
-  }
-  update = () => {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    this.instance.updateParams({
+  }, [show])
+
+  function update () {
+    instance.current.updateParams({
       yyUnit: typeof locale['unit_year'] === 'string' ? locale['unit_year'] : '年',
       MMUnit: typeof locale['unit_month'] === 'string' ? locale['unit_month'] : '月',
       ddUnit: typeof locale['unit_date'] === 'string' ? locale['unit_date'] : '日',
       hhUnit: typeof locale['unit_hour'] === 'string' ? locale['unit_hour'] : '时',
       mmUnit: typeof locale['unit_minute'] === 'string' ? locale['unit_minute'] : '分'
     });
-    const def = this.getDefault();
-    this.instance.setDefaults(def);
-    this.instance.update();
+    const def = getDefault();
+    instance.current.setDefaults(def);
+    instance.current.update();
   }
-  getDefault = () => {
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    const {split, timeSplit, type, fail} = this.props;
-    var defaultValue = this.props.valueForKey || this.props.value;
+  function getDefault () {
+    var defaultValue = valueForKey || value;
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;
@@ -86,9 +74,9 @@ export default class PickerDate extends Component {
     // 默认值
     if (type === 'date') {
       // 如果不是合法的日期格式
-      const e = this.instance ? this.instance : {};
+      const e = instance.current ? instance.current : {};
       if (!defaultValue || !defaultValue.isDate(split)) {
-        if (fail) fail({errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}`, event: e});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}`});
       } else {
         let dateValues = defaultValue.split(split)
         defaultYear = dateValues[0]
@@ -98,7 +86,7 @@ export default class PickerDate extends Component {
     } else if (type === 'month') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isMonth(split)) {
-        if (fail) fail({errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`, event: e});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD`});
       } else {
         let monthValues = defaultValue.split(split)
         defaultYear = monthValues[0]
@@ -107,7 +95,7 @@ export default class PickerDate extends Component {
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isDateTime(split, timeSplit)) {
-        if (fail) fail({errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`, event: e});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
       } else {
         let values = defaultValue.split(' ')
         let dateValues = values[0].split(split || '-')
@@ -121,7 +109,7 @@ export default class PickerDate extends Component {
     } else if (type === 'time') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isTime(split, timeSplit)) {
-        if (fail) fail({errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`, event: e});
+        if (onError) onError(e, {errMsg: `${locale['hint_invalid_date'] || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
       } else {
         let timeValues = defaultValue.split(timeSplit || ':')
         defaultHour = timeValues[0]
@@ -136,55 +124,51 @@ export default class PickerDate extends Component {
       minute: defaultMinute,
     }
   }
-  getData = () => {
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+  function getData () {
     // 自定义数据
     var yearsData = null
     var monthsData = null
     var daysData = null
     var hoursData = null
     var minutesData = null
-    if (this.props.data) {
-      if (this.props.data.year) {
-        yearsData = this.props.data.year.map((n) => {
+    if (data) {
+      if (data.year) {
+        yearsData = data.year.map((n) => {
           return {
-            'key': '' + n,
-            'value': '' + n + (locale['unit_year'] || '年')
+            'id': '' + n,
+            'name': '' + n + (locale['unit_year'] || '年')
           }
         })
       }
-      if (this.props.data.month) {
-        monthsData = this.props.data.month.map((n) => {
+      if (data.month) {
+        monthsData = data.month.map((n) => {
           return {
-            'key': '' + n,
-            'value': '' + n + (locale['unit_month'] || '月')
+            'id': '' + n,
+            'name': '' + n + (locale['unit_month'] || '月')
           }
         })
       }
-      if (this.props.data.day) {
-        daysData = this.props.data.day.map((n) => {
+      if (data.day) {
+        daysData = data.day.map((n) => {
           return {
-            'key': '' + n,
-            'value': '' + n + (locale['unit_date'] || '日')
+            'id': '' + n,
+            'name': '' + n + (locale['unit_date'] || '日')
           }
         })
       }
-      if (this.props.data.hour) {
-        hoursData = this.props.data.hour.map((n) => {
+      if (data.hour) {
+        hoursData = data.hour.map((n) => {
           return {
-            'key': '' + n,
-            'value': '' + n + (locale['unit_hour'] || '时')
+            'id': '' + n,
+            'name': '' + n + (locale['unit_hour'] || '时')
           }
         })
       }
-      if (this.props.data.minute) {
-        minutesData = this.props.data.minute.map((n) => {
+      if (data.minute) {
+        minutesData = data.minute.map((n) => {
           return {
-            'key': '' + n,
-            'value': '' + n + (locale['unit_minute'] || '分')
+            'id': '' + n,
+            'name': '' + n + (locale['unit_minute'] || '分')
           }
         })
       }
@@ -197,26 +181,13 @@ export default class PickerDate extends Component {
       minutesData: minutesData,
     }
   }
-  initInstance = () => {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    var data = this.getData();
-    var def = this.getDefault();
+  function initInstance () {
+    if (!refEl || !refEl.current) return;
+    var data = getData();
+    var def = getDefault();
     // render数据
-    const {
-      split,
-      timeSplit,
-      type,
-      show,
-      maskAttribute = {},
-      submitAttribute = {},
-      cancelAttribute = {}
-    } = this.props;
-    this.instance = new Instance({
-      mask: this.$el,
+    instance.current = new Instance({
+      mask: refEl.current,
       split: split,
       timeSplit: timeSplit,
       viewType: type,
@@ -249,65 +220,43 @@ export default class PickerDate extends Component {
       hhUnit: locale['unit_hour'] || '时',
       mmUnit: locale['unit_minute'] || '分'
     })
-    if (show && this.instance) {
+    if (show && instance) {
       setTimeout(function(){
-        this.instance.show();
+        instance.current.show();
       },10);
     }
   }
   // 过滤已经回调的属性
-  filterProps = (props) => {
-    var propsed = {}
-    for (let n in props) {
-      if (n !== 'onClick') {
-        propsed[n] = props[n]
-      }
-    }
-    return propsed;
+  function filterProps (props) {
+    const {onClick, ...otherProps} = props;
+    return {...otherProps};
   }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    let {
-      portal,
-      data,
-      split,
-      timeSplit,
-      type,
-      show,
-      value,
-      valueForKey,
 
-      maskAttribute = {},
-      submitAttribute = {},
-      cancelAttribute = {},
 
-      fail,
-      ...others
-    } = this.props;
-    // 剔除掉onClick事件, 因为在instance时已经回调了
-    maskAttribute = this.filterProps(maskAttribute)
-    submitAttribute = this.filterProps(submitAttribute)
-    cancelAttribute = this.filterProps(cancelAttribute)
-    return createPortal(
-      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}`}>
-        <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
-          <div className="picker-header">
-            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (locale['cancel'] || '取消')}</a>
-            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{cancelAttribute.caption || (locale['finish'] || '完成')}</a>
-          </div>
-          <div className="picker-wrapper">
-            <div className="picker-layer">
-              <div className="picker-layer-frame"></div>
-            </div>
-            <div className="picker-slotbox"></div>
-          </div>
+  // 剔除掉onClick事件, 因为在instance时已经回调了
+  const otherMaskAttribute = filterProps(maskAttribute)
+  const otherSubmitAttribute = filterProps(submitAttribute)
+  const otherCancelAttribute = filterProps(cancelAttribute)
+  return createPortal(
+    <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
+      <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
+        <div className="picker-header">
+          <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale['cancel'] || '取消')}</a>
+          <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || (locale['finish'] || '完成')}</a>
         </div>
-      </div>,
-      portal || this.context.portal || document.getElementById('root') || document.body
-    );
-  }
-}
+        <div className="picker-wrapper">
+          <div className="picker-layer">
+            <div className="picker-layer-frame"></div>
+          </div>
+          <div className="picker-slotbox"></div>
+        </div>
+      </div>
+    </div>,
+    portal || context.portal || document.getElementById('root') || document.body
+  );
+})
+
+export default React.memo(PickerDate, (prevProps, nextProps) => {
+  if (nextProps.show === prevProps.show) return true;
+  return false;
+})

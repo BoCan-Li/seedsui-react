@@ -1,4 +1,4 @@
-import React, { Fragment, forwardRef, useRef, useState, useEffect } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
 import InputText from './../InputText';
 import Picker from './../Picker';
 
@@ -8,11 +8,15 @@ const InputPicker = forwardRef(({
   onChange,
 
   // Picker
-  list = [], // [{key: '', value: ''}]
+  list = [], // [{id: '', name: ''}]
   valueForKey,
   pickerProps = {},
   ...others
 }, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const [show, setShow] = useState(false)
   // 点击文本框
   function onClickInput (...parameter) {
@@ -29,7 +33,7 @@ const InputPicker = forwardRef(({
   }
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
-    if (ref.current) e.target = ref.current
+    if (refEl.current) e.target = refEl.current
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
       pickerProps.submitAttribute.onClick(e, value, options);
@@ -44,6 +48,7 @@ const InputPicker = forwardRef(({
   }
   // 点击取消按钮
   function onClickCancel (e) {
+    if (refEl.current) e.target = refEl.current
     if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
       pickerProps.cancelAttribute.onClick(e);
       return;
@@ -52,12 +57,12 @@ const InputPicker = forwardRef(({
   }
   // 过滤非法数据
   list = list.filter(item => {
-    if (!item || (!item.key && !item.value)) return false;
+    if (!item || (!item.id && !item.name)) return false;
     return true;
   });
 
   return <Fragment>
-    <InputText ref={ref} {...others} readOnly onClick={onClickInput}/>
+    <InputText ref={refEl} {...others} readOnly onClick={onClickInput}/>
     <Picker
       {...pickerProps}
       maskAttribute={{

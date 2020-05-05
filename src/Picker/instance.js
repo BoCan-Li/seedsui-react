@@ -4,8 +4,8 @@ var Picker = function (params) {
   Model
   ------------------------ */
   var defaults = {
-    dataKeyPropertyName: 'key',
-    dataValuePropertyName: 'value',
+    idPropertyName: 'id',
+    namePropertyName: 'name',
 
     overflowContainer: document.body,
     overflowContainerActiveClass: 'overflow-hidden',
@@ -235,12 +235,12 @@ var Picker = function (params) {
     var defaultIndex = 0
     for (var i = 0; i < values.length; i++) {
       // 获得defaultIndex
-      if (slot.defaultKey && slot.defaultKey == values[i][s.params.dataKeyPropertyName]) { // eslint-disable-line
+      if (slot.defaultKey && slot.defaultKey == values[i][s.params.idPropertyName]) { // eslint-disable-line
         defaultIndex = i
       }
 
       // 把li添加到槽中
-      li += '<li>' + values[i][s.params.dataValuePropertyName] + '</li>'
+      li += '<li>' + values[i][s.params.namePropertyName] + '</li>'
     }
     slot.innerHTML = li
     // 选中项

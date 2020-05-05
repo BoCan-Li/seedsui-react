@@ -2426,13 +2426,13 @@ function getStreet (districtId) {
       resolve([
         {
           "parentid": districtId,
-          "value": "街道1",
-          "key": "1",
+          "name": "街道1",
+          "id": "1",
         },
         {
           "parentid": districtId,
-          "value": "街道2",
-          "key": "2",
+          "name": "街道2",
+          "id": "2",
         }
       ])
     }, 500);
@@ -2533,7 +2533,7 @@ onChange = (e, value) => {
   onChange={值改变 func(e, value, option), 默认无}
 
   // Picker
-  list={选择列表 array, 默认无} // [{key: '', value: ''}]
+  list={选择列表 array, 默认无} // [{id: '', name: ''}]
   valueForKey={选中key用split分割 string, 默认无}
   pickerProps={Picker组件弹框属性 object, 默认无} // className: picker
 
@@ -2546,16 +2546,16 @@ import InputPicker from 'seedsui-react/lib/InputPicker';
 
 const list = [
   {
-    key: '1',
-    value: '111'
+    id: '1',
+    name: '111'
   },
   {
-    key: '2',
-    value: '222'
+    id: '2',
+    name: '222'
   },
   {
-    key: '3',
-    value: '333'
+    id: '3',
+    name: '333'
   }
 ];
 
@@ -2646,60 +2646,15 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 
   // Picker
   multiple={是否允许多选 bool, 默认false}
-  list={选择列表 array, 默认无} // [{key: '', value: ''}]
-  valueForKey={选中key用split分割 string, 默认无}
+  list={选择列表 array, 默认无} // [{id: '', name: ''}]
+  valueForKey={选中id用split分割 string, 默认无}
   pickerProps={PickerSelect组件弹框属性 object, 默认无} // className: picker
 
   {...others} // InputText组件
 />
 ```
 ### 示例
-```javascript
-import InputSelect from 'seedsui-react/lib/InputSelect';
-
-this.state = {
-  value: '333',
-  list: [
-    {
-      key: '1',
-      value: '111'
-    },
-    {
-      key: '2',
-      value: '222'
-    },
-    {
-      key: '3',
-      value: '333'
-    }
-  ]
-}
-
-onChange = (e, value, options) => {
-  console.log(e.target)
-  console.log(value, options)
-  this.setState({
-    value: value
-  });
-}
-
-<InputSelect
-  list={this.state.list}
-  multiple
-  value={this.state.value}
-  valueForKey={'1-3'}
-  onChange={this.onChange}
-  placeholder="请选择"
-  className="border-b"
-  pickerProps={{
-    split: '-',
-    maskAttribute: {
-      style: {zIndex: '11'},
-      className: "bg-white"
-    }
-  }}
-/>
-```
+[参考](#inputpicker)
 [返回目录](#component)
 
 
@@ -3306,7 +3261,7 @@ onSubmit = () => {
   list={列表 array, 默认无, 示例如下:}
   // [{
   //   container: node,
-  //   lButtons: [{value: '按钮文字', className: 'warn', style: object}], // className默认
+  //   lButtons: [{caption: '按钮文字', className: 'warn', style: object}], // className默认
   //   rButtons: 同lButtons
   // }]
   style={容器style object, 默认无}
@@ -3553,7 +3508,7 @@ import Mark from 'seedsui-react/lib/Mark';
 ### 属性
 ```javascript
 <Marquee
-  list={列表 array, 默认无} // [{key: 'xx', value: ''}]
+  list={列表 array, 默认无} // [{id: 'xx', name: ''}]
   contentAttribute={单条属性 object, 默认无}
   step={一次移动数值 number, 默认50}
   duration={移动动画时长 number, 默认300}
@@ -3569,12 +3524,12 @@ import Mark from 'seedsui-react/lib/Mark';
 import Marquee from 'seedsui-react/lib/Marquee';
 const list = [
   {
-    key: '1',
-    value: '标题标题1'
+    id: '1',
+    name: '标题标题1'
   },
   {
-    key: '2',
-    value: '标题标题2'
+    id: '2',
+    name: '标题标题2'
   }
 ];
 onClick = (...params) => {
@@ -3585,7 +3540,7 @@ onClick = (...params) => {
   onClick={this.onClick}
   autoplay={5000}
   step={48}
-  contentAttribute={{
+  optionAttribute={{
     style: {height: '38px', padding: '5px 0'},
     className: 'flex flex-center nowrap2'
   }}
@@ -4014,7 +3969,7 @@ onDelete = (...params) => {
 ```javascript
 <Picker
   portal={传送dom object, 默认document.getElementById('root')}
-  list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
+  list={列表 array, 默认无} // 格式 [{id: '', name: ''}]
   show={*显隐 bool, 默认false}
   value={值 string, 默认无}
   valueForKey={选中key string, 默认无}
@@ -4030,11 +3985,11 @@ onDelete = (...params) => {
 import Picker from 'seedsui-react/lib/Picker';
 
 const mockPickerList = [{
-	"key": "7004955043756964827",
-	"value": "瓶"
+	"id": "7004955043756964827",
+	"name": "瓶"
 }, {
-	"key": "5796844733294559575",
-	"value": "箱(=25.0000瓶)"
+	"id": "5796844733294559575",
+	"name": "箱(=25.0000瓶)"
 }];
 
 this.state = {
@@ -4100,7 +4055,7 @@ onClick = () => {
 <PickerCity
   portal={传送dom object, 默认document.getElementById('root')}
   data={数据源 array, 默认内置数据源}
-  dataFormat={数据源格式化 object, 默认如注释} // {keyName: 'key', valueName: 'value', childName: 'children'}
+  dataFormat={数据源格式化 object, 默认如注释} // {idPropertyName: 'id', namePropertyName: 'name', childPropertyName: 'children'}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认'district'} // district | city
   show={*显隐 bool, 默认false}
@@ -4266,7 +4221,7 @@ import Player from 'seedsui-react/lib/Player';
 <PickerDistrict
   portal={传送dom object, 默认document.getElementById('root')}
   data={数据源 array, 默认内置数据源}
-  dataFormat={数据源格式化 object, 默认如注释} // {keyName: 'key', valueName: 'value', childName: 'children'}
+  dataFormat={数据源格式化 object, 默认如注释} // {idPropertyName: 'id', namePropertyName: 'name', childPropertyName: 'children'}
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认''} // province | city | district | street
   show={*显隐 bool, 默认false}
@@ -4275,7 +4230,7 @@ import Player from 'seedsui-react/lib/Player';
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
-  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象, resolve([key: "", value: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则停留在选择页面不进行选择操作
+  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则停留在选择页面不进行选择操作
 />
 ```
 ### 示例
@@ -4291,13 +4246,13 @@ function getStreet (districtId) {
       resolve([
         {
           "parentid": districtId,
-          "value": "街道1",
-          "key": "1",
+          "name": "街道1",
+          "id": "1",
         },
         {
           "parentid": districtId,
-          "value": "街道2",
-          "key": "2",
+          "name": "街道2",
+          "id": "2",
         }
       ])
     }, 500);
@@ -4639,7 +4594,7 @@ submit = () => {
 ### 属性
 ```javascript
 <Radio
-  value={容器框data-value string, 默认无}
+  value={容器框data-name string, 默认无}
   checked={容器框data-checked bool, 默认无} // 获取状态用e.target.getAttribute('data-checked') === 'true'
 
   inputAttribute={单选框属性 object, 默认无}
@@ -4748,57 +4703,6 @@ import Share from 'seedsui-react/lib/Share';
 
 
 
-## SearchBoard
-[搜索面板](https://unpkg.com/seedsui-react/src/lib/SearchBoard/SearchBoard.js)
-### 属性
-```javascript
-<SearchBoard
-  style={容器style object, 默认无}
-  className={容器className string, 默认'border-b', 基础'searchboard'}
-  dbKey={搜索历史存储到db中的key string, 默认'app_search_history'}
-  show={*显隐 bool, 默认true}
-  showValidTags={如果没有历史记录是否隐藏面板 bool, 默认true}
-  onClick={点击标签 func(item, index), 默认无}
-  onClear={点击清除 func(), 默认无}
-  expandCaption={扩展标题 string, 默认无}
-  expandTags={扩展标签 array, 默认无} // 格式 [{value: 'xx'}]
-  onClickExpand={点击扩展标签 func(item, index), 默认无}
->
-</SearchBoard>
-```
-### 示例
-```javascript
-import SearchBoard from 'seedsui-react/lib/SearchBoard';
-
-this.state = {
-  searchValue: ''
-}
-
-searchGoods = (value) => {
-  this.setState({searchValue: value});
-  if (this.$historySearch) this.$historySearch.add({key: value, value: value});
-  // 加载数据
-}
-
-<div className="flex flex-middle" style={style}>
-  <form className="flex flex-middle flex-1" onSubmit={this.searchGoods}>
-    <i className="icon icon-search size20 color-sub"></i>
-    <input type="search" ref={input => this.searchInput = input} className="searchbar-input" placeholder="商品名称/单据编号"/>
-    <i className="icon icon-rdo-close-fill size16 color-sub" onClick={this.onClear}></i>
-  </form>
-  <div style={{display: 'block', fontSize: '15px', lineHeight: '30px', paddingLeft: '10px'}} onClick={this.onClickCancel}>取消</div>
-</div>
-
-<SearchBoard
-  show={goods.length === 0 && !this.state.searchValue}
-  ref={(el) => {this.$historySearch = el;}}
-  dbKey="app_history_search_goods"
-  onClick={(item) => {this.searchGoods(item.value)}}
-/>
-```
-[返回目录](#component)
-
-
 
 ## PickerSelect
 [选择弹框](https://unpkg.com/seedsui-react/src/lib/PickerSelect/PickerSelect.js)
@@ -4807,7 +4711,7 @@ searchGoods = (value) => {
 <PickerSelect
   portal={传送dom object, 默认document.getElementById('root')}
   multiple={是否允许多选 bool, 默认false}
-  list={列表 array, 默认无} // 格式 [{key: '', value: ''}]
+  list={列表 array, 默认无} // 格式 [{id: '', name: ''}]
   split={多选分割字符串 bool, 默认,}
   show={*显隐 bool, 默认false}
   value={值 string, 默认无}

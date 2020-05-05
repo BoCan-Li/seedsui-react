@@ -7,22 +7,60 @@ import {
   Titlebar,
   Container,
   Bridge,
+  Marquee,
   InputDate
 } from '../../src';
 
 
-const list = [
+// 获取街道
+function getStreet (districtId) {
+  return new Promise((resolve) => {
+    Bridge.showLoading();
+    setTimeout(() => {
+      Bridge.hideLoading();
+      resolve([
+        {
+          "parentid": districtId,
+          "name": "街道1",
+          "id": "1",
+        },
+        {
+          "parentid": districtId,
+          "name": "街道2",
+          "id": "2",
+        }
+      ])
+    }, 500);
+  })
+}
+
+const list1 = [
   {
-    key: '1',
-    value: '111'
+    id: '1',
+    name: '111'
   },
   {
-    key: '2',
-    value: '222'
+    id: '2',
+    name: '222'
   },
   {
-    key: '3',
-    value: '333'
+    id: '3',
+    name: '333'
+  }
+];
+
+const list2 = [
+  {
+    id: '111',
+    name: '标题1'
+  },
+  {
+    id: '2222',
+    name: '标题2'
+  },
+  {
+    id: '333',
+    name: '标题3'
   }
 ];
 
@@ -30,12 +68,16 @@ function Demo () {
   const refComponent = useRef(null);
   const refComponent2 = useRef(null);
 
+  const [list, setList] = useState(list2);
   const [value, setValue] = useState('');
   const [value2, setValue2] = useState('');
 
   useEffect(() => {
     console.log(refComponent)
     console.log(refComponent2)
+    // setTimeout(() => {
+    //   setList(list2);
+    // }, 3000);
   }, [])
 
   function onChange (e, value, option) {
@@ -48,7 +90,7 @@ function Demo () {
     console.log(value, option)
     setValue2(value);
   }
-  function onFail (e, msg) {
+  function onError (e, msg) {
     console.log(e)
     console.log(msg);
   }
@@ -58,21 +100,28 @@ function Demo () {
       <Titlebar caption="SeedsUI"/>
     </Header>
     <Container>
-      <InputDate
-        ref={refComponent}
-        value={value}
-        onChange={onChange}
-        placeholder="请选择"
-        className="border-b"
-      />
+      <div className="flex-1 color-sub" style={{margin: '0 12px', height: '36px', overflow: 'hidden'}}>
+        <Marquee
+          list={list}
+          onClick={onChange}
+          ref={refComponent}
+          autoplay={2000}
+          step={36}
+          optionAttribute={{
+            style: {height: '36px', overflow: 'hidden'},
+            className: 'flex flex-middle'
+          }}
+        />
+      </div>
       <InputDate
         max={new Date().format('YYYY-MM-DD')}
         ref={refComponent2}
         value={value2}
         onChange={onChange2}
         placeholder="请选择"
-        fail={onFail}
+        onError={onError}
       />
+      {/* <PickerCity ref={refComponent2}/> */}
     </Container>
   </Page>
 }

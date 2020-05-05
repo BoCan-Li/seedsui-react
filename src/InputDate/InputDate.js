@@ -1,5 +1,5 @@
 // require PrototypeDate.js和PrototypeString.js
-import React, {forwardRef, useState, useContext, Fragment} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useState, useContext, Fragment} from 'react';
 import InputText from './../InputText';
 import PickerDate from './../PickerDate';
 import Context from '../Context/instance.js';
@@ -18,6 +18,10 @@ const InputDate = forwardRef(({
   pickerProps = {},
   ...others
 }, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const [show, setShow] = useState(false)
   // context
   const context = useContext(Context) || {};
@@ -30,9 +34,9 @@ const InputDate = forwardRef(({
     const selectDate = text.toDate(split, timeSplit);
     let value = '';
     const e = {};
-    if (ref.current) {
-      e.target = ref.current
-      value = ref.current.value
+    if (refEl.current) {
+      e.target = refEl.current
+      value = refEl.current.value
     }
     if (min && (min.isDateTime(split, timeSplit) || min.isDate(split) || min.isMonth(split) || min.isTime(timeSplit))) {
       if (type === 'date' && selectDate.compareDate(min.toDate(split, timeSplit)) === -1) {
@@ -105,7 +109,7 @@ const InputDate = forwardRef(({
   }
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
-    if (ref.current) e.target = ref.current
+    if (refEl.current) e.target = refEl.current
     let val = correctDate(value)
     if (val === false) return
     // 确定按钮回调
@@ -130,7 +134,7 @@ const InputDate = forwardRef(({
   }
   
   return <Fragment>
-    <InputText ref={ref} {...others} type="text" readOnly onClick={onClickInput}/>
+    <InputText ref={refEl} {...others} type="text" readOnly onClick={onClickInput}/>
     <PickerDate
       {...pickerProps}
       maskAttribute={{

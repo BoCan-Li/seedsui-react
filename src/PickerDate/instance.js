@@ -47,7 +47,7 @@ var PickerDate = function (params) {
     onClickSubmit: function (e) {
       e.activeText = getActiveText(e.activeOptions)
       var activeKeys = e.activeOptions.map(function (n, i, a) {
-        return n['key']
+        return n['id']
       })
       s.setDefaultsByKeys(activeKeys)
       if (onDateClickSubmit) onDateClickSubmit(e)
@@ -55,9 +55,9 @@ var PickerDate = function (params) {
     onScrollEnd: function (e) {
       // 根据月份算日
       if ((e.params.viewType === 'date' || e.params.viewType === 'datetime') && (e.activeSlot.index === 0 || e.activeSlot.index === 1)) {
-        var year = e.activeOptions[0]['key']
-        var month = e.activeOptions[1]['key']
-        var defaultDay = e.activeOptions[2]['key']
+        var year = e.activeOptions[0]['id']
+        var month = e.activeOptions[1]['id']
+        var defaultDay = e.activeOptions[2]['id']
         updateDays(year, month, defaultDay) // 更新总天数
       }
       // 回调
@@ -133,13 +133,13 @@ var PickerDate = function (params) {
   // 从非自定义日数据的自然日中更新
   function updateDaysForDefault (year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
-    var currentLastDay = s.days[s.days.length - 1]['key']
+    var currentLastDay = s.days[s.days.length - 1]['id']
     if (lastDay === currentLastDay) return
     if (lastDay > currentLastDay) {
       for (var i = 1 + parseInt(currentLastDay, 10); i <= lastDay; i++) {
         s.days.push({
-          'key': '' + i,
-          'value': '' + i + s.params.ddUnit
+          'id': '' + i,
+          'name': '' + i + s.params.ddUnit
         })
       }
     } else if (lastDay < currentLastDay) {
@@ -151,17 +151,17 @@ var PickerDate = function (params) {
   // 从自定义的日数据daysData中更新
   function updateDaysForCustom (year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
-    var currentLastDay = s.days[s.days.length - 1]['key']
+    var currentLastDay = s.days[s.days.length - 1]['id']
     var customData = s.params.daysData
     if (lastDay === currentLastDay) return
     if (lastDay > currentLastDay) {
       customData.forEach(function (n) {
-        if (n['key'] <= lastDay && n['key'] > currentLastDay) s.days.push(n)
+        if (n['id'] <= lastDay && n['id'] > currentLastDay) s.days.push(n)
       })
     } else if (lastDay < currentLastDay) {
       for (var j = currentLastDay; j > lastDay; j--) {
         s.days.forEach(function (n) { // eslint-disable-line
-          if (n['key'] === '' + j) s.days.pop()
+          if (n['id'] === '' + j) s.days.pop()
         })
       }
     }
@@ -175,7 +175,7 @@ var PickerDate = function (params) {
       updateDaysForDefault(year, month)
     }
     var defaultKey = defaultDay
-    if (s.days.length < defaultDay) defaultKey = s.days[s.days.length - 1]['key']
+    if (s.days.length < defaultDay) defaultKey = s.days[s.days.length - 1]['id']
     s.replaceSlot(2, s.days, defaultKey, s.params.dayClass) // 修改第三项
   }
 
@@ -184,7 +184,7 @@ var PickerDate = function (params) {
   ---------------- */
   function getActiveText (activeData) {
     var activeKeys = activeData.map(function (n, i, a) {
-      return n['key']
+      return n['id']
     })
     if (s.params.viewType === 'date') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2]
     else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + s.params.timeSplit + activeKeys[4]
@@ -223,8 +223,8 @@ var PickerDate = function (params) {
     } else {
       for (var yyyy = s.params.minYear; yyyy <= s.params.maxYear; yyyy++) {
         s.years.push({
-          'key': '' + yyyy,
-          'value': s.params.isSimpleYear ? yyyy.toString().substring(2, 4) + s.params.yyUnit : yyyy + s.params.yyUnit
+          'id': '' + yyyy,
+          'name': s.params.isSimpleYear ? yyyy.toString().substring(2, 4) + s.params.yyUnit : yyyy + s.params.yyUnit
         })
       }
     }
@@ -238,8 +238,8 @@ var PickerDate = function (params) {
       for (var MM = 1; MM <= 12; MM++) {
         var _MM = MM.toString().length === 1 ? '0' + MM : MM
         s.months.push({
-          'key': '' + _MM,
-          'value': _MM + s.params.MMUnit
+          'id': '' + _MM,
+          'name': _MM + s.params.MMUnit
         })
       }
     }
@@ -257,8 +257,8 @@ var PickerDate = function (params) {
       for (var dd = 1; dd <= currentMaxday; dd++) {
         var _dd = dd.toString().length === 1 ? '0' + dd : dd
         s.days.push({
-          'key': '' + _dd,
-          'value': _dd + s.params.ddUnit
+          'id': '' + _dd,
+          'name': _dd + s.params.ddUnit
         })
       }
     }
@@ -274,8 +274,8 @@ var PickerDate = function (params) {
       for (var hh = 0; hh <= 23; hh++) {
         var _hh = hh.toString().length === 1 ? '0' + hh : hh
         s.hours.push({
-          'key': '' + _hh,
-          'value': _hh + s.params.hhUnit
+          'id': '' + _hh,
+          'name': _hh + s.params.hhUnit
         })
       }
     }
@@ -288,8 +288,8 @@ var PickerDate = function (params) {
       for (var mm = 0; mm <= 59; mm++) {
         var _mm = mm.toString().length === 1 ? '0' + mm : mm
         s.minutes.push({
-          'key': '' + _mm,
-          'value': _mm + s.params.mmUnit
+          'id': '' + _mm,
+          'name': _mm + s.params.mmUnit
         })
       }
     }

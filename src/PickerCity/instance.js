@@ -9,9 +9,9 @@ var PickerCity = function (params) {
     Model
     -------------------- */
   var defaults = {
-    dataKeyPropertyName: 'key',
-    dataValuePropertyName: 'value',
-    dataChildPropertyName: 'children',
+    idPropertyName: 'id',
+    namePropertyName: 'name',
+    childPropertyName: 'children',
 
     split: '-',
     
@@ -39,10 +39,10 @@ var PickerCity = function (params) {
       // var activeOption = e.activeSlot.values[e.activeSlot.activeIndex]
       var activeOption = e.activeOptions[e.activeSlot.index]
       if (e.activeSlot.index === 0) { // 滚动省
-        var city = replaceCity(activeOption[s.params.dataKeyPropertyName]) // 修改第二项
-        replaceDistrict(city[0][s.params.dataKeyPropertyName]) // 修改第三项
+        var city = replaceCity(activeOption[s.params.idPropertyName]) // 修改第二项
+        replaceDistrict(city[0][s.params.idPropertyName]) // 修改第三项
       } else if (e.activeSlot.index === 1) { // 滚动市
-        replaceDistrict(activeOption[s.params.dataKeyPropertyName]) // 修改第三项
+        replaceDistrict(activeOption[s.params.idPropertyName]) // 修改第三项
       }
       // 回调
       if (onCityScrollEnd) onCityScrollEnd(e)
@@ -58,8 +58,8 @@ var PickerCity = function (params) {
   
   // DefaultValue
   s.params.defaultValues = [{
-    [s.params.dataKeyPropertyName]: '',
-    [s.params.dataValuePropertyName]: '----'
+    [s.params.idPropertyName]: '',
+    [s.params.namePropertyName]: '----'
   }]
 
   // Data
@@ -91,26 +91,26 @@ var PickerCity = function (params) {
   // 设置数据
   s.setData = function (data, dataProperty) {
     if (data) s.params.data = data
-    if (dataProperty && dataProperty.dataKeyPropertyName) s.params.dataKeyPropertyName = dataProperty.dataKeyPropertyName
-    if (dataProperty && dataProperty.dataValuePropertyName) s.params.dataValuePropertyName = dataProperty.dataValuePropertyName
-    if (dataProperty && dataProperty.dataChildPropertyName) s.params.dataChildPropertyName = dataProperty.dataChildPropertyName
+    if (dataProperty && dataProperty.idPropertyName) s.params.idPropertyName = dataProperty.idPropertyName
+    if (dataProperty && dataProperty.namePropertyName) s.params.namePropertyName = dataProperty.namePropertyName
+    if (dataProperty && dataProperty.childPropertyName) s.params.childPropertyName = dataProperty.childPropertyName
   }
   // 根据省市区名获得keys,返回:['320000','320100','320105'],参数:['江苏省','南京市','建邺区']
   s.getKeysByValues = function(values) {
     var keys = []
     for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
       // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
-      if (values[0] && (province[s.params.dataValuePropertyName].indexOf(values[0]) > -1 || values[0].indexOf(province[s.params.dataValuePropertyName]) > -1)) {
-        keys.push(province[s.params.dataKeyPropertyName])
-        for (var j = 0, city; city = province[s.params.dataChildPropertyName][j++];) { // eslint-disable-line
+      if (values[0] && (province[s.params.namePropertyName].indexOf(values[0]) > -1 || values[0].indexOf(province[s.params.namePropertyName]) > -1)) {
+        keys.push(province[s.params.idPropertyName])
+        for (var j = 0, city; city = province[s.params.childPropertyName][j++];) { // eslint-disable-line
           // 获得市
-          if (values[1] && (city[s.params.dataValuePropertyName].indexOf(values[1]) > -1 || values[1].indexOf(city[s.params.dataValuePropertyName]) > -1)) {
-            keys.push(city[s.params.dataKeyPropertyName])
+          if (values[1] && (city[s.params.namePropertyName].indexOf(values[1]) > -1 || values[1].indexOf(city[s.params.namePropertyName]) > -1)) {
+            keys.push(city[s.params.idPropertyName])
             if (values[2]) {
-              for (var k = 0, district; district = city[s.params.dataChildPropertyName][k++];) { // eslint-disable-line
+              for (var k = 0, district; district = city[s.params.childPropertyName][k++];) { // eslint-disable-line
                 // 获得区
-                if (values[2] && (district[s.params.dataValuePropertyName].indexOf(values[2]) > -1 || values[2].indexOf(district[s.params.dataValuePropertyName]) > -1)) {
-                  keys.push(district[s.params.dataKeyPropertyName])
+                if (values[2] && (district[s.params.namePropertyName].indexOf(values[2]) > -1 || values[2].indexOf(district[s.params.namePropertyName]) > -1)) {
+                  keys.push(district[s.params.idPropertyName])
                   return keys
                 }
               }
@@ -122,24 +122,24 @@ var PickerCity = function (params) {
       }
     }
     // 如果省市区不对,则返回第一个省第一个市
-    return [s.params.data[0][s.params.dataKeyPropertyName], s.params.data[0][s.params.dataChildPropertyName][0][s.params.dataKeyPropertyName]]
+    return [s.params.data[0][s.params.idPropertyName], s.params.data[0][s.params.childPropertyName][0][s.params.idPropertyName]]
   }
   // 根据省市区名获得keys,返回:['江苏省','南京市','建邺区'],参数:['320000','320100','320105']
   s.getValuesByKeys = function (keys) {
     var values = []
     for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
       // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
-      if (keys[0] && province[s.params.dataKeyPropertyName] === keys[0]) {
-        values.push(province[s.params.dataValuePropertyName])
-        for (var j = 0, city; city = province[s.params.dataChildPropertyName][j++];) { // eslint-disable-line
+      if (keys[0] && province[s.params.idPropertyName] === keys[0]) {
+        values.push(province[s.params.namePropertyName])
+        for (var j = 0, city; city = province[s.params.childPropertyName][j++];) { // eslint-disable-line
           // 获得市
-          if (keys[1] && city[s.params.dataKeyPropertyName] === keys[1]) {
-            values.push(city[s.params.dataValuePropertyName])
+          if (keys[1] && city[s.params.idPropertyName] === keys[1]) {
+            values.push(city[s.params.namePropertyName])
             if (keys[2]) {
-              for (var k = 0, district; district = city[s.params.dataChildPropertyName][k++];) { // eslint-disable-line
+              for (var k = 0, district; district = city[s.params.childPropertyName][k++];) { // eslint-disable-line
                 // 获得区
-                if (keys[2] && district[s.params.dataKeyPropertyName] === keys[2]) {
-                  values.push(district[s.params.dataValuePropertyName])
+                if (keys[2] && district[s.params.idPropertyName] === keys[2]) {
+                  values.push(district[s.params.namePropertyName])
                   return values
                 }
               }
@@ -151,19 +151,19 @@ var PickerCity = function (params) {
       }
     }
     // 如果省市区不对,则返回第一个省第一个市
-    return [s.params.data[0][s.params.dataValuePropertyName], s.params.data[0][s.params.dataChildPropertyName][0][s.params.dataValuePropertyName]]
+    return [s.params.data[0][s.params.namePropertyName], s.params.data[0][s.params.childPropertyName][0][s.params.namePropertyName]]
   }
   // 获取value,根据key
   s.getValueByKey = function (key) {
     for (var i = 0, province; province = s.params.data[i++];) { // eslint-disable-line
       // 获得省, 兼容简称模式: 例如"江苏省"和"江苏"也能匹配成功
-      if (province[s.params.dataKeyPropertyName] === key) return province[s.params.dataValuePropertyName]
-      for (var j = 0, city; city = province[s.params.dataChildPropertyName][j++];) { // eslint-disable-line
+      if (province[s.params.idPropertyName] === key) return province[s.params.namePropertyName]
+      for (var j = 0, city; city = province[s.params.childPropertyName][j++];) { // eslint-disable-line
         // 获得市
-        if (city[s.params.dataKeyPropertyName] === key) return city[s.params.dataValuePropertyName]
-        for (var k = 0, district; district = city[s.params.dataChildPropertyName][k++];) { // eslint-disable-line
+        if (city[s.params.idPropertyName] === key) return city[s.params.namePropertyName]
+        for (var k = 0, district; district = city[s.params.childPropertyName][k++];) { // eslint-disable-line
           // 获得区
-          if (district[s.params.dataKeyPropertyName] === key) return district[s.params.dataValuePropertyName]
+          if (district[s.params.idPropertyName] === key) return district[s.params.namePropertyName]
         }
       }
     }
@@ -192,18 +192,18 @@ var PickerCity = function (params) {
   // 获得选中的文字
   function getActiveText (activeOptions) {
     var activeValues = activeOptions.map(function (n, i, a) {
-      return n[s.params.dataValuePropertyName]
+      return n[s.params.namePropertyName]
     })
     var activeText = ''
     if (activeValues[0]) activeText += activeValues[0]
     if (activeValues[1]) activeText += s.params.split + activeValues[1]
-    if (activeValues[2] && activeValues[2] !== s.params.defaultValues[0][s.params.dataValuePropertyName]) activeText += s.params.split + activeValues[2]
+    if (activeValues[2] && activeValues[2] !== s.params.defaultValues[0][s.params.namePropertyName]) activeText += s.params.split + activeValues[2]
     return activeText
   }
   // 设置选中的keys
   function setActiveKeys (activeOptions) {
     var activeKeys = activeOptions.map(function (n, i, a) {
-      return n[s.params.dataKeyPropertyName]
+      return n[s.params.idPropertyName]
     })
     if (activeKeys[0]) s.setActiveProvinceKey(activeKeys[0])
     if (activeKeys[1]) s.setActiveCityKey(activeKeys[1])
@@ -216,8 +216,8 @@ var PickerCity = function (params) {
     /* eslint-disable */
     for (var i = 0, opt; opt = array[i++];) {
       arr.push({
-        [s.params.dataKeyPropertyName]: opt[s.params.dataKeyPropertyName],
-        [s.params.dataValuePropertyName]: opt[s.params.dataValuePropertyName]
+        [s.params.idPropertyName]: opt[s.params.idPropertyName],
+        [s.params.namePropertyName]: opt[s.params.namePropertyName]
       })
     }
     /* eslint-enable */
@@ -231,10 +231,10 @@ var PickerCity = function (params) {
     // 如果传key，则找到对应key的子级
     /* eslint-disable */
     for (var i = 0, province; province = s.params.data[i++];) {
-      if (province[s.params.dataKeyPropertyName] == key) return getPureArray(province[s.params.dataChildPropertyName])
-      for (var j = 0, city; city = province[s.params.dataChildPropertyName][j++];) {
-        if (!city[s.params.dataChildPropertyName]) break
-        if (city[s.params.dataKeyPropertyName] == key) return getPureArray(city[s.params.dataChildPropertyName])
+      if (province[s.params.idPropertyName] == key) return getPureArray(province[s.params.childPropertyName])
+      for (var j = 0, city; city = province[s.params.childPropertyName][j++];) {
+        if (!city[s.params.childPropertyName]) break
+        if (city[s.params.idPropertyName] == key) return getPureArray(city[s.params.childPropertyName])
       }
     }
     /* eslint-enable */
@@ -246,13 +246,13 @@ var PickerCity = function (params) {
   /* // 替换省
   function replaceProvince (activeKey) {
     var provinces = getChildrenByKey()
-    s.replaceSlot(0, provinces, activeKey || provinces[0][s.params.dataKeyPropertyName], s.params.cityClass)
+    s.replaceSlot(0, provinces, activeKey || provinces[0][s.params.idPropertyName], s.params.cityClass)
     return provinces
   } */
   // 替换市
   function replaceCity (key, activeKey) {
     var citys = getChildrenByKey(key)
-    s.replaceSlot(1, citys, activeKey || citys[0][s.params.dataKeyPropertyName], s.params.cityClass)
+    s.replaceSlot(1, citys, activeKey || citys[0][s.params.idPropertyName], s.params.cityClass)
     return citys
   }
   // 替换区
@@ -260,16 +260,16 @@ var PickerCity = function (params) {
     if (s.params.viewType !== 'district') return
     var districts = getChildrenByKey(key)
     if (districts && districts.length && districts.length > 0) {
-      s.replaceSlot(2, districts, activeKey || districts[0][s.params.dataKeyPropertyName], s.params.districtClass)
+      s.replaceSlot(2, districts, activeKey || districts[0][s.params.idPropertyName], s.params.districtClass)
     } else {
-      s.replaceSlot(2, s.params.defaultValues, s.params.defaultValues[s.params.dataKeyPropertyName], s.params.districtClass)
+      s.replaceSlot(2, s.params.defaultValues, s.params.defaultValues[s.params.idPropertyName], s.params.districtClass)
     }
   }
   // 添加省
   function addProvince () {
     s.province = getChildrenByKey()
     if (!s.activeProvinceKey) {
-      s.setActiveProvinceKey(s.province[0][s.params.dataKeyPropertyName])
+      s.setActiveProvinceKey(s.province[0][s.params.idPropertyName])
     }
     s.addSlot(s.province, s.activeProvinceKey, s.params.provinceClass)
   }
@@ -279,12 +279,12 @@ var PickerCity = function (params) {
     // code有误
     if (!s.city) {
       console.warn('SeedsUI PickerCity: 上级省code' + s.activeProvinceKey + '下级不存在,将默认选中第一个城市')
-      s.setActiveProvinceKey(s.province[0][s.params.dataKeyPropertyName])
+      s.setActiveProvinceKey(s.province[0][s.params.idPropertyName])
       s.city = getChildrenByKey(s.activeProvinceKey)
-      s.setActiveCityKey(s.city[0][s.params.dataKeyPropertyName])
+      s.setActiveCityKey(s.city[0][s.params.idPropertyName])
     }
     if (!s.activeCityKey) {
-      s.setActiveCityKey(s.city[0][s.params.dataKeyPropertyName])
+      s.setActiveCityKey(s.city[0][s.params.idPropertyName])
     }
     s.addSlot(s.city, s.activeCityKey, s.params.cityClass)
   }
@@ -295,12 +295,12 @@ var PickerCity = function (params) {
     // code有误
     if (!s.district) {
       console.warn('SeedsUI PickerCity: 上级市code' + s.activeCityKey + '下级不存在,将默认选中第一个区县或置空')
-      s.setActiveCityKey(s.city[0][s.params.dataKeyPropertyName])
-      s.district = getChildrenByKey(s.city[0][s.params.dataKeyPropertyName])
-      if (s.district) s.setActiveDistrictKey(s.district[0][s.params.dataKeyPropertyName])
+      s.setActiveCityKey(s.city[0][s.params.idPropertyName])
+      s.district = getChildrenByKey(s.city[0][s.params.idPropertyName])
+      if (s.district) s.setActiveDistrictKey(s.district[0][s.params.idPropertyName])
     }
     if (!s.activeDistrictKey && s.district) {
-      s.setActiveDistrictKey(s.district[0][s.params.dataKeyPropertyName])
+      s.setActiveDistrictKey(s.district[0][s.params.idPropertyName])
     }
     if (s.district) {
       s.addSlot(s.district, s.activeDistrictKey, s.params.districtClass)

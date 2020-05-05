@@ -1,11 +1,11 @@
-import React, { forwardRef, useRef, useEffect, useContext } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Instance from './instance.js';
 import Context from '../Context/instance.js';
 
 const Picker = forwardRef(({
   portal,
-  list = [], // [{key: '', value: ''}]
+  list = [], // [{id: '', name: ''}]
 
   show = false,
   value,
@@ -17,7 +17,10 @@ const Picker = forwardRef(({
   slotAttribute = {},
   ...others
 }, ref) =>  {
-  ref = useRef(null);
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   const instance = useRef(null);
   useEffect(() => {
     initInstance()
@@ -37,25 +40,25 @@ const Picker = forwardRef(({
   }, [show])
 
   function setDefault () {
-    let key = valueForKey || '';
-    if (!key) {
+    let id = valueForKey || '';
+    if (!id) {
       const defaultOpt = getDefaults();
-      if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
+      if (defaultOpt && defaultOpt.id) id = defaultOpt.id;
     }
     instance.current.clearSlots();
-    instance.current.addSlot(list, key || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认key,样式(lock样式为锁定列)
+    instance.current.addSlot(list, id || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认id,样式(lock样式为锁定列)
   }
 
   function getDefaults () {
     if (!valueForKey && !value) {
       if (list && list[0]) return list[0];
-      return [{key: '', value: ''}];
+      return [{id: '', name: ''}];
     }
     const values = list.filter((item) => {
       if (valueForKey) {
-        if (valueForKey === item.key) return true
+        if (valueForKey === item.id) return true
       } else if (value) {
-        if (item.value === value) return true
+        if (item.name === value) return true
       }
       return false
     });
@@ -63,10 +66,13 @@ const Picker = forwardRef(({
   }
 
   function initInstance () {
-    if (!list || !list.length || instance.current) return;
+    if (!list || !list.length || instance.current) {
+      console.log('SeedsUI Picker: 参数list为空')
+      return;
+    }
     // render数据
     instance.current = new Instance({
-      mask: ref.current,
+      mask: refEl.current,
       onClickMask: (e) => {
         if (maskAttribute.onClick) maskAttribute.onClick(e)
       },
@@ -74,7 +80,7 @@ const Picker = forwardRef(({
         if (cancelAttribute.onClick) cancelAttribute.onClick(e);
       },
       onClickSubmit: (e) => {
-        const value = e.activeOptions[0].value;
+        const value = e.activeOptions[0].name;
         const options = e.activeOptions;
         if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
       },
@@ -83,9 +89,9 @@ const Picker = forwardRef(({
     });
     // 默认项
     const defaultOpt = getDefaults();
-    let key = '';
-    if (defaultOpt && defaultOpt.key) key = defaultOpt.key;
-    instance.current.addSlot(list, key, slotAttribute.className || 'text-center');
+    let id = '';
+    if (defaultOpt && defaultOpt.id) id = defaultOpt.id;
+    instance.current.addSlot(list, id, slotAttribute.className || 'text-center');
     if (show && instance.current) {
       instance.current.show()
     }
@@ -105,7 +111,7 @@ const Picker = forwardRef(({
   const otherSubmitAttribute = filterProps(submitAttribute)
   const otherCancelAttribute = filterProps(cancelAttribute)
   return createPortal(
-    <div ref={ref} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
+    <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
         <div className="picker-header">
           <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale['cancel'] || '取消')}</a>

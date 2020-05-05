@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle} from 'react';
 
 const InputText = forwardRef(({
   type = 'text', // 类型: text | number | tel | password
@@ -37,9 +37,13 @@ const InputText = forwardRef(({
   fail,
   ...others
 }, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   // 点击容器
   function click (e) {
-    let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
+    let elInput = refEl.current.querySelector('.input-text') || refEl.current.querySelector('.input-pre');
     if (!elInput) return;
     if (disabled) return;
     var target = e.target;
@@ -118,7 +122,7 @@ const InputText = forwardRef(({
   }
   // 点击清除
   function onClear (e) {
-    let elInput = ref.current.querySelector('.input-text') || ref.current.querySelector('.input-pre');
+    let elInput = refEl.current.querySelector('.input-text') || refEl.current.querySelector('.input-pre');
     if (!elInput) return;
     elInput.focus();
     // 赋值
@@ -189,7 +193,7 @@ const InputText = forwardRef(({
   riconAttribute = filterProps(riconAttribute)
   clearAttribute = filterProps(clearAttribute)
 
-  return (<div ref={ref} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
+  return (<div ref={refEl} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
       {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
       {getInputDOM()}

@@ -142,12 +142,12 @@ var PickerSelect = function (params) {
   }
   s.updateActive = function () {
     var options = [].slice.call(s.picker.querySelectorAll('.' + s.params.optionClass))
-    var activeKeys = s.activeOptions.map(function (item) {
-      return item.key
+    var activeIds = s.activeOptions.map(function (item) {
+      return item.id
     })
     options.forEach(function (n, i) {
-      var key = n.getAttribute('data-key')
-      if (activeKeys.indexOf(key) >= 0) {
+      var id = n.getAttribute('data-id')
+      if (activeIds.indexOf(id) >= 0) {
         n.classList.add(s.params.optionActiveClass)
       } else {
         n.classList.remove(s.params.optionActiveClass)
@@ -227,11 +227,11 @@ var PickerSelect = function (params) {
       // 获得选中项
       options.forEach(function (n, i) {
         if (n.classList.contains(s.params.optionActiveClass)) {
-          var key = n.getAttribute('data-key')
-          var value = n.getAttribute('data-value')
+          var key = n.getAttribute('data-id')
+          var value = n.getAttribute('data-name')
           s.activeOptions.push({
-            key: key,
-            value: value
+            id: key,
+            name: value
           })
         }
       })
@@ -243,11 +243,11 @@ var PickerSelect = function (params) {
       })
       // 设置点中的为选中项
       e.target.classList.add(s.params.optionActiveClass)
-      var key = e.target.getAttribute('data-key')
-      var value = e.target.getAttribute('data-value')
+      var id = e.target.getAttribute('data-id')
+      var name = e.target.getAttribute('data-name')
       s.activeOptions = [{
-        key: key,
-        value: value
+        id: id,
+        name: name
       }]
     }
     

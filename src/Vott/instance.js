@@ -42,8 +42,8 @@ var Vott = function (container, params) {
     /*
     callbacks
     onClick:function(s)
-    success:function(s)
-    fail:function(s)
+    onSuccess:function(s)
+    onError:function(s)
     */
   }
   params = params || {}
@@ -164,7 +164,7 @@ var Vott = function (container, params) {
     // 渲染多边形
     s.draw(s.params.data)
     // Callback
-    if (s.params.success) s.params.success(s)
+    if (s.params.onSuccess) s.params.onSuccess(s)
     // 增加事件
     if (!s.params.readOnly) {
       s.detach()
@@ -177,7 +177,7 @@ var Vott = function (container, params) {
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.svg.classList.remove(s.params.activeClass)
     // Callback
-    if (s.params.fail) s.params.fail({errMsg: `${locale('invalid_image_src') || '图片地址无效'}`, event: e})
+    if (s.params.onError) s.params.onError(e, {errMsg: `${locale('invalid_image_src') || '图片地址无效'}`})
   }
   // 更新DOM
   s.update = function () {

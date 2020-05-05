@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useRef, forwardRef, useState} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext, useState} from 'react';
 import {createPortal} from 'react-dom';
 import Carrousel from './../Carrousel';
 import InputPre from './../InputPre';
@@ -26,7 +26,13 @@ const Emoji = forwardRef(({
   onChange,
   ...others
 }, ref) =>  {
-  ref = useRef(null)
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
   let [tempValue, setTempValue] = useState(value);
   const instance = useRef(null)
   // 自动扩充功能
@@ -36,14 +42,14 @@ const Emoji = forwardRef(({
   // 初始化
   useEffect(() => {
     // 输入框
-    let elInput = ref.current.querySelector('.input-pre');
+    let elInput = refEl.current.querySelector('.input-pre');
     if (!elInput) return;
     let elPre = elInput.nextElementSibling;
     if (elPre.tagName !== 'PRE') return;
     if (autoFocus && elInput) elInput.focus();
     instance.current = new Instance({
       data: data,
-      mask: ref.current,
+      mask: refEl.current,
       isClickMaskHide: false,
       // onClickMask: (s) => {
       //   if (maskAttribute.onClick) maskAttribute.onClick(s.event)
@@ -77,7 +83,7 @@ const Emoji = forwardRef(({
   // 因为synchronization模式, 每次组件在render的时候都生成了一份本次render的state、function、effects, 这些与之前或者之后的render没关系, 所以当值发生变化时需要即时的更新回调
   useEffect(() => {
     // 输入框
-    let elInput = ref.current.querySelector('.input-pre');
+    let elInput = refEl.current.querySelector('.input-pre');
     if (!elInput) return;
     let elPre = elInput.nextElementSibling;
     if (elPre.tagName !== 'PRE') return;
@@ -116,14 +122,14 @@ const Emoji = forwardRef(({
         page++;
       }
       if (!icons[page]) icons[page] = [];
-      icons[page].push({key: name, value: data[name]});
+      icons[page].push({id: name, name: data[name]});
       index++;
     }
     // 生成DOM
     return icons.map((icon, i) => {
       return <div key={`page${i}`} className={`emoji-carrousel-slide`}>
         {icon.map((item, index) => {
-          return <a key={`face${index}`} className={`emoji-face`} data-emoji={item.value} title={item.key}>&nbsp;</a>
+          return <a key={`face${index}`} className={`emoji-face`} data-emoji={item.name} title={item.id}>&nbsp;</a>
         })}
         <a className={`emoji-face-delete`}>&nbsp;</a>
       </div>
@@ -140,16 +146,12 @@ const Emoji = forwardRef(({
     setTempValue(val)
   }
 
-  // context
-  const context = useContext(Context) || {};
-  const locale = context.locale || {};
-
 
   // 剔除掉onClick事件, 因为在instance时已经回调了
   const otherMaskAttribute = filterProps(maskAttribute);
   const otherSubmitAttribute = filterProps(submitAttribute);
   return createPortal(
-    <div ref={ref} {...maskAttribute} className={`mask emoji-mask active${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
+    <div ref={refEl} {...maskAttribute} className={`mask emoji-mask active${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`emoji active${others.className ? ' ' + others.className : ''}`}>
         <div className="emoji-edit">
           {licon}

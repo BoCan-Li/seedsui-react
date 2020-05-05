@@ -1,71 +1,50 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 
-export default class PickerSelect extends Component {
-  static contextType = Context;
-  static propTypes = {
-    portal: PropTypes.object,
-    multiple: PropTypes.bool, // 是否允许多选
-    list: PropTypes.array, // [{key: '', value: ''}]
-    split: PropTypes.string,
+const Picker = forwardRef(({
+  portal,
+  multiple = false, // 是否允许多选
+  list = [], // [{id: '', name: ''}]
+  split = ',',
 
-    show: PropTypes.bool,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    valueForKey: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
+  show = false,
+  value,
+  valueForKey,
 
-    maskAttribute: PropTypes.object,
-    submitAttribute: PropTypes.object,
-    cancelAttribute: PropTypes.object,
-    optionAttribute: PropTypes.object
-  }
-  static defaultProps = {
-    split: ','
-  }
-  constructor(props, context) {
-    super(props, context);
-  }
-  componentDidMount = () => {
-  }
-  componentDidUpdate = (prevProps) => {
-    const {
-      list,
-      show
-    } = this.props;
+  maskAttribute = {},
+  submitAttribute = {},
+  cancelAttribute = {},
+  optionAttribute = {},
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+  useEffect(() => {
     if (!list || !list.length) return;
-    if (this.$el && show !== prevProps.show) {
-      const selectedKeys = Object.values(this.getSelectedKeys() || []) || [];
-      [].slice.call(this.$el.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
-        if (selectedKeys.indexOf(list[i].key) !== -1) {
-          n.classList.add('active');
-        } else {
-          n.classList.remove('active');
-        }
-      })
-    }
-  }
-  // 获取选中的key
-  getSelectedKeys = () => {
-    const {
-      list,
-      valueForKey,
-      value,
-      split
-    } = this.props;
+    const selectedIds = Object.values(getSelectedIds() || []) || [];
+    [].slice.call(refEl.current.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
+      if (selectedIds.indexOf(list[i].id) !== -1) {
+        n.classList.add('active');
+      } else {
+        n.classList.remove('active');
+      }
+    })
+  }, [show])
+  // 获取选中的id
+  function getSelectedIds () {
     const selected = valueForKey || value;
-    const selectedName = valueForKey ? 'key' : 'value';
+    const selectedName = valueForKey ? 'id' : 'name';
     if (selected) {
       const options = selected.split(split || ',').map((val) => {
         for (var i = 0, option; option = list[i++];) { // eslint-disable-line
           if (option[selectedName] === val) {
-            return option.key;
+            return option.id;
           }
         }
         return '';
@@ -76,26 +55,15 @@ export default class PickerSelect extends Component {
     }
   }
   // 构建值
-  buildValue = (options) => {
-    if (!this.props.multiple) return options[0].value;
+  function buildValue (options) {
+    if (!multiple) return options[0].name;
     const value = options.map((item) => {
-      return item.value;
+      return item.name;
     });
-    const {
-      pickerProps =  {}
-    } = this.props;
-    return value.join(pickerProps.split || ',');
+    return value.join(split || ',');
   }
   // 点击遮罩
-  onClick = (e) => {
-    const {
-      multiple,
-      list,
-      maskAttribute = {},
-      optionAttribute = {},
-      submitAttribute = {},
-      cancelAttribute = {}
-    } = this.props;
+  function onClick (e) {
     if (e.target.classList.contains('picker-mask')) { // 点击遮罩
       if (maskAttribute.onClick) maskAttribute.onClick(e)
     } else if (e.target.classList.contains('pickerselect-option')) { // 点击项
@@ -104,7 +72,7 @@ export default class PickerSelect extends Component {
       if (!multiple && submitAttribute.onClick) {
         e.activeOptions = [list[index]];
         e.activeIndex = [Number(index)];
-        const value = this.buildValue(e.activeOptions);
+        const value = buildValue(e.activeOptions);
         const options = e.activeOptions;
         submitAttribute.onClick(e, value, options);
       } else {
@@ -113,14 +81,14 @@ export default class PickerSelect extends Component {
     } else if (e.target.classList.contains('picker-submit')) { // 点击确定按钮
       var selected = [];
       var selectedIndex = [];
-      [].slice.call(this.$el.querySelectorAll('.pickerselect-option.active')).forEach((n) => {
+      [].slice.call(refEl.current.querySelectorAll('.pickerselect-option.active')).forEach((n) => {
         const index = n.getAttribute('data-index');
         selected.push(list[index]);
         selectedIndex.push(index);
       });
       e.activeOptions = selected;
       e.activeIndex = selectedIndex;
-      const value = this.buildValue(e.activeOptions);
+      const value = buildValue(e.activeOptions);
       const options = e.activeOptions;
       if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
     } else if (e.target.classList.contains('picker-cancel')) { // 点击取消按钮
@@ -128,61 +96,40 @@ export default class PickerSelect extends Component {
     }
   }
   // 过滤已经回调的属性
-  filterProps = (props) => {
-    var propsed = {}
-    for (let n in props) {
-      if (n !== 'onClick') {
-        propsed[n] = props[n]
-      }
-    }
-    return propsed;
+  function filterProps (props) {
+    const {onClick, ...otherProps} = props;
+    return {...otherProps};
   }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    let {
-      portal,
-      multiple,
-      list,
-      split,
-      show,
-      value,
-      valueForKey,
-
-      maskAttribute = {},
-      submitAttribute = {},
-      cancelAttribute = {},
-      optionAttribute = {},
-      ...others
-    } = this.props;
     // 如果没有数据, 则不显示
     if (!list || !list.length) return null;
     // 剔除掉onClick事件, 因为在instance时已经回调了
-    maskAttribute = this.filterProps(maskAttribute)
-    submitAttribute = this.filterProps(submitAttribute)
-    cancelAttribute = this.filterProps(cancelAttribute)
-    optionAttribute = this.filterProps(optionAttribute)
+    const otherMaskAttribute = filterProps(maskAttribute)
+    const otherSubmitAttribute = filterProps(submitAttribute)
+    const otherCancelAttribute = filterProps(cancelAttribute)
+    const otherOptionAttribute = filterProps(optionAttribute)
     return createPortal(
-      <div ref={(el) => {this.$el = el}} {...maskAttribute} className={`mask picker-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} onClick={this.onClick}>
+      <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}${show ? ' active' : ''}`} onClick={onClick}>
         <div {...others} className={`pickerselect${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
           <div className="picker-header">
-            <a {...cancelAttribute} className={`picker-cancel${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelAttribute.caption || (locale['cancel'] || '取消')}</a>
-            <a {...submitAttribute} className={`picker-submit${submitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{cancelAttribute.caption || (locale['finish'] || '完成')}</a>
+            <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale['cancel'] || '取消')}</a>
+            <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{otherSubmitAttribute.caption || (locale['finish'] || '完成')}</a>
           </div>
           <div className="pickerselect-wrapper">
             {list.map((item, index) => {
-              return <div key={index} {...optionAttribute} className={`pickerselect-option${optionAttribute.className ? ' ' + optionAttribute.className : ''}`} data-index={index}>
-                <p className="pickerselect-option-caption">{item.value}</p>
+              return <div key={index} {...otherOptionAttribute} className={`pickerselect-option${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ''}`} data-index={index}>
+                <p className="pickerselect-option-caption">{item.name}</p>
                 <i className="pickerselect-option-icon"></i>
               </div>
             })}
           </div>
         </div>
       </div>,
-      portal || this.context.portal || document.getElementById('root') || document.body
+      portal || context.portal || document.getElementById('root') || document.body
     );
-  }
-}
+  })
+
+  export default React.memo(Picker, (prevProps, nextProps) => {
+    if (nextProps.show === prevProps.show) return true;
+    return false;
+  })
+  
