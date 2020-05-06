@@ -10,7 +10,7 @@ const InputDistrict = forwardRef(({
   onChange,
 
   // Picker
-  valueForKey,
+  selected,
   type = '', // province | city | district | street
   pickerProps = {
     maskAttribute: {},
@@ -74,7 +74,7 @@ const InputDistrict = forwardRef(({
         ...pickerProps.cancelAttribute,
         onClick: onClickCancel
       }}
-      valueForKey={valueForKey}
+      selected={selected}
       type={type}
       value={value}
       show={pickerProps.show === undefined ? show : pickerProps.show}

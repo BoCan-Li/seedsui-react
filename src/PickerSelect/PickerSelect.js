@@ -10,7 +10,7 @@ const Picker = forwardRef(({
 
   show = false,
   value,
-  valueForKey,
+  selected,
 
   maskAttribute = {},
   submitAttribute = {},
@@ -38,12 +38,15 @@ const Picker = forwardRef(({
   }, [show])
   // 获取选中的id
   function getSelectedIds () {
-    const selected = valueForKey || value;
-    const selectedName = valueForKey ? 'id' : 'name';
-    if (selected) {
-      const options = selected.split(split || ',').map((val) => {
+    let selectedValue = value;
+    if (selected && selected.length) {
+      selectedValue = selected[0].id;
+    }
+    const selectedProperty = selected && selected.length ? 'id' : 'name';
+    if (selectedValue) {
+      const options = selectedValue.split(split || ',').map((val) => {
         for (var i = 0, option; option = list[i++];) { // eslint-disable-line
-          if (option[selectedName] === val) {
+          if (option[selectedProperty] === val) {
             return option.id;
           }
         }
@@ -79,14 +82,14 @@ const Picker = forwardRef(({
         e.target.classList.toggle('active');
       }
     } else if (e.target.classList.contains('picker-submit')) { // 点击确定按钮
-      var selected = [];
+      var selectedOptions = [];
       var selectedIndex = [];
       [].slice.call(refEl.current.querySelectorAll('.pickerselect-option.active')).forEach((n) => {
         const index = n.getAttribute('data-index');
-        selected.push(list[index]);
+        selectedOptions.push(list[index]);
         selectedIndex.push(index);
       });
-      e.activeOptions = selected;
+      e.activeOptions = selectedOptions;
       e.activeIndex = selectedIndex;
       const value = buildValue(e.activeOptions);
       const options = e.activeOptions;

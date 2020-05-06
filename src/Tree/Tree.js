@@ -17,7 +17,7 @@ const Tree = forwardRef(({
   list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren,
-  onChange,
+  onChange, // func(e, value, selected)
 
   onClick,
   onClickLeaf,

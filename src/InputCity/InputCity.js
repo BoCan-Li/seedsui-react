@@ -9,7 +9,7 @@ const InputCity = forwardRef(({
 
   // Picker
   type = 'district',
-  valueForKey,
+  selected,
   pickerProps = {},
   ...others
 }, ref) =>  {
@@ -71,7 +71,7 @@ const InputCity = forwardRef(({
         ...pickerProps.cancelAttribute,
         onClick: onClickCancel
       }}
-      valueForKey={valueForKey}
+      selected={selected}
       type={type}
       value={others.value}
       show={pickerProps.show === undefined ? show : pickerProps.show}

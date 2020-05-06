@@ -18,7 +18,7 @@ const PickerDistrict = forwardRef(({
     type = '', // province | city | district | street
     show,
     value, // '北京-东城区'
-    valueForKey, // '110000-110101'
+    selected, // [{id: '', name: ''}]
 
     maskAttribute = {},
     submitAttribute = {},
@@ -33,8 +33,8 @@ const PickerDistrict = forwardRef(({
   // context
   const context = useContext(Context) || {};
   let parentProperty = dataFormat.parentName || 'parentid';
-  let keyProperty = dataFormat.idPropertyName || 'id';
-  let valueProperty = dataFormat.namePropertyName || 'name';
+  let idProperty = dataFormat.idPropertyName || 'id';
+  let nameProperty = dataFormat.namePropertyName || 'name';
   let childProperty = dataFormat.childPropertyName || 'children';
   
   // 页签和列表
@@ -57,14 +57,14 @@ const PickerDistrict = forwardRef(({
     if (!parentid || parentid === '-1') {
       return data;
     }
-    let parent = data.getDeepTreeNode(parentid, parentProperty, keyProperty)
+    let parent = data.getDeepTreeNode(parentid, parentProperty, idProperty)
     return parent[childProperty]
   }
   // 根据key或者name获取tabs, property用于区分是key还是value比较
   let initTabs = [];
   function getTabs (values, property) {
     if (!values || !values.length) return null
-    if (property !== keyProperty || property !== valueProperty) property = valueProperty
+    if (property !== idProperty || property !== nameProperty) property = nameProperty
     initTabs = []
     var levels = 0 // 层级
     function getRow (parentid, list, value) {
@@ -79,7 +79,7 @@ const PickerDistrict = forwardRef(({
           // 下一层级
           levels++
           if (values[levels] && children) {
-            getRow(item[keyProperty], children, values[levels])
+            getRow(item[idProperty], children, values[levels])
           }
         }
       }
@@ -93,18 +93,20 @@ const PickerDistrict = forwardRef(({
   useEffect(() => {
     console.log('地区初始化')
     // 初始化tabs
-    if (valueForKey) {
-      initTabs = getTabs(valueForKey.split(split || '-'), keyProperty)
+    if (selected && selected.length) {
+      initTabs = getTabs(selected.map((item) => {
+        return item.id
+      }), idProperty)
     } else if (value) {
-      initTabs = getTabs(value.split(split || '-'), valueProperty)
+      initTabs = getTabs(value.split(split || '-'), nameProperty)
     }
     if (initTabs && initTabs.length) {
-      initTabs[initTabs.length - 1][valueProperty] = '请选择'
+      initTabs[initTabs.length - 1][nameProperty] = '请选择'
     } else {
       initTabs[0] = {
         [parentProperty]: '',
-        [keyProperty]: '',
-        [valueProperty]: '请选择'
+        [idProperty]: '',
+        [nameProperty]: '请选择'
       }
     }
     // 初始化列表
@@ -153,7 +155,7 @@ const PickerDistrict = forwardRef(({
   function getOptionsStr (options) {
     let val = [];
     for (let option of options) {
-      val.push(option[valueProperty])
+      val.push(option[nameProperty])
     }
     return val.join(split)
   }
@@ -187,7 +189,7 @@ const PickerDistrict = forwardRef(({
     // 没有children, 并且有街道请求, 则获取街道
     if (!option[childProperty] || !option[childProperty].length) {
       if (!option.isStreet && getStreet) {
-        streets = await getStreet(option[keyProperty])
+        streets = await getStreet(option[idProperty])
         // 如果返回不是数组, 则认为返回错误
         if (streets instanceof Array === false) {
           return
@@ -205,11 +207,11 @@ const PickerDistrict = forwardRef(({
         })
         setList(streets)
         // 设置tabs
-        // spliceTabs[spliceTabs.length - 1][valueProperty] = option[valueProperty]
+        // spliceTabs[spliceTabs.length - 1][nameProperty] = option[nameProperty]
         spliceTabs.push({
-          [parentProperty]: option[keyProperty],
-          [keyProperty]: '',
-          [valueProperty]: '请选择'
+          [parentProperty]: option[idProperty],
+          [idProperty]: '',
+          [nameProperty]: '请选择'
         })
         setTabs(spliceTabs)
         setTabIndex(spliceTabs.length - 1)
@@ -224,8 +226,8 @@ const PickerDistrict = forwardRef(({
     // 补充请选择的空项
     spliceTabs.push({
       [parentProperty]: '',
-      [keyProperty]: '',
-      [valueProperty]: '请选择'
+      [idProperty]: '',
+      [nameProperty]: '请选择'
     });
 
     setTabs(spliceTabs)
@@ -252,15 +254,15 @@ const PickerDistrict = forwardRef(({
         <div className="picker-district-tabbar">
           {tabs.map((tab, index) => {
             return <div onClick={() => onClickTab(tab, index)} className={`picker-district-tab${index === tabIndex ? ' active' : ''}`} key={index}>
-              {tab[valueProperty]}
+              {tab[nameProperty]}
             </div>
           })}
         </div>
         <div className="picker-district-body" ref={refElBody}>
           {list && list.map((item, index) => {
-            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex][keyProperty] === item[keyProperty] ? ' active' : ''}`}>
+            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex][idProperty] === item[idProperty] ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
-              <div className="picker-district-option-caption">{item[valueProperty]}</div>
+              <div className="picker-district-option-caption">{item[nameProperty]}</div>
             </div>
           })}
         </div>

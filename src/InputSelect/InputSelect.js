@@ -10,7 +10,7 @@ const InputSelect = forwardRef(({
   // Picker
   multiple = false,
   list = [], // [{id: '', name: ''}]
-  valueForKey,
+  selected,
   pickerProps = {},
   ...others
 }, ref) =>  {
@@ -79,7 +79,7 @@ const InputSelect = forwardRef(({
           onClick: onClickCancel
         }}
         list={list}
-        valueForKey={valueForKey}
+        selected={selected}
         value={others.value} 
         show={pickerProps.show === undefined ? show : pickerProps.show}
         multiple={multiple}

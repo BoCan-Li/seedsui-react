@@ -17,7 +17,7 @@ const PickerCity = forwardRef(({
   type = 'district', // district | city
   show = false,
   value, // '北京-东城区'
-  valueForKey, // '110000-110101'
+  selected, // [{id: '', name: ''}]
 
   maskAttribute = {},
   submitAttribute = {},
@@ -56,8 +56,10 @@ const PickerCity = forwardRef(({
   }, [show])
 
   function setDefault () {
-    if (valueForKey && valueForKey.split(split).length > 1 && valueForKey.split(split).some(key => {return !isNaN(key)})) {
-      instance.current.setDefaultKeys(valueForKey.split(split));
+    if (selected && selected.length) {
+      instance.current.setDefaultKeys(selected.map((item) => {
+        return item.id
+      }));
     } else {
       const defaultValues = getDefaultValues();
       instance.current.setDefaultValues(defaultValues);
@@ -76,8 +78,10 @@ const PickerCity = forwardRef(({
     return defaultValues;
   }
   function getDefaultKeys () {
-    if (valueForKey && valueForKey.split(split).length > 1) {
-      return valueForKey.split(split);
+    if (selected && selected.length > 1) {
+      return selected.map((item) => {
+        return item.id;
+      });
     }
     return ['', '', ''];
   }

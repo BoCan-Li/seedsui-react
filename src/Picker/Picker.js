@@ -9,7 +9,7 @@ const Picker = forwardRef(({
 
   show = false,
   value,
-  valueForKey,
+  selected,
 
   maskAttribute = {},
   submitAttribute = {},
@@ -40,7 +40,10 @@ const Picker = forwardRef(({
   }, [show])
 
   function setDefault () {
-    let id = valueForKey || '';
+    let id = '';
+    if (selected && selected.length) {
+      id = selected[0].id;
+    }
     if (!id) {
       const defaultOpt = getDefaults();
       if (defaultOpt && defaultOpt.id) id = defaultOpt.id;
@@ -50,13 +53,13 @@ const Picker = forwardRef(({
   }
 
   function getDefaults () {
-    if (!valueForKey && !value) {
+    if ((!selected || !selected.length) && !value) {
       if (list && list[0]) return list[0];
       return [{id: '', name: ''}];
     }
     const values = list.filter((item) => {
-      if (valueForKey) {
-        if (valueForKey === item.id) return true
+      if (selected && selected.length) {
+        if (selected[0].id === item.id) return true
       } else if (value) {
         if (item.name === value) return true
       }

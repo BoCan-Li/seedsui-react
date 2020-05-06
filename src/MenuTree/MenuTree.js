@@ -5,14 +5,15 @@ import Instance from './instance.js';
 
 export default class MenuTree extends Component {
   static propTypes = {
-    selectedId: PropTypes.string, // 默认选中项的id
+    selected: PropTypes.string, // 默认选中项的id
     onClick: PropTypes.func,
+    onChange: PropTypes.func,
 
     list: PropTypes.array
   }
   /* list: [{
     id: '',
-    caption: '',
+    name: '',
     active: false,
     children
   }] */
@@ -24,7 +25,9 @@ export default class MenuTree extends Component {
   componentDidUpdate = (prevProps) => {
     if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
       if (this.props.list && this.props.list.length) {
-        this.instance.setSelectedId(this.props.selectedId)
+        if (this.props.selected && this.props.selected.length) {
+          this.instance.setSelectedId(this.props.selected[0].id)
+        }
         var list = Object.clone(this.props.list);
         if (JSON.stringify(list).indexOf('"children"') === -1) {
           list = list.deepTree()
@@ -43,7 +46,7 @@ export default class MenuTree extends Component {
     }
     const instance = new Instance(this.$el, {
       data: list,
-      selectedId: this.props.selectedId,
+      selectedId: this.props.selected && this.props.selected.length ? this.props.selected[0].id : '',
       onClick: this.onClick // (item, isActive, isExtend: true展开 | false收缩)
     });
     this.instance = instance;
@@ -55,7 +58,7 @@ export default class MenuTree extends Component {
     if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
   }
   render() {
-    const {selectedId, onClick, list, ...others} = this.props;
+    const {selected, onClick, list, ...others} = this.props;
     return (
       <ul ref={el => {this.$el = el;}} {...others} className={`menutree${others.className ? ' ' + others.className : ''}`}>
       </ul>

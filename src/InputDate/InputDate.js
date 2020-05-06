@@ -14,7 +14,7 @@ const InputDate = forwardRef(({
 
   // Picker
   type = 'date',
-  valueForKey,
+  selected,
   pickerProps = {},
   ...others
 }, ref) =>  {
@@ -149,7 +149,7 @@ const InputDate = forwardRef(({
         ...pickerProps.cancelAttribute,
         onClick: onClickCancel
       }}
-      valueForKey={valueForKey}
+      selected={selected}
       type={type}
       value={others.value} 
       show={pickerProps.show === undefined ? show : pickerProps.show}

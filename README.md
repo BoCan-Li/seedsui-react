@@ -2261,7 +2261,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   onChange={值改变 func(e, value, option), 默认无}
 
   // Picker
-  valueForKey={选中key用split分割 string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   type={城市类型 string, 默认'district'} // 'district' | 'city'
   pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
 
@@ -2269,27 +2269,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 />
 ```
 ### 示例
-```javascript
-import InputCity from 'seedsui-react/lib/InputCity';
-
-
-const [value, setValue] = useState('');
-
-function onChange (e, value, option) {
-  console.log(e.target)
-  console.log(value, option)
-  setValue(value);
-}
-
-<InputCity
-  ref={refComponent}
-  value={value}
-  onChange={onChange}
-  placeholder="请选择"
-  className="border-b"
-/>
-```
-[返回目录](#component)
+用法同[InputPicker](#inputpicker)
 
 
 
@@ -2337,50 +2317,14 @@ function onChange (e, value, option) {
   fail={错误 func(e, {msg: '', select: '', min: '', value: ''}), 默认无}
 
   // Picker
-  valueForKey={选中key用split分割 string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   type={城市类型 string, 默认'district'} // 'date | month | time | datetime'
   pickerProps={PickerDate组件弹框属性 object, 默认无} // className: picker
   {...others} // InputText组件
 />
 ```
 ### 示例
-```javascript
-import InputDate from 'seedsui-react/lib/InputDate';
-
-this.state = {
-  value: new Date().format('YYYY,MM,DD hh&mm')
-}
-
-onChange = (e, value) => {
-  console.log(e.target)
-  this.setState({
-    value: value
-  });
-}
-function onFail (e, msg) {
-  console.log(e)
-  console.log(msg);
-}
-
-<InputDate
-  type="datetime"
-  max={new Date().format('YYYY-MM-DD')}
-  fail={this.fail}
-  value={this.state.value}
-  onChange={this.onChange}
-  placeholder="请选择"
-  className="border-b"
-  pickerProps={{
-    split: ',',
-    timeSplit: '&',
-    maskAttribute: {
-      style: {
-        zIndex: '11'
-      }
-    }
-  }}
-/>
-```
+用法同[InputPicker](#inputpicker)
 
 
 
@@ -2406,7 +2350,7 @@ function onFail (e, msg) {
   onChange={值改变 func(e, value, option), 默认无}
 
   // Picker
-  valueForKey={选中key用split分割 string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   type={城市类型 string, 默认''} // province | city | district | street
   pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
 
@@ -2439,20 +2383,18 @@ function getStreet (districtId) {
   })
 }
 
-state = {
-  value: ''
-}
+const [value, setValue] = useState('');
 
-onChange = (e, value) => {
-  console.log(e.event)
-  this.setState({
-    value: value
-  });
+function onChange (e, value, selected) {
+  console.log(e.target)
+  console.log(value, selected)
+  setValue(value);
 }
 
 <InputDistrict
-  value={this.state.value}
-  onChange={this.onChange}
+  ref={refComponent}
+  value={value}
+  onChange={onChange}
   placeholder="请选择"
   className="border-b"
   pickerProps={{
@@ -2534,7 +2476,7 @@ onChange = (e, value) => {
 
   // Picker
   list={选择列表 array, 默认无} // [{id: '', name: ''}]
-  valueForKey={选中key用split分割 string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   pickerProps={Picker组件弹框属性 object, 默认无} // className: picker
 
   {...others} // InputText组件
@@ -2561,9 +2503,9 @@ const list = [
 
 const [value, setValue] = useState('');
 
-function onChange (e, value, option) {
+function onChange (e, value, selected) {
   console.log(e.target)
-  console.log(value, option)
+  console.log(value, selected)
   setValue(value);
 }
 
@@ -2647,14 +2589,14 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
   // Picker
   multiple={是否允许多选 bool, 默认false}
   list={选择列表 array, 默认无} // [{id: '', name: ''}]
-  valueForKey={选中id用split分割 string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   pickerProps={PickerSelect组件弹框属性 object, 默认无} // className: picker
 
   {...others} // InputText组件
 />
 ```
 ### 示例
-[参考](#inputpicker)
+用法同[InputPicker](#inputpicker)
 [返回目录](#component)
 
 
@@ -3563,7 +3505,7 @@ onClick = (...params) => {
 <MenuTiled
   list={列表 array, 默认无} // [{id: '1', name: '测试数据1', children:[]}]
   selected={选中集合 array, 默认无} // [{id: '1', name: '测试数据1'}]
-  onClick={点击 func(e, item, list), 默认无} // 回调里返回的list为格式化后的list
+  onChange={点击 func(e, value, selected, data), 默认无} // 回调里返回的data为格式化后的list
   {...others}
 />
 ```
@@ -3604,13 +3546,13 @@ const menus = [
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
-const [selected, setSelected] = useState({'b': {id: 'b', name: '测试数据1-b', parentid: '1'}});
+const [selected, setSelected] = useState([{id: 'b', name: '测试数据1-b', parentid: '1'}]);
 
 onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
   console.log(e, item, isActived, isExtand, childrenCount);
 }
 
-<MenuTiled list={menus} selected={{'b': {}}} onChange={this.onClickMenu}/>
+<MenuTiled list={menus} selected={selected} onChange={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
@@ -3626,11 +3568,11 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
   list={列表 array, 默认无, 示例如下:}
   /* list: [{
     id: '',
-    caption: '',
+    name: '',
     active: false,
     children
   }] */
-  selectedId={默认选中项的id string, 默认无}
+  selected={默认选中项 array, 默认无} // [{id: '', name: ''}]
   onClick={点击 func(s, item, isActived, isExtand: true展开 | false收缩, childrenCount), 默认无}
 />
 ```
@@ -3638,7 +3580,7 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
 ```javascript
 import MenuTree from 'seedsui-react/lib/MenuTree';
 
-const mockData = [
+const mockList = [
   {id: '2', name: '测试数据2', parentid: '-1'},
   {id: '1', name: '测试数据1', parentid: '-1'},
   {id: 'a', name: '测试数据1-a', parentid: '1'},
@@ -3647,25 +3589,24 @@ const mockData = [
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
-this.state = {
-  selectedId: '2',
-  data: mockData
+const [list, setList] = useState(mockList)
+const [selected, setSelected] = useState([])
+
+function clearData () {
+  setList([])
+}
+function addData () {
+  setList(mockList)
+}
+function onChange (e, value, selected) {
+  console.log(e.target)
+  console.log(value, selected)
+  setSelected(selected);
 }
 
-clearData = () => {
-  this.setState({
-    data: []
-  });
-}
-addData = () => {
-  this.setState({
-    data: mockData
-  });
-}
-
-<MenuTree ref="$menutree" list={this.state.data} selectedId={this.state.selectedId} onClick={this.onClickMenu}/>
-<input type="button" value="置空" onClick={this.clearData}/>
-<input type="button" value="显示" onClick={this.addData}/>
+<MenuTree ref={refCompoent} list={list} selected={selected} onChange={onChange}/>
+<input type="button" value="置空" onClick={clearData}/>
+<input type="button" value="显示" onClick={addData}/>
 ```
 [返回目录](#component)
 
@@ -3973,7 +3914,7 @@ onDelete = (...params) => {
   list={列表 array, 默认无} // 格式 [{id: '', name: ''}]
   show={*显隐 bool, 默认false}
   value={值 string, 默认无}
-  valueForKey={选中key string, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
@@ -3985,7 +3926,7 @@ onDelete = (...params) => {
 ```javascript
 import Picker from 'seedsui-react/lib/Picker';
 
-const mockPickerList = [{
+const list = [{
 	"id": "7004955043756964827",
 	"name": "瓶"
 }, {
@@ -3993,48 +3934,36 @@ const mockPickerList = [{
 	"name": "箱(=25.0000瓶)"
 }];
 
-this.state = {
-  pickerShow: false,
-  pickerId: '',
-  pickerList: []
+const [list, setList] = useState(list);
+const [show, setShow] = useState(false);
+const [selected, setSelected] = useState();
+
+function onClickSubmit (e, value, selected) {
+  console.log(e, value, selected);
+  setSelected(selected);
+  hidePicker();
+}
+function hidePicker () {
+  setShow(false);
+}
+function showPicker () {
+  setShow(true);
 }
 
-onClickSubmit = (e, value) => {
-  console.log(value);
-  this.hidePicker();
-}
-hidePicker = () => {
-  this.setState({
-    pickerShow: false
-  });
-}
-showPicker = () => {
-  this.setState({
-    pickerShow: true
-  });
-}
-onClick = () => {
-  this.setState({
-    pickerId: '5796844733294559575',
-    pickerList: mockPickerList,
-    pickerShow: true
-  });
-}
-
-<input type="button" value="显示" onClick={this.onClick}/>
+<input type="button" value="显示" onClick={showPicker}/>
 
 <Picker
-  list={this.state.pickerList}
-  valueForKey={this.state.pickerId}
-  show={this.state.pickerShow}
+  list={list}
+  selected={selected}
+  show={how}
   submitAttribute={{
-    onClick: this.onClickSubmit
+    onClick: onClickSubmit
   }}
   cancelAttribute={{
-    onClick: this.hidePicker
+    onClick: hidePicker
   }}
   maskAttribute={{
-    onClick: this.hidePicker
+    onClick: hidePicker
   }}
 />
 ```
@@ -4061,47 +3990,14 @@ onClick = () => {
   type={类型 string, 默认'district'} // district | city
   show={*显隐 bool, 默认false}
   value={值 string, 默认无} // '北京-东城区'
-  valueForKey={选中key string, 默认无} // '110000-110101'
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
 />
 ```
 ### 示例
-```javascript
-import PickerCity from 'seedsui-react/lib/PickerCity';
-
-onClickSubmit = (e, value) => {
-  console.log(value);
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickCancel = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickMask = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-
-<PickerCity
-  value=""
-  show={this.state.show}
-  submitAttribute={{
-    onClick: this.onClickSubmit
-  }}
-  cancelAttribute={{
-    onClick: this.onClickCancel
-  }}
-  maskAttribute={{
-    onClick: this.onClickMask
-  }}
-/>
-```
+用法同[Picker](#picker)
 [返回目录](#component)
 
 
@@ -4127,7 +4023,7 @@ onClickMask = () => {
   type={类型 string, 默认'district'} // date | month | time | datetime
   show={*显隐 bool, 默认false}
   value={值 string, 默认无} // '2018-02-26'
-  valueForKey={选中key string, 默认无} // '2018-02-26'
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
@@ -4136,40 +4032,7 @@ onClickMask = () => {
 />
 ```
 ### 示例
-```javascript
-import PickerDate from 'seedsui-react/lib/PickerDate';
-
-onClickSubmit = (e, value) => {
-  console.log(value);
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickCancel = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickMask = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-
-<PickerDate
-  value=""
-  show={this.state.show}
-  submitAttribute={{
-    onClick: this.onClickSubmit
-  }}
-  cancelAttribute={{
-    onClick: this.onClickCancel
-  }}
-  maskAttribute={{
-    onClick: this.onClickMask
-  }}
-/>
-```
+用法同[Picker](#picker)
 [返回目录](#component)
 
 
@@ -4227,7 +4090,7 @@ import Player from 'seedsui-react/lib/Player';
   type={类型 string, 默认''} // province | city | district | street
   show={*显隐 bool, 默认false}
   value={值 string, 默认无} // '北京-东城区'
-  valueForKey={选中key string, 默认无} // '110000-110101'
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
@@ -4235,63 +4098,7 @@ import Player from 'seedsui-react/lib/Player';
 />
 ```
 ### 示例
-```javascript
-import PickerDistrict from 'seedsui-react/lib/PickerDistrict';
-
-// 获取街道
-function getStreet (districtId) {
-  return new Promise((resolve) => {
-    Bridge.showLoading();
-    setTimeout(() => {
-      Bridge.hideLoading();
-      resolve([
-        {
-          "parentid": districtId,
-          "name": "街道1",
-          "id": "1",
-        },
-        {
-          "parentid": districtId,
-          "name": "街道2",
-          "id": "2",
-        }
-      ])
-    }, 500);
-  })
-}
-
-onClickSubmit = (e, value) => {
-  console.log(value);
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickCancel = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickMask = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-
-<PickerDistrict
-  value=""
-  show={this.state.show}
-  submitAttribute={{
-    onClick: this.onClickSubmit
-  }}
-  cancelAttribute={{
-    onClick: this.onClickCancel
-  }}
-  maskAttribute={{
-    onClick: this.onClickMask
-  }}
-  getStreet={getStreet}
-/>
-```
+用法同[Picker](#picker)
 [返回目录](#component)
 
 
@@ -4716,7 +4523,7 @@ import Share from 'seedsui-react/lib/Share';
   split={多选分割字符串 bool, 默认,}
   show={*显隐 bool, 默认false}
   value={值 string, 默认无}
-  valueForKey={选中key string | number, 默认无}
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
@@ -4725,40 +4532,7 @@ import Share from 'seedsui-react/lib/Share';
 />
 ```
 ### 示例
-```javascript
-import PickerSelect from 'seedsui-react/lib/PickerSelect';
-
-onClickSubmit = (e, value) => {
-  console.log(value);
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickCancel = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-onClickMask = () => {
-  this.setState({
-    show: !this.state.show
-  });
-}
-
-<PickerSelect
-  value=""
-  show={this.state.show}
-  submitAttribute={{
-    onClick: this.onClickSubmit
-  }}
-  cancelAttribute={{
-    onClick: this.onClickCancel
-  }}
-  maskAttribute={{
-    onClick: this.onClickMask
-  }}
-/>
-```
+用法同[Picker](#picker)
 [返回目录](#component)
 
 

@@ -13,7 +13,7 @@ const PickerDate = forwardRef(({
   type = 'date', // date | month | time | datetime
   show = false,
   value, // '2018-02-26'
-  valueForKey, // '2018-02-26'
+  selected, // [{id: '', name: ''}]
 
   maskAttribute = {},
   submitAttribute = {},
@@ -59,7 +59,13 @@ const PickerDate = forwardRef(({
     instance.current.update();
   }
   function getDefault () {
-    var defaultValue = valueForKey || value;
+    var defaultValue = value;
+    if (selected && selected.length) {
+      defaultValue = selected.map((item) => {
+        return item.id
+      });
+      defaultValue = defaultValue.join(split);
+    }
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;
