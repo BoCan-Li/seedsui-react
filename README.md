@@ -5077,18 +5077,22 @@ showMsg = (msg) => {
 ### 属性
 ```javascript
 <Tree
-  treeAttribute={树属性 object, 默认无} // 基础className为tree
-  
+  split={分隔符 string, 默认','}
   multiple={是否需要多选 bool, 默认true} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
+  extend={展开收缩 number, 默认0} // 1.全部展开 -1.全部收缩 0.不工作
   bar={选中项聚合展现栏 string | node, 默认无}
-  selected={选中项 array, 默认无} // 格式 [{id: '', name: '', parentid: ''}]
-  list={列表项 array, 默认无} // [{id: '', name: '', parentid: ''}]
 
+  treeAttribute={树属性 object, 默认无} // 基础className为tree
   buttonAddAttribute={添加按钮属性 object, 默认无} // {className: '', onClick: func()}
   buttonDelAttribute={删除按钮属性 object, 默认无} // {className: '', onClick: func()}
+  
+  selected={选中项 array, 默认无} // 选中项: {id: item, id: item}
+  list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
 
-  onClickLastChild={点击底层节点 func(s), 默认无}
+  getChildren={动态渲染子元素 Promise, 默认无} // 信息过大的情况, 先只渲染部门再渲染人员, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: "", parentid: ""])时会渲染, resolve('错误')则停留在选择页面不进行渲染操作
+
+  onClickLeaf={点击底层节点 func(s), 默认无}
 
   onClick={点击节点 func(s, item, isActived, isExtend, childrenCount), 默认无}
   onData={数据加载时,可修改dom func(option), 默认无} // 通过修改option.html塞入按钮前
@@ -5355,31 +5359,59 @@ var userList2 = [
   }
 ];
 
-// 展开全部
-onExtend = () => {
-  this.$tree.instance.extendAll();
+// 异步加载的方法, 点击Title, 去请求数据, 将数据塞到指定节点下
+function getChildren (id) {
+  return new Promise((resolve) => {
+    if (id === "56a81fea-03f4-41e1-a521-ea14513a65c6") { // 加载业务产品部
+      console.log('加载业务产品部');
+      setTimeout(() => {
+        resolve(userList1)
+      }, 2000)
+    } else if (id === "96a2835b-a1b2-4556-bf68-cb0038042b57") { // 加载移动平台产品线
+      console.log('加载移动平台产品线');
+      setTimeout(() => {
+        resolve(userList2)
+      }, 2000)
+    }
+    
+  })
 }
-// 展开全部
-onCollapse = () => {
-  this.$tree.instance.collapseAll();
-}
-// 异步加载的方法, 点击Title, 去请求数据
-onAsync = (e, item, isActived, isExtend, childrenCount) => {
-  if (!isExtend || e.targetLine.hasData) return;
-  var ul = e.targetLine.nextElementSibling;
-  if (item.id === "56a81fea-03f4-41e1-a521-ea14513a65c6") { // 加载业务产品部
-    console.log('加载业务产品部');
-    this.$tree.instance.addData(userList1, item.id, ul);
-    e.targetLine.hasData = true;
+
+const [selected, setSelected] = useState(
+  {
+    '13ed5bf3-1b91-4fca-9303-ee8071b32154': {
+      "id": "13ed5bf3-1b91-4fca-9303-ee8071b32154",
+      "name": "内勤组",
+      "parentid": "b93d94c6-7e30-4caf-89eb-188bef40b3ba",
+    },
+    '47f9b708-ab98-4fb3-a643-217db2074c73': {
+      "id": "47f9b708-ab98-4fb3-a643-217db2074c73",
+      "name": "人力资源部",
+      "parentid": "-1",
+    }
   }
-  if (item.id === "96a2835b-a1b2-4556-bf68-cb0038042b57") { // 加载移动平台产品线
-    console.log('加载移动平台产品线');
-    this.$tree.instance.addData(userList2, item.id, ul);
-    e.targetLine.hasData = true;
-  }
+)
+const [extend, setExtend] = useState(0); // 1.全部展开 -1.全部收缩 0.不工作
+// 获取选中
+function onSubmit () {
+  console.log(selected)
 }
-// 添加数据时, 可手动修改它的样式
-onData = (option) => {
+// 展开全部
+function onExtend () {
+  setExtend(1);
+}
+// 展开全部
+function onCollapse () {
+  setExtend(-1);
+}
+
+useEffect(() => {
+  console.log(refComponent)
+  console.log(refComponent2)
+}, [])
+
+// 添加数据时, 可手动修改它的渲染样式
+function onData (option) {
   if (option.isPeople) {
     var photo = "";
     if (option.avatarUrl) {
@@ -5393,25 +5425,30 @@ onData = (option) => {
   }
 }
 // 查看选中信息
-onSubmit = () => {
-  let selected = this.$tree.instance.selected;
-  console.log(selected);
+function onChange (e, value, selected) {
+  console.log(e)
+  console.log(value)
+  console.log(selected)
+  setSelected(selected)
 }
+
 
 <div id="idTreeBar" className="tree-bar"></div>
 <Tree
-  ref={(el) => {this.$tree = el}}
+  ref={refComponent}
   list={groupList}
-  multiple={false}
+  extend={extend}
+  multiple
   checkbox
-  onClick={this.onAsync}
-  onData={this.onData}
-  selected={[{id: '56a81fea-03f4-41e1-a521-ea14513a65c6', name: '业务产品部', parentid: '-1'}]}
+  getChildren={getChildren}
+  onData={onData}
+  onChange={onChange}
+  selected={selected}
   bar="#idTreeBar"
 />
-<input type="button" className="button lg" value="查看选中" onClick={this.onSubmit}/>
-<input type="button" className="button lg" value="展开全部" onClick={this.onExtend}/>
-<input type="button" className="button lg" value="收缩全部" onClick={this.onCollapse}/>
+<input type="button" className="button lg" value="查看选中" onClick={onSubmit}/>
+<input type="button" className="button lg" value="展开全部" onClick={onExtend}/>
+<input type="button" className="button lg" value="收缩全部" onClick={onCollapse}/>
 ```
 [返回目录](#component)
 

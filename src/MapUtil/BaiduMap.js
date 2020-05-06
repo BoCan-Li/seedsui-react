@@ -750,4 +750,38 @@ var BaiduMap = function (id, params) {
   s.initMap()
 }
 
+
+BaiduMap.load = function (params = {}) {
+  // window.BMAP_PROTOCOL = "https";
+  // window.BMap_loadScriptTime = (new Date).getTime();
+  // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918"></script>`);
+  return new Promise((resolve) => {
+    if (window.BMap) { // eslint-disable-line
+      resolve(true)
+      if (params.success) params.success()
+      return
+    }
+    if (!params.ak) {
+      resolve('请在传入地图的密钥MapUtil.load("key")')
+      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load("key")'})
+      return
+    }
+    window.BMAP_PROTOCOL = 'https';
+    window.BMap_loadScriptTime = (new Date).getTime()
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.charset = 'utf-8'
+    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
+    document.body.appendChild(script)
+    script.onload = function () {
+      resolve(true)
+      if (params.success) params.success()
+    }
+    script.onerror = function (err) {
+      resolve('加载地图失败')
+      if (params.fail) params.fail({errMsg: '加载地图失败', err: err})
+    }
+  });
+}
+
 export default BaiduMap

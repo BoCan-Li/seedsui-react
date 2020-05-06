@@ -1,77 +1,67 @@
 // require PrototypeArray.js
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
 import Instance from './instance.js';
 
-export default class Tree extends Component {
-  static propTypes = {
-    treeAttribute: PropTypes.object,
-    
-    multiple: PropTypes.bool, // 是否需要多选
-    checkbox: PropTypes.bool, // 是否可选
-    bar: PropTypes.oneOfType([ // 选中栏
-      PropTypes.string,
-      PropTypes.node
-    ]),
-    selected: PropTypes.array, // [{id: '', name: '', parentid: ''}]
-    list: PropTypes.array, // [{id: '', name: '', parentid: ''}]
+const Tree = forwardRef(({
+  split = ',',
+  multiple = true, // 是否需要多选
+  checkbox = true, // 是否可选
+  extend = 0, // 1.全部展开 -1.全部收缩 0.不工作
+  bar, // 选中栏
 
-    buttonAddAttribute: PropTypes.object, // {className: '', onClick: func()}
-    buttonDelAttribute: PropTypes.object, // {className: '', onClick: func()}
+  treeAttribute = {},
+  buttonAddAttribute = {}, // {className: '', onClick: func()}
+  buttonDelAttribute = {}, // {className: '', onClick: func()}
 
-    onClickLastChild: PropTypes.func,
+  selected = {}, // 选中项: {id: item, id: item}
+  list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
-    onClick: PropTypes.func,
-    onData: PropTypes.func
-  }
-  static defaultProps = {
-    multiple: true,
-    list: []
-  }
-  constructor(props) {
-    super(props);
-  }
-  componentDidUpdate = (prevProps) => {
-    if (JSON.stringify(prevProps.list) !== JSON.stringify(this.props.list)) {
-      if (this.props.list && this.props.list.length) {
-        const {selected} = this.props;
-        var list = Object.clone(this.props.list);
-        if (JSON.stringify(list).indexOf('"children"') !== -1) {
-          list = list.flattenTree()
-        }
-        // 设置已选中
-        if(Array.isArray(selected) && selected.length) {
-          for (var opt of selected) {
-            this.instance.addSelected(opt)
-          }
-        }
-        // 开始渲染
-        this.instance.setData(list);
-        this.instance.update();
-      } else {
-        this.instance.setData([]);
-        this.instance.update();
-      }
-    }
-  }
-  componentDidMount = () => {
-    if (this.instance) return;
-    const {
-      multiple,
-      checkbox,
-      bar,
-      buttonAddAttribute = {},
-      buttonDelAttribute = {},
-      onClickLastChild,
-      onData
-    } = this.props;
+  getChildren,
+  onChange,
+
+  onClick,
+  onClickLeaf,
+  onData,
+  
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  const instance = useRef(null);
+
+  // useEffect(() => {
+  //   if (list && list.length) {
+  //     let data = Object.clone(list);
+  //     if (JSON.stringify(data).indexOf('"children"') !== -1) {
+  //       data = data.flattenTree()
+  //     }
+  //     // 设置已选中
+  //     if (selected && Object.values(selected).length) {
+  //       for (var id in selected) {
+  //         instance.current.addSelected(selected[id])
+  //       }
+  //     }
+  //     // 开始渲染
+  //     instance.current.setData(data);
+  //     instance.current.update();
+  //   } else {
+  //     instance.current.setData([]);
+  //     instance.current.update();
+  //   }
+  // }, [list])
+
+  useEffect(() => {
+    if (instance.current) return;
     // 更新数据
-    var list = Object.clone(this.props.list);
-    if (JSON.stringify(list).indexOf('"children"') !== -1) {
-      list = list.flattenTree()
+    let data = Object.clone(list);
+    if (JSON.stringify(data).indexOf('"children"') !== -1) {
+      data = data.flattenTree()
     }
-    const instance = new Instance(this.$tree, {
-      data: list,
+    let elTree = refEl.current.querySelector('ul')
+    instance.current = new Instance(elTree, {
+      data: data,
       multiple,
       checkbox,
       bar,
@@ -79,39 +69,52 @@ export default class Tree extends Component {
       onClickAdd: buttonAddAttribute.onClick,
       buttonDelClass: buttonDelAttribute.className,
       onClickDel: buttonDelAttribute.onClick,
-      onClickLastChild, // 没有子节点
-      onClick: this.onClick,
+      onClickLeaf: onClickLeaf, // 没有子节点
+      onClick: click,
+      onAddSelected: addSelected,
       onData: onData
     });
-    this.instance = instance;
     // 设置已选中
-    const {selected} = this.props;
-    if(Array.isArray(selected) && selected.length) {
-      for (var opt of selected) {
-        this.instance.addSelected(opt)
+    if (selected && Object.values(selected).length) {
+      for (var id in selected) {
+        instance.current.addSelected(selected[id])
       }
     }
-    this.instance.update();
+    instance.current.update();
+  }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (extend === 1) {
+      instance.current.extendAll();
+    } else if (extend === -1) {
+      instance.current.collapseAll();
+    }
+  }, [extend])
+
+  // 选中项
+  function addSelected (s) {
+    if (refEl.current) s.target = refEl.current;
+    if (onChange) {
+      let value = [];
+      for (let id in s.selected) {
+        value.push(s.selected[id].name);
+      }
+      onChange(s, value.join(','), s.selected)
+    }
   }
-  onClick = (s) => {
-    const {selected} = this.props;
-    var list = Object.clone(this.props.list);
-    if (JSON.stringify(list).indexOf('"children"') !== -1) {
-      list = list.flattenTree()
+
+  // 点击
+  function click (s) {
+    if (refEl.current) s.target = refEl.current;
+    let data = Object.clone(list);
+    if (JSON.stringify(data).indexOf('"children"') !== -1) {
+      data = data.flattenTree()
     }
     // item
     const id = s.targetLine.getAttribute('data-id');
-    let item = list.getFlattenTreeNode(id);
+    let item = data.getFlattenTreeNode(id);
     // isActived
-    let isActived = selected ? selected.filter((option) => {
-      if (option.id === id) return true;
-      return false;
-    }) : null;
-    if (isActived && isActived.length > 0) {
-      isActived = true;
-    } else {
-      isActived = false;
-    }
+    let isActived = selected[id] ? true : false;
     // childrenCount
     let childrenCount = 0;
     const ul = s.targetLine.nextElementSibling;
@@ -121,32 +124,35 @@ export default class Tree extends Component {
     // isExtend
     const isExtend = s.targetLine.classList.contains('extend');
     
-    
-    if (this.props.onClick) this.props.onClick(s, item, isActived, isExtend, childrenCount);
+    if (onClick) onClick(s, item, isActived, isExtend, childrenCount);
+
+    if (getChildren) {
+      addChildren(s, item, isActived, isExtend, childrenCount)
+    }
   }
-  render() {
-    const {
-      treeAttribute = {},
-      
-      multiple,
-      checkbox,
-      bar,
-      selected,
-      list,
 
-      buttonAddAttribute,
-      buttonDelAttribute,
-
-      onClickLastChild,
-
-      onClick,
-      onData,
-      ...others
-    } = this.props;
-    return (
-      <div ref={(el) => {this.$el = el}} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
-        <ul ref={(el) => {this.$tree = el}} {...treeAttribute} className={`tree${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
-      </div>
-    );
+  // 异步加载的方法, 点击Title, 去请求数据, 将数据塞到指定节点下
+  async function addChildren (s, item, isActived, isExtend, childrenCount) {
+    if (!isExtend || s.targetLine.childrenLoaded) return;
+    var ul = s.targetLine.nextElementSibling;
+    let leaf = await getChildren(item.id)
+    // 如果返回不是数组, 则认为返回错误
+    if (leaf instanceof Array === false) {
+      return
+    }
+    instance.current.addData(leaf, item.id, ul);
+    s.targetLine.childrenLoaded = true;
   }
-}
+
+  return (
+    <div ref={refEl} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
+      <ul {...treeAttribute} className={`tree${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
+    </div>
+  );
+})
+
+export default React.memo(Tree, (prevProps, nextProps) => {
+  if (prevProps.extend !== nextProps.extend) return false;
+  if (JSON.stringify(prevProps.list) === JSON.stringify(nextProps.list)) return true;
+  return false;
+})

@@ -1,25 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Group extends Component {
-  static propTypes = {
-    children: PropTypes.node
-  }
-  static defaultProps = {
-    className: 'border-tb'
-  }
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const {
-      children,
-      ...others
-    } = this.props;
-    return (
-      <div ref={el => {this.$el = el;}} {...others} className={'group' + (others.className ? ' ' + others.className : '')}>
-        {children}
-      </div>
-    );
-  }
-}
+const Group = forwardRef(({
+  children,
+  className = 'border-tb',
+  ...others
+}, ref) =>  {
+  return <div ref={ref} {...others} className={'group' + (className ? ' ' + className : '')}>
+    {children}
+  </div>
+})
+
+export default Group

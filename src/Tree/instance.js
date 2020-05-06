@@ -39,9 +39,10 @@ var Tree = function (container, params) {
     /*
     callbacks
     onClick:function(Tree)
-    onClickLastChild:function(Tree)
+    onClickLeaf:function(Tree)
     onClickAdd: function(option)
     onClickDel: function(option)
+    onAddSelected: function (Tree)
     onData:function(option)
     */
   }
@@ -340,6 +341,8 @@ var Tree = function (container, params) {
 
     // s.selected中添加选中
     s.selected[opts.id] = opts
+
+    if (s.params.onAddSelected) s.params.onAddSelected(s)
   }
   // 显示选中项
   s.showBar = function () {
@@ -437,9 +440,12 @@ var Tree = function (container, params) {
         }
       }
       /* eslint-enable */
-
-      // Callback onClickLastChild(点击底层)
-      if ((!s.targetLine.nextElementSibling || !s.targetLine.nextElementSibling.hasChildNodes()) && s.params.onClickLastChild) s.params.onClickLastChild(s)
+      s.isLeaf = false
+      // Callback onClickLeaf(点击底层)
+      if ((!s.targetLine.nextElementSibling || !s.targetLine.nextElementSibling.hasChildNodes()) && s.params.onClickLeaf) {
+        s.params.onClickLeaf(s)
+        s.isLeaf = true
+      }
       // Callback onClick
       if (s.params.onClick) s.params.onClick(s)
     } else {
