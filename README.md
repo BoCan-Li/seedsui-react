@@ -5091,9 +5091,9 @@ showMsg = (msg) => {
   list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren={动态渲染子元素 Promise, 默认无} // 信息过大的情况, 先只渲染部门再渲染人员, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: "", parentid: ""])时会渲染, resolve('错误')则停留在选择页面不进行渲染操作
+  onChange={点击底层节点 func(s, value, selected), 默认无}
 
   onClickLeaf={点击底层节点 func(s), 默认无}
-
   onClick={点击节点 func(s, item, isActived, isExtend, childrenCount), 默认无}
   onData={数据加载时,可修改dom func(option), 默认无} // 通过修改option.html塞入按钮前
 />
