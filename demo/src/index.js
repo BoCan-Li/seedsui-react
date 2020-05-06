@@ -7,9 +7,9 @@ import {
   Titlebar,
   Container,
   Bridge,
-  Tree,
-  MapUtil
+  Tree
 } from '../../src';
+
 
 
 const groupList = [
@@ -268,7 +268,6 @@ var userList2 = [
     "parentid": "96a2835b-a1b2-4556-bf68-cb0038042b57"
   }
 ];
-
 // 异步加载的方法, 点击Title, 去请求数据, 将数据塞到指定节点下
 function getChildren (id) {
   return new Promise((resolve) => {
@@ -290,20 +289,19 @@ function getChildren (id) {
 function Demo () {
   const refComponent = useRef(null);
   const refComponent2 = useRef(null);
-
   const [selected, setSelected] = useState(
-    {
-      '13ed5bf3-1b91-4fca-9303-ee8071b32154': {
+    [
+      {
         "id": "13ed5bf3-1b91-4fca-9303-ee8071b32154",
         "name": "内勤组",
         "parentid": "b93d94c6-7e30-4caf-89eb-188bef40b3ba",
       },
-      '47f9b708-ab98-4fb3-a643-217db2074c73': {
+      {
         "id": "47f9b708-ab98-4fb3-a643-217db2074c73",
         "name": "人力资源部",
         "parentid": "-1",
       }
-    }
+    ]
   )
   const [extend, setExtend] = useState(0); // 1.全部展开 -1.全部收缩 0.不工作
   // 获取选中
@@ -318,12 +316,12 @@ function Demo () {
   function onCollapse () {
     setExtend(-1);
   }
-
+  
   useEffect(() => {
     console.log(refComponent)
     console.log(refComponent2)
   }, [])
-
+  
   // 添加数据时, 可手动修改它的渲染样式
   function onData (option) {
     if (option.isPeople) {
@@ -340,7 +338,7 @@ function Demo () {
   }
   // 查看选中信息
   function onChange (e, value, selected) {
-    console.log(e.target)
+    console.log(e)
     console.log(value)
     console.log(selected)
     setSelected(selected)
@@ -348,30 +346,29 @@ function Demo () {
 
   return <Page>
     <Header>
-      <Titlebar caption="SeedsUI"/>
+      <Titlebar caption="标题"/>
     </Header>
     <Container>
-      <div id="idTreeBar" className="tree-bar"></div>
-      <Tree
-        ref={refComponent}
-        list={groupList}
-        extend={extend}
-        multiple
-        checkbox
-        getChildren={getChildren}
-        onData={onData}
-        onChange={onChange}
-        selected={selected}
-        bar="#idTreeBar"
-      />
-      <input type="button" className="button lg" value="查看选中" onClick={onSubmit}/>
-      <input type="button" className="button lg" value="展开全部" onClick={onExtend}/>
-      <input type="button" className="button lg" value="收缩全部" onClick={onCollapse}/>
+    <div id="idTreeBar" className="tree-bar"></div>
+<Tree
+  ref={refComponent}
+  list={groupList}
+  extend={extend}
+  multiple
+  checkbox
+  getChildren={getChildren}
+  onData={onData}
+  onChange={onChange}
+  selected={selected}
+  bar="#idTreeBar"
+/>
+<input type="button" className="button lg" value="查看选中" onClick={onSubmit}/>
+<input type="button" className="button lg" value="展开全部" onClick={onExtend}/>
+<input type="button" className="button lg" value="收缩全部" onClick={onCollapse}/>
     </Container>
   </Page>
 }
 
-MapUtil.load({ak: '3pTjiH1BXLjASHeBmWUuSF83'})
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))
 });

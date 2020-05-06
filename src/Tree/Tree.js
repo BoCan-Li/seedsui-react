@@ -13,7 +13,7 @@ const Tree = forwardRef(({
   buttonAddAttribute = {}, // {className: '', onClick: func()}
   buttonDelAttribute = {}, // {className: '', onClick: func()}
 
-  selected = {}, // 选中项: {id: item, id: item}
+  selected = [], // 选中项: [{id: '', name: ''}]
   list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren,
@@ -75,9 +75,9 @@ const Tree = forwardRef(({
       onData: onData
     });
     // 设置已选中
-    if (selected && Object.values(selected).length) {
-      for (var id in selected) {
-        instance.current.addSelected(selected[id])
+    if (selected && selected.length) {
+      for (var item of selected) {
+        instance.current.addSelected(item)
       }
     }
     instance.current.update();
@@ -99,8 +99,16 @@ const Tree = forwardRef(({
       for (let id in s.selected) {
         value.push(s.selected[id].name);
       }
-      onChange(s, value.join(','), s.selected)
+      onChange(s, value.join(','), Object.values(s.selected))
     }
+  }
+
+  // 判断是否选中
+  function isSelected (id) {
+    for (let item of selected) {
+      if (item.id === id) return true;
+    }
+    return false;
   }
 
   // 点击
@@ -114,7 +122,7 @@ const Tree = forwardRef(({
     const id = s.targetLine.getAttribute('data-id');
     let item = data.getFlattenTreeNode(id);
     // isActived
-    let isActived = selected[id] ? true : false;
+    let isActived = isSelected(id) ? true : false;
     // childrenCount
     let childrenCount = 0;
     const ul = s.targetLine.nextElementSibling;

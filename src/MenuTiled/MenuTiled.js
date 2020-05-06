@@ -10,9 +10,8 @@ const iconSelectClass = 'menutiled-icon-checked';
 const activeClass = 'active';
 
 const MenuTiled = forwardRef(({
-  selectedId, // 默认选中项的id
   selected, // [{id: '', name: ''}]
-  onClick,
+  onChange, // func(e, value, selected)
 
   list,
   // list: [{
@@ -56,8 +55,8 @@ const MenuTiled = forwardRef(({
         // 添加子级
         if (!newViewGroups[hierarchy + 1]) newViewGroups[hierarchy + 1] = [];
         newViewGroups[hierarchy + 1] = item.children;
-      } else if (onClick) { // 叶子节点点击触发
-        onClick(e, item, data)
+      } else if (onChange) { // 叶子节点点击触发
+        onChange(e, item.name, [item], data)
       }
       setViewGroups(newViewGroups);
     }
@@ -65,11 +64,8 @@ const MenuTiled = forwardRef(({
   
   // 判断是否选中
   function isSelected (id) {
-    if (selectedId === id) return true;
-    // selected判断
-    if (!selected || !selected.length) return false;
-    for (let option of selected) {
-      if (option.id === id) return true;
+    for (let item of selected) {
+      if (item.id === id) return true;
     }
     return false;
   }

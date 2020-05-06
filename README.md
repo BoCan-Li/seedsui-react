@@ -3561,9 +3561,8 @@ onClick = (...params) => {
 ### 属性
 ```javascript
 <MenuTiled
-  list={列表 array, 默认无} // [{id: '1',caption: '测试数据1',children:[]}]
-  selectedId={默认选中项的id string, 默认无}
-  selected={选中集合 array, 默认无} // [{id: '1',caption: '测试数据1'}]
+  list={列表 array, 默认无} // [{id: '1', name: '测试数据1', children:[]}]
+  selected={选中集合 array, 默认无} // [{id: '1', name: '测试数据1'}]
   onClick={点击 func(e, item, list), 默认无} // 回调里返回的list为格式化后的list
   {...others}
 />
@@ -3605,11 +3604,13 @@ const menus = [
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
+const [selected, setSelected] = useState({'b': {id: 'b', name: '测试数据1-b', parentid: '1'}});
+
 onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
   console.log(e, item, isActived, isExtand, childrenCount);
 }
 
-<MenuTiled list={menus} selectedId={'b'} onClick={this.onClickMenu}/>
+<MenuTiled list={menus} selected={{'b': {}}} onChange={this.onClickMenu}/>
 ```
 [返回目录](#component)
 
@@ -5087,7 +5088,7 @@ showMsg = (msg) => {
   buttonAddAttribute={添加按钮属性 object, 默认无} // {className: '', onClick: func()}
   buttonDelAttribute={删除按钮属性 object, 默认无} // {className: '', onClick: func()}
   
-  selected={选中项 array, 默认无} // 选中项: {id: item, id: item}
+  selected={选中项 array, 默认无} // 选中项: [{id: '', id: ''}]
   list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren={动态渲染子元素 Promise, 默认无} // 信息过大的情况, 先只渲染部门再渲染人员, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: "", parentid: ""])时会渲染, resolve('错误')则停留在选择页面不进行渲染操作

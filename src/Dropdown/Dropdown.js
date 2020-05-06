@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useState, Fragment} from 'react';
 import Tabbar from './../Tabbar';
 import Dialog from './../Dialog';
 import MenuTiled from './../MenuTiled';
 
-function Dropdown ({
+const Dropdown = forwardRef(({
   top,
   disabled,
   onChange,
@@ -12,11 +12,14 @@ function Dropdown ({
   tabbarProps = {},
   dialogProps = {},
   menutiledProps = {}
-}) {
+}, ref) => {
   const refElTabbar = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refElTabbar.current
+  });
   const [activeIndex, setActiveIndex] = useState(-1);
   const [tabs, setTabs] = useState([]);
-  const [selectedId, setSelectedId] = useState('');
+  const [selected, setSelected] = useState('');
   const [menus, setMenus] = useState([]);
   const [offsetTop, setOffsetTop] = useState(0);
   const [show, setShow] = useState(false);
@@ -65,7 +68,7 @@ function Dropdown ({
   }, [list]) // eslint-disable-line
   
   function onClickTab (e, item, index) {
-    setSelectedId(tabs[index].id);
+    setSelected([tabs[index]]);
     setMenus(list[index].data);
     if (activeIndex >= 0) { // 隐藏弹框
       setActiveIndex(-1);
@@ -88,7 +91,9 @@ function Dropdown ({
     });
     return newList;
   }
-  function onClickMenu (e, item, items) {
+  function onSelected (e, value, selected, data) {
+    if (!selected || !selected.length) return;
+    const item = selected[0];
     if (item.children && item.children.length > 0) return;
     const newTabs = Object.clone(tabs);
     // 如果选中的标题是全部,则显示原始标题,例如:点击分类,选择全部,则应当显示分类
@@ -126,13 +131,13 @@ function Dropdown ({
       >
         <MenuTiled
           list={menus}
-          selectedId={selectedId}
-          onClick={onClickMenu}
+          selected={selected}
+          onChange={onSelected}
           {...menutiledProps}
         />
       </Dialog>
     </Fragment>
   )
-}
+})
 
 export default Dropdown
