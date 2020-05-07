@@ -3201,7 +3201,7 @@ onSubmit = () => {
   // }]
   style={容器style object, 默认无}
   className={容器className string, 默认无, 基础'list-pull'}
-  onClick={点击列表 func(item, index, option, s), 默认无}
+  onClick={点击列表 func(s, item, index, option), 默认无}
   onShowedLeft={左侧显示 func(s), 默认无}
   onShowedRight={右侧显示 func(s), 默认无}
 />
@@ -3246,7 +3246,7 @@ function onShowedLeft (s) {
   s.hide();
 }
 
-function onClickListPull (item, index, option, s) {
+function onClickListPull (s, item, index, option) {
   console.log(item, index, option)
   s.hide()
 }

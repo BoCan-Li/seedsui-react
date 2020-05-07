@@ -54,7 +54,6 @@ var ListPull = function (container, params) {
 		target.style.webkitTransform = 'translate3d(' + x + 'px,0px,0px)'
 		target.classList.add(s.params.activeClass)
 		// Callback onShowedLeft | onShowedRight
-		s.target = target
 		if (s.params.onShowedLeft || s.params.onShowedRight) {
 			setTimeout(() => {
 				if (direction === 'left' && s.params.onShowedLeft) s.params.onShowedLeft(s)
@@ -163,8 +162,9 @@ var ListPull = function (container, params) {
 		}
 		s.touches.endX = e.clientX || e.changedTouches[0].clientX
 		s.touches.endY = e.clientY || e.changedTouches[0].clientY
+		s.event = e
+		s.target = e.target
 		if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) { // 点击
-			s.event = e
 			// 在展开状态下(s.leftClientWidth || s.rightClientWidth),如果点击主容器handler将无效
 			if (!e.target.classList.contains(s.params.handlerClass) || s.leftClientWidth || s.rightClientWidth) {
 				// Callback onClick

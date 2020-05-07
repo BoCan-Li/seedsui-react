@@ -33,7 +33,7 @@ const ListPull = forwardRef(({
             item = option.rButtons[i];
           }
         }
-        if (onClick) onClick(item, index, option, s)
+        if (onClick) onClick(s, item, index, option)
       },
       onShowedLeft: onShowedLeft,
       onShowedRight: onShowedRight
