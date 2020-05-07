@@ -1,14 +1,11 @@
-// require [PrototypeString.js] clearProtocol()
 // ImgLazy 图片预加载
-import DB from './../DB'
-
 var ImgLazy = function (params) {
   /* --------------------
   Model
   -------------------- */
   var defaults = {
     overflowContainer: document.body,
-    load: 'scroll', // scroll 滚动加载 | queue 队列加载 | all 全部加载
+    load: 'scroll', // scroll 滚动加载 | queue 队列加载
     threshold: 300, // 滚动加载时，显示区域扩张上下像素
     loadAttr: 'data-load-src', // 加载地址
     errorAttr: 'data-error-src', // 错误地址
@@ -50,23 +47,6 @@ var ImgLazy = function (params) {
     }
     return false
   }
-  // 浏览器已加载图片
-  s.completeList = []
-  s.updateCompleteList = function (src) {
-    s.completeList = DB.getSession('seedsui_imglazy_complete_list') || []
-    if (src && typeof src === 'string') {
-      s.completeList.push(src.clearProtocol())
-      DB.setSession('seedsui_imglazy_complete_list', s.completeList)
-    }
-  }
-  s.updateCompleteList()
-  // 是否已加载
-  s.isComplete = function (src) {
-    if (src && typeof src === 'string' && s.completeList.indexOf(src.clearProtocol()) !== -1) {
-      return true
-    }
-    return false
-  }
   /* --------------------
   Events
   -------------------- */
@@ -88,8 +68,6 @@ var ImgLazy = function (params) {
     var target = e.target
     var imgTarget = target.$el
     imgTarget.setAttribute(s.params.completeAttr, '1')
-    // 图片加载完成后记录到seesion中
-    s.updateCompleteList(target.src)
     
     // 渲染图片
     s.render(imgTarget, target.src)
@@ -142,9 +120,6 @@ var ImgLazy = function (params) {
   Init
   -------------------- */
   s.load = function () {
-    // 更新已加载的图片
-    s.updateCompleteList()
-
     // 获取所有需要加载的图片
     s.imgs = [].slice.call(s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')).filter((n) => {
       if (n.getAttribute(s.params.loadAttr)) return true
@@ -162,11 +137,6 @@ var ImgLazy = function (params) {
       // 图片路径和裂图路径
       var loadSrc = s.imgs[i].getAttribute(s.params.loadAttr)
       var errorSrc = s.imgs[i].getAttribute(s.params.imgErrorAttr) || ''
-      // 已加载的图片不需要再次加载
-      if (s.isComplete(loadSrc)) {
-        s.render(s.imgs[i], loadSrc) // 渲染图片
-        continue
-      }
       
       var flag = true
       if (s.params.load === 'scroll') flag = s.isInScreen(s.imgs[i]) // 滚动加载
@@ -186,12 +156,6 @@ var ImgLazy = function (params) {
     // 图片路径和裂图路径
     var loadSrc = s.imgs[i].getAttribute(s.params.loadAttr)
     var errorSrc = s.imgs[i].getAttribute(s.params.imgErrorAttr) || ''
-    // 已加载的图片不需要再次加载
-    if (s.isComplete(loadSrc)) {
-      s.render(s.imgs[i], loadSrc) // 渲染图片
-      s.queue(i++)
-      return
-    }
     // 加载
     if (s.imgs[i].getAttribute(s.params.completeAttr)) {
       i++

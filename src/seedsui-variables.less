@@ -2457,6 +2457,127 @@ a {
 
 
 
+
+
+
+
+
+
+
+// ContainerPull下拉刷新控件
+.setContainerPull(){
+  @-webkit-keyframes dfAnimate-spinner {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+  }
+  //pull类型
+  .df-pull {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+  }
+  .df-pull-box {
+    .flex;
+    .flex-middle;
+    .flex-center;
+    height: @50px;
+    color: #777;
+  }
+  .df-pull-caption {
+    display: block;
+    height: @20px;
+    line-height: @20px;
+  }
+  .df-pull-icon {
+    display: block;
+    margin-right: @10px;
+    transition-timing-function: ease-in;
+    transition-property:transform;
+    transition-duration:@animation-duration;
+  
+    width: @20px;
+    height: @20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-image: url(//res.waiqin365.com/d/seedsui/dragrefresh/pull.png);
+  
+    &.df-pull-icon-up{
+      transform: rotate(0deg);
+    }
+    &.df-pull-icon-down{
+      transform: rotate(180deg);
+    }
+    &.df-pull-icon-none{
+      display: none;
+    }
+    &.df-pull-icon-loading{
+      background-position: left bottom;
+      transition-duration:0ms;
+      animation: dfAnimate-spinner 1000ms infinite linear;
+    }
+  }
+  //circle类型
+  .df-circle{
+    position:absolute;
+    .flex;
+    .flex-middle;
+    .flex-center;
+    top:-@50px;
+    left:50%;
+    margin-left:-@20px;
+    background-size:@32px @32px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color:white;
+    width:@48px;
+    height:@48px;
+    border-radius: 100%;
+    box-shadow:0 0 @6px 0 rgba(0,0,0,.2);
+    color:@primary-bg;
+  
+    transition-timing-function: ease-in;
+    transition-property:transform;
+    transition-duration:@animation-duration;
+    &.df-circle-show{
+      transform:translate3d(0,@120px,0) rotate(0deg);
+    }
+  }
+  .df-circle-icon{
+    display: block;
+    margin: 0 auto;
+    width: @32px;
+    height:@32px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(//res.waiqin365.com/d/seedsui/dragrefresh/circle.svg);
+  
+    transition-timing-function: ease-in;
+    transition-property:transform;
+    transition-duration:@animation-duration;
+    &.df-circle-icon-loading{
+      animation: dfAnimate-spinner 1000ms infinite linear;
+    }
+  }
+  .df-circle-icon-none{
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 // Dialog弹框
 .setDialog(){
   // Dialog遮罩, 基于.mask

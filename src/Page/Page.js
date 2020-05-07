@@ -1,23 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Page extends Component {
-  static propTypes = {
-    animation: PropTypes.string,
-    children: PropTypes.node
-  }
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
-  componentDidMount () {
-  }
-  render() {
-    const {animation, children, ...others} = this.props;
-    return (
-      <section ref={(el) => {this.$el = el}} {...others} className={'page' + (others.className ? ' ' + others.className : '')} data-animation={animation}>
-        {children}
-      </section>
-    );
-  }
-}
+const Page = forwardRef(({
+  animation,
+  children,
+  ...others
+}, ref) =>  {
+  return <section ref={ref} {...others} className={'page' + (others.className ? ' ' + others.className : '')} data-animation={animation}>
+    {children}
+  </section>
+})
+
+export default Page

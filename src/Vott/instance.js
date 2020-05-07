@@ -470,6 +470,7 @@ var Vott = function (container, params) {
   }
   // 获取单个图形的信息
   s.getShapeData = function (shape) {
+    if (!shape) return
     // 还原比例
     var polygon = s.toPolygon(shape.getAttribute('points')).map(function (points) {
       return points.map(function (point) {
@@ -657,8 +658,10 @@ var Vott = function (container, params) {
     s.event = e
     if (s.params.onChange) {
       var shapeData = s.getShapeData(s.touches.target)
-      var shapes = s.getSelected()
-      s.params.onChange(s, shapeData, shapes)
+      if (shapeData) {
+        var shapes = s.getSelected()
+        s.params.onChange(s, shapeData, shapes)
+      }
     }
   }
   // 双击删除此形状

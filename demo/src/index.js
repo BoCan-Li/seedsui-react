@@ -6,366 +6,38 @@ import {
   Header,
   Titlebar,
   Container,
-  Bridge,
-  Vott
+  Bridge
 } from '../../src';
 
 function Demo () {
   const refComponent = useRef(null);
   useEffect(() => {
     console.log(refComponent)
-  }, [])
-  
-const result = {
-	"skuList": [{
-		"x1": 442,
-		"x2": 492,
-		"y1": 79,
-		"y2": 265
-	}, {
-		"x1": 51,
-		"x2": 103,
-		"y1": 94,
-		"y2": 263
-	}, {
-		"x1": 221,
-		"x2": 269,
-		"y1": 774,
-		"y2": 948
-	}, {
-		"x1": 64,
-		"x2": 110,
-		"y1": 293,
-		"y2": 473
-	}, {
-		"x1": 598,
-		"x2": 643,
-		"y1": 283,
-		"y2": 468
-	}, {
-		"x1": 251,
-		"x2": 297,
-		"y1": 296,
-		"y2": 472
-	}, {
-		"x1": 266,
-		"x2": 312,
-		"y1": 89,
-		"y2": 265
-	}, {
-		"x1": 198,
-		"x2": 242,
-		"y1": 294,
-		"y2": 474
-	}, {
-		"x1": 311,
-		"x2": 355,
-		"y1": 84,
-		"y2": 265
-	}, {
-		"x1": 646,
-		"x2": 688,
-		"y1": 287,
-		"y2": 466
-	}, {
-		"x1": 155,
-		"x2": 196,
-		"y1": 295,
-		"y2": 473
-	}, {
-		"x1": 84,
-		"x2": 129,
-		"y1": 572,
-		"y2": 720
-	}, {
-		"x1": 431,
-		"x2": 475,
-		"y1": 575,
-		"y2": 721
-	}, {
-		"x1": 219,
-		"x2": 262,
-		"y1": 569,
-		"y2": 720
-	}, {
-		"x1": 131,
-		"x2": 174,
-		"y1": 573,
-		"y2": 721
-	}, {
-		"x1": 176,
-		"x2": 218,
-		"y1": 572,
-		"y2": 720
-	}, {
-		"x1": 137,
-		"x2": 180,
-		"y1": 810,
-		"y2": 947
-	}, {
-		"x1": 388,
-		"x2": 430,
-		"y1": 578,
-		"y2": 719
-	}, {
-		"x1": 587,
-		"x2": 627,
-		"y1": 808,
-		"y2": 948
-	}, {
-		"x1": 263,
-		"x2": 303,
-		"y1": 578,
-		"y2": 717
-	}, {
-		"x1": 355,
-		"x2": 401,
-		"y1": 144,
-		"y2": 261
-	}, {
-		"x1": 423,
-		"x2": 466,
-		"y1": 356,
-		"y2": 473
-	}, {
-		"x1": 382,
-		"x2": 422,
-		"y1": 355,
-		"y2": 471
-	}, {
-		"x1": 672,
-		"x2": 712,
-		"y1": 148,
-		"y2": 254
-	}, {
-		"x1": 552,
-		"x2": 596,
-		"y1": 389,
-		"y2": 466
-	}, {
-		"x1": 512,
-		"x2": 550,
-		"y1": 633,
-		"y2": 721
-	}, {
-		"x1": 589,
-		"x2": 627,
-		"y1": 633,
-		"y2": 719
-	}, {
-		"x1": 472,
-		"x2": 507,
-		"y1": 865,
-		"y2": 956
-	}, {
-		"x1": 468,
-		"x2": 510,
-		"y1": 389,
-		"y2": 467
-	}, {
-		"x1": 553,
-		"x2": 587,
-		"y1": 632,
-		"y2": 720
-	}, {
-		"x1": 544,
-		"x2": 585,
-		"y1": 810,
-		"y2": 949
-	}, {
-		"x1": 217,
-		"x2": 266,
-		"y1": 86,
-		"y2": 271
-	}, {
-		"x1": 580,
-		"x2": 625,
-		"y1": 172,
-		"y2": 255
-	}, {
-		"x1": 403,
-		"x2": 440,
-		"y1": 175,
-		"y2": 259
-	}, {
-		"x1": 510,
-		"x2": 551,
-		"y1": 391,
-		"y2": 465
-	}, {
-		"x1": 324,
-		"x2": 380,
-		"y1": 289,
-		"y2": 471
-	}, {
-		"x1": 348,
-		"x2": 388,
-		"y1": 576,
-		"y2": 721
-	}, {
-		"x1": 507,
-		"x2": 543,
-		"y1": 860,
-		"y2": 950
-	}, {
-		"x1": 628,
-		"x2": 666,
-		"y1": 630,
-		"y2": 720
-	}, {
-		"x1": 305,
-		"x2": 346,
-		"y1": 581,
-		"y2": 720
-	}, {
-		"x1": 127,
-		"x2": 195,
-		"y1": 76,
-		"y2": 263
-	}, {
-		"x1": 628,
-		"x2": 669,
-		"y1": 171,
-		"y2": 255
-	}, {
-		"x1": 98,
-		"x2": 135,
-		"y1": 847,
-		"y2": 946
-	}, {
-		"x1": 182,
-		"x2": 217,
-		"y1": 837,
-		"y2": 943
-	}, {
-		"x1": 538,
-		"x2": 578,
-		"y1": 177,
-		"y2": 258
-	}, {
-		"x1": 493,
-		"x2": 536,
-		"y1": 173,
-		"y2": 259
-	}, {
-		"x1": 212,
-		"x2": 255,
-		"y1": 1112,
-		"y2": 1205
-	}, {
-		"x1": 294,
-		"x2": 351,
-		"y1": 764,
-		"y2": 939
-	}]
-};
-
-const result1 = {
-	"skuList": [{
-		"x1": 442,
-		"x2": 492,
-		"y1": 79,
-		"y2": 265
-	}, {
-		"x1": 51,
-		"x2": 103,
-		"y1": 94,
-		"y2": 263
-  }]
-};
-
-const result2 = {
-	"skuList": [{
-		"x1": 493,
-		"x2": 536,
-		"y1": 173,
-		"y2": 259
-	}, {
-		"x1": 212,
-		"x2": 255,
-		"y1": 1112,
-		"y2": 1205
-	}, {
-		"x1": 294,
-		"x2": 351,
-		"y1": 764,
-		"y2": 939
-	}]
-};
-
-const [data, setData] = useState([])
-const [readOnly, setReadOnly] = useState(true)
-const [params, setParams] = useState({})
-
-function onChange(e, item, list) {
-  console.log(e, item, list)
-}
-function onChangeData () {
-  setData(convertData(result.skuList))
-}
-function onChangeData1 () {
-  setData(convertData(result1.skuList))
-}
-function onChangeData2 () {
-  setData(convertData(result2.skuList))
-}
-function changeReadOnly () {
-  setReadOnly(!readOnly)
-}
-function changeBlue () {
-  setParams({
-    shapeAttributes: {
-      style: 'stroke:blue;',
-      className: 'blue',
-      id: 'blue',
-      custom: '自定义blue'
-    }
-  });
-}
-function getSelected () {
-  var selected = this.$vott.instance.getSelected();
-  console.log(selected);
-}
-function convertData (skuList) {
-  return skuList.map((item) => {
-    return {
-      polygon: [
-        [item.x2, item.y1],
-        [item.x1, item.y1],
-        [item.x1, item.y2],
-        [item.x2, item.y2],
-      ],
-      style: 'stroke:red;',
-      className: 'default',
-      id: 'default',
-      custom: '自定义属性'
-    }
-  })
-}
-  
-
-
+	}, [])
+	const [list, setList] = useState([
+		'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343333&di=a85930ded8bf26f1e67da77638e01c95&imgtype=0&src=http%3A%2F%2Ffile04.16sucai.com%2Fd%2Ffile%2F2015%2F0429%2F56f0698d2becb7433ae694860d3d3df6.jpg',
+		'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343333&di=7bcb2c84cae38d7ac9dfe23131d7a49d&imgtype=0&src=http%3A%2F%2Ffile02.16sucai.com%2Fd%2Ffile%2F2015%2F0331%2F84f37ac106d412a608360a65be2654bb.jpg',
+	])
+	function add () {
+		setList([
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343333&di=a85930ded8bf26f1e67da77638e01c95&imgtype=0&src=http%3A%2F%2Ffile04.16sucai.com%2Fd%2Ffile%2F2015%2F0429%2F56f0698d2becb7433ae694860d3d3df6.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343333&di=7bcb2c84cae38d7ac9dfe23131d7a49d&imgtype=0&src=http%3A%2F%2Ffile02.16sucai.com%2Fd%2Ffile%2F2015%2F0331%2F84f37ac106d412a608360a65be2654bb.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343332&di=41db6a0b3c569f25126006a1a45c16ff&imgtype=0&src=http%3A%2F%2Ffile06.16sucai.com%2F2016%2F0606%2Fe971b8bb661d8e43c03b73f34df0b365.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343332&di=f29b5bccb76c2b5d0318cb2cf92119a3&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180103%2F868eb21b0b8e45e6bec55218252badf9.jpeg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343332&di=75d2580e1fc116046d9aafb4d5499a68&imgtype=0&src=http%3A%2F%2Fdesk.fd.zol-img.com.cn%2Fg5%2FM00%2F02%2F0C%2FChMkJ1bK2zKIZrPwAAI5J9v12CIAALJ6gJ3SWgAAjk_383.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343332&di=5b400b3c70d2003646916e4ba7bc4a5c&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Ffc1f4134970a304eb048b46ad1c8a786c9175c33.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588862343331&di=4898a2f3c21a794219e2d7790a8ebd9f&imgtype=0&src=http%3A%2F%2Ffile04.16sucai.com%2Fd%2Ffile%2F2015%2F0417%2F309a1058647104845307bb338221485e.jpg'
+		])
+	}
   return <Page>
     <Header>
       <Titlebar caption="标题"/>
     </Header>
     <Container>
-    <Vott
-      ref={refComponent}
-      style={{height: '700px'}}
-      data={data}
-      readOnly={readOnly}
-      src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
-      params={params}
-      onChange={onChange}
-      preview
-    />
-    <input type="button" value="只读" onClick={changeReadOnly}></input>
-    <input type="button" value="绘制蓝色" onClick={changeBlue}></input>
-    <input type="button" value="获取选中" onClick={getSelected}></input>
-    <input type="button" value="全部" onClick={onChangeData}/>
-    <input type="button" value="切换1" onClick={onChangeData1}/>
-    <input type="button" value="切换2" onClick={onChangeData2}/>
+			<input type="button" value="动态增加图片" onClick={add}/>
+			{list.map((src, index) => {
+				return <div key={index} style={{height: '800px', overflow: 'hidden'}}><img data-load-src={src} style={{width: '340px'}} data-error-src="//res.waiqin365.com/d/seedsui/carrousel/default.png" src="//res.waiqin365.com/d/seedsui/carrousel/default.png" alt=""/></div>
+			})}
     </Container>
   </Page>
 }

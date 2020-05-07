@@ -1,23 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Footer extends Component {
-  static propTypes = {
-    children: PropTypes.node
-  }
-  constructor(props) {
-    super(props);
-  }
+const Footer = forwardRef(({
+  children,
+  ...others
+}, ref) =>  {
+  return <footer ref={ref} {...others} className={`footer${others.className ? ' ' + others.className : ''}`}>
+    {children}
+  </footer>
+})
 
-  render() {
-    const {
-      children,
-      ...others
-    } = this.props;
-    return (
-      <footer ref={el => {this.$el = el;}} {...others} className={`footer${others.className ? ' ' + others.className : ''}`}>
-        {children}
-      </footer>
-    );
-  }
-}
+export default Footer

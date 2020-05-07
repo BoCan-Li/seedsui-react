@@ -23,6 +23,7 @@ export { default as Chat } from './Chat';
 export { default as Checkbox } from './Checkbox';
 export { default as ConfigProvider } from './ConfigProvider'; // 不常用
 export { default as Container } from './Container';
+export { default as ContainerPull } from './ContainerPull';
 export { default as Context } from './Context'; // 不常用
 export { default as Counter } from './Counter'; // 不常用
 export { default as Dialog } from './Dialog';
