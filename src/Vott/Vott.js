@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext, useState} from 'react';
 import Instance from './instance.js';
 import BridgeBrowser from './../Bridge/browser';
 import Context from '../Context/instance.js';
 
-export default class Vott extends Component {
-  static contextType = Context;
-  static propTypes = {
-    data: PropTypes.array, // 渲染形状: [{polygon: [[x,y]], css: '', class: ''}]
-    readOnly: PropTypes.bool, // 是否只读
-    src: PropTypes.string,
-    params: PropTypes.object, // 设置实例化参数
-    preview: PropTypes.bool // 是否支持单击预览, readOnly为true时才生效
-  }
+let loaded = 0;
+
+const Vott = forwardRef(({
+  src,
+  data = [],
+  params = {}, // 设置实例化参数
   // data = {
   //   polygon: [ // 逆时针
   //     [x2, y1], // 右上
@@ -28,57 +24,69 @@ export default class Vott extends Component {
   // params = {
   //   shapeAttributes: '形状属性'
   // }
-  static defaultProps = {
-  }
-  constructor(props, context) {
-    super(props, context);
-  }
-  componentDidUpdate (prevProps) {
-    if (this.instance) {
-      if (prevProps.params !== this.props.params) {
-        this.instance.updateParams(this.props.params);
-      }
-      if (prevProps.readOnly !== this.props.readOnly) {
-        this.instance.setReadOnly(this.props.readOnly);
-      }
-      if (prevProps.src !== this.props.src) {
-        this.instance.updateParams({src: this.props.src});
-        this.load = 0
-        this.instance.update();
-      }
-      if (prevProps.data !== this.props.data) {
-        this.instance.updateParams({data: this.props.data});
-        this.load = 0
-        this.instance.update();
-      }
+  readOnly = true, // 是否只读
+  preview = true, // 是否支持单击预览, readOnly为true时才生效
+  onChange, // func(e, value, selected)
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  const instance = useRef(null)
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+  useEffect(() => {
+    if (instance.current) instance.current.updateParams(params);
+  }, [params])
+
+  useEffect(() => {
+    if (instance.current) instance.current.setReadOnly(readOnly);
+  }, [readOnly])
+
+  useEffect(() => {
+    if (instance.current) {
+      instance.current.updateParams({src: src});
+      loaded = 0
+      instance.current.update();
     }
-  }
-  componentDidMount () {
-    const {
-      data,
-      readOnly,
-      src,
-      params = {}
-    } = this.props;
-    this.instance = new Instance(this.$el, {
+  }, [src])
+
+  useEffect(() => {
+    if (instance.current) {
+      instance.current.updateParams({data: data});
+      loaded = 0
+      instance.current.update();
+    }
+  }, [data])
+
+  useEffect(() => {
+    instance.current = new Instance(refEl.current, {
       readOnly: readOnly,
       data: data,
       src: src,
-      success: this.onLoad,
+      onSuccess: load,
+      onChange: change,
       ...params
     });
+  }, [])
+
+  function change (s, item, list) {
+    if (refEl.current) s.target = refEl.current
+    if (onChange) onChange(s, item, list)
   }
-  onLoad = () => {
-    this.load = 1
+  function load () {
+    loaded = 1
   }
-  onClick = () => {
-    this.preview()
+  function click () {
+    previewImage()
   }
-  preview = () => {
-    if (!this.props.readOnly || !this.props.preview || !this.load) return
-    var svg = this.instance.svg;
+  function previewImage () {
+    if (!readOnly || !preview || !loaded) return
+    var svg = instance.current.svg;
     var previewHTML = `<div class="preview-layer">${svg.outerHTML}</div>`;
-    BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML, success: (s) => {
+    BridgeBrowser.previewImage({urls: [src], layerHTML: previewHTML, success: (s) => {
       var layer = s.container.querySelector('.preview-layer');
       svg = s.container.querySelector('.vott-svg');
       svg.style.backgroundImage = 'initial';
@@ -95,31 +103,19 @@ export default class Vott extends Component {
       svg.style.WebkitTransformOrigin = `0 0`
     }});
   }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    const {
-      data,
-      readOnly,
-      src,
-      params = {},
-      preview,
-      ...others
-    } = this.props;
-    return (
-      <div className="vott-container" {...others} ref={(el) => {this.$el = el}}>
-        <svg className="vott-svg" preserveAspectRatio="none" onClick={this.onClick}></svg>
-        <div className={`vott-loading active`}>
-          <div className={`vott-loading-icon`}></div>
-        </div>
-        <div className={`vott-error`}>
-          <div className={`vott-error-icon`}></div>
-          <div className={`vott-error-caption`}>{locale['hint_image_failed_to_load'] || '图片加载失败'}</div>
-        </div>
+
+  return (
+    <div className="vott-container" {...others} ref={refEl}>
+      <svg className="vott-svg" preserveAspectRatio="none" onClick={click}></svg>
+      <div className={`vott-loading active`}>
+        <div className={`vott-loading-icon`}></div>
       </div>
-    );
-  }
-}
+      <div className={`vott-error`}>
+        <div className={`vott-error-icon`}></div>
+        <div className={`vott-error-caption`}>{locale['hint_image_failed_to_load'] || '图片加载失败'}</div>
+      </div>
+    </div>
+  );
+})
+
+export default Vott

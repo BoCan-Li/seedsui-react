@@ -42,6 +42,7 @@ var Vott = function (container, params) {
     /*
     callbacks
     onClick:function(s)
+    onChange:function(s)
     onSuccess:function(s)
     onError:function(s)
     */
@@ -144,6 +145,7 @@ var Vott = function (container, params) {
   }
   // 图片加载完成或者错误
   s.onLoad = function (e) {
+    s.event = e
     var target = e.target
     // 显隐
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
@@ -172,12 +174,13 @@ var Vott = function (container, params) {
     }
   }
   s.onError = function (e) {
+    s.event = e
     // 显隐
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.svg.classList.remove(s.params.activeClass)
     // Callback
-    if (s.params.onError) s.params.onError(e, {errMsg: `${locale('invalid_image_src') || '图片地址无效'}`})
+    if (s.params.onError) s.params.onError(s, {errMsg: `${locale('invalid_image_src') || '图片地址无效'}`})
   }
   // 更新DOM
   s.update = function () {
@@ -465,25 +468,30 @@ var Vott = function (container, params) {
     var sorts = GeoUtil.sortPoints(polygon)
     return sorts
   }
+  // 获取单个图形的信息
+  s.getShapeData = function (shape) {
+    // 还原比例
+    var polygon = s.toPolygon(shape.getAttribute('points')).map(function (points) {
+      return points.map(function (point) {
+        return point / s.scale
+      })
+    })
+    var params = shape.getAttribute('data-params') ? JSON.parse(shape.getAttribute('data-params')) : {}
+    return {
+      polygon: polygon,
+      style: shape.getAttribute('style') || '',
+      class: shape.getAttribute('class') || '',
+      id: shape.id || '',
+      ...params
+    }
+  }
   // 获取选中
   s.getSelected = function () {
     var shapes = s.svg.querySelectorAll('.' + s.params.shapeClass)
     var selected = []
     for (var shape of shapes) {
-      // 还原比例
-      var polygon = s.toPolygon(shape.getAttribute('points')).map(function (points) {
-        return points.map(function (point) {
-          return point / s.scale
-        })
-      })
-      var params = shape.getAttribute('data-params') ? JSON.parse(shape.getAttribute('data-params')) : {}
-      selected.push({
-        polygon: polygon,
-        className: shape.getAttribute('style') || '',
-        class: shape.getAttribute('class') || '',
-        id: shape.id || '',
-        ...params
-      })
+      let item = s.getShapeData(shape)
+      selected.push(item)
     }
     return selected
   }
@@ -645,6 +653,13 @@ var Vott = function (container, params) {
     }
 
     s.moveEnd = true
+    // Callback
+    s.event = e
+    if (s.params.onChange) {
+      var shapeData = s.getShapeData(s.touches.target)
+      var shapes = s.getSelected()
+      s.params.onChange(s, shapeData, shapes)
+    }
   }
   // 双击删除此形状
   s.onDblClick = function (e) {

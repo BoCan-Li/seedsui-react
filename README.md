@@ -2753,10 +2753,11 @@ import Legend from 'seedsui-react/lib/Legend';
 ### 属性
 ```javascript
 <Vott
-  readOnly={是否只读 bool, 默认false}
   src={图片地址或者base64 string, 默认无}
   data={标注数据 array, 默认无}
   params={设置实例化参数 object, 默认无}
+  
+  readOnly={是否只读 bool, 默认false}
   preview={是否预览 bool, 默认true, 是否支持单击预览, readOnly为true时才生效}
   {...others}
 />
@@ -3062,51 +3063,41 @@ const result2 = {
 	}]
 };
 
-this.state = {
-  data: [],
-  readOnly: false,
-  params: {}
-}
 
-onChangeData = () => {
-  this.setState({
-    data: this.convertData(result.skuList)
-  })
+const [data, setData] = useState([])
+const [readOnly, setReadOnly] = useState(true)
+const [params, setParams] = useState({})
+
+function onChange(e, item, list) {
+  console.log(e, item, list)
 }
-onChangeData1 = () => {
-  this.setState({
-    data: this.convertData(result1.skuList)
-  })
+function onChangeData () {
+  setData(convertData(result.skuList))
 }
-onChangeData2 = () => {
-  this.setState({
-    data: this.convertData(result2.skuList)
-  })
+function onChangeData1 () {
+  setData(convertData(result1.skuList))
 }
-changeReadOnly = () => {
-  this.setState((prevState) => {
-    return {
-      readOnly: !prevState.readOnly
+function onChangeData2 () {
+  setData(convertData(result2.skuList))
+}
+function changeReadOnly () {
+  setReadOnly(!readOnly)
+}
+function changeBlue () {
+  setParams({
+    shapeAttributes: {
+      style: 'stroke:blue;',
+      className: 'blue',
+      id: 'blue',
+      custom: '自定义blue'
     }
-  })
+  });
 }
-changeBlue = () => {
-  this.setState({
-    params: {
-      shapeAttributes: {
-        style: 'stroke:blue;',
-        className: 'blue',
-        id: 'blue',
-        custom: '自定义blue'
-      }
-    }
-  })
-}
-getSelected = () => {
+function getSelected () {
   var selected = this.$vott.instance.getSelected();
   console.log(selected);
 }
-convertData = (skuList) => {
+function convertData (skuList) {
   return skuList.map((item) => {
     return {
       polygon: [
@@ -3122,21 +3113,23 @@ convertData = (skuList) => {
     }
   })
 }
-  
+
 <Vott
-  ref={el => {this.$vott = el}}
+  ref={refComponent}
   style={{height: '700px'}}
-  data={this.state.data}
-  readOnly={this.state.readOnly}
+  data={data}
+  readOnly={readOnly}
   src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
-  params={this.state.params}
+  params={params}
+  onChange={onChange}
+  preview
 />
-<input type="button" value="只读" onClick={this.changeReadOnly}></input>
-<input type="button" value="绘制蓝色" onClick={this.changeBlue}></input>
-<input type="button" value="获取选中" onClick={this.getSelected}></input>
-<input type="button" value="全部" onClick={this.onChangeData}/>
-<input type="button" value="切换1" onClick={this.onChangeData1}/>
-<input type="button" value="切换2" onClick={this.onChangeData2}/>
+<input type="button" value="只读" onClick={changeReadOnly}></input>
+<input type="button" value="绘制蓝色" onClick={changeBlue}></input>
+<input type="button" value="获取选中" onClick={getSelected}></input>
+<input type="button" value="全部" onClick={onChangeData}/>
+<input type="button" value="切换1" onClick={onChangeData1}/>
+<input type="button" value="切换2" onClick={onChangeData2}/>
 ```
 [返回目录](#component)
 

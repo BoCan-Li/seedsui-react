@@ -1,5 +1,5 @@
 // require PrototypeArray.js
-import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import Instance from './instance.js';
 
 const Tree = forwardRef(({
