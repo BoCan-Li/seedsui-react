@@ -3563,17 +3563,13 @@ onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
 ### 属性
 ```javascript
 <MenuTree
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'menutree'}
-  list={列表 array, 默认无, 示例如下:}
-  /* list: [{
-    id: '',
-    name: '',
-    active: false,
-    children
-  }] */
-  selected={默认选中项 array, 默认无} // [{id: '', name: ''}]
-  onClick={点击 func(s, item, isActived, isExtand: true展开 | false收缩, childrenCount), 默认无}
+  selected={选中项 array, 默认无} // 选中项: [{id: '', name: ''}]
+  list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
+
+  onChange={点击节点 func(s, value, selected), 默认无}
+
+  onClick={点击节点 func(s, value, item, isActived, isExtend, childrenCount), 默认无}
+  onClickLeaf={点击底层节点 func(s, value, item, isActived), 默认无}
 />
 ```
 ### 示例
@@ -3590,7 +3586,7 @@ const mockList = [
 ];
 
 const [list, setList] = useState(mockList)
-const [selected, setSelected] = useState([])
+const [selected, setSelected] = useState([{id: 'I', name: '测试数据1-b-I', parentid: 'b'}])
 
 function clearData () {
   setList([])
@@ -3604,7 +3600,7 @@ function onChange (e, value, selected) {
   setSelected(selected);
 }
 
-<MenuTree ref={refCompoent} list={list} selected={selected} onChange={onChange}/>
+<MenuTree ref={refComponent} list={list} selected={selected} onChange={onChange}/>
 <input type="button" value="置空" onClick={clearData}/>
 <input type="button" value="显示" onClick={addData}/>
 ```
@@ -4867,9 +4863,9 @@ showMsg = (msg) => {
 
   getChildren={动态渲染子元素 Promise, 默认无} // 信息过大的情况, 先只渲染部门再渲染人员, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: "", parentid: ""])时会渲染, resolve('错误')则停留在选择页面不进行渲染操作
   onChange={点击底层节点 func(s, value, selected), 默认无}
+  onClick={点击节点 func(s, value, item, isActived, isExtend, childrenCount), 默认无}
+  onClickLeaf={点击底层节点 func(s, value, item, isActived), 默认无}
 
-  onClickLeaf={点击底层节点 func(s), 默认无}
-  onClick={点击节点 func(s, item, isActived, isExtend, childrenCount), 默认无}
   onData={数据加载时,可修改dom func(option), 默认无} // 通过修改option.html塞入按钮前
 />
 ```

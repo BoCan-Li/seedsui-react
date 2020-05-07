@@ -7,7 +7,7 @@ import {
   Titlebar,
   Container,
   Bridge,
-  MenuTree
+  Tree
 } from '../../src';
 
 function Demo () {
@@ -25,7 +25,7 @@ function Demo () {
   ];
   
   const [list, setList] = useState(mockList)
-  const [selected, setSelected] = useState([])
+  const [selected, setSelected] = useState([{id: 'I', name: '测试数据1-b-I', parentid: 'b'}])
   
   function clearData () {
     setList([])
@@ -45,7 +45,7 @@ function Demo () {
       <Titlebar caption="标题"/>
     </Header>
     <Container>
-      <MenuTree ref={refCompoent} list={list} selected={selected} onChange={onChange}/>
+      <Tree ref={refComponent} list={list} selected={selected} onClickLeaf={onChange}/>
       <input type="button" value="置空" onClick={clearData}/>
       <input type="button" value="显示" onClick={addData}/>
     </Container>

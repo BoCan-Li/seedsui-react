@@ -442,8 +442,8 @@ var Tree = function (container, params) {
       /* eslint-enable */
       s.isLeaf = false
       // Callback onClickLeaf(点击底层)
-      if ((!s.targetLine.nextElementSibling || !s.targetLine.nextElementSibling.hasChildNodes()) && s.params.onClickLeaf) {
-        s.params.onClickLeaf(s)
+      if ((!s.targetLine.nextElementSibling || !s.targetLine.nextElementSibling.hasChildNodes())) {
+        if (s.params.onClickLeaf) s.params.onClickLeaf(s)
         s.isLeaf = true
       }
       // Callback onClick

@@ -20,7 +20,6 @@ var MenuTree = function (container, params) {
   /* 参数data: [{
     id: '',
     name: '',
-    active: false,
     children
   }] */
   params = params || {}

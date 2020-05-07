@@ -69,7 +69,6 @@ const Tree = forwardRef(({
       onClickAdd: buttonAddAttribute.onClick,
       buttonDelClass: buttonDelAttribute.className,
       onClickDel: buttonDelAttribute.onClick,
-      onClickLeaf: onClickLeaf, // 没有子节点
       onClick: click,
       onAddSelected: addSelected,
       onData: onData
@@ -132,7 +131,9 @@ const Tree = forwardRef(({
     // isExtend
     const isExtend = s.targetLine.classList.contains('extend');
     
-    if (onClick) onClick(s, item, isActived, isExtend, childrenCount);
+    // 点击回调
+    if (onClick) onClick(s, item.name, item, isActived, isExtend, childrenCount);
+    if (s.isLeaf && onClickLeaf) onClickLeaf(s, item.name, item, isActived);
 
     if (getChildren) {
       addChildren(s, item, isActived, isExtend, childrenCount)
