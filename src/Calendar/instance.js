@@ -511,6 +511,7 @@ var Calendar = function (container, params) {
     s.slideXTo(2)
   }
   s.onClick = function (e) {
+    s.target = e.target
     s.event = e
     // 点击禁用日期
     if (e.target.classList.contains(s.params.disableClass)) return
@@ -580,9 +581,10 @@ var Calendar = function (container, params) {
     s.touches.vertical = 0
   }
   s.onTransitionEnd = function (e) {
+    s.target = e.target
     s.event = e
     // 横向滑动时需要还原位置
-    if (encodeURI.target.classList.contains(s.params.wrapperXClass)) {
+    if (s.target.classList.contains(s.params.wrapperXClass)) {
       // 还原位置
       s.updateTranslateX()
       // Callback onHorizontalTransitionEnd

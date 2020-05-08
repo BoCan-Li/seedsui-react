@@ -1,52 +1,71 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// require (PrototypeDate.js), 使用了format
+import React, { forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 import Instance from './instance.js';
 
-export default class Calendar extends Component {
-  static propTypes = {
-    type: PropTypes.string, // week|month
-    titleFormat: PropTypes.string, // 标题日期格式化 YYYY年MM月DD日 周E 第W周
-    disableBeforeDate: PropTypes.object, // 禁用之前日期
-    disableAfterDate: PropTypes.object, // 禁用之后日期
-    verticalDrag: PropTypes.bool, // 是否允许垂直拖动
-    defaultDate: PropTypes.object, // 默认日期
-    prevHTML: PropTypes.string, // 左箭头
-    nextHTML: PropTypes.string, // 右箭头
-    onChange: PropTypes.func,
-    onClick: PropTypes.func,
-    onError: PropTypes.func
+const Calendar = forwardRef(({
+  type = 'month', // week | month
+  activeTo = '', // today | default
+  defaultDate, // 默认日期
+  titleFormat, // 标题日期格式化 YYYY年MM月DD日 周E 第W周
+  disableBeforeDate, // 禁用之前日期
+  disableAfterDate, // 禁用之后日期
+  verticalDrag, // 是否允许垂直拖动
+  prevHTML = '&lt', // 左箭头
+  nextHTML = '&gt', // 右箭头
+  onChange,
+  onClick,
+  onError
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  const instance = useRef(null)
+
+  function change (s) {
+    if (onChange) onChange(s, s.activeDate.format('YYYY-MM-DD'), s.activeDate)
   }
-  static defaultProps = {
-    type: 'month',
-    verticalDrag: true,
-    prevHTML: '&lt',
-    nextHTML: '&gt',
+  function click (s) {
+    if (onClick) onClick(s, s.selectedDate.format('YYYY-MM-DD'), s.selectedDate)
   }
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount () {
-    if (this.instance) return
-    const {type, titleFormat, disableBeforeDate, disableAfterDate, verticalDrag, defaultDate, prevHTML, nextHTML, onChange, onClick, onError} = this.props;
-    var instance = new Instance(this.$el, {
+  useEffect(() => {
+    if (instance.current) return
+    instance.current = new Instance(refEl.current, {
       viewType: type,
       titleFormat: titleFormat,
-
       disableBeforeDate: disableBeforeDate,
       disableAfterDate: disableAfterDate,
       verticalDrag: verticalDrag,
       defaultDate: defaultDate,
       prevHTML: prevHTML,
       nextHTML: nextHTML,
-      onChange: onChange,
-      onClick: onClick,
+      onChange: change,
+      onClick: click,
       onError: onError // func(e, err)
     });
-    this.instance = instance;
-  }
-  render() {
-    return (
-      <div ref={el => {this.$el = el;}} className="calendar"></div>
-    );
-  }
-}
+  }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (!instance.current) return
+    if (type === 'month') {
+      instance.current.showMonth();
+    } else if (type === 'week') {
+      instance.current.showWeek();
+    }
+  }, [type])
+
+  useEffect(() => {
+    if (!instance.current) return
+    if (activeTo === 'today') {
+      instance.current.setToday();
+    } else if (activeTo === 'default') {
+      instance.current.setDefaultDate();
+    }
+  }, [activeTo])
+
+  return (
+    <div ref={refEl} className="calendar"></div>
+  );
+})
+
+export default Calendar
