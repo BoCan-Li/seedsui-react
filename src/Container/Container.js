@@ -10,9 +10,9 @@ const Container = forwardRef(({
   useImperativeHandle(ref, () => {
     return refEl.current
   });
-  const lazyInstance = useRef(null);
 
   // 图片懒加载
+  const lazyInstance = useRef(null);
   useEffect(() => {
     if (lazyLoad !== 'scroll' && lazyLoad !== 'queue') return;
     if (lazyInstance.current) {
@@ -24,7 +24,7 @@ const Container = forwardRef(({
       });
       lazyInstance.current.load();
     }
-  }, [children])
+  }, [children]) // eslint-disable-line
 
   return <article ref={refEl} {...others} className={`container${others.className ? ' ' + others.className : ''}`}>
     {children}

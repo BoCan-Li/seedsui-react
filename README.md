@@ -106,7 +106,8 @@ import Chat from 'seedsui-react/lib/Chat';
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
 - [ConfigProvider](#configprovider) 全局配置(已废弃)
-- [Container](#container) page主体
+- [Container](#container) container主体
+- [ContainerPull](#containerpull) 带下拉刷新功能的container主体
 - [Context](#context) 全局配置
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
@@ -885,8 +886,6 @@ locale('hint_only_mobile')
 ### 属性
 ```javascript
 <Container
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'container'}
   lazyLoad={懒人加载 string, 默认无} // scroll 滚动加载 | queue 队列加载
   // 异步加载时需要使用:
   // ref="$container" 和 ref={(el) => {this.$container = el;}}, this.refs.$container === this.$container
@@ -932,6 +931,160 @@ function add () {
 </Page>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## ContainerPull
+[下拉刷新](https://unpkg.com/seedsui-react/src/lib/ContainerPull/ContainerPull.js)
+### 属性
+```javascript
+<ContainerPull
+  onTopRefresh={头部刷新 func(s)}
+  onBottomRefresh={底部刷新 func(s)}
+  refreshing={是否正在刷新 bool, 默认false} // true: 正在刷新 false: 刷新完成
+  lazyLoad={懒人加载 string, 默认无} // scroll 滚动加载 | queue 队列加载
+  {...others}
+>
+内容
+</ContainerPull>
+```
+### 示例
+```javascript
+import ContainerPull from 'seedsui-react/lib/ContainerPull';
+import BottomNoData from 'seedsui-react/lib/ContainerPull/BottomNoData';
+import BottomRefreshing from 'seedsui-react/lib/ContainerPull/BottomRefreshing';
+import Notice from 'seedsui-react/lib/ContainerPull/Notice';
+
+// 全局变量
+let page = 1;
+let rows = 5;
+const data = [
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	},
+	{
+		id: '1',
+		name: '数据'
+	}
+]
+
+// 非全局变量
+const refEl = useRef(null);
+let [refreshing, setRefreshing] = useState('');
+let [list, setList] = useState([]);
+// 用于判断是否没有数据了0.没有数据
+let [hasMore, setHasMore] = useState(true);
+// 错误信息
+let [message, setMessage] = useState('');
+
+function onTopRefresh () {
+  console.log('头部刷新');
+  loadData(false);
+}
+function onBottomRefresh () {
+  if (hasMore === true) {
+    console.log('底部刷新');
+    loadData(true);
+  }
+}
+// 获取列表的基本方法
+function getList (options = {}) {
+  return new Promise((resolve) => {
+    console.log(`第${options.page}页, 开始刷新`)
+    setRefreshing(true);
+    page = options.page;
+    setTimeout(() => {
+      console.log(`第${options.page}页, 刷新完成`)
+      setRefreshing(false)
+      let allList = list;
+      // 设置数据
+      const serList = data || [];
+      allList = options.page === 1 ? serList : allList.concat(serList);
+      list = allList;
+      // 数据加载完成, 假设共5页, 或者用其它判断方法
+      if (options.page >= 10 || allList.length === 0) {
+        setHasMore(false);
+        if (allList.length === 0) {
+          setMessage('暂无数据');
+        }
+      } else {
+        setHasMore(true);
+        setMessage('');
+      }
+      setList(allList)
+      resolve(true)
+    }, 2000)
+  })
+}
+function loadData (isNext) {
+  // 分页
+  if (isNext) {
+    page++;
+  } else {
+    page = 1;
+    if (refEl && refEl.current) refEl.current.scrollTop = 0;
+  }
+  // 获得数据
+  getList({
+    page: page,
+    rows: rows
+  });
+}
+
+useEffect(() => {
+  loadData();
+}, []); // eslint-disable-line
+
+<ContainerPull ref={refEl} refreshing={refreshing} onTopRefresh={onTopRefresh} onBottomRefresh={onBottomRefresh}>
+  {list.map((item, index) => {
+    return <div className="flex flex-middle" style={{height: '44px'}} key={index}>{item.name}</div>
+  })}
+  {hasMore === true && <BottomRefreshing/>}
+  {hasMore === false && <BottomNoData/>}
+</ContainerPull>
+{message && <Notice caption={message}/>}
+```
+[返回目录](#component)
+
 
 
 
@@ -1130,7 +1283,7 @@ import Dot from 'seedsui-react/lib/Dot';
 
 
 
-## Dragrefresh
+## Dragrefresh(即将废弃,使用ContainerPull组件代替)
 [下拉刷新](https://unpkg.com/seedsui-react/src/lib/Dragrefresh/Dragrefresh.js)
 ### 属性
 ```javascript
@@ -1228,6 +1381,16 @@ loadData = () => {
 </Dragrefresh>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
 
 
 

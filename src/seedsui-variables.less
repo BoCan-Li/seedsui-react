@@ -2466,32 +2466,32 @@ a {
 
 // ContainerPull下拉刷新控件
 .setContainerPull(){
-  @-webkit-keyframes dfAnimate-spinner {
+  @keyframes containerpull-animation-spinner {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(180deg); }
     100% { transform: rotate(360deg); }
   }
   //pull类型
-  .df-pull {
+  .containerpull-pull {
     display: block;
     position: relative;
     overflow: hidden;
     width: 100%;
     height: 0;
   }
-  .df-pull-box {
+  .containerpull-pull-box {
     .flex;
     .flex-middle;
     .flex-center;
     height: @50px;
     color: #777;
   }
-  .df-pull-caption {
+  .containerpull-pull-caption {
     display: block;
     height: @20px;
     line-height: @20px;
   }
-  .df-pull-icon {
+  .containerpull-pull-icon {
     display: block;
     margin-right: @10px;
     transition-timing-function: ease-in;
@@ -2505,23 +2505,23 @@ a {
     background-position: left top;
     background-image: url(//res.waiqin365.com/d/seedsui/dragrefresh/pull.png);
   
-    &.df-pull-icon-up{
+    &.containerpull-pull-icon-up{
       transform: rotate(0deg);
     }
-    &.df-pull-icon-down{
+    &.containerpull-pull-icon-down{
       transform: rotate(180deg);
     }
-    &.df-pull-icon-none{
+    &.containerpull-pull-icon-none{
       display: none;
     }
-    &.df-pull-icon-loading{
+    &.containerpull-pull-icon-loading{
       background-position: left bottom;
       transition-duration:0ms;
-      animation: dfAnimate-spinner 1000ms infinite linear;
+      animation: containerpull-animation-spinner 1000ms infinite linear;
     }
   }
   //circle类型
-  .df-circle{
+  .containerpull-circle{
     position:absolute;
     .flex;
     .flex-middle;
@@ -2542,11 +2542,11 @@ a {
     transition-timing-function: ease-in;
     transition-property:transform;
     transition-duration:@animation-duration;
-    &.df-circle-show{
+    &.containerpull-circle-show{
       transform:translate3d(0,@120px,0) rotate(0deg);
     }
   }
-  .df-circle-icon{
+  .containerpull-circle-icon{
     display: block;
     margin: 0 auto;
     width: @32px;
@@ -2559,11 +2559,11 @@ a {
     transition-timing-function: ease-in;
     transition-property:transform;
     transition-duration:@animation-duration;
-    &.df-circle-icon-loading{
-      animation: dfAnimate-spinner 1000ms infinite linear;
+    &.containerpull-circle-icon-loading{
+      animation: containerpull-animation-spinner 1000ms infinite linear;
     }
   }
-  .df-circle-icon-none{
+  .containerpull-circle-icon-none{
     display: none;
   }
 }
@@ -2632,7 +2632,7 @@ a {
 
 // Dragrefresh下拉刷新控件
 .setDragrefresh(){
-  @-webkit-keyframes dfAnimate-spinner {
+  @keyframes dfAnimate-spinner {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(180deg); }
     100% { transform: rotate(360deg); }

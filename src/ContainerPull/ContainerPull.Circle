@@ -10,10 +10,10 @@ var DragCircle = {
   },
   onShowTop: function (e) {
     var topContainer = e.topContainer;
-    var topIcon = topContainer.querySelector('.df-pull-icon');
+    var topIcon = topContainer.querySelector('.containerpull-pull-icon');
     topContainer.style.height = e.params.threshold + 'px';
-    if (topIcon) topIcon.classList.remove('df-pull-icon-down');
-    if (topIcon) topIcon.classList.add('df-pull-icon-loading');
+    if (topIcon) topIcon.classList.remove('containerpull-pull-icon-down');
+    if (topIcon) topIcon.classList.add('containerpull-pull-icon-loading');
     topCaption.innerHTML = locale['refreshing'] || '正在刷新...';
   },
   onHideTop: function (e) {
@@ -22,9 +22,9 @@ var DragCircle = {
   },
   onTopHid: function (e) {
     var topContainer = e.topContainer;
-    var topIcon = topContainer.querySelector('.df-pull-icon');
-    if (topIcon) topIcon.classList.remove('df-pull-icon-down');
-    if (topIcon) topIcon.classList.remove('df-pull-icon-loading');
+    var topIcon = topContainer.querySelector('.containerpull-pull-icon');
+    if (topIcon) topIcon.classList.remove('containerpull-pull-icon-down');
+    if (topIcon) topIcon.classList.remove('containerpull-pull-icon-loading');
   }
 }
 
@@ -32,10 +32,10 @@ export default DragCircle
 
 /*
 // 头部
-<div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-circle">
-  <div class="df-circle-icon"></div>
+<div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer containerpull-circle">
+  <div class="containerpull-circle-icon"></div>
 </div>
 
 // 底部
-<div className="SID-Dragrefresh-BottomContainer df-circle-icon df-circle-icon-loading" style={{height: '50px'}}></div>
+<div className="SID-Dragrefresh-BottomContainer containerpull-circle-icon containerpull-circle-icon-loading" style={{height: '50px'}}></div>
 */
