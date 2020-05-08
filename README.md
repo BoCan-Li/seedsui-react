@@ -1041,7 +1041,7 @@ function getList (options = {}) {
       allList = options.page === 1 ? serList : allList.concat(serList);
       list = allList;
       // 数据加载完成, 假设共5页, 或者用其它判断方法
-      if (options.page >= 10 || allList.length === 0) {
+      if (options.page >= 5 || allList.length === 0) {
         setHasMore(false);
         if (allList.length === 0) {
           setMessage('暂无数据');
