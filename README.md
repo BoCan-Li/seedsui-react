@@ -501,17 +501,18 @@ import Button from 'seedsui-react/lib/Button';
 ### 属性
 ```javascript
 <Calendar
-  type={日历类型 string, 默认'month'} // week|month
+  type={日历类型 string, 默认'month'} // 'week' | 'month'
+  activeTo={跳转到 string|date, 默认无} // 'today' | 'default' | 自定义日期
+  defaultDate={默认选中日期 date, 默认new Date()}
   titleFormat={是否显示周数 string, 默认'YYYY年MM月DD日'} // 标题日期格式化 YYYY年MM月DD日 周E 第W周
   disableBeforeDate={禁用此前日期 date, 默认无}
   disableAfterDate={禁用此后日期 date, 默认无}
   verticalDrag={是否允许垂直拖动 bool, 默认true}
-  defaultDate={默认选中日期 date, 默认new Date()}
   prevHTML={左箭头html string, 默认'&lt'}
   nextHTML={右箭头html string, 默认'&gt'}
-  onChange={选中日期发生变化 func(date)}
-  onClick={点击 func(date)}
-  fail={非法操作,如选择禁用日期 func(date)}
+  onChange={选中日期发生变化 func(s, value)}
+  onClick={点击 func(s, value)}
+  onError={非法操作,如选择禁用日期 func(s, err)}
 />
 ```
 ### 示例
@@ -545,6 +546,9 @@ function showToday () {
 function showReset () {
   setActiveTo('default');
 }
+function showCustom () {
+  setActiveTo(new Date('1988,08,22'));
+}
 
 <Calendar
   ref={refComponent}
@@ -559,7 +563,8 @@ function showReset () {
 <a style={{margin: '8px'}} className="button lg bg-1" onClick={showMonth}>月</a>
 <a style={{margin: '8px'}} className="button lg bg-2" onClick={showWeek}>周</a>
 <a style={{margin: '8px'}} className="button lg bg-3" onClick={showToday}>今天</a>
-<a style={{margin: '8px'}} className="button lg bg-4" onClick={showReset}>重置</a>
+<a style={{margin: '8px'}} className="button lg bg-4" onClick={showReset}>默认日期</a>
+<a style={{margin: '8px'}} className="button lg bg-4" onClick={showCustom}>1988-08-22</a>
 ```
 [返回目录](#component)
 

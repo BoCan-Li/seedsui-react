@@ -468,6 +468,12 @@ var Calendar = function (container, params) {
     s.activeDate.setTime(s.today.getTime())
     s.draw()
   }
+  s.setDate = function (date) {
+    if (date instanceof Date) {
+      s.activeDate.setTime(date.getTime())
+      s.draw()
+    }
+  }
   s.setDefaultDate = function () {
     if (!s.params.defaultDate) {
       console.log('SeedsUI Warn: 没有设置defaultDate默认时间')

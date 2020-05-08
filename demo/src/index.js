@@ -43,6 +43,9 @@ function Demo () {
 	function showReset () {
 		setActiveTo('default');
 	}
+	function showCustom () {
+		setActiveTo(new Date('1988,08,22'));
+	}
 	
 	
 
@@ -64,7 +67,8 @@ function Demo () {
 			<a style={{margin: '8px'}} className="button lg bg-1" onClick={showMonth}>月</a>
 			<a style={{margin: '8px'}} className="button lg bg-2" onClick={showWeek}>周</a>
 			<a style={{margin: '8px'}} className="button lg bg-3" onClick={showToday}>今天</a>
-			<a style={{margin: '8px'}} className="button lg bg-4" onClick={showReset}>重置</a>
+			<a style={{margin: '8px'}} className="button lg bg-4" onClick={showReset}>默认日期</a>
+			<a style={{margin: '8px'}} className="button lg bg-4" onClick={showCustom}>1988-08-22</a>
 		</Container>
   </Page>
 }

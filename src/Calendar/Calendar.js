@@ -56,6 +56,10 @@ const Calendar = forwardRef(({
 
   useEffect(() => {
     if (!instance.current) return
+    if (activeTo instanceof Date) {
+      instance.current.setDate(activeTo);
+      return;
+    }
     if (activeTo === 'today') {
       instance.current.setToday();
     } else if (activeTo === 'default') {
