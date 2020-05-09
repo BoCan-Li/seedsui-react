@@ -37,7 +37,7 @@ const Picker = forwardRef(({
     } else if (list && list.length > 0) {
       initInstance();
     }
-  }, [show])
+  }, [show]) // eslint-disable-line
 
   function setDefault () {
     const defaultOpt = getDefaultOption();
