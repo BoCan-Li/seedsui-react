@@ -27,36 +27,27 @@ const Picker = forwardRef(({
   const locale = context.locale || {};
   useEffect(() => {
     if (!list || !list.length) return;
-    const selectedIds = Object.values(getSelectedIds() || []) || [];
     [].slice.call(refEl.current.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
-      if (selectedIds.indexOf(list[i].id) !== -1) {
-        n.classList.add('active');
-      } else {
-        n.classList.remove('active');
-      }
-    })
-  }, [show])
-  // 获取选中的id
-  function getSelectedIds () {
-    let selectedValue = value;
-    if (selected && selected.length) {
-      selectedValue = selected[0].id;
-    }
-    const selectedProperty = selected && selected.length ? 'id' : 'name';
-    if (selectedValue) {
-      const options = selectedValue.split(split || ',').map((val) => {
-        for (var i = 0, option; option = list[i++];) { // eslint-disable-line
-          if (option[selectedProperty] === val) {
-            return option.id;
+      if (selected && selected.length) {
+        for (let option of selected) {
+          if (option.id === list[i].id) {
+            n.classList.add('active');
+          } else {
+            n.classList.remove('active');
           }
         }
-        return '';
-      });
-      return options;
-    } else {
-      return [];
-    }
-  }
+      } else if (value) {
+        let selectedValues = value.split(split || ',');
+        for (let name of selectedValues) {
+          if (name === list[i].name) {
+            n.classList.add('active');
+          } else {
+            n.classList.remove('active');
+          }
+        }
+      }
+    })
+  }, [show]) // eslint-disable-line
   // 构建值
   function buildValue (options) {
     if (!multiple) return options[0].name;

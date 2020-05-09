@@ -24,7 +24,7 @@ const Picker = forwardRef(({
   const instance = useRef(null);
   useEffect(() => {
     initInstance()
-  }, [])
+  }, []) // eslint-disable-line
 
   useEffect(() => {
     if (instance.current) {
@@ -40,32 +40,22 @@ const Picker = forwardRef(({
   }, [show])
 
   function setDefault () {
-    let id = '';
-    if (selected && selected.length) {
-      id = selected[0].id;
-    }
-    if (!id) {
-      const defaultOpt = getDefaults();
-      if (defaultOpt && defaultOpt.id) id = defaultOpt.id;
-    }
+    const defaultOpt = getDefaultOption();
     instance.current.clearSlots();
-    instance.current.addSlot(list, id || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认id,样式(lock样式为锁定列)
+    instance.current.addSlot(list, defaultOpt.id || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认id,样式(lock样式为锁定列)
   }
 
-  function getDefaults () {
-    if ((!selected || !selected.length) && !value) {
-      if (list && list[0]) return list[0];
-      return [{id: '', name: ''}];
+  function getDefaultOption () {
+    if (selected && selected.length) {
+      return selected[0]
     }
-    const values = list.filter((item) => {
-      if (selected && selected.length) {
-        if (selected[0].id === item.id) return true
-      } else if (value) {
-        if (item.name === value) return true
+    if (value) {
+      for (let item of list) {
+        if (item.name === value) return item
       }
-      return false
-    });
-    return values[0];
+      return null
+    }
+    return null
   }
 
   function initInstance () {
@@ -91,7 +81,7 @@ const Picker = forwardRef(({
       }
     });
     // 默认项
-    const defaultOpt = getDefaults();
+    const defaultOpt = getDefaultOption();
     let id = '';
     if (defaultOpt && defaultOpt.id) id = defaultOpt.id;
     instance.current.addSlot(list, id, slotAttribute.className || 'text-center');

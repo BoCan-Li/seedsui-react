@@ -1021,7 +1021,7 @@ const data = [
 const refEl = useRef(null);
 let [refreshing, setRefreshing] = useState('');
 let [list, setList] = useState([]);
-// 用于判断是否没有数据了0.没有数据
+// 用于判断是否没有数据了true:有数据 false:没有数据
 let [hasMore, setHasMore] = useState(true);
 // 错误信息
 let [message, setMessage] = useState('');

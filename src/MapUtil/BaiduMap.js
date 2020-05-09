@@ -762,8 +762,8 @@ BaiduMap.load = function (params = {}) {
       return
     }
     if (!params.ak) {
-      resolve('请在传入地图的密钥MapUtil.load("key")')
-      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load("key")'})
+      resolve('请在传入地图的密钥MapUtil.load({ak: ""})')
+      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})'})
       return
     }
     window.BMAP_PROTOCOL = 'https';
