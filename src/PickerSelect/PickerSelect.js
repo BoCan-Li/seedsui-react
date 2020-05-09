@@ -28,12 +28,11 @@ const Picker = forwardRef(({
   useEffect(() => {
     if (!list || !list.length) return;
     [].slice.call(refEl.current.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
+      n.classList.remove('active');
       if (selected && selected.length) {
         for (let option of selected) {
           if (option.id === list[i].id) {
             n.classList.add('active');
-          } else {
-            n.classList.remove('active');
           }
         }
       } else if (value) {
@@ -41,8 +40,6 @@ const Picker = forwardRef(({
         for (let name of selectedValues) {
           if (name === list[i].name) {
             n.classList.add('active');
-          } else {
-            n.classList.remove('active');
           }
         }
       }
