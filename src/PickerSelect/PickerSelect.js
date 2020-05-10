@@ -88,6 +88,7 @@ const Picker = forwardRef(({
   }
   // 过滤已经回调的属性
   function filterProps (props) {
+    if (!props) return {};
     const {onClick, ...otherProps} = props;
     return {...otherProps};
   }

@@ -209,33 +209,29 @@ import Chat from 'seedsui-react/lib/Chat';
 ### 示例
 ```javascript
 import Actionsheet from 'seedsui-react/lib/Actionsheet';
-this.state = {
-  show: false;
-}
-onClick = (e, item, index) => {
+const [show, setShow] = useState(false);
+function onClick (e, item, index) {
   console.log(e, item, index)
 }
-show = (...param) => {
+function onShow (...param) {
   console.log(...param)
-  this.setState({
-    show: true
-  });
+  setShow(true);
 }
-hide = (...param) => {
+function onHide (...param) {
   console.log(...param)
-  this.setState({
-    show: false
-  });
+  setShow(false)
 }
+
+<input type="button" value="显示" onClick={onShow}/>
 <Actionsheet
-  show={this.state.show}
+  show={show}
   list={[{caption: '菜单1'}, {caption: '菜单2'}]}
-  onClick={this.onClick}
+  onClick={onClick}
   cancelAttribute={{
-    onClick: this.hide
+    onClick: onHide
   }}
   maskAttribute={{
-    onClick: this.hide
+    onClick: onHide
   }}
 />
 ```
@@ -289,32 +285,26 @@ Alert组件更适用于复杂的定制弹框,一般弹框建议直接使用Api�
 ```javascript
 import Alert from 'seedsui-react/lib/Alert';
 
-this.state = {
-  show: false
-}
+const [show, setShow] = useState(false)
 
-onClick = () => {
-  this.setState((prevState) => {
-    return {
-      show: !prevState.show
-    }
-  })
+function onClick () {
+  setShow(!show);
 }
 
 <Alert
-  show={this.state.show}
+  show={show}
   style={{color: 'green'}}
   className="transition-duration-0"
   maskAttribute={{className: "transition-duration-0"}}
   portal={document.body}
-  submitAttribute={{onClick: this.onClick, className: 'primary', disabled: false}}
-  cancelAttribute={{onClick: this.onClick}}
+  submitAttribute={{onClick: onClick, className: 'primary', disabled: false}}
+  cancelAttribute={{onClick: onClick}}
   captionAttribute={{style: {padding: '30px 12px 5px 12px'}}}
   contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}
 >
   <div>hhh</div>
 </Alert>
-<input type="button" value="显隐" onClick={this.onClick}/>
+<input type="button" value="显隐" onClick={onClick}/>
 ```
 [返回目录](#component)
 
@@ -337,17 +327,9 @@ onClick = () => {
 ```
 ### 示例
 ```javascript
-import Actionsheet from 'seedsui-react/lib/Actionsheet';
+import Badge from 'seedsui-react/lib/Badge';
 
-const BadgeStyle = {
-  position: 'absolute',
-  left: '13px',
-  top: '-5px',
-};
-
-<Icon className="icon-cart">
-  {cartCount > 0 && <Badge style={BadgeStyle}>{cartCount}</Badge>}
-</Icon>
+<Badge>{cartCount}</Badge>}
 ```
 [返回目录](#component)
 

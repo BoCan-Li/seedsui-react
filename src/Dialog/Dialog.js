@@ -13,6 +13,10 @@ const Dialog = forwardRef(({
   children,
   ...others
 }, ref) =>  {
+  // context
+  const context = useContext(Context) || {};
+  // const locale = context.locale || {};
+
   // 点击dialog主体
   function click (e) {
     e.stopPropagation()
@@ -65,7 +69,7 @@ const Dialog = forwardRef(({
         {children && children}
       </div>
     </div>,
-    portal || document.getElementById('root') || document.body
+    portal || context.portal || document.getElementById('root') || document.body
   );
 })
 

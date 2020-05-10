@@ -23,9 +23,9 @@ const InputText = forwardRef(({
   onBlur,
   onFocus,
   // 左右图标
-  liconAttribute,
+  liconAttribute = {},
   licon,
-  riconAttribute,
+  riconAttribute = {},
   ricon,
   // 清除按键
   clear,
@@ -178,29 +178,24 @@ const InputText = forwardRef(({
 
   // 过滤已经回调的属性
   function filterProps (props) {
-    if (!props) return props;
-    var propsed = {}
-    for (let n in props) {
-      if (n !== 'onClick') {
-        propsed[n] = props[n]
-      }
-    }
-    return propsed;
+    if (!props) return {};
+    const {onClick, ...otherProps} = props;
+    return {...otherProps};
   }
 
   // 剔除掉onClick事件, 因为在容器onClick已经回调了
-  liconAttribute = filterProps(liconAttribute)
-  riconAttribute = filterProps(riconAttribute)
-  clearAttribute = filterProps(clearAttribute)
+  const otherLiconAttribute = filterProps(liconAttribute)
+  const otherRiconAttribute = filterProps(riconAttribute)
+  const otherClearAttribute = filterProps(clearAttribute)
 
   return (<div ref={refEl} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
-      {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+      {otherLiconAttribute && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + otherLiconAttribute.className : ''}`}></i>}
       {getInputDOM()}
       {children && children}
       {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-      {clear && value && !readOnly && !disabled && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
-      {riconAttribute && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
+      {clear && value && !readOnly && !disabled && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+      {otherRiconAttribute && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
       {ricon && ricon}
       {rcaption && rcaption}
     </div>);

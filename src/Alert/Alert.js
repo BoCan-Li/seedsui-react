@@ -1,131 +1,97 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useContext} from 'react';
 import {createPortal} from 'react-dom';
-import Context from '../Context/instance.js';
+import Context from './../Context/instance.js';
 
-export default class Alert extends Component {
-  static contextType = Context;
-  static propTypes = {
-    portal: PropTypes.object,
-    show: PropTypes.bool,
-    animation: PropTypes.string,  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
-    duration: PropTypes.number,
+const Alert = forwardRef(({
+  portal,
+  show,
+  animation = 'zoom', // slideLeft | slideRight | slideUp | slideDown | zoom | fade
+  duration,
 
-    maskAttribute: PropTypes.object,
+  maskAttribute = {},
 
-    caption: PropTypes.node,
-    captionAttribute: PropTypes.object,
+  caption,
+  captionAttribute = {},
 
-    icon: PropTypes.node,
+  icon,
 
-    contentAttribute: PropTypes.object,
+  contentAttribute = {},
 
-    submitCaption: PropTypes.node,
-    submitAttribute: PropTypes.object,
+  submitCaption,
+  submitAttribute = {},
 
-    cancelCaption: PropTypes.node,
-    cancelAttribute: PropTypes.object,
+  cancelCaption,
+  cancelAttribute = {},
 
-    children: PropTypes.node,
+  children,
+  ...others
+}, ref) =>  {
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+
+  // 构建动画
+  let animationClassName = '';
+  switch (animation) {
+    case 'slideLeft':
+      animationClassName = 'popup-animation right-middle';
+      break;
+    case 'slideRight':
+      animationClassName = 'popup-animation left-middle';
+      break;
+    case 'slideUp':
+      animationClassName = 'popup-animation bottom-center';
+      break;
+    case 'slideDown':
+      animationClassName = 'popup-animation top-center';
+      break;
+    case 'zoom':
+      animationClassName = 'popup-animation middle';
+      break;
+    case 'fade':
+      animationClassName = 'popup-animation middle';
+      break;
+    case 'none':
+      animationClassName = '';
+      break;
+    default:
+      animationClassName = 'popup-animation middle';
   }
-  static defaultProps = {
-    animation: 'zoom'
-  }
-  constructor(props, context) {
-    super(props, context);
-  }
-  componentDidMount = () => {
-  }
-  render() {
-    // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
-    const {
-      portal,
-      show,
-      animation,
-      duration,
-
-      maskAttribute = {},
-
-      caption,
-      captionAttribute = {},
-
-      icon,
-
-      contentAttribute = {},
-
-      submitCaption = locale['ok'] || '确定',
-      submitAttribute = {},
-
-      cancelCaption = locale['cancel'] || '取消',
-      cancelAttribute = {},
-
-      children,
-      ...others
-    } = this.props;
-    // 构建动画
-    let animationClassName = '';
-    switch (animation) {
-      case 'slideLeft':
-        animationClassName = 'popup-animation right-middle';
-        break;
-      case 'slideRight':
-        animationClassName = 'popup-animation left-middle';
-        break;
-      case 'slideUp':
-        animationClassName = 'popup-animation bottom-center';
-        break;
-      case 'slideDown':
-        animationClassName = 'popup-animation top-center';
-        break;
-      case 'zoom':
-        animationClassName = 'popup-animation middle';
-        break;
-      case 'fade':
-        animationClassName = 'popup-animation middle';
-        break;
-      case 'none':
-        animationClassName = '';
-        break;
-      default:
-        animationClassName = 'popup-animation middle';
+  // 动画时长
+  let durationStyle = {};
+  if (typeof duration === 'number') {
+    durationStyle = {
+      WebkitTransitionDuration: duration + 'ms'
     }
-    // 动画时长
-    let durationStyle = {};
-    if (typeof duration === 'number') {
-      durationStyle = {
-        WebkitTransitionDuration: duration + 'ms'
-      }
-    }
-    return createPortal(
+  }
+
+  return createPortal(
+    <div
+      ref={ref}
+      {...maskAttribute}
+      className={`mask alert-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
+      style={Object.assign({}, durationStyle, maskAttribute.style || {})}
+    >
       <div
-        ref={(el) => {this.$el = el}}
-        {...maskAttribute}
-        className={`mask alert-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`}
-        style={Object.assign({}, durationStyle, maskAttribute.style || {})}
+        data-animation={animation}
+        {...others}
+        className={`alert${animationClassName ? ' ' + animationClassName : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}
+        style={Object.assign({}, durationStyle, others.style || {})}
       >
-        <div
-          data-animation={animation}
-          {...others}
-          className={`alert${animationClassName ? ' ' + animationClassName : ''}${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}
-          style={Object.assign({}, durationStyle, others.style || {})}
-        >
-          {caption && <h1 {...captionAttribute}>{caption}</h1>}
-          <div {...contentAttribute} className={`alert-content${contentAttribute.className ? ' ' + contentAttribute.className : ''}`}>
-            {icon}
-            {/* 内容 */}
-            {children}
-          </div>
-          <div className="alert-handler">
-            {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption}</a>}
-            {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption}</a>}
-          </div>
+        {caption && <h1 {...captionAttribute}>{caption}</h1>}
+        <div {...contentAttribute} className={`alert-content${contentAttribute.className ? ' ' + contentAttribute.className : ''}`}>
+          {icon}
+          {/* 内容 */}
+          {children}
         </div>
-      </div>,
-      portal || this.context.portal || document.getElementById('root') || document.body
-    );
-  }
-}
+        <div className="alert-handler">
+          {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption || locale['cancel'] || '取消'}</a>}
+          {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption || locale['ok'] || '确定'}</a>}
+        </div>
+      </div>
+    </div>,
+    portal || context.portal || document.getElementById('root') || document.body
+  );
+})
+
+export default Alert

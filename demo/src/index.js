@@ -7,7 +7,7 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-  Calendar,
+	Alert
 } from '../../src';
 
 function Demo () {
@@ -16,59 +16,29 @@ function Demo () {
     console.log(refComponent)
 	}, [])
 
-	const defaultDate = new Date();
-	defaultDate.nextMonth();
-	const [type, setType] = useState('week');
-	const [activeTo, setActiveTo] = useState('');
-
-	function onChangeCalendar (s, value) {
-		// 记录滑动后切换的日期
-		console.log(s)
-		console.log('滑动选中:' + value)
+	const [show, setShow] = useState(false)
+	function onClick () {
+		setShow(!show);
 	}
-	function onClickCalendar (s, value) {
-		// 记录点击的选中日期, 用于滑动不切换日期用
-		console.log(s)
-		console.log('点击选中:' + value)
-	}
-	function showMonth () {
-		setType('month');
-	}
-	function showWeek () {
-		setType('week');
-	}
-	function showToday () {
-		setActiveTo('today');
-	}
-	function showReset () {
-		setActiveTo('default');
-	}
-	function showCustom () {
-		setActiveTo(new Date('1988,08,22'));
-	}
-	
-	
-
   return <Page>
     <Header>
       <Titlebar caption="标题"/>
     </Header>
 		<Container>
-			<Calendar
-				ref={refComponent}
-				defaultDate={defaultDate}
-				type={type}
-				activeTo={activeTo}
-				titleFormat="YYYY年MM月DD日 周EE 第W周"
-				onChange={onChangeCalendar}
-				onClick={onClickCalendar}
-				// disableBeforeDate={new Date()} // 禁用今天以前的日期
-			/>
-			<a style={{margin: '8px'}} className="button lg bg-1" onClick={showMonth}>月</a>
-			<a style={{margin: '8px'}} className="button lg bg-2" onClick={showWeek}>周</a>
-			<a style={{margin: '8px'}} className="button lg bg-3" onClick={showToday}>今天</a>
-			<a style={{margin: '8px'}} className="button lg bg-4" onClick={showReset}>默认日期</a>
-			<a style={{margin: '8px'}} className="button lg bg-4" onClick={showCustom}>1988-08-22</a>
+			<Alert
+				show={show}
+				style={{color: 'green'}}
+				className="transition-duration-0"
+				maskAttribute={{className: "transition-duration-0"}}
+				portal={document.body}
+				submitAttribute={{onClick: onClick, className: 'primary', disabled: false}}
+				cancelAttribute={{onClick: onClick}}
+				captionAttribute={{style: {padding: '30px 12px 5px 12px'}}}
+				contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}
+			>
+				<div>hhh</div>
+			</Alert>
+			<input type="button" value="显隐" onClick={onClick}/>
 		</Container>
   </Page>
 }
