@@ -1,22 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Mark extends Component {
-  static propTypes = {
-    className: PropTypes.string, // 'info | success | cancel | warn | disable | primary | hint'
-    children: PropTypes.node,
-  }
-  static defaultProps = {
-    className: 'info'
-  }
-  constructor(props) {
-    super(props);
-  }
+const Mark = forwardRef(({
+  children,
+  ...others
+}, ref) =>  {
+  return (
+    children ? <span ref={ref} {...others} className={`mark${others.className ? ' ' + others.className : ''}`}>{children}</span> : null
+  )
+})
 
-  render() {
-    const {className, children, ...others} = this.props;
-    return (
-      children ? <span ref={el => {this.$el = el;}} {...others} className={`mark${className ? ' ' + className : ''}`}>{children}</span> : null
-    );
-  }
-}
+export default Mark

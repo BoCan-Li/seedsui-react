@@ -721,35 +721,29 @@ import Chat from 'seedsui-react/lib/Chat';
 ### 属性
 ```javascript
 <Checkbox
-  style={容器style object, 默认无}
-  className={容器className string, 默认无, 基础'checkbox-box'}
-  onClick={点击复选框 func(e, checked)}
-
-  name={复选框name string, 默认无}
   value={复选框value string, 默认无}
   checked={是否选中 bool, 默认false}
-  disabled={是否禁用 bool, 默认false}
+
+  inputAttribute={文本框属性 object, 默认无}
 
   caption={复选框标题 string, 默认无}
-  captionClassName={复选框标题className string, 默认无, 基础'checkbox-caption'}
-  captionStyle={复选框标题style object, 默认无}
+  captionAttribute={标题属性 object, 默认无}
+  onClick={点击复选框 func(e, checked)}
+
+  {...others}
 />
 ```
 ### 示例
 ```javascript
 import Checkbox from 'seedsui-react/lib/Checkbox';
 
-this.state = {
-  checked: false
+const [checked, setChecked] = useState(false);
+
+function onClick (e, curentChecked) {
+  setChecked(!curentChecked);
 }
 
-onClick = (e, checked) => {
-  this.setState({
-    checked: !checked
-  })
-}
-
-<Checkbox caption="全选" checked={this.state.checked} onClick={this.onClick}/>
+<Checkbox caption="全选" checked={checked} onClick={onClick}/>
 ```
 [返回目录](#component)
 
@@ -1258,9 +1252,6 @@ onClick = () => {
 ### 属性
 ```javascript
 <Dot
-  style={图标style object, 默认无}
-  className={图标className string, 默认无, 基础'dot'}
-  size={宽高大小px number, 默认无}
   {...others}
 />
 ```
@@ -1268,7 +1259,7 @@ onClick = () => {
 ```javascript
 import Dot from 'seedsui-react/lib/Dot';
 
-<Dot size={8}/>
+<Dot className="size8"/>
 ```
 [返回目录](#component)
 
@@ -2443,7 +2434,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 />
 ```
 ### 示例
-用法同[InputPicker](#inputpicker)
+用法与[InputPicker](#inputpicker)相同
 
 
 
@@ -2498,7 +2489,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 />
 ```
 ### 示例
-用法同[InputPicker](#inputpicker)
+用法与[InputPicker](#inputpicker)相同
 
 
 
@@ -2770,7 +2761,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 />
 ```
 ### 示例
-用法同[InputPicker](#inputpicker)
+用法与[InputPicker](#inputpicker)相同
 [返回目录](#component)
 
 
@@ -4156,7 +4147,7 @@ function showPicker () {
 />
 ```
 ### 示例
-用法同[Picker](#picker)
+用法与[Picker](#picker)相同
 [返回目录](#component)
 
 
@@ -4191,7 +4182,7 @@ function showPicker () {
 />
 ```
 ### 示例
-用法同[Picker](#picker)
+用法与[Picker](#picker)相同
 [返回目录](#component)
 
 
@@ -4257,7 +4248,7 @@ import Player from 'seedsui-react/lib/Player';
 />
 ```
 ### 示例
-用法同[Picker](#picker)
+用法与[Picker](#picker)相同
 [返回目录](#component)
 
 
@@ -4559,34 +4550,9 @@ submit = () => {
 ## Radio
 [单选框](https://unpkg.com/seedsui-react/src/lib/Radio/Radio.js)
 ### 属性
-```javascript
-<Radio
-  value={容器框data-name string, 默认无}
-  checked={容器框data-checked bool, 默认无} // 获取状态用e.target.getAttribute('data-checked') === 'true'
-
-  inputAttribute={单选框属性 object, 默认无}
-
-  caption={标题内容 string, 默认无}
-  captionAttribute={标题属性 object, 默认无}
-  {...others}
-/>
-```
+属性与[Checkbox](#checkbox)相同
 ### 示例
-```javascript
-import Radio from 'seedsui-react/lib/Radio';
-
-this.state = {
-  checked: false
-}
-
-onClick = (e, checked) => {
-  this.setState({
-    checked: !checked
-  })
-}
-
-<Radio caption="全选" checked={this.state.checked} onClick={this.onClick}/>
-```
+用法与[Checkbox](#checkbox)相同
 [返回目录](#component)
 
 
@@ -4691,7 +4657,7 @@ import Share from 'seedsui-react/lib/Share';
 />
 ```
 ### 示例
-用法同[Picker](#picker)
+用法与[Picker](#picker)相同
 [返回目录](#component)
 
 

@@ -1,24 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Legend extends Component {
-  static propTypes = {
-    children: PropTypes.node
-  }
-  static defaultProps = {
-  }
-  constructor(props) {
-    super(props);
-  }
+const Legend = forwardRef(({
+  children,
+  ...others
+}, ref) =>  {
+  return <div ref={ref} {...others} className={`legend${others.className ? ' ' + others.className : ''}`}>
+    <div className="legend-caption">
+      {children}
+    </div>
+  </div>
+})
 
-  render() {
-    const {children, ...others} = this.props;
-    return (
-      <div ref={(el) => {this.$el = el;}} {...others} className={`legend${others.className ? ' ' + others.className : ''}`}>
-        <div className="legend-caption">
-          {children}
-        </div>
-      </div>
-    );
-  }
-}
+export default Legend

@@ -7,7 +7,7 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-	Alert
+	Legend
 } from '../../src';
 
 function Demo () {
@@ -16,29 +16,19 @@ function Demo () {
     console.log(refComponent)
 	}, [])
 
-	const [show, setShow] = useState(false)
-	function onClick () {
-		setShow(!show);
+
+	const [checked, setChecked] = useState(false);
+
+	function onClick (e, curentChecked) {
+		setChecked(!curentChecked);
 	}
+
   return <Page>
     <Header>
       <Titlebar caption="标题"/>
     </Header>
 		<Container>
-			<Alert
-				show={show}
-				style={{color: 'green'}}
-				className="transition-duration-0"
-				maskAttribute={{className: "transition-duration-0"}}
-				portal={document.body}
-				submitAttribute={{onClick: onClick, className: 'primary', disabled: false}}
-				cancelAttribute={{onClick: onClick}}
-				captionAttribute={{style: {padding: '30px 12px 5px 12px'}}}
-				contentAttribute={{style: {padding: '15px 12px 20px 12px'}}}
-			>
-				<div>hhh</div>
-			</Alert>
-			<input type="button" value="显隐" onClick={onClick}/>
+			<Legend ref={refComponent} className="success">aa</Legend>
 		</Container>
   </Page>
 }

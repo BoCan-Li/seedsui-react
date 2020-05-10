@@ -1,23 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, {forwardRef} from 'react';
 
-export default class Header extends Component {
-  static propTypes = {
-    children: PropTypes.node
-  }
-  constructor(props) {
-    super(props);
-  }
+const Header = forwardRef(({
+  children,
+  ...others
+}, ref) =>  {
+  return <header ref={ref} {...others} className={`header${others.className ? ' ' + others.className : ''}`}>
+    {children}
+  </header>
+})
 
-  render() {
-    const {
-      children,
-      ...others
-    } = this.props;
-    return (
-      <header ref={el => {this.$el = el;}} {...others} className={`header${others.className ? ' ' + others.className : ''}`}>
-        {children}
-      </header>
-    );
-  }
-}
+export default Header

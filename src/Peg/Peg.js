@@ -1,18 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Peg extends Component {
-  static propTypes = {
-  }
-  static defaultProps = {
-  }
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const {...others} = this.props;
-    return (
-      <i ref={el => {this.$el = el;}} {...others} className={`peg${others.className ? ' ' + others.className: ''}`}></i>
-    );
-  }
-}
+const Peg = forwardRef(({
+  ...others
+}, ref) =>  {
+  return <i ref={ref} {...others} className={`peg${others.className ? ' ' + others.className : ''}`}></i>
+})
+
+export default Peg
