@@ -1,5 +1,6 @@
 import React, {forwardRef, useContext} from 'react';
 import {createPortal} from 'react-dom';
+import Context from './../Context/instance.js';
 
 const Dialog = forwardRef(({
   portal,

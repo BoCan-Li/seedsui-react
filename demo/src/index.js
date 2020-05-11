@@ -8,7 +8,8 @@ import {
 	Bridge,
 	Container,
   Legend,
-  InputText
+  InputText,
+  Dialog
 } from '../../src';
 
 function Demo () {
@@ -31,6 +32,9 @@ function Demo () {
 		<Container>
 			<Legend ref={refComponent} className="success">aa</Legend>
       <InputText placeholder="hh" liconAttribute={{className: 'icon-plus', onClick: () => console.log(1)}} riconAttribute={{className: 'icon-plus', onClick: () => console.log(2)}}/>
+      <Dialog show>
+        asdfasdfaf
+      </Dialog>
 		</Container>
   </Page>
 }
