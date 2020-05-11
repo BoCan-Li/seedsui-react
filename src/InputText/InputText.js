@@ -23,9 +23,9 @@ const InputText = forwardRef(({
   onBlur,
   onFocus,
   // 左右图标
-  liconAttribute = {},
+  liconAttribute,
   licon,
-  riconAttribute = {},
+  riconAttribute,
   ricon,
   // 清除按键
   clear,
@@ -52,12 +52,12 @@ const InputText = forwardRef(({
       e.stopPropagation();
       return;
     }
-    if (target.classList.contains('licon') && liconAttribute.onClick) {
+    if (target.classList.contains('licon') && liconAttribute && liconAttribute.onClick) {
       liconAttribute.onClick(e, elInput.value);
       e.stopPropagation();
       return;
     }
-    if (target.classList.contains('ricon') && riconAttribute.onClick) {
+    if (target.classList.contains('ricon') && riconAttribute && riconAttribute.onClick) {
       riconAttribute.onClick(e, elInput.value);
       e.stopPropagation();
       return;
@@ -190,12 +190,12 @@ const InputText = forwardRef(({
 
   return (<div ref={refEl} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
-      {otherLiconAttribute && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + otherLiconAttribute.className : ''}`}></i>}
+      {liconAttribute && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + otherLiconAttribute.className : ''}`}></i>}
       {getInputDOM()}
       {children && children}
       {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
       {clear && value && !readOnly && !disabled && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
-      {otherRiconAttribute && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
+      {riconAttribute && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
       {ricon && ricon}
       {rcaption && rcaption}
     </div>);

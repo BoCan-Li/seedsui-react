@@ -7,7 +7,8 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-	Legend
+  Legend,
+  InputText
 } from '../../src';
 
 function Demo () {
@@ -29,6 +30,7 @@ function Demo () {
     </Header>
 		<Container>
 			<Legend ref={refComponent} className="success">aa</Legend>
+      <InputText placeholder="hh" liconAttribute={{className: 'icon-plus', onClick: () => console.log(1)}} riconAttribute={{className: 'icon-plus', onClick: () => console.log(2)}}/>
 		</Container>
   </Page>
 }
