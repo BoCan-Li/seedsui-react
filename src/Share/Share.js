@@ -6,7 +6,7 @@ import ShareType from './ShareType';
 
 function Share({
   children,
-  type,
+  type, // 点击单个图标分享, wework企业微信和wq外勤客户端JSBridge才生效wechat | wework | moments
   shareTo = ['wechat', 'wework', 'moments'],
   config = {
     title: '', // 分享标题
