@@ -191,29 +191,91 @@ var BaiduMap = function (id, params) {
     s.map.setViewport(points)
   }
   /**
-    * 坐标转换
-    * @param {Array} points [[lng, lat], [lng, lat]]
+    * 标准坐标转成百度坐标
+    * @param {Array} point [lng, lat]
     * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {status: 0 成功, points 百度坐标}
+    * @return {Promise} result: {code: '1' 成功, point: 百度坐标Point对象}
     */
-  s.formatPoints = function (points, type = 'gcj02') {
+  s.pointConvertBdPoint = function (point, type = 'gcj02') {
+    return new Promise((resolve) => {
+      point = new BMap.Point(point[0], point[1])
+      var convertor = new BMap.Convertor()
+      if (type === 'wgs84' || type === 'gcj02') {
+        let types = [1, 5]
+        if (type === 'gcj02') types = [3, 5]
+        convertor.translate([point], types[0], types[1], (result) => {
+          // 改造结果
+          let res = result
+          if (result.status !== 0) {
+            res.code = '0'
+          } else {
+            res.code = '1'
+            if (result.points && result.points.length) {
+              res.point = result.points[0]
+            }
+          }
+          resolve(res)
+        })
+      } else {
+        resolve({code: '0', status: -1, point: point})
+      }
+    })
+  }
+  /**
+    * 标准坐标转成百度坐标
+    * @param {Array} point [lng, lat]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Promise} result: {code: '1' 成功, points 百度坐标Point对象集合}
+    */
+  s.pointsConvertBdPoints = function (points, type = 'gcj02') {
     return new Promise((resolve) => {
       points = points.map((point) => {
         return new BMap.Point(point[0], point[1])
       })
       var convertor = new BMap.Convertor()
-      if (type === 'wgs84') {
-        convertor.translate(points, 1, 5, (result) => {
-          resolve(result)
-        })
-      } else if (type === 'gcj02') {
-        convertor.translate(points, 3, 5, (result) => {
-          resolve(result)
+      if (type === 'wgs84' || type === 'gcj02') {
+        let types = [1, 5]
+        if (type === 'gcj02') types = [3, 5]
+        convertor.translate(points, types[0], types[1], (result) => {
+          // 改造结果
+          let res = result
+          if (result.status !== 0) {
+            res.code = '0'
+          } else {
+            res.code = '1'
+          }
+          resolve(res)
         })
       } else {
         resolve({status: -1, points: points})
       }
     })
+  }
+  /**
+    * 将[[lng, lat]]转换为百度点Point对象集合
+    * @param {Array} points [[lng, lat], [lng, lat]]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Promise} result: {status: 0 成功, points 百度坐标Point对象}
+    */
+  s.pointsToBdPoints = function (points) {
+    return points.map((point) => {
+      return new BMap.Point(point[0], point[1])
+    })
+  }
+  /**
+    * 将[lng, lat]转换为百度点Point对象
+    * @param {Array} point [lng, lat]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Point}
+    */
+  s.pointToBdPoint = function (point = {}) {
+    if (point instanceof BMap.Point) {
+      return point
+    }
+    if (point && point[0] && point[1]) {
+      return new BMap.Point(point[0], point[1])
+    }
+    return null
   }
   /**
     * 地址逆解析
@@ -224,11 +286,11 @@ var BaiduMap = function (id, params) {
   s.getAddress = function (point, type) {
     return new Promise(async (resolve) => {
       // 格式化坐标
-      const fmtResult =  await s.formatPoints([point], type)
-      if (fmtResult.status !== 0) return
+      const fmtResult =  await s.pointConvertBdPoint(point, type)
+      if (fmtResult.code !== '1') return
       // 逆解析
       var geocoder = new BMap.Geocoder()
-      geocoder.getLocation(fmtResult.points[0], (result) => {
+      geocoder.getLocation(fmtResult.point, (result) => {
         resolve(result)
       })
     })
@@ -273,11 +335,11 @@ var BaiduMap = function (id, params) {
     return local
   }
   /**
-    * px转坐标, 老版的百度地图不是用坐标而是px
+    * px转不百度坐标Point对象, 老版的百度地图不是用坐标而是px
     * @param {Object} px {x: , y: }
-    * @return {Point} 格式{lng: , lat: }
+    * @return {Point}
     */
-  s.pxToPoint = function (px) {
+  s.pxToBdPoint = function (px) {
     if (!px) return null
     return new BMap.MercatorProjection().pointToLngLat(new BMap.Pixel(px.x, px.y))
   }
@@ -286,7 +348,7 @@ var BaiduMap = function (id, params) {
     * @param {Points} points 点集合, 格式[[lng, lat], [lng, lat]]
     * @return {Points} 格式[{lng: '', lat: ''}]
     */
-  s.pointsToPoints = function (points) {
+  s.pointsToArrayObject = function (points) {
     if (!points || !Array.isArray(points)) return []
     if (JSON.stringify(points).indexOf('lng') !== -1) return points
     if (!Array.isArray(points[0]) || !points[0][0] || !points[0][1]) return []
@@ -303,14 +365,14 @@ var BaiduMap = function (id, params) {
     })
   }
   /**
-    * 通俗偏移量转为Size对象
+    * 通俗偏移量转为百度Size对象
     * @param {Object} wh {
         width: 0,
         height: 0
       }
     * @return {Size} 表示一个矩形区域的大小
     */
-  s.whToSize = function (wh = {}) {
+  s.whToBdSize = function (wh = {}) {
     if (wh instanceof BMap.Size) {
       return wh
     }
@@ -340,12 +402,12 @@ var BaiduMap = function (id, params) {
     }
   }
   /**
-    * html转成InfoWindow
+    * html转成百度InfoWindow对象
     * @param {String} html
     * @param {InfoWindowOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b8
     * @return {InfoWindow} 窗口信息
     */
-  s.htmlToInfoWindow = function (html, options) {
+  s.htmlToBdInfoWindow = function (html, options) {
     if (!html) return null
     return new BMap.InfoWindow(html, options)
   }
@@ -374,28 +436,28 @@ var BaiduMap = function (id, params) {
       }
     * @return {Size} 表示一个矩形区域的大小
     */
-  s.styleToIcon = function (style = {}, infoStyle = {}) {
+  s.styleToBdIcon = function (style = {}, infoStyle = {}) {
     // marginTop和marginLeft
     let marginTop = Object.getUnitNum(style.marginTop)
     let marginLeft = Object.getUnitNum(style.marginLeft)
-    let anchor = s.whToSize({width: marginTop || 0, height: marginLeft || 0})
+    let anchor = s.whToBdSize({width: marginTop || 0, height: marginLeft || 0})
     // width和height
     let width = Object.getUnitNum(style.width)
     let height = Object.getUnitNum(style.height)
     if (!width) width = 16
     if (!height) height = 24
-    let size = s.whToSize({width: width, height: height})
+    let size = s.whToBdSize({width: width, height: height})
     // backgroundPosition
     let imageOffset = null
     if (style.backgroundPosition) {
       let bgWh = s.s.positionToWh(style.backgroundPosition)
-      imageOffset = s.whToSize({width: bgWh.width, height: bgWh.height})
+      imageOffset = s.whToBdSize({width: bgWh.width, height: bgWh.height})
     }
     // backgroundSize
-    let imageSize = s.whToSize({width: width, height: height})
+    let imageSize = s.whToBdSize({width: width, height: height})
     if (style.backgroundSize) {
       let bgWh = s.s.positionToWh(style.backgroundSize)
-      imageOffset = s.whToSize({width: bgWh.width || width, height: bgWh.height || height})
+      imageOffset = s.whToBdSize({width: bgWh.width || width, height: bgWh.height || height})
     }
     // backgroundImage
     let imageUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII='
@@ -404,7 +466,7 @@ var BaiduMap = function (id, params) {
     }
 
     // window容器的marginTop和marginLeft
-    let infoWindowAnchor = s.whToSize({width: infoStyle.marginLeft || 0, height: infoStyle.marginTop || 0})
+    let infoWindowAnchor = s.whToBdSize({width: infoStyle.marginLeft || 0, height: infoStyle.marginTop || 0})
 
     return new BMap.Icon(imageUrl, size, {
       anchor: anchor,
@@ -416,14 +478,14 @@ var BaiduMap = function (id, params) {
     })
   }
   /**
-    * 通俗偏移量转为Size对象
+    * 将点字面量转为百度的点
     * @param {Object} point {
         lng: ,
         lat: 
       }
-    * @return {Point} 表示一个矩形区域的大小
+    * @return {Point}
     */
-  s.pointToPoint = function (point = {}) {
+  s.objectToBdPoint = function (point = {}) {
     if (point instanceof BMap.Point) {
       return point
     }
@@ -437,7 +499,7 @@ var BaiduMap = function (id, params) {
     * @param {String} position 通俗位置
     * @return {ControlAnchor} 百度位置字段
     */
-  s.positionToAnchor = function (position) {
+  s.positionToBdAnchor = function (position) {
     // 位置
     let anchor = null
     switch (position) {
@@ -468,9 +530,9 @@ var BaiduMap = function (id, params) {
     */
   s.showDistance = function (options = {}) {
     // 位置
-    const anchor = s.positionToAnchor(options.position)
+    const anchor = s.positionToBdAnchor(options.position)
     // 偏移量
-    let offset = s.whToSize(options.offset)
+    let offset = s.whToBdSize(options.offset)
     // 实例
     const scaleControl = new BMap.ScaleControl({
       anchor: anchor,
@@ -490,9 +552,9 @@ var BaiduMap = function (id, params) {
     */
   s.showNavigation = function (options = {}) {
     // 位置
-    let anchor = s.positionToAnchor(options.position)
+    let anchor = s.positionToBdAnchor(options.position)
     // 偏移量
-    let offset = s.whToSize(options.offset)
+    let offset = s.whToBdSize(options.offset)
     // 类型
     let type = null
     switch (options.type) {
@@ -551,19 +613,18 @@ var BaiduMap = function (id, params) {
   }
   
   // 点转多边形points:[[lng, lat], [lng, lat]]
-  s.pointsToPolygon = function (argPoints) {
-    var points = s.pointsToPoints(argPoints);
+  s.pointsToBdPolygon = function (points) {
     var ps = []
     for (var point of points) {
-      ps.push(new BMap.Point(point.lng, point.lat))
+      ps.push(new BMap.Point(point[0], point[1]))
     }
     return new BMap.Polygon(ps)
   }
   // 点转多边形points:[[ [lng, lat], [lng, lat] ], [ [lng, lat], [lng, lat] ]]
-  s.pointsToPolygons = function (argPointss) {
+  s.pointsToBdPolygons = function (argPointss) {
     let polygons = []
     for (let i = 0; i < argPointss.length; i++) {
-      let polygon = s.pointsToPolygon(argPointss[i])
+      let polygon = s.pointsToBdPolygon(argPointss[i])
       polygons.push(polygon)
     }
     return polygons
@@ -600,7 +661,7 @@ var BaiduMap = function (id, params) {
     return boundary
   }
   // 绘制多边形
-  s.drawPolygon = function (options = {}){ // {polygon: Object, points: [], styleOptions: {}}
+  s.drawPolygon = function (options = {}){ // {polygon: Polygon, points: [], styleOptions: {}}
     var polygon = null
     if (options.polygon && Object.keys(options.polygon) && Object.keys(options.polygon).length) {
       polygon = options.polygon
@@ -618,7 +679,7 @@ var BaiduMap = function (id, params) {
       // 设置矢量图标填充透明度,opacity范围0~1
       polygon.setFillOpacity(options.styleOptions.fillOpacity || s.params.styleOptions.fillOpacity)
     } else if (Array.isArray(options.points) && options.points.length) {
-      polygon = new BMap.Polygon(s.pointsToPoints(options.points), options.styleOptions || s.params.styleOptions)
+      polygon = new BMap.Polygon(s.pointsToBdPoints(options.points), options.styleOptions || s.params.styleOptions)
     }
     if (polygon) {
       s.map.addOverlay(polygon) // 添加覆盖物
@@ -682,7 +743,7 @@ var BaiduMap = function (id, params) {
     */
   s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, marker: {}, info: {}}
     // 绘制位置
-    const point = s.pointToPoint(options.point)
+    const point = s.objectToBdPoint(options.point)
     if (!point) return
     // 绘制图标
     if (!options.marker) options.marker = {}
@@ -690,8 +751,8 @@ var BaiduMap = function (id, params) {
     const {offset, iconStyle, ...markerOptions} = options.marker
     const marker = new BMap.Marker(point,
       {
-        offset: s.whToSize(offset),
-        icon: s.styleToIcon(iconStyle, options.info.style),
+        offset: s.whToBdSize(offset),
+        icon: s.styleToBdIcon(iconStyle, options.info.style),
         ...markerOptions
       }
     )
@@ -767,7 +828,7 @@ BaiduMap.load = function (params = {}) {
       return
     }
     window.BMAP_PROTOCOL = 'https';
-    window.BMap_loadScriptTime = (new Date).getTime()
+    window.BMap_loadScriptTime = new Date().getTime()
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.charset = 'utf-8'

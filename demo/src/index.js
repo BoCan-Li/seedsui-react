@@ -7,37 +7,33 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-  Legend,
-  InputText,
-  Dialog
+  InputLocation,
+  MapUtil
 } from '../../src';
 
 function Demo () {
   const refComponent = useRef(null);
+
+  const [value, setValue] = useState('');
   useEffect(() => {
-    console.log(refComponent)
-	}, [])
-
-
-	const [checked, setChecked] = useState(false);
-
-	function onClick (e, curentChecked) {
-		setChecked(!curentChecked);
-	}
+    Bridge.debug = true
+  }, [])
+  function changeValue (e, val) {
+    setValue(val)
+  }
 
   return <Page>
     <Header>
       <Titlebar caption="标题"/>
     </Header>
 		<Container>
-			<Legend ref={refComponent} className="success">aa</Legend>
-      <InputText placeholder="hh" liconAttribute={{className: 'icon-plus', onClick: () => console.log(1)}} riconAttribute={{className: 'icon-plus', onClick: () => console.log(2)}}/>
-      <Dialog show>
-        asdfasdfaf
-      </Dialog>
+      <InputLocation value={value} onChange={changeValue}/>
 		</Container>
   </Page>
 }
+
+// 加载百度地图js库
+MapUtil.load({ak: '3pTjiH1BXLjASHeBmWUuSF83'})
 
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))
