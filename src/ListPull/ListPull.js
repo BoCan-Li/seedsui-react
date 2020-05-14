@@ -15,30 +15,39 @@ const ListPull = forwardRef(({
     return refEl.current
   });
   const instance = useRef(null)
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onClick = click;
+  }
+  // useEffect(() => {
+  //   instance.current.params.onClick = onClick;
+  // }, [onClick]) // eslint-disable-line
 
   useEffect(() => {
     if (!refEl || !refEl.current) return;
     instance.current = new Instance(refEl.current, {
-      onClick: (s) => {
-        const e = s.event;
-        const index = e.target.getAttribute('data-index');
-        const option = list[index];
-        let item = null;
-        const i = e.target.getAttribute('data-i');
-        const direction = e.target.getAttribute('data-direction');
-        if (i && direction) {
-          if (direction === 'left') {
-            item = option.lButtons[i];
-          } else {
-            item = option.rButtons[i];
-          }
-        }
-        if (onClick) onClick(s, item, index, option)
-      },
+      onClick: click,
       onShowedLeft: onShowedLeft,
       onShowedRight: onShowedRight
     });
   }, []) // eslint-disable-line
+
+  function click (s) {
+    const e = s.event;
+    const index = e.target.getAttribute('data-index');
+    const option = list[index];
+    let item = null;
+    const i = e.target.getAttribute('data-i');
+    const direction = e.target.getAttribute('data-direction');
+    if (i && direction) {
+      if (direction === 'left') {
+        item = option.lButtons[i];
+      } else {
+        item = option.rButtons[i];
+      }
+    }
+    if (onClick) onClick(s, item, index, option)
+  }
   
   return (
     <ul ref={refEl} className={`list-pull${others.className ? ' ' + others.className : ''}`}>
