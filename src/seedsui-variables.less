@@ -3543,7 +3543,7 @@ a {
     font-size: @indexbar-font-size;
     font-weight:bold;
     z-index: 2;
-    a{
+    .indexbar-button{
       .flex;
       .flex-1;
       .flex-middle;
@@ -3552,7 +3552,7 @@ a {
       color: @indexbar-color;
       transform: scale(0.8);
     }
-    &.active a{
+    &.active .indexbar-button{
       color: @indexbar-color-active;
     }
   }

@@ -1,3 +1,4 @@
+// require (PrototypeArray.js), 使用了equals方法
 import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
 import Instance from './instance.js';
 

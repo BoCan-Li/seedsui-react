@@ -57,7 +57,7 @@ var Actionsheet = function (params) {
       console.log('没有parent')
       return
     }
-    if (!mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+    if (!s.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
       s.parent.appendChild(s.mask)

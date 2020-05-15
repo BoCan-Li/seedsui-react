@@ -6,11 +6,18 @@ var Indexbar = function (params) {
 	var defaults = {
 		overflowContainer: null,
 		parent: document.body,
-		indexAttr: 'data-indexbar-name', // DOM索引属性
-		indexs: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+
+		bar: null,
 		barClass: 'indexbar',
 		barActiveClass: 'active',
-		tooltipClass: 'indexbar-tooltip'
+
+		buttonClass: 'indexbar-button',
+
+		tooltip: null,
+		tooltipClass: 'indexbar-tooltip',
+
+		indexAttr: 'data-indexbar-name', // DOM索引属性
+		indexs: null
 	}
 	params = params || {}
 	for (var def in defaults) {
@@ -36,7 +43,8 @@ var Indexbar = function (params) {
 	// Bar
 	s.bar = null
 	s.updateBar = function () {
-		if (!s.bar) s.bar = s.parent.querySelector('.' + s.params.barClass)
+		if (!s.bar) s.bar = typeof s.params.bar === 'string' ? document.querySelector(s.params.bar) : s.params.bar
+		if (!s.bar || !s.bar.tagName) s.bar = s.parent.querySelector('.' + s.params.barClass)
 		if (!s.bar) {
 			s.bar = document.createElement('div')
 			s.parent.appendChild(s.bar)
@@ -44,19 +52,22 @@ var Indexbar = function (params) {
 		s.bar.setAttribute('class', s.params.barClass)
 	}
 	s.updateIndexs = function () {
+		if (!s.params.indexs) return
 		s.bar.innerHTML = ''
 		s.indexs = []
 		s.params.indexs.forEach(function (n) {
-			var index = document.createElement('a')
-			index.innerHTML = n
-			s.indexs.push(index)
-			s.bar.appendChild(index)
+			var button = document.createElement('span')
+			button.setAttribute('class', s.params.buttonClass)
+			button.innerHTML = n
+			s.indexs.push(button)
+			s.bar.appendChild(button)
 		})
 	}
 
 	// ToolTip
 	s.updateToolTip = function () {
-		if (!s.tooltip) s.tooltip = s.parent.querySelector('.' + s.params.tooltipClass)
+		if (!s.tooltip) s.tooltip = typeof s.params.tooltip === 'string' ? document.querySelector(s.params.tooltip) : s.params.tooltip
+		if (!s.tooltip || !s.tooltip.tagName) s.tooltip = s.parent.querySelector('.' + s.params.tooltipClass)
 		if (!s.tooltip) {
 			s.tooltip = document.createElement('div')
 			s.bar.parentNode.insertBefore(s.tooltip, s.bar.nextSibling)
@@ -76,9 +87,8 @@ var Indexbar = function (params) {
   s.updateParams = function (params = {}) {
     for (var param in params) {
       s.params[param] = params[param]
-    }
-    // 更新DOM
-    s.update()
+		}
+		s.update()
   }
 	/* -----------------------
 	Method
