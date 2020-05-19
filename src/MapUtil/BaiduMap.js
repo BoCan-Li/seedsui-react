@@ -22,11 +22,12 @@ var BaiduMap = function (id, params) {
       fillOpacity: 0.6 //填充的透明度，取值范围0 - 1
     },
     labelStyleOptions: {
-      color : 'red',
-      fontSize : '12px',
-      height : '20px',
-      lineHeight : '20px',
-      fontFamily: '微软雅黑'
+      border: 0,
+      padding: '6px 15px',
+      color: 'white',
+      backgroundColor: 'rgba(0,0,0,0.74)',
+      boxShadow: '0 9px 28px 8px rgba(0,0,0,0.05), 0 6px 16px 0 rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12)',
+      borderRadius: '4px'
     }
     /*  callback
     onSubmit:function(selected)
@@ -175,20 +176,51 @@ var BaiduMap = function (id, params) {
   }
   /**
     * 自动切换到有覆盖物的视图
+    * @param {Point} point [lng, lat]
+    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
     * @return {Void}
     */
-  s.centerToOverlays = function () {
-    var overlays = s.map.getOverlays()
-    var points = []
-    for(var i = 0; i < overlays.length; i++) {
-      var overlay = overlays[i]
-      if (overlay instanceof BMap.Polygon) { // 多边形
-        points = points.concat(overlay.getPath())
-      } else if (overlay instanceof BMap.Marker) { // 标记
-        points = points.concat(overlay.point)
+  s.centerToPoints = function (points, options) {
+    var bdPoints = []
+    if (points && points.length) {
+      bdPoints = s.pointsToBdPoints(points)
+    } else {
+      var overlays = s.map.getOverlays()
+      for(var i = 0; i < overlays.length; i++) {
+        var overlay = overlays[i]
+        if (overlay instanceof BMap.Polygon) { // 多边形
+          bdPoints = bdPoints.concat(overlay.getPath())
+        } else if (overlay instanceof BMap.Marker) { // 标记
+          bdPoints = bdPoints.concat(overlay.point)
+        }
       }
     }
-    s.map.setViewport(points)
+    s.map.setViewport(bdPoints, options || {})
+  }
+  /**
+    * 自动切换到有覆盖物的视图
+    * @param {Point} point [lng, lat]
+    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
+    * @return {Void}
+    */
+  s.centerToPoint = function (point, options) {
+    let bdPoint = s.pointToBdPoint(point)
+    console.log([bdPoint])
+    s.map.setViewport([bdPoint], options || {})
+  }
+  /**
+    * 自动切换到有覆盖物的视图
+    * @param {Circle} point [lng, lat]
+    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
+    * @return {Void}
+    */
+  s.centerToCircle = function (circle, options) {
+    if (circle instanceof BMap.Circle !== true) {
+      return
+    }
+    let point = circle.getCenter()
+    let bounds = circle.getBounds()
+    s.centerToPoints([point, [bounds.Ge, bounds.Vd], [bounds.Le, bounds.Xd]], options)
   }
   /**
     * 标准坐标转成百度坐标
@@ -221,13 +253,7 @@ var BaiduMap = function (id, params) {
       }
     })
   }
-  /**
-    * 标准坐标转成百度坐标
-    * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {code: '1' 成功, points 百度坐标Point对象集合}
-    */
-  s.pointsConvertBdPoints = function (points, type = 'gcj02') {
+  function pointsConvertBdPoints (points, type = 'gcj02') {
     return new Promise((resolve) => {
       points = points.map((point) => {
         return new BMap.Point(point[0], point[1])
@@ -239,6 +265,33 @@ var BaiduMap = function (id, params) {
         convertor.translate(points, types[0], types[1], (result) => {
           // 改造结果
           let res = result
+          let errMsg = ''
+          switch (res.status) {
+            case 1:
+              errMsg = '内部错误'
+              break
+            case 4:
+              errMsg = '转换失败'
+              break
+            case 21:
+              errMsg = 'form非法'
+              break
+            case 22:
+              errMsg = 'to非法'
+              break
+            case 24:
+              errMsg = 'coords非法'
+              break
+            case 25:
+              errMsg = 'coords个数非法, 超过限制'
+              break
+            case 26:
+              errMsg = '参数错误'
+              break
+            default:
+              errMsg = 'ok'
+          }
+          res.errMsg = errMsg
           if (result.status !== 0) {
             res.code = '0'
           } else {
@@ -247,28 +300,75 @@ var BaiduMap = function (id, params) {
           resolve(res)
         })
       } else {
-        resolve({status: -1, points: points})
+        resolve({code: '0', status: -1, points: points, errMsg: '无需要转换'})
       }
     })
   }
   /**
-    * 将[[lng, lat]]转换为百度点Point对象集合
-    * @param {Array} points [[lng, lat], [lng, lat]]
+    * 标准坐标转成百度坐标
+    * @param {Array} point [lng, lat]
     * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {status: 0 成功, points 百度坐标Point对象}
+    * @return {Promise} result: {code: '1' 成功, points 百度坐标Point对象集合}
     */
-  s.pointsToBdPoints = function (points) {
-    return points.map((point) => {
-      return new BMap.Point(point[0], point[1])
+  s.pointsConvertBdPoints = function (points, type = 'gcj02') {
+    return new Promise(async (resolve) => {
+      if (!Array.isArray(points) || !points.length) {
+        resolve({code: '0', points: points, errMsg: '没有传入points'})
+      }
+      points = points.map((point) => {
+        return new BMap.Point(point[0], point[1])
+      })
+      let result = null
+      if (points.length > 10) { // 百度转换功能最多支持10条, 超过10条需要拆分开转
+        let sumPoints = [];
+        let sumLength = points.length
+        async function pointsIterator () {
+          let splicePoints = points.splice(0, 10)
+          result = await pointsConvertBdPoints(splicePoints, type = 'gcj02')
+          if (result.code === '1') {
+            sumPoints = sumPoints.concat(result.points)
+            if (sumPoints.length < sumLength) {
+              pointsIterator()
+            } else {
+              result.points = sumPoints
+              resolve(result)
+            }
+          } else {
+            resolve(result)
+            return
+          }
+        }
+        pointsIterator()
+      } else {
+        result = await pointsConvertBdPoints(points, type = 'gcj02')
+        resolve(result)
+      }
+      // var convertor = new BMap.Convertor()
+      // if (type === 'wgs84' || type === 'gcj02') {
+      //   let types = [1, 5]
+      //   if (type === 'gcj02') types = [3, 5]
+      //   convertor.translate(points, types[0], types[1], (result) => {
+      //     // 改造结果
+      //     let res = result
+      //     if (result.status !== 0) {
+      //       res.code = '0'
+      //     } else {
+      //       res.code = '1'
+      //     }
+      //     resolve(res)
+      //   })
+      // } else {
+      //   resolve({code: '0', status: -1, points: points})
+      // }
     })
   }
   /**
     * 将[lng, lat]转换为百度点Point对象
     * @param {Array} point [lng, lat]
     * @param {String} type 'wgs84 | gcj02'
-    * @return {Point}
+    * @return {Array<Point>}
     */
-  s.pointToBdPoint = function (point = {}) {
+  s.pointToBdPoint = function (point) {
     if (point instanceof BMap.Point) {
       return point
     }
@@ -276,6 +376,70 @@ var BaiduMap = function (id, params) {
       return new BMap.Point(point[0], point[1])
     }
     return null
+  }
+  /**
+    * 将[[lng, lat]]转换为百度点Point对象集合
+    * @param {Array} points [[lng, lat], [lng, lat]]
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Point}
+    */
+  s.pointsToBdPoints = function (points) {
+    return points.map((point) => {
+      return s.pointToBdPoint(point)
+    })
+  }
+  /**
+    * 将标准坐标转换为百度点Polygon对象
+    * @param {Array} points [[lng, lat], [lng, lat]]
+    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+    * @return {Polygon}
+    */
+  s.pointsToBdPolygon = function (points, options) {
+    let bdPoints = s.pointsToBdPoints(points)
+    // 校验是否有非法点
+    for (let bdPoint of bdPoints) {
+      if (!bdPoint) return null
+    }
+    return new BMap.Polygon(bdPoints, options)
+  }
+  /**
+    * 将标准多边形坐标转换为百度点Polygon对象
+    * @param {Array} polygons [[[lng, lat], [lng, lat]], [[lng, lat], [lng, lat]]]
+    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+    * @return {Array<Polygon>}
+    */
+  s.polygonsToBdPolygons = function (polygons, options) {
+    let bdPolygons = []
+    for (let polygon of polygons) {
+      // 校验是否有非法多边形
+      let bdPolygon = s.pointsToBdPolygon(polygon, options)
+      if (!bdPolygon) return null
+      bdPolygons.push(bdPolygon)
+    }
+    return bdPolygons
+  }
+  /**
+    * 将[lng, lat]转换为百度点Circle对象
+    * @param {Array} point [lng, lat]
+    * @param {Number} radius 半径
+    * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
+    * @return {Circle}
+    */
+  s.pointToBdCircle = function (point, radius, options = {}) {
+    let bdPoint = s.pointToBdPoint(point)
+    if (!bdPoint) return null
+    let circleOptions = {
+      strokeColor: options.strokeColor || s.params.styleOptions.strokeColor,
+      fillColor: options.fillColor || s.params.styleOptions.fillColor,
+      strokeWeight: options.strokeWeight || s.params.styleOptions.strokeWeight,
+      strokeOpacity: options.strokeOpacity || s.params.styleOptions.strokeOpacity,
+      fillOpacity: options.fillOpacity || s.params.styleOptions.fillOpacity,
+      strokeStyle: options.strokeStyle || s.params.styleOptions.strokeStyle, // solid或dashed
+      enableMassClear: typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+      // enableEditing: typeof options.enableEditing === 'boolean' ? options.enableEditing : false, // 是否启用线编辑，默认为false(此属性与enableEditing方法冲突, 不建议使用此属性)
+      enableClicking: typeof options.enableClicking === 'boolean' ? options.enableClicking : true, // 是否响应点击事件，默认为true
+    }
+    return new BMap.Circle(bdPoint, radius || 1000, circleOptions)
   }
   /**
     * 地址逆解析
@@ -568,7 +732,7 @@ var BaiduMap = function (id, params) {
         type = BMAP_NAVIGATION_CONTROL_LARGE
     }
     // 是否显示级别提示信息
-    const showZoomInfo = options.showZoomInfo || false
+    const showZoomInfo = typeof options.showZoomInfo === 'boolean' ? options.showZoomInfo : false
     // 定位按钮, 启用会多出个定位按钮
     let enableGeolocation = false
     if (typeof options.enableGeolocation === 'boolean') {
@@ -589,8 +753,22 @@ var BaiduMap = function (id, params) {
   /**
     * 清除覆盖物
     */
-  s.clearOverlays = function () {
+  s.clearOverlays = function (overlays) {
+    if (overlays) {
+      for (let overlay of overlays) {
+        s.map.removeOverlay(overlay)
+      }
+      return
+    }
+    // 清除所有overlays, 此方法慎用, 经常会与鼠标事件冲突
     s.map.clearOverlays()
+  }
+  /**
+    * 清除覆盖物
+    */
+  s.clearOverlay = function (overlay) {
+    if (!overlay) return
+    s.map.removeOverlay(overlay)
   }
   // 启用手动绘制
   // 设置当前的绘制模式，参数DrawingType，为5个可选常量: 
@@ -611,39 +789,33 @@ var BaiduMap = function (id, params) {
       s.drawingManager.setDrawingMode(type || BMAP_DRAWING_POLYGON) // 默认多边形
     }
   }
+  s.disableManualDraw = function (type) {
+    if (s.drawingManager) {
+      s.drawingManager.close()
+    }
+  }
   
-  // 点转多边形points:[[lng, lat], [lng, lat]]
-  s.pointsToBdPolygon = function (points) {
-    var ps = []
-    for (var point of points) {
-      ps.push(new BMap.Point(point[0], point[1]))
-    }
-    return new BMap.Polygon(ps)
-  }
-  // 点转多边形points:[[ [lng, lat], [lng, lat] ], [ [lng, lat], [lng, lat] ]]
-  s.pointsToBdPolygons = function (argPointss) {
-    let polygons = []
-    for (let i = 0; i < argPointss.length; i++) {
-      let polygon = s.pointsToBdPolygon(argPointss[i])
-      polygons.push(polygon)
-    }
-    return polygons
-  }
-  // 绘制省市区域
-  s.drawBoundary = function (options = {}) { // {area: '江苏省南京市建邺区', styleOptions: {}, success: func(), fail: func()}
+  /**
+    * 绘制省市区域
+    * @param {String} area 域名名称: 江苏南京市鼓楼区
+    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+    * @param {Object} callback 回调配置 {success: func(), fail: func()}
+    * @return {Polygon}
+    */
+  s.drawBoundary = function (area, options, callback = {}) {
     var boundary = new BMap.Boundary()
-    if (!options.area) {
+    if (!area) {
       console.warn(`${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
-      options.fail && options.fail({
+      callback.fail && callback.fail({
         errMsg: `${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`
       })
       return
     }
-    boundary.get(options.area, function (res) { // 获取行政区域
+    boundary.get(area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
         console.warn(`${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`)
-        options.fail && options.fail({
+        callback.fail && callback.fail({
           errMsg: `${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`
         })
         return
@@ -651,80 +823,89 @@ var BaiduMap = function (id, params) {
       var polygons = []
       var polygonsPath = []
       for (var i = 0; i < count; i++) {
-        polygons[i] = new BMap.Polygon(res.boundaries[i], options.styleOptions || s.params.styleOptions)
+        polygons[i] = new BMap.Polygon(res.boundaries[i], options || s.params.styleOptions)
         s.map.addOverlay(polygons[i]) // 添加覆盖物
         polygonsPath = polygonsPath.concat(polygons[i].getPath())
       }
-      // s.map.setViewport(pointArray) //调整视野
-      options.success && options.success({...res, polygons, polygonsPath})
+      callback.success && callback.success({...res, polygons, polygonsPath})
     })
     return boundary
   }
-  // 绘制多边形
-  s.drawPolygon = function (options = {}){ // {polygon: Polygon, points: [], styleOptions: {}}
-    var polygon = null
-    if (options.polygon && Object.keys(options.polygon) && Object.keys(options.polygon).length) {
-      polygon = options.polygon
-      if (!options.styleOptions) options.styleOptions = {}
-      // 设置多边型的边线颜色，参数为合法的CSS颜色值
-      polygon.setStrokeColor(options.styleOptions.strokeColor || s.params.styleOptions.strokeColor)
-      // 设置多边形边线的宽度，取值为大于等于1的整数
-      polygon.setStrokeWeight(options.styleOptions.strokeWeight || s.params.styleOptions.strokeWeight)
-      // 设置圆形的边线透明度，取值范围0 - 1
-      polygon.setStrokeOpacity(options.styleOptions.strokeOpacity || s.params.styleOptions.strokeOpacity)
-      // 设置圆形边线样式为实线或虚线，取值solid或dashed
-      polygon.setStrokeStyle(options.styleOptions.strokeStyle || s.params.styleOptions.strokeStyle)
-      // 设置矢量图标的填充颜色。支持颜色常量字符串、十六进制、RGB、RGBA等格式
-      polygon.setFillColor(options.styleOptions.fillColor || s.params.styleOptions.fillColor)
-      // 设置矢量图标填充透明度,opacity范围0~1
-      polygon.setFillOpacity(options.styleOptions.fillOpacity || s.params.styleOptions.fillOpacity)
-    } else if (Array.isArray(options.points) && options.points.length) {
-      polygon = new BMap.Polygon(s.pointsToBdPoints(options.points), options.styleOptions || s.params.styleOptions)
-    }
-    if (polygon) {
-      s.map.addOverlay(polygon) // 添加覆盖物
-      options.success && options.success(polygon)
-    } else {
+  /**
+    * 绘制多边形
+    * @param {Array} polygon
+    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+    * @return {Polygon}
+    */
+  s.drawPolygon = function (polygon, options = {}){
+    let bdPolygon = s.pointsToBdPolygon(polygon, options)
+    if (!bdPolygon) {
       console.warn(`drawPolygon: ${locale('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${locale('or') || '或者'}{points: []}`)
-      options.fail && options.fail({
-        errMsg: `drawPolygon: ${locale('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${locale('or') || '或者'}{points: []}`
-      })
+      return null
     }
-    return polygon
+    // 设置多边型的边线颜色，参数为合法的CSS颜色值
+    bdPolygon.setStrokeColor(options.strokeColor || s.params.styleOptions.strokeColor)
+    // 设置多边形边线的宽度，取值为大于等于1的整数
+    bdPolygon.setStrokeWeight(options.strokeWeight || s.params.styleOptions.strokeWeight)
+    // 设置圆形的边线透明度，取值范围0 - 1
+    bdPolygon.setStrokeOpacity(options.strokeOpacity || s.params.styleOptions.strokeOpacity)
+    // 设置圆形边线样式为实线或虚线，取值solid或dashed
+    bdPolygon.setStrokeStyle(options.strokeStyle || s.params.styleOptions.strokeStyle)
+    // 设置矢量图标的填充颜色。支持颜色常量字符串、十六进制、RGB、RGBA等格式
+    bdPolygon.setFillColor(options.fillColor || s.params.styleOptions.fillColor)
+    // 设置矢量图标填充透明度,opacity范围0~1
+    bdPolygon.setFillOpacity(options.fillOpacity || s.params.styleOptions.fillOpacity)
+
+    // 添加覆盖物
+    s.map.addOverlay(bdPolygon)
+    return bdPolygon
   }
-  // 绘制多边形
-  s.drawPolygons = function (options = []){ // [{polygon: Object, points: [], styleOptions: {}}]
-    let polygons = []
-    for (let option of options) {
-      polygons.push(s.drawPolygon(option))
+  /**
+    * 绘制多边形
+    * @param {Array} polygons
+    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+    * @return {Array<Polygon>}
+    */
+  s.drawPolygons = function (polygons, options){
+    let bdPolygons = []
+    for (let polygon of polygons) {
+      bdPolygons.push(s.drawPolygon(polygon, options))
     }
-    return polygons
+    return bdPolygons
   }
-  // 绘制Label
-  s.drawLabel = function (options = {}){ // {point: {}, styleOptions: {}}
-    if (!options.point) {
-      console.warn(`drawLabel: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`)
-      options.fail && options.fail({
-        errMsg: `drawLabel: ${locale('hint_pass_in_parameters') || '请传入参数'}{point: }`
-      })
-      return
+
+  /**
+    * 绘制标记
+    * @param {Point} point [lng, lat]
+    * @param {String} content 显示内容
+    * @param {LabelOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b10
+    * @return {Label} 标记对象
+    */
+  s.drawLabel = function (point, content, options = {}){ // {point: [lng, lat], options: {}}
+    // 绘制位置
+    const bdPoint = s.pointToBdPoint(point)
+    if (!bdPoint) return null
+    const label = new BMap.Label(content || '',
+      {
+        offset: s.whToBdSize(options.offset),
+        position: bdPoint,
+        enableMassClear: typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+      }
+    )
+    if (options.style) {
+      label.setStyle(Object.assign(s.params.labelStyleOptions, options.style))
+    } else {
+      label.setStyle(s.params.labelStyleOptions)
     }
-    var opts = {
-      position: options.point, // 指定文本标注所在的地理位置
-      offset: new BMap.Size(0, 0) // 设置文本偏移量
-    }
-    var label = new BMap.Label(JSON.stringify(options.point), opts) // 创建文本标注对象
-    label.setStyle(options.styleOptions || s.params.labelStyleOptions);
     s.map.addOverlay(label)
     return label
   }
-
-  
   /**
     * 绘制标记
+    * @param {Point} point [lng, lat]
     * @param {Object} options {
         point {Point}: {lng: ,lat: },
-        marker {Object}: 
+        options {Object}: 
         {
           offset: {width: , height: }
           icon: {backgroundImage: url(), backgroundSize: ''}
@@ -737,33 +918,55 @@ var BaiduMap = function (id, params) {
           shadow: Icon	阴影图标
           title: String	鼠标移到marker上的显示内容
         },
-        info {}
+        info {
+          style: {样式属性参考styleToBdIcon}
+        }
     * }
     * @return {Marker} 标记对象
     */
-  s.drawMarker = function (options = {}){ // {point: {lng: ,lat: }, marker: {}, info: {}}
+  s.drawMarker = function (point, opt = {}){ // {options: {}, info: {}}
     // 绘制位置
-    const point = s.objectToBdPoint(options.point)
-    if (!point) return
+    const bdPoint = s.pointToBdPoint(point)
+    if (!bdPoint) return null
     // 绘制图标
-    if (!options.marker) options.marker = {}
-    if (!options.info) options.info = {}
-    const {offset, iconStyle, ...markerOptions} = options.marker
-    const marker = new BMap.Marker(point,
+    if (!opt.options) opt.options = {}
+    if (!opt.info) opt.info = {}
+    const marker = new BMap.Marker(bdPoint,
       {
-        offset: s.whToBdSize(offset),
-        icon: s.styleToBdIcon(iconStyle, options.info.style),
-        ...markerOptions
+        offset: s.whToBdSize(opt.options.offset),
+        icon: s.styleToBdIcon(opt.options.iconStyle, opt.info.style),
+        enableMassClear: typeof opt.options.enableMassClear === 'boolean' ? opt.options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+        enableDragging: typeof opt.options.enableDragging === 'boolean' ? opt.options.enableDragging : false, // 是否启用拖拽，默认为false
+        enableClicking: typeof opt.options.enableClicking === 'boolean' ? opt.options.enableClicking : true, // 是否响应点击事件。默认为true
+        raiseOnDrag: typeof opt.options.raiseOnDrag === 'boolean' ? opt.options.raiseOnDrag : false, // 拖拽标注时，标注是否开启离开地图表面效果。默认为false
+        draggingCursor: opt.options.draggingCursor || '', // 拖拽标注时的鼠标指针样式。此属性值需遵循CSS的cursor属性规范
+        rotation: opt.options.rotation || 0, // 旋转角度
+        shadow: opt.options.shadow || null, // 阴影图标
+        title: opt.options.title || '', // 鼠标移到marker上的显示内容
       }
     )
     s.map.addOverlay(marker)
     // 点击显示弹框
-    if (options.onClick) {
+    if (opt.onClick) {
       marker.addEventListener('click', function (e) {
-        options.onClick(e)
+        opt.onClick(e)
       })
     }
     return marker
+  }
+  /**
+    * 绘制圆形
+    * @param {Point} point [lng, lat]
+    * @param {Number} radius 半径
+    * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
+    * @return {Circle}
+    */
+  s.drawCircle = function (point, radius, options = {}){
+    const circle = s.pointToBdCircle(point, radius, options)
+    if (!circle) return null
+    s.map.addOverlay(circle)
+    // 如果point不在中心, 需要设置圆形的中心点坐标: circle.setCenter(bdPoint)
+    return circle
   }
   // 添加右键菜单
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}

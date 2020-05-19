@@ -12,27 +12,27 @@ var GeoUtil = {};
     * 多边形转线
     * @param {Polygon} polygon 多边形
     * @param {Boolean} isRegular 是否要求是一个标准的多边形, 如果传true, 则返回集合会加上首尾互连
-    * @return {Line<Array>}
+    * @return {Line<Array>} [[[lng, lat], [lng, lat]], [[lng, lat], [lng, lat]]]
     */
-   GeoUtil.polygonToLines = function (polygon, isRegular) {
+  GeoUtil.polygonToLines = function (polygon, isRegular) {
     var lines = []
     // 取出所有相邻的线
     for (var i = 0; i < polygon.length - 1; i++) {
       lines.push([
-        polygon[i][0], polygon[i][1],
-        polygon[i + 1][0], polygon[i + 1][1]
+        [polygon[i][0], polygon[i][1]],
+        [polygon[i + 1][0], polygon[i + 1][1]]
       ])
     }
     // 再将首尾互连, 防止出现一个不规则的多边形, 例如五角星
     if (isRegular) {
       lines.push([
-        polygon[polygon.length - 1][0], polygon[polygon.length - 1][1],
-        polygon[0][0], polygon[0][1]
+        [polygon[polygon.length - 1][0], polygon[polygon.length - 1][1]],
+        [polygon[0][0], polygon[0][1]]
       ])
     }
     return lines
   }
-
+  
   /**
     * 判断点是否在多边形里
     * @param {Point} point 点
@@ -56,13 +56,29 @@ var GeoUtil = {};
   }
   /**
     * 判断两条线是否相交
-    * @param {Line} line0 线
-    * @param {Line} line1 对比线
+    * @param {Line} line0 [[lng, lat], [lng, lat]]
+    * @param {Line} line1 [[lng, lat], [lng, lat]]
     * @return {Boolean}
     */
   GeoUtil.lineIntersectLine = function (line0, line1) {
-    var [a,b,c,d] = line0
-    var [p,q,r,s] = line1
+    if (line0.length !== 2) return false
+		if (line1.length !== 2) return false
+		if (line0[0].length !== 2) return false
+		if (line0[1].length !== 2) return false
+		if (line1[0].length !== 2) return false
+    if (line1[1].length !== 2) return false
+    
+    let a = line0[0][1]
+    let b = line0[0][0]
+    let c = line0[1][1]
+    let d = line0[1][0]
+
+    let p = line1[0][1]
+    let q = line1[0][0]
+    let r = line1[1][1]
+    let s = line1[1][0]
+    // var [a,b,c,d] = line0
+    // var [p,q,r,s] = line1
     var det, gamma, lambda;
     det = (c - a) * (s - q) - (r - p) * (d - b);
     if (det === 0) {
@@ -141,18 +157,19 @@ var GeoUtil = {};
   }
 
   /**
-    * 判断是否是一个标准的多边形, 具体为多边形, 且不允许交叉, 或者五角星等不规则的多边形
-    * @param {Polygon} polygon
+    * 判断是否是一个合法的多边形, 具体为多边形, 且不允许交叉, 或者五角星等不规则的多边形
+    * @param {Polygon} polygon [[lng, lat], [lng, lat], [lng, lat]]
     * @returns {Boolean}
     */
   GeoUtil.isPolygon = function (polygon) {
+    // 获取边线, [[[lng, lat], [lng, lat]], [[lng, lat], [lng, lat]]]
     var lines = GeoUtil.polygonToLines(polygon, true)
     for (var i = 0; i < lines.length; i++) {
       for (var j = i + 1; j < lines.length; j++) {
-        if (GeoUtil.lineIntersectLine(lines[i], lines[j])) return true
+        if (GeoUtil.lineIntersectLine(lines[i], lines[j])) return false
       }
     }
-    return false
+    return true
   }
 
   /**
@@ -197,21 +214,21 @@ var GeoUtil = {};
   }
   /**
     * 多边形坐标点按逆时针排序, 从右上角开始到右下角结束
-    * @param {Polygon} points
+    * @param {Polygon} points [[lng, lat]]
     * @return {Polygon} 错误返回-1
     * 参考:https://cs.stackexchange.com/questions/52606/sort-a-list-of-points-to-form-a-non-self-intersecting-polygon
     */
-   GeoUtil.sortPoints = function (points) {
+  GeoUtil.sortPoints = function (points) {
     points = points.splice(0)
     var p0 = {}
     p0[1] = Math.min.apply(null, points.map(p => p[1]))
-    p0[0] = Math.max.apply(null,  points.filter(p => p[1] == p0[1]).map(p => p[0]))
+    p0[0] = Math.max.apply(null,  points.filter(p => p[1] === p0[1]).map(p => p[0])) // 将==改为===以兼容eslint
     points.sort((a, b) => angleCompare(p0, a, b))
     return points
   }
   function angleCompare(p0, a, b) {
     var left = isLeft(p0, a, b)
-    if (left == 0) return distCompare(p0, a, b)
+    if (left === 0) return distCompare(p0, a, b) // 将==改为===以兼容eslint
     return left
   }
 
@@ -223,6 +240,61 @@ var GeoUtil = {};
     var distA = (p0[0] - a[0]) * (p0[0] - a[0]) + (p0[1] - a[1]) * (p0[1] - a[1])
     var distB = (p0[0] - b[0]) * (p0[0] - b[0]) + (p0[1] - b[1]) * (p0[1] - b[1])
     return distA - distB
+  }
+  /**
+    * 坐标转换
+    * @param {Point} point [lng, lat]
+    * @param {String} from 原始坐标类型 'wgs84 | gcj02 | bd09'
+    * @param {String} to 转换坐标类型 'wgs84 | gcj02 | bd09'
+    * @return {Point} 错误返回null
+    */
+  GeoUtil.coordtransform = function (point, from = 'gcj02', to = 'bd09') {
+    if (!point || point.length !== 2) {
+      console.log('GeoUtil: point参数不正确')
+      return null
+    }
+    let gg_lng = point[0]
+    let gg_lat = point[1]
+    let lng = 0
+    let lat = 0
+    let PI = 3.14159265358979324 * 3000.0 / 180.0
+    // let EARTHRADIUS = 6370996.81 // 地球半径
+    // 百度经纬度坐标转国测局坐标
+    function bd09togcj02 (longitude, latitude) {
+      let lng = longitude - 0.0065
+      let lat = latitude - 0.006
+      let z = Math.sqrt(lng * lng + lat * lat) - 0.00002 * Math.sin(lat * PI)
+      let theta = Math.atan2(lat, lng) - 0.000003 * Math.cos(lng * PI)
+      return [z * Math.cos(theta), z * Math.sin(theta)]
+    }
+    if (from === 'bd09' && to === 'gcj02') {
+      return bd09togcj02(gg_lng, gg_lat)
+    }
+    // 国测局坐标转百度经纬度坐标
+    function gcj02tobd09 (longitude, latitude) {
+      let lat = +latitude
+      let lng = +longitude
+      let z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * PI)
+      let theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * PI)
+      return [z * Math.cos(theta) + 0.0065, z * Math.sin(theta) + 0.006]
+    };
+    if (from === 'gcj02' && to === 'bd09') {
+      return gcj02tobd09(gg_lng, gg_lat)
+    }
+    return [lng, lat]
+  }
+  /**
+    * 坐标转换
+    * @param {Array<Point>} points [[lng, lat]]
+    * @param {String} from 原始坐标类型 'wgs84 | gcj02 | bd09'
+    * @param {String} to 转换坐标类型 'wgs84 | gcj02 | bd09'
+    * @return {Point} 错误返回null
+    */
+  GeoUtil.coordstransform = function (points, from = 'gcj02', to = 'bd09') {
+    if (!points || !points.length) return points;
+    return points.map((point) => {
+      return GeoUtil.coordtransform(point, from, to)
+    })
   }
 })();
 
