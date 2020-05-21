@@ -600,8 +600,8 @@ import Card from 'seedsui-react/lib/Card';
   list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
   speed={动画过渡的速度 number, 默认300}
   enableOnChange={手动调用slideTo方法是否触发onChange事件回调 bool, 默认true}
-  onChange={轮播时事件回调 func()}
-  onClick={点击块 func(item, index, s, e)}
+  onChange={轮播时事件回调 func(s)}
+  onClick={点击块 func(s, item, index)}
   
   children={wrapper容器内子元素 node, 默认无}
 
@@ -3634,7 +3634,7 @@ import Mark from 'seedsui-react/lib/Mark';
   autoplay={一次滚动停留时长 number, 默认2000} // 为0时不再滚动
   direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
   loop={是否循环 bool, 默认true}
-  onClick={点击 func(item, index), 默认无}
+  onClick={点击 func(e, item, index), 默认无}
   {...others} // 容器属性
 />
 ```
@@ -4038,7 +4038,7 @@ import Peg from 'seedsui-react/lib/Peg';
   uploading={是否上传中 bool, 默认无}
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
-  onClick={点击一项 func, 默认无}
+  onClick={点击一项 func(e, item, index), 默认无}
 />
 ```
 ### 示例

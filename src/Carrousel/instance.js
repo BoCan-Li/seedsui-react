@@ -500,6 +500,7 @@ var Carrousel = function (container, params) {
     s.wrapper.style.webkitTransform = 'translate(' + moveX + 'px,0px)'
   }
   s.onTouchEnd = function (e) {
+    s.event = e
     if (s.params.stopPropagation) e.stopPropagation() // 此属性与FastClick冲突
     // s.container.removeEventListener('touchmove', preventDefault, false)
     s.touches.endX = e.clientX || e.changedTouches[0].clientX
@@ -507,7 +508,7 @@ var Carrousel = function (container, params) {
 
     // 单击事件
     if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
-      if (s.params.onClick) s.params.onClick(s, e)
+      if (s.params.onClick) s.params.onClick(s)
     // 滑动事件,左右拉动
     } else if (s.touches.direction === 1) {
       if (s.touches.diffX > s.params.threshold) {
@@ -529,6 +530,7 @@ var Carrousel = function (container, params) {
     s.startAutoplay()
   }
   s.onClick = function (e) {
+    s.event = e
     e.stopPropagation()
     if (e.target.classList.contains(s.params.bulletClass)) {
       s.onClickBullet(e)
@@ -537,7 +539,7 @@ var Carrousel = function (container, params) {
     } else if (e.target.classList.contains(s.params.controlNextClass)) {
       s.onClickNext(e)
     } else {
-      if (s.params.onClick) s.params.onClick(s, e)
+      if (s.params.onClick) s.params.onClick(s)
     }
   }
   s.onClickBullet = function (e) {

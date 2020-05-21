@@ -205,7 +205,6 @@ var BaiduMap = function (id, params) {
     */
   s.centerToPoint = function (point, options) {
     let bdPoint = s.pointToBdPoint(point)
-    console.log([bdPoint])
     s.map.setViewport([bdPoint], options || {})
   }
   /**

@@ -42,8 +42,8 @@ const Carrousel = forwardRef(({
   function slideToIndex () {
     // 设置选中项
     let len = childrenArr.length || (list || []).length;
-    if (isNaN(activeIndex) && activeIndex <= len - 1) {
-      instance.current.slideTo(activeIndex, 0, false)
+    if (!isNaN(activeIndex) && activeIndex <= len - 1) {
+      instance.current.slideTo(activeIndex, speed, false)
     }
   }
 
@@ -64,7 +64,7 @@ const Carrousel = forwardRef(({
   useEffect(() => {
     // 只有list或children发生变化时才更新
     update();
-  }, [list, children, activeIndex]);
+  }, [list, children, activeIndex]); // eslint-disable-line
 
   useEffect(() => {
     if (!refEl || !refEl.current) return
@@ -76,7 +76,7 @@ const Carrousel = forwardRef(({
       slidesPerView: slidesPerView,
       loop: loop,
       imgLoadSrc: defaultSrc,
-      onClick: onClick,
+      onClick: click,
       onSlideChangeEnd: onChange ? onChange : null
     });
     // 轮播图片, 自适应的情况下, 高度需要计算
@@ -86,12 +86,12 @@ const Carrousel = forwardRef(({
         slideToIndex()
       }, delay);
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   // 点击轮播
-  function onClick (s, e) {
+  function click (s) {
     const index = s.activeIndex;
-    if (onClick) onClick(list[index], index, s, e);
+    if (onClick) onClick(s, list[index], index);
   }
   // 如果className没有carrousel-container或者carrousel-page, 则补充一个
   function getCarrouselClassName () {
