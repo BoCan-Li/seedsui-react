@@ -2924,6 +2924,7 @@ import Legend from 'seedsui-react/lib/Legend';
   
   readOnly={是否只读 bool, 默认false}
   preview={是否预览 bool, 默认true, 是否支持单击预览, readOnly为true时才生效}
+  onChange={修改标注 func(e, value, selected), 默认无}
   {...others}
 />
 // data = {
@@ -3287,7 +3288,6 @@ function onChange(e, item, list) {
 />
 <input type="button" value="只读" onClick={changeReadOnly}></input>
 <input type="button" value="绘制蓝色" onClick={changeBlue}></input>
-<input type="button" value="获取选中" onClick={getSelected}></input>
 <input type="button" value="全部" onClick={onChangeData}/>
 <input type="button" value="切换1" onClick={onChangeData1}/>
 <input type="button" value="切换2" onClick={onChangeData2}/>

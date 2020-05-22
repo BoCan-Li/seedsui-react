@@ -7902,11 +7902,13 @@ a {
     overflow: hidden;
     background-color: #F2F2F2;
   }
-  .vott-svg{
+  .vott-wrapper{
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+  .vott-svg{
     display: none;
     background-size: cover;
     background-position: center;
@@ -8022,5 +8024,14 @@ a {
     margin-top: 4px;
     &:extend(.font-size-sm);
     color: #D8D8D8;
+  }
+  .vott-watermark{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-size: 30%;
+    pointer-events: none;
   }
 }

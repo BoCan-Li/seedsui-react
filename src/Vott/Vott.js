@@ -3,7 +3,7 @@ import Instance from './instance.js';
 import BridgeBrowser from './../Bridge/browser';
 import Context from '../Context/instance.js';
 
-let loaded = 0;
+let loaded = 0; // eslint-disable-line
 
 const Vott = forwardRef(({
   src,
@@ -26,6 +26,7 @@ const Vott = forwardRef(({
   // }
   readOnly = true, // 是否只读
   preview = true, // 是否支持单击预览, readOnly为true时才生效
+  watermark,
   onChange, // func(e, value, selected)
   ...others
 }, ref) =>  {
@@ -70,7 +71,7 @@ const Vott = forwardRef(({
       onChange: change,
       ...params
     });
-  }, [])
+  }, []) // eslint-disable-line
 
   function change (s, item, list) {
     if (refEl.current) s.target = refEl.current
@@ -84,29 +85,35 @@ const Vott = forwardRef(({
   }
   function previewImage () {
     if (!readOnly || !preview || !loaded) return
-    var svg = instance.current.svg;
-    var previewHTML = `<div class="preview-layer">${svg.outerHTML}</div>`;
+    // 克隆Wrapper
+    var wrapper = instance.current.wrapper;
+
+    var previewHTML = `<div class="preview-layer"> <div class="vott-wrapper">${wrapper.innerHTML}</div></div>`;
     BridgeBrowser.previewImage({urls: [src], layerHTML: previewHTML, success: (s) => {
       var layer = s.container.querySelector('.preview-layer');
-      svg = s.container.querySelector('.vott-svg');
+      wrapper = s.container.querySelector('.vott-wrapper');
+      var svg = wrapper.querySelector('.vott-svg');
       svg.style.backgroundImage = 'initial';
+      // 计算宽高
       var width = svg.style.width.replace('px', '');
       var height = svg.style.height.replace('px', '');
-      // 计算宽高
       var scale = 1
       if (width > height) { // 宽图计算
         scale = layer.clientWidth / width;
       } else { // 长图计算
         scale = layer.clientHeight / height;
       }
-      svg.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
-      svg.style.WebkitTransformOrigin = `0 0`
+      wrapper.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
+      wrapper.style.WebkitTransformOrigin = `0 0`
     }});
   }
 
   return (
     <div className="vott-container" {...others} ref={refEl}>
-      <svg className="vott-svg" preserveAspectRatio="none" onClick={click}></svg>
+      <div className="vott-wrapper" onClick={click}>
+        <svg className="vott-svg" preserveAspectRatio="none"></svg>
+        {watermark && <div className="vott-watermark" style={{backgroundImage: `url(${watermark})`}}></div>}
+      </div>
       <div className={`vott-loading active`}>
         <div className={`vott-loading-icon`}></div>
       </div>

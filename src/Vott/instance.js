@@ -17,7 +17,7 @@ var Vott = function (container, params) {
     activeClass: 'active',
 
     containerClass: 'vott-container',
-
+    wrapperClass: 'vott-wrapper',
     svgClass: 'vott-svg',
 
     shapeClass: 'vott-shape',
@@ -102,8 +102,11 @@ var Vott = function (container, params) {
     return svg
   }
 
+  // Wrapper
+  s.wrapper = s.container.querySelector('.' + s.params.wrapperClass)
+
   // Svg
-  s.svg = s.container.querySelector('.' + s.params.svgClass) || s.createSvg('svg', {
+  s.svg = s.wrapper.querySelector('.' + s.params.svgClass) || s.createSvg('svg', {
     'class': s.params.svgClass,
     // 'viewBox': '0,0,' + s.container.clientWidth + ',' + s.container.clientHeight // 视窗大小决定里层的像素, 类似rem, 设置此值让svg内值同px相同
     preserveAspectRatio: 'none' // 长宽比, none为拉伸到和svg画布相同尺寸, 设置此值让svg内值同px相同
@@ -594,7 +597,7 @@ var Vott = function (container, params) {
         'data-params': JSON.stringify({...others})
       })
       s.touches.target = s.svg.shape
-      s.container.appendChild(s.svg)
+      s.wrapper.appendChild(s.svg)
       s.activeShape(s.touches.target)
       // 选中类型
       s.touches.type = 'new'
