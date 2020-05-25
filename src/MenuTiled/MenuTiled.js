@@ -64,6 +64,7 @@ const MenuTiled = forwardRef(({
   
   // 判断是否选中
   function isSelected (id) {
+    if (!Array.isArray(selected) || !id) return false;
     for (let item of selected) {
       if (item.id === id) return true;
     }

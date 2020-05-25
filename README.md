@@ -1526,6 +1526,23 @@ function onChange (e, tabs) {
 
 <Header>
   <Dropdown list={items} listRoot={root} onChange={onChange}/>
+  {/* 只要单个弹窗可如下:
+  const [selected, setSelected] = useState();
+  function onSelected (e, value, selected) {
+		setSelected(selected)
+	}
+  <DropdownDialog
+    top={44}
+    show={true}
+
+    list={root}
+    selected={[{
+      "id": "2",
+      "name": "品牌",
+    }]}
+    onSelected={(e, value, selected) => ()}
+  />
+   */}
 </Header>
 ```
 [返回目录](#component)

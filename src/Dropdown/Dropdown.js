@@ -1,7 +1,6 @@
 import React, {forwardRef, useRef, useImperativeHandle, useEffect, useState, Fragment} from 'react';
 import Tabbar from './../Tabbar';
-import Dialog from './../Dialog';
-import MenuTiled from './../MenuTiled';
+import DropdownDialog from './DropdownDialog';
 
 const Dropdown = forwardRef(({
   top,
@@ -122,20 +121,17 @@ const Dropdown = forwardRef(({
         className="tabbar-dropdown tabbar-tiled border-b"
         {...tabbarProps}
       />
-      <Dialog
-        maskAttribute={{onClick: onClickMask, style: {top: offsetTop + 'px'}}}
-        animation="slideDown"
-        style={{width: '100%'}}
+      <DropdownDialog
+        top={offsetTop}
         show={show}
-        {...dialogProps}
-      >
-        <MenuTiled
-          list={menus}
-          selected={selected}
-          onChange={onSelected}
-          {...menutiledProps}
-        />
-      </Dialog>
+        onClickMask={onClickMask}
+        dialogProps={dialogProps}
+
+        list={menus}
+        selected={selected}
+        onSelected={onSelected}
+        menutiledProps={menutiledProps}
+      />
     </Fragment>
   )
 })
