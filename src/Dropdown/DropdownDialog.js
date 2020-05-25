@@ -10,7 +10,7 @@ const DropdownDialog = forwardRef(({
 
   list,
   selected,
-  onSelected,
+  onChange,
   menutiledProps = {}
 }, ref) => {
   return (
@@ -24,7 +24,7 @@ const DropdownDialog = forwardRef(({
       <MenuTiled
         list={list}
         selected={selected}
-        onChange={onSelected}
+        onChange={onChange}
         {...menutiledProps}
       />
     </Dialog>

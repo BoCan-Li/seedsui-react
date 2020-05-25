@@ -1540,7 +1540,7 @@ function onChange (e, tabs) {
       "id": "2",
       "name": "品牌",
     }]}
-    onSelected={(e, value, selected) => ()}
+    onChange={(e, value, selected) => ()}
   />
    */}
 </Header>

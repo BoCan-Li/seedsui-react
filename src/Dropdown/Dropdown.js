@@ -129,7 +129,7 @@ const Dropdown = forwardRef(({
 
         list={menus}
         selected={selected}
-        onSelected={onSelected}
+        onChange={onSelected}
         menutiledProps={menutiledProps}
       />
     </Fragment>
