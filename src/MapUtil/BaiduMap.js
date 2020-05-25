@@ -799,9 +799,10 @@ var BaiduMap = function (id, params) {
     * @param {String} area 域名名称: 江苏南京市鼓楼区
     * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
     * @param {Object} callback 回调配置 {success: func(), fail: func()}
+    * @param {Boolean} pureData 只要纯数据, 设置为true时, 则不会绘制到地图上
     * @return {Polygon}
     */
-  s.drawBoundary = function (area, options, callback = {}) {
+  s.drawBoundary = function (area, options, callback = {}, pureData) {
     var boundary = new BMap.Boundary()
     if (!area) {
       console.warn(`${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
@@ -813,20 +814,29 @@ var BaiduMap = function (id, params) {
     boundary.get(area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(`${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`)
+        console.warn(`${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area: ${area}不是一个合法的值`)
         callback.fail && callback.fail({
-          errMsg: `${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area`
+          errMsg: `${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area: ${area}不是一个合法的值`
         })
         return
       }
-      var polygons = []
-      var polygonsPath = []
+      var bdPolygons = []
+      var bdPolygonsPath = []
       for (var i = 0; i < count; i++) {
-        polygons[i] = new BMap.Polygon(res.boundaries[i], options || s.params.styleOptions)
-        s.map.addOverlay(polygons[i]) // 添加覆盖物
-        polygonsPath = polygonsPath.concat(polygons[i].getPath())
+        bdPolygons[i] = new BMap.Polygon(res.boundaries[i], options || s.params.styleOptions)
+        if (!pureData) s.map.addOverlay(bdPolygons[i]) // 添加覆盖物
+        bdPolygonsPath = bdPolygonsPath.concat(bdPolygons[i].getPath())
       }
-      callback.success && callback.success({...res, polygons, polygonsPath})
+      // 获取polygons, 格式: [[lng,lat]]
+      let polygons = []
+      for (let bdPolygon of bdPolygons) {
+        let polygon = [];
+        for (let bdPoint of bdPolygon.Sn) {
+          polygon.push([bdPoint.lng, bdPoint.lat]);
+        }
+        polygons.push(polygon);
+      }
+      callback.success && callback.success({...res, bdPolygons, bdPolygonsPath, polygons})
     })
     return boundary
   }

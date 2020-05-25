@@ -37,6 +37,11 @@ const InputText = forwardRef(({
   fail,
   ...others
 }, ref) =>  {
+  if (typeof value === 'number') {
+    value = String(value)
+  } else if (typeof value !== 'string') {
+    value = ''
+  }
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
     return refEl.current
@@ -187,7 +192,6 @@ const InputText = forwardRef(({
   const otherLiconAttribute = filterProps(liconAttribute)
   const otherRiconAttribute = filterProps(riconAttribute)
   const otherClearAttribute = filterProps(clearAttribute)
-
   return (<div ref={refEl} {...others} className={`input-text-box${others.className ? ' ' + others.className : ''}`} onClick={click}>
       {licon && licon}
       {liconAttribute && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + otherLiconAttribute.className : ''}`}></i>}

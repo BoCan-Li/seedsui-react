@@ -7,7 +7,8 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-  Vott
+	Vott,
+	InputNumber
 } from '../../src';
 
 const result = {
@@ -340,21 +341,22 @@ function Demo () {
     </Header>
 		<Container>
     <Vott
-  ref={refComponent}
-  style={{height: '400px'}}
-  data={data}
-  readOnly={readOnly}
-  src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
-  params={params}
-  onChange={onChange}
-  watermark="//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png"
-  preview
-/>
-<input type="button" value="只读" onClick={changeReadOnly}></input>
-<input type="button" value="绘制蓝色" onClick={changeBlue}></input>
-<input type="button" value="全部" onClick={onChangeData}/>
-<input type="button" value="切换1" onClick={onChangeData1}/>
-<input type="button" value="切换2" onClick={onChangeData2}/>
+			ref={refComponent}
+			style={{height: '400px'}}
+			data={data}
+			readOnly={readOnly}
+			src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
+			params={params}
+			onChange={onChange}
+			watermark="//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png"
+			preview
+		/>
+		<InputNumber value={true} onChange={onChange} clear/>
+		<input type="button" value="只读" onClick={changeReadOnly}></input>
+		<input type="button" value="绘制蓝色" onClick={changeBlue}></input>
+		<input type="button" value="全部" onClick={onChangeData}/>
+		<input type="button" value="切换1" onClick={onChangeData1}/>
+		<input type="button" value="切换2" onClick={onChangeData2}/>
 		</Container>
   </Page>
 }
