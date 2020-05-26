@@ -188,6 +188,7 @@ class Test extends Component {
 # Component
 - [Actionsheet](#actionsheet) 卡片弹框
 - [Alert](#alert) 弹出框
+- [Attach](#attach) 弹出框
 - [Badge](#badge) 徽章
 - [BiClock](#biclock) 时钟
 - [BiDoughnut](#bidoughnut) 环形图
@@ -401,6 +402,75 @@ function onClick () {
 <input type="button" value="显隐" onClick={onClick}/>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Attach
+[照片控件](https://unpkg.com/seedsui-react/src/lib/Attach/Attach.js)
+### 属性
+```javascript
+<Attach
+  {...others}
+  list={照片列表 array, 默认无} // [{thumb: '', src: '', children: node}]
+  uploading={是否上传中 bool, 默认无}
+  onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
+  onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
+  onClick={点击一项 func(e, item, index), 默认无}
+/>
+```
+### 示例
+```javascript
+import Attach from 'seedsui-react/lib/Attach';
+const list = [{
+  name: '1',
+  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+},{
+  name: '2',
+  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
+}];
+
+function onClick (...params) {
+  console.log('点击')
+  console.log(...params)
+}
+function onChoose (...params) {
+  console.log('选择')
+  console.log(...params)
+}
+function onDelete (...params) {
+  console.log('删除')
+  console.log(...params)
+}
+
+<Attach
+  list={list}
+  onChoose={onChoose}
+  onDelete={onDelete}
+  onClick={onClick}
+/>
+```
+[返回目录](#component)
+
+
+
+
 
 
 
@@ -4137,8 +4207,12 @@ import Peg from 'seedsui-react/lib/Peg';
 
 
 
+
+
+
+
 ## Photos
-[小竖条](https://unpkg.com/seedsui-react/src/lib/Photos/Photos.js)
+[照片控件](https://unpkg.com/seedsui-react/src/lib/Photos/Photos.js)
 ### 属性
 ```javascript
 <Photos
@@ -4164,25 +4238,36 @@ const list = [{
   src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
 }];
 
-onClick = (...params) => {
+function onClick (...params) {
+  console.log('点击')
   console.log(...params)
 }
-onChoose = (...params) => {
+function onChoose (...params) {
+  console.log('选择')
   console.log(...params)
 }
-onDelete = (...params) => {
+function onDelete (...params) {
+  console.log('删除')
   console.log(...params)
 }
 
 <Photos
-  list={this.state.list}
-  onFile={this.onFile}
-  onChoose={this.onChoose}
-  onDelete={this.onDelete}
-  onClick={this.onClick}
+  list={list}
+  onChoose={onChoose}
+  onDelete={onDelete}
+  onClick={onClick}
 />
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
 
 
 

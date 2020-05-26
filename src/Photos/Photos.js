@@ -1,20 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef} from 'react';
 
-export default class Photos extends Component {
-  static propTypes = {
-    list: PropTypes.array, // [{thumb: '', src: '', children: node}]
-    upload: PropTypes.node, // 上传按钮覆盖的dom
-    uploading: PropTypes.bool, // 是否上传中
-    onChoose: PropTypes.func, // 浏览器会显示file框onChoose(e), 并监听file框change事件
-    onDelete: PropTypes.func,
-    onClick: PropTypes.func
-  }
-  static defaultProps = {
-  }
+const Photos = forwardRef(({
+  list, // [{id: '', name: '', src: ''}]
+  upload, // 上传按钮覆盖的dom
+  uploading, // 是否上传中
+  onChoose, // 浏览器会显示file框onChoose(e), 并监听file框change事件
+  onDelete,
+  onClick,
+  ...others
+}, ref) =>  {
   // 点击整个photos容器
-  onClick = (e) => {
-    const {list, onChoose, onDelete, onClick} = this.props;
+  function click (e) {
     const target = e.target;
     if (target.classList.contains('photos-upload')) { // 点击添加
       if (onChoose) onChoose(e);
@@ -26,63 +22,55 @@ export default class Photos extends Component {
       if (index && onDelete) onDelete(e, list[index], Number(index));
     }
   }
-  // 点击file框
-  onFile = (e) => {
-    if (this.props.onChoose) this.props.onChoose(e);
+  // file框选择
+  function fileChange (e) {
+    if (onChoose) onChoose(e);
     e.target.value = ''; // 防止选择重复图片时不触发
     e.stopPropagation();
   }
   // 图片加载完成
-  onLoad = (e) => {
+  function load (e) {
     var target = e.target;
     target.parentNode.setAttribute('data-complete', '1');
   }
   // 图片加载失败
-  onError = (e) => {
+  function error (e) {
     var target = e.target;
     target.parentNode.setAttribute('data-complete', '0');
   }
-  render() {
-    const {
-      list = [],
-      uploading,
-      upload, // 上传dom
-      onChoose,
-      onDelete,
-      onClick,
-      ...others
-    } = this.props;
-    return (<div
-      ref={el => {this.$el = el;}}
-      {...others}
-      className={`photos${others.className ? ' ' + others.className: ''}`}
-      onClick={this.onClick}
-    >
-      {list && list.length > 0 && list.map((item, index) => {
-        return <div
-          key={index}
-          data-index={index}
-          className={`photos-item${item.className ? ' ' + item.className: ''}`}
-          style={Object.assign({backgroundImage: `url(${item.thumb})`}, item.style || {})}
-        >
-          <img className="photos-item-img" src={item.thumb} alt="" onLoad={this.onLoad} onError={this.onError}/>
-          <div className="photos-item-error"></div>
-          <div className="photos-item-load"></div>
-          {onDelete && <div className="photos-delete">
-            <div className="photos-delete-icon"></div>
-          </div>}
-          {item.children}
-        </div>
-      })}
-      {/* 图片上传: 上传按钮 */}
-      {onChoose && <div className="photos-item photos-upload">
-        {/* PC端使用file框 */}
-        {!navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={this.onFile} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
-        {upload && upload}
-        {uploading && <div className="photos-upload-loading">
-          <div className="photos-upload-loading-icon"></div>
+
+  return (<div
+    ref={ref}
+    {...others}
+    className={`photos${others.className ? ' ' + others.className: ''}`}
+    onClick={click}
+  >
+    {list && list.length > 0 && list.map((item, index) => {
+      return <div
+        key={index}
+        data-index={index}
+        className={`photos-item${item.className ? ' ' + item.className: ''}`}
+        style={Object.assign({backgroundImage: `url(${item.thumb})`}, item.style || {})}
+      >
+        <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>
+        <div className="photos-item-error"></div>
+        <div className="photos-item-load"></div>
+        {onDelete && <div className="photos-delete">
+          <div className="photos-delete-icon"></div>
         </div>}
+        {item.children}
+      </div>
+    })}
+    {/* 图片上传: 上传按钮 */}
+    {onChoose && <div className="photos-item photos-upload">
+      {/* PC端使用file框 */}
+      {!navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
+      {upload && upload}
+      {uploading && <div className="photos-upload-loading">
+        <div className="photos-upload-loading-icon"></div>
       </div>}
-    </div>);
-  }
-}
+    </div>}
+  </div>);
+})
+
+export default Photos

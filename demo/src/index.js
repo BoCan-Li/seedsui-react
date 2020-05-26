@@ -7,45 +7,41 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-	InputSelect
+	Attach
 } from '../../src';
 
-const list = [
-  {
-    id: '1',
-    name: '111'
-  },
-  {
-    id: '2',
-    name: '222'
-  },
-  {
-    id: '3',
-    name: '333'
-  }
-];
+const list = [{
+  name: '1',
+  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+},{
+  name: '2',
+  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
+}];
 
 function Demo () {
-  const [value, setValue] = useState('333');
-
-function onChange (e, value, selected) {
-  console.log(e.target)
-  console.log(value, selected)
-  setValue(value);
-}
+  function onClick (...params) {
+    console.log('点击')
+    console.log(...params)
+  }
+  function onChoose (...params) {
+    console.log('选择')
+    console.log(...params)
+  }
+  function onDelete (...params) {
+    console.log('删除')
+    console.log(...params)
+  }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-		<InputSelect
-    disabled
-  list={list}
-  value={value}
-  onClick={onChange}
-  placeholder="请选择"
-  className="border-b"
-/>
+		  <Attach
+        list={list}
+        onChoose={onChoose}
+        onDelete={onDelete}
+        onClick={onClick}
+      />
 		</Container>
   </Page>
 }

@@ -750,6 +750,111 @@ a {
 
 // Attach附件选择
 .setAttach(){
+  .attach-upload{
+    &.disabled{
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    position: relative;
+    width: 100px;
+    height: 32px;
+    margin-left: 12px;
+    background-color: white;
+    border: 1px solid @border;
+    border-radius: 4px;
+    .attach-upload-wrapper{
+      .flex;
+      .flex-middle;
+      .flex-center;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .attach-upload-icon{
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      font-family: 'iconfont';
+      &:extend(.icon-upload all);
+      &.uploading{
+        &:extend(.icon-refresh all);
+        animation-name: rotate360;
+        animation-duration: 700ms;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+    }
+    .attach-upload-label{
+      margin-left: 6px;
+    }
+    input[type=file]{
+      width:100%;
+      height:100%;
+      filter:alpha(opacity=0);
+      opacity:0;
+      cursor:pointer;
+    }
+  }
+  .attach-item{
+    .flex;
+    .flex-middle;
+    margin-left: 10px;
+    padding: 10px 12px 10px 0;
+    .border-b;
+  }
+  .attach-item-type{
+    pointer-events: none;
+    font-family: 'iconfont';
+    color: @sub;
+    &.video{
+      &:extend(.icon-type-video all);
+    }
+    &.text{
+      &:extend(.icon-type-text all);
+    }
+    &.word{
+      &:extend(.icon-type-word all);
+    }
+    &.unknown{
+      &:extend(.icon-type-unknow all);
+    }
+    &.audio{
+      &:extend(.icon-type-audio all);
+    }
+    &.excel{
+      &:extend(.icon-type-excel all);
+    }
+    &.pack{
+      &:extend(.icon-type-pack all);
+    }
+    &.pic{
+      &:extend(.icon-type-pic all);
+    }
+    &.pdf{
+      &:extend(.icon-type-pdf all);
+    }
+    &.ppt{
+      &:extend(.icon-type-ppt all);
+    }
+  }
+  .attach-item-label{
+    pointer-events: none;
+    .flex-1;
+    .nowrap;
+    .ellipsis;
+    margin-left: 6px;
+  }
+  .attach-item-delete{
+    color: @badge-bg;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    font-family: 'iconfont';
+    &:extend(.icon-trash all);
+  }
 }
 
 
@@ -3630,7 +3735,15 @@ a {
 
 
 
+@keyframes rotate360 {
+  0% {
+    transform: rotate(0deg);
+  }
 
+  100% {
+    transform: rotate(360deg);
+  }
+}
 // InputLocation定位
 .setInputLocation(){
   // .input-location, .input-location-error{
@@ -3645,15 +3758,6 @@ a {
     width: 24px;
     height: 24px;
     background-image: url(//res.waiqin365.com/d/seedsui/icon/location.png);
-  }
-  @keyframes rotate360 {
-    0% {
-      transform: rotate(0deg);
-    }
-  
-    100% {
-      transform: rotate(360deg);
-    }
   }
   .input-location-icon-active{
     animation-name: rotate360;

@@ -10,6 +10,7 @@ import './PrototypePinyin.js'; // 不常用
 
 export { default as Actionsheet } from './Actionsheet';
 export { default as Alert } from './Alert';
+export { default as Attach } from './Attach';
 export { default as Badge } from './Badge';
 export { default as BiClock } from './BiClock'; // 不常用
 export { default as BiDoughnut } from './BiDoughnut'; // 不常用
