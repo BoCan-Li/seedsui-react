@@ -1,5 +1,5 @@
 // BaiduMap 百度地图使用库
-// 引入 PrototypeObject.js: Object.getUnitNum
+// 引入 PrototypeObject.js: Object.getUnitNum, Object.loadScript
 // 引入 PrototypeString.js: Object.getUnitNum方法中使用toNumber()
 import locale from './../locale'
 
@@ -1023,20 +1023,36 @@ var BaiduMap = function (id, params) {
   s.initMap()
 }
 
-
+/**
+    * 动态加载百度地图
+    * @param {Object} params {
+    *   key: '百度地图ak',
+    *   library: ['draw'], // 百度地图的其它库
+    *   success: () => {},
+    *   fail: ({errMsg: ''}) => {},
+    * }
+    */
 BaiduMap.load = function (params = {}) {
   // window.BMAP_PROTOCOL = "https";
   // window.BMap_loadScriptTime = (new Date).getTime();
-  // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918"></script>`);
-  return new Promise((resolve) => {
+  // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.key}&services=&t=20200415105918"></script>`);
+  return new Promise(async (resolve) => {
     if (window.BMap) { // eslint-disable-line
+      // 加载绘制库
+      if (params.library && params.library.indexOf('draw') !== -1) {
+        let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
+        if (!drawRes) {
+          resolve('加载地图失败')
+          if (params.fail) params.fail({errMsg: '加载地图失败'})
+        }
+      }
       resolve(true)
       if (params.success) params.success()
       return
     }
-    if (!params.ak) {
-      resolve('请在传入地图的密钥MapUtil.load({ak: ""})')
-      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})'})
+    if (!params.key) {
+      resolve('请在传入地图的密钥MapUtil.load({key: ""})')
+      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({key: ""})'})
       return
     }
     window.BMAP_PROTOCOL = 'https';
@@ -1044,9 +1060,17 @@ BaiduMap.load = function (params = {}) {
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.charset = 'utf-8'
-    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
+    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.key}&services=&t=20200415105918`
     document.body.appendChild(script)
-    script.onload = function () {
+    script.onload = async function () {
+      // 加载绘制库
+      if (params.library && params.library.indexOf('draw') !== -1) {
+        let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
+        if (!drawRes) {
+          resolve('加载地图失败')
+          if (params.fail) params.fail({errMsg: '加载地图失败'})
+        }
+      }
       resolve(true)
       if (params.success) params.success()
     }

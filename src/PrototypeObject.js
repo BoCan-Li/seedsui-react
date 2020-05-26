@@ -338,16 +338,20 @@ Object.getUnitNum = function (unit) {
   return unit.toNumber()
 }
 
+
+
 // 动态加载script的方法, attrs: [{defer: 'defer}]
-Object.loadScript = function (id, src, attrs = []) {
+Object.loadScript = function (src, attrs = [], id) {
   return new Promise((resolve) => {
-    if (!document.getElementById(id)) { // 没有bmap, 需要加载库
+    if (!id || !document.getElementById(id)) { // 没有bmap, 需要加载库
       var script = document.createElement('script')
       if (id) script.id = id
       script.src = src
-      for (let attr of attrs) {
-        for (let n in attr) {
-          script[n] = attr[n]
+      if (attrs && attrs.length) {
+        for (let attr of attrs) {
+          for (let n in attr) {
+            script[n] = attr[n]
+          }
         }
       }
       document.body.appendChild(script)
