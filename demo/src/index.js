@@ -6,45 +6,45 @@ import {
   Header,
   Titlebar,
 	Bridge,
-	Container
+	Container,
+	InputPicker
 } from '../../src';
-import DropdownDialog from '../../src/Dropdown/DropdownDialog';
 
+const list = [
+  {
+    id: '1',
+    name: '111'
+  },
+  {
+    id: '2',
+    name: '222'
+  },
+  {
+    id: '3',
+    name: '333'
+  }
+];
 
 function Demo () {
-  const [root, setRoot] = useState([
-		{
-			"id": "1",
-			"name": "分类",
-		},
-		{
-			"id": "2",
-			"name": "品牌",
-		},
-		{
-			"id": "3",
-			"name": "筛选",
-		}
-	]);
-	const [selected, setSelected] = useState();
-	const [show, setShow] = useState(true);
-	function onSelected (e, value, selected) {
-		setSelected(selected)
-		setShow(false)
-	}
+  const [value, setValue] = useState('333');
+
+function onChange (e, value, selected) {
+  console.log(e.target)
+  console.log(value, selected)
+  setValue(value);
+}
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
-			<DropdownDialog
-        top={44}
-        show={show}
-
-        list={root}
-        selected={selected}
-        onSelected={onSelected}
-      />
     </Header>
 		<Container>
+		<InputPicker
+  list={list}
+  value={value}
+  onChange={onChange}
+  placeholder="请选择"
+  className="border-b"
+/>
 		</Container>
   </Page>
 }

@@ -41,6 +41,7 @@ const Picker = forwardRef(({
 
   function setDefault () {
     const defaultOpt = getDefaultOption();
+    if (!defaultOpt) return;
     instance.current.clearSlots();
     instance.current.addSlot(list, defaultOpt.id || '', slotAttribute.className || 'text-center'); // 添加列,参数:数据,默认id,样式(lock样式为锁定列)
   }

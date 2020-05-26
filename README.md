@@ -2691,8 +2691,7 @@ function onChange (e, value, selected) {
   setValue(value);
 }
 
-<InputCity
-  ref={refComponent}
+<InputPicker
   list={list}
   value={value}
   onChange={onChange}
