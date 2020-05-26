@@ -7,7 +7,7 @@ import {
   Titlebar,
 	Bridge,
 	Container,
-	InputPicker
+	InputSelect
 } from '../../src';
 
 const list = [
@@ -38,10 +38,11 @@ function onChange (e, value, selected) {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-		<InputPicker
+		<InputSelect
+    disabled
   list={list}
   value={value}
-  onChange={onChange}
+  onClick={onChange}
   placeholder="请选择"
   className="border-b"
 />

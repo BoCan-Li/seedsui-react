@@ -23,6 +23,7 @@ const InputDistrict = forwardRef(({
   // 点击文本框
   function onClickInput (...parameter) {
     if (onClick) onClick(...parameter);
+    if (others.readOnly) return;
     setShow(!show);
   }
   // 点击遮罩

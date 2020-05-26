@@ -21,6 +21,7 @@ const InputPicker = forwardRef(({
   // 点击文本框
   function onClickInput (...parameter) {
     if (onClick) onClick(...parameter);
+    if (others.readOnly) return;
     setShow(true);
   }
   // 点击遮罩
