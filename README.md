@@ -38,50 +38,144 @@ npm install less less-loader --save-dev
 搜索“/\.css”，修改规则为/\.css|.less$/,use -> {loader: require.resolve('less-loader')}
 
 ```js
-// 导入seedsui基础库
-import 'components/seedsui/index.less'; // 需要手动配置,见下节
+// 加载样式
+import './../../assets/style/main.less'; // 全局 main.less, 见下节main.less
+// 加载seedsui库
 import 'seedsui-react/lib/PrototypeArray.js';
 import 'seedsui-react/lib/PrototypeMath.js';
 import 'seedsui-react/lib/PrototypeObject.js';
 import 'seedsui-react/lib/PrototypeString.js';
 import 'seedsui-react/lib/PrototypeDate.js';
+
 // 导入组件
 import Chat from 'seedsui-react/lib/Chat';
 ```
-### index.less手动配置:
-#### 1.图标 src/components/seedsui/iconfont.less:<br>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less),放入src/components/seedsui/iconfont.less后修改
-<br><br>
-#### 2.变量 src/components/seedsui/variables.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/components/seedsui/variables.less后修改
-<br><br>
-#### 3.组件 src/components/seedsui/components.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/components/seedsui/components.less后修改<br>
-引入地址修改如:
+### main.less:
 ```less
-@import "global/top/appearance.less";
-```
-前缀改为../../../node_modules/seedsui-react/lib/
-```less
-@import "../../../node_modules/seedsui-react/lib/global/top/appearance.less";
-```
+/*
+ * seedsui样式(seedsui组件样式增减在assets/seedsui/components.less中)
+ */
+@import "../seedsui/index.less";
 
-#### 三个less汇集 src/components/seedsui/index.less:
+/*
+ * 全局通用样式
+ */
+```
+### src/assets/seedsui/index.less:
 ```less
 // 图标
 // @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
 @import "iconfont.less";
-// 变量,依赖图标(换肤文件)
+// 变量,依赖图标,换肤文件
 // @import "../../../node_modules/seedsui-react/lib/seedsui-variables.less";
 @import "variables.less";
+
 // 组件,依赖变量库
 // @import "../../../node_modules/seedsui-react/lib/seedsui-components.less";
 @import "components.less";
 ```
 
+#### src/assets/seedsui/iconfont.less:
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less), 放入src/assets/seedsui/iconfont.less后修改
+
+#### src/assets/seedsui/variables.less:
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/assets/seedsui/variables.less后修改
+
+
+#### src/assets/seedsui/components.less:<br/>
+[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/assets/seedsui/components.less后修改
+
 
 # 国际化
-[下载国际化文件](https://unpkg.com/seedsui-react/lib/lang.js), 修改window._seeds_lang对象即可
+## 国际化文件
+[中文国际化文件](https://unpkg.com/seedsui-react/lib/locale/zh_CN.js)
+[英文国际化文件](https://unpkg.com/seedsui-react/lib/locale/en_US.js)
+## 国际化自定义
+#### src/locale/index.js:
+```js
+export default function (key) {
+  // let language = navigator.language;
+  const ua = navigator.userAgent.toLowerCase()
+  let language = 'zh_CN';
+  if (ua.indexOf('lang=zh_CN') !== -1) {
+    language = 'zh_CN';
+  } else if (ua.indexOf('lang=en_US') !== -1) {
+    language = 'en_US';
+  } else {
+    language = 'zh_CN';
+  }
+  // seeds国际化文件
+  let seedsLocale = require(`seedsui-react/lib/locale/${language}.js`);
+  if (seedsLocale.default) seedsLocale = seedsLocale.default;
+  // 本地国际化文件
+  let appLocale = require(`./${language}`);
+  if (appLocale.default) appLocale = appLocale.default;
+  // 合并国际化文件
+  let locale = Object.assign({}, seedsLocale, appLocale)
+  // 设置语言
+  locale.locale_language = language;
+  if (key) return locale[key] || '';
+  return locale;
+}
+```
+#### src/locale/en_US.js:
+```js
+export default {
+  'my_contract': 'My contract',
+  'to_be_filled': 'To be filled',
+  'to_be_signed': 'To be signed',
+  'signed': 'Signed',
+  'archived': 'Archived'
+}
+```
+#### src/locale/zh_CN.js:
+```js
+export default {
+  'my_contract': '我的合同',
+  'to_be_filled': '待填写',
+  'to_be_signed': '待签署',
+  'signed': '已签署',
+  'archived': '已归档'
+}
+```
+#### 全局配置国际化
+```js
+import Context from 'seedsui-react/lib/Context';
+ReactDOM.render(
+  <Context locale={locale()}>
+    <Routes />
+  </Context>,
+  document.getElementById('root')
+);
+```
+
+#### js中引用国际化
+```js
+import locale from './../../locale';
+
+locale('my_contract') || '我的合同'
+```
+
+#### 函数组件中引用国际化
+```js
+import Context from 'seedsui-react/lib/Context/instance.js';
+
+const context = useContext(Context) || {};
+const locale = context.locale || {};
+```
+
+#### class组件中引用国际化
+```js
+import Context from 'seedsui-react/lib/Context/instance.js';
+
+class Test extends Component {
+  static contextType = Context;
+  componentDidMount() {
+    let {locale} = this.context;
+    if (!locale) locale = {}
+  }
+}
+```
 
 
 # 组件规范
@@ -5465,11 +5559,19 @@ import VideoFull from 'seedsui-react/lib/VideoFull';
 ## MapUtil
 [地图工具](https://unpkg.com/seedsui-react/src/lib/MapUtil/BaiduMap.js)
 ### 引入库
-```html
-<script src="http://api.map.baidu.com/api?v=2.0&ak=&s=1"></script>
-<!--加载鼠标绘制工具-->
-<!-- <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
-<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" /> -->
+```js
+MapUtil.load({
+  key: '百度key',
+  library: ['draw'], // 鼠标绘制库, 没用到则不用传
+  success: () => {
+    initData();
+  },
+  fail: () => {
+    changeState({
+      errMsg: '地图库加载失败, 请稍后再试'
+    });
+  }
+})
 ```
 
 ### 示例
@@ -5524,13 +5626,25 @@ componentDidMount () {
 
 // 添加鼠标绘制工具监听事件，用于获取绘制结果
 initMap = () => {
-  // 创建鼠标绘制管理类
-  this.mapUtil.createDrawingManager();
-  if (this.mapUtil && this.mapUtil.drawingManager) {
-    this.mapUtil.showScale();
-    this.mapUtil.showNavigation();
-    this.mapUtil.drawingManager.addEventListener('overlaycomplete', this.drawBlue);
-    this.drawRed();
+  console.log('创建地图')
+  this.mapUtil = new MapUtil('Id-MapContainer', {
+    // 缩放导航
+    navigation: {
+      position: 'bottom-right',
+      type: 'zoom'
+    },
+    // 中心位置
+    center: {
+      center: '江苏南京市'
+    }
+  });
+  this.mapUtil.showScale();
+  this.mapUtil.showNavigation();
+  // 启用多边形绘制功能
+  if (!this.mapUtil.drawingManager) {
+    this.mapUtil.createDrawingManager();
+    this.mapUtil.drawingManager.removeEventListener('overlaycomplete', this.drawBlue, false)
+    this.mapUtil.drawingManager.addEventListener('overlaycomplete', this.drawBlue, false)
   }
 }
 // 绘制总区域
@@ -5567,7 +5681,7 @@ drawBlue = (e) => {
     success: () => {
       // 判断多边形是否合法
       if (GeoUtil.isPolygon(
-          polygon.so.map(point => {
+          polygon.getPath().map(point => {
             return [point.lat, point.lng]
           })
         )
