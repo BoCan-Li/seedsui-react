@@ -119,7 +119,6 @@ var BaiduMap = function (id, params) {
     // var geolocationControl = new BMap.GeolocationControl()
     // geolocationControl.addEventListener('locationSuccess', function (res) {
     //   // e.addressComponent.province
-    //   console.log(res)
     //   if (options.success) options.success({errMsg: res.message})
     // })
     // geolocationControl.addEventListener('locationError', function (res) {
@@ -831,7 +830,8 @@ var BaiduMap = function (id, params) {
       let polygons = []
       for (let bdPolygon of bdPolygons) {
         let polygon = [];
-        for (let bdPoint of bdPolygon.Sn) {
+        let bdPoints = bdPolygon.getPath()
+        for (let bdPoint of bdPoints) {
           polygon.push([bdPoint.lng, bdPoint.lat]);
         }
         polygons.push(polygon);
