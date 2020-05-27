@@ -46,6 +46,24 @@ const PickerDate = forwardRef(({
     }
   }, [show])
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onClickSubmit = clickSubmit;
+    instance.current.params.onClickCancel = clickCancel;
+    instance.current.params.onClickMask = clickMask;
+  }
+  function clickSubmit (e) {
+    const value = e.activeText;
+    const options = e.activeOptions;
+    if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
+  }
+  function clickCancel (e) {
+    if (cancelAttribute.onClick) cancelAttribute.onClick(e);
+  }
+  function clickMask (e) {
+    if (maskAttribute.onClick) maskAttribute.onClick(e)
+  }
+  
   function update () {
     instance.current.updateParams({
       yyUnit: typeof locale['unit_year'] === 'string' ? locale['unit_year'] : '年',
@@ -207,17 +225,9 @@ const PickerDate = forwardRef(({
       defaultDay: def.day,
       defaultHour: def.hour,
       defaultMinute: def.minute,
-      onClickMask: (e) => {
-        if (maskAttribute.onClick) maskAttribute.onClick(e)
-      },
-      onClickCancel: (e) => {
-        if (cancelAttribute.onClick) cancelAttribute.onClick(e);
-      },
-      onClickSubmit: (e) => {
-        const value = e.activeText;
-        const options = e.activeOptions;
-        if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
-      },
+      onClickMask: clickMask,
+      onClickCancel: clickCancel,
+      onClickSubmit: clickSubmit,
       onHid: (e) => {
       },
       yyUnit: locale['unit_year'] || '年',

@@ -39,6 +39,24 @@ const Picker = forwardRef(({
     }
   }, [show]) // eslint-disable-line
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onClickSubmit = clickSubmit;
+    instance.current.params.onClickCancel = clickCancel;
+    instance.current.params.onClickMask = clickMask;
+  }
+  function clickSubmit (e) {
+    const value = e.activeOptions[0].name;
+    const options = e.activeOptions;
+    if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
+  }
+  function clickCancel (e) {
+    if (cancelAttribute.onClick) cancelAttribute.onClick(e);
+  }
+  function clickMask (e) {
+    if (maskAttribute.onClick) maskAttribute.onClick(e)
+  }
+
   function setDefault () {
     const defaultOpt = getDefaultOption();
     if (!defaultOpt) return;
@@ -67,17 +85,9 @@ const Picker = forwardRef(({
     // render数据
     instance.current = new Instance({
       mask: refEl.current,
-      onClickMask: (e) => {
-        if (maskAttribute.onClick) maskAttribute.onClick(e)
-      },
-      onClickCancel: (e) => {
-        if (cancelAttribute.onClick) cancelAttribute.onClick(e);
-      },
-      onClickSubmit: (e) => {
-        const value = e.activeOptions[0].name;
-        const options = e.activeOptions;
-        if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
-      },
+      onClickMask: clickMask,
+      onClickCancel: clickCancel,
+      onClickSubmit: clickSubmit,
       onHid: (e) => {
       }
     });

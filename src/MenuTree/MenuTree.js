@@ -47,6 +47,10 @@ const MenuTree = forwardRef(({
     });
   }, [])
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onClick = click;
+  }
   function click (s, item, isActived, isExtend) {
     if (refEl.current) s.target = refEl.current;
     // childrenCount

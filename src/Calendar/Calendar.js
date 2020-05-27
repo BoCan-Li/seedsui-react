@@ -22,6 +22,12 @@ const Calendar = forwardRef(({
   });
   const instance = useRef(null)
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onChange = change;
+    instance.current.params.onClick = click;
+    instance.current.params.onError = onError;
+  }
   function change (s) {
     if (onChange) onChange(s, s.activeDate.format('YYYY-MM-DD'), s.activeDate)
   }
