@@ -14,7 +14,6 @@ const Attach = forwardRef(({
     if (suffix.indexOf('?') !== -1) {
       suffix = suffix.substring(0, suffix.indexOf('?'));
     }
-    console.log(suffix.toUpperCase())
     if ('RM,RMVB,MP4,3GP,AVI,MKV,WMV,MPG,VOB,FLV'.indexOf(suffix.toUpperCase()) !== -1) {
       return 'video'
     }
