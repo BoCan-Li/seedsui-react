@@ -73,6 +73,11 @@ const Vott = forwardRef(({
     });
   }, []) // eslint-disable-line
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onChange = change;
+  }
+
   function change (s, item, list) {
     if (refEl.current) s.target = refEl.current
     if (onChange) onChange(s, item, list)

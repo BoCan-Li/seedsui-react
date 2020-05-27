@@ -88,6 +88,12 @@ const Carrousel = forwardRef(({
     }
   }, []) // eslint-disable-line
 
+  // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
+  if (instance.current) {
+    instance.current.params.onClick = click;
+    instance.current.params.onSlideChangeEnd = onChange;
+  }
+
   // 点击轮播
   function click (s) {
     const index = s.activeIndex;
