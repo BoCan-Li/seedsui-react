@@ -6,42 +6,31 @@ import {
   Header,
   Titlebar,
 	Bridge,
-	Container,
-	Attach
+  Container,
+  InputText,
+	InputCity
 } from '../../src';
 
-const list = [{
-  name: '1',
-  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
-},{
-  name: '2',
-  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-}];
 
 function Demo () {
-  function onClick (...params) {
-    console.log('点击')
-    console.log(...params)
+  const [values, setValues] = useState(['', '2'])
+  function onChange (e, value, options) {
+    let newValues = Object.clone(values)
+    newValues[1] = value;
+    setValues(newValues)
   }
-  function onChoose (...params) {
-    console.log('选择')
-    console.log(...params)
-  }
-  function onDelete (...params) {
-    console.log('删除')
-    console.log(...params)
+  function onChange2 (e, value, options) {
+    let newValues = Object.clone(values)
+    newValues[0] = value;
+    setValues(newValues)
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-		  <Attach
-        list={list}
-        onChoose={onChoose}
-        onDelete={onDelete}
-        onClick={onClick}
-      />
+      <InputText value={values[1]} onChange={onChange}/>
+      <InputCity value={values[0]} onChange={onChange2}/>
 		</Container>
   </Page>
 }

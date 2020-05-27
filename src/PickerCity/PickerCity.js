@@ -23,6 +23,7 @@ const PickerCity = forwardRef(({
   submitAttribute = {},
   cancelAttribute = {},
 
+  onScrollEnd,
   ...others
 }, ref) =>  {
   const refEl = useRef(null)
@@ -62,6 +63,10 @@ const PickerCity = forwardRef(({
     instance.current.params.onClickMask = clickMask;
   }
   function clickSubmit (e) {
+    // 获取选中项
+    e.activeText = e.getActiveText(e.activeOptions)
+    e.setActiveKeys(e.activeOptions)
+    // Callback
     const value = e.activeText;
     const options = e.activeOptions;
     if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
@@ -71,6 +76,18 @@ const PickerCity = forwardRef(({
   }
   function clickMask (e) {
     if (maskAttribute.onClick) maskAttribute.onClick(e)
+  }
+  function scrollEnd (e) {
+    // var activeOption = e.activeSlot.values[e.activeSlot.activeIndex]
+    var activeOption = e.activeOptions[e.activeSlot.index]
+    if (e.activeSlot.index === 0) { // 滚动省
+      var city = e.replaceCity(activeOption[e.params.idPropertyName]) // 修改第二项
+      e.replaceDistrict(city[0][e.params.idPropertyName]) // 修改第三项
+    } else if (e.activeSlot.index === 1) { // 滚动市
+      e.replaceDistrict(activeOption[e.params.idPropertyName]) // 修改第三项
+    }
+    // Callback
+    if (onScrollEnd) onScrollEnd(e)
   }
 
   function setDefault () {
@@ -125,6 +142,7 @@ const PickerCity = forwardRef(({
       onClickMask: clickMask,
       onClickCancel: clickCancel,
       onClickSubmit: clickSubmit,
+      onScrollEnd: scrollEnd,
       onHid: (e) => {
       }
     });

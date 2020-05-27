@@ -1,11 +1,6 @@
 import Picker from './../Picker/instance.js';
 
 var PickerDate = function (params) {
-  // 参数改写
-  var onDateClickSubmit = params.onClickSubmit
-  var onDateScrollEnd = params.onScrollEnd
-  params.onClickSubmit = undefined
-  params.onScrollEnd = undefined
   var nowDate = new Date()
   /* ----------------
     Model
@@ -43,26 +38,6 @@ var PickerDate = function (params) {
     ddUnit: '日',
     hhUnit: '时',
     mmUnit: '分',
-
-    onClickSubmit: function (e) {
-      e.activeText = getActiveText(e.activeOptions)
-      var activeKeys = e.activeOptions.map(function (n, i, a) {
-        return n['id']
-      })
-      s.setDefaultsByKeys(activeKeys)
-      if (onDateClickSubmit) onDateClickSubmit(e)
-    },
-    onScrollEnd: function (e) {
-      // 根据月份算日
-      if ((e.params.viewType === 'date' || e.params.viewType === 'datetime') && (e.activeSlot.index === 0 || e.activeSlot.index === 1)) {
-        var year = e.activeOptions[0]['id']
-        var month = e.activeOptions[1]['id']
-        var defaultDay = e.activeOptions[2]['id']
-        updateDays(year, month, defaultDay) // 更新总天数
-      }
-      // 回调
-      if (onDateScrollEnd) onDateScrollEnd(e)
-    }
   }
   params = params || {}
   for (var def in defaults) {
@@ -168,7 +143,7 @@ var PickerDate = function (params) {
   }
 
   // 变换月时更新总天数
-  function updateDays (year, month, defaultDay) {
+  s.updateDays = function (year, month, defaultDay) {
     if (s.params.daysData) {
       updateDaysForCustom(year, month)
     } else {
@@ -182,7 +157,7 @@ var PickerDate = function (params) {
   /* ----------------
   Method
   ---------------- */
-  function getActiveText (activeData) {
+  s.getActiveText = function (activeData) {
     var activeKeys = activeData.map(function (n, i, a) {
       return n['id']
     })

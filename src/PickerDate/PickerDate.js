@@ -20,6 +20,7 @@ const PickerDate = forwardRef(({
   cancelAttribute = {},
 
   onError,
+  onScrollEnd,
   ...others
 }, ref) =>  {
   const refEl = useRef(null)
@@ -51,8 +52,16 @@ const PickerDate = forwardRef(({
     instance.current.params.onClickSubmit = clickSubmit;
     instance.current.params.onClickCancel = clickCancel;
     instance.current.params.onClickMask = clickMask;
+    instance.current.params.onScrollEnd = scrollEnd;
   }
   function clickSubmit (e) {
+    // 获取选中项
+    e.activeText = e.getActiveText(e.activeOptions)
+    var activeKeys = e.activeOptions.map(function (n, i, a) {
+      return n['id']
+    })
+    e.setDefaultsByKeys(activeKeys)
+    // Callback
     const value = e.activeText;
     const options = e.activeOptions;
     if (submitAttribute.onClick) submitAttribute.onClick(e, value, options);
@@ -62,6 +71,17 @@ const PickerDate = forwardRef(({
   }
   function clickMask (e) {
     if (maskAttribute.onClick) maskAttribute.onClick(e)
+  }
+  function scrollEnd (e) {
+    // 根据月份算日
+    if ((e.params.viewType === 'date' || e.params.viewType === 'datetime') && (e.activeSlot.index === 0 || e.activeSlot.index === 1)) {
+      var year = e.activeOptions[0]['id']
+      var month = e.activeOptions[1]['id']
+      var defaultDay = e.activeOptions[2]['id']
+      e.updateDays(year, month, defaultDay) // 更新总天数
+    }
+    // Callback
+    if (onScrollEnd) onScrollEnd(e)
   }
   
   function update () {
@@ -228,8 +248,8 @@ const PickerDate = forwardRef(({
       onClickMask: clickMask,
       onClickCancel: clickCancel,
       onClickSubmit: clickSubmit,
-      onHid: (e) => {
-      },
+      onScrollEnd: scrollEnd,
+      onHid: (e) => {},
       yyUnit: locale['unit_year'] || '年',
       MMUnit: locale['unit_month'] || '月',
       ddUnit: locale['unit_date'] || '日',

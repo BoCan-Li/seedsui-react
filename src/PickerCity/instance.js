@@ -1,10 +1,5 @@
 import Picker from './../Picker/instance.js'
 var PickerCity = function (params) {
-  // 参数改写
-  var onCityClickSubmit = params.onClickSubmit
-  var onCityScrollEnd = params.onScrollEnd
-  params.onClickSubmit = undefined
-  params.onScrollEnd = undefined
   /* --------------------
     Model
     -------------------- */
@@ -28,25 +23,7 @@ var PickerCity = function (params) {
 
     provinceClass: 'text-center',
     cityClass: 'text-center',
-    districtClass: 'text-center',
-
-    onClickSubmit: function (e) {
-      e.activeText = getActiveText(e.activeOptions)
-      setActiveKeys(e.activeOptions)
-      if (onCityClickSubmit) onCityClickSubmit(e)
-    },
-    onScrollEnd: function (e) {
-      // var activeOption = e.activeSlot.values[e.activeSlot.activeIndex]
-      var activeOption = e.activeOptions[e.activeSlot.index]
-      if (e.activeSlot.index === 0) { // 滚动省
-        var city = replaceCity(activeOption[s.params.idPropertyName]) // 修改第二项
-        replaceDistrict(city[0][s.params.idPropertyName]) // 修改第三项
-      } else if (e.activeSlot.index === 1) { // 滚动市
-        replaceDistrict(activeOption[s.params.idPropertyName]) // 修改第三项
-      }
-      // 回调
-      if (onCityScrollEnd) onCityScrollEnd(e)
-    }
+    districtClass: 'text-center'
   }
   params = params || {}
   for (var def in defaults) {
@@ -190,7 +167,7 @@ var PickerCity = function (params) {
   }
   
   // 获得选中的文字
-  function getActiveText (activeOptions) {
+  s.getActiveText = function (activeOptions) {
     var activeValues = activeOptions.map(function (n, i, a) {
       return n[s.params.namePropertyName]
     })
@@ -201,7 +178,7 @@ var PickerCity = function (params) {
     return activeText
   }
   // 设置选中的keys
-  function setActiveKeys (activeOptions) {
+  s.setActiveKeys = function (activeOptions) {
     var activeKeys = activeOptions.map(function (n, i, a) {
       return n[s.params.idPropertyName]
     })
@@ -250,13 +227,13 @@ var PickerCity = function (params) {
     return provinces
   } */
   // 替换市
-  function replaceCity (key, activeKey) {
+  s.replaceCity = function (key, activeKey) {
     var citys = getChildrenByKey(key)
     s.replaceSlot(1, citys, activeKey || citys[0][s.params.idPropertyName], s.params.cityClass)
     return citys
   }
   // 替换区
-  function replaceDistrict (key, activeKey) {
+  s.replaceDistrict = function (key, activeKey) {
     if (s.params.viewType !== 'district') return
     var districts = getChildrenByKey(key)
     if (districts && districts.length && districts.length > 0) {
