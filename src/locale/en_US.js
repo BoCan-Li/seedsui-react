@@ -26,6 +26,8 @@ export default {
   'hint_only_app_and_wx': 'Only support wechat or app',
   'hint_only_mobile': 'Only support mobile',
   'hint_scan_failed': 'Scan failed',
+  'hint_previewFile_failed': 'Preview File failed',
+  'hint_previewFile_success': 'Preview File success',
   'hint_try_again_later': 'Try again later',
   'hint_max_upload': 'Max upload',
   'photos': 'photos',

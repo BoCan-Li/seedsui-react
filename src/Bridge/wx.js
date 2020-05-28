@@ -195,6 +195,18 @@ var Bridge = {
   },
   previewImage: function (params) {
     wx.previewImage(params) // eslint-disable-line
+  },
+  /**
+    * 文件操作: 预览文件
+    * @param {Object} params
+    * params: {
+    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+    *  size: 1048576 // 需要预览文件的字节大小(必填)
+    * }
+    */
+  previewFile: function (params) {
+    wx.previewFile(params) // eslint-disable-line
   }
 }
 

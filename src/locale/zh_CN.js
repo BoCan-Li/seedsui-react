@@ -26,6 +26,8 @@ export default {
   'hint_only_app_and_wx': '此功能仅可在微信或APP中使用',
   'hint_only_mobile': '此功能仅可在手机中使用',
   'hint_scan_failed': '扫码失败',
+  'hint_previewFile_failed': '预览文件失败',
+  'hint_previewFile_success': '预览文件成功',
   'hint_try_again_later': '请稍后重试',
   'hint_max_upload': '最多只能传',
   'photos': '张照片',

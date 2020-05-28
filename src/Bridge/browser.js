@@ -478,10 +478,10 @@ var Bridge = {
     }, 500)
   },
   
-  /* -----------------------------------------------------
-    扫描二维码并返回结果
-    @return {resultStr:''}
-  ----------------------------------------------------- */
+  /*
+   * 扫描二维码并返回结果
+   * 返回：{resultStr:''}
+   * */
   scanQRCode: function (params = {}) {
     var self = this
     if (!self.debug) {
@@ -492,6 +492,25 @@ var Bridge = {
     setTimeout(function () {
       if (params.success) params.success({resultStr: '504823170310092750280333'})
     }, 500)
+  },
+  /**
+    * 文件操作: 预览文件
+    * @param {Object} params
+    * params: {
+    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+    *  size: 1048576 // 需要预览文件的字节大小(必填)
+    * }
+    */
+  previewFile: function (params) {
+    var self = this
+    if (!self.debug) {
+      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      if (params.fail) params.fail({errMsg: `previewFile:fail${locale('hint_previewFile_failed') || '预览文件失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`})
+      return
+    }
+    if (params.success) params.success({errMsg: `previewFile:ok${locale('hint_previewFile_success') || '预览文件成功'}`})
+    if (params.url) window.location.href = params.url
   }
 }
 export default Bridge
