@@ -345,3 +345,13 @@ window.String.prototype.toNumber = function () {
   }
   return null
 }
+
+// 取出文件后缀名
+window.String.prototype.getSuffix = function () {
+  let suffix = this.substring(this.lastIndexOf('.') + 1, this.length)
+  if (!suffix) return ''
+  if (suffix.indexOf('?') !== -1) {
+    suffix = suffix.substring(0, suffix.indexOf('?'))
+  }
+  return suffix
+}

@@ -1,3 +1,4 @@
+// require (PrototypeString.js), 使用了getSuffix
 import React, {forwardRef} from 'react';
 
 const Attach = forwardRef(({
@@ -9,7 +10,7 @@ const Attach = forwardRef(({
   ...others
 }, ref) =>  {
   function getIcon (src) {
-    let suffix =  src.substring(src.lastIndexOf('.') + 1, src.length)
+    let suffix =  src.getSuffix();
     if (!suffix) return 'unknown';
     if (suffix.indexOf('?') !== -1) {
       suffix = suffix.substring(0, suffix.indexOf('?'));
