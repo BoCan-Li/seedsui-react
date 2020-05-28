@@ -95,14 +95,16 @@ var Bridge = {
       return
     }
     // 调用定位
-    if (self.locating) return
-    self.locating = true
+    if (self.locationTask) {
+      self.locationTask.push(params)
+      return
+    }
+    self.locationTask = []
     console.log('调用定位...')
     wx.getLocation({ // eslint-disable-line
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: 'gcj02',
       success: (res) => {
-        self.locating = false
         // 将位置信息存储到cookie中60秒
         if (res.latitude && res.latitude) {
           if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
@@ -111,14 +113,14 @@ var Bridge = {
           if (params.fail) params.fail(res)
           else self.showToast('没有获取到经纬度', {mask: false})
         }
+        self.getLocationTask(res)
       },
       fail: (res) => {
-        self.locating = false
         if (params.fail) params.fail(res)
         else self.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
+        self.getLocationTask(res)
       },
       complete: (res) => {
-        self.locating = false
         if (params.complete) params.complete(res)
       }
     })

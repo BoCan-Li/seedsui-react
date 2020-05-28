@@ -2768,6 +2768,7 @@ function onChange (e, value, selected) {
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
   readOnly={文本是否只读 bool, 默认true} // 改为false: 允许手动修改位置信息, 并只能点击定位图标定位
+  autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
   {...others}
@@ -2777,18 +2778,13 @@ function onChange (e, value, selected) {
 ```javascript
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
-state = {
-  value: ''
-}
-
-onChange = (e, value) => {
+const [value, setValue] = useState('');
+function onChange (e, value) {
   console.log(e.target);
-  this.setState({
-    value
-  })
+  setValue(value);
 }
 
-<InputLocation value={this.state.value} placeholder="请点击获取位置信息" onChange={this.onChange}/>
+<InputLocation value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
 ```
 
 

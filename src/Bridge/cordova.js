@@ -335,12 +335,14 @@ var Bridge = {
     }
 
     // 调用定位
-    if (self.locating) return
-    self.locating = true
+    if (self.locationTask) {
+      self.locationTask.push(params)
+      return
+    }
+    self.locationTask = []
     console.log('调用定位...')
     // 调用定位
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
-      self.locating = false
       if (res && res.wqLatitude) {
         let result = res
         // 对结果进行格式化
@@ -359,9 +361,12 @@ var Bridge = {
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(result) , params.cache || 60)
         if (params.success) params.success(result)
+        self.getLocationTask(result)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocation:fail${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
+        let res = {errMsg: `getLocation:fail${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`}
+        if (params.fail) params.fail(res)
         else self.showToast(locale('hint_location_failed') || '定位失败, 请检查定位权限是否开启', {mask: false})
+        self.getLocationTask(res)
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },

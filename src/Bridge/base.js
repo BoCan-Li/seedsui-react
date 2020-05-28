@@ -145,6 +145,19 @@ var Bridge = {
     }
     self.confirm.show()
   },
+  getLocationTask: function (res) { // 记录定位任务, 防止重复定位
+    let self = this
+    if (self.locationTask && self.locationTask.length) {
+      for (let locationTaskItem of self.locationTask) {
+        if (res.longitude && res.latitude) {
+          if (locationTaskItem.success) locationTaskItem.success(res)
+        } else {
+          if (locationTaskItem.fail) locationTaskItem.fail(res)
+        }
+      }
+    }
+    self.locationTask = null
+  },
   /**
     * 百度地图:获取当前位置名称
     * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}

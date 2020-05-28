@@ -374,19 +374,23 @@ var Bridge = {
     }
 
     // 调用定位
-    if (self.locating) return
-    self.locating = true
+    if (self.locationTask) {
+      self.locationTask.push(params)
+      return
+    }
+    self.locationTask = []
     console.log('调用定位...')
     self.invoke('getLocation', 'gcj02', (res) => {
-      self.locating = false
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启'})
+        res.errMsg = {errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启'}
+        if (params.fail) params.fail(res)
         else self.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
+      self.getLocationTask(res)
     })
   },
   /* -----------------------------------------------------

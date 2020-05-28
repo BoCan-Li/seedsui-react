@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, forwardRef } from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect} from 'react';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 import Context from '../Context/instance.js';
@@ -8,10 +8,16 @@ const InputLocation = forwardRef(({
   loadingValue,
   failedValue,
   readOnly = true,
+  autoLocation,
   onClick,
   onChange,
   ...others
 }, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+
   const context = useContext(Context) || {};
   const locale = context.locale || {};
   if (!loadingValue || typeof loadingValue !== 'string') {
@@ -20,6 +26,15 @@ const InputLocation = forwardRef(({
   if (!failedValue || typeof failedValue !== 'string') {
     failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
   }
+
+  useEffect(() => {
+    if (autoLocation) {
+      location({
+        target: refEl.current,
+        currentTarget: refEl.current
+      })
+    }
+  }, [])
 
   const [status, setStatus] = useState('1') // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
   function click (event, value) {
@@ -39,6 +54,12 @@ const InputLocation = forwardRef(({
     if (!readOnly && !e.target.classList.contains('input-location-icon')) {
       return;
     }
+    // 定位
+    location(e);
+  }
+
+  function location (e) {
+    Bridge.debug = true
     // 定位中...
     setStatus('-1')
     Bridge.getLocation({
@@ -89,7 +110,7 @@ const InputLocation = forwardRef(({
     statusDOM = <div className={`input-text ${inputClassName} input-location-error`} style={(others.inputAttribute || {}).style || {}}>{failedValue}</div>;
   }
   return <InputText
-    ref={ref}
+    ref={refEl}
     readOnly={readOnly}
     onClick={click}
     onChange={onChange}
