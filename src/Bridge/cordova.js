@@ -167,6 +167,30 @@ var Bridge = {
       if (callback) callback(result)
     }, params ? JSON.stringify(params) : null);
   },
+  /**
+    * 文件操作: 预览文件
+    * @param {Object} params
+    * params: {
+    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+    *  size: 1048576 // 需要预览文件的字节大小(必填)
+    * }
+    */
+  previewFile: function (params) {
+    if (!params) {
+      console.warn('[SeedsUI cordova内核]previewFile:fail没有传入参数')
+      return
+    }
+    wq.wqio.openFile((res) => { // eslint-disable-line
+      if (res.flag === '1') {
+        if (params.success) params.success({errMsg: `previewFile:ok${locale('hint_previewFile_success') || '预览文件成功'}`})
+      } else {
+        if (params.fail) params.fail({errMsg: `previewFile:fail${res.msg}`})
+      }
+    }, params ? JSON.stringify({
+      filePath: params.url
+    }) : null)
+  },
   /* -----------------------------------------------------
     视频播放
     @params {src: '视频地址', title: '标题'}
@@ -318,24 +342,24 @@ var Bridge = {
     wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
       self.locating = false
       if (res && res.wqLatitude) {
-        // 格式化为标准的返回信息
-        var location = {
-          latitude: res.wqLatitude,
-          longitude: res.wqLongitude,
-          speed: null,
-          accuracy: res.radius,
-          address: res.wqAddress,
-          country: '中国',
-          province: res.province,
-          city: res.city,
-          area: res.district,
-          street: res.street
-        }
+        let result = res
+        // 对结果进行格式化
+        result.latitude = res.wqLatitude
+        result.longitude = res.wqLongitude
+        result.point = [res.wqLongitude, res.wqLatitude]
+        // result.speed = null
+        result.accuracy = res.radius
+        result.address = res.wqAddress
+        // result.country = '中国'
+        // result.province = res.province
+        // result.city = res.city
+        // result.district = res.district
+        // result.street = res.street
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(location) , params.cache || 60)
-        if (params.success) params.success(location)
+        if (params.success) params.success(result)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocation: ${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
+        if (params.fail) params.fail({errMsg: `getLocation:fail${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
         else self.showToast(locale('hint_location_failed') || '定位失败, 请检查定位权限是否开启', {mask: false})
       }
     }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位

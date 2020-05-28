@@ -443,7 +443,7 @@ var BaiduMap = function (id, params) {
     * 地址逆解析
     * @param {Array} point [lng, lat]
     * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {status: 0 成功, points 百度坐标}
+    * @return {Promise} result: {status: 0 成功, point 坐标, address 地址}
     */
   s.getAddress = function (point, type) {
     return new Promise(async (resolve) => {
@@ -452,7 +452,16 @@ var BaiduMap = function (id, params) {
       if (fmtResult.code !== '1') return
       // 逆解析
       var geocoder = new BMap.Geocoder()
-      geocoder.getLocation(fmtResult.point, (result) => {
+      geocoder.getLocation(fmtResult.point, (res) => {
+        // 对结果进行格式化
+        let result = res
+        if (res.addressComponents) {
+          result.point = point
+          result.province = res.addressComponents.province
+          result.city = res.addressComponents.city
+          result.district = res.addressComponents.district
+          result.street = res.addressComponents.street
+        }
         resolve(result)
       })
     })
