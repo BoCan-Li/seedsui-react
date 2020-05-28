@@ -355,8 +355,9 @@ var Bridge = {
         // result.city = res.city
         // result.district = res.district
         // result.street = res.street
+        result.fake = res.mokelocation === 'true' || res.mokelocation === true
         // 将位置信息存储到cookie中60秒
-        if (params.cache) DB.setCookie('app_location', JSON.stringify(location) , params.cache || 60)
+        if (params.cache) DB.setCookie('app_location', JSON.stringify(result) , params.cache || 60)
         if (params.success) params.success(result)
       } else {
         if (params.fail) params.fail({errMsg: `getLocation:fail${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`})
@@ -387,23 +388,23 @@ var Bridge = {
     var self = this
     wq.wqlocation.getLocationMap((res) => { // eslint-disable-line
       if (res && res.wqLatitude) {
-        // 格式化为标准的返回信息
-        var location = {
-          latitude: res.wqLatitude,
-          longitude: res.wqLongitude,
-          speed: null,
-          accuracy: res.radius,
-          address: res.poiname || res.wqAddress,
-          country: '中国',
-          province: res.province,
-          city: res.city,
-          area: res.district,
-          street: res.street,
-          locationLie: res.mokelocation
-        }
-        if (params.success) params.success(location)
+        let result = res
+        // 对结果进行格式化
+        result.latitude = res.wqLatitude
+        result.longitude = res.wqLongitude
+        result.point = [res.wqLongitude, res.wqLatitude]
+        // result.speed = null
+        result.accuracy = res.radius
+        result.address = res.poiname || res.wqAddress
+        // result.country = '中国'
+        // result.province = res.province
+        // result.city = res.city
+        // result.district = res.district
+        // result.street = res.street
+        result.fake = res.mokelocation === 'true' || res.mokelocation === true
+        if (params.success) params.success(result)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocationMap:${locale('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启'}`})
+        if (params.fail) params.fail({errMsg: `getLocationMap:fail${locale('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启'}`})
         else self.showToast(locale('hint_location_map_failed') || '定位失败, 请检查外勤365定位权限是否开启', {mask: false})
       }
     }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
