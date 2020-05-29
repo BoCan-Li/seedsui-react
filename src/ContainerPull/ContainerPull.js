@@ -109,6 +109,9 @@ const ContainerPull = forwardRef(({
         if (!instance.current.hasScroll()) {
           console.log('刷新完成,但没有滚动条,继续加载...')
           bottomRefresh()
+        } else if (instance.current.isBottom()) {
+          console.log('刷新完成,滚动条在底部,继续加载...')
+          bottomRefresh()
         }
       }, 500);
     }

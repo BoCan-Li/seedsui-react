@@ -97,6 +97,17 @@ var ContainerPull = function (params) {
     }
     return true
   }
+  // 判断滚动条是否在底部
+  s.isBottom = function () {
+    var clientHeight = s.container.clientHeight // || window.innerHeight
+    var scrollHeight = s.container.scrollHeight
+    var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
+    // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
+    if (scrollTop + clientHeight >= scrollHeight - 2) {
+      return true
+    }
+    return false
+  }
   // 头部刷新, 刷新中时将不允许刷新
   s.topRefresh = function () {
     if (s.isLoading) return
@@ -280,11 +291,7 @@ var ContainerPull = function (params) {
   s.onScroll = function (e) {
     if (s.params.onScroll) s.params.onScroll(e)
     if (!s.params.onBottomRefresh) return
-    var clientHeight = s.container.clientHeight // || window.innerHeight
-    var scrollHeight = s.container.scrollHeight
-    var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
-    // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
-    if (scrollTop + clientHeight >= scrollHeight - 2) {
+    if (s.isBottom()) {
       s.bottomRefresh()
     }
   }

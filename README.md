@@ -1164,7 +1164,7 @@ let [list, setList] = useState([]);
 // 用于判断是否没有数据了true:有数据 false:没有数据
 let [hasMore, setHasMore] = useState(true);
 // 错误信息
-let [message, setMessage] = useState('');
+let [errMsg, setErrMsg] = useState('');
 
 function onTopRefresh () {
   console.log('头部刷新');
@@ -1194,11 +1194,11 @@ function getList (options = {}) {
       if (options.page >= 5 || allList.length === 0) {
         setHasMore(false);
         if (allList.length === 0) {
-          setMessage('暂无数据');
+          setErrMsg('暂无数据');
         }
       } else {
         setHasMore(true);
-        setMessage('');
+        setErrMsg('');
       }
       setList(allList)
       resolve(true)
@@ -1231,7 +1231,7 @@ useEffect(() => {
   {hasMore === true && <BottomRefreshing/>}
   {hasMore === false && <BottomNoData/>}
 </ContainerPull>
-{message && <Notice caption={message}/>}
+{errMsg && <Notice caption={errMsg} style={{top: '44px'}}/>}
 ```
 [返回目录](#component)
 
