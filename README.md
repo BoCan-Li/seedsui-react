@@ -2767,7 +2767,7 @@ function onChange (e, value, selected) {
 <InputLocation
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
-  readOnly={文本是否只读 bool, 默认true} // 改为false: 允许手动修改位置信息, 并只能点击定位图标定位
+  readOnly={文本是否只读 bool, 默认无} // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
   autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
@@ -2785,6 +2785,8 @@ function onChange (e, value) {
 }
 
 <InputLocation value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
+// 只读
+<InputLocation readOnly={true} riconAttribute={{className: ''}} value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
 ```
 
 

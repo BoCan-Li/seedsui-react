@@ -7,7 +7,7 @@ import Context from '../Context/instance.js';
 const InputLocation = forwardRef(({
   loadingValue,
   failedValue,
-  readOnly = true,
+  readOnly, // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
   autoLocation,
   onClick,
   onChange,
@@ -38,12 +38,15 @@ const InputLocation = forwardRef(({
 
   const [status, setStatus] = useState('1') // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
   function click (event, value) {
+    if (readOnly === true) {
+      return;
+    }
     // 正在定位不允许操作
     if (status === '-1') {
       return;
     }
     // 非只读状态下, 点击错误面板, 允许手动输入位置
-    if (!readOnly && status === '0') {
+    if (readOnly === false && status === '0') {
       setStatus('1');
       return;
     }
@@ -51,7 +54,7 @@ const InputLocation = forwardRef(({
     var e = event.nativeEvent;
     if (onClick) onClick(e, value);
     // 如果非只读, 则仅允许点击图标定位
-    if (!readOnly && !e.target.classList.contains('input-location-icon')) {
+    if (readOnly === false && !e.target.classList.contains('input-location-icon')) {
       return;
     }
     // 定位
@@ -98,8 +101,8 @@ const InputLocation = forwardRef(({
 
   // 计算class, 防止重要class被覆盖
   let inputClassName = (others.inputAttribute || {}).className || '';
-  let riconClassName = (others.riconAttribute || {}).className || '';
-  if (!riconClassName) {
+  let riconClassName = (others.riconAttribute || {}).className;
+  if (riconClassName === undefined) {
     riconClassName = 'input-location-icon size24'
   }
   // 加载和错误面板, 显示这些面板时将会隐藏文本框, 样式必须与文本框一致
