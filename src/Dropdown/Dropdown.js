@@ -122,10 +122,14 @@ const Dropdown = forwardRef(({
         {...tabbarProps}
       />
       <DropdownDialog
-        top={offsetTop}
         show={show}
-        onClickMask={onClickMask}
-        dialogProps={dialogProps}
+        dialogProps={{
+          maskAttribute: {
+            onClick: onClickMask,
+            style: {top: offsetTop + 'px'}
+          },
+          ...(dialogProps || {})
+        }}
 
         list={menus}
         selected={selected}

@@ -7,26 +7,44 @@ import {
   Header,
   Titlebar,
   Bridge,
-  Container,
-  InputLocation,
-  GeoUtil
+  Container
 } from '../../src';
-
+import DropdownDialog from '../../src/Dropdown/DropdownDialog';
+const root = [{
+  "id": "1",
+  "name": "分类",
+},
+{
+  "id": "2",
+  "name": "品牌",
+},
+{
+  "id": "3",
+  "name": "筛选",
+}]
 function Demo () {
-  const [value, setValue] = useState('');
-  console.log(GeoUtil.getDistance(['118.730798','31.983238'], ['118.421002', '31.935272']))
-  function onChange (e, value) {
-    console.log(e.target);
-    setValue(value);
-  }
-
 
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
+      <DropdownDialog
+    dialogProps={{
+      maskAttribute: {
+        onClick: () => console.log(1),
+        style: {top: '44px'}
+      }
+    }}
+    show={true}
+
+    list={root}
+    selected={[{
+      "id": "2",
+      "name": "品牌",
+    }]}
+    onChange={(e, value, selected) => console.log(selected)}
+  />
     </Header>
 		<Container>
-      <InputLocation readOnly={true} riconAttribute={{className: ''}} value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
     </Container>
   </Page>
 }

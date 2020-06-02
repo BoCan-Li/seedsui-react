@@ -3,9 +3,7 @@ import Dialog from './../Dialog';
 import MenuTiled from './../MenuTiled';
 
 const DropdownDialog = forwardRef(({
-  top,
   show,
-  onClickMask,
   dialogProps = {},
 
   list,
@@ -15,10 +13,11 @@ const DropdownDialog = forwardRef(({
 }, ref) => {
   return (
     <Dialog
-      maskAttribute={{onClick: onClickMask, style: {top: top + 'px'}}}
       animation="slideDown"
-      style={{width: '100%'}}
       show={show}
+      style={{
+        width: '100%'
+      }}
       {...dialogProps}
     >
       <MenuTiled

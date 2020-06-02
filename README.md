@@ -1691,12 +1691,29 @@ function onChange (e, tabs) {
 <Header>
   <Dropdown list={items} listRoot={root} onChange={onChange}/>
   {/* 只要单个弹窗可如下:
+  const root = [{
+    "id": "1",
+    "name": "分类",
+  },
+  {
+    "id": "2",
+    "name": "品牌",
+  },
+  {
+    "id": "3",
+    "name": "筛选",
+  }]
   const [selected, setSelected] = useState();
   function onSelected (e, value, selected) {
 		setSelected(selected)
 	}
   <DropdownDialog
-    top={44}
+    dialogProps={{
+      maskAttribute: {
+        onClick: () => console.log(1),
+        style: {top: '44px'}
+      }
+    }}
     show={true}
 
     list={root}
