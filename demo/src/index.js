@@ -8,15 +8,18 @@ import {
   Titlebar,
   Bridge,
   Container,
-  InputLocation
+  InputLocation,
+  GeoUtil
 } from '../../src';
 
 function Demo () {
   const [value, setValue] = useState('');
-function onChange (e, value) {
-  console.log(e.target);
-  setValue(value);
-}
+  console.log(GeoUtil.getDistance(['118.730798','31.983238'], ['118.421002', '31.935272']))
+  function onChange (e, value) {
+    console.log(e.target);
+    setValue(value);
+  }
+
 
   return <Page>
     <Header>

@@ -191,18 +191,18 @@ var GeoUtil = {};
   }
   /**
     * 获得两个点之间的距离
-    * @param {Point} p0
-    * @param {Point} p1
-    * @return {Number} 错误返回-1
+    * @param {Point} p0 // [lng, lat]
+    * @param {Point} p1 // [lng, lat]
+    * @return {Number} km, 错误返回-1
     */
   GeoUtil.getDistance = function (p0, p1) {
     if (!p0[0] || !p0[1] || !p1[0] || !p1[1]) {
       return -1
     }
-    var lat1 = p0[0]
-    var lng1 = p0[1]
-    var lat2 = p1[0]
-    var lng2 = p1[1]
+    var lng1 = p0[0]
+    var lat1 = p0[1]
+    var lng2 = p1[0]
+    var lat2 = p1[1]
     var radLat1 = lat1 * Math.PI / 180.0
     var radLat2 = lat2 * Math.PI / 180.0
     var a = radLat1 - radLat2
