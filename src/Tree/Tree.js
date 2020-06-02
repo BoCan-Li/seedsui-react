@@ -22,6 +22,7 @@ const Tree = forwardRef(({
   onClick,
   onClickLeaf,
   onData,
+  params = {}, // 设置实例化参数
   
   ...others
 }, ref) =>  {
@@ -71,7 +72,8 @@ const Tree = forwardRef(({
       onClickDel: buttonDelAttribute.onClick,
       onClick: click,
       onAddSelected: addSelected,
-      onData: onData
+      onData: onData,
+      ...(params || {})
     });
     // 设置已选中
     if (selected && selected.length) {

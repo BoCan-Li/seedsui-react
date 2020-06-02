@@ -156,14 +156,9 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
 window.Array.prototype.getFlattenTreeRoots = function (parentIdName, nodeIdName) {
   var list = this
   var roots = []
-  var objList = {}
-  // 转成键值对数据
+  // 取出顶层数据(没有parentid或者parentid===-1)
   list.forEach(function (item) {
-    objList[item[nodeIdName || 'id']] = item
-  })
-  // 取出顶层数据
-  list.forEach(function (item) {
-    if (!objList[item[parentIdName || 'parentid']]) roots.push(item)
+    if (!item[parentIdName || 'parentid'] || String(item[parentIdName || 'parentid']) === '-1') roots.push(item)
   })
   return roots
 }
