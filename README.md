@@ -5506,8 +5506,12 @@ function getChildren (id) {
     
   })
 }
+const refElBar = useRef(null);
+const [elBar, setElBar] = useState(null);
+
 const [list, setList] = useState([])
   useEffect(() => {
+    setElBar(refElBar.current)
     setTimeout(() => {
       setList(groupList)
     }, 1000)
@@ -5561,7 +5565,8 @@ function onChange (e, value, options) {
 }
 
 
-<div id="idTreeBar" className="tree-bar"></div>
+
+<div ref={refElBar} className="tree-bar"></div>
 <Tree
   list={list}
   extend={extend}
@@ -5571,7 +5576,7 @@ function onChange (e, value, options) {
   onData={onData}
   onChange={onChange}
   selected={selected}
-  bar="#idTreeBar"
+  bar={elBar}
 />
 <input type="button" className="button lg" value="查看选中" onClick={onSubmit}/>
 <input type="button" className="button lg" value="展开全部" onClick={onExtend}/>

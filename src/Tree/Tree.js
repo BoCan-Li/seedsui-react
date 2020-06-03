@@ -1,4 +1,4 @@
-// require PrototypeArray.js
+// require PrototypeArray.js(flattenTree)
 import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import Instance from './instance.js';
 
@@ -76,12 +76,8 @@ const Tree = forwardRef(({
       if (JSON.stringify(data).indexOf('"children"') !== -1) {
         data = data.flattenTree()
       }
-      // 设置已选中
-      if (selected && Object.values(selected).length) {
-        for (var id in selected) {
-          instance.current.addSelected(selected[id])
-        }
-      }
+      // 选中选中项
+      checkedSelected();
       // 开始渲染
       instance.current.setData(data);
       instance.current.update();
@@ -115,7 +111,7 @@ const Tree = forwardRef(({
       instance.current.removeAllSelected()
     }
   }
-  // 当bar更新时, 需要选中选中项
+  // 当bar更新时, 选中项放到bar上
   function barSelected () {
     instance.current.bar.innerHTML = '';
     if (selected && selected.length) {
@@ -132,10 +128,6 @@ const Tree = forwardRef(({
     if (refEl.current) s.target = refEl.current;
     if (onChange) {
       let value = [];
-      if (!s.selected || !s.selected.length) {
-        onChange(s, '', [])
-        return;
-      }
       for (let id in s.selected) {
         value.push(s.selected[id].name);
       }
@@ -203,7 +195,7 @@ const Tree = forwardRef(({
 })
 
 export default React.memo(Tree, (prevProps, nextProps) => {
-  if ((prevProps.selected || []).length !== (nextProps.selected || []).length) return false;
+  // if ((prevProps.selected || []).length !== (nextProps.selected || []).length) return false;
   if (prevProps.bar !== nextProps.bar) return false;
   if (prevProps.extend !== nextProps.extend) return false;
   if (JSON.stringify(prevProps.list) === JSON.stringify(nextProps.list)) return true;
