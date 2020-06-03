@@ -50,17 +50,14 @@ const Tree = forwardRef(({
       buttonDelClass: buttonDelAttribute.className,
       onClickDel: buttonDelAttribute.onClick,
       onClick: click,
-      onAddSelected: addSelected,
+      onChange: change,
       onData: onData,
       ...(params || {})
     });
-    // 设置已选中
-    if (selected && selected.length) {
-      for (var item of selected) {
-        instance.current.addSelected(item)
-      }
-    }
+    // 渲染数据
     instance.current.update();
+    // 设置已选中
+    checkedSelected();
     refEl.current.instance = instance;
   }, []) // eslint-disable-line
 
@@ -94,18 +91,51 @@ const Tree = forwardRef(({
     }
   }, [list])
 
+  useEffect(() => {
+    if (!bar || !instance.current) return;
+    instance.current.params.bar = bar;
+    instance.current.updateBar();
+    barSelected();
+  }, [bar])
+
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
     instance.current.params.onClick = click;
-    instance.current.params.onAddSelected = addSelected;
+    instance.current.params.onChange = change;
     instance.current.params.onData = onData;
   }
 
+  // 选中选中项
+  function checkedSelected () {
+    if (selected && selected.length) {
+      for (var item of selected) {
+        instance.current.addSelected(item)
+      }
+    } else {
+      instance.current.removeAllSelected()
+    }
+  }
+  // 当bar更新时, 需要选中选中项
+  function barSelected () {
+    instance.current.bar.innerHTML = '';
+    if (selected && selected.length) {
+      for (var item of selected) {
+        instance.current.addBarOption(item)
+      }
+    } else {
+      instance.current.removeAllSelected()
+    }
+  }
+
   // 选中项
-  function addSelected (s) {
+  function change (s) {
     if (refEl.current) s.target = refEl.current;
     if (onChange) {
       let value = [];
+      if (!s.selected || !s.selected.length) {
+        onChange(s, '', [])
+        return;
+      }
       for (let id in s.selected) {
         value.push(s.selected[id].name);
       }
@@ -162,7 +192,7 @@ const Tree = forwardRef(({
       return
     }
     instance.current.addData(leaf, item.id, ul);
-    s.targetLine.childrenLoaded = true;
+    if (s.targetLine) s.targetLine.childrenLoaded = true;
   }
 
   return (
@@ -173,6 +203,8 @@ const Tree = forwardRef(({
 })
 
 export default React.memo(Tree, (prevProps, nextProps) => {
+  if (prevProps.selected.length !== nextProps.selected.length) return false;
+  if (prevProps.bar !== nextProps.bar) return false;
   if (prevProps.extend !== nextProps.extend) return false;
   if (JSON.stringify(prevProps.list) === JSON.stringify(nextProps.list)) return true;
   return false;

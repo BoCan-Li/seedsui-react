@@ -43,7 +43,7 @@ var Tree = function (container, params) {
     onClickLeaf:function(Tree)
     onClickAdd: function(option)
     onClickDel: function(option)
-    onAddSelected: function (Tree)
+    onChange: function (Tree)
     onData:function(option)
     */
   }
@@ -73,12 +73,12 @@ var Tree = function (container, params) {
       if (!s.bar) {
         console.log('SeedsUI Error：未找到Bar的DOM对象，请检查传入参数是否正确')
         return
+      } else {
+        // 点击选中容器
+        s.bar.removeEventListener('click', s.onClickBar, false)
+        s.bar.addEventListener('click', s.onClickBar, false)
       }
     }
-  }
-  s.updateBar()
-  s.setBar = function (bar) {
-    s.params.bar = bar
   }
 
   // Selected
@@ -185,7 +185,7 @@ var Tree = function (container, params) {
     //   s.initData(tree.id, s.container)
     // }
   }
-  // s.update()
+  // s.update() // 改为由外部调用渲染数据
   /* ------------------
     Method
     ------------------ */
@@ -288,15 +288,22 @@ var Tree = function (container, params) {
     return div
   }
   // 删除选中项
-  s.removeSelected = function (id) {
+  s.removeSelected = function (id, isClick) {
     if (s.selected[id]) {
       // 删除数组
       delete s.selected[id]
       // 删除bar上元素
-      if (s.bar) s.bar.removeChild(s.bar.querySelector('[' + s.params.idAttr + '="' + id + '"]'))
+      if (s.bar) {
+        var barOption = s.bar.querySelector('[' + s.params.idAttr + '="' + id + '"]')
+        if (barOption) s.bar.removeChild(barOption)
+      }
       // 清空树上的选中状态
       var node = s.container.querySelector('[' + s.params.idAttr + '="' + id + '"]')
       if (node) node.classList.remove(s.params.activeClass)
+    }
+    if (isClick && s.params.onChange) {
+      console.log('删除节点')
+      s.params.onChange(s)
     }
   }
   s.removeAllSelected = function () {
@@ -317,18 +324,19 @@ var Tree = function (container, params) {
       el.classList.add(s.params.extendClass)
     }
   }
-  s.addSelected = function (opts) {
+  s.addSelected = function (opts, isClick) {
     if (!opts.id || !opts.name || !opts.parentid) {
-      console.log('SeedsUI Error:id、name、parentid三个参数不正确')
+      console.log('SeedsUI Tree:id、name、parentid三个参数不正确')
       return
     }
+    
     if (s.selected[opts.id]) {
-      console.log('SeedsUI Info:您要选中的节点已经选中')
+      console.log('SeedsUI Tree:您要选中的节点已经选中')
       return
     }
     
     if (s.isSelected(opts.id, opts.parentid)) {
-      console.log('SeedsUI Info:您要选中的节点已经选中')
+      console.log('SeedsUI Tree:您要选中的节点已经选中')
       return
     }
 
@@ -336,11 +344,7 @@ var Tree = function (container, params) {
     if (!s.params.multiple) s.removeAllSelected()
 
     // bar上添加选中
-    if (s.bar) {
-      var barOption = s.createBarOption(opts.id, opts.name, opts.parentid)
-      s.bar.appendChild(barOption)
-      s.showBar()
-    }
+    s.addBarOption(opts)
 
     // tree中激活选中
     var treeOption = s.container.querySelector('[' + s.params.idAttr + '="' + opts.id + '"]')
@@ -349,7 +353,18 @@ var Tree = function (container, params) {
     // s.selected中添加选中
     s.selected[opts.id] = opts
 
-    if (s.params.onAddSelected) s.params.onAddSelected(s)
+    if (isClick && s.params.onChange) {
+      console.log('选中节点')
+      s.params.onChange(s)
+    }
+  }
+  // bar上添加选中
+  s.addBarOption = function (opts) {
+    if (s.bar) {
+      var barOption = s.createBarOption(opts.id, opts.name, opts.parentid)
+      s.bar.appendChild(barOption)
+      s.showBar()
+    }
   }
   // 显示选中项
   s.showBar = function () {
@@ -377,11 +392,6 @@ var Tree = function (container, params) {
       s.container[action]('touchend', s.onTouchEnd, false)
     } else {
       s.container[action]('click', s.onClickTree, false)
-    }
-    
-    // 点击选中容器
-    if (s.bar) {
-      s.bar[action]('click', s.onClickBar, false)
     }
   }
   // attach、dettach事件
@@ -482,7 +492,7 @@ var Tree = function (container, params) {
     */
     var opts = s.getDataByTarget(elLine)
     // 添加到s.selected
-    s.addSelected(opts)
+    s.addSelected(opts, true)
     // Callback onClickAdd
     if (s.params.onClickAdd) s.params.onClickAdd(opts, s)
   }
@@ -499,7 +509,7 @@ var Tree = function (container, params) {
     // 选中选中项
     var id = s.option.getAttribute(s.params.idAttr)
     var opts = s.selected[id]
-    s.removeSelected(id)
+    s.removeSelected(id, true)
     // 如果为空，则隐藏选中容器
     if (s.isEmptyJson(s.selected)) {
       if (s.bar) s.hideBar()

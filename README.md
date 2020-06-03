@@ -5506,7 +5506,12 @@ function getChildren (id) {
     
   })
 }
-
+const [list, setList] = useState([])
+  useEffect(() => {
+    setTimeout(() => {
+      setList(groupList)
+    }, 1000)
+  }, [])
 const [selected, setSelected] = useState(
   {
     '13ed5bf3-1b91-4fca-9303-ee8071b32154': {
@@ -5550,17 +5555,15 @@ function onData (option) {
   }
 }
 // 查看选中信息
-function onChange (e, value, selected) {
-  console.log(e)
-  console.log(value)
-  console.log(selected)
-  setSelected(selected)
+function onChange (e, value, options) {
+  console.log(value, options)
+  setSelected(options)
 }
 
 
 <div id="idTreeBar" className="tree-bar"></div>
 <Tree
-  list={groupList}
+  list={list}
   extend={extend}
   multiple
   checkbox
