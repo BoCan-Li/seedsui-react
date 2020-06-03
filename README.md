@@ -697,7 +697,6 @@ function showCustom () {
 }
 
 <Calendar
-  ref={refComponent}
   defaultDate={defaultDate}
   type={type}
   activeTo={activeTo}
@@ -2755,7 +2754,6 @@ function onChange (e, value, selected) {
 }
 
 <InputDistrict
-  ref={refComponent}
   value={value}
   onChange={onChange}
   placeholder="请选择"
@@ -3472,7 +3470,6 @@ function onChange(e, item, list) {
 }
 
 <Vott
-  ref={refComponent}
   style={{height: '700px'}}
   data={data}
   readOnly={readOnly}
@@ -3972,7 +3969,7 @@ function onChange (e, value, selected) {
   setSelected(selected);
 }
 
-<MenuTree ref={refComponent} list={list} selected={selected} onChange={onChange}/>
+<MenuTree list={list} selected={selected} onChange={onChange}/>
 <input type="button" value="置空" onClick={clearData}/>
 <input type="button" value="显示" onClick={addData}/>
 ```
@@ -5538,11 +5535,6 @@ function onCollapse () {
   setExtend(-1);
 }
 
-useEffect(() => {
-  console.log(refComponent)
-  console.log(refComponent2)
-}, [])
-
 // 添加数据时, 可手动修改它的渲染样式
 function onData (option) {
   if (option.isPeople) {
@@ -5568,7 +5560,6 @@ function onChange (e, value, selected) {
 
 <div id="idTreeBar" className="tree-bar"></div>
 <Tree
-  ref={refComponent}
   list={groupList}
   extend={extend}
   multiple

@@ -32,27 +32,6 @@ const Tree = forwardRef(({
   });
   const instance = useRef(null);
 
-  // useEffect(() => {
-  //   if (list && list.length) {
-  //     let data = Object.clone(list);
-  //     if (JSON.stringify(data).indexOf('"children"') !== -1) {
-  //       data = data.flattenTree()
-  //     }
-  //     // 设置已选中
-  //     if (selected && Object.values(selected).length) {
-  //       for (var id in selected) {
-  //         instance.current.addSelected(selected[id])
-  //       }
-  //     }
-  //     // 开始渲染
-  //     instance.current.setData(data);
-  //     instance.current.update();
-  //   } else {
-  //     instance.current.setData([]);
-  //     instance.current.update();
-  //   }
-  // }, [list])
-
   useEffect(() => {
     if (instance.current) return;
     // 更新数据
@@ -82,6 +61,7 @@ const Tree = forwardRef(({
       }
     }
     instance.current.update();
+    refEl.current.instance = instance;
   }, []) // eslint-disable-line
 
   useEffect(() => {
@@ -91,6 +71,28 @@ const Tree = forwardRef(({
       instance.current.collapseAll();
     }
   }, [extend])
+
+  useEffect(() => {
+    if (!instance.current) return;
+    if (list && list.length) {
+      let data = Object.clone(list);
+      if (JSON.stringify(data).indexOf('"children"') !== -1) {
+        data = data.flattenTree()
+      }
+      // 设置已选中
+      if (selected && Object.values(selected).length) {
+        for (var id in selected) {
+          instance.current.addSelected(selected[id])
+        }
+      }
+      // 开始渲染
+      instance.current.setData(data);
+      instance.current.update();
+    } else {
+      instance.current.setData([]);
+      instance.current.update();
+    }
+  }, [list])
 
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
