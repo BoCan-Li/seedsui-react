@@ -83,7 +83,9 @@ const InputText = forwardRef(({
   }
   // 修改值回调
   function change (e, val) {
-    e.target.value = val;
+    if (defaultValue || defaultValue === '') {
+      e.target.value = val;
+    }
     // 更新清空按钮
     updateState(val);
     // 更新自动扩充功能

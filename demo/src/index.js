@@ -8,7 +8,8 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Tree
+  Tree,
+  NumBox
 } from '../../src';
 
 const groupList = [
@@ -346,6 +347,7 @@ function onChange (e, value, options) {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
+      <NumBox digits={3} min={0} max={10} value="" style={{width: '100px'}}/>
     <div ref={refElBar} className="tree-bar"></div>
     <Tree
   list={list}

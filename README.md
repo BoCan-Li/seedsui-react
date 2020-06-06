@@ -3011,35 +3011,40 @@ fail = (e, error) => {
 <InputText
   type={类型 string, 默认'text'} // 与w3c的type一致: text | number | tel | password
   pre={是否启用自动扩充功能 bool, 默认无}
-  // 容器
-  onClick={点击容器 func(e, value), 默认无}
-  // 文本框
-  inputAttribute={文本框属性 object, 默认无}
-  autoFocus={自动获取焦点 bool, 默认false}
-  maxLength={文本框最大输入长度 string | number, 默认无}
-  min={文本框最小值 string | number, 默认无} // 日期或者数字框专用
-  digits={文本框截取小数 string | number, 默认false} // 日期或者数字框专用
-  readOnly={文本是否只读 bool, 默认无}
-  disabled={文本是否禁用 bool, 默认无}
-
-  value={值 string | number, 默认''}
-  placeholder={占位符 string, 默认''}
+  readOnly={是否只读 bool, 默认无}
+  disabled={是否禁用 bool, 默认无}
   
-  // 文本框事件
-  onChange={值改变 func(e, value), 默认无}
-  onBlur={失去焦点 func(e, value), 默认无}
-  onFocus={获取焦点 func(e, value), 默认无}
+  // 文本框
+  inputAttribute={文本框属性 object, 默认无} // className默认为'numbox-input'
+  value={值 string | number, 默认无}
+  defaultValue={值 string | number, 默认无}
+  digits={文本框截取小数 string | number, 默认无}
+  max={最大值 string | number, 默认无}
+  min={最小值 string | number, 默认无}
+  placeholder={占位符 string, 默认''}
+  maxLength={输入长度 string, 默认'16'}
+  readOnly={是否只读 bool, 默认无}
+  required={是否必填 bool, 默认true} // 如果设置必填,则框内一定有值,默认为最小值或者0
+
+  // 自动获取焦点
+  autoFocus={渲染时自动获取焦点 bool, 默认false}
+  autoSelect={渲染时自动选中 bool, 默认false}
 
   // 左右图标
-  liconAttribute={左图标属性 object, 默认无}
   licon={左图标 node, 默认无}
-
-  riconAttribute={右图标属性 object, 默认无}
+  liconAttribute={左图标属性 object, 默认无}
   ricon={右图标 node, 默认无}
+  riconAttribute={右图标属性 object, 默认无}
 
   // 清除按钮
   clear={清除 bool | func(e, ''), 默认无}
   clearAttribute={清除图标属性 object, 默认无}
+
+  // events
+  onClick={点击容器 func(e), 默认无}
+  onChange={值发生变化 func(e, value), 默认无}
+  onBlur={失去焦点 func(e, value), 默认无}
+  onFocus={获取焦点 func(e, value), 默认无}
 
   // 右侧内容
   rcaption={右侧内容 node, 默认无}
@@ -4024,6 +4029,7 @@ import Notice from 'seedsui-react/lib/Notice';
 ### 属性
 ```javascript
 <NumBox
+  readOnly={是否只读 bool, 默认无}
   disabled={是否禁用 bool, 默认无}
 
   // 加减号
@@ -4033,6 +4039,7 @@ import Notice from 'seedsui-react/lib/Notice';
   // 文本框
   inputAttribute={文本框属性 object, 默认无} // className默认为'numbox-input'
   value={值 string | number, 默认无}
+  defaultValue={值 string | number, 默认无}
   digits={文本框截取小数 string | number, 默认无}
   max={最大值 string | number, 默认无}
   min={最小值 string | number, 默认无}
@@ -4060,7 +4067,6 @@ import Notice from 'seedsui-react/lib/Notice';
   onChange={值发生变化 func(e, value), 默认无}
   onBlur={失去焦点 func(e, value), 默认无}
   onFocus={获取焦点 func(e, value), 默认无}
-  fail={值发生变化 func({errMsg:''}), 默认无}
   {...others}
 />
 ```

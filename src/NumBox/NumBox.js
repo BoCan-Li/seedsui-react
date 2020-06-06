@@ -34,7 +34,6 @@ const NumBox = forwardRef(({
   onChange,
   onBlur,
   onFocus,
-  onError,
   ...others
 }, ref) =>  {
   const refEl = useRef(null)
@@ -60,12 +59,12 @@ const NumBox = forwardRef(({
 
   // 更新禁用状态
   function updateState (val) {
-    if (val && !isNaN(min) && min - val >= 0) {
+    if (!isNaN(min) && !isNaN(val) && val <= min) {
       setMinDisabled(true);
     } else {
       setMinDisabled(false);
     }
-    if (val && !isNaN(max) && max - val <= 0) {
+    if (!isNaN(max) && !isNaN(val) && val >= max) {
       setMaxDisabled(true);
     } else {
       setMaxDisabled(false);
@@ -75,6 +74,27 @@ const NumBox = forwardRef(({
     } else {
       setClearShow(false);
     }
+  }
+
+  function correctNumber (val) {
+    // 最大长度
+    if (maxLength && val && val.length > maxLength) {
+      val = val.substring(0, maxLength)
+    }
+    // 小数位截取
+    if (!isNaN(digits)) {
+      if (String(val || '').indexOf('.') !== -1) {
+        val = val.substring(0, val.indexOf('.') + Number(digits) + 1)
+      }
+    }
+    // 输入时只校验最大值、小数点、最大长度、返回错误
+    if (!isNaN(max) && !isNaN(val)) {
+      if (val > max) val = max;
+    }
+    if (!isNaN(min) && !isNaN(val)) {
+      if (val < min) val = min;
+    }
+    return val;
   }
 
   // 获取焦点时, 如果readOnly或者disabled时, 需要立即失去焦点, 解决ios会出现底栏的问题
@@ -95,7 +115,7 @@ const NumBox = forwardRef(({
     //   refElInput.current.value = value;
     // }
     // 失去焦点时只校验非空、最小值
-    const val = Math.Calc.correctNumber(e.target.value, {required, min});
+    const val = correctNumber(e.target.value);
     if (val !== '' + e.target.value) {
       change(e, val);
     }
@@ -107,25 +127,22 @@ const NumBox = forwardRef(({
     refElInput.current.focus();
     if (autoSelect) refElInput.current.select();
   }
-  function error (err) {
-    if (onError) {
-      onError({target: refEl.current}, err)
-    }
-  }
   // 修改值回调
   function change (e, val) {
-    e.target.value = val;
+    if (defaultValue || defaultValue === '') {
+      e.target.value = val;
+    }
     updateState(val);
     if (onChange) onChange(e, val);
   }
+  
   // 修改值
   function changeHandler (e) {
-    let val = ''
+    let val = e.target.value;
     if (e.target.validity.badInput) {
       val = '';
     } else {
-      // 输入时只校验最大值、小数点、最大长度、返回错误
-      val = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError: error});
+      val = correctNumber(val);
     }
     // Callback
     change(e, val);
@@ -137,7 +154,7 @@ const NumBox = forwardRef(({
   // 点击减
   function clickMinus (e) {
     let event = {target: refElInput.current}
-    let val = Math.Calc.correctNumber(Math.Calc.subtract(refElInput.current.value, 1), {max, digits, maxLength, fail: error});
+    let val = correctNumber(Math.Calc.subtract(refElInput.current.value, 1));
     // Callback
     change(event, val);
     if (minusAttribute.onClick) minusAttribute.onClick(e, val);
@@ -146,7 +163,7 @@ const NumBox = forwardRef(({
   // 点击加
   function clickPlus (e) {
     let event = {target: refElInput.current}
-    let val = Math.Calc.correctNumber(Math.Calc.add(refElInput.current.value, 1), {max, digits, maxLength, fail: error});
+    let val = correctNumber(Math.Calc.add(refElInput.current.value, 1));
     // Callback
     change(event, val);
     if (plusAttribute.onClick) plusAttribute.onClick(e, val);
@@ -160,11 +177,11 @@ const NumBox = forwardRef(({
     if (clear && target.classList.contains('clearicon')) {
       clickClear(e);
     }
-    if (liconAttribute.onClick && target.classList.contains('licon')) {
+    if (liconAttribute && liconAttribute.onClick && target.classList.contains('licon')) {
       liconAttribute.onClick(e, refElInput.current.value);
       return;
     }
-    if (riconAttribute.onClick && target.classList.contains('ricon')) {
+    if (riconAttribute && riconAttribute.onClick && target.classList.contains('ricon')) {
       riconAttribute.onClick(e, refElInput.current.value);
       return;
     }
