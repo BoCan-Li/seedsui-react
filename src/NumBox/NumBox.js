@@ -1,320 +1,252 @@
 // require PrototypeMath.js, 用于解决加减法精度丢失的问题
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useState} from 'react';
 
-export default class NumBox extends Component {
-  static propTypes = {
-    // 容器
-    disabled: PropTypes.bool,
-    // 加减号
-    plusAttribute: PropTypes.object,
-    minusAttribute: PropTypes.object,
-    // 文本框
-    inputAttribute: PropTypes.object,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    digits: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    max: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    min: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    placeholder: PropTypes.string,
-    maxLength: PropTypes.string,
-    readOnly: PropTypes.bool,
-    required: PropTypes.bool, // 设置非空时, 会自动补一个合法值
-    // 自动获取焦点
-    autoFocus: PropTypes.bool, // 渲染时自动获取焦点
-    autoSelect: PropTypes.bool, // 渲染时自动选中
-    // 左右图标
-    licon: PropTypes.node,
-    liconAttribute: PropTypes.object,
-    ricon: PropTypes.node,
-    riconAttribute: PropTypes.object,
-    // 清除按键
-    clear: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.func
-    ]),
-    clearAttribute: PropTypes.object,
-    // events
-    onClick: PropTypes.func,
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-    onFocus: PropTypes.func,
-    onError: PropTypes.func
-  }
-  static defaultProps = {
-    maxLength: '16'
-  }
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount () {
-    if (this.props.autoFocus) {
-      this.autoFocus();
+const NumBox = forwardRef(({
+  // 容器
+  disabled,
+  // 加减号
+  plusAttribute = {},
+  minusAttribute = {},
+  // 文本框
+  inputAttribute = {},
+  defaultValue,
+  value,
+  digits,
+  max,
+  min,
+  placeholder,
+  maxLength = '16',
+  readOnly,
+  required, // 设置非空时, 会自动补一个合法值
+  // 自动获取焦点
+  autoFocus, // 渲染时自动获取焦点
+  autoSelect, // 渲染时自动选中
+  // 左右图标
+  licon,
+  liconAttribute,
+  ricon,
+  riconAttribute,
+  // 清除按键
+  clear,
+  clearAttribute,
+  // events
+  onClick,
+  onChange,
+  onBlur,
+  onFocus,
+  onError,
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  const refElInput = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+
+  useEffect(() => {
+    if (autoFocus) {
+      focus();
+    }
+  }, []) // eslint-disable-line
+
+  const [minDisabled, setMinDisabled] = useState(false);
+  const [maxDisabled, setMaxDisabled] = useState(false);
+  const [clearShow, setClearShow] = useState(false);
+
+  useEffect(() => {
+    let val = refElInput.current.value || '';
+    updateState(val);
+  }, []) // eslint-disable-line
+
+  // 更新禁用状态
+  function updateState (val) {
+    if (val && !isNaN(min) && min - val >= 0) {
+      setMinDisabled(true);
+    } else {
+      setMinDisabled(false);
+    }
+    if (val && !isNaN(max) && max - val <= 0) {
+      setMaxDisabled(true);
+    } else {
+      setMaxDisabled(false);
+    }
+    if (val) {
+      setClearShow(true);
+    } else {
+      setClearShow(false);
     }
   }
-  // 失去焦点
-  onBlur = (e) => {
-    const {
-      readOnly,
-      disabled,
-      required,
-      value,
-      min,
-      onChange,
-      onBlur
-    } = this.props;
-    if (readOnly || disabled) {
-      return;
-    }
-    // 如果value和框内值不等, 设置为相等
-    if (this.$input && this.$input.value !== value) {
-      this.$input.value = value;
-    }
-    // 失去焦点时只校验非空、最小值
-    const val = Math.Calc.correctNumber(value, {required, min});
-    if (onChange && '' + val !== '' + value) onChange(e, val);
-    if (onBlur) onBlur(e, val);
-  };
-  // 获取焦点
-  onFocus = (e) => {
-    const {readOnly, disabled, onFocus} = this.props;
+
+  // 获取焦点时, 如果readOnly或者disabled时, 需要立即失去焦点, 解决ios会出现底栏的问题
+  function focusHandler (e) {
     if (readOnly || disabled) {
       e.target.blur();
       return;
     }
-    if (onFocus) onFocus(e, this.props.value);
+    if (onFocus) onFocus(e);
   };
+  // 失去焦点需要校验值是否正确
+  function blurHandler (e) {
+    if (readOnly || disabled) {
+      return;
+    }
+    // 如果value和框内值不等, 设置为相等
+    // if (refElInput.current && refElInput.current.value !== value) {
+    //   refElInput.current.value = value;
+    // }
+    // 失去焦点时只校验非空、最小值
+    const val = Math.Calc.correctNumber(e.target.value, {required, min});
+    if (val !== '' + e.target.value) {
+      change(e, val);
+    }
+    if (onBlur) onBlur(e);
+  }
   // 点击加减号清除时获取焦点
-  autoFocus = () => {
-    if (this.props.disabled || this.props.readOnly || !this.$input) return;
-    this.$input.focus();
-    if (this.props.autoSelect) this.$input.select();
-    // 修复兼容ios12的bug, 与全局的回弹并不冲突, 这里主要解决点击加减号时获取焦点, 不回弹的问题
-    var iosExp = navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
-    if (iosExp && iosExp[1] && iosExp[1] > '12') {
-      // 兼容输入法把页面顶上去, 不回弹的问题
-      if (window.inputToggleTimeout) {
-        window.clearTimeout(window.inputToggleTimeout);
-      }
-      if (!this.$input.getAttribute('ios-bug-blur')) {
-        this.$input.setAttribute('ios-bug-blur', '1');
-        this.$input.addEventListener('blur', () => {
-          window.inputToggleTimeout = window.setTimeout(() => {
-            document.getElementById('root').scrollIntoView();
-          }, 100);
-        }, false);
-      }
+  function focus () {
+    if (disabled || readOnly || !refElInput.current) return;
+    refElInput.current.focus();
+    if (autoSelect) refElInput.current.select();
+  }
+  function error (err) {
+    if (onError) {
+      onError({target: refEl.current}, err)
     }
   }
-  error = (err) => {
-    if (this.props.onError) {
-      this.props.onError({target: this.$el}, err)
-    }
+  // 修改值回调
+  function change (e, val) {
+    e.target.value = val;
+    updateState(val);
+    if (onChange) onChange(e, val);
   }
   // 修改值
-  onChange = (e) => {
+  function changeHandler (e) {
+    let val = ''
     if (e.target.validity.badInput) {
-      e.target.value = '';
+      val = '';
+    } else {
+      // 输入时只校验最大值、小数点、最大长度、返回错误
+      val = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError: error});
     }
-    // 输入时只校验最大值、小数点、最大长度、返回错误
-    const {max, digits, maxLength} = this.props;
-    var value = Math.Calc.correctNumber(e.target.value, {max, digits, maxLength, onError: error});
-    if (this.props.onChange) this.props.onChange(e, value);
+    // Callback
+    change(e, val);
   };
   // 点击文本框, 逢0清空
-  onClickInput = (e) => {
-    const {
-      inputAttribute = {}
-    } = this.props;
-    var value = e.target.value;
-    if (value - 0 === 0) {
-      e.target.value = '';
-    }
+  function clickInput (e) {
     if (inputAttribute.onClick) inputAttribute.onClick(e, value);
   }
   // 点击减
-  onClickMinus = (e) => {
-    const {
-      onChange,
-      minusAttribute = {}
-    } = this.props;
-    let value = Math.Calc.correctNumber(Math.Calc.subtract(this.$input.value, 1), this.props);
+  function clickMinus (e) {
+    let event = {target: refElInput.current}
+    let val = Math.Calc.correctNumber(Math.Calc.subtract(refElInput.current.value, 1), {max, digits, maxLength, fail: error});
     // Callback
-    if (onChange) onChange(e, value);
-    if (minusAttribute.onClick) minusAttribute.onClick(e, value);
-    this.autoFocus();
+    change(event, val);
+    if (minusAttribute.onClick) minusAttribute.onClick(e, val);
+    focus();
   };
   // 点击加
-  onClickPlus = (e) => {
-    const {
-      onChange,
-      plusAttribute = {}
-    } = this.props;
-    let value = Math.Calc.correctNumber(Math.Calc.add(this.$input.value, 1), this.props);
+  function clickPlus (e) {
+    let event = {target: refElInput.current}
+    let val = Math.Calc.correctNumber(Math.Calc.add(refElInput.current.value, 1), {max, digits, maxLength, fail: error});
     // Callback
-    if (onChange) onChange(e, value);
-    if (plusAttribute.onClick) plusAttribute.onClick(e, value);
-    this.autoFocus();
+    change(event, val);
+    if (plusAttribute.onClick) plusAttribute.onClick(e, val);
+    focus();
   };
   // 点击容器
-  onClick = (e) => {
+  function click (e) {
     e.stopPropagation();
-    const {
-      clear, onClick, liconAttribute = {}, riconAttribute = {}
-    } = this.props;
-    if (this.props.disabled) return;
+    if (disabled) return;
     var target = e.target;
     if (clear && target.classList.contains('clearicon')) {
-      this.onClear(e);
+      clickClear(e);
     }
     if (liconAttribute.onClick && target.classList.contains('licon')) {
-      liconAttribute.onClick(e, this.$input.value);
+      liconAttribute.onClick(e, refElInput.current.value);
       return;
     }
     if (riconAttribute.onClick && target.classList.contains('ricon')) {
-      riconAttribute.onClick(e, this.$input.value);
+      riconAttribute.onClick(e, refElInput.current.value);
       return;
     }
     if (target.classList.contains('numbox-input')) {
-      this.onClickInput(e);
+      clickInput(e);
       return;
     }
     if (target.classList.contains('numbox-button-plus')) {
-      this.onClickPlus(e);
+      clickPlus(e);
       return;
     }
     if (target.classList.contains('numbox-button-minus')) {
-      this.onClickMinus(e);
+      clickMinus(e);
       return;
     }
-    if (onClick) onClick(e, this.$input.value);
+    if (onClick) onClick(e, refElInput.current.value);
   }
   // 点击清除
-  onClear = (e) => {
-    this.autoFocus();
-    // 赋值
-    if (this.props.clear && typeof this.props.clear === 'function') this.props.clear(e, '');
-    if (this.props.onChange) {
-      this.props.onChange(e, '');
-    }
+  function clickClear (e) {
+    focus();
+    let event = {target: refElInput.current};
+    if (clear && typeof clear === 'function') clear(event, '');
+    // Callback
+    change(event, '');
     e.stopPropagation();
   }
   // render
-  getInputDOM = () => {
-    const {
-      disabled,
-      readOnly,
-      inputAttribute = {},
-      value,
-      placeholder,
-      max,
-      min
-    } = this.props;
+  function getInputDOM () {
     return <input
-      ref={(el) => {this.$input = el;}}
+      ref={refElInput}
       type="number"
       {...inputAttribute}
       className={`numbox-input${inputAttribute.className ? ' ' + inputAttribute.className : ''}`}
+      defaultValue={defaultValue}
       value={value}
       min={min}
       max={max}
+      maxLength={maxLength}
       disabled={disabled}
       readOnly={readOnly}
       placeholder={placeholder}
-      onChange={this.onChange}
-      onFocus={this.onFocus}
-      onBlur={this.onBlur}
+      onChange={changeHandler}
+      onFocus={focusHandler}
+      onBlur={blurHandler}
     />;
   }
+
   // 过滤已经回调的属性
-  filterProps = (props) => {
-    if (!props) return props;
-    var propsed = {}
-    for (let n in props) {
-      if (n !== 'onClick') {
-        propsed[n] = props[n]
-      }
-    }
-    return propsed;
+  function filterProps (props) {
+    if (!props) return {};
+    const {onClick, ...otherProps} = props;
+    return {...otherProps};
   }
-  render() {
-    let {
-      // 容器
-      disabled,
-      // 加减号
-      plusAttribute = {},
-      minusAttribute = {},
-      // 文本框
-      inputAttribute,
-      value,
-      digits,
-      max,
-      min,
-      placeholder,
-      maxLength,
-      readOnly,
-      required, // 设置非空时, 会自动补一个合法值
-      // 自动获取焦点
-      autoFocus, // 渲染时自动获取焦点
-      autoSelect, // 渲染时自动选中
-      // 左右图标
-      licon,
-      liconAttribute,
-      ricon,
-      riconAttribute,
-      // 清除按键
-      clear,
-      clearAttribute,
-      // events
-      onClick,
-      onChange,
-      onBlur,
-      onFocus,
-      onError,
-      ...others
-    } = this.props;
-    // 剔除掉onClick事件, 因为在容器onClick已经回调了
-    liconAttribute = this.filterProps(liconAttribute)
-    riconAttribute = this.filterProps(riconAttribute)
-    clearAttribute = this.filterProps(clearAttribute)
-    return (
-      <div ref={el => {this.$el = el;}} {...others} disabled={(min >= max) || disabled} className={`numbox${others.className ? ' ' + others.className : ''}`} onClick={this.onClick}>
-        <input
-          ref={(el) => {this.$minus = el;}}
-          value="-"
-          disabled={!isNaN(min) ? min - value >= 0 : false}
-          {...plusAttribute}
-          type="button"
-          className={`numbox-button numbox-button-minus${plusAttribute.className ? ' ' + plusAttribute.className : ''}`}
-        />
-        {licon && licon}
-        {liconAttribute && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
-        {this.getInputDOM()}
-        {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-        {clear && value && !readOnly && !disabled && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : 'ricon close-icon-clear size18'}`}></i>}
-        {riconAttribute && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
-        {ricon && ricon}
-        <input
-          ref={(el) => {this.$plus = el;}}
-          value="+"
-          disabled={!isNaN(max) ? max - value <= 0 : false}
-          {...minusAttribute}
-          type="button"
-          className={`numbox-button numbox-button-plus${minusAttribute.className ? ' ' + minusAttribute.className : ''}`}
-        />
-      </div>
-    );
-  }
-}
+  // 剔除掉onClick事件, 因为在容器onClick已经回调了
+  liconAttribute = filterProps(liconAttribute)
+  riconAttribute = filterProps(riconAttribute)
+  clearAttribute = filterProps(clearAttribute)
+  return (
+    <div ref={refEl} {...others} disabled={(min >= max) || disabled} className={`numbox${others.className ? ' ' + others.className : ''}`} onClick={click}>
+      <input
+        value="-"
+        disabled={minDisabled}
+        {...plusAttribute}
+        type="button"
+        className={`numbox-button numbox-button-minus${plusAttribute.className ? ' ' + plusAttribute.className : ''}`}
+      />
+      {licon && licon}
+      {liconAttribute && !Object.isEmptyObject(liconAttribute) && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+      {getInputDOM()}
+      {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
+      {clearShow && !readOnly && !disabled && clear && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+      {riconAttribute && !Object.isEmptyObject(riconAttribute) && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
+      {ricon && ricon}
+      <input
+        value="+"
+        disabled={maxDisabled}
+        {...minusAttribute}
+        type="button"
+        className={`numbox-button numbox-button-plus${minusAttribute.className ? ' ' + minusAttribute.className : ''}`}
+      />
+    </div>
+  );
+})
+
+export default NumBox
