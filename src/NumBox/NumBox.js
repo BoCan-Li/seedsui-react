@@ -219,9 +219,9 @@ const NumBox = forwardRef(({
     return {...otherProps};
   }
   // 剔除掉onClick事件, 因为在容器onClick已经回调了
-  liconAttribute = filterProps(liconAttribute)
-  riconAttribute = filterProps(riconAttribute)
-  clearAttribute = filterProps(clearAttribute)
+  let otherLiconAttribute = filterProps(liconAttribute)
+  let otherRiconAttribute = filterProps(riconAttribute)
+  let otherClearAttribute = filterProps(clearAttribute)
   return (
     <div ref={refEl} {...others} disabled={(min >= max) || disabled} className={`numbox${others.className ? ' ' + others.className : ''}`} onClick={click}>
       <input
@@ -232,11 +232,11 @@ const NumBox = forwardRef(({
         className={`numbox-button numbox-button-minus${plusAttribute.className ? ' ' + plusAttribute.className : ''}`}
       />
       {licon && licon}
-      {liconAttribute && !Object.isEmptyObject(liconAttribute) && <i {...liconAttribute} className={`licon icon${liconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
+      {otherLiconAttribute && !Object.isEmptyObject(otherLiconAttribute) && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
       {getInputDOM()}
       {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-      {clearShow && !readOnly && !disabled && clear && <i {...clearAttribute} className={`icon clearicon${clearAttribute.className ? ' ' + clearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
-      {riconAttribute && !Object.isEmptyObject(riconAttribute) && <i {...riconAttribute} className={`ricon icon${riconAttribute.className ? ' ' + riconAttribute.className : ''}`}></i>}
+      {clearShow && !readOnly && !disabled && clear && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+      {otherRiconAttribute && !Object.isEmptyObject(otherRiconAttribute) && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
       {ricon && ricon}
       <input
         value="+"
