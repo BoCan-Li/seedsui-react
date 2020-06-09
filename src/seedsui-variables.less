@@ -1044,6 +1044,21 @@ a {
     .flex-middle;
     .flex-center;
     // 颜色
+    &.white .bi-doughtut-circle{
+      border: @bi-doughtut-line-width solid fade(white, 20%);
+    }
+    &.white .bi-doughtut-caption{
+      color: white;
+    }
+    &.white .bi-doughtut-circle.left{
+      border-bottom: @bi-doughtut-line-width solid white;
+      border-left: @bi-doughtut-line-width solid white; 
+    }
+    &.white .bi-doughtut-circle.right{
+      border-top: @bi-doughtut-line-width solid white;
+      border-right: @bi-doughtut-line-width solid white;
+    }
+
     &.info .bi-doughtut-circle{
       border: @bi-doughtut-line-width solid fade(@info-bg, 20%);
     }
@@ -4435,24 +4450,24 @@ a {
 
   @-webkit-keyframes loading-floating-blade-fade {
     0% {
-        opacity: 0.85;
+      opacity: 0.85;
     }
     50% {
-        opacity: 0.25;
+      opacity: 0.25;
     }
     100% {
-        opacity: 0.25;
+      opacity: 0.25;
     }
   }
   @keyframes loading-floating-blade-fade {
     0% {
-        opacity: 0.85;
+      opacity: 0.85;
     }
     50% {
-        opacity: 0.25;
+      opacity: 0.25;
     }
     100% {
-        opacity: 0.25;
+      opacity: 0.25;
     }
   }
   .loading-floating-caption {

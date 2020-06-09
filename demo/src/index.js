@@ -8,22 +8,36 @@ import {
   Titlebar,
   Bridge,
   Container,
-  InputText
+  BiDoughnut
 } from '../../src';
 
 function Demo () {
+  const [times, setTimes] = useState(2);
 
-  const [show, setShow] = useState(false); // 1.全部展开 -1.全部收缩 0.不工作
-  function showNumbox () {
-    setShow(true);
-  }
+  // setTimeout(() => {
+  //   setTimes(times + 1)
+  // }, 1000);
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      {show && <InputText digits={3} min={0} max={10} defaultValue={2} style={{width: '100px'}} clear/>}
-      <input type="button" className="button lg" value="查看选中" onClick={showNumbox}/>
+      <div style={{background: 'black'}}>
+        <img style={{width: '86px', height: '86px', opacity: '0.5'}} src={`https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg`}/>
+        <BiDoughnut className="white" borderWidth={2} style={{position: 'absolute', top: '30px', left: '30px'}} rotate={360} duration={20000} size={30}>
+          a
+        </BiDoughnut>
+        {/* <div className="loading-pie">
+          <div className="loading-pie-left">
+            <div className={`loading-pie-left-circle${times >= 4 ? ' pending' : ''}`}></div>
+          </div>
+          <div className="loading-pie-right">
+            <div className="loading-pie-right-circle"/>
+          </div>
+        </div> */}
+        <div className="loading-pie-wait">识别中...</div>
+      </div>
+      
     </Container>
   </Page>
 }

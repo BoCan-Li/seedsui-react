@@ -1,32 +1,24 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { forwardRef, useRef, useImperativeHandle, useEffect } from 'react';
 
-export default class BiDoughnut extends Component {
-  static propTypes = {
-    style: PropTypes.object,
-    lineWidth: PropTypes.number, // 边框宽度
-    size: PropTypes.number, // 大小,px
-    duration: PropTypes.number, // 时长
-    rotate: PropTypes.number, // 最大360
-    delay: PropTypes.number, // 延时
-    captionAttribute: PropTypes.object,
-    children: PropTypes.node
-  };
+const BiDoughnut = forwardRef(({
+  style,
+  borderWidth = 3, // 边框宽度
+  size = 50, // 大小,px
+  duration = 1000, // 时长
+  rotate = 0, // 最大360
+  delay = 100,  // 延时
+  captionAttribute = {},
+  children,
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  const refElLeftCircle = useRef(null)
+  const refElRightCircle = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
 
-  static defaultProps = {
-    lineWidth: 3,
-    size: 50,
-    duration: 1000,
-    rotate: 0,
-    delay: 100,
-    className: 'disabled'
-  }
-
-  constructor(props, context) {
-    super(props, context);
-  }
-  getDuration = () => {
-    const {duration, rotate} = this.props;
+  function getDuration () {
     const correctRotate = rotate > 360 ? 360 : rotate
     const duration1 = duration / 360;
     const durationRotate = duration1 * correctRotate;
@@ -43,8 +35,7 @@ export default class BiDoughnut extends Component {
       durationRight: durationRight
     }
   }
-  getRotate = () => {
-    const {rotate} = this.props;
+  function getRotate () {
     let rotateLeft = -135; // 左circle旋转角度
     let rotateRight = -135 + rotate; // 右circle旋转角度
     if (rotate > 180) {
@@ -57,57 +48,50 @@ export default class BiDoughnut extends Component {
     }
   }
   // 只有延迟100毫秒动画才会生效
-  aniRotate = () => {
+  function aniRotate () {
     // 时长与延时
-    const duration = this.getDuration();
+    const duration = getDuration();
     const durationLeft = duration.durationLeft;
     const delayLeft = duration.delayLeft;
     const durationRight = duration.durationRight;
     // 旋转
-    const rotate = this.getRotate();
+    const rotate = getRotate();
     let rotateLeft = rotate.rotateLeft;
     let rotateRight = rotate.rotateRight;
     setTimeout(() => {
-      if (this.$elLeftCircle) {
-        this.$elLeftCircle.style.WebkitTransitionDuration = `${durationLeft}ms`;
-        this.$elLeftCircle.style.WebkitTransitionDelay = `${delayLeft}ms`;
+      if (refElLeftCircle.current) {
+        refElLeftCircle.current.style.WebkitTransitionDuration = `${durationLeft}ms`;
+        refElLeftCircle.current.style.WebkitTransitionDelay = `${delayLeft}ms`;
       }
-      if (this.$elRightCircle) {
-        this.$elRightCircle.style.WebkitTransitionDuration = `${durationRight}ms`;
+      if (refElRightCircle.current) {
+        refElRightCircle.current.style.WebkitTransitionDuration = `${durationRight}ms`;
       }
-      if (this.$elLeftCircle) {
-        this.$elLeftCircle.style.WebkitTransform = `rotate(${rotateLeft}deg)`;
+      if (refElLeftCircle.current) {
+        refElLeftCircle.current.style.WebkitTransform = `rotate(${rotateLeft}deg)`;
       }
-      if (this.$elRightCircle) {
-        this.$elRightCircle.style.WebkitTransform = `rotate(${rotateRight}deg)`;
+      if (refElRightCircle.current) {
+        refElRightCircle.current.style.WebkitTransform = `rotate(${rotateRight}deg)`;
       }
-    }, this.props.delay);
+    }, delay);
   }
-  render() {
-    const {
-      style,
-      lineWidth,
-      size,
-      duration,
-      rotate,
-      delay,
-      className,
-      captionAttribute = {},
-      children,
-      ...others
-    } = this.props;
-    // 动画旋转
-    this.aniRotate();
-    return (
-      <div {...others} className={`bi-doughtut${others.className ? ' ' + others.className : ''}`} style={Object.assign({width: `${size}px`, height: `${size}px`}, style || {})}>
-        <div className="bi-doughtut-wrapper left">
-          <div ref={(el) => {this.$elLeftCircle = el;}} className="bi-doughtut-circle left" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
-        </div>
-        <div className="bi-doughtut-wrapper right">
-          <div ref={(el) => {this.$elRightCircle = el;}} className="bi-doughtut-circle right" style={{borderWidth: `${lineWidth}px`, width: `${size - (lineWidth * 2)}px`, height: `${size - (lineWidth * 2)}px`}}></div>
-        </div>
-        <div {...captionAttribute} className={`bi-doughtut-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{children}</div>
+  // 动画旋转
+  aniRotate();
+  return (
+    <div ref={refEl} {...others} className={`bi-doughtut${others.className ? ' ' + others.className : ''}`} style={Object.assign({width: `${size}px`, height: `${size}px`}, style || {})}>
+      <div className="bi-doughtut-wrapper left">
+        <div ref={refElLeftCircle} className="bi-doughtut-circle left" style={{borderWidth: `${borderWidth}px`, width: `${size - (borderWidth * 2)}px`, height: `${size - (borderWidth * 2)}px`}}></div>
       </div>
-    );
-  }
-}
+      <div className="bi-doughtut-wrapper right">
+        <div ref={refElRightCircle} className="bi-doughtut-circle right" style={{borderWidth: `${borderWidth}px`, width: `${size - (borderWidth * 2)}px`, height: `${size - (borderWidth * 2)}px`}}></div>
+      </div>
+      <div
+        {...captionAttribute}
+        className={`bi-doughtut-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+})
+
+export default BiDoughnut;

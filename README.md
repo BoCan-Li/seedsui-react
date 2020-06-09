@@ -530,7 +530,7 @@ import BiClock from 'seedsui-react/lib/BiClock';
 ### 属性
 ```javascript
 <BiDoughnut
-  lineWidth={边框宽度px number, 默认3}
+  borderWidth={边框宽度px number, 默认3}
   size={宽高大小px number, 默认50}
   duration={动画时长 number, 默认1000}
   rotate={旋转角度 number, 默认0, 最大360}
