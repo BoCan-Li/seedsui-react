@@ -57,6 +57,12 @@ const InputText = forwardRef(({
     }
   }, []) // eslint-disable-line
 
+  useEffect(() => {
+    if (refElInput.current) {
+      refElInput.current.value = defaultValue;
+    }
+  }, [defaultValue])
+
   const [clearShow, setClearShow] = useState(false);
 
   // 更新清除按钮

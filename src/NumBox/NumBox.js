@@ -57,6 +57,12 @@ const NumBox = forwardRef(({
     updateState(val);
   }, []) // eslint-disable-line
 
+  useEffect(() => {
+    if (refElInput.current) {
+      refElInput.current.value = defaultValue;
+    }
+  }, [defaultValue])
+
   // 更新禁用状态
   function updateState (val) {
     if (!isNaN(min) && !isNaN(val) && val <= min) {
