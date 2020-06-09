@@ -58,8 +58,10 @@ const NumBox = forwardRef(({
   }, []) // eslint-disable-line
 
   useEffect(() => {
-    if (refElInput.current) {
-      refElInput.current.value = defaultValue;
+    if ((defaultValue || defaultValue === '') && refElInput.current) {
+      if (refElInput.current.value !== defaultValue) {
+        refElInput.current.value = defaultValue;
+      }
     }
   }, [defaultValue])
 
@@ -82,14 +84,16 @@ const NumBox = forwardRef(({
     }
   }
 
-  function correctNumber (val) {
+  function correctNumber (originVal) {
+    let val = originVal;
+    if (typeof val === 'number') val = String(val)
     // 最大长度
     if (maxLength && val && val.length > maxLength) {
       val = val.substring(0, maxLength)
     }
     // 小数位截取
     if (!isNaN(digits)) {
-      if (String(val || '').indexOf('.') !== -1) {
+      if (val.indexOf('.') !== -1) {
         val = val.substring(0, val.indexOf('.') + Number(digits) + 1)
       }
     }

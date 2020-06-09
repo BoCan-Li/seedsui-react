@@ -58,8 +58,11 @@ const InputText = forwardRef(({
   }, []) // eslint-disable-line
 
   useEffect(() => {
-    if (refElInput.current) {
-      refElInput.current.value = defaultValue;
+    if ((defaultValue || defaultValue === '') && refElInput.current) {
+      if (refElInput.current.value !== defaultValue) {
+        console.log(defaultValue)
+        refElInput.current.value = defaultValue;
+      }
     }
   }, [defaultValue])
 
@@ -132,10 +135,9 @@ const InputText = forwardRef(({
       e.stopPropagation();
     }
   }
-  // 文本框事件
-  function changeHandler (e) {
-    var target = e.target;
-    var val = target.value;
+  function correctNumber (originVal) {
+    let val = originVal;
+    if (typeof val === 'number') val = String(val)
     // 最大长度
     if (maxLength && val && val.length > maxLength) {
       val = val.substring(0, maxLength)
@@ -153,6 +155,12 @@ const InputText = forwardRef(({
     if (!isNaN(min) && !isNaN(val)) {
       if (val < min) val = min;
     }
+    return val;
+  }
+  // 文本框事件
+  function changeHandler (e) {
+    var target = e.target;
+    var val = correctNumber(target.value);
     // onChange
     change(e, val);
   }
