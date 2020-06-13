@@ -1,4 +1,4 @@
-import './seedsui.less';
+import './index.less';
 
 import './PrototypeArray.js';
 import './PrototypeMath.js';

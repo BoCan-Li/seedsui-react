@@ -1,93 +1,131 @@
-// 将'@import "' 替换为 '@import "../../../node_modules/seedsui-react/lib/' 使用
-// 公共框
-@import "global/global.less";
-@import "global/shape.less"; // 不常用
+// 尺寸
+@px-scale:1;
+@1px:1px * @px-scale;
+@2px:2px * @px-scale;
+@3px:3px * @px-scale;
+@4px:4px * @px-scale;
+@5px:5px * @px-scale;
+@6px:6px * @px-scale;
+@7px:7px * @px-scale;
+@8px:8px * @px-scale;
+@9px:9px * @px-scale;
+@10px:10px * @px-scale;
+@11px:11px * @px-scale;
+@12px:12px * @px-scale;
+@13px:13px * @px-scale;
+@14px:14px * @px-scale;
+@15px:15px * @px-scale;
+@16px:16px * @px-scale;
+@17px:17px * @px-scale;
+@18px:18px * @px-scale;
+@19px:19px * @px-scale;
+@20px:20px * @px-scale;
+@21px:21px * @px-scale;
+@22px:22px * @px-scale;
+@23px:23px * @px-scale;
+@24px:24px * @px-scale;
+@25px:25px * @px-scale;
+@26px:26px * @px-scale;
+@27px:27px * @px-scale;
+@28px:28px * @px-scale;
+@29px:29px * @px-scale;
+@30px:30px * @px-scale;
+@31px:31px * @px-scale;
+@32px:32px * @px-scale;
+@33px:33px * @px-scale;
+@34px:34px * @px-scale;
+@35px:35px * @px-scale;
+@36px:36px * @px-scale;
+@37px:37px * @px-scale;
+@38px:38px * @px-scale;
+@39px:39px * @px-scale;
+@40px:40px * @px-scale;
+@41px:41px * @px-scale;
+@42px:42px * @px-scale;
+@43px:43px * @px-scale;
+@44px:44px * @px-scale;
+@45px:45px * @px-scale;
+@46px:46px * @px-scale;
+@47px:47px * @px-scale;
+@48px:48px * @px-scale;
+@49px:49px * @px-scale;
+@50px:50px * @px-scale;
+@51px:51px * @px-scale;
+@52px:52px * @px-scale;
+@53px:53px * @px-scale;
+@54px:54px * @px-scale;
+@55px:55px * @px-scale;
+@56px:56px * @px-scale;
+@57px:57px * @px-scale;
+@58px:58px * @px-scale;
+@59px:59px * @px-scale;
+@60px:60px * @px-scale;
+@61px:61px * @px-scale;
+@62px:62px * @px-scale;
+@63px:63px * @px-scale;
+@64px:64px * @px-scale;
+@65px:65px * @px-scale;
+@66px:66px * @px-scale;
+@67px:67px * @px-scale;
+@68px:68px * @px-scale;
+@69px:69px * @px-scale;
+@70px:70px * @px-scale;
+@71px:71px * @px-scale;
+@72px:72px * @px-scale;
+@73px:73px * @px-scale;
+@74px:74px * @px-scale;
+@75px:75px * @px-scale;
+@76px:76px * @px-scale;
+@77px:77px * @px-scale;
+@78px:78px * @px-scale;
+@79px:79px * @px-scale;
+@80px:80px * @px-scale;
+@81px:81px * @px-scale;
+@82px:82px * @px-scale;
+@83px:83px * @px-scale;
+@84px:84px * @px-scale;
+@85px:85px * @px-scale;
+@86px:86px * @px-scale;
+@87px:87px * @px-scale;
+@88px:88px * @px-scale;
+@89px:89px * @px-scale;
+@90px:90px * @px-scale;
+@91px:91px * @px-scale;
+@92px:92px * @px-scale;
+@93px:93px * @px-scale;
+@94px:94px * @px-scale;
+@95px:95px * @px-scale;
+@96px:96px * @px-scale;
+@97px:97px * @px-scale;
+@98px:98px * @px-scale;
+@99px:99px * @px-scale;
+@100px:100px * @px-scale;
+@120px:120px * @px-scale;
+@150px:150px * @px-scale;
+@170px:170px * @px-scale;
+@200px:200px * @px-scale;
+@215px:215px * @px-scale;
+@240px:240px * @px-scale;
+@250px:250px * @px-scale;
+@264px:264px * @px-scale;
+@270px:270px * @px-scale;
+@300px:300px * @px-scale;
+@750px:750px * @px-scale;
+@960px:960px * @px-scale;
+@1122px:1122px * @px-scale;
+@1136px:1136px * @px-scale;
 
-// 组件库
-@import "Actionsheet/actionsheet.less"; // 不常用
-@import "Alert/alert.less";
-@import "Attach/attach.less";
-@import "Badge/badge.less";
-@import "BiClock/bi-clock.less"; // 不常用
-@import "BiDoughnut/bi-doughnut.less"; // 不常用
-@import "BiGauge/bi-gauge.less"; // 不常用
-@import "Button/button.less";
-@import "Calendar/calendar.less"; // 不常用
-@import "Card/card.less";
-@import "Carrousel/carrousel.less";
-@import "Chat/chat.less"; // 不常用
-@import "Checkbox/checkbox.less";
-@import "Container/container.less";
-@import "ContainerPull/containerpull.less";
-@import "Dialog/dialog.less";
-@import "Dot/dot.less";
-@import "Dragrefresh/dragrefresh.less";
-@import "Emoji/emoji.less"; // 不常用
-@import "FixTable/fixtable.less"; // 不常用
-@import "Footer/footer.less";
-@import "Group/group.less";
-@import "Header/header.less";
-@import "IndexBar/indexbar.less"; // 不常用
-@import "InputArea/inputarea.less";
-@import "InputColor/inputcolor.less"; // 不常用
-@import "InputPre/inputpre.less";
-@import "InputRange/inputrange.less"; // 不常用
-@import "InputSafe/inputsafe.less"; // 不常用
-@import "InputStar/inputstar.less"; // 不常用
-@import "InputText/inputtext.less";
-@import "InputLocation/inputlocation.less";
-@import "Imgmark/imgmark.less"; // 不常用
-@import "Legend/legend.less"; // 不常用
-@import "ListPull/listpull.less"; // 不常用
-@import "Loading/loading.less";
-@import "LotteryWheel/lotterywheel.less"; // 不常用
-@import "Mark/mark.less";
-@import "Marquee/marquee.less"; // 不常用
-@import "MenuTiled/menutiled.less"; // 不常用
-@import "MenuTree/menutree.less"; // 不常用
-@import "VideoFull/videofull.less"; // 不常用
-@import "Notice/notice.less";
-@import "NumBox/numbox.less";
-@import "OnOff/onoff.less";
-@import "Page/page.less";
-@import "PagePull/pagepull.less"; // 不常用
-@import "PDFView/pdfview.less"; // 不常用
-@import "Peg/peg.less"; // 不常用
-@import "Photos/photos.less"; // 不常用
-@import "Picker/picker.less";
-@import "PickerDistrict/pickerdistrict.less";
-@import "Player/player.less"; // 不常用
-@import "Popover/popover.less";
-@import "Preview/preview.less"; // 不常用
-@import "Progress/progress.less"; // 不常用
-@import "QRCode/qrcode.less"; // 不常用
-@import "Radio/radio.less";
-@import "Share/share.less"; // 不常用
-@import "PickerSelect/pickerselect.less";
-@import "Star/star.less"; // 不常用
-@import "Stencil/stencil.less"; // 不常用
-@import "Sticker/sticker.less"; // 不常用
-@import "Tabbar/tabbar.less";
-@import "Ticket/ticket.less"; // 不常用
-@import "Timeline/timeline.less"; // 不常用
-@import "Timepart/timepart.less"; // 不常用
-@import "Titlebar/titlebar.less";
-@import "Toast/toast.less";
-@import "Tree/tree.less"; // 不常用
-@import "Vott/vott.less"; // 不常用
+@animation-duration: 200ms;
 
-// 工具库
-@import "global/filter.less"; // 不常用
-// @import "global/animate.less"; // 动画库,比较大,不建议加载
-@import "global/layout.less"; // 不常用
-@import "global/row.less"; // 不常用
-@import "global/size.less";
-@import "global/color.less";
+// 文字尺寸
+@font-size-xl:@20px;
+@font-size-lg:@16px;
+@font-size-md:@14px;
+@font-size-sm:@12px;
 
-
-
-
-
+// 边框颜色
+@border:#e5e5e5;
+@dpborder:#e5e5e5;
 
 // border 共公边框
 @border-t-1:-webkit-gradient(linear, left bottom, left top, color-stop(0.5, rgba(0, 0, 0, 0)), color-stop(0.5, @border));
@@ -240,8 +278,8 @@ hr:extend(.border-b){
     -webkit-backface-visibility:hidden;
 
     bottom:0;
-    width:@1px;
-    height:@10px;
+    width:1px;
+    height:10px;
   }
   &:before{
     left:0;
@@ -265,7 +303,7 @@ hr:extend(.border-b){
 
 .bordered{
   border-style:solid;
-  border-width:@1px;
+  border-width:1px;
   border-color: @dpborder;
 }
 .dotted{
@@ -275,11 +313,11 @@ hr:extend(.border-b){
   border-style:dashed;
 }
 .splitter{
-  margin-left: @8px;
-  margin-right: @8px;
+  margin-left: 8px;
+  margin-right: 8px;
   display: block;
-  width: @1px;
-  height: @16px;
+  width: 1px;
+  height: 16px;
   .border-l;
 }
 
