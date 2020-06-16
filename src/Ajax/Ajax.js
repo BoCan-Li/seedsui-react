@@ -3,12 +3,11 @@ var Ajax = {
   xhr: function (config) {
     var xhr = new window.XMLHttpRequest()
     var url = config.url
-    var data = config.data || {}
     var success = config.success
     var error = config.error
-    var params = Object.params(data)
+    var params = config.data || {}
     var type = config.type || 'GET'
-    var contentType = config.contentType
+    var contentType = config.contentType // 'application/x-www-form-urlencoded; charset=UTF-8' || 'application/json'
     var token = config.token
     var extra = config.extra
 
@@ -24,15 +23,11 @@ var Ajax = {
     }
     // 鉴权
     if (token) xhr.setRequestHeader('Authorization', token)
-    // post | get
+    // 发送请求
     if (type === 'POST') {
       xhr.open(type, url, true)
       xhr.setRequestHeader('Content-type', contentType || 'application/json')
-      if (contentType === 'application/x-www-form-urlencoded; charset=UTF-8') {
-        xhr.send(params)
-      } else {
-        xhr.send(JSON.stringify(data))
-      }
+      xhr.send(params)
     } else {
       if (url.indexOf('?') === -1) {
         url += '?' + params
@@ -44,29 +39,18 @@ var Ajax = {
     }
   },
   fetchData: function (url, config) {
-    // config = req, type, contentType, token
-    // 显示loading
-    // ob.$emit('ajaxLoading', true)
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
       Ajax.xhr({
         url: url,
-        data: config.req || {},
+        data: config.params || {},
         type: config.type || null,
         contentType: config.contentType || null,
         token: config.token || null,
-        success: function (data) {
-          if (data.code === '1') {
-            resolve(data)
-          } else {
-            reject(data)
-          }
-          // 关闭loading
-          // ob.$emit('ajaxLoading', false)
+        success: function (result) {
+          resolve(result)
         },
         error: function (err) {
-          reject(err)
-          // 关闭loading
-          // ob.$emit('ajaxLoading', false)
+          resolve({errMsg: `发送请求失败`, data: err})
         }
       })
     })
