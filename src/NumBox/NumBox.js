@@ -152,7 +152,9 @@ const NumBox = forwardRef(({
     if (e.target.validity.badInput) {
       val = '';
     } else {
-      val = correctNumber(val);
+      if (val !== '') {
+        val = correctNumber(val);
+      }
     }
     // Callback
     change(e, val);

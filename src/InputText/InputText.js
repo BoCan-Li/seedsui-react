@@ -160,7 +160,10 @@ const InputText = forwardRef(({
   // 文本框事件
   function changeHandler (e) {
     var target = e.target;
-    var val = correctNumber(target.value);
+    var val = target.value
+    if (val !== '') {
+      val = correctNumber(target.value);
+    }
     // onChange
     change(e, val);
   }
