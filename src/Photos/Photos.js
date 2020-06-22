@@ -10,7 +10,8 @@ const Photos = forwardRef(({
   ...others
 }, ref) =>  {
   // 点击整个photos容器
-  function click (e) {
+  function click (event) {
+    const e = event.nativeEvent;
     const target = e.target;
     if (target.classList.contains('photos-upload')) { // 点击添加
       if (onChoose) onChoose(e);
@@ -23,7 +24,8 @@ const Photos = forwardRef(({
     }
   }
   // file框选择
-  function fileChange (e) {
+  function fileChange (event) {
+    const e = event.nativeEvent;
     if (onChoose) onChoose(e);
     e.target.value = ''; // 防止选择重复图片时不触发
     e.stopPropagation();
