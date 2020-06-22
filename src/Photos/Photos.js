@@ -13,6 +13,9 @@ const Photos = forwardRef(({
   function click (event) {
     const e = event.nativeEvent;
     const target = e.target;
+    if (target.type === 'file') {
+      target.value = ''; // 防止选择重复图片时不触发
+    }
     if (target.classList.contains('photos-upload')) { // 点击添加
       if (onChoose) onChoose(e);
     } else if (target.classList.contains('photos-item')) { // 点击照片
@@ -27,7 +30,6 @@ const Photos = forwardRef(({
   function fileChange (event) {
     const e = event.nativeEvent;
     if (onChoose) onChoose(e);
-    e.target.value = ''; // 防止选择重复图片时不触发
     e.stopPropagation();
   }
   // 图片加载完成
