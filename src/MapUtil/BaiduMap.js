@@ -216,9 +216,7 @@ var BaiduMap = function (id, params) {
     if (circle instanceof BMap.Circle !== true) {
       return
     }
-    let point = circle.getCenter()
-    let bounds = circle.getBounds()
-    s.centerToPoints([point, [bounds.Ge, bounds.Vd], [bounds.Le, bounds.Xd]], options)
+    s.centerToPoints(circle.getPath(), options)
   }
   /**
     * 标准坐标转成百度坐标
