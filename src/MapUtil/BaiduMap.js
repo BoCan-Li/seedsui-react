@@ -216,6 +216,8 @@ var BaiduMap = function (id, params) {
     if (circle instanceof BMap.Circle !== true) {
       return
     }
+    // let point = circle.getCenter()
+    // let bounds = circle.getBounds()
     s.centerToPoints(circle.getPath(), options)
   }
   /**
