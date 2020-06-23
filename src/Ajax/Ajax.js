@@ -4,7 +4,7 @@ var Ajax = {
     var xhr = new window.XMLHttpRequest()
     var url = config.url
     var success = config.success
-    var error = config.error
+    var fail = config.fail
     var params = config.data || {}
     var type = config.type || 'GET'
     var contentType = config.contentType // 'application/x-www-form-urlencoded; charset=UTF-8' || 'application/json'
@@ -17,14 +17,14 @@ var Ajax = {
           var res = JSON.parse(xhr.responseText)
           success(res, extra)
         } else {
-          error && error()
+          fail && fail()
         }
       }
     }
     // 鉴权
     if (token) xhr.setRequestHeader('Authorization', token)
     // 发送请求
-    if (type === 'POST') {
+    if (type === 'POST' || type === 'post') {
       xhr.open(type, url, true)
       xhr.setRequestHeader('Content-type', contentType || 'application/json')
       xhr.send(params)
@@ -49,7 +49,7 @@ var Ajax = {
         success: function (result) {
           resolve(result)
         },
-        error: function (err) {
+        fail: function (err) {
           resolve({errMsg: `发送请求失败`, data: err})
         }
       })
@@ -58,3 +58,18 @@ var Ajax = {
 }
 
 export default Ajax
+
+
+// 示例:
+// Ajax.xhr({
+//   url: `/app/location/locationareafence/locationareafence_savefence.action`,
+//   data: Object.params(params),
+//   type: 'post',
+//   contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+//   success: function (result) {
+//     console.log(result)
+//   },
+//   fail: function (err) {
+//     console.log(err)
+//   }
+// })
