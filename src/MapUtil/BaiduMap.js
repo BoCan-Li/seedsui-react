@@ -373,6 +373,9 @@ var BaiduMap = function (id, params) {
     if (point && point[0] && point[1]) {
       return new BMap.Point(point[0], point[1])
     }
+    if (point && point.lng && point.lat) {
+      return new BMap.Point(point.lng, point.lat)
+    }
     return null
   }
   /**
@@ -1033,14 +1036,14 @@ var BaiduMap = function (id, params) {
 }
 
 /**
-    * 动态加载百度地图
-    * @param {Object} params {
-    *   key: '百度地图ak',
-    *   library: ['draw'], // 百度地图的其它库
-    *   success: () => {},
-    *   fail: ({errMsg: ''}) => {},
-    * }
-    */
+  * 动态加载百度地图
+  * @param {Object} params {
+  *   key: '百度地图ak',
+  *   library: ['draw'], // 百度地图的其它库
+  *   success: () => {},
+  *   fail: ({errMsg: ''}) => {},
+  * }
+  */
 BaiduMap.load = function (params = {}) {
   // window.BMAP_PROTOCOL = "https";
   // window.BMap_loadScriptTime = (new Date).getTime();
