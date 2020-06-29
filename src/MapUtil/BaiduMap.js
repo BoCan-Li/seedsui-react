@@ -370,7 +370,7 @@ var BaiduMap = function (id, params) {
     if (point instanceof BMap.Point) {
       return point
     }
-    if (point && point[0] && point[1]) {
+    if (Array.isArray(point) && point[0] && point[1]) {
       return new BMap.Point(point[0], point[1])
     }
     if (point && point.lng && point.lat) {
