@@ -197,7 +197,7 @@ class Test extends Component {
 - [Button](#button) 按钮
 - [Calendar](#calendar) 日历
 - [Card](#card) 卡片
-- [Carrousel](#carrousel) 轮播
+- [Carrousel](#carrousel) 轮播(Swiper的简化版)
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
 - [ConfigProvider](#configprovider) 全局配置(已废弃)
@@ -265,6 +265,7 @@ class Test extends Component {
 - [Star](#star) 星星
 - [Stencil](#stencil) 加载模板
 - [Sticker](#sticker) 标签贴
+- [Swiper](#swiper) 轮播(Carrousel的增强版, 参考https://swiperjs.com/api)
 - [Tabbar](#tabbar) 页签
 - [Ticket](#ticket) 票券
 - [Timeline](#timeline) 时间轴
@@ -740,6 +741,12 @@ import Card from 'seedsui-react/lib/Card';
 
 
 
+
+
+
+
+
+
 ## Carrousel
 [轮播](https://unpkg.com/seedsui-react/src/lib/Carrousel/Carrousel.js)
 ### 属性
@@ -826,6 +833,14 @@ onCarrouselChange = async (s) => {
 />
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
 
 
 
@@ -4958,6 +4973,118 @@ import Sticker from 'seedsui-react/lib/Sticker';
 <Sticker>NEW</Sticker>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Swiper
+[轮播](https://unpkg.com/seedsui-react/src/lib/Swiper/Swiper.js)
+### 属性
+```javascript
+<Swiper
+  params={实例化Swiper的参数 object, 默认无} // https://swiperjs.com/api/#parameters
+  speed={切换activeIndex时的动画过渡速度 number, 默认300}
+  activeIndex={默认选中第几页 number, 默认0}
+  onClick={点击页 func(s, e)}
+  onChange={轮播时事件回调 func(s)}
+  // 画布容器
+  wrapperAttribute={画布容器属性 object, 默认无} // 例如: wrapperAttribute={className: 'notice-wrapper'}
+  // 单项容器
+  slideAttribute={单项容器属性 object, 默认无}
+  // 分页
+  paginationAttribute={分页容器属性 object, 默认无}
+  // 翻页
+  prevAttribute={上一页按钮属性 object, 默认无}
+  nextAttribute={下一页按钮属性 object, 默认无}
+  // 轮播页
+  children={slide容器内元素 node, 默认无}
+  // 容器子元素
+  containerChildren={container容器内子元素 node, 默认无}
+
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Swiper from 'seedsui-react/lib/Swiper';
+let [activeIndex, setActiveIndex] = useState(1);
+let [speed, setSpeed] = useState(0);
+const [slides, setSlides] = useState([
+  (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
+  (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'red'}}></div>),
+]);
+
+useEffect(() => {
+  setTimeout(() => {
+    setSlides([
+      (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
+      (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
+      (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'red'}}></div>),
+      (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'yellow', overflow: 'hidden'}}><img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/></div>)
+    ])
+    setSpeed(300);
+  }, 3000);
+});
+
+function changeHandler (s) {
+  console.log(s.activeIndex);
+  setActiveIndex(s.activeIndex);
+}
+
+<Container style={{backgroundColor: 'black'}}>
+  <Swiper
+    speed={speed}
+    activeIndex={activeIndex}
+    onChange={changeHandler}
+    style={{
+      width: '100%',
+      height: '100%'
+    }}
+    paginationAttribute={{
+      className: 'swiper-pagination-white'
+    }}
+    params={{
+      zoom: true,
+      pagination: {
+        el: '.swiper-pagination',
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      }
+    }}
+    slides={slides}
+  >
+    <div style={{position: 'absolute', top: '0', left: '0', backgroundColor: 'red', width: '100px', height: '100px'}}>自定义子节点</div>
+  </Swiper>
+</Container>
+```
+[返回目录](#component)
+
+
+
+
+
+
+
+
+
+
 
 
 

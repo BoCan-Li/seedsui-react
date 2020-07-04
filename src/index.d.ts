@@ -91,6 +91,7 @@ export { default as PickerSelect } from './PickerSelect';
 export { default as Star } from './Star';
 export { default as Stencil } from './Stencil'; // 不常用
 export { default as Sticker } from './Sticker'; // 不常用
+export { default as Swiper } from './Swiper'; // 不常用
 export { default as Tabbar } from './Tabbar';
 export { default as Ticket } from './Ticket'; // 不常用
 export { default as Timeline } from './Timeline'; // 不常用
