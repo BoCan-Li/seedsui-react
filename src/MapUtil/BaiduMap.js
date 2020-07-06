@@ -29,8 +29,16 @@ var BaiduMap = function (id, params) {
       boxShadow: '0 9px 28px 8px rgba(0,0,0,0.05), 0 6px 16px 0 rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12)',
       borderRadius: '4px'
     }
-    /*  callback
-    onSubmit:function(selected)
+    /*
+    // 中心位置
+    center: '江苏省,南京市',
+    // 缩放导航
+    navigation: {
+      position: 'bottom-right',
+      type: 'zoom'
+    },
+    // Map构造函数的可选参数
+    mapOptions: {} // 参考: http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b1
     */
   }
   params = params || {}
@@ -60,7 +68,7 @@ var BaiduMap = function (id, params) {
   // 地图实例
   s.map = null
   if (id) {
-    s.map = new BMap.Map(id)
+    s.map = new BMap.Map(id, s.params.mapOptions)
   }
   /**
     * 获取当前地理位置
