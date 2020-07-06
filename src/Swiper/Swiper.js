@@ -4,7 +4,7 @@ import Instance from './instance';
 
 const Swiper = forwardRef(({
   params = {},
-  speed = 300,
+  speed = 500,
   activeIndex = 0,
   onClick,
   onChange,
@@ -80,14 +80,13 @@ const Swiper = forwardRef(({
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
     if (!params.on || !params.on.slideChange) {
-      // instance.current.params.on.slideChange = function () {
-      //   if (onChange) onChange(instance.current)
-      // }
-      instance.current.off('click');
       instance.current.off('slideChange');
       instance.current.on('slideChange', function () {
         if (onChange) onChange(instance.current)
       });
+    }
+    if (!params.on || !params.on.click) {
+      instance.current.off('click');
       instance.current.on('click', function (e) {
         if (onClick) onClick(instance.current, e)
       });
@@ -114,10 +113,3 @@ const Swiper = forwardRef(({
 })
 
 export default Swiper
-// export default React.memo(Swiper, (prevProps, nextProps) => {
-//   if (prevProps.activeIndex !== nextProps.activeIndex) return false;
-//   if ((prevProps.slides || []).length === (nextProps.slides || []).length) {
-//     return true;
-//   }
-//   return false;
-// })
