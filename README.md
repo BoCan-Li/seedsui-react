@@ -5753,26 +5753,43 @@ function onChange (e, value, options) {
 <VideoFull
   scriptSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js'}
   cssSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css'}
+
   poster={封面图片地址 string, 默认无}
   src={视频地址 string, 默认无}
   autoPlay={自动播放 boolean, 默认无, 仅pc端支持}
+  isLive={是否直播 boolean, 默认无}
+  params={实例参数 object, 默认无}
+
+  onError={错误回调 func(e, {errMsg})}
+  onLoad={视频实例完成,视频准备完成 func(e, s)}
+
+  bar={自定义控件 string | node, 默认无}
+  children={内容 node, 默认无}
+  {...others}
+/>
 ```
 ### 示例
 ```javascript
 import VideoFull from 'seedsui-react/lib/VideoFull';
 
-<Page className="flex flex-vertical" style={{backgroundColor: 'black'}}>
-  <Header className="flex flex-right" style={{position: 'relative', padding: '16px'}}>
-    <div className="videofull-caption">312</div>
-    <div className="videofull-close" onClick={this.back} style={{marginLeft: '16px'}}></div>
-  </Header>
-  <Container className="flex-1" style={{position: 'relative', top: 'auto', bottom: 'auto'}}>
-    {src && <VideoFull
-      ref="$video"
-      poster={poster}
-      mp4={src}/>}
-  </Container>
-</Page >
+const refVideoFull = useRef(null);
+function playVideo () {
+  if (refVideoFull.current && refVideoFull.current.instance && refVideoFull.current.instance.current) {
+    refVideoFull.current.instance.current.play()
+  }
+}
+
+<VideoFull
+  poster={`//img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg`}
+  src={`//player.alicdn.com/video/aliyunmedia.mp4`}
+  autoPlay
+  bar={
+    <Fragment>
+      <div className="videofull-caption" onClick={playVideo}>视频标题</div>
+      <div className="videofull-close"></div>
+    </Fragment>
+  }
+/>
 ```
 [返回目录](#component)
 

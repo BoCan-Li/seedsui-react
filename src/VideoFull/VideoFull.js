@@ -1,15 +1,21 @@
-import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useState, useContext} from 'react';
 import Context from './../Context/instance.js';
 
 const VideoFull = forwardRef(({
     scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
     cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
+    
     poster = '',
     src,
     autoPlay = true,
+    isLive,
     params,
     onError,
-    onLoad
+    onLoad,
+
+    bar, // 状态栏
+    children,
+    ...others
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
@@ -57,7 +63,83 @@ const VideoFull = forwardRef(({
     });
   }
 
-  async function initInstance() {
+  // 视频控件样式修改
+  function getSkinLayout () {
+    if (isLive) {
+      return [
+        {
+          name: 'bigPlayButton', align: 'cc'
+        },
+        {
+          name: 'controlBar', align: 'blabs', x: 0, y: 0,
+          children: [
+            { name: 'progress', align: 'tlabs', x: 0, y: 0 },
+            { name: 'playButton', align: 'tl', x: 15, y: 26 },
+            { name: 'nextButton', align: 'tl', x: 10, y: 26 },
+            { name: 'timeDisplay', align: 'tl', x: 10, y: 24 },
+            { name: 'fullScreenButton', align: 'tr', x: 10, y: 25 },
+            { name: 'streamButton', align: 'tr', x: 10, y: 23 },
+            { name: 'volume', align: 'tr', x: 10, y: 25 }
+          ]
+        },
+        {
+          name: 'fullControlBar', align: 'tlabs', x: 0, y: 0,
+          children: [
+            { name: 'fullTitle', align: 'tl', x: 25, y: 6 },
+            { name: 'fullNormalScreenButton', align: 'tr', x: 24, y: 13 },
+            { name: 'fullTimeDisplay', align: 'tr', x: 10, y: 12 },
+            { name: 'fullZoom', align: 'cc' }
+          ]
+        }
+      ]
+    }
+    return [
+      {
+        name: 'bigPlayButton', align: 'cc'
+      },
+      {
+        name: 'H5Loading', align: 'cc'
+      },
+      {
+        name: 'errorDisplay', align: 'tlabs', x: 0, y: 0
+      },
+      {
+        name: 'infoDisplay'
+      },
+      {
+        name: 'tooltip', align: 'blabs', x: 0, y: 56
+      },
+      {
+        name: 'thumbnail'
+      },
+      {
+        name: 'controlBar', align: 'blabs', x: 0, y: 0,
+        children: [
+          { name: 'progress', align: 'blabs', x: 0, y: 44 },
+          { name: 'playButton', align: 'tl', x: 15, y: 12 },
+          { name: 'timeDisplay', align: 'tl', x: 10, y: 7 },
+          { name: 'fullScreenButton', align: 'tr', x: 10, y: 12 },
+          { name: 'subtitle', align: 'tr', x: 15, y: 12 },
+          { name: 'setting', align: 'tr', x: 15, y: 12 },
+          { name: 'volume', align: 'tr', x: 5, y: 10 }
+        ]
+      }
+    ]
+  }
+
+  // 绑定显隐事件
+  const [showBar, setShowBar] = useState(false);
+  function attachBar (player) {
+    if (!player) return;
+    player.on('hideBar', () => {
+      setShowBar(false);
+    });
+    player.on('showBar', () => {
+      setShowBar(true);
+    });
+  }
+  // 实例化
+  async function initInstance () {
     if (!src) {
       console.error(locale['hint_video_src'] || '请传入视频源');
       if (onError) onError(e, {errMsg: locale['hint_video_src'] || '请传入视频源'});
@@ -69,40 +151,45 @@ const VideoFull = forwardRef(({
       return
     }
     let e = {target: refEl.current}
-    const width = refEl.current.clientWidth;
-    const height = refEl.current.clientHeight;
-    console.log(width);
-    console.log(height);
+    // const width = refEl.current.clientWidth;
+    // const height = refEl.current.clientHeight;
     // 构建参数
     let data = {
       id: idSdkPlayer,
       source: src,
-      width: width,
-      height: height,
-      videoWidth: width,
-      videoHeight: height,
+      // 样式设置
+      width: '100%',
+      height: '100%',
+      videoWidth: '100%',
+      videoHeight: '100%',
+      skinLayout: getSkinLayout(),
+      // 控件设置
       autoplay: autoPlay,
-
-      isLive:true,
+      controlBarVisibility: 'click',
+      showBarTime: 3000,
+      // 播放设置
+      isLive: isLive,
       preload: true,
       playsinline: true,
       showBuffer: true,
       defaultDefinition: 'FD',
       source: src,
-      // source: 'https://player.alicdn.com/resource/player/big_buck_bunny.mp4',
       useH5Prism: true,
       useFlashPrism: false,
       cover: poster,
-      // prismplayer 2.0.1版本支持的属性，主要用户实现在android 微信上的同层播放
       x5_type: 'h5',
       x5_fullscreen: false,
       ...params
     };
     instance.current = new Aliplayer(data, function (player) {
+      if (bar) {
+        attachBar(player);
+      }
       if (autoPlay) {
-        player.play()
+        player.play();
       }
     });
+    refEl.current.instance = instance;
     if (onLoad) onLoad(e, instance.current);
   }
   
@@ -112,8 +199,10 @@ const VideoFull = forwardRef(({
   }, []) // eslint-disable-line
 
   return (
-    <div className="videofull-page" ref={refEl}>
+    <div className="videofull-page" {...others} ref={refEl}>
       <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
+      {showBar && bar ? bar : null}
+      {children}
     </div>
   );
 })
