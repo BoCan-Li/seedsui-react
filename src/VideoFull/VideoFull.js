@@ -1,77 +1,121 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
+import Context from './../Context/instance.js';
 
-export default class VideoFull extends Component {
-  static propTypes = {
-    poster: PropTypes.string,
-    m3u8: PropTypes.string,
-    flv: PropTypes.string,
-    mp4: PropTypes.string,
-    autoPlay: PropTypes.bool,
-    libSrc: PropTypes.string
-  };
-  componentWillMount() {
-  }
-  loadTcPlayer = () => {
+const VideoFull = forwardRef(({
+    scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
+    cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
+    poster = '',
+    src,
+    autoPlay = true,
+    params,
+    onError,
+    onLoad
+}, ref) =>  {
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+  const instance = useRef(null);
+
+  const idSdkCss = '_seedsui_videofull_css_';
+  const idSdkScript = '_seedsui_videofull_script_';
+  const idSdkPlayer = '_seedsui_videofull_player_';
+
+  function loadSdk () {
     return new Promise((resolve) => {
-      var script = document.getElementById('_typlayer_lib_');
-      if (script) {
-        resolve(true);
-        return;
+      var css = document.getElementById(idSdkCss);
+      if (!css) {
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+        link.id = idSdkCss;
+        link.href = cssSDK;
+        link.setAttribute('rel','stylesheet');
+        link.setAttribute('type', 'text/css');
+        head.appendChild(link);
       }
-      script = document.createElement('script')
-      script.id = '_typlayer_lib_'
-      script.type = 'text/javascript'
-      script.charset = 'utf-8'
-      script.src = this.props.libSrc || '//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.3.2.js'
-      document.body.appendChild(script)
-      script.onload = function () {
+      var script = document.getElementById(idSdkScript);
+      if (!script) {
+        script = document.createElement('script')
+        script.id = idSdkScript
+        script.type = 'text/javascript'
+        script.charset = 'utf-8'
+        script.src = scriptSDK
+        document.body.appendChild(script)
+        script.onload = function () {
+          resolve(true)
+        }
+        script.onerror = function () {
+          resolve(false)
+        }
+      } else {
         resolve(true)
-      }
-      script.onerror = function () {
-        resolve(false)
       }
     });
   }
-  async componentDidMount() {
-    const {
-      poster,
-      m3u8,
-      flv,
-      mp4,
-      autoPlay
-    } = this.props;
-    const width = this.$el.clientWidth;
-    const height = this.$el.clientHeight;
-    if (!await this.loadTcPlayer()) {
-      console.error('加载TcPlayer出错, 请稍后再试')
-      return
-    }
-    // 构建参数
-    let params = {
-      autoplay: autoPlay || false, // iOS 下 safari 浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
-      poster: {
-        style: 'stretch',
-        src: poster
-      },
-      width: width, // 视频的显示宽度，请尽量使用视频分辨率宽度
-      height: height // 视频的显示高度，请尽量使用视频分辨率高度
-    };
-    if (m3u8) params.m3u8 = m3u8;
-    if (flv) params.flv = flv; // 增加了一个 flv 的播放地址，用于PC平台的播放 请替换成实际可用的播放地址
-    if (mp4) params.mp4 = mp4;
-    if (!m3u8 && !flv && !mp4) {
-      console.warn('请传入视频源');
+
+  async function initInstance() {
+    if (!src) {
+      console.error(locale['hint_video_src'] || '请传入视频源');
+      if (onError) onError(e, {errMsg: locale['hint_video_src'] || '请传入视频源'});
       return;
     }
-    // eslint-disable-next-line
-    this.instance = new TcPlayer('_id_tcplayer_video_container_', params);
+    if (!await loadSdk()) {
+      console.error(locale['hint_video_sdk_load_failed'] || '加载播放器库出错, 请稍后再试');
+      if (onError) onError(e, {errMsg: locale['hint_video_sdk_load_failed'] || '加载播放器库出错, 请稍后再试'});
+      return
+    }
+    let e = {target: refEl.current}
+    const width = refEl.current.clientWidth;
+    const height = refEl.current.clientHeight;
+    console.log(width);
+    console.log(height);
+    // 构建参数
+    let data = {
+      id: idSdkPlayer,
+      source: src,
+      width: width,
+      height: height,
+      videoWidth: width,
+      videoHeight: height,
+      autoplay: autoPlay,
+
+      isLive:true,
+      preload: true,
+      playsinline: true,
+      showBuffer: true,
+      defaultDefinition: 'FD',
+      source: src,
+      // source: 'https://player.alicdn.com/resource/player/big_buck_bunny.mp4',
+      useH5Prism: true,
+      useFlashPrism: false,
+      cover: poster,
+      // prismplayer 2.0.1版本支持的属性，主要用户实现在android 微信上的同层播放
+      x5_type: 'h5',
+      x5_fullscreen: false,
+      ...params
+    };
+    instance.current = new Aliplayer(data, function (player) {
+      if (autoPlay) {
+        player.play()
+      }
+    });
+    if (onLoad) onLoad(e, instance.current);
   }
-  render() {
-    return (
-      <div className="videofull-page" ref={(el) => {this.$el = el}}>
-        <div id="_id_tcplayer_video_container_"></div>
-      </div>
-    );
-  }
-}
+  
+  useEffect(() => {
+    if (instance.current) return;
+    initInstance();
+  }, []) // eslint-disable-line
+
+  return (
+    <div className="videofull-page" ref={refEl}>
+      <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
+    </div>
+  );
+})
+
+export default VideoFull

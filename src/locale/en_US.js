@@ -92,4 +92,6 @@ export default {
   'sharetip_click': 'Click',
   'sharetip_sent_to_friend_or': 'sent to friend or',
   'sharetip_share_to_moments': 'share to moments',
+  'hint_video_src': 'No param src',
+  'hint_video_sdk_load_failed': 'failed to load video sdk',
 }

@@ -19,7 +19,7 @@ const Carrousel = forwardRef(({
   activeIndex, // 默认选中第几块
 
   loop = false, // 是否循环显示
-  autoplay = 0, // 是否自动播放
+  autoPlay = 0, // 是否自动播放
   slidesPerView = 1, // 一屏显示几块,默认1块
   defaultSrc = '//res.waiqin365.com/d/seedsui/carrousel/default.png', // 默认图片
   list = [], // [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
@@ -53,7 +53,7 @@ const Carrousel = forwardRef(({
       height: style && style.height ? style.height : null,
       width: style && style.width ? style.width : null,
       stopPropagation: stopPropagation,
-      autoplay: autoplay,
+      autoplay: autoPlay,
       slidesPerView: slidesPerView,
       loop: loop,
       imgLoadSrc: defaultSrc
@@ -72,7 +72,7 @@ const Carrousel = forwardRef(({
       height: style && style.height ? style.height : null,
       width: style && style.width ? style.width : null,
       stopPropagation: stopPropagation,
-      autoplay: autoplay,
+      autoplay: autoPlay,
       slidesPerView: slidesPerView,
       loop: loop,
       imgLoadSrc: defaultSrc,

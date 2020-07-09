@@ -92,4 +92,6 @@ export default {
   'sharetip_click': '点击',
   'sharetip_sent_to_friend_or': '发送给朋友或',
   'sharetip_share_to_moments': '分享给朋友圈',
+  'hint_video_src': '请传入视频源',
+  'hint_video_sdk_load_failed': '加载播放器库出错, 请稍后再试',
 }

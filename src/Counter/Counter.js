@@ -1,45 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import {Counter as Instance} from './instance.js';
 
-export default class Counter extends Component {
-  static propTypes = {
-    duration: PropTypes.number,
-    from: PropTypes.number,
-    to: PropTypes.number,
-    suffix: PropTypes.string, // 后缀
-    autoplay: PropTypes.bool, // 是否自动播放
-  }
-  static defaultProps = {
-    duration: 5000,
-    from: 0,
-    to: 10,
-    autoplay: true
-  }
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount = () => {
-    var instance = new Instance(this.$el);
-    if (this.props.autoplay) {
-      instance.play();
+const Counter = forwardRef(({
+  duration = 5000,
+  from = 0,
+  to = 10,
+  suffix = '', // 后缀
+  autoPlay = true, // 是否自动播放
+  ...others
+}, ref) =>  {
+  const refEl = useRef(null)
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
+
+  const instance = useRef(null);
+  useEffect(() => {
+    if (instance.current) return;
+    initInstance();
+  }, []);
+
+  function initInstance () {
+    instance.current = new Instance(refEl.current);
+    if (autoPlay) {
+      instance.current.play();
     }
-    this.instance = instance;
+    refEl.current.instance = instance;
   }
-  play = () => {
-    if (this.instance) {
-      this.instance.play();
-    }
-  }
-  render() {
-    const {
-      duration,
-      from,
-      to,
-      suffix,
-      autoplay,
-      ...others
-    } = this.props;
-    return <span ref={el => {this.$el = el;}} {...others} className={`counter${others.className ? ' ' + others.className: ''}`} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
-  }
-}
+  return <span ref={refEl} {...others} className={`counter${others.className ? ' ' + others.className: ''}`} data-duration={duration} data-from={from} data-to={to} data-suffix={suffix}>1</span>;
+})
+
+export default Counter

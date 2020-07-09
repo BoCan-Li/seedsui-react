@@ -1,5 +1,5 @@
 // require (PrototypeArray.js), 使用了equals方法
-import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect} from 'react';
 import Instance from './instance.js';
 
 const Marquee = forwardRef(({
@@ -7,7 +7,7 @@ const Marquee = forwardRef(({
   optionAttribute = {},
   step = 50,
   duration = 300,
-  autoplay, // 是否自动播放, 播放间隔毫秒数
+  autoPlay = 2000, // 是否自动播放, 播放间隔毫秒数
   direction = 'top', // top | bottom | left | right
   loop = true,
   onClick,
@@ -36,7 +36,7 @@ const Marquee = forwardRef(({
       start: 0,
       end: step * (list.length - 1)
     });
-    if (autoplay) {
+    if (autoPlay) {
       instance.current.play();
     }
   }
@@ -46,13 +46,14 @@ const Marquee = forwardRef(({
       end: step * (list.length - 1),
       step,
       duration,
-      delay: isNaN(autoplay) ? 2000 : Number(autoplay || 0),
+      delay: autoPlay,
       direction,
       loop
     });
-    if (autoplay || isNaN(autoplay)) {
+    if (autoPlay) {
       instance.current.play();
     }
+    refEl.current.instance = instance;
   }
   // 过滤已经回调的属性
   function filterProps (props) {

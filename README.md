@@ -764,7 +764,7 @@ import Card from 'seedsui-react/lib/Card';
   loop={是否循环显示 bool, 默认false}
   activeIndex={默认选中第几块 number, 默认0}
   
-  autoplay={自动播放毫秒数 number, 默认0} // 设置大于0的数值才会触发自动播放
+  autoPlay={自动播放毫秒数 number, 默认0} // 设置大于0的数值才会触发自动播放
   slidesPerView={一屏显示几块 number, 默认1}
   defaultSrc={默认图片 string, 默认'//res.waiqin365.com/d/seedsui/carrousel/default.png'}
   list={轮播图 array, 默认无} // 格式: [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
@@ -1354,7 +1354,7 @@ locale('hint_only_mobile')
   from={开始数字 number, 默认0}
   to={结束数字 number, 默认10}
   suffix={数字不变的后缀 string, 默认无} // 如设置为/10, 则显示为0/10
-  autoplay={是否自动播放 bool, 默认true}
+  autoPlay={是否自动播放 bool, 默认true}
   {...others}
 />
 ```
@@ -1362,15 +1362,23 @@ locale('hint_only_mobile')
 ```javascript
 play() // 播放
 ```
-### 示例
+### 示例: 手动触发播放
 ```javascript
 import Counter from 'seedsui-react/lib/Counter';
 
-onClick = () => {
-  this.refs.$counter.play();
+const refCounter = useRef(null);
+
+function playCounter () {
+  refCounter.current.instance.current.play()
 }
 
-<Counter to={500} autoplay={false} ref="$counter"/>
+<Counter to={500} autoPlay={false} ref={refCounter}/>
+```
+### 示例: 自动播放
+```javascript
+import Counter from 'seedsui-react/lib/Counter';
+
+<Counter from={20} to={500}/>
 ```
 [返回目录](#component)
 
@@ -3843,7 +3851,7 @@ import Mark from 'seedsui-react/lib/Mark';
   contentAttribute={单条属性 object, 默认无}
   step={一次移动数值 number, 默认50}
   duration={移动动画时长 number, 默认300}
-  autoplay={一次滚动停留时长 number, 默认2000} // 为0时不再滚动
+  autoPlay={一次滚动停留时长 number, 默认2000} // 为0时不再滚动
   direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
   loop={是否循环 bool, 默认true}
   onClick={点击 func(e, item, index), 默认无}
@@ -3863,13 +3871,13 @@ const list = [
     name: '标题标题2'
   }
 ];
-onClick = (...params) => {
+function clickMarquee (...params) {
   console.log(...params)
 }
 <Marquee
   list={list}
-  onClick={this.onClick}
-  autoplay={5000}
+  onClick={clickMarquee}
+  autoPlay={5000}
   step={48}
   optionAttribute={{
     style: {height: '38px', padding: '5px 0'},
@@ -5743,13 +5751,11 @@ function onChange (e, value, options) {
 ### 属性
 ```javascript
 <VideoFull
+  scriptSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js'}
+  cssSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css'}
   poster={封面图片地址 string, 默认无}
-  m3u8={m3u8视频地址 string, 默认无}
-  flv={flv视频地址 string, 默认无}
-  mp4={mp4视频地址 string, 默认无}
-  autoPlay={自动播放 string, 默认无, 仅pc端支持}
-  libSrc={TCPlayer库地址 string, 默认'//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.3.2.js'}
-/>
+  src={视频地址 string, 默认无}
+  autoPlay={自动播放 boolean, 默认无, 仅pc端支持}
 ```
 ### 示例
 ```javascript

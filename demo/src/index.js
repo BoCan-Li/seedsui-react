@@ -9,7 +9,8 @@ import {
   Bridge,
   Container,
   Swiper,
-  Vott
+  Vott,
+  VideoFull
 } from '../../src';
 
 function Demo () {
@@ -352,12 +353,21 @@ function Demo () {
     console.log(e);
     console.log(speed);
   }
+  const refVideoFull = useRef(null);
+  function playVideo () {
+    refVideoFull.current.instance.current.play()
+  }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
-		<Container style={{backgroundColor: 'black'}}>
-      <Swiper
+		<Container>
+      <VideoFull
+        ref={refVideoFull}
+        poster={`//img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg`}
+        src={`//player.alicdn.com/video/aliyunmedia.mp4`}
+      />
+      {/* <Swiper
         speed={speed}
         activeIndex={activeIndex}
         onChange={changeHandler}
@@ -397,7 +407,7 @@ function Demo () {
           onChange={onChange}
           preview={false}
         />
-      </Swiper>
+      </Swiper> */}
     </Container>
   </Page>
 }
