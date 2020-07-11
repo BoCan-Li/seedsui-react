@@ -228,6 +228,73 @@ var Bridge = {
     wq.previewImage(params) // eslint-disable-line
   },
   /**
+    * 选择、录制视频
+    * @param {Object} params
+    * {
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      maxDuration: 60, // 最大录相时长
+      camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success({localIds:[src]})
+    * }
+    */
+  chooseVideo: function (params = {}) {
+    // 标准化参数
+    params.compressed = true
+    if (params.sizeType && params.sizeType.length) {
+      if (params.sizeType.indexOf('compressed') === -1) {
+        params.compressed = false
+      }
+    }
+    console.log('外勤WK内核chooseVideo', params)
+    wq.chooseVideo({
+      ...params,
+      success: function (res) {
+        // 标准化回调参数: 将tempFilePath改为localId
+        res.localId = res.tempFilePath
+        if (params.success) params.success(res)
+      }
+    }) // eslint-disable-line
+  },
+  /**
+    * 视频上传
+    * @param {Object} params
+    * {
+      uploadDir: '目录/年月',
+      tenantId: '企业id'
+      localId: 'localId',
+      success: func(res)
+    * }
+    */
+  uploadVideo: function (params) {
+    var uploadParams = Object.clone(params)
+    var self = this
+    if (!params.uploadDir) {
+      self.showToast(locale('hint_upload_video_must_dir') || '没有上传目录', {mask: false})
+      return
+    }
+    if (!params.localId) {
+      self.showToast(locale('hint_upload_video_must_localIds') || '没有上传视频地址', {mask: false})
+      return
+    }
+    if (params.tenantId) uploadParams.tenantId = params.tenantId
+    if (params.isAI) uploadParams.isAI = params.isAI
+    // 构建成功回调的参数
+    uploadParams.success = function () {
+      if (params.success) {
+        params.success({
+          errMsg: 'uploadVideo:ok',
+          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+          serverId: params.serverId,
+          tenantId: params.tenantId
+        })
+      }
+    }
+    console.log('外勤WK内核上传')
+    console.log(uploadParams)
+    wq.uploadImage(uploadParams) // eslint-disable-line
+  },
+  /**
     * 文件操作: 预览文件
     * @param {Object} params
     * params: {

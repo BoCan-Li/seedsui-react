@@ -1,6 +1,7 @@
 import React, {forwardRef} from 'react';
 
 const Photos = forwardRef(({
+  type,
   list, // [{id: '', name: '', src: ''}]
   upload, // 上传按钮覆盖的dom
   uploading, // 是否上传中
@@ -13,6 +14,7 @@ const Photos = forwardRef(({
   function click (event) {
     const e = event.nativeEvent;
     const target = e.target;
+    e.targetType = type;
     if (target.type === 'file') {
       target.value = ''; // 防止选择重复图片时不触发
     }
@@ -59,6 +61,9 @@ const Photos = forwardRef(({
         <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>
         <div className="photos-item-error"></div>
         <div className="photos-item-load"></div>
+        {type === 'video' && <div className="photos-item-video">
+          <div className="photos-item-video-icon"></div>
+        </div>}
         {onDelete && <div className="photos-delete">
           <div className="photos-delete-icon"></div>
         </div>}
@@ -67,10 +72,17 @@ const Photos = forwardRef(({
     })}
     {/* 图片上传: 上传按钮 */}
     {onChoose && <div className="photos-item photos-upload">
+      {/* 拍照或者视频图标 */}
+      <div className={`photos-upload-icon${type === 'video' ? ' video' : ''}`}></div>
+      {/* 拍照 */}
       {/* PC端使用file框 */}
-      {!navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
+      {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
       {upload && upload}
-      {uploading && <div className="photos-upload-loading">
+      {type !== 'video' && uploading && <div className="photos-upload-loading">
+        <div className="photos-upload-loading-icon"></div>
+      </div>}
+      {/* 视频 */}
+      {type === 'video' && uploading && <div className="photos-upload-loading">
         <div className="photos-upload-loading-icon"></div>
       </div>}
     </div>}
