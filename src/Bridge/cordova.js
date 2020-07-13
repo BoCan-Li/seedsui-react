@@ -250,7 +250,7 @@ var Bridge = {
         if (params.success) params.success(res)
       } else {
         if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
-        else self.showToast(locale('hint_video_upload_failed') || '上传失败', {mask: false})
+        else self.showToast(locale('hint_upload_failed') || '上传失败', {mask: false})
       }
     }, JSON.stringify(params))
   },
@@ -517,11 +517,11 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!params.uploadDir) {
-      self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
+      self.showToast(locale('hint_no_upload_dir') || '没有上传目录', {mask: false})
       return;
     }
     if (!params.localId || Object.isEmptyObject(params.localId)) {
-      self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
       return;
     }
     let filePathList = [{

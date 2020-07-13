@@ -200,11 +200,11 @@ var Bridge = {
     var uploadParams = Object.clone(params)
     var self = this
     if (!params.uploadDir) {
-      self.showToast(locale('hint_upload_image_must_dir') || '没有上传目录', {mask: false})
+      self.showToast(locale('hint_no_upload_dir') || '没有上传目录', {mask: false})
       return
     }
     if (!params.localId) {
-      self.showToast(locale('hint_upload_image_must_localIds') || '没有上传图片地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
       return
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
@@ -228,6 +228,60 @@ var Bridge = {
     wq.previewImage(params) // eslint-disable-line
   },
   /**
+    * 视频文件上传, 658支持
+    * @param {Object} params
+    * {
+      uploadDir: '目录/年月',
+      localId: 'localId',
+      success: func(res)
+    * }
+    */
+   uploadFile: function (params = {}) {
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.5.8') < 0) {
+      self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.5.8及以上的客户端', {mask: false})
+      return
+    }
+    if (!params.localId) {
+      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
+      return
+    }
+    wq.uploadFile({
+      url: `/fileupload/v1/doUpload.do?uploadPath=${params.uploadDir || 'file'}`,
+      filePath: params.localId,
+      name: 'file',
+      formData: params.data,
+      success: (result = {}) => {
+        if (result.code === '1' && result.data[0]) {
+          const data = result.data[0];
+          let tenantId = data.url.replace('/' + data.filePath, '');
+          tenantId = tenantId.substring(tenantId.lastIndexOf('/') + 1, tenantId.length)
+          if (!params.success) return
+          params.success({
+            errMsg: 'uploadFile:ok',
+            thumb: data.url,
+            src: data.url,
+            tenantId: tenantId,
+            path: data.filePath
+          })
+        } else {
+          if (!params.fail) return
+          params.fail({
+            errMsg: `uploadFile:fail ${result.message || locale('hint_upload_failed') || '上传失败'}`,
+            ...result
+          })
+        }
+      },
+      fail: (err = {}) => {
+        if (!params.fail) return
+        params.fail({
+          errMsg: `uploadFile:fail ${err.message || locale('hint_upload_failed') || '上传失败'}`,
+          ...err
+        })
+      }
+    })
+  },
+  /**
     * 选择、录制视频
     * @param {Object} params
     * {
@@ -239,6 +293,11 @@ var Bridge = {
     * }
     */
   chooseVideo: function (params = {}) {
+    const self = this
+    if (Device.compareVersion(Device.platformVersion, '6.5.8') < 0) {
+      self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.5.8及以上的客户端', {mask: false})
+      return
+    }
     // 标准化参数
     params.compressed = true
     if (params.sizeType && params.sizeType.length) {
@@ -255,44 +314,6 @@ var Bridge = {
         if (params.success) params.success(res)
       }
     }) // eslint-disable-line
-  },
-  /**
-    * 视频上传
-    * @param {Object} params
-    * {
-      uploadDir: '目录/年月',
-      tenantId: '企业id'
-      localId: 'localId',
-      success: func(res)
-    * }
-    */
-  uploadVideo: function (params) {
-    var uploadParams = Object.clone(params)
-    var self = this
-    if (!params.uploadDir) {
-      self.showToast(locale('hint_upload_video_must_dir') || '没有上传目录', {mask: false})
-      return
-    }
-    if (!params.localId) {
-      self.showToast(locale('hint_upload_video_must_localIds') || '没有上传视频地址', {mask: false})
-      return
-    }
-    if (params.tenantId) uploadParams.tenantId = params.tenantId
-    if (params.isAI) uploadParams.isAI = params.isAI
-    // 构建成功回调的参数
-    uploadParams.success = function () {
-      if (params.success) {
-        params.success({
-          errMsg: 'uploadVideo:ok',
-          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
-          serverId: params.serverId,
-          tenantId: params.tenantId
-        })
-      }
-    }
-    console.log('外勤WK内核上传')
-    console.log(uploadParams)
-    wq.uploadImage(uploadParams) // eslint-disable-line
   },
   /**
     * 文件操作: 预览文件

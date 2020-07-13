@@ -1,21 +1,24 @@
 import React, {forwardRef, useRef, useImperativeHandle, useEffect, useState, useContext} from 'react';
+import {createPortal} from 'react-dom';
 import Context from './../Context/instance.js';
 
 const VideoFull = forwardRef(({
-    scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
-    cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
-    
-    poster = '',
-    src,
-    autoPlay = true,
-    isLive,
-    params,
-    onError,
-    onLoad,
+  portal,
 
-    bar, // 状态栏
-    children,
-    ...others
+  scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
+  cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
+  
+  poster = '',
+  src,
+  autoPlay = true,
+  isLive,
+  params,
+  onError,
+  onLoad,
+
+  bar, // 状态栏
+  children,
+  ...others
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
@@ -198,13 +201,18 @@ const VideoFull = forwardRef(({
     initInstance();
   }, []) // eslint-disable-line
 
-  return (
-    <div className="videofull-page" {...others} ref={refEl}>
-      <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
-      {showBar && bar ? bar : null}
-      {children}
-    </div>
-  );
+  const DOM = <div className="videofull-page" {...others} ref={refEl}>
+    <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
+    {showBar && bar ? bar : null}
+    {children}
+  </div>;
+  if (portal) {
+    return createPortal(
+      DOM,
+      portal
+    );
+  }
+  return DOM;
 })
 
 export default VideoFull

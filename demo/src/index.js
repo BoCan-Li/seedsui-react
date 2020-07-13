@@ -10,7 +10,7 @@ import {
   Container,
   Swiper,
   Vott,
-  Photos
+  Loading
 } from '../../src';
 
 function Demo () {
@@ -353,45 +353,12 @@ function Demo () {
     console.log(e);
     console.log(speed);
   }
-  const [stauts, setStatus] = useState(1);
-  useEffect(() => {
-    setTimeout(() => {
-      setStatus(2)
-    }, 5000);
-  }, [])
-  const list = [{
-    id: '1',
-    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
-    src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
-  },{
-    id: '2',
-    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-    src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-  }];
-  
-  function onClick (...params) {
-    console.log('点击')
-    console.log(...params)
-  }
-  function onChoose (e) {
-    console.log('选择')
-    console.log(e.targetType)
-  }
-  function onDelete (...params) {
-    console.log('删除')
-    console.log(...params)
-  }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <Photos
-        type="video"
-        list={list}
-        onChoose={onChoose}
-        onClick={onClick}
-      />
+      <Loading/>
       {/* <Swiper
         speed={speed}
         activeIndex={activeIndex}

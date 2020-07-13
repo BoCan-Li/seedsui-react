@@ -18,6 +18,7 @@ export { default as BiGauge } from './BiGauge'; // 不常用
 export { default as Bridge } from './Bridge';
 export { default as Button } from './Button';
 export { default as Calendar } from './Calendar'; // 不常用
+export { default as Camera } from './Camera'; // 不常用
 export { default as Card } from './Card';
 export { default as Carrousel } from './Carrousel';
 export { default as Chat } from './Chat';
@@ -66,6 +67,7 @@ export { default as Marquee } from './Marquee';
 export { default as MenuTiled } from './MenuTiled';
 export { default as MenuTree } from './MenuTree';
 export { default as VideoFull } from './VideoFull'; // 不常用
+export { default as Videos } from './Videos'; // 不常用
 export { default as Vott } from './Vott'; // 不常用
 export { default as Notice } from './Notice';
 export { default as NumBox } from './NumBox';

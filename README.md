@@ -196,6 +196,7 @@ class Test extends Component {
 - [Bridge](#bridge) 桥接
 - [Button](#button) 按钮
 - [Calendar](#calendar) 日历
+- [Camera](#camera) h5拍照与录相功能
 - [Card](#card) 卡片
 - [Carrousel](#carrousel) 轮播(Swiper的简化版)
 - [Chat](#chat) 聊天
@@ -643,6 +644,15 @@ import Button from 'seedsui-react/lib/Button';
 
 
 
+
+
+
+
+
+
+
+
+
 ## Calendar
 [日历](https://unpkg.com/seedsui-react/src/lib/Calendar/Calendar.js)
 ### 属性
@@ -717,6 +727,59 @@ function showCustom () {
 
 
 
+
+
+
+
+
+
+
+## Camera
+[h5拍照与录相功能](https://unpkg.com/seedsui-react/src/lib/Camera/Camera.js)
+### 属性
+```javascript
+<Camera
+  portal={传送dom object, 默认document.getElementById('root')}
+  onHide={点击隐藏按钮 func, 默认无}
+  onRecord={录相 func(e, file), 默认无}
+  children={子元素 node, 默认无}
+  {...others}
+/>
+```
+### 示例
+```javascript
+import Camera from 'seedsui-react/lib/Camera';
+// h5录相完成后保存
+function saveRecord (e, file) {
+  var data = new FormData();
+  data.append("file", file);
+  // 保存, 仅为示例, 并非真实接口
+  var req = new XMLHttpRequest();
+  req.open("POST", "com.spinsoft.bip.frame.utils.image.saveMp4.biz.ext");
+  req.send(data);
+}
+
+{/* 录相 */}
+{showRecord && <Camera
+  onHide={() => setShowRecord(false)}
+  onRecord={saveRecord}
+/>}
+```
+[返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Card
 [卡片](https://unpkg.com/seedsui-react/src/lib/Card/Card.js)
 ### 属性
@@ -737,6 +800,15 @@ import Card from 'seedsui-react/lib/Card';
 </Card>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5751,6 +5823,7 @@ function onChange (e, value, options) {
 ### 属性
 ```javascript
 <VideoFull
+  portal={传送dom object, 默认document.getElementById('root')}
   scriptSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js'}
   cssSDK={TCPlayer库地址 string, 默认'//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css'}
 
@@ -5796,6 +5869,65 @@ function playVideo () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Videos
+[视频控件](https://unpkg.com/seedsui-react/src/lib/Videos/Videos.js)
+### 属性
+```javascript
+<Videos
+  onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
+  onClick={点击一项 func(e, item, index), 默认点击预览视频}
+  {...others} // 其它属性与Photos一致
+/>
+```
+### 示例
+```javascript
+import Videos from 'seedsui-react/lib/Videos';
+const list = [{
+  id: '1',
+  thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+  src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
+},{
+  id: '2',
+  thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+  src: 'https://www.w3school.com.cn/i/movie.ogg'
+}];
+
+function onClick (...params) {
+  console.log('点击')
+  console.log(...params)
+}
+function onChoose (...params) {
+  console.log('选择')
+  console.log(...params)
+}
+function onDelete (...params) {
+  console.log('删除')
+  console.log(...params)
+}
+
+<Videos
+  list={list}
+  onChoose={onChoose}
+  onDelete={onDelete}
+  onClick={onClick}
+/>
+```
+[返回目录](#component)
 
 
 
