@@ -4690,7 +4690,6 @@ import Sticker from 'seedsui-react/lib/Sticker';
   params={实例化Swiper的参数 object, 默认无} // https://swiperjs.com/api/#parameters
   speed={切换activeIndex时的动画过渡速度 number, 默认300}
   activeIndex={默认选中第几页 number, 默认0}
-  onClick={点击页 func(s, e)}
   onChange={轮播时事件回调 func(s)}
   // 画布容器
   wrapperAttribute={画布容器属性 object, 默认无} // 例如: wrapperAttribute={className: 'notice-wrapper'}

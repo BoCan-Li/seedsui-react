@@ -6,7 +6,6 @@ const Swiper = forwardRef(({
   params = {},
   speed = 500,
   activeIndex = 0,
-  onClick,
   onChange,
   // 画布容器
   wrapperAttribute = {},
@@ -37,9 +36,6 @@ const Swiper = forwardRef(({
       on: {
         slideChange: function () {
           if (onChange) onChange(instance.current)
-        },
-        click: function (e) {
-          if (onClick) onClick(instance.current, e)
         },
         ...params.on
       }
@@ -83,12 +79,6 @@ const Swiper = forwardRef(({
       instance.current.off('slideChange');
       instance.current.on('slideChange', function () {
         if (onChange) onChange(instance.current)
-      });
-    }
-    if (!params.on || !params.on.click) {
-      instance.current.off('click');
-      instance.current.on('click', function (e) {
-        if (onClick) onClick(instance.current, e)
       });
     }
   }

@@ -114,7 +114,7 @@ const Vott = forwardRef(({
   }
 
   return (
-    <div className="vott-container" {...others} ref={refEl}>
+    <div ref={refEl} {...others} className={`vott-container${others.className ? ' ' + others.className : ''}`}>
       <div className="vott-wrapper" onClick={click}>
         <svg className="vott-svg" preserveAspectRatio="none"></svg>
         {watermark && <div className="vott-watermark" style={{backgroundImage: `url(${watermark})`}}></div>}

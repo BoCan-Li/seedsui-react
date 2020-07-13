@@ -9,8 +9,7 @@ import {
   Bridge,
   Container,
   Swiper,
-  Vott,
-  Loading
+  Vott
 } from '../../src';
 
 function Demo () {
@@ -344,26 +343,25 @@ function Demo () {
       setSpeed(500);
     }, 3000);
   }, [])
-  function changeHandler (s) {
+  function changeHandler (s = {}) {
     console.log(s.activeIndex);
     setActiveIndex(s.activeIndex);
   }
-  function clickHandler (s, e) {
-    console.log(s);
-    console.log(e);
-    console.log(speed);
+  function clickHandler (e) {
+    if (e.target.classList.contains('swiper-button-prev') || e.target.classList.contains('swiper-button-next')) {
+      return;
+    }
+    console.log(e.target);
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <Loading/>
-      {/* <Swiper
+      <Swiper
         speed={speed}
         activeIndex={activeIndex}
         onChange={changeHandler}
-        onClick={clickHandler}
         style={{
           width: '100%',
           height: '100%'
@@ -373,9 +371,12 @@ function Demo () {
           pagination: {
             el: '.swiper-pagination',
           },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+          // navigation: {
+          //   nextEl: '.swiper-button-next',
+          //   prevEl: '.swiper-button-prev',
+          // },
+          on: {
+            tap: clickHandler
           }
         }}
         containerChildren={<div
@@ -391,7 +392,7 @@ function Demo () {
         <img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
         <Vott
           className="swiper-zoom-target"
-          style={{height: '100%', width: '100%', backgroundColor: 'black'}}
+          style={{height: '100%', width: '100%', backgroundColor: 'black', pointerEvents: 'none'}}
           data={data}
           readOnly={readOnly}
           src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"
@@ -399,7 +400,7 @@ function Demo () {
           onChange={onChange}
           preview={false}
         />
-      </Swiper> */}
+      </Swiper>
     </Container>
   </Page>
 }
