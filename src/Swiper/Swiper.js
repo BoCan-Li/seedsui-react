@@ -25,7 +25,7 @@ const Swiper = forwardRef(({
 
   useEffect(() => {
     if (!refEl || !refEl.current) return
-    instance.current = new Instance('.swiper-container', {
+    instance.current = new Instance(refEl.current, {
       ...params
     });
     refEl.current.instance = instance;
@@ -42,7 +42,7 @@ const Swiper = forwardRef(({
 
   return (
     <div ref={refEl} {...others} className={`swiper-container${others.className ? ' ' + others.className : ''}`}>
-      <div className="swiper-wrapper">
+      <div {...wrapperAttribute} className={`swiper-wrapper${wrapperAttribute.className ? ' ' + wrapperAttribute.className : ''}`}>
         {children}
       </div>
       {/* 系统默认分页 */}

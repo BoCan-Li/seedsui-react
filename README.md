@@ -4708,12 +4708,8 @@ import Sticker from 'seedsui-react/lib/Sticker';
 import Swiper from 'seedsui-react/lib/Swiper';
 // 初始化轮播
 function initHandler (s) {
-  s.slideTo(activeIndex, 0);
-}
-// 轮播切换
-let [activeIndex, setActiveIndex] = useState(1);
-function changeHandler (s = {}) {
-  setActiveIndex(s.activeIndex);
+  let defaultIndex = 1;
+  s.slideTo(defaultIndex, 0);
 }
 // 点击事件: 防止与放大缩小的双击事件冲突
 function clickHandler (s, e) {
@@ -4752,7 +4748,6 @@ function zoomHandler () {
       },
       on: {
         init: initHandler,
-        slideChange: changeHandler,
         tap: clickHandler,
         zoomChange: zoomHandler
       }
