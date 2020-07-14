@@ -4,13 +4,8 @@ import Instance from './instance';
 
 const Swiper = forwardRef(({
   params = {},
-  speed = 500,
-  activeIndex = 0,
-  onChange,
   // 画布容器
   wrapperAttribute = {},
-  // 单项容器
-  slideAttribute = {},
   // 分页
   paginationAttribute = {},
   // 翻页
@@ -27,70 +22,28 @@ const Swiper = forwardRef(({
     return refEl.current
   });
   const instance = useRef(null)
-  const slides = React.Children.toArray(children)
 
   useEffect(() => {
     if (!refEl || !refEl.current) return
-    instance.current = new Instance(refEl.current, {
-      ...params,
-      on: {
-        slideChange: function () {
-          if (onChange) onChange(instance.current)
-        },
-        ...params.on
-      }
+    instance.current = new Instance('.swiper-container', {
+      ...params
     });
     refEl.current.instance = instance;
-    slideToActiveIndex();
   }, []) // eslint-disable-line
-
-  function beforeUpdate () {
-    if (!instance.current && (!slides || !slides.length)) return false;
-    return true;
-  }
-  useEffect(() => {
-    if (!beforeUpdate()) return;
-    instance.current.update();
-    slideToActiveIndex();
-  }, slides); // eslint-disable-line
-
-  useEffect(() => {
-    slideToActiveIndex();
-  }, [activeIndex]); // eslint-disable-line
-
-  function slideToActiveIndex () {
-    if (!beforeUpdate()) return;
-    let index = 0;
-    if (activeIndex > slides.length - 1) {
-      index = slides.length - 1;
-    } else if (activeIndex < 0) {
-      index = 0;
-    } else {
-      index = activeIndex;
-    }
-    // 跳转索引与当前索引一致不需要跳转
-    if (index === instance.current.activeIndex) return;
-    instance.current.slideTo(index, speed);
-  }
 
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
-    if (!params.on || !params.on.slideChange) {
-      instance.current.off('slideChange');
-      instance.current.on('slideChange', function () {
-        if (onChange) onChange(instance.current)
-      });
+    if (!params.on) return;
+    for (let eventName in params.on) {
+      instance.current.off(eventName);
+      instance.current.on(eventName, params.on[eventName]);
     }
   }
 
   return (
     <div ref={refEl} {...others} className={`swiper-container${others.className ? ' ' + others.className : ''}`}>
       <div className="swiper-wrapper">
-        {slides && slides.map((slide, index) => {
-          return (<div {...slideAttribute} className={`swiper-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}`} style={{overflow: params.zoom ? 'hidden' : '', ...(slideAttribute.style || {})}} key={index}>
-            {params.zoom ? <div className="swiper-zoom-container">{slide}</div> : slide}
-          </div>)
-        })}
+        {children}
       </div>
       {/* 系统默认分页 */}
       {params.pagination && <div {...paginationAttribute} className={`swiper-pagination${paginationAttribute.className ? ' ' + paginationAttribute.className : ''}`}></div>}

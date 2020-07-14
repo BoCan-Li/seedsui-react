@@ -4687,14 +4687,9 @@ import Sticker from 'seedsui-react/lib/Sticker';
 ### 属性
 ```javascript
 <Swiper
-  params={实例化Swiper的参数 object, 默认无} // https://swiperjs.com/api/#parameters
-  speed={切换activeIndex时的动画过渡速度 number, 默认300}
-  activeIndex={默认选中第几页 number, 默认0}
-  onChange={轮播时事件回调 func(s)}
+  params={实例化Swiper的参数 object, 默认无} // https://swiperjs.com/api
   // 画布容器
   wrapperAttribute={画布容器属性 object, 默认无} // 例如: wrapperAttribute={className: 'notice-wrapper'}
-  // 单项容器
-  slideAttribute={单项容器属性 object, 默认无}
   // 分页
   paginationAttribute={分页容器属性 object, 默认无}
   // 翻页
@@ -4711,41 +4706,40 @@ import Sticker from 'seedsui-react/lib/Sticker';
 ### 示例
 ```javascript
 import Swiper from 'seedsui-react/lib/Swiper';
+// 初始化轮播
+function initHandler (s) {
+  s.slideTo(activeIndex, 0);
+}
+// 轮播切换
 let [activeIndex, setActiveIndex] = useState(1);
-let [speed, setSpeed] = useState(0);
-const [slides, setSlides] = useState([
-  (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
-  (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'red'}}></div>),
-]);
-
-useEffect(() => {
-  setTimeout(() => {
-    setSlides([
-      (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
-      (<img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>),
-      (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'red'}}></div>),
-      (<div className="swiper-zoom-target" style={{width: '200px', height: '200px', backgroundColor: 'yellow', overflow: 'hidden'}}><img src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/></div>)
-    ])
-    setSpeed(300);
-  }, 3000);
-});
-
-function changeHandler (s) {
-  console.log(s.activeIndex);
+function changeHandler (s = {}) {
   setActiveIndex(s.activeIndex);
+}
+// 点击事件: 防止与放大缩小的双击事件冲突
+function clickHandler (s, e) {
+  if (e.target.classList.contains('swiper-button-prev') || e.target.classList.contains('swiper-button-next')) {
+    return;
+  }
+  if (clickSpace) {
+    window.clearTimeout(clickSpace)
+    clickSpace = null
+  }
+  clickSpace = setTimeout(() => {
+    console.log('触发点击')
+  }, 500)
+}
+function zoomHandler () {
+  if (clickSpace) {
+    window.clearTimeout(clickSpace)
+    clickSpace = null
+  }
 }
 
 <Container style={{backgroundColor: 'black'}}>
   <Swiper
-    speed={speed}
-    activeIndex={activeIndex}
-    onChange={changeHandler}
     style={{
       width: '100%',
       height: '100%'
-    }}
-    paginationAttribute={{
-      className: 'swiper-pagination-white'
     }}
     params={{
       zoom: true,
@@ -4755,11 +4749,25 @@ function changeHandler (s) {
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
+      },
+      on: {
+        init: initHandler,
+        slideChange: changeHandler,
+        tap: clickHandler,
+        zoomChange: zoomHandler
       }
     }}
-    slides={slides}
   >
-    <div style={{position: 'absolute', top: '0', left: '0', backgroundColor: 'red', width: '100px', height: '100px'}}>自定义子节点</div>
+    <div className="swiper-slide">
+      <div className="swiper-zoom-container">
+        <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
+      </div>
+    </div>
+    <div className="swiper-slide">
+      <div className="swiper-zoom-container">
+        <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
+      </div>
+    </div>
   </Swiper>
 </Container>
 ```
