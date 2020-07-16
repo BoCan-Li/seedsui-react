@@ -7,106 +7,31 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Swiper,
+  InputDate,
+  Context
 } from '../../src';
 
-let clickSpace = null;
+import zhCN from '../../src/locale/zh_CN';
+import enUS from '../../src/locale/en_US';
 
 function Demo () {
-  // 初始化轮播
-  function initHandler (s) {
-    let defaultIndex = 1;
-    s.slideTo(defaultIndex, 0);
+  const [locale, setLocale] = useState(zhCN);
+  function useZh () {
+    setLocale(zhCN);
   }
-  // 点击事件: 防止与放大缩小的双击事件冲突
-  function clickHandler (s, e) {
-    if (e.target.classList.contains('swiper-button-prev') || e.target.classList.contains('swiper-button-next')) {
-      return;
-    }
-    if (clickSpace) {
-      window.clearTimeout(clickSpace)
-      clickSpace = null
-    }
-    clickSpace = setTimeout(() => {
-      console.log('触发点击')
-    }, 500)
+  function useEn () {
+    setLocale(enUS);
   }
-  function zoomHandler () {
-    if (clickSpace) {
-      window.clearTimeout(clickSpace)
-      clickSpace = null
-    }
-  }
-  
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <Swiper
-        style={{
-          width: '100%',
-          height: '200px'
-        }}
-        params={{
-          zoom: true,
-          pagination: {
-            el: '.swiper-pagination',
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-          on: {
-            init: initHandler,
-            tap: clickHandler,
-            zoomChange: zoomHandler
-          }
-        }}
-      >
-        <div className="swiper-slide">
-          <div className="swiper-zoom-container">
-            <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-          </div>
-        </div>
-        <div className="swiper-slide">
-          <div className="swiper-zoom-container">
-            <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-          </div>
-        </div>
-      </Swiper>
-      <Swiper
-        style={{
-          width: '100%',
-          height: '200px'
-        }}
-        params={{
-          zoom: true,
-          pagination: {
-            el: '.swiper-pagination',
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-          on: {
-            init: initHandler,
-            tap: clickHandler,
-            zoomChange: zoomHandler
-          }
-        }}
-      >
-        <div className="swiper-slide">
-          <div className="swiper-zoom-container">
-            <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-          </div>
-        </div>
-        <div className="swiper-slide">
-          <div className="swiper-zoom-container">
-            <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-          </div>
-        </div>
-      </Swiper>
+      <input type="button" value="英文" onClick={useEn}/>
+      <input type="button" value="中文" onClick={useZh}/>
+      <Context locale={locale}>
+        <InputDate type="datetime"/>
+      </Context>
     </Container>
   </Page>
 }
