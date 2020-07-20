@@ -4,6 +4,8 @@ import Bridge from './../Bridge';
 import MapView from './../MapView';
 import Context from '../Context/instance.js';
 
+let mapData = null;
+
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const InputLocation = forwardRef(({
   loadingValue,
@@ -20,7 +22,7 @@ const InputLocation = forwardRef(({
   useImperativeHandle(ref, () => {
     return refEl.current
   });
-  const [mapData, setMapData] = useState(null);
+  const [mapShow, setMapShow] = useState(false);
 
   const context = useContext(Context) || {};
   const locale = context.locale || {};
@@ -54,10 +56,12 @@ const InputLocation = forwardRef(({
     // 只读状态不允许定位
     if (readOnly === true) {
       if (preview && selected && selected.longitude && selected.latitude) { // 预览
-        setMapData({
+        mapData = {
           point: [selected.longitude, selected.latitude],
-          address: selected.address
-        });
+          address: selected.address,
+          show: true
+        };
+        setMapShow(true);
       }
       return;
     }
@@ -137,10 +141,11 @@ const InputLocation = forwardRef(({
       inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important input-location-success ' + inputClassName: 'input-location-success ' + inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
     />
     {mapData && <MapView
+      show={mapShow}
       header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
       points={[mapData.point]}
       portal={context.portal || document.getElementById('root') || document.body}
-      onHide={() => setMapData(null)}
+      onHide={() => setMapShow(false)}
     />}
   </Fragment>
 })

@@ -241,6 +241,7 @@ class Test extends Component {
 - [ListPull](#listpull) 可推动列表
 - [Loading](#loading) 加载中
 - [LotteryWheel](#lotterywheel) 奖品轮播
+- [MapView](#MapView) 地图预览
 - [Mark](#mark) 标记
 - [Marquee](#marquee) 跑马灯
 - [MenuTiled](#menutiled) 平铺弹出菜单
@@ -3492,6 +3493,74 @@ const wrapperWidth = containerWidth * 0.85;
 </div>
 ```
 [返回目录](#component)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## MapView
+[地图预览](https://unpkg.com/seedsui-react/src/lib/MapView/MapView.js)
+### 属性
+```javascript
+<MapView
+  show={*显隐 bool, 默认false} // 百度地图不能移除DOM, 再渲染
+  portal={传送dom object, 默认document.getElementById('root')}
+  caption={原生头部标题 string, 默认'暂无数据'}
+  onHide={点击隐藏按钮 func, 默认无}
+  // 其它属性
+  center={定位地址 string, 默认'江苏省,南京市'}
+  // 标记点
+  points={标记点 array, 默认无} // [[118.798128, 31.968592], [118.619429,32.113449]] => 南京南站, 老山
+  // 圆形
+  circle={圆形 object, 默认无} // {point: [118.798128, 31.968592], radius: 1000} => 南京南站
+  // 多边形
+  polygon={多边形 array, 默认无} // [[118.798128, 31.968592], [118.619429,32.113449], [118.694616,31.97165]]
+  // 地区
+  district={地区 object, 默认无} // {province: {id: "320000", name: "江苏"}, city: {id: "320100", name: "南京市"}, district: {id: "320105", name: "建邺区"}}
+  // 子元素
+  header={header容器内子元素 node, 默认无}
+  children={子元素 node, 默认无}
+/>
+```
+### 示例
+```javascript
+import Loading from 'seedsui-react/lib/Loading';
+let mapData = null;
+mapData = {
+  point: [selected.longitude, selected.latitude],
+  address: selected.address,
+  show: true
+};
+
+const [mapShow, setMapShow] = useState(false);
+
+{mapData && <MapView
+  show={mapShow}
+  header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
+  points={[mapData.point]}
+  portal={context.portal || document.getElementById('root') || document.body}
+  onHide={() => setMapShow(false)}
+/>}
+```
+[返回目录](#component)
+
+
+
+
+
 
 
 

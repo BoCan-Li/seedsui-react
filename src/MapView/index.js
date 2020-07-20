@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import MapUtil from './../MapUtil';
 import Page from './../Page';
@@ -11,8 +11,9 @@ import Close from './Close';
 import helper from './helper';
 
 function MapView ({
+  show,
   portal,
-  title,
+  caption,
   onHide,
   // 其它属性
   center = '江苏省,南京市',
@@ -28,6 +29,7 @@ function MapView ({
   header,
   children
 }) {
+  const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');
 
   useEffect(() => {
@@ -52,9 +54,8 @@ function MapView ({
       return;
     }
     console.log('初始化地图')
-    helper.initMap(center, () => {
-      console.log('初始化地图完成')
-    });
+    if (!refWrapperEl.current) return;
+    helper.initMap(refWrapperEl.current, center);
   }
 
   // 绘制标记点
@@ -95,15 +96,15 @@ function MapView ({
 
   // 标题
   useEffect(() => {
-    if (title) {
-      Bridge.setTitle(title);
+    if (caption) {
+      Bridge.setTitle(caption);
     }
-  }, [title])
+  }, [caption])
 
-  const DOM = <Page>
+  const DOM = <Page className={show ? '' : 'hide'}>
     {header && <Header>{header}</Header>}
-    <Container style={{position: 'relative'}}>
-      <Wrapper/>
+    <Container>
+      <Wrapper ref={refWrapperEl}/>
       <Close onClick={onHide}/>
       {children}
     </Container>

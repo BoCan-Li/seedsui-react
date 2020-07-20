@@ -18,13 +18,18 @@ import zhCN from '../../src/locale/zh_CN';
 import enUS from '../../src/locale/en_US';
 
 function Demo () {
-  const [locale, setLocale] = useState(zhCN);
-  function useZh () {
-    setLocale(zhCN);
+  const [selected, setSelected] = useState({latitude: '31.968592', longitude: '118.798128', address: '南京南站'});
+  function changeSelected () {
+    setSelected({
+      latitude: '32.113449', longitude: '118.619429', address: '老山'
+    });
   }
-  function useEn () {
-    setLocale(enUS);
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      changeSelected();
+      console.log('修改值')
+    }, 3000);
+  }, [])
   const [value, setValue] = useState('asdf');
   function onChange (e, value) {
     console.log(e.target);
@@ -41,19 +46,14 @@ function Demo () {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <input type="button" value="英文" onClick={useEn}/>
-      <input type="button" value="中文" onClick={useZh}/>
-      <Context locale={locale}>
-        <InputDate type="datetime"/>
-        <InputLocation
-          selected={{latitude: '31.968592', longitude: '118.798128', address: '南京南站'}}
-          readOnly={true}
-          value={value}
-          placeholder="请点击获取位置信息"
-          onChange={onChange}
-          onClick={(e) => console.log(e)}
-        />
-      </Context>
+      <InputLocation
+        selected={selected}
+        readOnly={true}
+        value={value}
+        placeholder="请点击获取位置信息"
+        onChange={onChange}
+        onClick={(e) => console.log(e)}
+      />
     </Container>
   </Page>
 }

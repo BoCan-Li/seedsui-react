@@ -17,9 +17,9 @@ export default {
   // 圆形
   circle: null,
   // 初始化地图
-  initMap: function (center, onLoad) {
-    self = this
-    const mapUtil = new MapUtil('Id-MapLocateNow-MapContainer', {
+  initMap: function (container, center) {
+    var self = this
+    const mapUtil = new MapUtil(container, {
       // 缩放导航
       navigation: {
         position: 'bottom-right',
@@ -31,8 +31,9 @@ export default {
       }
     });
     mapUtil.map.addEventListener('load', (e) => {
+      // 加载完成开始绘制
       self.mapUtil = mapUtil;
-      if (onLoad) onLoad(e);
+      console.log('初始化地图完成')
     }, false)
   },
   // 标记: 绘制标记
@@ -72,18 +73,21 @@ export default {
         }
       }
     });
+    console.log('绘制标记完成')
     return marker;
   },
   // 圆形: 绘制标签
   drawLabel: function (point, radius) {
-    if (!this.mapUtil) {
+    var self = this;
+    let bdPoint = GeoUtil.coordtransform(point);
+    if (!self.mapUtil) {
       setTimeout(() => {
-        this.drawLabel(point, radius);
+        self.drawLabel(bdPoint, radius);
       }, 500);
       return;
     }
-    if (!this.label) {
-      this.label = this.mapUtil.drawLabel(point, `半径${radius}米`, {
+    if (!self.label) {
+      self.label = self.mapUtil.drawLabel(bdPoint, `半径${radius}米`, {
         offset: {
           width: 0,
           height: 14
@@ -93,8 +97,8 @@ export default {
         }
       })
     } else {
-      this.label.setPosition(point)
-      this.label.setContent(`半径${Math.trunc(radius, 2)}米`)
+      self.label.setPosition(bdPoint)
+      self.label.setContent(`半径${Math.trunc(radius, 2)}米`)
     }
   },
   // 绘制圆形
@@ -108,12 +112,9 @@ export default {
       }, 500);
       return;
     }
-
-    let circle = self.mapUtil.drawCircle(GeoUtil.coordtransform(point), radius)
-    if (!circle) return;
     let bdPoint = GeoUtil.coordtransform(point);
-    circle.setCenter(bdPoint)
-
+    let circle = self.mapUtil.drawCircle(bdPoint, radius)
+    if (!circle) return;
     setTimeout(() => {
       self.mapUtil.centerToCircle(circle, {
         zoomFactor: -1
@@ -162,20 +163,20 @@ export default {
     });
   },
   destroy: function () {
-    // var self = this;
-    // console.log('移除标注');
+    var self = this;
+    console.log('移除标注');
     // 清空地图标注
-    // self.mapUtil.clearOverlays();
+    self.mapUtil.clearOverlays();
     // 标记
-    // self.markers = null;
-    // // 标签
-    // self.label = null;
-    // // 地区
-    // self.district = null;
-    // self.districtPolygons = null;
-    // // 多边形
-    // self.polygon = null;
-    // // 圆形
-    // self.circle = null;
+    self.markers = null;
+    // 标签
+    self.label = null;
+    // 地区
+    self.district = null;
+    self.districtPolygons = null;
+    // 多边形
+    self.polygon = null;
+    // 圆形
+    self.circle = null;
   }
 }

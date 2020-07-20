@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 
-function Wrapper ({
-  props = {}
-}) {
+const Wrapper = forwardRef(({
+  ...props
+}, ref) =>  {
   return (
-    <div {...props} className={`mapview${props.className ? ' ' + props.className : ''}`} id="Id-MapLocateNow-MapContainer"></div>
+    <div
+      ref={ref}
+      {...props}
+      className={`mapview${props.className ? ' ' + props.className : ''}`}
+      id="Id-MapLocateNow-MapContainer"
+    >
+    </div>
   );
-}
+})
+
 export default Wrapper;
