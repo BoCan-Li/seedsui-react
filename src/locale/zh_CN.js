@@ -1,6 +1,7 @@
 export default {
   'cancel': '取消',
   'ok': '确定',
+  'close': '关闭',
   'finish': '完成',
   'submit': '提交',
   'uploaded_completed': '上传完成',

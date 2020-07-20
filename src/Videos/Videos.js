@@ -7,6 +7,7 @@ import Camera from './../Camera';
 const Videos = forwardRef(({
   onClick,
   onChoose,
+  preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
   const refVideoFull = useRef(null);
@@ -18,8 +19,8 @@ const Videos = forwardRef(({
   function click (e, item, index) {
     if (onClick) {
       onClick(e, item, index);
-      return;
     }
+    if (!preview) return;
     if (!item.src) {
       Bridge.showToast('没有src', {mask: false})
     }

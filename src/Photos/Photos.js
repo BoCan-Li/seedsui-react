@@ -8,6 +8,7 @@ const Photos = forwardRef(({
   onChoose, // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete,
   onClick,
+  preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
   // 点击整个photos容器
@@ -23,6 +24,9 @@ const Photos = forwardRef(({
     } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
       if (index && onClick) onClick(e, list[index], Number(index));
+      if (preview) {
+        // 预览
+      }
     } else if (target.classList.contains('photos-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
       if (index && onDelete) onDelete(e, list[index], Number(index));

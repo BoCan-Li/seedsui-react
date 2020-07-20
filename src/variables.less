@@ -3765,6 +3765,9 @@ a {
   .input-location-error{
     color: @cancel-bg;
   }
+  .input-location-success{
+    color: @link-bg;
+  }
   .input-location-icon{
     width: 24px;
     height: 24px;
@@ -4530,6 +4533,99 @@ a {
     z-index: 2;
   }
 }
+
+
+
+
+
+
+
+
+
+
+// MapView
+.setMapView() {
+  .mapview{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    // 缩放容器
+    .BMap_stdMpCtrl.BMap_stdMpType3.BMap_noprint.anchorBR{
+      width: 30px !important;
+      height: 65px !important;
+      .BMap_stdMpZoom{
+        width: 30px !important;
+        height: 65px !important;
+      }
+    }
+    // 缩放加减号
+    .BMap_stdMpZoom .BMap_button{
+      background: #FFFFFF;
+      box-shadow: 0 -1px 3px 0 rgba(0,0,0,0.20);
+      border-radius: 4px;
+      border-radius: 4px;
+      height: 30px;
+      width: 30px;
+      background-image: initial;
+      text-align: center;
+      line-height: 30px;
+      color: #808080;
+      &.BMap_stdMpZoomIn { // 加号
+        background-position: 0;
+
+        font-family: 'iconfont';
+        &:extend(.icon-plus-fill all);
+      }
+      &.BMap_stdMpZoomOut { // 减号
+        top: auto !important;
+        bottom: 0 !important;
+        background-position: 0;
+
+        font-family: 'iconfont';
+        &:extend(.icon-minus-fill all);
+      }
+    }
+    // 圆形拖拽
+    .BMap_vectex_node{
+      background-image: none;
+      border-radius: 100%;
+      background: #FFFFFF;
+      border: 1px solid #1A1A1A;
+    }
+  }
+  .mapview-close{
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items:center;
+    height: 30px;
+    background: white;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.20);
+    border-radius: 2px;
+    border-radius: 2px;
+    padding: 0 12px;
+  }
+  .mapview-close-label{
+    display:block;
+  }
+  .mapview-bar{
+    position: relative;
+    background-color: #FAFAFA;
+    border-bottom: 1px solid #E6E7E8;
+    height: 45px;
+    line-height: 45px;
+    padding: 0 10px;
+  }
+}
+
+
+
+
 
 
 

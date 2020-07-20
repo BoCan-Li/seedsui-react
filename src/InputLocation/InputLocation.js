@@ -1,6 +1,7 @@
-import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment} from 'react';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
+import MapView from './../MapView';
 import Context from '../Context/instance.js';
 
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
@@ -11,12 +12,15 @@ const InputLocation = forwardRef(({
   autoLocation,
   onClick,
   onChange,
+  preview = true, // 是否支持单击预览, readOnly为true时才生效
+  selected, // {latitude: '纬度', longitude: '经度', address:'地址'}
   ...others
 }, ref) =>  {
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
     return refEl.current
   });
+  const [mapData, setMapData] = useState(null);
 
   const context = useContext(Context) || {};
   const locale = context.locale || {};
@@ -38,11 +42,23 @@ const InputLocation = forwardRef(({
 
   const [status, setStatus] = useState('1') // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
   function click (event, value) {
-    if (readOnly === true) {
-      return;
-    }
     // 正在定位不允许操作
     if (status === '-1') {
+      return;
+    }
+    // 触发点击事件
+    var e = event.nativeEvent;
+    if (onClick) {
+      onClick(e, value);
+    }
+    // 只读状态不允许定位
+    if (readOnly === true) {
+      if (preview && selected && selected.longitude && selected.latitude) { // 预览
+        setMapData({
+          point: [selected.longitude, selected.latitude],
+          address: selected.address
+        });
+      }
       return;
     }
     // 非只读状态下, 点击错误面板, 允许手动输入位置
@@ -50,9 +66,6 @@ const InputLocation = forwardRef(({
       setStatus('1');
       return;
     }
-
-    var e = event.nativeEvent;
-    if (onClick) onClick(e, value);
     // 如果非只读, 则仅允许点击图标定位
     if (readOnly === false && !e.target.classList.contains('input-location-icon')) {
       return;
@@ -112,16 +125,24 @@ const InputLocation = forwardRef(({
   } else if (status === '0') {
     statusDOM = <div className={`input-text ${inputClassName} input-location-error`} style={(others.inputAttribute || {}).style || {}}>{failedValue}</div>;
   }
-  return <InputText
-    ref={refEl}
-    readOnly={readOnly}
-    onClick={click}
-    onChange={onChange}
-    children={statusDOM}
-    {...others}
-    riconAttribute={Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
-    inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important ' + inputClassName : inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
-  />;
+  return <Fragment>
+    <InputText
+      ref={refEl}
+      readOnly={readOnly}
+      onClick={click}
+      onChange={onChange}
+      children={statusDOM}
+      {...others}
+      riconAttribute={readOnly ? null : Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
+      inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important input-location-success ' + inputClassName: 'input-location-success ' + inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
+    />
+    {mapData && <MapView
+      header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
+      points={[mapData.point]}
+      portal={context.portal || document.getElementById('root') || document.body}
+      onHide={() => setMapData(null)}
+    />}
+  </Fragment>
 })
 
 export default InputLocation

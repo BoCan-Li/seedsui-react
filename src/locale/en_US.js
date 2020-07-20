@@ -1,6 +1,7 @@
 export default {
   'cancel': 'Cancel',
   'ok': 'Ok',
+  'close': 'Close',
   'finish': 'Finish',
   'submit': 'Submit',
   'uploaded_completed': 'Uploaded',
