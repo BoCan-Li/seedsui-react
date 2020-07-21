@@ -4,7 +4,6 @@ import Context from './../Context/instance.js';
 
 const VideoFull = forwardRef(({
   portal,
-  show = true, // 阿里视频库不能移除DOM, 再渲染
 
   scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
   cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
@@ -205,11 +204,15 @@ const VideoFull = forwardRef(({
   }
   
   useEffect(() => {
-    if (!show) return;
-    idSdkPlayer = `_seedsui_videofull_player_${Date.now()}`;
+    window._seedsui_videofull_player_ = window._seedsui_videofull_player_ ? window._seedsui_videofull_player_ + 1 : 1;
+    idSdkPlayer = `_seedsui_videofull_player_${window._seedsui_videofull_player_}`;
     setIdSdkPlayer(idSdkPlayer);
     if (instance.current) return;
     initInstance();
+
+    return () => {
+      if (instance.current) instance.current.dispose();
+    }
   }, []) // eslint-disable-line
 
   useEffect(() => {
@@ -218,7 +221,7 @@ const VideoFull = forwardRef(({
     }
   }, [pause])
 
-  const DOM = <div className={`videofull-page${others.className ? (show ? ' ' : ' hide') + others.className : (show ? '' : 'hide')}`} {...others} ref={refEl}>
+  const DOM = <div className={`videofull-page${others.className ? ' ' + others.className : ''}`} {...others} ref={refEl}>
     <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
     {showBar && bar ? bar : null}
     {children}
