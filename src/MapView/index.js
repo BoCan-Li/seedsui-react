@@ -58,7 +58,10 @@ function MapView ({
       return;
     }
     console.log('初始化地图' + center)
-    if (!refWrapperEl.current) return;
+    if (!refWrapperEl.current) {
+      setErrMsg('地图容器不存在');
+      return;
+    }
     helper.initMap(refWrapperEl.current, center);
   }
 

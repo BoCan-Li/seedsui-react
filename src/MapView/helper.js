@@ -1,7 +1,6 @@
 import MapUtil from './../MapUtil';
 import GeoUtil from './../GeoUtil';
 import Bridge from './../Bridge';
-// let self = null;
 
 export default {
   mapUtil: null,
@@ -19,6 +18,7 @@ export default {
   // 初始化地图
   initMap: function (container, center) {
     var self = this
+    Bridge.showLoading();
     const mapUtil = new MapUtil(container, {
       // 缩放导航
       navigation: {
@@ -31,6 +31,7 @@ export default {
       }
     });
     mapUtil.map.addEventListener('load', (e) => {
+      Bridge.hideLoading();
       // 加载完成开始绘制
       self.mapUtil = mapUtil;
       console.log('初始化地图完成')
@@ -137,11 +138,14 @@ export default {
       }, 500);
       return;
     }
+    let bdPolygons = polygon.map((point) => {
+      return GeoUtil.coordtransform(point);
+    })
     if (self.polygon) {
       self.mapUtil.clearOverlay(self.polygon)
     }
-    self.polygon = self.mapUtil.drawPolygon(polygon)
-    self.mapUtil.centerToPoints(polygon)
+    self.polygon = self.mapUtil.drawPolygon(bdPolygons)
+    self.mapUtil.centerToPoints(bdPolygons)
     console.log('绘制多边形完成');
   },
   /**
