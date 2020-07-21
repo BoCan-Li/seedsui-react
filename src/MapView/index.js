@@ -42,10 +42,14 @@ function MapView ({
         setErrMsg('地图库加载失败, 请稍后再试');
       }
     })
-    return () => {
+  }, []) // eslint-disable-line
+
+  // 隐藏时, 移除标注
+  useEffect(() => {
+    if (show === false) {
       helper.destroy();
     }
-  }, []) // eslint-disable-line
+  }, [show])
 
   // 初始化地图
   function initData () {
@@ -53,14 +57,14 @@ function MapView ({
       setErrMsg('地图库加载失败, 请稍后再试');
       return;
     }
-    console.log('初始化地图')
+    console.log('初始化地图' + center)
     if (!refWrapperEl.current) return;
     helper.initMap(refWrapperEl.current, center);
   }
 
   // 绘制标记点
   useEffect(() => {
-    if (points && points.length) {
+    if (points && points.length && show) {
       console.log('绘制标记')
       helper.drawMarkers(points)
     }
@@ -68,7 +72,7 @@ function MapView ({
 
   // 绘制圆形
   useEffect(() => {
-    if (circle && circle.point) {
+    if (circle && circle.point && show) {
       console.log('绘制圆形')
       helper.drawCircle(circle.point, circle.radius)
     }
@@ -76,7 +80,7 @@ function MapView ({
 
   // 绘制多边形
   useEffect(() => {
-    if (polygon) {
+    if (polygon && show) {
       console.log('绘制多边形')
       helper.drawPolygon(polygon)
     }
@@ -84,7 +88,7 @@ function MapView ({
 
   // 绘制地区
   useEffect(() => {
-    if (district) {
+    if (district && show) {
       console.log('绘制区域')
       let districtName = [];
       for (let name in district) {
@@ -96,7 +100,7 @@ function MapView ({
 
   // 标题
   useEffect(() => {
-    if (caption) {
+    if (caption && show) {
       Bridge.setTitle(caption);
     }
   }, [caption])

@@ -74,7 +74,6 @@ export default {
         }
       }
     });
-    console.log('绘制标记完成')
     return marker;
   },
   // 圆形: 绘制标签
@@ -175,8 +174,7 @@ export default {
   destroy: function () {
     var self = this;
     console.log('移除标注');
-    // 清空地图标注
-    self.mapUtil.clearOverlays();
+    self.mapUtil = null;
     // 标记
     self.markers = null;
     // 标签
