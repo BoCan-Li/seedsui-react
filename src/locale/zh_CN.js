@@ -99,5 +99,10 @@ export default {
   'hint_video_src': '请传入视频源',
   'hint_video_sdk_load_failed': '加载播放器库出错, 请稍后再试',
   'hint_upload_file_version': '此功能需要升级至6.5.8及以上的客户端',
-  'hint_choose_video_version': '此功能需要升级至6.5.8及以上的客户端'
+  'hint_choose_video_version': '此功能需要升级至6.5.8及以上的客户端',
+  'hint_map_ak': '请传入百度地图ak',
+  'hint_map_failed_load': '地图库加载失败, 请稍后再试',
+  'hint_map_no_container': '地图容器不存在',
+  'hint_map_init_timeout': '初始化地图超时, 请检查当前网络是否稳定',
+  'hint_map_no_boundary_data': '暂无{0}的边界数据'
 }

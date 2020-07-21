@@ -1,9 +1,12 @@
 import MapUtil from './../MapUtil';
 import GeoUtil from './../GeoUtil';
 import Bridge from './../Bridge';
+import locale from './../locale' // 国际化
 
 export default {
   mapUtil: null,
+  // 是否中断未完成的绘制
+  abort: false,
   // 标记
   markers: null,
   // 标签
@@ -16,7 +19,7 @@ export default {
   // 圆形
   circle: null,
   // 初始化地图
-  initMap: function (container, center) {
+  initMap: function (container, center, callback) {
     var self = this
     Bridge.showLoading();
     const mapUtil = new MapUtil(container, {
@@ -32,14 +35,23 @@ export default {
     });
     mapUtil.map.addEventListener('load', (e) => {
       Bridge.hideLoading();
+      window.clearTimeout(self.loadTimeout);
       // 加载完成开始绘制
       self.mapUtil = mapUtil;
       console.log('初始化地图完成')
+      callback(mapUtil);
     }, false)
+    // 超时处理
+    if (self.loadTimeout) window.clearTimeout(self.loadTimeout);
+    self.loadTimeout = setTimeout(() => {
+      Bridge.hideLoading();
+      callback(locale('hint_map_init_timeout') || '初始化地图超时, 请检查当前网络是否稳定');
+    }, 10000);
   },
   // 标记: 绘制标记
   drawMarkers: function (points) {
     var self = this;
+    if (self.abort) return;
     if (!self.mapUtil) {
       setTimeout(() => {
         self.drawMarkers(points);
@@ -80,13 +92,14 @@ export default {
   // 圆形: 绘制标签
   drawLabel: function (point, radius) {
     var self = this;
-    let bdPoint = GeoUtil.coordtransform(point);
+    if (self.abort) return;
     if (!self.mapUtil) {
       setTimeout(() => {
-        self.drawLabel(bdPoint, radius);
+        self.drawLabel(point, radius);
       }, 500);
       return;
     }
+    let bdPoint = GeoUtil.coordtransform(point);
     if (!self.label) {
       self.label = self.mapUtil.drawLabel(bdPoint, `半径${radius}米`, {
         offset: {
@@ -105,6 +118,7 @@ export default {
   // 绘制圆形
   drawCircle: function (point, radius) {
     var self = this;
+    if (self.abort) return;
     if (!point || point.length !== 2) return;
     if (!radius) return;
     if (!self.mapUtil) {
@@ -130,7 +144,8 @@ export default {
   },
   // 绘制多边形
   drawPolygon: function (polygon) {
-    var self = this
+    var self = this;
+    if (self.abort) return;
     if (!polygon || !polygon.length) return;
     if (!self.mapUtil) {
       setTimeout(() => {
@@ -152,7 +167,8 @@ export default {
    * 地区
    */
   drawDistrict: function (districtName) {
-    var self = this
+    var self = this;
+    if (self.abort) return;
     if (!districtName) return
     if (!self.mapUtil) {
       setTimeout(() => {
@@ -171,7 +187,7 @@ export default {
         console.log('绘制区域完成');
       },
       fail: (err) => {
-        Bridge.showToast(`暂无${districtName}的边界数据`, {mask: false});
+        Bridge.showToast(locale('hint_map_no_boundary_data', [districtName]) || `暂无${districtName}的边界数据`, {mask: false});
       }
     });
   },

@@ -99,5 +99,10 @@ export default {
   'hint_video_src': 'No param src',
   'hint_video_sdk_load_failed': 'failed to load video sdk',
   'hint_upload_file_version': 'Upload file needs to be upgraded to 6.5.8 and above clients',
-  'hint_choose_video_version': 'Choose video needs to be upgraded to 6.5.8 and above clients'
+  'hint_choose_video_version': 'Choose video needs to be upgraded to 6.5.8 and above clients',
+  'hint_map_ak': 'Please set param "ak"',
+  'hint_map_failed_load': 'Failed to load map library',
+  'hint_map_no_container': 'No map container',
+  'hint_map_init_timeout': 'Init map timeout',
+  'hint_map_no_boundary_data': 'No {0}\'s boundary data'
 }

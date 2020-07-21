@@ -3517,7 +3517,8 @@ const wrapperWidth = containerWidth * 0.85;
 ### 属性
 ```javascript
 <MapView
-  show={*显隐 bool, 默认false} // 百度地图不能移除DOM, 再渲染
+  ak={*百度地图key string, 默认无}
+  show={*显隐 bool, 默认true} // 百度地图不能移除DOM, 再渲染
   portal={传送dom object, 默认document.getElementById('root')}
   caption={原生头部标题 string, 默认'暂无数据'}
   onHide={点击隐藏按钮 func, 默认无}
@@ -3539,7 +3540,7 @@ const wrapperWidth = containerWidth * 0.85;
 ```
 ### 示例
 ```javascript
-import Loading from 'seedsui-react/lib/Loading';
+import MapView from 'seedsui-react/lib/MapView';
 let mapData = null;
 mapData = {
   point: [selected.longitude, selected.latitude],
@@ -3550,12 +3551,21 @@ mapData = {
 const [mapShow, setMapShow] = useState(false);
 
 {mapData && <MapView
+  ak="百度地图key"
   show={mapShow}
   header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
   points={[mapData.point]}
   portal={context.portal || document.getElementById('root') || document.body}
   onHide={() => setMapShow(false)}
 />}
+```
+
+```javascript
+import MapView from 'seedsui-react/lib/MapView';
+<MapView
+  ak='3pTjiH1BXLjASHeBmWUuSF83'
+  circle={{point: [118.798128, 31.968592], radius: 1000}}
+/>
 ```
 [返回目录](#component)
 

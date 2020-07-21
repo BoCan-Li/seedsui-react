@@ -9,9 +9,11 @@ import Bridge from './../Bridge';
 import Wrapper from './Wrapper';
 import Close from './Close';
 import helper from './helper';
+import Context from './../Context/instance.js';
 
 function MapView ({
-  show, // 百度地图不能移除DOM, 再渲染
+  ak, // 百度地图key
+  show = true, // 百度地图不能移除DOM, 再渲染
   portal,
   caption,
   onHide,
@@ -29,17 +31,25 @@ function MapView ({
   header,
   children
 }) {
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+
   const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');
 
   useEffect(() => {
+    if (!ak) {
+      setErrMsg(locale['hint_map_ak'] || '请传入百度地图ak');
+      return;
+    }
     MapUtil.load({
-      key: '3pTjiH1BXLjASHeBmWUuSF83',
+      ak: ak,
       success: () => {
         initData();
       },
       fail: () => {
-        setErrMsg('地图库加载失败, 请稍后再试');
+        setErrMsg(locale['hint_map_failed_load'] || '地图库加载失败, 请稍后再试');
       }
     })
   }, []) // eslint-disable-line
@@ -54,15 +64,21 @@ function MapView ({
   // 初始化地图
   function initData () {
     if (!window.BMap) { // 如果有高德地图, 则加上 || !window.AMap
-      setErrMsg('地图库加载失败, 请稍后再试');
+      setErrMsg(locale['hint_map_failed_load'] || '地图库加载失败, 请稍后再试');
       return;
     }
     console.log('初始化地图' + center)
     if (!refWrapperEl.current) {
-      setErrMsg('地图容器不存在');
+      setErrMsg(locale['hint_map_no_container'] || '地图容器不存在');
       return;
     }
-    helper.initMap(refWrapperEl.current, center);
+
+    helper.initMap(refWrapperEl.current, center, (result) => {
+      if (typeof result === 'string') {
+        setErrMsg(result);
+        return;
+      }
+    });
   }
 
   // 绘制标记点
@@ -108,11 +124,22 @@ function MapView ({
     }
   }, [caption])
 
+  // 中断绘制
+  useEffect(() => {
+    if (show) {
+      if (errMsg) {
+        helper.abort = true;
+      } else {
+        helper.abort = false;
+      }
+    }
+  }, [errMsg])
+
   const DOM = <Page className={show ? '' : 'hide'}>
     {header && <Header>{header}</Header>}
     <Container>
       <Wrapper ref={refWrapperEl}/>
-      <Close onClick={onHide}/>
+      {onHide && <Close onClick={onHide}/>}
       {children}
     </Container>
     {errMsg && <Notice caption={errMsg}/>}

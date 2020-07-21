@@ -7,7 +7,8 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Videos
+  Videos,
+  MapView
 } from '../../src';
 function Demo () {
   const list = [{
@@ -38,11 +39,9 @@ function Demo () {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <Videos
-        list={list}
-        onChoose={onChoose}
-        onDelete={onDelete}
-        onClick={onClick}
+      <MapView
+        ak='3pTjiH1BXLjASHeBmWUuSF83'
+        circle={{point: [118.798128, 31.968592], radius: 1000}}
       />
     </Container>
   </Page>

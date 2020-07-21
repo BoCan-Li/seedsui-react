@@ -1046,7 +1046,7 @@ var BaiduMap = function (id, params) {
 /**
   * 动态加载百度地图
   * @param {Object} params {
-  *   key: '百度地图ak',
+  *   ak: '百度地图ak',
   *   library: ['draw'], // 百度地图的其它库
   *   success: () => {},
   *   fail: ({errMsg: ''}) => {},
@@ -1055,7 +1055,7 @@ var BaiduMap = function (id, params) {
 BaiduMap.load = function (params = {}) {
   // window.BMAP_PROTOCOL = "https";
   // window.BMap_loadScriptTime = (new Date).getTime();
-  // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.key}&services=&t=20200415105918"></script>`);
+  // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918"></script>`);
   return new Promise(async (resolve) => {
     if (window.BMap) { // eslint-disable-line
       // 加载绘制库
@@ -1070,9 +1070,9 @@ BaiduMap.load = function (params = {}) {
       if (params.success) params.success()
       return
     }
-    if (!params.key) {
-      resolve('请在传入地图的密钥MapUtil.load({key: ""})')
-      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({key: ""})'})
+    if (!params.ak) {
+      resolve('请在传入地图的密钥MapUtil.load({ak: ""})')
+      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})'})
       return
     }
     window.BMAP_PROTOCOL = 'https';
@@ -1080,7 +1080,7 @@ BaiduMap.load = function (params = {}) {
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.charset = 'utf-8'
-    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.key}&services=&t=20200415105918`
+    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
     document.body.appendChild(script)
     script.onload = async function () {
       // 加载绘制库
