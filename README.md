@@ -5517,6 +5517,7 @@ function onChange (e, value, options) {
   poster={封面图片地址 string, 默认无}
   src={视频地址 string, 默认无}
   autoPlay={自动播放 boolean, 默认无, 仅pc端支持}
+  pause={暂停 boolean, 默认无} // true暂停
   isLive={是否直播 boolean, 默认无}
   params={实例参数 object, 默认无}
 

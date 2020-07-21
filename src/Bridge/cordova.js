@@ -557,8 +557,7 @@ var Bridge = {
     * @param {Object} params
     * {
     * urls:[],
-    * current:'当前显示图片地址',
-    * index:'当前显示图片索引'
+    * current:'当前显示的资源序号或者当前资源的url链接',
     * }
     */
   previewImage: function (argParams) {
@@ -570,6 +569,13 @@ var Bridge = {
     // 格式化index
     var position = 0
     if (argParams && argParams.index) position = argParams.index
+    if (typeof current === 'number') {
+      position = current;
+    } else if (typeof current === 'string') {
+      for (let [index, source] of list.entries()) {
+        if (source.src === current) position = index;
+      }
+    }
     // 格式化urls
     var photos = []
     if (argParams && argParams.urls && argParams.urls.length) {
