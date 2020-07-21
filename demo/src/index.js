@@ -7,67 +7,51 @@ import {
   Titlebar,
   Bridge,
   Container,
-  InputDate,
-  Context,
-  MapUtil,
-  InputLocation,
-  MapView
+  Photos
 } from '../../src';
-
-import zhCN from '../../src/locale/zh_CN';
-import enUS from '../../src/locale/en_US';
-
+let clickSpace = null;
 function Demo () {
-  const [selected, setSelected] = useState({latitude: '31.968592', longitude: '118.798128', address: '南京南站'});
-  function changeSelected () {
-    setSelected({
-      latitude: '32.113449', longitude: '118.619429', address: '老山'
-    });
+  const list = [{
+    type: 'video',
+    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+    src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
+  },{
+    type: 'video',
+    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+    src: 'https://www.w3school.com.cn/i/movie.ogg'
+  }];
+  
+  function onClick (...params) {
+    console.log('点击')
+    console.log(...params)
   }
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     changeSelected();
-  //     console.log('修改值')
-  //   }, 3000);
-  // }, [])
-  const [value, setValue] = useState('asdf');
-  function onChange (e, value) {
-    console.log(e.target);
-    setValue(value);
+  function onChoose (...params) {
+    console.log('选择')
+    console.log(...params)
   }
-  // return <MapView
-  //   // district={{province: {id: "320000", name: "江苏"}, city: {id: "320100", name: "南京市"}}}
-  //   // circle={{point: [118.798128, 31.968592], radius: 1000}}
-  //   points={[[118.798128, 31.968592], [118.619429,32.113449]]}
-    
-  // />
+  function onDelete (...params) {
+    console.log('删除')
+    console.log(...params)
+  }
+
+  
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation
-        selected={selected}
-        readOnly={true}
-        value={value}
-        placeholder="请点击获取位置信息"
-        onChange={onChange}
-        onClick={(e) => console.log(e)}
-      />
-      <InputLocation
-        selected={{latitude: '32.113449', longitude: '118.619429', address: '老山'}}
-        readOnly={true}
-        value={value}
-        placeholder="请点击获取位置信息"
-        onChange={onChange}
-        onClick={(e) => console.log(e)}
+      <Photos
+        list={list}
+        onChoose={onChoose}
+        onDelete={onDelete}
+        onClick={onClick}
       />
     </Container>
   </Page>
 }
 
 // 加载百度地图js库
-MapUtil.load({key: '3pTjiH1BXLjASHeBmWUuSF83'})
+// MapUtil.load({key: '3pTjiH1BXLjASHeBmWUuSF83'})
 
 Bridge.ready(() => {
   render(<Demo/>, document.querySelector('#demo'))

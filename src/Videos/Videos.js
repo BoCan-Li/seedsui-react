@@ -63,6 +63,7 @@ const Videos = forwardRef(({
       onClick={click}
       onChoose={choose}
       type="video"
+      preview={false}
     />
     {/* h5预览 */}
     {previewItem && <VideoFull

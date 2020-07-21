@@ -4339,48 +4339,52 @@ onClick = () => {
 
 ## Preview
 [提示弹框](https://unpkg.com/seedsui-react/src/lib/Preview/Preview.js)
-### 建议
-Preview预览组件, 为了解决需要预览图片上方加浮动层的问题, 一般预览建议直接使用Api直接调用:
-* Bridge.previewImage({urls: [src], layerHTML: `<div class="preview-layer" style="background-image:url(${layer})"></div>`})代替
+### 提示
+Preview预览组件中的inctance.js, 也可以直接使用Api直接调用:
+* Bridge.previewImage({urls: [src], layerHTML: `<div class="preview-layer" style="background-image:url(${layer})"></div>`})
 
 详见[Bridge 桥接库](#bridge) 桥接库
 ### 属性
 ```javascript
 <Preview
-  portal={传送dom object, 默认document.getElementById('root')}
-  show={*显隐 bool, 默认false}
-  showHeader={是否显示操作头 bool, 默认false}
+  list={资源列表 array, 默认无} // [{thumb: '', src: '', type: 'video|image, 默认image', children: node}]
+  current={当前显示的资源序号或者当前资源的src链接 string或number, 默认0}
+  
+  onHide={点击隐藏按钮 func, 默认无}
+  onChange={选中发生变化 func(s), 默认无}
 
-  src={图片地址 string, 默认无}
-  layerHTML={图片上方浮层 string, 默认无}
+  children={子元素 node, 默认无}
 
-  onClickBack={点击返回按钮 func(), 默认无}
+  {...others}
 />
 ```
 ### 示例
 ```javascript
 import Preview from 'seedsui-react/lib/Preview';
 
-this.state = {
-  showPreview: false,
-  previewSrc: 'http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg',
-}
+const [previewCurrent, setPreviewCurrent] = useState(null);
 
-onPreview = () => {
-  this.setState((prevState) => {
-    return {
-      showPreview: !prevState.showPreview
-    }
-  });
-}
+const list = [{
+  id: '1',
+  thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+  src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
+},{
+  id: '2',
+  thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+  src: 'https://www.w3school.com.cn/i/movie.ogg'
+}];
 
-<input type="button" value="显示" onClick={this.onPreview}/>
-<Preview
-  show={this.state.showPreview}
-  src={this.state.previewSrc}
-  layerHTML={`<div class="preview-layer" style="background-image:url(//res.waiqin365.com/d/common_mobile/images/placeholder/watermark.png)"></div>`}
-  onClickBack={this.onPreview}
-/>
+<div>
+<input type="button" value="预览" onClick={() => setPreviewCurrent(0)}>
+{/* 预览 */}
+{typeof previewCurrent === 'number' &&
+  <Preview
+    onHide={() => setPreviewCurrent(null)}
+    list={list} // 需要预览的资源列表{url: '图片或视频的地址', type: 'video|image, 默认image', poster: '封面地址'}
+    current={previewCurrent}
+  />
+}
+</div>
 ```
 [返回目录](#component)
 
@@ -4803,40 +4807,39 @@ function zoomHandler () {
   }
 }
 
-<Container style={{backgroundColor: 'black'}}>
-  <Swiper
-    style={{
-      width: '100%',
-      height: '100%'
-    }}
-    params={{
-      zoom: true,
-      pagination: {
-        el: '.swiper-pagination',
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      on: {
-        init: initHandler,
-        tap: clickHandler,
-        zoomChange: zoomHandler
-      }
-    }}
-  >
-    <div className="swiper-slide">
-      <div className="swiper-zoom-container">
-        <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-      </div>
+
+<Swiper
+  style={{
+    width: '100%',
+    height: '100%'
+  }}
+  params={{
+    zoom: true,
+    pagination: {
+      el: '.swiper-pagination',
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    on: {
+      init: initHandler,
+      tap: clickHandler,
+      zoomChange: zoomHandler
+    }
+  }}
+>
+  <div className="swiper-slide">
+    <div className="swiper-zoom-container">
+      <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
     </div>
-    <div className="swiper-slide">
-      <div className="swiper-zoom-container">
-        <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg" style={{width: '100%'}}/>
-      </div>
+  </div>
+  <div className="swiper-slide">
+    <div className="swiper-zoom-container">
+      <img className="swiper-zoom-target" src="http://image-test.waiqin365.com/6692513571099135446/sku/201809/20180911195747712_05105130_CAMERA_21001006280.jpg"/>
     </div>
-  </Swiper>
-</Container>
+  </div>
+</Swiper>
 ```
 [返回目录](#component)
 

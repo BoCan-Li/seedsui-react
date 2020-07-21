@@ -4,6 +4,7 @@ import Context from './../Context/instance.js';
 
 const VideoFull = forwardRef(({
   portal,
+  show = true, // 阿里视频库不能移除DOM, 再渲染
 
   scriptSDK = '//g.alicdn.com/de/prismplayer/2.8.8/aliplayer-min.js',
   cssSDK = '//g.alicdn.com/de/prismplayer/2.8.8/skins/default/aliplayer-min.css',
@@ -11,6 +12,7 @@ const VideoFull = forwardRef(({
   poster = '',
   src,
   autoPlay = true,
+  pause,
   isLive,
   params,
   onError,
@@ -29,10 +31,10 @@ const VideoFull = forwardRef(({
     return refEl.current
   });
   const instance = useRef(null);
+  let [idSdkPlayer, setIdSdkPlayer] = useState('');
 
   const idSdkCss = '_seedsui_videofull_css_';
   const idSdkScript = '_seedsui_videofull_script_';
-  const idSdkPlayer = '_seedsui_videofull_player_';
 
   function loadSdk () {
     return new Promise((resolve) => {
@@ -153,6 +155,12 @@ const VideoFull = forwardRef(({
       if (onError) onError(e, {errMsg: locale['hint_video_sdk_load_failed'] || '加载播放器库出错, 请稍后再试'});
       return
     }
+    if (!window.Aliplayer) {
+      setTimeout(() => {
+        initInstance();
+      }, 1000);
+      return;
+    }
     let e = {target: refEl.current}
     // const width = refEl.current.clientWidth;
     // const height = refEl.current.clientHeight;
@@ -197,11 +205,20 @@ const VideoFull = forwardRef(({
   }
   
   useEffect(() => {
+    if (!show) return;
+    idSdkPlayer = `_seedsui_videofull_player_${Date.now()}`;
+    setIdSdkPlayer(idSdkPlayer);
     if (instance.current) return;
     initInstance();
   }, []) // eslint-disable-line
 
-  const DOM = <div className="videofull-page" {...others} ref={refEl}>
+  useEffect(() => {
+    if (instance.current && pause === true) {
+      instance.current.pause();
+    }
+  }, [pause])
+
+  const DOM = <div className={`videofull-page${others.className ? (show ? ' ' : ' hide') + others.className : (show ? '' : 'hide')}`} {...others} ref={refEl}>
     <div x5-video-player-type="h5" className="prism-player" webkit-playsinline="true" playsInline={true} id={idSdkPlayer} style={{width:'100%', height:'100%'}}></div>
     {showBar && bar ? bar : null}
     {children}

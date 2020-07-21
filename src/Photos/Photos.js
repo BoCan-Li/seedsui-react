@@ -1,8 +1,9 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useState} from 'react';
+import Preview from './../Preview';
 
 const Photos = forwardRef(({
   type,
-  list, // [{id: '', name: '', src: ''}]
+  list, // [{id: '', name: '', thumb: '', src: ''}]
   upload, // 上传按钮覆盖的dom
   uploading, // 是否上传中
   onChoose, // 浏览器会显示file框onChoose(e), 并监听file框change事件
@@ -11,6 +12,7 @@ const Photos = forwardRef(({
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
+  const [previewCurrent, setPreviewCurrent] = useState(null);
   // 点击整个photos容器
   function click (event) {
     const e = event.nativeEvent;
@@ -24,8 +26,9 @@ const Photos = forwardRef(({
     } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
       if (index && onClick) onClick(e, list[index], Number(index));
+      // 预览
       if (preview) {
-        // 预览
+        setPreviewCurrent(Number(index));
       }
     } else if (target.classList.contains('photos-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
@@ -90,6 +93,14 @@ const Photos = forwardRef(({
         <div className="photos-upload-loading-icon"></div>
       </div>}
     </div>}
+    {/* 预览 */}
+    {typeof previewCurrent === 'number' &&
+      <Preview
+        onHide={() => setPreviewCurrent(null)}
+        list={list} // 需要预览的资源列表{url: '图片或视频的地址', type: 'video|image, 默认image', poster: '封面地址'}
+        current={previewCurrent}
+      />
+    }
   </div>);
 })
 

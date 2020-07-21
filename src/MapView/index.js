@@ -11,7 +11,7 @@ import Close from './Close';
 import helper from './helper';
 
 function MapView ({
-  show,
+  show, // 百度地图不能移除DOM, 再渲染
   portal,
   caption,
   onHide,
