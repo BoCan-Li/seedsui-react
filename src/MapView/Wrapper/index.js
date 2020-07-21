@@ -8,7 +8,6 @@ const Wrapper = forwardRef(({
       ref={ref}
       {...props}
       className={`mapview${props.className ? ' ' + props.className : ''}`}
-      id="Id-MapLocateNow-MapContainer"
     >
     </div>
   );

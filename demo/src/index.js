@@ -24,12 +24,12 @@ function Demo () {
       latitude: '32.113449', longitude: '118.619429', address: '老山'
     });
   }
-  useEffect(() => {
-    setTimeout(() => {
-      changeSelected();
-      console.log('修改值')
-    }, 3000);
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     changeSelected();
+  //     console.log('修改值')
+  //   }, 3000);
+  // }, [])
   const [value, setValue] = useState('asdf');
   function onChange (e, value) {
     console.log(e.target);
@@ -48,6 +48,14 @@ function Demo () {
 		<Container>
       <InputLocation
         selected={selected}
+        readOnly={true}
+        value={value}
+        placeholder="请点击获取位置信息"
+        onChange={onChange}
+        onClick={(e) => console.log(e)}
+      />
+      <InputLocation
+        selected={{latitude: '32.113449', longitude: '118.619429', address: '老山'}}
         readOnly={true}
         value={value}
         placeholder="请点击获取位置信息"

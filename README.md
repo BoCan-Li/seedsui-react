@@ -2885,6 +2885,7 @@ function onChange (e, value, selected) {
   autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
+  preview={是否预览 bool, 默认true, 是否支持单击预览, readOnly为true时才生效}
   {...others}
 />
 ```
@@ -3522,6 +3523,7 @@ const wrapperWidth = containerWidth * 0.85;
   onHide={点击隐藏按钮 func, 默认无}
   // 其它属性
   center={定位地址 string, 默认'江苏省,南京市'}
+  // 以下形状或者标记一次只能绘制一个
   // 标记点
   points={标记点 array, 默认无} // [[118.798128, 31.968592], [118.619429,32.113449]] => 南京南站, 老山
   // 圆形
@@ -4015,6 +4017,7 @@ import Peg from 'seedsui-react/lib/Peg';
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
   onClick={点击一项 func(e, item, index), 默认无}
+  preview={是否预览 bool, 默认true, 是否支持单击预览}
 />
 ```
 ### 示例
@@ -5572,6 +5575,7 @@ function playVideo () {
 <Videos
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
   onClick={点击一项 func(e, item, index), 默认点击预览视频}
+  preview={是否预览 bool, 默认true, 是否支持单击预览}
   {...others} // 其它属性与Photos一致
 />
 ```

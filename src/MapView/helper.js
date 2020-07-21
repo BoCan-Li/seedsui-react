@@ -38,24 +38,25 @@ export default {
   },
   // 标记: 绘制标记
   drawMarkers: function (points) {
-    if (!this.mapUtil) {
+    var self = this;
+    if (!self.mapUtil) {
       setTimeout(() => {
-        this.drawMarkers(points);
+        self.drawMarkers(points);
       }, 500);
       return;
     }
-    if (this.markers) {
-      this.mapUtil.clearOverlays(this.markers);
+    if (self.markers) {
+      self.mapUtil.clearOverlays(self.markers);
     }
-    this.markers = [];
+    self.markers = [];
     let bdPoints = [];
     for (let point of points) {
       let bdPoint = GeoUtil.coordtransform(point);
       bdPoints.push(bdPoint);
-      this.markers.push(this.drawMarker(bdPoint));
+      self.markers.push(self.drawMarker(bdPoint));
     }
     setTimeout(() => {
-      this.mapUtil.centerToPoints(bdPoints);
+      self.mapUtil.centerToPoints(bdPoints);
       console.log('绘制标记完成');
     }, 500);
   },
@@ -112,6 +113,9 @@ export default {
       }, 500);
       return;
     }
+    if (self.circle) {
+      self.mapUtil.clearOverlay(self.circle)
+    }
     let bdPoint = GeoUtil.coordtransform(point);
     let circle = self.mapUtil.drawCircle(bdPoint, radius)
     if (!circle) return;
@@ -134,6 +138,9 @@ export default {
       }, 500);
       return;
     }
+    if (self.polygon) {
+      self.mapUtil.clearOverlay(self.polygon)
+    }
     self.polygon = self.mapUtil.drawPolygon(polygon)
     self.mapUtil.centerToPoints(polygon)
     console.log('绘制多边形完成');
@@ -149,6 +156,9 @@ export default {
         self.drawDistrict(districtName);
       }, 500);
       return;
+    }
+    if (self.district) {
+      self.mapUtil.clearOverlays(self.district)
     }
     self.mapUtil.drawBoundary(districtName, null, {
       success: (res) => {
