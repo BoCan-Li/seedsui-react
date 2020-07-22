@@ -229,7 +229,7 @@ var Bridge = {
     wq.previewImage(params) // eslint-disable-line
   },
   /**
-    * 视频文件上传, 658支持
+    * 视频文件上传
     * @param {Object} params
     * {
       uploadDir: '目录/年月',
@@ -237,47 +237,43 @@ var Bridge = {
       success: func(res)
     * }
     */
-   uploadFile: function (params = {}) {
+   uploadFile: function (argParams = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
       self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
       return
     }
-    if (!params.localId) {
+    if (!argParams.localId) {
       self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
       return
     }
-    wq.uploadFile({
-      url: `/fileupload/v1/doUpload.do?uploadPath=${params.uploadDir || 'file'}`,
-      filePath: params.localId,
+    let url = argParams.url ? `${argParams.url}${argParams.url.indexOf('?') === -1 ? '?' : '&'}uploadPath=${argParams.uploadDir || 'file'}` : `/fileupload/v1/doUpload.do?uploadPath=${argParams.uploadDir || 'file'}`;
+    let params = {
+      url: url,
+      filePath: argParams.localId,
       name: 'file',
-      formData: params.data,
-      success: (result = {}) => {
-        if (result.code === '1' && result.data[0]) {
-          const data = result.data[0];
-          let tenantId = data.url.replace('/' + data.filePath, '');
-          tenantId = tenantId.substring(tenantId.lastIndexOf('/') + 1, tenantId.length)
-          if (!params.success) return
-          params.success({
-            errMsg: 'uploadFile:ok',
-            thumb: data.url,
-            src: data.url,
-            tenantId: tenantId,
-            path: data.filePath
-          })
-        } else {
-          if (!params.fail) return
-          params.fail({
-            errMsg: `uploadFile:fail ${result.message || locale('hint_upload_failed') || '上传失败'}`,
-            ...result
-          })
-        }
-      },
-      fail: (err = {}) => {
-        if (!params.fail) return
-        params.fail({
-          errMsg: `uploadFile:fail ${err.message || locale('hint_upload_failed') || '上传失败'}`,
-          ...err
+      formData: argParams.data,
+    }
+    alert(JSON.stringify(params));
+    self.invoke('uploadFile', params, function (result) {
+      alert(JSON.stringify(result))
+      if (result.code === '1' && result.data[0]) {
+        const data = result.data[0];
+        let tenantId = data.url.replace('/' + data.filePath, '');
+        tenantId = tenantId.substring(tenantId.lastIndexOf('/') + 1, tenantId.length)
+        if (!argParams.success) return
+        argParams.success({
+          errMsg: 'uploadFile:ok',
+          thumb: data.url,
+          src: data.url,
+          tenantId: tenantId,
+          path: data.filePath
+        })
+      } else {
+        if (!argParams.fail) return
+        argParams.fail({
+          errMsg: `uploadFile:fail ${result.message || locale('hint_upload_failed') || '上传失败'}`,
+          ...result
         })
       }
     })
@@ -309,7 +305,7 @@ var Bridge = {
     self.invoke('chooseVideo', params, function (res) {
       // 标准化回调参数: 将tempFilePath改为localId
       if (res.tempFilePath) {
-        res.localId = res.tempFilePath
+        res.localIds = [res.tempFilePath]
       }
       if (res.errMsg === 'chooseVideo:ok') {
         if (argParams.success) argParams.success(res)

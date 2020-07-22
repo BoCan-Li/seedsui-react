@@ -37,7 +37,12 @@ function Demo () {
       maxDuration: 3, // 最大录相时长
       camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      success: (res) => alert(JSON.stringify(res)),
+      success: (res) => {
+        Bridge.uploadFile({
+          localId: res.localIds[0],
+          uploadDir: 'cuxiao/2020/07'
+        })
+      },
       fail: (res) => alert('错误')
     })
   }
