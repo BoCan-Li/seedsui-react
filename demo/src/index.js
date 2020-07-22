@@ -34,10 +34,11 @@ function Demo () {
   function chooseHandler () {
     Bridge.chooseVideo({
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      maxDuration: 60, // 最大录相时长
+      maxDuration: 3, // 最大录相时长
       camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      success: (res) => alert(JSON.stringify(res))
+      success: (res) => alert(JSON.stringify(res)),
+      fail: (res) => alert('错误')
     })
   }
   return <Page>

@@ -293,37 +293,30 @@ var Bridge = {
       success({localIds:[src]})
     * }
     */
-  chooseVideo: function (params = {}) {
+  chooseVideo: function (argParams = {}) {
     const self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
       self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
       return
     }
-    // 标准化参数
-    params.compressed = true
-    if (params.sizeType && params.sizeType.length) {
-      if (params.sizeType.indexOf('compressed') === -1) {
-        params.compressed = false
-      } else {
-        params.compressed = true
-      }
-      delete params.sizeType
+    let params = {
+      sourceType: argParams.sourceType || ['album','camera'],
+      maxDuration: argParams.maxDuration || 10,
+      camera: argParams.camera || 'back',
+      compressed: argParams.sizeType && argParams.sizeType.length && argParams.sizeType.indexOf('compressed') === -1 ? false : true
     }
-    alert(JSON.stringify(params))
     console.log('外勤WK内核chooseVideo', params)
-    // self.invoke('chooseVideo', params, function (res) {
-    //   alert(JSON.stringify(res))
-    // })
-    wq.chooseVideo({
-      ...params,
-      success: function (res) {
-        // 标准化回调参数: 将tempFilePath改为localId
-        if (res.tempFilePath) {
-          res.localId = res.tempFilePath
-        }
-        if (params.success) params.success(res)
+    self.invoke('chooseVideo', params, function (res) {
+      // 标准化回调参数: 将tempFilePath改为localId
+      if (res.tempFilePath) {
+        res.localId = res.tempFilePath
       }
-    }) // eslint-disable-line
+      if (res.errMsg === 'chooseVideo:ok') {
+        if (argParams.success) argParams.success(res)
+      } else {
+        if (argParams.fail) argParams.fail(res)
+      }
+    })
   },
   /**
     * 文件操作: 预览文件
