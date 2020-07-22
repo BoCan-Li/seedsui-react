@@ -9,6 +9,7 @@ var CameraRecorder = {
   onStopInit: null, // 初始化时停止录制回调, 当调用stopRecord传入回调时, 此回调将被覆盖
   // 关闭媒体流
   closeStream: function (stream) {
+    if (!stream) return
     if (typeof stream.stop === 'function') {
       stream.stop()
     } else {

@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, Fragment, useState} from 'react';
+import React, {forwardRef, useContext, useRef, Fragment, useState} from 'react';
 import Bridge from './../Bridge';
 import Photos from './../Photos';
 import VideoFull from './../VideoFull';

@@ -19,6 +19,8 @@ const Camera = forwardRef(({
   const refElStop = useRef(null);
   const refElTime = useRef(null);
   const refElTimeTarget = useRef(null);
+  const refElError = useRef(null);
+  const refElErrorTarget = useRef(null);
   useImperativeHandle(ref, () => {
     return refEl.current
   });
@@ -32,6 +34,10 @@ const Camera = forwardRef(({
       },
       onStop: function (e, file) {
         onRecord(e, file)
+      },
+      onError: function (e, err) {
+        if (refElError.current) refElError.current.style.display = 'block';
+        if (refElErrorTarget.current) refElErrorTarget.current.innerHTML = err.errMsg;
       }
     })
   }
@@ -76,6 +82,11 @@ const Camera = forwardRef(({
       <span className="camera-recorder-timer-dot"></span>
       <span ref={refElTimeTarget} className="camera-recorder-timer-label">00:03</span>
     </div>
+
+    <div ref={refElError} className="camera-recorder-error">
+      <span ref={refElErrorTarget} className="camera-recorder-error-label"></span>
+    </div>
+
     <div className="camera-close" onClick={closeRecorder}></div>
     {children}
   </div>,
