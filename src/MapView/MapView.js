@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useContext, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import MapUtil from './../MapUtil';
 import Page from './../Page';
@@ -52,14 +52,18 @@ function MapView ({
         setErrMsg(locale['hint_map_failed_load'] || '地图库加载失败, 请稍后再试');
       }
     })
+    // 移除组件时注销
+    return () => {
+      helper.destroy();
+    }
   }, []) // eslint-disable-line
 
   // 隐藏时, 移除标注
-  useEffect(() => {
-    if (show === false) {
-      helper.destroy();
-    }
-  }, [show])
+  // useEffect(() => {
+  //   if (show === false) {
+  //     helper.destroy();
+  //   }
+  // }, [show])
 
   // 初始化地图
   function initData () {

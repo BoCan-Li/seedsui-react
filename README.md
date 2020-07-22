@@ -2879,6 +2879,7 @@ function onChange (e, value, selected) {
 ### 属性
 ```javascript
 <InputLocation
+  selected={选中地址经纬度信息 string, 默认无} // 用于只读时, 点击预览地图{latitude: '纬度', longitude: '经度', address:'地址'}
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
   readOnly={文本是否只读 bool, 默认无} // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
@@ -2900,8 +2901,19 @@ function onChange (e, value) {
 }
 
 <InputLocation value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
-// 只读
-<InputLocation readOnly={true} riconAttribute={{className: ''}} value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
+```
+
+```javascript
+import InputLocation from 'seedsui-react/lib/InputLocation';
+
+const [selected, setSelected] = useState({latitude: '31.968592', longitude: '118.798128', address:'南京南站'});
+useEffect(() => {
+  setTimeout(() => {
+    setSelected({latitude: '32.113449', longitude: '118.619429', address:'老山'});
+  }, 5000);
+}, []) // eslint-disable-line
+
+<InputLocation readOnly={true} value={selected.address} selected={selected}/>
 ```
 
 

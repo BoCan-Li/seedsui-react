@@ -100,8 +100,9 @@ export default {
       return;
     }
     let bdPoint = GeoUtil.coordtransform(point);
+    bdPoint = this.mapUtil.pointToBdPoint(bdPoint);
     if (!self.label) {
-      self.label = self.mapUtil.drawLabel(bdPoint, `半径${radius}米`, {
+      self.label = self.mapUtil.drawLabel(bdPoint, locale('radius_of_m', [radius]) || `半径${radius}米`, {
         offset: {
           width: 0,
           height: 14
@@ -112,14 +113,17 @@ export default {
       })
     } else {
       self.label.setPosition(bdPoint)
-      self.label.setContent(`半径${Math.trunc(radius, 2)}米`)
+      self.label.setContent(locale('radius_of_m', [Math.trunc(radius, 2)]) || `半径${Math.trunc(radius, 2)}米`)
     }
   },
   // 绘制圆形
   drawCircle: function (point, radius) {
     var self = this;
     if (self.abort) return;
-    if (!point || point.length !== 2) return;
+    if (!point || point.length !== 2) {
+      console.log(`point参数${JSON.stringify(point)}格式不正确, 请传入[lng, lat]`)
+      return;
+    }
     if (!radius) return;
     if (!self.mapUtil) {
       setTimeout(() => {
@@ -127,18 +131,19 @@ export default {
       }, 500);
       return;
     }
-    if (self.circle) {
-      self.mapUtil.clearOverlay(self.circle)
-    }
     let bdPoint = GeoUtil.coordtransform(point);
-    let circle = self.mapUtil.drawCircle(bdPoint, radius)
-    if (!circle) return;
+    bdPoint = this.mapUtil.pointToBdPoint(bdPoint);
+    if (self.circle) {
+      self.circle.setCenter(bdPoint)
+    } else {
+      self.circle = self.mapUtil.drawCircle(bdPoint, radius)
+    }
+    if (!self.circle) return;
     setTimeout(() => {
-      self.mapUtil.centerToCircle(circle, {
+      self.mapUtil.centerToCircle(self.circle, {
         zoomFactor: -1
       })
     }, 300);
-    self.circle = circle;
     console.log('绘制圆形完成');
     self.drawLabel(point, radius)
   },

@@ -4,8 +4,6 @@ import Bridge from './../Bridge';
 import MapView from './../MapView';
 import Context from '../Context/instance.js';
 
-let mapData = null;
-
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const InputLocation = forwardRef(({
   loadingValue,
@@ -23,6 +21,7 @@ const InputLocation = forwardRef(({
     return refEl.current
   });
   const [mapShow, setMapShow] = useState(false);
+  const [mapData, setMapData] = useState(null);
 
   const context = useContext(Context) || {};
   const locale = context.locale || {};
@@ -56,11 +55,11 @@ const InputLocation = forwardRef(({
     // 只读状态不允许定位
     if (readOnly === true) {
       if (preview && selected && selected.longitude && selected.latitude) { // 预览
-        mapData = {
+        setMapData({
           point: [selected.longitude, selected.latitude],
           address: selected.address,
           show: true
-        };
+        });
         setMapShow(true);
       }
       return;
@@ -141,6 +140,7 @@ const InputLocation = forwardRef(({
       inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important input-location-success ' + inputClassName: 'input-location-success ' + inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
     />
     {mapData && <MapView
+      ak='3pTjiH1BXLjASHeBmWUuSF83'
       show={mapShow}
       header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
       points={[mapData.point]}

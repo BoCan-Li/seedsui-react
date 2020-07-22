@@ -104,5 +104,6 @@ export default {
   'hint_map_failed_load': 'Failed to load map library',
   'hint_map_no_container': 'No map container',
   'hint_map_init_timeout': 'Init map timeout',
-  'hint_map_no_boundary_data': 'No {0}\'s boundary data'
+  'hint_map_no_boundary_data': 'No {0}\'s boundary data',
+  'radius_of_m': 'Radius of {0} m',
 }
