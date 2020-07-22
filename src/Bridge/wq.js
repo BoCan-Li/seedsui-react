@@ -1,4 +1,5 @@
 import DB from './../DB'
+import Device from './../Device'
 import locale from './../locale'
 
 var Bridge = {
@@ -238,8 +239,8 @@ var Bridge = {
     */
    uploadFile: function (params = {}) {
     var self = this
-    if (Device.compareVersion(Device.platformVersion, '6.5.8') < 0) {
-      self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.5.8及以上的客户端', {mask: false})
+    if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
+      self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
       return
     }
     if (!params.localId) {
@@ -294,8 +295,8 @@ var Bridge = {
     */
   chooseVideo: function (params = {}) {
     const self = this
-    if (Device.compareVersion(Device.platformVersion, '6.5.8') < 0) {
-      self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.5.8及以上的客户端', {mask: false})
+    if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
+      self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
       return
     }
     // 标准化参数
@@ -303,14 +304,23 @@ var Bridge = {
     if (params.sizeType && params.sizeType.length) {
       if (params.sizeType.indexOf('compressed') === -1) {
         params.compressed = false
+      } else {
+        params.compressed = true
       }
+      delete params.sizeType
     }
+    alert(JSON.stringify(params))
     console.log('外勤WK内核chooseVideo', params)
+    // self.invoke('chooseVideo', params, function (res) {
+    //   alert(JSON.stringify(res))
+    // })
     wq.chooseVideo({
       ...params,
       success: function (res) {
         // 标准化回调参数: 将tempFilePath改为localId
-        res.localId = res.tempFilePath
+        if (res.tempFilePath) {
+          res.localId = res.tempFilePath
+        }
         if (params.success) params.success(res)
       }
     }) // eslint-disable-line

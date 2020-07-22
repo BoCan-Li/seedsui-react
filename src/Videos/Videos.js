@@ -3,6 +3,7 @@ import Bridge from './../Bridge';
 import Photos from './../Photos';
 import VideoFull from './../VideoFull';
 import Camera from './../Camera';
+import Context from './../Context/instance.js';
 
 const Videos = forwardRef(({
   onClick,
@@ -10,6 +11,10 @@ const Videos = forwardRef(({
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || {};
+  
   const refVideoFull = useRef(null);
   // h5预览
   const [previewItem, setPreivewItem] = useState(null);
@@ -22,14 +27,10 @@ const Videos = forwardRef(({
     }
     if (!preview) return;
     if (!item.src) {
-      Bridge.showToast('没有src', {mask: false})
+      Bridge.showToast(locale['no_param_src'] || '没有参数src', {mask: false})
     }
-    if (Bridge.platform === 'wechat' || Bridge.platform === 'wework' || Bridge.platform === 'wq') {
-      Bridge.perviewFile(item.src)
-    } else {
-      // h5预览
-      setPreivewItem(item);
-    }
+    // 客户端预览视频有问题, 所以使用h5预览
+    setPreivewItem(item);
   }
   // 关闭h5预览
   function closePreview () {

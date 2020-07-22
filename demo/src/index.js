@@ -7,21 +7,51 @@ import {
   Titlebar,
   Bridge,
   Container,
-  InputLocation
+  Videos
 } from '../../src';
 function Demo () {
-  const [selected, setSelected] = useState({latitude: '31.968592', longitude: '118.798128', address:'南京南站'});
-  useEffect(() => {
-    setTimeout(() => {
-      setSelected({latitude: '32.113449', longitude: '118.619429', address:'老山'});
-    }, 5000);
-  }, []) // eslint-disable-line
+  const list = [{
+    id: '1',
+    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+    src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
+  },{
+    id: '2',
+    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+    src: 'https://www.w3school.com.cn/i/movie.ogg'
+  }];
+  function onClick (...params) {
+    console.log('点击')
+    console.log(...params)
+  }
+  function onChoose (...params) {
+    console.log('选择')
+    console.log(...params)
+  }
+  function onDelete (...params) {
+    console.log('删除')
+    console.log(...params)
+  }
+  function chooseHandler () {
+    Bridge.chooseVideo({
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      maxDuration: 60, // 最大录相时长
+      camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success: (res) => alert(JSON.stringify(res))
+    })
+  }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation readOnly={true} value={selected.address} selected={selected}/>
+      <Videos
+        list={list}
+        onChoose={onChoose}
+        onDelete={onDelete}
+        onClick={onClick}
+        onChoose={chooseHandler}
+      />
     </Container>
   </Page>
 }

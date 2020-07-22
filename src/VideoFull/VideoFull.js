@@ -180,7 +180,7 @@ const VideoFull = forwardRef(({
       // 播放设置
       isLive: isLive,
       preload: true,
-      playsinline: true,
+      playsinline: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/) ? true : false,
       showBuffer: true,
       defaultDefinition: 'FD',
       source: src,
