@@ -247,34 +247,19 @@ var Bridge = {
       self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
       return
     }
-    let url = argParams.url ? `${argParams.url}${argParams.url.indexOf('?') === -1 ? '?' : '&'}uploadPath=${argParams.uploadDir || 'file'}` : `/fileupload/v1/doUpload.do?uploadPath=${argParams.uploadDir || 'file'}`;
     let params = {
-      url: url,
+      url: argParams.url || `/fileupload/v1/doUpload.do?uploadPath=file`,
       filePath: argParams.localId,
       name: 'file',
       formData: argParams.data,
     }
-    alert(JSON.stringify(params));
-    self.invoke('uploadFile', params, function (result) {
-      alert(JSON.stringify(result))
-      if (result.code === '1' && result.data[0]) {
-        const data = result.data[0];
-        let tenantId = data.url.replace('/' + data.filePath, '');
-        tenantId = tenantId.substring(tenantId.lastIndexOf('/') + 1, tenantId.length)
+    self.invoke('uploadFile', params, function (res) {
+      if (res.errMsg === 'uploadFile:ok') {
         if (!argParams.success) return
-        argParams.success({
-          errMsg: 'uploadFile:ok',
-          thumb: data.url,
-          src: data.url,
-          tenantId: tenantId,
-          path: data.filePath
-        })
+        argParams.success(res)
       } else {
         if (!argParams.fail) return
-        argParams.fail({
-          errMsg: `uploadFile:fail ${result.message || locale('hint_upload_failed') || '上传失败'}`,
-          ...result
-        })
+        argParams.fail(res)
       }
     })
   },

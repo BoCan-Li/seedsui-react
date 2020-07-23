@@ -31,16 +31,46 @@ function Demo () {
     console.log('删除')
     console.log(...params)
   }
-  function chooseHandler () {
+  function chooseHandler (e, file) {
+    if (e && e.targetType === 'video') { // 文件框
+      console.log(e)
+      console.log(file)
+      return;
+    }
     Bridge.chooseVideo({
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      maxDuration: 3, // 最大录相时长
+      maxDuration: 2, // 最大录相时长
       camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: (res) => {
         Bridge.uploadFile({
+          url: `http://172.31.3.223:6020/fileupload/v1/doUpload.do?uploadPath=cuxiao/2020/07`,
           localId: res.localIds[0],
-          uploadDir: 'cuxiao/2020/07'
+          success: (result) => {
+            alert(JSON.stringify(result))
+            if (typeof result.data === 'string') {
+              result.data = JSON.parse(result.data);
+            }
+            const data = result.data[0];
+            if (!data) {
+              Bridge.showToast(result.errMsg, {mask: false});
+              return;
+            }
+            let tenantId = data.url.replace('/' + data.filePath, '');
+            tenantId = tenantId.substring(tenantId.lastIndexOf('/') + 1, tenantId.length)
+            Bridge.showAlert(JSON.stringify([{
+              thumb: data.url,
+              src: data.url,
+              tenantId: tenantId,
+              path: data.filePath,
+              // 周春林测试服务器
+              // thumb: data.url.replace('image-test', 'image'),
+              // src: data.url.replace('image-test', 'image')
+            }]))
+          },
+          fail: (err) => {
+            alert(JSON.stringify(err))
+          }
         })
       },
       fail: (res) => alert('错误')

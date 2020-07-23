@@ -1755,7 +1755,7 @@ a {
     z-index: 1;
     background-color: black;
   }
-  .camera-recorder-start, .camera-recorder-stop{
+  .camera-recorder-start, .camera-recorder-stop, .camera-success{
     display: none;
     position: absolute;
     bottom: 30px;
@@ -1775,7 +1775,7 @@ a {
     background-color: white;
     border-radius: 100%;
   }
-  .camera-recorder-start-dot, .camera-recorder-stop-dot{
+  .camera-recorder-start-dot, .camera-recorder-stop-dot {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1815,6 +1815,20 @@ a {
     color: white;
     vertical-align: middle;
     display: inline-block;
+  }
+  .camera-success-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: 'iconfont';
+    &:extend(.icon-ok-fill all);
+    color: @success-bg;
+    font-family: 'iconfont';
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+    margin-top: -16px;
+    margin-left: -16px;
   }
   .camera-recorder-error{
     display: none;

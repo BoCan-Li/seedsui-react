@@ -47,14 +47,9 @@ const Videos = forwardRef(({
     }
   }
   // h5录相
-  function record (e, file) {
-    const event = {
-      target: file,
-      targetType: 'video',
-      type: 'video/mp4'
-    }
+  function record (e) {
     if (onChoose) {
-      onChoose(event);
+      onChoose(e);
     }
   }
   return <Fragment>

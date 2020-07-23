@@ -1,12 +1,13 @@
 // CameraRecorder
 var CameraRecorder = {
+  maxDuration: 10, // 最大录制时长
   recorder: null, // 录制器
   recorderFile: null, // 录制完成文件
   stream: null, // 视频流
   timer: null, // 计时
   timerEl: null, // 计时元素
   onStop: null, // 当前停止录制回调
-  onStopInit: null, // 初始化时停止录制回调, 当调用stopRecord传入回调时, 此回调将被覆盖
+  onStopTempCallback: null, // 临时停止回调
   // 关闭媒体流
   closeStream: function (stream) {
     if (!stream) return
@@ -43,8 +44,8 @@ var CameraRecorder = {
     */
 	init: function (params = {}) {
     const self = this
-    const {constraints = {}, video, timer, onOpened, onStop, onError} = params
-    self.onStopInit = onStop
+    const {constraints = {}, maxDuration, video, timer, onOpened, onStop, onError} = params
+    self.maxDuration = maxDuration || 10
     self.onStop = onStop
     self.timerEl = timer
     if (!video) {
@@ -96,7 +97,8 @@ var CameraRecorder = {
           }
         )
         chunks = []
-        if (self.onStop) self.onStop(e, self.getFile())
+        if (self.onStopTempCallback) self.onStopTempCallback({target: self.getFile(), targetType: 'video'})
+        else if (self.onStop) self.onStop({target: self.getFile(), targetType: 'video'})
       }
 		}, (err) => {
       if (onError) onError({target: video}, {errMsg: 'The following error occurred: ' + err.name})
@@ -104,9 +106,14 @@ var CameraRecorder = {
   },
   startTimer: function (timerEl) {
     if (!timerEl) return
+    var self = this
     let t = 0
-    this.timer = setInterval(() => {
+    self.timer = setInterval(() => {
       t += 1000
+      // 大于最大录相时长, 则停止录相
+      if (self.maxDuration && t / 1000 > self.maxDuration) {
+        self.stopRecord()
+      }
       // 将毫秒数转成时分
       let hours = parseInt(t / 3600000)
       let minutes = parseInt((t % 3600000) / 60000)
@@ -129,7 +136,7 @@ var CameraRecorder = {
         timeStr += '00'
       }
       timerEl.innerHTML = timeStr
-    }, 100)
+    }, 1000)
   },
   // 开始录制
   startRecord: function () {
@@ -140,13 +147,11 @@ var CameraRecorder = {
   // 结束录制
   stopRecord: function (callback) {
     const self = this
-    if (callback) {
-      self.onStop = callback
-    } else if (callback === false || callback === null) {
-      self.onStop = null
-    } else {
-      self.onStop = self.onStopInit
-    }
+    if (callback) { // 临时callback
+      self.onStopTempCallback = callback
+    } else if (callback === false || callback === null) { // 不希望走onStop事件
+      self.onStop = function () {}
+    } 
     // 终止计时
     if (self.timer) window.clearInterval(self.timer)
     if (self.recorder && self.recorder.state === 'recording') {
