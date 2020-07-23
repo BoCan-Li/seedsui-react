@@ -17,7 +17,6 @@ const Photos = forwardRef(({
   function click (event) {
     const e = event.nativeEvent;
     const target = e.target;
-    e.targetType = type;
     if (target.type === 'file') {
       target.value = ''; // 防止选择重复图片时不触发
     }
@@ -68,6 +67,7 @@ const Photos = forwardRef(({
         <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>
         <div className="photos-item-error"></div>
         <div className="photos-item-load"></div>
+        {/* 视频播放图标 */}
         {type === 'video' && <div className="photos-item-video">
           <div className="photos-item-video-icon"></div>
         </div>}
@@ -85,11 +85,7 @@ const Photos = forwardRef(({
       {/* PC端使用file框 */}
       {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
       {upload && upload}
-      {type !== 'video' && uploading && <div className="photos-upload-loading">
-        <div className="photos-upload-loading-icon"></div>
-      </div>}
-      {/* 视频 */}
-      {type === 'video' && uploading && <div className="photos-upload-loading">
+      {uploading && <div className="photos-upload-loading">
         <div className="photos-upload-loading-icon"></div>
       </div>}
     </div>}

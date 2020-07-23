@@ -745,7 +745,8 @@ function showCustom () {
 <Camera
   portal={传送dom object, 默认document.getElementById('root')}
   onHide={点击隐藏按钮 func, 默认无}
-  onRecord={录相 func(e, file), 默认无}
+  onRecord={录相 func(e), 默认无} // 有onRecord
+  maxDuration={最大录相时长 number, 默认10秒}
   children={子元素 node, 默认无}
   {...others}
 />
@@ -754,9 +755,9 @@ function showCustom () {
 ```javascript
 import Camera from 'seedsui-react/lib/Camera';
 // h5录相完成后保存
-function saveRecord (e, file) {
+function saveRecord (e) {
   var data = new FormData();
-  data.append("file", file);
+  data.append("file", e.target);
   // 保存, 仅为示例, 并非真实接口
   var req = new XMLHttpRequest();
   req.open("POST", "com.spinsoft.bip.frame.utils.image.saveMp4.biz.ext");

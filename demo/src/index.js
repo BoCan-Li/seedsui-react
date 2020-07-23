@@ -31,10 +31,9 @@ function Demo () {
     console.log('删除')
     console.log(...params)
   }
-  function chooseHandler (e, file) {
+  function chooseHandler (e) {
     if (e && e.targetType === 'video') { // 文件框
       console.log(e)
-      console.log(file)
       return;
     }
     Bridge.chooseVideo({
@@ -47,7 +46,6 @@ function Demo () {
           url: `http://172.31.3.223:6020/fileupload/v1/doUpload.do?uploadPath=cuxiao/2020/07`,
           localId: res.localIds[0],
           success: (result) => {
-            alert(JSON.stringify(result))
             if (typeof result.data === 'string') {
               result.data = JSON.parse(result.data);
             }
