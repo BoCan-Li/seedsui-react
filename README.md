@@ -5125,13 +5125,20 @@ showMsg = (msg) => {
 
 
 
+
+
+
+
+
+
+
 ## Tree
 [树结构](https://unpkg.com/seedsui-react/src/lib/Tree/Tree.js)
 ### 属性
 ```javascript
 <Tree
   split={分隔符 string, 默认','}
-  multiple={是否需要多选 bool, 默认true} // 只有设置checkbox为true才生效
+  multiple={是否需要多选 bool, 默认false} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
   extend={展开收缩 number, 默认0} // 1.全部展开 -1.全部收缩 0.不工作
   bar={选中项聚合展现栏 string | node, 默认无}

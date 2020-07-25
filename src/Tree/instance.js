@@ -471,7 +471,10 @@ var Tree = function (container, params) {
   // 点击添加按钮
   s.onClickBtnAdd = function (e) {
     s.event = e
+    // 选中项
     var elLine = e.target.parentNode
+    var opts = s.getDataByTarget(elLine)
+
     // 删除子级
     var elLines = elLine.parentNode.querySelectorAll('.' + s.params.lineClass)
     /* eslint-disable */
@@ -487,7 +490,6 @@ var Tree = function (container, params) {
     var name=elLine.getAttribute(s.params.nameAttr)
     var parentid=elLine.getAttribute(s.params.parentidAttr)
     */
-    var opts = s.getDataByTarget(elLine)
     // 添加到s.selected
     s.addSelected(opts, true)
     // Callback onClickAdd
@@ -506,6 +508,16 @@ var Tree = function (container, params) {
     // 选中选中项
     var id = s.option.getAttribute(s.params.idAttr)
     var opts = s.selected[id]
+
+    // 单选
+    if (!s.params.multiple) {
+      // Callback onClickAdd
+      if (s.params.onClickAdd) s.params.onClickAdd(opts, s)
+      if (s.params.onChange) s.params.onChange(s)
+      return
+    }
+
+    // 多选
     s.removeSelected(id, true)
     // 如果为空，则隐藏选中容器
     if (s.isEmptyJson(s.selected)) {

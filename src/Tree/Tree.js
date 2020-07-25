@@ -4,7 +4,7 @@ import Instance from './instance.js';
 
 const Tree = forwardRef(({
   split = ',',
-  multiple = true, // 是否需要多选
+  multiple = false, // 是否需要多选
   checkbox = true, // 是否可选
   extend = 0, // 1.全部展开 -1.全部收缩 0.不工作
   bar, // 选中栏
@@ -40,7 +40,7 @@ const Tree = forwardRef(({
       data = data.flattenTree()
     }
     let elTree = refEl.current.querySelector('ul')
-    console.log('初始化')
+    console.log('初始化, 是否多选:' + multiple)
     instance.current = new Instance(elTree, {
       data: data,
       multiple,
