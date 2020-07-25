@@ -7,9 +7,11 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Videos
+  Tree
 } from '../../src';
 function Demo () {
+  useEffect(() => {
+  }, [])
   const list = [{
     id: '1',
     thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
@@ -79,13 +81,63 @@ function Demo () {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <Videos
+      <Tree
+        selected={[{parentid: '5377070435626674285', id: '6734269460078366627', name: '测试二组'}]}
+        list={[
+          {
+              "name":"测试二组",
+              "parentid":"5377070435626674285",
+              "id":"6734269460078366627",
+              "keyword":"测试二组 ceshierzu",
+              "props":{
+                  "node_type":"1"
+              }
+          },
+          {
+              "name":"测试一组",
+              "parentid":"5377070435626674285",
+              "id":"8586232242889919914",
+              "keyword":"测试一组 ceshiyizu",
+              "props":{
+                  "node_type":"1"
+              }
+          },
+          {
+              "name":"测试部",
+              "parentid":"10",
+              "id":"5377070435626674285",
+              "keyword":"测试部 ceshibu",
+              "props":{
+                  "node_type":"1"
+              }
+          },
+          {
+              "name":"202",
+              "parentid":"6734269460078366627",
+              "id":"7278386654397193143",
+              "keyword":"202 202",
+              "props":{
+                  "node_type":"1"
+              }
+          },
+          {
+              "name":"测试3组",
+              "parentid":"5377070435626674285",
+              "id":"8495494582677258794",
+              "keyword":"测试3组 ceshi3zu",
+              "props":{
+                  "node_type":"1"
+              }
+          }
+      ]}
+      />
+      {/* <Videos
         list={list}
         onChoose={onChoose}
         onDelete={onDelete}
         onClick={onClick}
         onChoose={chooseHandler}
-      />
+      /> */}
     </Container>
   </Page>
 }

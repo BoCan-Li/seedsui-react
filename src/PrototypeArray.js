@@ -153,14 +153,35 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
 }
 
 // 取出无父节点的顶层数据, 即[{id: '', name: '', parentid: '-1' 或没有parentid}]
-window.Array.prototype.getFlattenTreeRoots = function (parentIdName, nodeIdName) {
+window.Array.prototype.getFlattenTreeRoots = function (parentIdName) {
   var list = this
+  var rootIds = list.getFlattenTreeRootIds()
   var roots = []
   // 取出顶层数据(没有parentid或者parentid===-1)
   list.forEach(function (item) {
-    if (!item[parentIdName || 'parentid'] || String(item[parentIdName || 'parentid']) === '-1') roots.push(item)
+    if (item[parentIdName || 'parentid'] && rootIds.indexOf(String(item[parentIdName || 'parentid'])) !== -1) roots.push(item)
   })
   return roots
+}
+
+// 取出扁平数据的顶层id集合, 无parentid, 则修改为'-1'
+window.Array.prototype.getFlattenTreeRootIds = function (parentIdName) {
+  var list = this
+  var parentIdMap = {}
+  // 取出所有的parentid
+  for (let item of list) {
+    if (!item[parentIdName || 'parentid']) {
+      item[parentIdName || 'parentid'] = '-1'
+      parentIdMap['-1'] = '1'
+    }
+    parentIdMap[item[parentIdName || 'parentid']] = '1'
+  }
+  // 在id中出现的parentid说明不是顶层id
+  for (let item of list) {
+    if (!item.id) continue
+    if (parentIdMap[item.id]) delete parentIdMap[item.id]
+  }
+  return Object.keys(parentIdMap)
 }
 
 // 根据id, 取出此id的下级节点数据, 即[{id: '', name: '', parentid: ''}]

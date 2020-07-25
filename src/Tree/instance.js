@@ -32,7 +32,6 @@ var Tree = function (container, params) {
     buttonDelClass: 'tree-button-del', // 默认删除按钮
     buttonDelSrc: '', // 图标删除按钮
 
-    rootParentId: '-1',
     idAttr: 'data-id',
     parentidAttr: 'data-parentid',
     nameAttr: 'data-name',
@@ -83,6 +82,7 @@ var Tree = function (container, params) {
 
   // Selected
   s.selected = {}
+  // 异步渲染时需要用临时数据, 所以设置_data用于渲染
   var _data = s.params.data
   s.buildOption = function (option) {
     // 拷贝option，方便传入回调中而不影响原option
@@ -173,17 +173,12 @@ var Tree = function (container, params) {
       return
     }
     // 数据格式化, 没有parentid的补上parentid
-    _data = s.params.data.map((item) => {
-      if (!item.parentid) item.parentid = s.params.rootParentId
-      return item
-    })
+    s.rootParentIds = s.params.data.getFlattenTreeRootIds()
+    _data = s.params.data
     s.updateBar()
-    s.initData(s.params.rootParentId, s.container) // 根节点
-    // var trees = _data.getFlattenTreeRoots()
-    // console.log(trees)
-    // for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
-    //   s.initData(tree.id, s.container)
-    // }
+    for (let rootParentId of s.rootParentIds) {
+      s.initData(rootParentId, s.container) // 根节点
+    }
   }
   // s.update() // 改为由外部调用渲染数据
   /* ------------------
@@ -208,20 +203,22 @@ var Tree = function (container, params) {
     return opts
   }
   // 危险: 获得所有父节点, 到根截止, 如果根节点parentid不正确将进入死循环
-  s.getParentOptions = function (parentid) {
-    var parentOptions = []
-    var currentId = parentid
-    while (currentId !== s.params.rootParentId) { // 提取所有父级节点
-      for (var i = 0, opt; opt = s.params.data[i++];) { // eslint-disable-line
-        if (opt.id === currentId) {
-          parentOptions.push(opt)
-          currentId = opt.parentid
-          break;
-        }
-      }
-    }
-    return parentOptions
-  }
+  // s.getParentOptions = function (parentid) { // 已使用getFlattenTreePredecessors代替
+  //   console.log(s.rootParentIds)
+  //   var parentOptions = []
+  //   var currentId = parentid
+  //   while (s.rootParentIds.indexOf(currentId) !== -1) { // 提取所有父级节点
+  //     debugger
+  //     for (var i = 0, opt; opt = s.params.data[i++];) { // eslint-disable-line
+  //       if (opt.id === currentId) {
+  //         parentOptions.push(opt)
+  //         currentId = opt.parentid
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   return parentOptions
+  // }
   // 当前被选中返回1，父级被选中返回-1，当前和父级都被选中返回2，没有被选中返回0
   s.isSelected = function (id, parentid) {
     var currentFlag = false
@@ -246,8 +243,8 @@ var Tree = function (container, params) {
     if (!hasNode) return 0
 
     // 向上查询是否已添加到选中项，一直查到顶级
-    var parentNodes = s.getParentOptions(parentid)
-    for (var i = 0, opt; opt = parentNodes[i++];) { // eslint-disable-line
+    var parentNodes = s.params.data.getFlattenTreePredecessors(parentid)
+    for (var opt of parentNodes) { // eslint-disable-line
       if (s.selected[opt.id]) {
         parentFlag = true
         break
@@ -326,17 +323,17 @@ var Tree = function (container, params) {
   }
   s.addSelected = function (opts, isClick) {
     if (!opts.id || !opts.name || !opts.parentid) {
-      console.log('SeedsUI Tree:id、name、parentid三个参数不正确')
+      console.error('addSelected:id、name、parentid三个参数不正确')
       return
     }
     
     if (s.selected[opts.id]) {
-      console.log('SeedsUI Tree:您要选中的节点已经选中')
+      console.log('addSelected:您要选中的节点已经选中')
       return
     }
     
     if (s.isSelected(opts.id, opts.parentid)) {
-      console.log('SeedsUI Tree:您要选中的节点已经选中')
+      console.log('addSelected:您要选中的节点已经选中')
       return
     }
 

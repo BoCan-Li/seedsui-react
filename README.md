@@ -5440,18 +5440,18 @@ const [list, setList] = useState([])
     }, 1000)
   }, [])
 const [selected, setSelected] = useState(
-  {
-    '13ed5bf3-1b91-4fca-9303-ee8071b32154': {
+  [
+    {
       "id": "13ed5bf3-1b91-4fca-9303-ee8071b32154",
       "name": "内勤组",
       "parentid": "b93d94c6-7e30-4caf-89eb-188bef40b3ba",
     },
-    '47f9b708-ab98-4fb3-a643-217db2074c73': {
+    {
       "id": "47f9b708-ab98-4fb3-a643-217db2074c73",
       "name": "人力资源部",
       "parentid": "-1",
     }
-  }
+  ]
 )
 const [extend, setExtend] = useState(0); // 1.全部展开 -1.全部收缩 0.不工作
 // 获取选中

@@ -13,7 +13,7 @@ const Tree = forwardRef(({
   buttonAddAttribute = {}, // {className: '', onClick: func()}
   buttonDelAttribute = {}, // {className: '', onClick: func()}
 
-  selected = [], // 选中项: [{id: '', name: ''}]
+  selected = [], // 选中项: [{id: '', name: '', parentid: ''}]
   list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren,
@@ -39,7 +39,12 @@ const Tree = forwardRef(({
     if (JSON.stringify(data).indexOf('"children"') !== -1) {
       data = data.flattenTree()
     }
+    if (!data || !data.length) {
+      console.log('Tree: 数据不正确, 无法渲染');
+      return;
+    }
     let elTree = refEl.current.querySelector('ul')
+    console.log('初始化')
     instance.current = new Instance(elTree, {
       data: data,
       multiple,
