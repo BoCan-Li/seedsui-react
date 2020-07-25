@@ -39,10 +39,6 @@ const Tree = forwardRef(({
     if (JSON.stringify(data).indexOf('"children"') !== -1) {
       data = data.flattenTree()
     }
-    if (!data || !data.length) {
-      console.log('Tree: 数据不正确, 无法渲染');
-      return;
-    }
     let elTree = refEl.current.querySelector('ul')
     console.log('初始化')
     instance.current = new Instance(elTree, {
@@ -90,14 +86,14 @@ const Tree = forwardRef(({
       instance.current.setData([]);
       instance.current.update();
     }
-  }, [list])
+  }, [list]) // eslint-disable-line
 
   useEffect(() => {
     if (!bar || !instance.current) return;
     instance.current.params.bar = bar;
     instance.current.updateBar();
     barSelected();
-  }, [bar])
+  }, [bar]) // eslint-disable-line
 
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
