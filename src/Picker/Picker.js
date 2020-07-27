@@ -72,7 +72,9 @@ const Picker = forwardRef(({
       for (let item of list) {
         if (item.name === value) return item
       }
-      return null
+    }
+    if (list && list.length) {
+      return list[0]
     }
     return null
   }
@@ -99,6 +101,7 @@ const Picker = forwardRef(({
     if (show && instance.current) {
       instance.current.show()
     }
+    refEl.current.instance = instance;
   }
 
   // 过滤已经回调的属性
