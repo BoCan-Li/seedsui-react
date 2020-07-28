@@ -11,7 +11,7 @@ var Bridge = {
     var self = this
     // 返回物理按键绑定
     self.addBackPress()
-    self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp'])
+    self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp', 'reloadByApp'])
   },
   // 公共方法，通过桥接调用原生方法公共入口
   invoke: function (name, param, callback) {

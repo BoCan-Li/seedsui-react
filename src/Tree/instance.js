@@ -509,15 +509,6 @@ var Tree = function (container, params) {
     var id = s.option.getAttribute(s.params.idAttr)
     var opts = s.selected[id]
 
-    // 单选
-    if (!s.params.multiple) {
-      // Callback onClickAdd
-      if (s.params.onClickAdd) s.params.onClickAdd(opts, s)
-      if (s.params.onChange) s.params.onChange(s)
-      return
-    }
-
-    // 多选
     s.removeSelected(id, true)
     // 如果为空，则隐藏选中容器
     if (s.isEmptyJson(s.selected)) {

@@ -132,7 +132,9 @@ const Tree = forwardRef(({
       for (let id in s.selected) {
         value.push(s.selected[id].name);
       }
-      onChange(s, value.join(','), Object.values(s.selected))
+      if (value.join(',')) {
+        onChange(s, value.join(','), Object.values(s.selected))
+      }
     }
   }
 
