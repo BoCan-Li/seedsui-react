@@ -9,14 +9,14 @@ const Loading = forwardRef(({
   iconAttribute,
   captionAttribute = {},
   children,
-  caption,
+  caption = '正在加载...',
   ...others
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
   const locale = context.locale || {};
 
-  let content = <div>{caption || locale['loading'] || '正在加载...'}</div>;
+  let content = null ;
   if (type === 'custom') { // 自定义样式
     content = (<div {...others} className={`loading-custom${others.className ? ' ' + others.className : ''}`}>
       {iconAttribute && <span {...iconAttribute} className={`loading-custom-icon${iconAttribute.className ? ' ' + iconAttribute.className : ''}`}></span>}
@@ -42,7 +42,7 @@ const Loading = forwardRef(({
         <div className="loading-floating-blade"></div>
         <div className="loading-floating-blade"></div>
       </div>
-      {caption && <div {...captionAttribute} className={`loading-floating-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption || locale['loading'] || '正在加载...'}</div>}
+      {caption && <div {...captionAttribute} className={`loading-floating-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>{caption}</div>}
     </div>);
   }
   if (portal) {
