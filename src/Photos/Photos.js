@@ -1,8 +1,9 @@
 import React, {forwardRef, useState} from 'react';
 import Preview from './../Preview';
+import Bridge from './../Bridge';
 
 const Photos = forwardRef(({
-  type,
+  type, // video录相, 其它为拍照
   list, // [{id: '', name: '', thumb: '', src: ''}]
   upload, // 上传按钮覆盖的dom
   uploading, // 是否上传中
@@ -37,6 +38,7 @@ const Photos = forwardRef(({
   // file框选择
   function fileChange (event) {
     const e = event.nativeEvent;
+    if (type === 'video') e.targetType = 'video';
     if (onChoose) onChoose(e);
     e.stopPropagation();
   }
@@ -81,9 +83,11 @@ const Photos = forwardRef(({
     {onChoose && <div className="photos-item photos-upload">
       {/* 拍照或者视频图标 */}
       <div className={`photos-upload-icon${type === 'video' ? ' video' : ''}`}></div>
+      {/* 录相 */}
+      {type === 'video' && Bridge.platform !== 'wq' && Bridge.platform !== 'waiqin' && <input type="file" name="uploadVideo" onChange={fileChange} accept="video/*" capture="camcorder"/>}
       {/* 拍照 */}
       {/* PC端使用file框 */}
-      {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPic" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
+      {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPhoto" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
       {upload && upload}
       {uploading && <div className="photos-upload-loading">
         <div className="photos-upload-loading-icon"></div>

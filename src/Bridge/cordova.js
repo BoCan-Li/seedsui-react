@@ -521,7 +521,7 @@ var Bridge = {
       return;
     }
     if (!params.localId || Object.isEmptyObject(params.localId)) {
-      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
       return;
     }
     let filePathList = [{
@@ -590,6 +590,67 @@ var Bridge = {
       photos: photos
     }
     wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
+  },
+  /**
+    * 视频文件上传
+    * @param {Object} params
+    * {
+      uploadDir: '目录/年月',
+      localId: 'localId',
+      success: func(res)
+    * }
+    */
+   uploadFile: function (argParams = {}) {
+    var self = this
+    if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
+      self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
+      return
+    }
+    if (!argParams.localId) {
+      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
+      return
+    }
+    let params = argParams.localId.split(':');
+    if (params.length !== 2) {
+      self.showToast(locale('hint_error_localeid') || 'localeId错误', {mask: false})
+      return
+    }
+    window.wq.wqio.uploadFile(JSON.stringify({ // 拍摄完后开始上传文件
+      filePathList: [{path: params[1], fileAlias: params[0]}],
+      url: uploadDir
+    }))
+    setTimeout(() => {
+      if (argParams.success) argParams.success({
+        filePath: params[1],
+        fileName: params[0]
+      })
+    }, 3000)
+  },
+  /**
+    * 选择、录制视频
+    * @param {Object} params
+    * {
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      maxDuration: 60, // 最大录相时长
+      camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success({localIds:[src]})
+    * }
+    */
+  chooseVideo: function (argParams = {}) {
+    const self = this
+    if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
+      self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
+      return
+    }
+    window.wq.wqphoto.getVideo(res => {
+      res.localIds = [res.tempPath]
+      // 标准化回调参数: 将tempFilePath改为localId
+      if (res.path) {
+        res.localIds = [res.name + ':' + res.path]
+      }
+      if (argParams.success) argParams.success(res)
+    }, null, JSON.stringify({ maxtime: argParams.maxDuration || 10}))
   },
   /* -----------------------------------------------------
     人员插件

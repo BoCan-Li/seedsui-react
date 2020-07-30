@@ -205,7 +205,7 @@ var Bridge = {
       return
     }
     if (!params.localId) {
-      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
       return
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
@@ -244,7 +244,7 @@ var Bridge = {
       return
     }
     if (!argParams.localId) {
-      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
       return
     }
     let params = {
@@ -268,7 +268,7 @@ var Bridge = {
     * @param {Object} params
     * {
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      maxDuration: 60, // 最大录相时长
+      maxDuration: 10, // 最大录相时长
       camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success({localIds:[src]})

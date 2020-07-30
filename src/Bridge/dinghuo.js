@@ -445,7 +445,7 @@ var Bridge = {
       return
     }
     if (!params.localId) {
-      self.showToast(locale('hint_no_upload_localid') || '没有上传地址', {mask: false})
+      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
       return
     }
     if (!params.tenantId) {

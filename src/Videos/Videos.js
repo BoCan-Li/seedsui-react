@@ -2,12 +2,12 @@ import React, {forwardRef, useContext, useRef, Fragment, useState} from 'react';
 import Bridge from './../Bridge';
 import Photos from './../Photos';
 import VideoFull from './../VideoFull';
-import Camera from './../Camera';
+// import Camera from './../Camera';
 import Context from './../Context/instance.js';
 
 const Videos = forwardRef(({
   onClick,
-  onChoose,
+  // onChoose,
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
@@ -18,8 +18,6 @@ const Videos = forwardRef(({
   const refVideoFull = useRef(null);
   // h5预览
   const [previewItem, setPreivewItem] = useState(null);
-  // h5录相
-  const [showRecord, setShowRecord] = useState(false);
   // 点击预览
   function click (e, item, index) {
     if (onClick) {
@@ -36,6 +34,9 @@ const Videos = forwardRef(({
   function closePreview () {
     setPreivewItem(null);
   }
+  /*
+  // h5录相
+  const [showRecord, setShowRecord] = useState(false);
   // 录制视频
   function choose (e) {
     if (Bridge.platform !== 'wq') {
@@ -52,12 +53,13 @@ const Videos = forwardRef(({
       onChoose(e);
     }
   }
+  */
   return <Fragment>
     <Photos
       ref={ref}
       {...others}
       onClick={click}
-      onChoose={choose}
+      // onChoose={choose}
       type="video"
       preview={false}
     />
@@ -73,10 +75,10 @@ const Videos = forwardRef(({
       }
     />}
     {/* 录相 */}
-    {showRecord && <Camera
+    {/* {showRecord && <Camera
       onHide={() => setShowRecord(false)}
       onRecord={record}
-    />}
+    />} */}
   </Fragment>;
 })
 

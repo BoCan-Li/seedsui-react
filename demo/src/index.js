@@ -7,42 +7,44 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Context,
-  InputDate
+  Videos
 } from '../../src';
-import BottomError from '../../src/ContainerPull/BottomError';
-import zhCN from '../../src/locale/zh_CN';
-import enUS from '../../src/locale/en_US';
-
 function Demo () {
   useEffect(() => {
   }, [])
-  const [locale, setLocale] = useState(zhCN);
-  const [language, setLanguage] = useState('zh_CN');
-
-  function useZh () {
-    setLocale(zhCN);
-    setLanguage('zh_CN');
+  const list = [{
+    id: '1',
+    thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+    src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
+  },{
+    id: '2',
+    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+    src: 'https://www.w3school.com.cn/i/movie.ogg'
+  }];
+  
+  function onClick (...params) {
+    console.log('点击')
+    console.log(...params)
   }
-  function useEn () {
-    setLocale(enUS);
-    setLanguage('en_US');
+  function onChoose (e) {
+    console.log('选择')
+    console.log(e)
+  }
+  function onDelete (...params) {
+    console.log('删除')
+    console.log(...params)
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <input type="button" value="英文" onClick={useEn}/>
-      <input type="button" value="中文" onClick={useZh}/>
-      <Context
-        portal={document.getElementById('demo')}
-        language={language}
-        // locale={locale}
-      >
-        <InputDate type="datetime"/>
-        <BottomError/>
-      </Context>
+      <Videos
+        list={list}
+        onChoose={onChoose}
+        onDelete={onDelete}
+        onClick={onClick}
+      />
     </Container>
   </Page>
 }
