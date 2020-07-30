@@ -1336,6 +1336,8 @@ useEffect(() => {
 
 
 
+
+
 ## Context
 [全局配置](https://unpkg.com/seedsui-react/src/lib/Context/Context.js)
 ### 属性
@@ -1349,6 +1351,47 @@ useEffect(() => {
 ```
 [locale格式](https://unpkg.com/seedsui-react/src/lib/locale/zh_CN.js)
 
+### 函数组件引用国际化
+```javascript
+import React, {useContext} from 'react';
+import Context from 'seedsui-react/lib/Context/instance.js';
+
+// 将国际化引用放到主体第一行
+let {locale} = useContext(Context);
+if (!locale) locale = function (key) {return key || ''}
+
+// 使用国际化
+{locale('filter') || '筛选'}
+```
+
+### Class组件引用国际化
+```javascript
+import Context from 'seedsui-react/lib/Context/instance.js';
+// 赋值国际化到context对象中
+static contextType = Context;
+
+// 使用国际化
+let {locale} = this.context;
+if (!locale) locale = function (key) {return key || ''}
+{locale('filter') || '筛选'}
+```
+
+### Js引用国际化
+> Js引用方法也可以用在Class组件和函数组件中
+```javascript
+import locale from 'utils/locale';
+
+// 使用国际化
+locale('filter') || '筛选';
+
+```
+
+### 使用变量
+```javascript
+// 国际化中的json: {'radius_of_m': '半径{0}米'}
+locale('radius_of_m', [1000]); // => 半径1000米
+```
+
 ### 示例
 ```javascript
 import InputDate from 'seedsui-react/lib/InputDate';
@@ -1356,59 +1399,30 @@ import zhCN from 'seedsui-react/lib/locale/zh_CN';
 import enUS from 'seedsui-react/lib/locale/en_US';
 import Context from 'seedsui-react/lib/Context';
 
-state = {
-  locale: zhCN
+const [locale, setLocale] = useState(zhCN);
+const [language, setLanguage] = useState('zh_CN');
+
+function useZh () {
+  setLocale(zhCN);
+  setLanguage('zh_CN');
+}
+function useEn () {
+  setLocale(enUS);
+  setLanguage('en_US');
 }
 
-useZh = () => {
-  this.setState({
-    locale: zhCN
-  });
-}
-useEn = () => {
-  this.setState({
-    locale: enUS
-  });
-}
-
-<input type="button" value="英文" onClick={this.useEn}/>
-<input type="button" value="中文" onClick={this.useZh}/>
-<Context portal={document.getElementById('demo')} locale={this.state.locale}>
+<input type="button" value="英文" onClick={useEn}/>
+<input type="button" value="中文" onClick={useZh}/>
+<Context
+  portal={document.getElementById('demo')}
+  language={language}
+  // locale={locale}
+>
   <InputDate type="datetime"/>
+  <BottomError/>
 </Context>
 
 ```
-
-### 组件调用示例
-```javascript
-import Context from 'seedsui-react/lib/Context/instance.js';
-static contextType = Context;
-// class类
-render() {
-  let {
-    locale = {}
-  } = this.context;
-  if (!locale) locale = {}
-
-  console.log(locale);
-  return (
-    <div></div>
-  );
-}
-// hooks
-function () => {
-  const context = useContext(Context) || {};
-  console.log(context)
-}
-```
-
-### 非组件中调用(因为只能在全局只有一个Context时才能这样用, 所以建议自己写一个js的国际化读取库)
-```javascript
-import locale from 'seedsui-react/lib/locale';
-
-locale('hint_only_mobile')
-```
-
 [返回目录](#component)
 
 

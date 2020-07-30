@@ -28,7 +28,7 @@ const Alert = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   // 构建动画
   let animationClassName = '';
@@ -85,8 +85,8 @@ const Alert = forwardRef(({
           {children}
         </div>
         <div className="alert-handler">
-          {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption || locale['cancel'] || '取消'}</a>}
-          {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption || locale['ok'] || '确定'}</a>}
+          {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption || locale('cancel') || '取消'}</a>}
+          {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption || locale('ok') || '确定'}</a>}
         </div>
       </div>
     </div>,

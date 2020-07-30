@@ -7,31 +7,48 @@ function Context({
   portal,
   children
 }) {
+  let data = null;
   // 根据语言名称获取locale数据
-  function initLocale() {
-    let languageLocale = null;
-    const result = require(`./../locale/${language}.js`)
+  function initLanguageLocale() {
+    let seedsuiLocale = {};
+    const result = require(`./../locale/${language}.js`);
     if (!result) {
       console.error(`seedsui中, ${language}语言包不存在`);
-      locale = null;
+      data = locale;
       return;
     }
     // 防止没有用babel-plugin-add-module-exports自动加上default
-    if (result.default) languageLocale = result.default;
-    locale = {
-      ...languageLocale,
+    if (result.default) seedsuiLocale = result.default;
+    data = {
+      ...seedsuiLocale,
       ...locale
     }
   }
-  // 获取locale数据
-  if (language) { // 其次读取locale
-    initLocale();
+  // 有language属性时, 读取seedsui内部国际化文件
+  if (language) {
+    initLanguageLocale()
+  } else {
+    data = locale
   }
-  localStorage.setItem('_seedsui_locale', JSON.stringify(locale))
+  if (data) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
   return (
     <Instance.Provider
       value={{
-        locale: locale,
+        locale: function (key, variable) {
+          if (!data) return key || '';
+          // 获取key的值
+          if (key) {
+            let value = data[key] || '';
+            if (value && variable && Array.isArray(variable) && variable.length) {
+              for (let i = 0; i < variable.length; i++) {
+                if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
+                value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
+              }
+            }
+            return value || key;
+          }
+          return data
+        },
         language: language,
         portal: portal
       }}

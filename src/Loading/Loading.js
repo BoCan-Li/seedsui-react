@@ -1,6 +1,6 @@
 import React, { forwardRef, useContext } from 'react';
 import {createPortal} from 'react-dom';
-import Context from '../Context/instance.js';
+import locale from './../locale' // 国际化数据
 
 const Loading = forwardRef(({
   portal,
@@ -9,13 +9,9 @@ const Loading = forwardRef(({
   iconAttribute,
   captionAttribute = {},
   children,
-  caption = '正在加载...',
+  caption = locale('loading'),
   ...others
 }, ref) =>  {
-  // context
-  const context = useContext(Context) || {};
-  const locale = context.locale || {};
-
   let content = null ;
   if (type === 'custom') { // 自定义样式
     content = (<div {...others} className={`loading-custom${others.className ? ' ' + others.className : ''}`}>

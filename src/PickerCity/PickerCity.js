@@ -33,7 +33,7 @@ const PickerCity = forwardRef(({
   const instance = useRef(null)
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   useEffect(() => {
     initInstance()
@@ -166,8 +166,8 @@ const PickerCity = forwardRef(({
     <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
         <div className="picker-header">
-          <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale['cancel'] || '取消')}</a>
-          <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || (locale['finish'] || '完成')}</a>
+          <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale('cancel') || '取消')}</a>
+          <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || (locale('finish') || '完成')}</a>
         </div>
         <div className="picker-wrapper">
           <div className="picker-layer">

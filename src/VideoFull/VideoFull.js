@@ -23,7 +23,7 @@ const VideoFull = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
@@ -145,13 +145,13 @@ const VideoFull = forwardRef(({
   // 实例化
   async function initInstance () {
     if (!src) {
-      console.error(locale['hint_video_src'] || '请传入视频源');
-      if (onError) onError(e, {errMsg: locale['hint_video_src'] || '请传入视频源'});
+      console.error(locale('hint_video_src') || '请传入视频源');
+      if (onError) onError(e, {errMsg: locale('hint_video_src') || '请传入视频源'});
       return;
     }
     if (!await loadSdk()) {
-      console.error(locale['hint_video_sdk_load_failed'] || '加载播放器库出错, 请稍后再试');
-      if (onError) onError(e, {errMsg: locale['hint_video_sdk_load_failed'] || '加载播放器库出错, 请稍后再试'});
+      console.error(locale('hint_video_sdk_load_failed') || '加载播放器库出错, 请稍后再试');
+      if (onError) onError(e, {errMsg: locale('hint_video_sdk_load_failed') || '加载播放器库出错, 请稍后再试'});
       return
     }
     if (!window.Aliplayer) {

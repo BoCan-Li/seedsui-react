@@ -13,7 +13,7 @@ const Videos = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   
   const refVideoFull = useRef(null);
   // h5预览
@@ -27,7 +27,7 @@ const Videos = forwardRef(({
     }
     if (!preview) return;
     if (!item.src) {
-      Bridge.showToast(locale['no_param_src'] || '没有参数src', {mask: false})
+      Bridge.showToast(locale('no_param_src') || '没有参数src', {mask: false})
     }
     // 客户端预览视频有问题, 所以使用h5预览
     setPreivewItem(item);

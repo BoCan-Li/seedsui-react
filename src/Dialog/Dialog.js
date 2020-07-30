@@ -16,7 +16,7 @@ const Dialog = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  // const locale = context.locale || {};
+  // const locale = context.locale || function (key) {return key || ''};
 
   // 点击dialog主体
   function click (e) {

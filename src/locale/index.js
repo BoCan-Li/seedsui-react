@@ -6,7 +6,7 @@ export default function (key, variable) {
     if (localStorage.getItem('_seedsui_locale')) {
       locale = JSON.parse(localStorage.getItem('_seedsui_locale')) || {}
     } else {
-      locale = require(`./zh_CN.js`)
+      locale = require(`./zh_CN.js`) // 默认国际化文件, en_US和zh_CN
       if (locale.default) locale = locale.default;
     }
   } catch (error) {
@@ -15,13 +15,13 @@ export default function (key, variable) {
   // 获取key的值
   if (key) {
     let value = locale[key] || '';
-    if (value && variable && Array.isArray(variable)) {
+    if (value && variable && Array.isArray(variable) && variable.length) {
       for (let i = 0; i < variable.length; i++) {
         if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
         value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
       }
     }
-    return value;
+    return value || key;
   }
   return locale
 }

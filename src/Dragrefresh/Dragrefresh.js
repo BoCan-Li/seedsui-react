@@ -53,10 +53,8 @@ export default class Dragrefresh extends Component {
   // 实例化
   init = () => {
     // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+    let {locale} = this.context;
+    if (!locale) locale = function (key) {return key || ''};
     const {onScroll} = this.props;
     var instance = new Instance({
       threshold: this.props.threshold,
@@ -79,10 +77,10 @@ export default class Dragrefresh extends Component {
         if (!e.isLoading) {
           if (e.touches.currentPosY >= e.params.threshold) {
             if (topIcon) topIcon.classList.add('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = locale['release'] || '释放立即刷新'
+            if (topCaption) topCaption.innerHTML = locale('release') || '释放立即刷新'
           } else {
             if (topIcon) topIcon.classList.remove('df-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = locale['pull_down'] || '下拉可以刷新'
+            if (topCaption) topCaption.innerHTML = locale('pull_down') || '下拉可以刷新'
           }
         }
       },
@@ -93,7 +91,7 @@ export default class Dragrefresh extends Component {
         topContainer.style.height = e.params.threshold + 'px';
         if (topIcon) topIcon.classList.remove('df-pull-icon-down')
         if (topIcon) topIcon.classList.add('df-pull-icon-loading')
-        if (topCaption) topCaption.innerHTML = locale['refreshing'] || '正在刷新...'
+        if (topCaption) topCaption.innerHTML = locale('refreshing') || '正在刷新...'
       },
       onHideTop: (e) => {
         var topContainer = e.topContainer;
@@ -172,10 +170,8 @@ export default class Dragrefresh extends Component {
   }
   render() {
     // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+    let {locale} = this.context;
+    if (!locale) locale = function (key) {return key || ''};
     const {
       threshold,
       end,
@@ -197,11 +193,11 @@ export default class Dragrefresh extends Component {
       onScroll,
 
       // 底部加载中
-      bottomLoadingCaption = locale['loading'] || '正在加载...',
+      bottomLoadingCaption = locale('loading') || '正在加载...',
       // 底部加载完成
-      bottomNoDataCaption = locale['no_more_data'] || '没有更多数据了',
+      bottomNoDataCaption = locale('no_more_data') || '没有更多数据了',
       // 底部加载错误
-      bottomErrorCaption = locale['refreshing_failed'] || '加载失败, 请稍后再试',
+      bottomErrorCaption = locale('refreshing_failed') || '加载失败, 请稍后再试',
       onClickBottomError,
       ...others
     } = this.props;
@@ -211,7 +207,7 @@ export default class Dragrefresh extends Component {
         {onTopRefresh && <div ref={(el) => {this.$elTopBox = el;}} className="SID-Dragrefresh-TopContainer df-pull">
           <div className="df-pull-box">
             <div className="df-pull-icon"></div>
-            <div className="df-pull-caption">{locale['pull_down'] || '下拉可以刷新'}</div>
+            <div className="df-pull-caption">{locale('pull_down') || '下拉可以刷新'}</div>
           </div>
         </div>}
         {this.props.children}

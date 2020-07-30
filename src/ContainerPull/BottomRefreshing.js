@@ -7,7 +7,7 @@ const BottomError = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
@@ -17,7 +17,7 @@ const BottomError = forwardRef(({
   return <div className="SID-Dragrefresh-BottomContainer containerpull-pull" style={{height: '50px'}} {...others}>
     {!children && <div className="containerpull-pull-box">
       <div className="containerpull-pull-icon containerpull-pull-icon-loading"></div>
-      <div className="containerpull-pull-caption">{locale['loading'] || '正在加载...'}</div>
+      <div className="containerpull-pull-caption">{locale('loading') || '正在加载...'}</div>
     </div>}
     {children}
   </div>

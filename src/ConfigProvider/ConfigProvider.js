@@ -19,42 +19,51 @@ export default class ConfigProvider extends Component {
 
   getChildContext() {
     let {
-      locale,
+      locale = {},
       language,
       portal,
       onChange
     } = this.props;
-    if (language) {
-      let defaultLocale = null;
-      switch (language) {
-        case 'zh_CN': {
-          defaultLocale = require('./../locale/zh_CN.js');
-          // 防止没有用babel-plugin-add-module-exports自动加上default
-          if (defaultLocale.default) defaultLocale = defaultLocale.default;
-          locale = {
-            ...defaultLocale,
-            ...locale
-          }
-          break;
-        }
-        case 'en_US': {
-          defaultLocale = require('./../locale/en_US.js');
-          // 防止没有用babel-plugin-add-module-exports自动加上default
-          if (defaultLocale.default) defaultLocale = defaultLocale.default;
-          locale = {
-            ...defaultLocale,
-            ...locale
-          }
-          break;
-        }
+    let data = null;
+    // 根据语言名称获取locale数据
+    function initLanguageLocale() {
+      let seedsuiLocale = {};
+      const result = require(`./../locale/${language}.js`);
+      if (!result) {
+        console.error(`seedsui中, ${language}语言包不存在`);
+        data = locale;
+        return;
+      }
+      // 防止没有用babel-plugin-add-module-exports自动加上default
+      if (result.default) seedsuiLocale = result.default;
+      data = {
+        ...seedsuiLocale,
+        ...locale
       }
     }
-    // 如果有locale的话, 则放入内存中, 开放给getLocaleValue使用
-    if (locale) {
-      localStorage.setItem('_seedsui_locale', JSON.stringify(locale))
+    // 有language属性时, 读取seedsui内部国际化文件
+    if (language) {
+      initLanguageLocale()
+    } else {
+      data = locale
     }
+    if (data) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
     return {
-      locale,
+      locale: function (key, variable) {
+        if (!data) return key || '';
+        // 获取key的值
+        if (key) {
+          let value = data[key] || '';
+          if (value && variable && Array.isArray(variable) && variable.length) {
+            for (let i = 0; i < variable.length; i++) {
+              if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
+              value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
+            }
+          }
+          return value || key;
+        }
+        return data
+      },
       language,
       portal,
       onChange

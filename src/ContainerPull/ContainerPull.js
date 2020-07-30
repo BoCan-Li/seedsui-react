@@ -15,7 +15,7 @@ const ContainerPull = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const refEl = useRef(null)
   const refElTop = useRef(null)
@@ -52,10 +52,10 @@ const ContainerPull = forwardRef(({
         if (!e.isLoading) {
           if (e.touches.currentPosY >= e.params.threshold) {
             if (topIcon) topIcon.classList.add('containerpull-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = locale['release'] || '释放立即刷新'
+            if (topCaption) topCaption.innerHTML = locale('release') || '释放立即刷新'
           } else {
             if (topIcon) topIcon.classList.remove('containerpull-pull-icon-down')
-            if (topCaption) topCaption.innerHTML = locale['pull_down'] || '下拉可以刷新'
+            if (topCaption) topCaption.innerHTML = locale('pull_down') || '下拉可以刷新'
           }
         }
       },
@@ -66,7 +66,7 @@ const ContainerPull = forwardRef(({
         topContainer.style.height = e.params.threshold + 'px';
         if (topIcon) topIcon.classList.remove('containerpull-pull-icon-down')
         if (topIcon) topIcon.classList.add('containerpull-pull-icon-loading')
-        if (topCaption) topCaption.innerHTML = locale['refreshing'] || '正在刷新...'
+        if (topCaption) topCaption.innerHTML = locale('refreshing') || '正在刷新...'
       },
       onHideTop: (e) => {
         var topContainer = e.topContainer;
@@ -121,7 +121,7 @@ const ContainerPull = forwardRef(({
     <div ref={refElTop} className="SID-Dragrefresh-TopContainer containerpull-pull">
       <div className="containerpull-pull-box">
         <div className="containerpull-pull-icon"></div>
-        <div className="containerpull-pull-caption">{locale['pull_down'] || '下拉可以刷新'}</div>
+        <div className="containerpull-pull-caption">{locale('pull_down') || '下拉可以刷新'}</div>
       </div>
     </div>
     {children}

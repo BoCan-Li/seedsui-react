@@ -142,10 +142,8 @@ export default class PDFView extends Component {
   // 实例化
   updateInstance = (rows) => {
     // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+    let {locale} = this.context;
+    if (!locale) locale = function (key) {return key || ''};
     const {
       pictures,
       src,
@@ -153,9 +151,9 @@ export default class PDFView extends Component {
       params = {}
     } = this.props;
     this.instance = new Instance(this.$el, {
-      loadHTML: locale['in_loading'] || '加载中',
-      errorHTML: locale['hint_file_failed_to_load'] || '文件加载失败',
-      nodataHTML: locale['no_data'] || '暂无数据',
+      loadHTML: locale('in_loading') || '加载中',
+      errorHTML: locale('hint_file_failed_to_load') || '文件加载失败',
+      nodataHTML: locale('no_data') || '暂无数据',
       ...params,
       pictures,
       src,
@@ -197,10 +195,8 @@ export default class PDFView extends Component {
   // 设置total则不分页
   getTotalDOM = (total, insertPageElements = [], pageFeatureClass) => {
     // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+    let {locale} = this.context;
+    if (!locale) locale = function (key) {return key || ''};
     const {
       params = {},
     } = this.props;
@@ -220,9 +216,9 @@ export default class PDFView extends Component {
           </div>
         </div>
         <img alt="" className="pdf-page-img hide"/>
-        <div className="pdf-page-load">{params.loadHTML !== undefined ? params.loadHTML : (locale['in_loading'] || '加载中')}</div>
-        <div className="pdf-page-error hide">{params.errorHTML !== undefined ? params.errorHTML : (locale['hint_file_failed_to_load'] || '文件加载失败')}</div>
-        <div className="pdf-page-nodata hide">{params.nodataHTML !== undefined ? params.nodataHTML : (locale['no_date'] || '暂无数据')}</div>
+        <div className="pdf-page-load">{params.loadHTML !== undefined ? params.loadHTML : (locale('in_loading') || '加载中')}</div>
+        <div className="pdf-page-error hide">{params.errorHTML !== undefined ? params.errorHTML : (locale('hint_file_failed_to_load') || '文件加载失败')}</div>
+        <div className="pdf-page-nodata hide">{params.nodataHTML !== undefined ? params.nodataHTML : (locale('no_date') || '暂无数据')}</div>
       </div>);
     }
     return DOM;

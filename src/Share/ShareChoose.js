@@ -65,7 +65,7 @@ function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp'
   }
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   // 返回列表
   if (!shareTo || !shareTo.length) return null
   return createPortal(
@@ -79,9 +79,9 @@ function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp'
           return <div className="share-item" key={index}>
             <i className={`share-icon ${share}`}></i>
             <p className="share-caption">
-              {share === 'wechat' && (locale['wechat_friend'] || '微信好友')}
-              {share === 'wework' && (locale['wework_friend'] || '企业微信好友')}
-              {share === 'moments' && (locale['wechat_moments'] || '微信朋友圈')}
+              {share === 'wechat' && (locale('wechat_friend') || '微信好友')}
+              {share === 'wework' && (locale('wework_friend') || '企业微信好友')}
+              {share === 'moments' && (locale('wechat_moments') || '微信朋友圈')}
             </p>
           </div>
         })}

@@ -24,12 +24,12 @@ const InputLocation = forwardRef(({
   const [mapData, setMapData] = useState(null);
 
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   if (!loadingValue || typeof loadingValue !== 'string') {
-    loadingValue = locale['location'] || '定位中...';
+    loadingValue = locale('location') || '定位中...';
   }
   if (!failedValue || typeof failedValue !== 'string') {
-    failedValue = locale['hint_location_failed'] || '定位失败, 请检查定位权限是否开启'
+    failedValue = locale('hint_location_failed') || '定位失败, 请检查定位权限是否开启'
   }
 
   useEffect(() => {

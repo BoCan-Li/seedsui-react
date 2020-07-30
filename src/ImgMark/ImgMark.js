@@ -87,7 +87,7 @@ export default class ImgMark extends Component {
     var layer = '' // 绘制的base64编码
     if (this.props.preview) {
       if (!this.validSrc) {
-        Bridge.showToast(`${locale['hint_image_failed_to_load'] || '图片加载失败'}, ${locale['cannot_preview'] || '无法预览'}`, {mask: false});
+        Bridge.showToast(`${locale('hint_image_failed_to_load') || '图片加载失败'}, ${locale('cannot_preview') || '无法预览'}`, {mask: false});
         return;
       }
       if (this.props.isDrawSrc) { // 绘制背景
@@ -108,10 +108,8 @@ export default class ImgMark extends Component {
   }
   render() {
     // 全局配置
-    let {
-      locale = {}
-    } = this.context;
-    if (!locale) locale = {}
+    let {locale} = this.context;
+    if (!locale) locale = function (key) {return key || ''};
     const {
       data,
       src,
@@ -142,7 +140,7 @@ export default class ImgMark extends Component {
         </canvas>
         <div className={`imgmark-error`}>
           <div className={`imgmark-error-icon`}></div>
-          <div className={`imgmark-error-caption`}>{locale['hint_image_failed_to_load'] || '图片加载失败'}</div>
+          <div className={`imgmark-error-caption`}>{locale('hint_image_failed_to_load') || '图片加载失败'}</div>
         </div>
         {/* 内容 */}
         {children}

@@ -7,7 +7,7 @@ const BottomNoData = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
@@ -16,7 +16,7 @@ const BottomNoData = forwardRef(({
 
   return <div className="SID-Dragrefresh-NoDataContainer containerpull-pull" style={{height: '50px'}} {...others}>
     {!children && <div className="containerpull-pull-box">
-      <div className="containerpull-pull-caption">{locale['no_more_data'] || '没有更多数据了'}</div>
+      <div className="containerpull-pull-caption">{locale('no_more_data') || '没有更多数据了'}</div>
     </div>}
     {children}
   </div>

@@ -6,10 +6,10 @@ function Close ({
 }) {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   return (
     <div {...props} className={`mapview-close${props.className ? ' ' + props.className : ''}`} >
-      <div className={`mapview-close-label`}>{locale['close'] || '关闭'}</div>
+      <div className={`mapview-close-label`}>{locale('close') || '关闭'}</div>
     </div>
   )
 }

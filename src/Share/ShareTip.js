@@ -66,18 +66,18 @@ function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {},
   }
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   return createPortal(
     <div className={`mask share-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} {...maskAttribute} onClick={handlerClick}>
       <div className="share-tip-arrow"></div>
       <div className={`share-tip`}>
-        <p>1.{locale['sharetip_click_on_the_top_right'] || '点击右上角'}</p>
+        <p>1.{locale('sharetip_click_on_the_top_right') || '点击右上角'}</p>
         <p>
-          2.{locale['sharetip_click'] || '点击'}
+          2.{locale('sharetip_click') || '点击'}
           <img alt="" src="//res.waiqin365.com/d/seedsui/share/tip_friend.png"/>
-          {locale['sharetip_sent_to_friend_or'] || '发送给朋友或'}
+          {locale('sharetip_sent_to_friend_or') || '发送给朋友或'}
           <img alt="" src="//res.waiqin365.com/d/seedsui/share/tip_moments.png"/>
-          {locale['sharetip_share_to_moments'] || '分享给朋友圈'}
+          {locale('sharetip_share_to_moments') || '分享给朋友圈'}
         </p>
       </div>
     </div>,

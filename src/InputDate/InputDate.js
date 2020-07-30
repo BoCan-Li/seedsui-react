@@ -25,7 +25,7 @@ const InputDate = forwardRef(({
   const [show, setShow] = useState(false)
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   // 日期纠正
   function correctDate (val) {
     const split = pickerProps.split || '-';
@@ -41,25 +41,25 @@ const InputDate = forwardRef(({
     if (min && (min.isDateTime(split, timeSplit) || min.isDate(split) || min.isMonth(split) || min.isTime(timeSplit))) {
       if (type === 'date' && selectDate.compareDate(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_less_than') || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'month' && selectDate.compareMonth(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_less_than') || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'time' && selectDate.compareTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_less_than') || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
       } else if (type === 'datetime' && selectDate.compareDateTime(min.toDate(split, timeSplit)) === -1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_less_than'] || '不能小于') + min, select: text, min: min, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_less_than') || '不能小于') + min, select: text, min: min, value: value});
           return false;
         }
         text = min;
@@ -68,25 +68,25 @@ const InputDate = forwardRef(({
     if (max && (max.isDateTime(split, timeSplit) || max.isDate(split) || max.isMonth(split) || max.isTime(timeSplit))) {
       if (type === 'date' && selectDate.compareDate(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_greater_than') || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'month' && selectDate.compareMonth(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_greater_than') || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'time' && selectDate.compareTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_greater_than') || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;
       } else if (type === 'datetime' && selectDate.compareDateTime(max.toDate(split, timeSplit)) === 1) {
         if (onError) {
-          onError(e, {errMsg: (locale['hint_cannot_be_greater_than'] || '不能大于') + max, select: text, max: max, value: value});
+          onError(e, {errMsg: (locale('hint_cannot_be_greater_than') || '不能大于') + max, select: text, max: max, value: value});
           return false;
         }
         text = max;

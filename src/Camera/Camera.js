@@ -13,7 +13,7 @@ const Camera = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const [successResult, setSuccessResult] = useState({});
 

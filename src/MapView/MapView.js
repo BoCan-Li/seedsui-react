@@ -33,14 +33,14 @@ function MapView ({
 }) {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
 
   const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');
 
   useEffect(() => {
     if (!ak) {
-      setErrMsg(locale['hint_map_ak'] || '请传入百度地图ak');
+      setErrMsg(locale('hint_map_ak') || '请传入百度地图ak');
       return;
     }
     MapUtil.load({
@@ -49,7 +49,7 @@ function MapView ({
         initData();
       },
       fail: () => {
-        setErrMsg(locale['hint_map_failed_load'] || '地图库加载失败, 请稍后再试');
+        setErrMsg(locale('hint_map_failed_load') || '地图库加载失败, 请稍后再试');
       }
     })
     // 移除组件时注销
@@ -68,12 +68,12 @@ function MapView ({
   // 初始化地图
   function initData () {
     if (!window.BMap) { // 如果有高德地图, 则加上 || !window.AMap
-      setErrMsg(locale['hint_map_failed_load'] || '地图库加载失败, 请稍后再试');
+      setErrMsg(locale('hint_map_failed_load') || '地图库加载失败, 请稍后再试');
       return;
     }
     console.log('初始化地图' + center)
     if (!refWrapperEl.current) {
-      setErrMsg(locale['hint_map_no_container'] || '地图容器不存在');
+      setErrMsg(locale('hint_map_no_container') || '地图容器不存在');
       return;
     }
 

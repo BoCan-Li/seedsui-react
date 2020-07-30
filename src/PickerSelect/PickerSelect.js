@@ -24,7 +24,7 @@ const Picker = forwardRef(({
   });
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || {};
+  const locale = context.locale || function (key) {return key || ''};
   useEffect(() => {
     if (!list || !list.length) return;
     [].slice.call(refEl.current.querySelectorAll('.pickerselect-option')).forEach((n, i) => {
@@ -103,8 +103,8 @@ const Picker = forwardRef(({
       <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}${show ? ' active' : ''}`} onClick={onClick}>
         <div {...others} className={`pickerselect${others.className ? ' ' + others.className : ''}${show ? ' active' : ''}`}>
           <div className="picker-header">
-            <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale['cancel'] || '取消')}</a>
-            <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{otherSubmitAttribute.caption || (locale['finish'] || '完成')}</a>
+            <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale('cancel') || '取消')}</a>
+            <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + submitAttribute.className : ''}${multiple ? '' : ' disabled'}`}>{otherSubmitAttribute.caption || (locale('finish') || '完成')}</a>
           </div>
           <div className="pickerselect-wrapper">
             {list.map((item, index) => {
