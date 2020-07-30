@@ -64,9 +64,10 @@ const Photos = forwardRef(({
         key={index}
         data-index={index}
         className={`photos-item${item.className ? ' ' + item.className: ''}`}
-        style={Object.assign({backgroundImage: `url(${item.thumb})`}, item.style || {})}
+        style={Object.assign({backgroundImage: item.thumb ? `url(${item.thumb})` : 'initial'}, item.style || {})}
+        data-complete={!item.thumb ? `null` : ''}
       >
-        <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>
+        {item.thumb && <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>}
         <div className="photos-item-error"></div>
         <div className="photos-item-load"></div>
         {/* 视频播放图标 */}

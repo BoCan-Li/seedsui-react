@@ -5605,7 +5605,8 @@ a {
       border-left-color: black;
     }
   }
-  .photos-item[data-complete="1"]{
+  // 1.成功 0.失败 null.没有缩放图
+  .photos-item[data-complete="1"], .photos-item[data-complete="null"]{
     .photos-item-error{ // 照片错误
       display: none;
     }
