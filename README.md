@@ -3007,6 +3007,13 @@ function onChange (e, value, selected) {
 
 
 
+
+
+
+
+
+
+
 ## InputPre
 [自增高输入框](https://unpkg.com/seedsui-react/src/lib/InputPre/InputPre.js)
 , 其它属性用法与[InputText 文本框](#inputtext) 组件一致

@@ -1,8 +1,10 @@
 import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
 import InputText from './../InputText';
 import PickerSelect from './../PickerSelect';
+import SelectGroup from './SelectGroup';
 
 const InputSelect = forwardRef(({
+  checkbox,
   // Input
   onClick,
   onChange,
@@ -58,34 +60,51 @@ const InputSelect = forwardRef(({
     setShow(false);
   }
 
-    // 过滤非法数据
-    list = list.filter(item => {
-      if (!item || (!item.id && !item.name)) return false;
-      return true;
-    });
+  // 过滤非法数据
+  list = list.filter(item => {
+    if (!item || (!item.id && !item.name)) return false;
+    return true;
+  });
+  if (checkbox) {
     return <Fragment>
-      <InputText ref={refEl} {...others} readOnly onClick={onClickInput}/>
-      <PickerSelect
-        {...pickerProps}
-        maskAttribute={{
-          ...pickerProps.maskAttribute,
-          onClick: onClickMask
-        }}
-        submitAttribute={{
-          ...pickerProps.submitAttribute,
-          onClick: onClickSubmit
-        }}
-        cancelAttribute={{
-          ...pickerProps.cancelAttribute,
-          onClick: onClickCancel
-        }}
+      <SelectGroup
+        list={list}
+        // Input
+        onClick={onClick}
+        onChange={onChange}
+
+        // Picker
+        multiple={multiple}
         list={list}
         selected={selected}
-        value={others.value} 
-        show={pickerProps.show === undefined ? show : pickerProps.show}
-        multiple={multiple}
+        pickerProps={pickerProps}
+        {...others}
       />
-    </Fragment>;
+    </Fragment>
+  }
+  return <Fragment>
+    <InputText ref={refEl} {...others} readOnly onClick={onClickInput}/>
+    <PickerSelect
+      {...pickerProps}
+      maskAttribute={{
+        ...pickerProps.maskAttribute,
+        onClick: onClickMask
+      }}
+      submitAttribute={{
+        ...pickerProps.submitAttribute,
+        onClick: onClickSubmit
+      }}
+      cancelAttribute={{
+        ...pickerProps.cancelAttribute,
+        onClick: onClickCancel
+      }}
+      list={list}
+      selected={selected}
+      value={others.value} 
+      show={pickerProps.show === undefined ? show : pickerProps.show}
+      multiple={multiple}
+    />
+  </Fragment>;
 })
 
 export default InputSelect

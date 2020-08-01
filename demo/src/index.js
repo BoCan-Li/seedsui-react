@@ -7,44 +7,46 @@ import {
   Titlebar,
   Bridge,
   Container,
-  MapView
+  InputSelect
 } from '../../src';
 function Demo () {
   const [point, setPoint] = useState([[118.798128, 31.968592], [118.66609, 31.974512]]);
   // useEffect(() => {
   // }, [])
-  const list = [{
-    style: {backgroundColor: 'red'},
-    id: '1',
-    thumb: '',
-    src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
-  },{
-    id: '2',
-    thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-    src: 'https://www.w3school.com.cn/i/movie.ogg'
-  }];
-  
-  function onClick (...params) {
-    setPoint([[118.798128, 31.968592], [118.619429,32.113449]])
-    console.log('点击')
-    console.log(...params)
-  }
-  function onChoose (e) {
-    console.log('选择')
-    console.log(e)
-  }
-  function onDelete (...params) {
-    console.log('删除')
-    console.log(...params)
+  const list = [
+    {
+      id: '1',
+      name: '111'
+    },
+    {
+      id: '2',
+      name: '222'
+    },
+    {
+      id: '3',
+      name: '333'
+    }
+  ];
+  const [value, setValue] = useState('');
+
+  function onChange (e, value, selected) {
+    console.log(e.target)
+    console.log(value, selected)
+    setValue(value);
   }
   return <Page>
     <Header>
-      <Titlebar caption="hh" rButtons={[{caption: '定位', onClick: onClick}]}/>
+      <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <MapView
-        ak='3pTjiH1BXLjASHeBmWUuSF83'
-        points={point}
+      <InputSelect
+        checkbox
+        multiple
+        list={list}
+        value={value}
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
       />
     </Container>
   </Page>
