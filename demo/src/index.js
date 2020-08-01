@@ -7,11 +7,12 @@ import {
   Titlebar,
   Bridge,
   Container,
-  Videos
+  MapView
 } from '../../src';
 function Demo () {
-  useEffect(() => {
-  }, [])
+  const [point, setPoint] = useState([[118.798128, 31.968592], [118.66609, 31.974512]]);
+  // useEffect(() => {
+  // }, [])
   const list = [{
     style: {backgroundColor: 'red'},
     id: '1',
@@ -24,6 +25,7 @@ function Demo () {
   }];
   
   function onClick (...params) {
+    setPoint([[118.798128, 31.968592], [118.619429,32.113449]])
     console.log('点击')
     console.log(...params)
   }
@@ -37,14 +39,12 @@ function Demo () {
   }
   return <Page>
     <Header>
-      <Titlebar caption="hh"/>
+      <Titlebar caption="hh" rButtons={[{caption: '定位', onClick: onClick}]}/>
     </Header>
 		<Container>
-      <Videos
-        list={list}
-        onChoose={onChoose}
-        onDelete={onDelete}
-        onClick={onClick}
+      <MapView
+        ak='3pTjiH1BXLjASHeBmWUuSF83'
+        points={point}
       />
     </Container>
   </Page>

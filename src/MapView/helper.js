@@ -9,6 +9,7 @@ export default {
   abort: false,
   // 标记
   markers: null,
+  marker: null,
   // 标签
   label: null,
   // 地区
@@ -46,11 +47,15 @@ export default {
     self.loadTimeout = setTimeout(() => {
       Bridge.hideLoading();
       callback(locale('hint_map_init_timeout') || '初始化地图超时, 请检查当前网络是否稳定');
-    }, 10000);
+    }, 20000);
   },
-  // 标记: 绘制标记
+  // 标记: 绘制全部标记
   drawMarkers: function (points) {
     var self = this;
+    if (!points || !points.length) {
+      console.error('绘制标记: 定位坐标参数不能为空');
+      return null;
+    }
     if (self.abort) return;
     if (!self.mapUtil) {
       setTimeout(() => {
@@ -58,36 +63,54 @@ export default {
       }, 500);
       return;
     }
-    if (self.markers) {
-      self.mapUtil.clearOverlays(self.markers);
-    }
-    self.markers = [];
-    let bdPoints = [];
-    for (let point of points) {
-      let bdPoint = GeoUtil.coordtransform(point);
-      bdPoints.push(bdPoint);
-      self.markers.push(self.drawMarker(bdPoint));
+    if (self.markers && self.markers.length === points.length) { // 更新标记
+      for (let [index, point] of points.entries()) {
+        self.drawMarker(point, self.markers[index]);
+      }
+    } else { // 绘制标记
+      if (self.markers) {
+        self.mapUtil.clearOverlays(self.markers);
+      }
+      self.markers = [];
+      for (let point of points) {
+        let marker = self.drawMarker(point);
+        self.markers.push(marker);
+      }
     }
     setTimeout(() => {
+      let bdPoints = [];
+      for (let marker of self.markers) {
+        bdPoints.push(marker.getPosition());
+      }
       self.mapUtil.centerToPoints(bdPoints);
       console.log('绘制标记完成');
     }, 500);
+    return self.markers;
   },
-  drawMarker: function (bdPoint) {
+  // 标记: 绘制标记, 更新原marker, 则传入marker
+  drawMarker: function (point, marker) {
+    var self = this;
+    self.marker = marker;
+    let bdPoint = GeoUtil.coordtransform(point);
+    bdPoint = self.mapUtil.pointToBdPoint(bdPoint); // eslint-disable-line
     if (!bdPoint) {
       console.error('绘制标记: 定位坐标错误');
       return null;
     }
-    let marker = this.mapUtil.drawMarker(bdPoint, {
-      options: {
-        iconStyle: {
-          width: '16px',
-          height: '27px',
-          backgroundImage: `url(//res.waiqin365.com/d/seedsui/mapview/location_red_shadow.png)`
+    if (!self.marker) {
+      self.marker = self.mapUtil.drawMarker(bdPoint, {
+        options: {
+          iconStyle: {
+            width: '16px',
+            height: '27px',
+            backgroundImage: `url(//res.waiqin365.com/d/seedsui/mapview/location_red_shadow.png)`
+          }
         }
-      }
-    });
-    return marker;
+      });
+    } else {
+      self.marker.setPosition(bdPoint)
+    }
+    return self.marker;
   },
   // 圆形: 绘制标签
   drawLabel: function (point, radius) {
