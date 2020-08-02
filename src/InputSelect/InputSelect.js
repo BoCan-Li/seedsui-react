@@ -1,7 +1,7 @@
 import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
 import InputText from './../InputText';
 import PickerSelect from './../PickerSelect';
-import SelectGroup from './SelectGroup';
+import CheckboxGroup from './CheckboxGroup';
 
 const InputSelect = forwardRef(({
   checkbox,
@@ -66,21 +66,20 @@ const InputSelect = forwardRef(({
     return true;
   });
   if (checkbox) {
-    return <Fragment>
-      <SelectGroup
-        list={list}
-        // Input
-        onClick={onClick}
-        onChange={onChange}
+    return <CheckboxGroup
+      ref={refEl}
+      list={list}
+      // Input
+      onClick={onClick}
+      onChange={onChange}
 
-        // Picker
-        multiple={multiple}
-        list={list}
-        selected={selected}
-        pickerProps={pickerProps}
-        {...others}
-      />
-    </Fragment>
+      // Picker
+      multiple={multiple}
+      list={list}
+      selected={selected}
+      pickerProps={pickerProps}
+      {...others}
+    />
   }
   return <Fragment>
     <InputText ref={refEl} {...others} readOnly onClick={onClickInput}/>

@@ -14,10 +14,6 @@ const SelectGroup = forwardRef(({
   pickerProps = {},
   ...others
 }, ref) =>  {
-  const refEl = useRef(null)
-  useImperativeHandle(ref, () => {
-    return refEl.current
-  });
   // 过滤非法数据
   list = list.filter(item => {
     if (!item || (!item.id && !item.name)) return false;
@@ -47,15 +43,17 @@ const SelectGroup = forwardRef(({
   }
   // 点击事件
   function clickHandler (e, checked, item, index) {
-    if (multiple) { // 多选
-      if (selectedMap[item.id]) {
-        delete selectedMap[item.id];
-      } else {
-        selectedMap[item.id] = item;
-      }
-    } else { // 单选
-      selectedMap = {
-        [item.id]: item
+    if (!others.readOnly) { // 非只读时才能修改选中值
+      if (multiple) { // 多选
+        if (selectedMap[item.id]) {
+          delete selectedMap[item.id];
+        } else {
+          selectedMap[item.id] = item;
+        }
+      } else { // 单选
+        selectedMap = {
+          [item.id]: item
+        }
       }
     }
     // 构建value
@@ -65,17 +63,27 @@ const SelectGroup = forwardRef(({
     }
     value = value.join(pickerProps.split || ',');
 
-    if (onChange) onChange(e, value, Object.values(selectedMap));
-    if (onClick) onClick(e, value, Object.values(selectedMap));
+    if (!others.readOnly && onChange) onChange(e, value, Object.values(selectedMap));
+    if (onClick) onClick(e, value);
   }
-  return <Fragment>
+  return <div ref={ref} className={`inputselect-checkbox-group${others.className ? ' ' + others.className : ''}`}>
     {list.map((item, index) => {
-      return <div className={`inputselect-checkbox-item${others.className ? ' ' + others.className : others.className}`} key={index}>
-        {multiple && <Checkbox caption={item.name} checked={isSelected(item)} onClick={(e, checked) => clickHandler(e, checked, item, index)}/>}
-        {!multiple && <Radio caption={item.name} checked={isSelected(item)} onClick={(e, checked) => clickHandler(e, checked, item, index)}/>}
+      return <div className={`inputselect-checkbox-item`} key={index}>
+        {multiple && <Checkbox
+          disabled={others.disabled}
+          caption={item.name}
+          checked={isSelected(item)}
+          onClick={(e, checked) => clickHandler(e, checked, item, index)}/>
+        }
+        {!multiple && <Radio
+          disabled={others.disabled}
+          caption={item.name}
+          checked={isSelected(item)}
+          onClick={(e, checked) => clickHandler(e, checked, item, index)}/>
+        }
       </div>
     })}
-  </Fragment>
+  </div>
 })
 
 export default SelectGroup

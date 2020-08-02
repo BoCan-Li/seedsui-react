@@ -979,6 +979,8 @@ import Chat from 'seedsui-react/lib/Chat';
   value={复选框value string, 默认无}
   checked={是否选中 bool, 默认false}
 
+  disabled={是否禁用 bool, 默认false}
+
   inputAttribute={文本框属性 object, 默认无}
 
   caption={复选框标题 string, 默认无}

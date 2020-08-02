@@ -10,9 +10,11 @@ import {
   InputSelect
 } from '../../src';
 function Demo () {
+  const refEl = useRef(null)
   const [point, setPoint] = useState([[118.798128, 31.968592], [118.66609, 31.974512]]);
-  // useEffect(() => {
-  // }, [])
+  useEffect(() => {
+    console.log(refEl)
+  }, [])
   const list = [
     {
       id: '1',
@@ -27,12 +29,15 @@ function Demo () {
       name: '333'
     }
   ];
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('111');
 
   function onChange (e, value, selected) {
     console.log(e.target)
     console.log(value, selected)
     setValue(value);
+  }
+  function onClick (...params) {
+    console.log(...params)
   }
   return <Page>
     <Header>
@@ -40,13 +45,17 @@ function Demo () {
     </Header>
 		<Container>
       <InputSelect
-        checkbox
-        multiple
+        ref={refEl}
+        pre
+        // readOnly
+        // disabled
+        // checkbox
+        multiple={false}
         list={list}
         value={value}
         onChange={onChange}
+        onClick={onClick}
         placeholder="请选择"
-        className="border-b"
       />
     </Container>
   </Page>

@@ -4027,8 +4027,17 @@ a {
 
 //InputSelect
 .setInputSelect() {
+  .inputselect-checkbox-group {
+    padding: 1px 0;
+  }
   .inputselect-checkbox-item {
-    padding: '10px 0'
+    margin: 10px 0;
+    .checkbox, .radio{
+      .flex;
+    }
+    .checkbox-caption, .radio-caption{
+      .flex-1;
+    }
   }
 }
 
