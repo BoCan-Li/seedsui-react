@@ -13,6 +13,10 @@ function Demo () {
   function addHistory () {
     setValue('bb')
     Bridge.addHistoryBack(() => {
+      console.log('一直监听返回');
+      Bridge.removeHistoryBack();
+    });
+    Bridge.addHistoryBack(() => {
       setValue('aa')
       console.log('返回1');
     }, 'dialog=bb');

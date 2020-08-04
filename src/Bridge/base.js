@@ -246,13 +246,30 @@ var Bridge = {
   // 返回按键监听
   addHistoryBack: function (callback, urlParameter) {
     var self = this
+    if (urlParameter && callback) { // 绑定当前路由的回调
+      if (!window.onHistoryBacks) window.onHistoryBacks = {}
+      window.onHistoryBacks[window.location.href] = callback
+    } else if (!urlParameter && callback) { // 单监听返回的回调
+      window.onHistoryBack = callback
+    }
+    // 添加路由
     if (urlParameter) self.addHistoryParameter(urlParameter)
-    if (callback) {
-      if (!window.onHistoryBacks) window.onHistoryBacks = []
-      window.onHistoryBacks.push(callback)
+  },
+  // 移除返回按键监听
+  removeHistoryBack: function (urlParameter) {
+    if (urlParameter && window.onHistoryBacks) {
+      for (let href in window.onHistoryBacks) {
+        if (href.indexOf(urlParameter) !== -1) {
+          delete window.onHistoryBacks[href]
+        }
+      }
+    } else {
+      window.onHistoryBack = null
     }
   },
-  removeHistoryBack: function () {
+  // 移除所有返回按键监听
+  clearHistoryBack: function () {
+    window.onHistoryBacks = null
     window.onHistoryBack = null
   },
   // 初始化历史记录监听
@@ -260,9 +277,16 @@ var Bridge = {
     var self = this
     self.history = new History({
       onBack: () => {
-        let onHistoryBack = window.onHistoryBacks.pop()
-        if (onHistoryBack) {
-          onHistoryBack()
+        console.log('SeedsUI: 返回')
+        if (window.onHistoryBacks) { // 绑定当前路由的回调
+          let callback = window.onHistoryBacks[window.location.href]
+          if (callback) {
+            delete window.onHistoryBacks[window.location.href]
+            callback()
+          }
+        }
+        if (window.onHistoryBack) { // 单监听返回的回调
+          window.onHistoryBack()
         }
       }
     })

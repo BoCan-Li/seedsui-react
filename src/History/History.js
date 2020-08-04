@@ -131,8 +131,8 @@ var History = function (params) {
     s.events(true)
   }
   s.onPopstate = function (e) {
-    // pushState的前进或者后退e.state都会有值, window.location.href跳转e.state也为null, 所以前进不能用e.state来判断
-    console.log(e.state)
+    // pushState的前进或者后退e.state都会有值, 如果用window.location.href跳转, e.state前进和后退都为null
+    // console.log(e.state)
     s.currentHash = window.location.href
 
     // 再次进入当前hash，则不工作
