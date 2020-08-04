@@ -6,7 +6,9 @@ import {
   Header,
   Titlebar,
   Bridge,
-  Container
+  Container,
+  InputLocation,
+  MapUtil
 } from '../../src';
 function Demo () {
   const [value, setValue] = useState('aa');
@@ -36,13 +38,23 @@ function Demo () {
       <div onClick={addHistory}>加个路由</div>
       <div onClick={addHistory2}>再加个路由</div>
       <div>{value}</div>
+      <InputLocation onChange={(...params) => console.log(...params)}/>
     </Container>
   </Page>
 }
 
-// 加载百度地图js库
-// MapUtil.load({key: '3pTjiH1BXLjASHeBmWUuSF83'})
+
 
 Bridge.ready(() => {
-  render(<Demo/>, document.querySelector('#demo'))
+  // 加载百度地图js库
+  MapUtil.load({
+    ak: '3pTjiH1BXLjASHeBmWUuSF83',
+    success: () => {
+      console.log(1)
+      render(<Demo/>, document.querySelector('#demo'))
+    },
+    fail: () => {
+      console.log('加载失败')
+    }
+  })
 });

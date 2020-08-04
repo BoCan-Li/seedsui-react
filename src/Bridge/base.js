@@ -206,6 +206,13 @@ var Bridge = {
     
     // 返回类型
     var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    // 如果已经有h5返回监听, 优先执行h5返回监听
+    if (window.onHistoryBacks && Object.keys(window.onHistoryBacks).length === 0) {
+      window.onHistoryBacks = null
+    }
+    if (window.onHistoryBacks || window.onHistoryBack) {
+      isFromApp = ''
+    }
     if (isFromApp === '1') { // 关闭当前页面
       try {
         self.closeWindow()

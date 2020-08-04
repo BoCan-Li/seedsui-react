@@ -467,6 +467,8 @@ var BaiduMap = function (id, params) {
         // 对结果进行格式化
         let result = res
         if (res.addressComponents) {
+          result.longitude = point[0]
+          result.latitude = point[1]
           result.point = point
           result.province = res.addressComponents.province
           result.city = res.addressComponents.city
