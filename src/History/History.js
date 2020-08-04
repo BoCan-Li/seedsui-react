@@ -131,6 +131,7 @@ var History = function (params) {
     s.events(true)
   }
   s.onPopstate = function (e) {
+    // pushState的前进或者后退e.state都会有值, window.location.href跳转e.state也为null, 所以前进不能用e.state来判断
     console.log(e.state)
     s.currentHash = window.location.href
 
@@ -147,7 +148,7 @@ var History = function (params) {
 
       // console.log('前进——当前hash：'+s.currentHash+'上个页面：'+s.prevHash)
     } else { // 后退
-      if (e.state === null) s.onBack() // window.location.href跳转e.state也为null, 所以前进不能用e.state来判断
+      s.onBack()
       // console.log('后退——当前hash：'+s.currentHash+'关闭页面：'+s.prevHash)
     }
   }

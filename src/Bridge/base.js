@@ -244,17 +244,25 @@ var Bridge = {
     if (self.history) self.history.addHistoryParameter(urlParameter)
   },
   // 返回按键监听
-  onHistoryBack: function (callback) {
-    if (callback) window.onHistoryBack = callback
+  addHistoryBack: function (callback, urlParameter) {
+    var self = this
+    if (urlParameter) self.addHistoryParameter(urlParameter)
+    if (callback) {
+      if (!window.onHistoryBacks) window.onHistoryBacks = []
+      window.onHistoryBacks.push(callback)
+    }
+  },
+  removeHistoryBack: function () {
+    window.onHistoryBack = null
   },
   // 初始化历史记录监听
   initHistory: function  () {
     var self = this
     self.history = new History({
       onBack: () => {
-        if (window.onHistoryBack) {
-          window.onHistoryBack()
-          window.onHistoryBack = null
+        let onHistoryBack = window.onHistoryBacks.pop()
+        if (onHistoryBack) {
+          onHistoryBack()
         }
       }
     })

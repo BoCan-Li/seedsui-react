@@ -10,18 +10,19 @@ import {
 } from '../../src';
 function Demo () {
   const [value, setValue] = useState('aa');
-  useEffect(() => {
-    Bridge.onHistoryBack(() => {
-      setValue('aa')
-      console.log('返回');
-    })
-  }, [])
   function addHistory () {
     setValue('bb')
-    // window.history.pushState({
-    //   href: '?dialog=true'
-    // }, document.title, '?dialog=true')
-    Bridge.addHistoryParameter('dialog=true');
+    Bridge.addHistoryBack(() => {
+      setValue('aa')
+      console.log('返回1');
+    }, 'dialog=bb');
+  }
+  function addHistory2 () {
+    setValue('cc')
+    Bridge.addHistoryBack(() => {
+      setValue('bb')
+      console.log('返回2');
+    }, 'dialog=cc');
   }
   return <Page>
     <Header>
@@ -29,6 +30,7 @@ function Demo () {
     </Header>
 		<Container>
       <div onClick={addHistory}>加个路由</div>
+      <div onClick={addHistory2}>再加个路由</div>
       <div>{value}</div>
     </Container>
   </Page>
