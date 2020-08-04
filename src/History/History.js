@@ -4,9 +4,7 @@ var History = function (params) {
   Model
   ------------------------ */
   var defaults = {
-    enableStorage: true,
-    historyKey: 'my_history',
-    useHash: true
+    storageKey: '_seedsui_history_',
     /* callbacks
     onInit:function(History)// 初始化
     onBack:function(History)// 返回
@@ -30,20 +28,53 @@ var History = function (params) {
 
   // 保存到storage中
   var storage = window.sessionStorage
-  var storageHistory = storage.getItem(s.params.historyKey)
-  if (s.params.enableStorage && storageHistory) s.list = storageHistory.split(',')
+  var storageHistory = storage.getItem(s.params.storageKey)
+  if (storageHistory) s.list = storageHistory.split(',')
 
   /* ------------------------
   Method
   ------------------------ */
   s.saveList = function () {
-    if (s.params.enableStorage) storage.setItem(s.params.historyKey, s.list)
+    storage.setItem(s.params.storageKey, s.list)
   }
   s.clearList = function () {
     s.list = []
-    storage.removeItem(s.params.historyKey)
+    storage.removeItem(s.params.storageKey)
+  }
+  s.initList = function () {
+    s.clearList()
+    s.list = [window.location.href]
+    s.saveList()
+  }
+  // 获取地址栏新增分割符
+  s.decollator = function () {
+    if (window.location.href.indexOf('?') !== -1) return '&'
+    return '?'
+  }
+  // 增加一条历史记录, 传地址栏参数, 如: 'dialog=true'
+  s.addHistoryParameter = function (urlParameter) {
+    let parameter = s.decollator() + urlParameter
+    if (window.location.href.indexOf(urlParameter) === -1) {
+      // 在不是hash路由时会刷新页面
+      // window.location.href = window.location.href + route
+      // 不刷新增加历史记录
+      let hash = '';
+      if (window.location.href.indexOf('#') !== -1) {
+        hash = '#' + window.location.href.split('#')[1] + parameter
+      } else if (window.location.href.indexOf('?') !== -1) {
+        hash = '?' + window.location.href.split('?')[1] + parameter
+      } else {
+        hash = parameter
+      }
+      window.history.pushState({
+        href: hash
+      }, document.title, hash)
+      s.list.push(window.location.href)
+      s.saveList()
+    }
   }
 
+  // hash路由操作
   s.add = function (hash, enableHistory) {
     s.list.push(hash)
     // 历史记录保存到本地数据库中
@@ -71,7 +102,7 @@ var History = function (params) {
           href: hash
         }, document.title, hash)
       } catch (err) {
-        console.log('SeedsUI Error:替换history失败')
+        console.error('SeedsUI Error:替换history失败')
       }
     }
   }
@@ -100,14 +131,8 @@ var History = function (params) {
     s.events(true)
   }
   s.onPopstate = function (e) {
-    // console.log('location: ' + document.location + ', state: ' + JSON.stringify(e.state))
-    s.currentHash = s.params.useHash ? location.hash : location.href
-    // 返回到根部
-    if (s.params.useHash && location.hash === '') {
-      s.onBack()
-      // console.log('根部——当前hash：'+s.currentHash+'关闭页面：'+s.prevHash)
-      return
-    }
+    console.log(e.state)
+    s.currentHash = window.location.href
 
     // 再次进入当前hash，则不工作
     if (s.list.indexOf(s.currentHash) >= 0 && s.list[s.list.length - 1] === s.currentHash) {
@@ -122,7 +147,7 @@ var History = function (params) {
 
       // console.log('前进——当前hash：'+s.currentHash+'上个页面：'+s.prevHash)
     } else { // 后退
-      s.onBack()
+      if (e.state === null) s.onBack() // window.location.href跳转e.state也为null, 所以前进不能用e.state来判断
       // console.log('后退——当前hash：'+s.currentHash+'关闭页面：'+s.prevHash)
     }
   }
@@ -156,6 +181,11 @@ var History = function (params) {
     s.attach()
   }
   s.init = function () {
+    // 如果历史记录里没有此条记录, 则从头记录
+    if (s.list.indexOf(window.location.href) === -1) {
+      s.initList()
+    }
+
     s.onInit()
   }
   s.init()

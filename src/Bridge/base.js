@@ -1,6 +1,7 @@
 import jsonp from './../jsonp'
 import Device from './../Device'
 import MapUtil from './../MapUtil'
+import History from './../History'
 import Toast from './../Toast/instance.js'
 import Alert from './../Alert/instance.js'
 import Loading from './../Loading/instance.js'
@@ -237,6 +238,28 @@ var Bridge = {
       _history.go(_backLvl)
     }
   },
+  // 增加一条历史记录, 传地址栏参数, 如: 'dialog=true'
+  addHistoryParameter: function (urlParameter) {
+    var self = this
+    if (self.history) self.history.addHistoryParameter(urlParameter)
+  },
+  // 返回按键监听
+  onHistoryBack: function (callback) {
+    if (callback) window.onHistoryBack = callback
+  },
+  // 初始化历史记录监听
+  initHistory: function  () {
+    var self = this
+    self.history = new History({
+      onBack: () => {
+        if (window.onHistoryBack) {
+          window.onHistoryBack()
+          window.onHistoryBack = null
+        }
+      }
+    })
+    // self.history.initList()
+  },
   /**
     * 动态加载桥接库
     * @param {Func} callback 加载完成回调
@@ -246,7 +269,10 @@ var Bridge = {
     var self = this
     var platform = self.platform
     if (platform !== 'wechat' && platform !== 'wework' && platform !== 'miniprogram' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
-      if (callback) window.addEventListener('load', callback, false)
+      window.addEventListener('load', () => {
+        self.initHistory()
+        if (callback) callback()
+      }, false)
       return
     }
     var script = document.createElement('script')
@@ -254,10 +280,9 @@ var Bridge = {
     script.defer = 'defer'
     if (platform === 'wechat' || platform === 'wework' || platform === 'miniprogram') { // 微信
       script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
-      if (callback) {
-        script.onload = function () {
-          callback()
-        }
+      script.onload = function () {
+        self.initHistory()
+        if (callback) callback()
       }
       if (options.fail) {
         script.onerror = function () {
@@ -266,13 +291,12 @@ var Bridge = {
       }
     } else if (platform === 'waiqin') { // 外勤cordova
       script.src = options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
-      if (callback) {
-        script.onload = function () {
-          document.addEventListener('deviceready', () => {
-            callback()
-            self.config()
-          })
-        }
+      script.onload = function () {
+        document.addEventListener('deviceready', () => {
+          self.initHistory()
+          if (callback) callback()
+          self.config()
+        })
       }
       if (options.fail) {
         script.onerror = function () {
@@ -282,11 +306,10 @@ var Bridge = {
     } else if (platform === 'wq') { // 外勤jssdk
       // 用开发d目录可以使用新功能
       script.src = options.wqSrc || '//res.waiqin365.com/d/open/js/waiqin365.min.js?v=1.0.1'
-      if (callback) {
-        script.onload = function () {
-          callback()
-          self.config()
-        }
+      script.onload = function () {
+        self.initHistory()
+        if (callback) callback()
+        self.config()
       }
       if (options.fail) {
         script.onerror = function () {
@@ -294,7 +317,8 @@ var Bridge = {
         }
       }
     } else if (platform === 'dinghuo') {
-      callback()
+      self.initHistory()
+      if (callback) callback()
       self.config()
     }
     if (script.src) document.body.appendChild(script)

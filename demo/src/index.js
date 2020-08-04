@@ -6,57 +6,30 @@ import {
   Header,
   Titlebar,
   Bridge,
-  Container,
-  InputSelect
+  Container
 } from '../../src';
 function Demo () {
-  const refEl = useRef(null)
-  const [point, setPoint] = useState([[118.798128, 31.968592], [118.66609, 31.974512]]);
+  const [value, setValue] = useState('aa');
   useEffect(() => {
-    console.log(refEl)
+    Bridge.onHistoryBack(() => {
+      setValue('aa')
+      console.log('返回');
+    })
   }, [])
-  const list = [
-    {
-      id: '1',
-      name: '111'
-    },
-    {
-      id: '2',
-      name: '222'
-    },
-    {
-      id: '3',
-      name: '333'
-    }
-  ];
-  const [value, setValue] = useState('111');
-
-  function onChange (e, value, selected) {
-    console.log(e.target)
-    console.log(value, selected)
-    setValue(value);
-  }
-  function onClick (...params) {
-    console.log(...params)
+  function addHistory () {
+    setValue('bb')
+    // window.history.pushState({
+    //   href: '?dialog=true'
+    // }, document.title, '?dialog=true')
+    Bridge.addHistoryParameter('dialog=true');
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputSelect
-        ref={refEl}
-        pre
-        // readOnly
-        // disabled
-        // checkbox
-        multiple={false}
-        list={list}
-        value={value}
-        onChange={onChange}
-        onClick={onClick}
-        placeholder="请选择"
-      />
+      <div onClick={addHistory}>加个路由</div>
+      <div>{value}</div>
     </Container>
   </Page>
 }

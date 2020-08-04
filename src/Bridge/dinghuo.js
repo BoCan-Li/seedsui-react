@@ -230,19 +230,10 @@ var Bridge = {
     }
     self.invoke('qmfpay', params, callback)
   },
-  /**
-    * ios绑定左上角返回按钮
-    * @param {Object} params {title: '自定义标题'}
-    * @param {Function} callback 回调
-    */
-  onHistoryBack: function (callback) {
-    var self = this
-    self.invoke('onHistoryBack', null, callback)
-  },
   // ios客户端返回按钮绑定, ios不支持addBackPress
   addIosBackPress: function (callback) {
     var self = this
-    self.onHistoryBack(() => {
+    self.invoke('onHistoryBack', null, () => {
       if (callback) callback()
       else if (self.back) self.back()
       self.addIosBackPress(callback)
