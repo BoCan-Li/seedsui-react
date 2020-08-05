@@ -3,12 +3,17 @@ import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
 import Context from '../Context/instance.js';
 
-function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {}, onHide }) {
+function ShareTip({
+  portal,
+  show,
+  config = {},
+  originConfig,
+  maskAttribute = {},
+  onHide
+}) {
   // 生命周期
   useEffect(() => {
-    // componentDidMount和componentDidUpdate
     return () => {
-      // componentWillUnmount
       // 更新分享
       if (originConfig) {
         wx.updateAppMessageShareData({ // eslint-disable-line
@@ -33,29 +38,33 @@ function ShareTip({ portal, show, config = {}, originConfig, maskAttribute = {},
     }
   });
 
-  // useEffect(() => {
-  //   // componentDidUpdate: 更新usernmae
-  // }, [state.username]);
+  useEffect(() => {
+    if (!show) return;
+    async function shareConfig () {
+      // 更新分享
+      wx.updateAppMessageShareData({ // eslint-disable-line
+        ...config,
+        success: () => {
+          console.log('更新好友分享成功')
+        },
+        fail: (res = {}) => {
+          Bridge.showToast(res.errMsg || '更新好友分享失败, 请稍后再试', {mask: false});
+        }
+      })
+      wx.updateTimelineShareData({ // eslint-disable-line
+        ...config,
+        success: () => {
+          console.log('更新朋友圈分享成功')
+        },
+        fail: (res = {}) => {
+          Bridge.showToast(res.errMsg || '更新朋友圈分享失败, 请稍后再试', {mask: false});
+        }
+      })
+    }
+    shareConfig()
+  }, [show]);
 
-  // 更新分享
-  wx.updateAppMessageShareData({ // eslint-disable-line
-    ...config,
-    success: () => {
-      console.log('更新好友分享成功')
-    },
-    fail: (res = {}) => {
-      Bridge.showToast(res.errMsg || '更新好友分享失败, 请稍后再试', {mask: false});
-    }
-  })
-  wx.updateTimelineShareData({ // eslint-disable-line
-    ...config,
-    success: () => {
-      console.log('更新朋友圈分享成功')
-    },
-    fail: (res = {}) => {
-      Bridge.showToast(res.errMsg || '更新朋友圈分享失败, 请稍后再试', {mask: false});
-    }
-  })
+  
   // 点击
   const handlerClick = (e) => {
     var target = e.target;

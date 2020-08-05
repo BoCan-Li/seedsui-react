@@ -3,9 +3,18 @@ import {createPortal} from 'react-dom';
 import Bridge from './../Bridge';
 import Context from '../Context/instance.js';
 
-function ShareChoose({ portal, show, config = {}, shareTo, animation = 'slideUp', onHide, maskAttribute = {}, ...others }) {
+function ShareChoose({
+  portal,
+  show,
+  config = {},
+  shareTo,
+  animation = 'slideUp',
+  onHide,
+  maskAttribute = {},
+  ...others
+}) {
   // 点击
-  const handlerClick = (e) => {
+  async function handlerClick (e) {
     var target = e.target;
     e.stopPropagation()
     if (target.classList.contains('wechat')) { // 微信

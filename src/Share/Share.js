@@ -8,6 +8,7 @@ function Share({
   children,
   type, // 点击单个图标分享, wework企业微信和wq外勤客户端JSBridge才生效wechat | wework | moments
   shareTo = ['wechat', 'wework', 'moments'],
+  getConfig,
   config = {
     title: '', // 分享标题
     desc: '', // 分享描述
@@ -28,16 +29,50 @@ function Share({
   // 定义state
   const [show, setShow] = useState(false);
   // 显隐弹窗
-  const handlerClick = () => {
-    if (Bridge.platform === 'dinghuo' || Bridge.platform === 'waiqin') {
-      Bridge.shareText({
-        title: config.title,
-        desc: config.desc,
-        link: config.link,
-        text: `${config.link}`
-      });
-    } else {
-      setShow(true)
+  async function handlerClick (event) {
+    var e = event.nativeEvent
+    if (getConfig) {
+      config = await getConfig()
+      // 如果返回不是对象, 则认为返回错误
+      if (config instanceof Object === false) {
+        return
+      }
+    }
+    // 非单项显示
+    if (!type) {
+      if (Bridge.platform === 'dinghuo' || Bridge.platform === 'waiqin') {
+        Bridge.shareText({
+          title: config.title,
+          desc: config.desc,
+          link: config.link,
+          text: `${config.link}`
+        });
+      } else {
+        setShow(true)
+      }
+      return
+    }
+
+    // 单项显示
+    var target = e.target;
+    if (target.classList.contains('wechat')) { // 微信
+      Bridge.invoke('shareWechatMessage', config, function (res) {
+        if (res.err_msg === 'shareWechatMessage:ok') {
+          console.log('分享成功')
+        }
+      })
+    } else if (target.classList.contains('wework')) { // 企业微信
+      Bridge.invoke('shareAppMessage', config, function (res) {
+        if (res.err_msg === 'shareAppMessage:ok') {
+          console.log('分享成功')
+        }
+      })
+    } else if (target.classList.contains('moments')) { // 朋友圈
+      Bridge.invoke('shareTimeline', config, function (res) {
+        if (res.err_msg === 'shareTimeline:ok') {
+          console.log('分享成功')
+        }
+      })
     }
   }
   return (
@@ -62,6 +97,7 @@ function Share({
       {/* 企业微信和外勤客户端JSBridge, 单项显示 */}
       {(Bridge.platform === 'wework' || Bridge.platform === 'wq') && type && <ShareType
         type={type}
+        getConfig={getConfig}
         config={config}
       />}
       {/* 订货客户端和外勤客户端cordova, 点击直接弹窗 */}
