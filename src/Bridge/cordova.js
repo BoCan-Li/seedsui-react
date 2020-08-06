@@ -527,16 +527,23 @@ var Bridge = {
     let filePathList = [{
       path: params.localId
     }]
-    if (params.isAI === '1') {
+    if (params.ext && params.ext.isAutoCheck === '1') {
       filePathList = [{
-        isAI: params.isAI,
+        isAI: '1',
         path: params.localeId
       }]
     }
+    
+    // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
+    let menuId = Device.getUrlParameter('menuId') || ''
     // 格式化params
     var uploadParams = {
       filePathList: filePathList,
-      url: params.uploadDir
+      url: params.uploadDir,
+      ext: {
+        menuId: menuId,
+        ...(params.ext || {})
+      }
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
     console.log('外勤Cordova内核上传', uploadParams)

@@ -98,7 +98,7 @@ const Photos = forwardRef(({
     {typeof previewCurrent === 'number' &&
       <Preview
         onHide={() => setPreviewCurrent(null)}
-        list={list} // 需要预览的资源列表{url: '图片或视频的地址', type: 'video|image, 默认image', poster: '封面地址'}
+        list={list} // 需要预览的资源列表{src: '图片或视频的地址', type: 'video|image, 默认image', thumb: '封面地址'}
         current={previewCurrent}
       />
     }

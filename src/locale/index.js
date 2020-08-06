@@ -7,7 +7,8 @@ export default function (key, variable) {
       locale = JSON.parse(localStorage.getItem('_seedsui_locale')) || {}
     } else {
       locale = require(`./zh_CN.js`) // 默认国际化文件, en_US和zh_CN
-      if (locale.default) locale = locale.default;
+      if (locale.default) locale = locale.default
+      if (locale && Object.keys(locale).length) localStorage.setItem('_seedsui_locale', JSON.stringify(locale))
     }
   } catch (error) {
     console.log(error)

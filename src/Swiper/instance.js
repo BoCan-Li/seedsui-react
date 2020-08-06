@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Swiper 6.0.2
  * Most modern mobile touch slider and framework with hardware accelerated transitions
@@ -9252,3 +9253,4 @@
   return Swiper;
 
 })));
+/* eslint-enable */

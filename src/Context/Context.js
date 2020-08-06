@@ -30,7 +30,11 @@ function Context({
   } else {
     data = locale
   }
-  if (data) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
+  if (!data || Object.keys(data).length === 0) {
+    console.log('读取默认国际化文件zh_CN')
+    data = require(`./../locale/zh_CN.js`)
+  }
+  if (data && Object.keys(data).length) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
   return (
     <Instance.Provider
       value={{

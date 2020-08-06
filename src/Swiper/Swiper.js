@@ -33,10 +33,12 @@ const Swiper = forwardRef(({
 
   // 更新句柄, 防止synchronization模式, 每次组件在render的时候都生成上次render的state、function、effects
   if (instance.current) {
-    if (!params.on) return;
-    for (let eventName in params.on) {
-      instance.current.off(eventName);
-      instance.current.on(eventName, params.on[eventName]);
+    instance.current.update()
+    if (params.on) {
+      for (let eventName in params.on) {
+        instance.current.off(eventName);
+        instance.current.on(eventName, params.on[eventName]);
+      }
     }
   }
 

@@ -197,7 +197,7 @@ var Bridge = {
       success: func(res)
     * }
     */
-  uploadImage: function (params) {
+  uploadImage: function (params = {}) {
     var uploadParams = Object.clone(params)
     var self = this
     if (!params.uploadDir) {
@@ -209,7 +209,12 @@ var Bridge = {
       return
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
-    if (params.isAI) uploadParams.isAI = params.isAI
+    // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
+    let menuId = Device.getUrlParameter('menuId') || ''
+    uploadParams.ext = {
+      menuId: menuId,
+      ...(params.ext || {})
+    }
     // 构建成功回调的参数
     uploadParams.success = function () {
       if (params.success) {
