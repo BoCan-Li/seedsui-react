@@ -34,7 +34,7 @@ function Share({
     if (getConfig) {
       config = await getConfig()
       // 如果返回不是对象, 则认为返回错误
-      if (config instanceof Object === false) {
+      if (typeof config !== 'object') {
         return
       }
     }
