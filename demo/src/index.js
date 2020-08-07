@@ -42,4 +42,13 @@ Bridge.ready(() => {
       console.log('加载失败')
     }
   })
+  MapUtil.load({
+    ak: '3pTjiH1BXLjASHeBmWUuSF83',
+    success: () => {
+      console.log(2)
+    },
+    fail: () => {
+      console.log('加载失败')
+    }
+  })
 });

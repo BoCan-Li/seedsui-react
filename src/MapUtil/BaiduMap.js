@@ -1077,9 +1077,15 @@ BaiduMap.load = function (params = {}) {
       if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})'})
       return
     }
+    // 已经加载js库了, 防止重复加载
+    if (document.getElementById(params.ak)) {
+      resolve(true)
+      return
+    }
     window.BMAP_PROTOCOL = 'https';
     window.BMap_loadScriptTime = new Date().getTime()
     var script = document.createElement('script')
+    script.id = params.ak
     script.type = 'text/javascript'
     script.charset = 'utf-8'
     script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
@@ -1099,6 +1105,8 @@ BaiduMap.load = function (params = {}) {
     script.onerror = function (err) {
       resolve('加载地图失败')
       if (params.fail) params.fail({errMsg: '加载地图失败', err: err})
+      // 加载失败移除dom
+      document.getElementById(params.ak).parentNode.removeChild(document.getElementById(params.ak))
     }
   });
 }
