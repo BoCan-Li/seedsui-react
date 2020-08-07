@@ -192,7 +192,7 @@ var Bridge = {
     * @param {Object} params
     * {
       uploadDir: '目录/年月',
-      tenantId: '企业id'
+      tenantId: '企业id',
       localId: 'localId',
       success: func(res)
     * }
@@ -225,6 +225,9 @@ var Bridge = {
           tenantId: params.tenantId
         })
       }
+    }
+    if (Device.compareVersion(Device.platformVersion, '6.6.2') < 0 && uploadParams.ext) {
+      delete uploadParams.ext
     }
     console.log('外勤WK内核上传')
     console.log(uploadParams)
