@@ -1054,22 +1054,36 @@ var BaiduMap = function (id, params) {
   *   fail: ({errMsg: ''}) => {},
   * }
   */
+async function scriptLoad (params = {}) {
+  return new Promise(async (resolve) => {
+    // 加载绘制库
+    if (params.library && params.library.indexOf('draw') !== -1) {
+      let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
+      if (!drawRes) {
+        if (params.fail) params.fail({errMsg: '加载地图失败'})
+        resolve('加载地图失败')
+      }
+    }
+    if (params.success) params.success()
+    resolve(true)
+  })
+}
+async function scriptError (params = {}, err) {
+  return new Promise(async (resolve) => {
+    resolve('加载地图失败')
+    if (params.fail) params.fail({errMsg: '加载地图失败', err: err})
+    // 加载失败移除dom
+    document.getElementById(params.ak).parentNode.removeChild(document.getElementById(params.ak))
+  })
+}
 BaiduMap.load = function (params = {}) {
   // window.BMAP_PROTOCOL = "https";
   // window.BMap_loadScriptTime = (new Date).getTime();
   // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918"></script>`);
   return new Promise(async (resolve) => {
     if (window.BMap) { // eslint-disable-line
-      // 加载绘制库
-      if (params.library && params.library.indexOf('draw') !== -1) {
-        let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
-        if (!drawRes) {
-          resolve('加载地图失败')
-          if (params.fail) params.fail({errMsg: '加载地图失败'})
-        }
-      }
-      resolve(true)
-      if (params.success) params.success()
+      let result = await scriptLoad(params)
+      resolve(result)
       return
     }
     if (!params.ak) {
@@ -1078,36 +1092,28 @@ BaiduMap.load = function (params = {}) {
       return
     }
     // 已经加载js库了, 防止重复加载
-    if (document.getElementById(params.ak)) {
-      resolve(true)
-      return
+    var script = document.getElementById(params.ak)
+    if (script) {
+      console.log('百度地图已加载, 无需再加载')
+    } else {
+      window.BMAP_PROTOCOL = 'https';
+      window.BMap_loadScriptTime = new Date().getTime()
+      script = document.createElement('script')
+      script.id = params.ak
+      script.type = 'text/javascript'
+      script.charset = 'utf-8'
+      script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
+      document.body.appendChild(script)
+      console.log('加载百度地图')
     }
-    window.BMAP_PROTOCOL = 'https';
-    window.BMap_loadScriptTime = new Date().getTime()
-    var script = document.createElement('script')
-    script.id = params.ak
-    script.type = 'text/javascript'
-    script.charset = 'utf-8'
-    script.src = `https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918`
-    document.body.appendChild(script)
-    script.onload = async function () {
-      // 加载绘制库
-      if (params.library && params.library.indexOf('draw') !== -1) {
-        let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
-        if (!drawRes) {
-          resolve('加载地图失败')
-          if (params.fail) params.fail({errMsg: '加载地图失败'})
-        }
-      }
-      resolve(true)
-      if (params.success) params.success()
-    }
-    script.onerror = function (err) {
-      resolve('加载地图失败')
-      if (params.fail) params.fail({errMsg: '加载地图失败', err: err})
-      // 加载失败移除dom
-      document.getElementById(params.ak).parentNode.removeChild(document.getElementById(params.ak))
-    }
+    script.addEventListener('load', async function () {
+      let result = await scriptLoad(params)
+      resolve(result)
+    }, false)
+    script.addEventListener('error', async function (err) {
+      let result = await scriptError(params, err)
+      resolve(result)
+    }, false)
   });
 }
 
