@@ -131,7 +131,7 @@ const InputLocation = forwardRef(({
   return <Fragment>
     <InputText
       ref={refEl}
-      readOnly={readOnly}
+      readOnly={!readOnly && readOnly !== false ? true : readOnly} // 不填写readOnly则认为文本框不允许输入, 只有readOnly为false时才允许输入
       onClick={click}
       onChange={onChange}
       children={statusDOM}

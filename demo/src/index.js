@@ -9,42 +9,25 @@ import {
   Container,
   MapUtil,
   Share,
-  Context
+  Context,
+  InputLocation
 } from '../../src';
 import locale from '../../src/locale/index.js';
 function Demo () {
-  const [value, setValue] = useState();
-  function addHistory () {
-    Bridge.uploadImage();
-    setValue('bb')
-    Bridge.addHistoryBack(() => {
-      console.log('一直监听返回');
-      Bridge.removeHistoryBack();
-    });
-    Bridge.addHistoryBack(() => {
-      setValue('aa')
-      console.log('返回1');
-    }, 'dialog=bb');
-  }
-  function addHistory2 () {
-    setValue('cc')
-    Bridge.addHistoryBack(() => {
-      setValue('bb')
-      console.log('返回2');
-    }, 'dialog=cc');
+  const [value, setValue] = useState('');
+  function onChange (e, value) {
+    console.log(e.target);
+    setValue(value);
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <div onClick={addHistory}>加个路由</div>
-      <div onClick={addHistory2}>再加个路由</div>
-      <div>{value}</div>
+      <InputLocation pre value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
     </Container>
   </Page>
 }
-
 
 
 Bridge.ready(() => {
