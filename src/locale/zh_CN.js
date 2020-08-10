@@ -55,6 +55,8 @@ export default {
   'hint_location_failed_UNKNOWN_ERROR': '定位失败, 用户拒绝请求地理定位',
   'hint_location_failed_not_supported': '当前浏览器不支持定位',
   'hint_location_map_failed': '定位失败, 请检查定位权限是否开启',
+  'current_location': '当前位置',
+  'reposition': '重新定位',
   'hint_weather_failed': '获取天气失败, 请稍后重试',
   'confirm_quit_page': '您确定要离开此页面吗?',
   'unit_year': '年', // 未使用,YYYY年

@@ -65,6 +65,8 @@ var BaiduMap = function (id, params) {
   /* eslint-enable */
   // 鼠标绘制管理实例
   s.drawingManager = null
+  // 容器
+  s.container = typeof id === 'string' ? document.getElementById(id) : id
   // 地图实例
   s.map = null
   if (id) {

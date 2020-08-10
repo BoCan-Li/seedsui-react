@@ -61,6 +61,7 @@ export { default as Legend } from './Legend';
 export { default as ListPull } from './ListPull'; // 不常用
 export { default as Loading } from './Loading';
 export { default as LotteryWheel } from './LotteryWheel'; // 不常用
+export { default as MapChoose } from './MapChoose'; // 不常用
 export { default as MapUtil } from './MapUtil'; // 不常用
 export { default as MapView } from './MapView'; // 不常用
 export { default as Mark } from './Mark';

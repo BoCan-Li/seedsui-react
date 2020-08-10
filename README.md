@@ -3577,14 +3577,16 @@ const wrapperWidth = containerWidth * 0.85;
 ### 示例
 ```javascript
 import MapView from 'seedsui-react/lib/MapView';
-let mapData = null;
-mapData = {
-  point: [selected.longitude, selected.latitude],
-  address: selected.address,
-  show: true
-};
-
-const [mapShow, setMapShow] = useState(false);
+const [selected, setSelected] = useState(null);
+const [mapData, setMapData] = useState(null);
+function changeHandler (e, value, selected) {
+  setSelected(selected);
+  setMapData({
+    point: [selected.longitude, selected.latitude],
+    address: selected.address,
+    show: true
+  });
+}
 
 {mapData && <MapView
   ak="百度地图key"
@@ -3594,6 +3596,7 @@ const [mapShow, setMapShow] = useState(false);
   portal={context.portal || document.getElementById('root') || document.body}
   onHide={() => setMapShow(false)}
 />}
+<InputLocation readOnly={true} value={selected.address} selected={selected} onChange={changeHandler}/>
 ```
 
 ```javascript

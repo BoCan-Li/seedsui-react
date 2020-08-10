@@ -2,16 +2,19 @@ import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, us
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 import MapView from './../MapView';
+import MapChoose from './../MapChoose';
 import Context from '../Context/instance.js';
 
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const InputLocation = forwardRef(({
+  ak, // 地图预览和选择地点时需要传入, 如果地图已经加载, 则不需要传入ak
   loadingValue,
   failedValue,
   readOnly, // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
   autoLocation,
   onClick,
   onChange,
+  type = 'location', // location: 点击定位当前位置, choose: 点击选择地点
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   selected, // {latitude: '纬度', longitude: '经度', address:'地址'}
   ...others
@@ -20,8 +23,12 @@ const InputLocation = forwardRef(({
   useImperativeHandle(ref, () => {
     return refEl.current
   });
-  const [mapShow, setMapShow] = useState(false);
-  const [mapData, setMapData] = useState(null);
+  // 地图预览
+  const [viewMapShow, setViewMapShow] = useState(false);
+  const [viewMapData, setViewMapData] = useState(null);
+  // 地图选点
+  const [chooseMapShow, setChooseMapShow] = useState(false);
+  const [chooseMapData, setChooseMapData] = useState(null);
 
   const context = useContext(Context) || {};
   const locale = context.locale || function (key) {return key || ''};
@@ -37,6 +44,12 @@ const InputLocation = forwardRef(({
       location({
         target: refEl.current,
         currentTarget: refEl.current
+      })
+    }
+    // 选点模式, 默认读取传入的坐标
+    if (!readOnly && type === 'choose' && selected && selected.latitude && selected.longitude) {
+      setChooseMapData({
+        point: [selected.longitude, selected.latitude]
       })
     }
   }, [])
@@ -55,14 +68,18 @@ const InputLocation = forwardRef(({
     // 只读状态不允许定位
     if (readOnly === true) {
       if (preview && selected && selected.longitude && selected.latitude) { // 预览
-        setMapData({
+        setViewMapData({
           point: [selected.longitude, selected.latitude],
           address: selected.address,
           show: true
         });
-        setMapShow(true);
+        setViewMapShow(true);
       }
       return;
+    }
+    // 非只读状态下, 如果type为choose为选择定位
+    if (type === 'choose') {
+      setChooseMapShow(true);
     }
     // 非只读状态下, 点击错误面板, 允许手动输入位置
     if (readOnly === false && status === '0') {
@@ -77,6 +94,7 @@ const InputLocation = forwardRef(({
     location(e);
   }
 
+  // 定位
   function location (e) {
     Bridge.debug = true
     // 定位中...
@@ -115,6 +133,13 @@ const InputLocation = forwardRef(({
     });
   }
 
+  // 选点
+  function chooseHandler (result) {
+    setChooseMapShow(false)
+    const address = result && result.address ? result.address : ''
+    if (onChange) onChange({target: refEl.current}, address, result);
+  }
+
   // 计算class, 防止重要class被覆盖
   let inputClassName = (others.inputAttribute || {}).className || '';
   let riconClassName = (others.riconAttribute || {}).className;
@@ -139,13 +164,22 @@ const InputLocation = forwardRef(({
       riconAttribute={readOnly ? null : Object.assign({}, others.riconAttribute, {className: `${status === '-1' ? riconClassName + ' input-location-icon-active' : riconClassName}`})}
       inputAttribute={Object.assign({}, others.inputAttribute, {className: statusDOM ? 'hide-important input-location-success ' + inputClassName: 'input-location-success ' + inputClassName})} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
     />
-    {mapData && <MapView
-      ak='3pTjiH1BXLjASHeBmWUuSF83'
-      show={mapShow}
-      header={mapData.address ? <div className="mapview-bar border-b">{mapData.address}</div> : null}
-      points={[mapData.point]}
+    {viewMapData && <MapView
+      ak={ak}
+      show={viewMapShow}
+      header={viewMapData.address ? <div className="map-bar border-b">{viewMapData.address}</div> : null}
+      points={[viewMapData.point]}
       portal={context.portal || document.getElementById('root') || document.body}
-      onHide={() => setMapShow(false)}
+      onHide={() => setViewMapShow(false)}
+    />}
+    {!readOnly && type === 'choose' && <MapChoose
+      ak={ak}
+      show={chooseMapShow}
+      autoLocation
+      point={chooseMapData && chooseMapData.point ? chooseMapData.point : null}
+      portal={context.portal || document.getElementById('root') || document.body}
+      onHide={() => setChooseMapShow(false)}
+      onChange={chooseHandler}
     />}
   </Fragment>
 })

@@ -4,29 +4,27 @@ import MapUtil from './../MapUtil';
 import Page from './../Page';
 import Header from './../Header';
 import Container from './../Container';
+import Footer from './../Footer';
 import Notice from './../Notice';
 import Bridge from './../Bridge';
 import Wrapper from './Wrapper';
 import Close from './Close';
+import Location from './Location';
 import helper from './helper';
 import Context from './../Context/instance.js';
 
-function MapView ({
+function MapChoose ({
   ak, // 百度地图key
   show = true, // 百度地图不能移除DOM, 再渲染
   portal,
   caption,
+  autoLocation,
   onHide,
+  onChange,
   // 其它属性
   center = '江苏省,南京市',
   // 标记点
-  points, // [[118.798128, 31.968592], [118.619429,32.113449]] => 南京南站, 老山
-  // 圆形
-  circle, // {point: [118.798128, 31.968592], radius: 1000} => 南京南站
-  // 多边形
-  polygon, // [[lng, lat], [lng, lat]]
-  // 地区
-  district, // {province: {id: "320000", name: "江苏"}, city: {id: "320100", name: "南京市"}, district: {id: "320105", name: "建邺区"}}
+  point, // [118.798128, 31.968592] => 南京南站
   // 子元素
   header,
   children
@@ -37,6 +35,8 @@ function MapView ({
 
   const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');
+  let [address, setAddress] = useState('');
+  let [data, setData] = useState(null);
 
   useEffect(() => {
     if (!window.BMap && !ak) {
@@ -76,50 +76,67 @@ function MapView ({
       setErrMsg(locale('hint_map_no_container') || '地图容器不存在');
       return;
     }
-
+    // 拖拽结束回调
+    helper.onDragEnd = function (res) {
+      address = res && res.address ? res.address : '';
+      setAddress(address);
+      setData(res);
+    }
+    // 初始化地图
     helper.initMap(refWrapperEl.current, center, (result) => {
       if (typeof result === 'string') {
         setErrMsg(result);
         return;
       }
+      // 自动定位
+      if (!point && autoLocation) {
+        locationHandler()
+      }
     });
+  }
+
+  // 立即定位
+  function locationHandler () {
+    Bridge.debug = true;
+    Bridge.getLocation({
+      type: 'gcj02',
+      success: async (data) => {
+        helper.initMarker([data.longitude, data.latitude])
+        // 客户端中不需要再getAddress
+        if (data.address) {
+          setAddress(address);
+          setData(data);
+          return;
+        }
+        const result = await Bridge.getAddress({ // 只支持gcj02
+          latitude: data.latitude,
+          longitude: data.longitude
+        });
+        
+        const address = result && result.address ? result.address : ''
+        setAddress(address);
+        setData(result);
+      },
+      fail: (res) => {
+        Bridge.showToast(res.errMsg, {mask: false});
+      }
+    });
+  }
+
+  // 提交
+  function submitHandler () {
+    if (onChange) {
+      onChange(data)
+    }
   }
 
   // 绘制标记点
   useEffect(() => {
-    if (points && points.length && show) {
+    if (point && point.length && show) {
       console.log('绘制标记')
-      helper.drawMarkers(points)
+      helper.initMarker(point)
     }
-  }, [points]) // eslint-disable-line
-
-  // 绘制圆形
-  useEffect(() => {
-    if (circle && circle.point && show) {
-      console.log('绘制圆形')
-      helper.drawCircle(circle.point, circle.radius)
-    }
-  }, [circle]) // eslint-disable-line
-
-  // 绘制多边形
-  useEffect(() => {
-    if (polygon && show) {
-      console.log('绘制多边形')
-      helper.drawPolygon(polygon)
-    }
-  }, [polygon]) // eslint-disable-line
-
-  // 绘制地区
-  useEffect(() => {
-    if (district && show) {
-      console.log('绘制区域')
-      let districtName = [];
-      for (let name in district) {
-        districtName.push(district[name].name);
-      }
-      helper.drawDistrict(districtName.join(','))
-    }
-  }, [district]) // eslint-disable-line
+  }, [point]) // eslint-disable-line
 
   // 标题
   useEffect(() => {
@@ -144,8 +161,16 @@ function MapView ({
     <Container>
       <Wrapper ref={refWrapperEl}/>
       {onHide && <Close onClick={onHide}/>}
+      <Location onClick={locationHandler}/>
       {children}
     </Container>
+    <Footer className="map-footer">
+      <div className="map-footer-content">
+        <p className="map-footer-content-caption">{locale('current_location') || '当前位置'}</p>
+        <p className="map-footer-content-sndcaption">{address || ' '}</p>
+      </div>
+      <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>
+    </Footer>
     {errMsg && <Notice caption={errMsg}/>}
   </Page>;
   if (portal) {
@@ -156,4 +181,4 @@ function MapView ({
   }
   return DOM;
 }
-export default MapView
+export default MapChoose

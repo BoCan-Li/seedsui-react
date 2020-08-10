@@ -8,23 +8,25 @@ import {
   Bridge,
   Container,
   MapUtil,
-  Share,
+  MapChoose,
   Context,
   InputLocation
 } from '../../src';
 import locale from '../../src/locale/index.js';
 function Demo () {
-  const [value, setValue] = useState('');
-  function onChange (e, value) {
-    console.log(e.target);
-    setValue(value);
+  function changeHandler (...params) {
+    console.log(...params)
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation pre value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
+      <InputLocation
+        point={[118.798128, 31.968592]}
+        type="choose"
+        onChange={changeHandler}
+      />
     </Container>
   </Page>
 }

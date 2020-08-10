@@ -55,6 +55,8 @@ export default {
   'hint_location_failed_UNKNOWN_ERROR': 'User refused to request geolocation',
   'hint_location_failed_not_supported': 'Geolocation is not supported by this browser',
   'hint_location_map_failed': 'Location map failed',
+  'current_location': 'Current location',
+  'reposition': 'Reposition',
   'hint_weather_failed': 'Weather failed',
   'confirm_quit_page': 'Confirm quit?',
   'unit_year': 'Y', // 未使用,YYYY年
