@@ -241,6 +241,7 @@ class Test extends Component {
 - [ListPull](#listpull) 可推动列表
 - [Loading](#loading) 加载中
 - [LotteryWheel](#lotterywheel) 奖品轮播
+- [MapChoose](#MapChoose) 地图选点
 - [MapView](#MapView) 地图预览
 - [Mark](#mark) 标记
 - [Marquee](#marquee) 跑马灯
@@ -2896,10 +2897,12 @@ function onChange (e, value, selected) {
 ### 属性
 ```javascript
 <InputLocation
+  ak={地图ak,地图预览和选择地点时需要传入, 如果地图已经加载, 则不需要传入ak}
   selected={选中地址经纬度信息 string, 默认无} // 用于只读时, 点击预览地图{latitude: '纬度', longitude: '经度', address:'地址'}
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
   readOnly={文本是否只读 bool, 默认无} // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
+  type={定位方式 string, 默认'location'} // location: 点击定位当前位置, choose: 点击选择地点
   autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
@@ -3532,6 +3535,51 @@ const wrapperWidth = containerWidth * 0.85;
 [返回目录](#component)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## MapChoose
+[地图预览](https://unpkg.com/seedsui-react/src/lib/MapChoose/MapChoose.js)
+### 属性
+```javascript
+<MapChoose
+  ak={*百度地图key string, 默认无}
+  show={*显隐 bool, 默认true} // 百度地图不能移除DOM, 再渲染
+  portal={传送dom object, 默认document.getElementById('root')}
+  caption={原生头部标题 string, 默认'暂无数据'}
+  onHide={点击隐藏按钮 func, 默认无}
+  onChange={提交回调 func(addrResult), 默认无}
+  // 其它属性
+  center={定位地址 string, 默认'江苏省,南京市'}
+  // 以下形状或者标记一次只能绘制一个
+  // 标记点
+  point={标记点 array, 默认无} // [118.798128, 31.968592] => 南京南站, 老山
+  // 子元素
+  header={header容器内子元素 node, 默认无}
+  children={子元素 node, 默认无}
+/>
+```
+### 示例
+```javascript
+import MapChoose from 'seedsui-react/lib/MapChoose';
+<MapChoose
+  ak='3pTjiH1BXLjASHeBmWUuSF83'
+  circle={{point: [118.798128, 31.968592], radius: 1000}}
+/>
+```
+[返回目录](#component)
 
 
 
