@@ -174,7 +174,7 @@ const MapChoose = forwardRef(({
         <p className="map-footer-content-caption">{locale('current_location') || '当前位置'}</p>
         <p className="map-footer-content-sndcaption">{address || ' '}</p>
       </div>
-      <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>
+      {address && <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>}
     </Footer>
     {errMsg && <Notice caption={errMsg}/>}
   </Page>;

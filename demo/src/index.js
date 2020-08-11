@@ -30,10 +30,10 @@ function Demo () {
     </Header>
 		<Container>
       <InputLocation
-        // type="choose"
+        type="choose"
         autoLocation
         // readOnly={false}
-        readOnly={true}
+        // readOnly={true}
         selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
         value={value}
         placeholder="请点击获取位置信息"
