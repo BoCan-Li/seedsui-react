@@ -16,6 +16,7 @@ import locale from '../../src/locale/index.js';
 function Demo () {
   useEffect(() => {
     Bridge.debug = true
+    console.log('2018-08-22 04:05'.toDate(null, null).format('YYYY-MM-DD hh:mm:ss'))
   }, [])
   const [value, setValue] = useState('');
   function changeHandler (e, value, data) {
@@ -48,17 +49,7 @@ Bridge.ready(() => {
   MapUtil.load({
     ak: '3pTjiH1BXLjASHeBmWUuSF83',
     success: () => {
-      console.log(1)
       render(<Demo/>, document.querySelector('#demo'))
-    },
-    fail: () => {
-      console.log('加载失败')
-    }
-  })
-  MapUtil.load({
-    ak: '3pTjiH1BXLjASHeBmWUuSF83',
-    success: () => {
-      console.log(2)
     },
     fail: () => {
       console.log('加载失败')

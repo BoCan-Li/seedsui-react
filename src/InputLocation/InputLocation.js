@@ -44,7 +44,7 @@ const InputLocation = forwardRef(({
     // 自动定位
     if (type !== 'choose' && autoLocation) {
       if (selected && selected.latitude && selected.longitude && selected.address) {
-        if (onChange) onChange({target: refEl.target}, selected.address, selected);
+        if (onChange) onChange({target: refEl.current}, selected.address, selected);
       } else {
         location({
           target: refEl.current,

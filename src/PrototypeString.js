@@ -111,10 +111,14 @@ window.String.prototype.isTime = function (timeSplit) {
   return new RegExp(`^[0-9]{2}${timeSplit || ':'}[0-9]{2}(${timeSplit || ':'}[0-9]{2})?$`).test(this)
 }
 // 转换成日期
-window.String.prototype.toDate = function (dateSplit, timeSplit) {
+window.String.prototype.toDate = function (dateSplit, timeSplit, now) {
   var date = new Date()
-  var dateStrArr = [date.getFullYear(), date.getMonth(), date.getDate()]
-  var timeStrArr = [date.getHours(), date.getMinutes(), date.getSeconds()]
+  var dateStrArr = [date.getFullYear(), date.getMonth(), 1]
+  var timeStrArr = [0, 0, 0]
+  if (now) {
+    dateStrArr = [date.getFullYear(), date.getMonth(), date.getDate()]
+    timeStrArr = [date.getHours(), date.getMinutes(), date.getSeconds()]
+  }
   if (this.isDate(dateSplit)) {
     dateStrArr = this.split(dateSplit || '-')
   } else if (this.isDateTime(dateSplit, timeSplit)) {
