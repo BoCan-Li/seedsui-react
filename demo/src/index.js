@@ -14,19 +14,20 @@ import {
 } from '../../src';
 import locale from '../../src/locale/index.js';
 function Demo () {
-  function changeHandler (...params) {
-    console.log(...params)
+  useEffect(() => {
+    Bridge.debug = true
+  }, [])
+  const [value, setValue] = useState('');
+  function changeHandler (e, value) {
+    console.log(e.target);
+    setValue(value);
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation
-        point={[118.798128, 31.968592]}
-        type="choose"
-        onChange={changeHandler}
-      />
+      <InputLocation type="choose" selected={{longitude: 118.798128, latitude: 31.968592}} value={value} placeholder="请点击获取位置信息" onChange={changeHandler}/>
     </Container>
   </Page>
 }

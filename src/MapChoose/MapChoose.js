@@ -1,4 +1,4 @@
-import React, {useRef, useContext, useEffect, useState} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect} from 'react';
 import {createPortal} from 'react-dom';
 import MapUtil from './../MapUtil';
 import Page from './../Page';
@@ -13,7 +13,7 @@ import Location from './Location';
 import helper from './helper';
 import Context from './../Context/instance.js';
 
-function MapChoose ({
+const MapChoose = forwardRef(({
   ak, // 百度地图key
   show = true, // 百度地图不能移除DOM, 再渲染
   portal,
@@ -28,12 +28,17 @@ function MapChoose ({
   // 子元素
   header,
   children
-}) {
+}, ref) =>  {
+  // 创建ref, useRef每次都会返回相同的引用, 所以用createRef
+  const refEl = useRef(null)
+  const refWrapperEl = useRef(null);
+  useImperativeHandle(ref, () => {
+    return refEl.current
+  });
   // context
   const context = useContext(Context) || {};
   const locale = context.locale || function (key) {return key || ''};
 
-  const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');
   let [address, setAddress] = useState('');
   let [data, setData] = useState(null);
@@ -126,7 +131,7 @@ function MapChoose ({
   // 提交
   function submitHandler () {
     if (onChange) {
-      onChange(data)
+      onChange({target: refEl.current}, address, data)
     }
   }
 
@@ -156,7 +161,7 @@ function MapChoose ({
     }
   }, [errMsg])
 
-  const DOM = <Page className={show ? '' : 'hide'}>
+  const DOM = <Page ref={refEl} className={show ? '' : 'hide'}>
     {header && <Header>{header}</Header>}
     <Container>
       <Wrapper ref={refWrapperEl}/>
@@ -180,5 +185,6 @@ function MapChoose ({
     );
   }
   return DOM;
-}
+})
+
 export default MapChoose

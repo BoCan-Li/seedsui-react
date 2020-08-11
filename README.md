@@ -2915,12 +2915,12 @@ function onChange (e, value, selected) {
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
 const [value, setValue] = useState('');
-function onChange (e, value) {
+function changeHandler (e, value) {
   console.log(e.target);
   setValue(value);
 }
 
-<InputLocation value={value} placeholder="请点击获取位置信息" onChange={onChange}/>
+<InputLocation value={value} placeholder="请点击获取位置信息" onChange={changeHandler}/>
 ```
 
 ```javascript
@@ -3560,7 +3560,7 @@ const wrapperWidth = containerWidth * 0.85;
   portal={传送dom object, 默认document.getElementById('root')}
   caption={原生头部标题 string, 默认'暂无数据'}
   onHide={点击隐藏按钮 func, 默认无}
-  onChange={提交回调 func(addrResult), 默认无}
+  onChange={提交回调 func(e, value, data), 默认无}
   // 其它属性
   center={定位地址 string, 默认'江苏省,南京市'}
   // 以下形状或者标记一次只能绘制一个

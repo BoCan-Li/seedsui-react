@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment, useDebugValue} from 'react';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 import MapView from './../MapView';
@@ -27,6 +27,7 @@ const InputLocation = forwardRef(({
   const [viewMapShow, setViewMapShow] = useState(false);
   const [viewMapData, setViewMapData] = useState(null);
   // 地图选点
+  const [chooseMapInit, setChooseMapInit] = useState(false);
   const [chooseMapShow, setChooseMapShow] = useState(false);
   const [chooseMapData, setChooseMapData] = useState(null);
 
@@ -79,7 +80,11 @@ const InputLocation = forwardRef(({
     }
     // 非只读状态下, 如果type为choose为选择定位
     if (type === 'choose') {
+      if (!chooseMapInit) {
+        setChooseMapInit(true);
+      }
       setChooseMapShow(true);
+      return;
     }
     // 非只读状态下, 点击错误面板, 允许手动输入位置
     if (readOnly === false && status === '0') {
@@ -96,7 +101,6 @@ const InputLocation = forwardRef(({
 
   // 定位
   function location (e) {
-    Bridge.debug = true
     // 定位中...
     setStatus('-1')
     Bridge.getLocation({
@@ -134,10 +138,10 @@ const InputLocation = forwardRef(({
   }
 
   // 选点
-  function chooseHandler (result) {
+  function chooseHandler (e, value, data) {
     setChooseMapShow(false)
-    const address = result && result.address ? result.address : ''
-    if (onChange) onChange({target: refEl.current}, address, result);
+    const address = data && data.address ? data.address : ''
+    if (onChange) onChange({target: refEl.current}, address, data);
   }
 
   // 计算class, 防止重要class被覆盖
@@ -172,7 +176,7 @@ const InputLocation = forwardRef(({
       portal={context.portal || document.getElementById('root') || document.body}
       onHide={() => setViewMapShow(false)}
     />}
-    {!readOnly && type === 'choose' && <MapChoose
+    {chooseMapInit && <MapChoose
       ak={ak}
       show={chooseMapShow}
       autoLocation
