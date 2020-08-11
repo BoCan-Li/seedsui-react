@@ -2915,26 +2915,25 @@ function onChange (e, value, selected) {
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
 const [value, setValue] = useState('');
-function changeHandler (e, value) {
+function changeHandler (e, value, data) {
   console.log(e.target);
+  console.log(data)
   setValue(value);
 }
 
-<InputLocation value={value} placeholder="请点击获取位置信息" onChange={changeHandler}/>
+<InputLocation
+  // type="choose"
+  autoLocation
+  // readOnly={false}
+  readOnly={true}
+  selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
+  value={value}
+  placeholder="请点击获取位置信息"
+  onChange={changeHandler}
+/>
 ```
 
-```javascript
-import InputLocation from 'seedsui-react/lib/InputLocation';
 
-const [selected, setSelected] = useState({latitude: '31.968592', longitude: '118.798128', address:'南京南站'});
-useEffect(() => {
-  setTimeout(() => {
-    setSelected({latitude: '32.113449', longitude: '118.619429', address:'老山'});
-  }, 5000);
-}, []) // eslint-disable-line
-
-<InputLocation readOnly={true} value={selected.address} selected={selected}/>
-```
 
 
 

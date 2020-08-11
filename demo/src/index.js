@@ -18,8 +18,9 @@ function Demo () {
     Bridge.debug = true
   }, [])
   const [value, setValue] = useState('');
-  function changeHandler (e, value) {
+  function changeHandler (e, value, data) {
     console.log(e.target);
+    console.log(data)
     setValue(value);
   }
   return <Page>
@@ -27,7 +28,16 @@ function Demo () {
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation type="choose" selected={{longitude: 118.798128, latitude: 31.968592}} value={value} placeholder="请点击获取位置信息" onChange={changeHandler}/>
+      <InputLocation
+        // type="choose"
+        autoLocation
+        // readOnly={false}
+        readOnly={true}
+        selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
+        value={value}
+        placeholder="请点击获取位置信息"
+        onChange={changeHandler}
+      />
     </Container>
   </Page>
 }

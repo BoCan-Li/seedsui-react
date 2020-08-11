@@ -11,7 +11,7 @@ const InputLocation = forwardRef(({
   loadingValue,
   failedValue,
   readOnly, // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
-  autoLocation,
+  autoLocation, // 自动定位, 选点模式不支持自动定位
   onClick,
   onChange,
   type = 'location', // location: 点击定位当前位置, choose: 点击选择地点
@@ -41,33 +41,34 @@ const InputLocation = forwardRef(({
   }
 
   useEffect(() => {
-    if (autoLocation) {
-      location({
-        target: refEl.current,
-        currentTarget: refEl.current
-      })
+    // 自动定位
+    if (type !== 'choose' && autoLocation) {
+      if (selected && selected.latitude && selected.longitude && selected.address) {
+        if (onChange) onChange({target: refEl.target}, selected.address, selected);
+      } else {
+        location({
+          target: refEl.current,
+          currentTarget: refEl.current
+        })
+      }
     }
     // 选点模式, 默认读取传入的坐标
-    if (!readOnly && type === 'choose' && selected && selected.latitude && selected.longitude) {
+    if (type === 'choose' && selected && selected.latitude && selected.longitude) {
       setChooseMapData({
         point: [selected.longitude, selected.latitude]
       })
     }
   }, [])
 
-  const [status, setStatus] = useState('1') // 定位状态, 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
-  function click (event, value) {
-    // 正在定位不允许操作
-    if (status === '-1') {
-      return;
-    }
-    // 触发点击事件
+  const [status, setStatus] = useState('1') // 定位状态, -1.定位中和0.定位失败时隐藏text框, 显示定位中或者定位失败的div, 1定位成功显示文本框
+  function clickHandler (event, value) {
     var e = event.nativeEvent;
+    // 触发点击事件
     if (onClick) {
       onClick(e, value);
     }
-    // 只读状态不允许定位
-    if (readOnly === true) {
+    // 只读状态下仅能预览定位
+    if (readOnly) {
       if (preview && selected && selected.longitude && selected.latitude) { // 预览
         setViewMapData({
           point: [selected.longitude, selected.latitude],
@@ -78,7 +79,28 @@ const InputLocation = forwardRef(({
       }
       return;
     }
-    // 非只读状态下, 如果type为choose为选择定位
+    // 正在定位不允许操作
+    if (status === '-1') {
+      return;
+    }
+
+    // 编辑状态下仅允许点击右边图标定位
+    if (readOnly === false) {
+      if (e.target.classList.contains('input-location-icon')) {
+        location(e);
+      } else if (status === '0') { // 非只读状态下, 点击错误面板, 允许手动输入位置
+        setStatus('1');
+      }
+      return;
+    }
+
+    // 非编辑状态下点击整行定位
+    location(e);
+  }
+
+  // 定位
+  function location (e) {
+    // 如果type为choose为选择定位
     if (type === 'choose') {
       if (!chooseMapInit) {
         setChooseMapInit(true);
@@ -86,21 +108,6 @@ const InputLocation = forwardRef(({
       setChooseMapShow(true);
       return;
     }
-    // 非只读状态下, 点击错误面板, 允许手动输入位置
-    if (readOnly === false && status === '0') {
-      setStatus('1');
-      return;
-    }
-    // 如果非只读, 则仅允许点击图标定位
-    if (readOnly === false && !e.target.classList.contains('input-location-icon')) {
-      return;
-    }
-    // 定位
-    location(e);
-  }
-
-  // 定位
-  function location (e) {
     // 定位中...
     setStatus('-1')
     Bridge.getLocation({
@@ -161,7 +168,7 @@ const InputLocation = forwardRef(({
     <InputText
       ref={refEl}
       readOnly={!readOnly && readOnly !== false ? true : readOnly} // 不填写readOnly则认为文本框不允许输入, 只有readOnly为false时才允许输入
-      onClick={click}
+      onClick={clickHandler}
       onChange={onChange}
       children={statusDOM}
       {...others}
