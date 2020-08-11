@@ -3794,11 +3794,11 @@ const menus = [
 
 const [selected, setSelected] = useState([{id: 'b', name: '测试数据1-b', parentid: '1'}]);
 
-onClickMenu = (e, item, isActived, isExtand, childrenCount) => {
-  console.log(e, item, isActived, isExtand, childrenCount);
+function nClickMenu (e, value, selected, data) {
+  console.log(e, value, selected, data);
 }
 
-<MenuTiled list={menus} selected={selected} onChange={this.onClickMenu}/>
+<MenuTiled list={menus} selected={selected} onChange={onClickMenu}/>
 ```
 [返回目录](#component)
 
