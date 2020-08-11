@@ -155,7 +155,7 @@ const InputLocation = forwardRef(({
   let inputClassName = (others.inputAttribute || {}).className || '';
   let riconClassName = (others.riconAttribute || {}).className;
   if (riconClassName === undefined) {
-    riconClassName = 'input-location-icon size24'
+    riconClassName = `input-location-icon size24 ${type === 'choose' ? 'input-location-icon-choose' : 'input-location-icon-location'}`
   }
   // 加载和错误面板, 显示这些面板时将会隐藏文本框, 样式必须与文本框一致
   let statusDOM = null;

@@ -30,7 +30,7 @@ function Demo () {
     </Header>
 		<Container>
       <InputLocation
-        type="choose"
+        // type="choose"
         autoLocation
         // readOnly={false}
         // readOnly={true}
