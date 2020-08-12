@@ -24,7 +24,8 @@ const MapChoose = forwardRef(({
   // 其它属性
   center = '江苏省,南京市',
   // 标记点
-  point, // [118.798128, 31.968592] => 南京南站
+  address, // 初始化标记地址, 传入地址是为了初始化point时, 不用地址逆解析
+  point, // 初始化标记点, [118.798128, 31.968592] => 南京南站
   // 子元素
   header,
   children
@@ -40,7 +41,7 @@ const MapChoose = forwardRef(({
   const locale = context.locale || function (key) {return key || ''};
 
   const [errMsg, setErrMsg] = useState('');
-  let [address, setAddress] = useState('');
+  let [addr, setAddr] = useState(address || '');
   let [data, setData] = useState(null);
 
   useEffect(() => {
@@ -83,8 +84,8 @@ const MapChoose = forwardRef(({
     }
     // 拖拽结束回调
     helper.onDragEnd = function (res) {
-      address = res && res.address ? res.address : '';
-      setAddress(address);
+      addr = res && res.address ? res.address : '';
+      setAddr(addr);
       setData(res);
     }
     // 初始化地图
@@ -106,21 +107,19 @@ const MapChoose = forwardRef(({
     Bridge.getLocation({
       type: 'gcj02',
       success: async (data) => {
-        helper.initMarker([data.longitude, data.latitude])
-        // 客户端中不需要再getAddress
+        // 客户端中不需要getAddress
         if (data.address) {
-          setAddress(address);
+          helper.drawMarker([data.longitude, data.latitude]);
+          setAddr(addr);
           setData(data);
           return;
         }
-        const result = await Bridge.getAddress({ // 只支持gcj02
-          latitude: data.latitude,
-          longitude: data.longitude
-        });
-        
-        const address = result && result.address ? result.address : ''
-        setAddress(address);
-        setData(result);
+        // 其它平台, 绘制标记后地址逆向解析, 并回调self.onDragEnd
+        helper.initMarker([data.longitude, data.latitude], (result) => {
+          addr = result && result.address ? result.address : ''
+          setAddr(addr);
+          setData(result);
+        })
       },
       fail: (res) => {
         Bridge.showToast(res.errMsg, {mask: false});
@@ -131,17 +130,31 @@ const MapChoose = forwardRef(({
   // 提交
   function submitHandler () {
     if (onChange) {
-      onChange({target: refEl.current}, address, data)
+      onChange({target: refEl.current}, addr, data)
     }
   }
 
   // 绘制标记点
   useEffect(() => {
-    if (point && point.length && show) {
-      console.log('绘制标记')
-      helper.initMarker(point)
+    if (point && point.length === 2 && show) {
+      if (!address) {
+        console.log('初始化标记')
+        helper.initMarker(point, (result) => {
+          addr = result && result.address ? result.address : ''
+          setAddr(addr);
+          setData(result);
+        })
+      } else {
+        console.log('更新标记')
+        helper.drawMarker(point)
+      }
     }
   }, [point]) // eslint-disable-line
+
+  // 更新地址
+  useEffect(() => {
+    setAddr(address)
+  }, [address]) // eslint-disable-line
 
   // 标题
   useEffect(() => {
@@ -172,9 +185,9 @@ const MapChoose = forwardRef(({
     <Footer className="map-footer">
       <div className="map-footer-content">
         <p className="map-footer-content-caption">{locale('current_location') || '当前位置'}</p>
-        <p className="map-footer-content-sndcaption">{address || ' '}</p>
+        <p className="map-footer-content-sndcaption">{addr}</p>
       </div>
-      {address && <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>}
+      {addr && <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>}
     </Footer>
     {errMsg && <Notice caption={errMsg}/>}
   </Page>;

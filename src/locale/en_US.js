@@ -46,6 +46,7 @@ export default {
   'hint_file_failed_to_load': 'File failed to load',
   'hint_hideloading_after_showloading': 'showLoading后才能hideLoading',
   'hint_address_failed': 'Address failed',
+  'hint_location_preview_fail': 'Incorrect coordinates. Preview failed',
   'hint_location_success': 'Location success',
   'hint_location_timeout': 'Location timeout',
   'hint_location_failed': 'Location failed',

@@ -15,7 +15,7 @@ const InputLocation = forwardRef(({
   onClick,
   onChange,
   type = 'location', // location: 点击定位当前位置, choose: 点击选择地点
-  preview = true, // 是否支持单击预览, readOnly为true时才生效
+  preview = true, // 是否支持单击预览, readOnly为true时才生效 
   selected, // {latitude: '纬度', longitude: '经度', address:'地址'}
   ...others
 }, ref) =>  {
@@ -29,7 +29,7 @@ const InputLocation = forwardRef(({
   // 地图选点
   const [chooseMapInit, setChooseMapInit] = useState(false);
   const [chooseMapShow, setChooseMapShow] = useState(false);
-  const [chooseMapData, setChooseMapData] = useState(null);
+  let [chooseMapData, setChooseMapData] = useState(null);
 
   const context = useContext(Context) || {};
   const locale = context.locale || function (key) {return key || ''};
@@ -41,23 +41,51 @@ const InputLocation = forwardRef(({
   }
 
   useEffect(() => {
-    // 自动定位
-    if (type !== 'choose' && autoLocation) {
-      if (selected && selected.latitude && selected.longitude && selected.address) {
-        if (onChange) onChange({target: refEl.current}, selected.address, selected);
-      } else {
-        location({
-          target: refEl.current,
-          currentTarget: refEl.current
-        })
+    async function fetchData () {
+      // 自动定位
+      if (autoLocation) {
+        if (selected && selected.latitude && selected.longitude) {
+          if (selected.address) { // 有地址, 则定位完成
+            if (onChange) onChange({target: refEl.current}, selected.address, selected);
+          } else { // 无地址, 则需要地址逆解析
+            setStatus('-1'); // 定位中...
+            const result = await Bridge.getAddress({ // 只支持gcj02
+              latitude: selected.latitude,
+              longitude: selected.longitude
+            });
+            const address = result && result.address ? result.address : ''
+            if (address) {
+              setStatus('1')
+              // 回调onChange
+              if (onChange) onChange({target: refEl.current}, address, result);
+              // 自动定位设置选择地图的数据
+              chooseMapData = {
+                point: [selected.longitude, selected.latitude],
+                address: address
+              };
+              setChooseMapData(chooseMapData);
+            } else {
+              setStatus('0')
+            }
+          }
+        } else {
+          location({
+            target: refEl.current,
+            currentTarget: refEl.current
+          }, true)
+        }
+      }
+      // 选点模式, 默认读取传入的坐标
+      if (type === 'choose' && selected && selected.latitude && selected.longitude) {
+        if (!chooseMapData || !chooseMapData.point || !chooseMapData.address) {
+          setChooseMapData({
+            point: [selected.longitude, selected.latitude],
+            address: selected.address || ''
+          })
+        }
       }
     }
-    // 选点模式, 默认读取传入的坐标
-    if (type === 'choose' && selected && selected.latitude && selected.longitude) {
-      setChooseMapData({
-        point: [selected.longitude, selected.latitude]
-      })
-    }
+    fetchData();
   }, [])
 
   const [status, setStatus] = useState('1') // 定位状态, -1.定位中和0.定位失败时隐藏text框, 显示定位中或者定位失败的div, 1定位成功显示文本框
@@ -69,13 +97,20 @@ const InputLocation = forwardRef(({
     }
     // 只读状态下仅能预览定位
     if (readOnly) {
-      if (preview && selected && selected.longitude && selected.latitude) { // 预览
-        setViewMapData({
-          point: [selected.longitude, selected.latitude],
-          address: selected.address,
-          show: true
-        });
-        setViewMapShow(true);
+      if (preview) { // 预览
+        if (selected && selected.longitude && selected.latitude) {
+          setViewMapData({
+            point: [selected.longitude, selected.latitude],
+            address: selected.address,
+            show: true
+          });
+          setViewMapShow(true);
+          preview(e, {errMsg: `preview:ok`})
+        } else {
+          if (typeof preview === 'function') {
+            preview(e, {errMsg: `preview:fail${locale('hint_location_preview_fail') || '坐标不正确, 预览失败'}`})
+          }
+        }
       }
       return;
     }
@@ -98,10 +133,11 @@ const InputLocation = forwardRef(({
     location(e);
   }
 
-  // 定位
-  function location (e) {
+  // 定位, isAutoLocation表示初始化时自动定位
+  function location (e, isAutoLocation) {
+    Bridge.debug = true
     // 如果type为choose为选择定位
-    if (type === 'choose') {
+    if (!isAutoLocation && type === 'choose') {
       if (!chooseMapInit) {
         setChooseMapInit(true);
       }
@@ -109,7 +145,7 @@ const InputLocation = forwardRef(({
       return;
     }
     // 定位中...
-    setStatus('-1')
+    setStatus('-1');
     Bridge.getLocation({
       type: 'gcj02',
       success: async (data) => {
@@ -118,7 +154,12 @@ const InputLocation = forwardRef(({
           // 赋值
           if (onChange) {
             onChange(e, data.address, data);
-            setStatus('1')
+            setStatus('1');
+            // 自动定位设置选择地图的数据
+            setChooseMapData({
+              point: [data.longitude, data.latitude],
+              address: data.address
+            });
           }
           return;
         }
@@ -130,6 +171,11 @@ const InputLocation = forwardRef(({
         if (onChange) onChange(e, address, result);
         if (address) {
           setStatus('1')
+          // 自动定位设置选择地图的数据
+          setChooseMapData({
+            point: [data.longitude, data.latitude],
+            address: address
+          });
         } else {
           setStatus('0')
         }
@@ -188,6 +234,7 @@ const InputLocation = forwardRef(({
       show={chooseMapShow}
       autoLocation
       point={chooseMapData && chooseMapData.point ? chooseMapData.point : null}
+      address={chooseMapData && chooseMapData.address ? chooseMapData.address : null}
       portal={context.portal || document.getElementById('root') || document.body}
       onHide={() => setChooseMapShow(false)}
       onChange={chooseHandler}

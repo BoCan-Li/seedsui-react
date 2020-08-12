@@ -2906,7 +2906,7 @@ function onChange (e, value, selected) {
   autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
-  preview={是否预览 bool, 默认true, 是否支持单击预览, readOnly为true时才生效}
+  preview={是否预览 bool|func(e, {errMsg: 'preview:ok'}), 默认true, 是否支持单击预览, readOnly为true时才生效}
   {...others}
 />
 ```
@@ -2920,6 +2920,11 @@ function changeHandler (e, value, data) {
   console.log(data)
   setValue(value);
 }
+function previewHandler (e, err) {
+  if (err.errMsg.indexOf('preview:fail') !== -1) {
+    Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
+  }
+}
 
 <InputLocation
   // type="choose"
@@ -2930,6 +2935,7 @@ function changeHandler (e, value, data) {
   value={value}
   placeholder="请点击获取位置信息"
   onChange={changeHandler}
+  preview={previewHandler}
 />
 ```
 
@@ -3564,7 +3570,8 @@ const wrapperWidth = containerWidth * 0.85;
   center={定位地址 string, 默认'江苏省,南京市'}
   // 以下形状或者标记一次只能绘制一个
   // 标记点
-  point={标记点 array, 默认无} // [118.798128, 31.968592] => 南京南站, 老山
+  address={初始化标记地址 string, 默认无} // 传入地址是为了初始化point时, 不用地址逆解析
+  point={初始化标记点 array, 默认无} // [118.798128, 31.968592] => 南京南站, 老山
   // 子元素
   header={header容器内子元素 node, 默认无}
   children={子元素 node, 默认无}

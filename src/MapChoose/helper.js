@@ -45,28 +45,18 @@ export default {
       self.drawTempMarker(false);
       // 拖拽点
       mapUtil.map.addEventListener('dragstart', () => {
-        if (self.tempMarker) {
-          self.tempMarker.classList.remove('hide');
-        }
-        if (self.marker) {
-          self.marker.setOffset(new BMap.Size(10000, 10000))
-        }
+        self.showTempMarker();
+        self.hideMarker();
       });
       mapUtil.map.addEventListener('dragend', async (e) => {
-        if (self.tempMarker) {
-          self.tempMarker.classList.add('hide');
-        }
+        self.hideTempMarker();
         if (!self.marker) return;
-        self.marker.setOffset(new BMap.Size(0, 0))
-        let bdPoint = mapUtil.map.getCenter();
-        self.marker.setPosition(bdPoint);
-        let point = [bdPoint.lng, bdPoint.lat];
-        point = GeoUtil.coordtransform(point, 'bd09', 'gcj02')
-        const result = await Bridge.getAddress({ // 只支持gcj02
-          latitude: point[1],
-          longitude: point[0]
-        });
-        // const address = result && result.address ? result.address : ''
+        // 获取中心点, 并绘制坐标点
+        let point = self.getCenterPoint(self.marker);
+        // 显示坐标点
+        self.showMarker();
+        // 地址逆解析
+        let result = await self.getAddress(point);
         if (self.onDragEnd) {
           self.onDragEnd(result)
         }
@@ -79,39 +69,15 @@ export default {
       callback(locale('hint_map_init_timeout') || '初始化地图超时, 请检查当前网络是否稳定');
     }, 20000);
   },
-  // 标记: 绘制全部标记
-  drawMarkers: function (points) {
+  // 获取中心点
+  getCenterPoint: function (marker) {
     var self = this;
-    if (!points || !points.length) {
-      console.error('绘制标记: 定位坐标参数不能为空');
-      return null;
-    }
-    if (self.abort) return;
-    if (!self.mapUtil) {
-      setTimeout(() => {
-        self.drawMarkers(points);
-      }, 500);
-      return;
-    }
-    if (self.markers) {
-      self.mapUtil.clearOverlays(self.markers);
-    }
-    self.markers = [];
-    for (let point of points) {
-      let marker = self.drawMarker(point);
-      self.markers.push(marker);
-    }
-    setTimeout(() => {
-      let bdPoints = [];
-      for (let marker of self.markers) {
-        bdPoints.push(marker.getPosition());
-      }
-      self.mapUtil.centerToPoints(bdPoints);
-      console.log('绘制标记完成');
-    }, 500);
-    return self.markers;
+    let bdPoint = self.mapUtil.map.getCenter();
+    if (marker) marker.setPosition(bdPoint);
+    let point = [bdPoint.lng, bdPoint.lat];
+    return GeoUtil.coordtransform(point, 'bd09', 'gcj02')
   },
-  // 绘制临时标记, 用于拖动
+  // 绘制临时标记, 拖拽显示, 停止拖拽隐藏
   drawTempMarker: function (show) {
     var self = this;
     if (!self.tempMarker) {
@@ -120,22 +86,57 @@ export default {
       self.mapUtil.container.appendChild(self.tempMarker);
     }
     if (show) {
-      self.tempMarker.classList.remove('hide')
+      self.showTempMarker();
     } else {
-      self.tempMarker.classList.add('hide')
+      self.hideTempMarker();
     }
   },
-  // 标记: 绘制标记, 更新原marker, 则传入marker
-  initMarker: async function (point) {
+  showTempMarker: function () {
+    var self = this;
+    if (self.tempMarker) {
+      self.tempMarker.classList.remove('hide');
+    }
+  },
+  hideTempMarker: function () {
+    var self = this;
+    if (self.tempMarker) {
+      self.tempMarker.classList.add('hide');
+    }
+  },
+  // 初始化标记, 并逆解析地址
+  initMarker: async function (point, callback) {
     var self = this;
     if (!point) {
+      console.error('初始化标记: 定位坐标参数不能为空');
+      return null;
+    }
+    if (self.abort) return;
+    if (!self.mapUtil) {
+      setTimeout(() => {
+        self.initMarker(point, callback);
+      }, 500);
+      return;
+    }
+
+    // 绘制坐标点
+    self.drawMarker(point);
+    
+    // 地址逆解析
+    let result = await self.getAddress(point);
+    if (callback) callback(result);
+  },
+  // 绘制坐标点
+  drawMarker: function (point) {
+    var self = this;
+    if (!point) {
+      debugger
       console.error('绘制标记: 定位坐标参数不能为空');
       return null;
     }
     if (self.abort) return;
     if (!self.mapUtil) {
       setTimeout(() => {
-        self.initMarker(point);
+        self.drawMarker(point);
       }, 500);
       return;
     }
@@ -160,18 +161,28 @@ export default {
     }
     // 只绘制一个定位到地图中心点
     self.mapUtil.centerToPoints(bdPoint);
-    // 地址逆解析
-    let gcjPoint = [bdPoint.lng, bdPoint.lat];
-    gcjPoint = GeoUtil.coordtransform(point, 'bd09', 'gcj02')
-    const result = await Bridge.getAddress({ // 只支持gcj02
-      latitude: gcjPoint[1],
-      longitude: gcjPoint[0]
-    });
-    // const address = result && result.address ? result.address : ''
-    if (self.onDragEnd) {
-      self.onDragEnd(result)
+  },
+  hideMarker: function () {
+    var self = this;
+    if (self.marker) {
+      self.marker.setOffset(new BMap.Size(10000, 10000))
     }
-    return self.marker;
+  },
+  showMarker: function () {
+    var self = this;
+    if (self.marker) {
+      self.marker.setOffset(new BMap.Size(0, 0))
+    }
+  },
+  // 地址逆解析
+  getAddress: async function (point) {
+    return new Promise(async (resolve) => {
+      const result = await Bridge.getAddress({ // 只支持gcj02
+        latitude: point[1],
+        longitude: point[0]
+      });
+      resolve(result)
+    })
   },
   destroy: function () {
     var self = this;

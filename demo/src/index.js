@@ -16,13 +16,20 @@ import locale from '../../src/locale/index.js';
 function Demo () {
   useEffect(() => {
     Bridge.debug = true
-    console.log('2018-08-22 04:05'.toDate(null, null).format('YYYY-MM-DD hh:mm:ss'))
   }, [])
-  const [value, setValue] = useState('');
-  function changeHandler (e, value, data) {
+  const [value, setValue] = useState('南京南站');
+  const [selected, setSelected] = useState({longitude: 118.798128, latitude: 31.968592, address: '南京南站'});
+  // {longitude: 118.798128, latitude: 31.968592, address: '南京南站'}
+  function changeHandler (e, value, selected) {
     console.log(e.target);
-    console.log(data)
+    console.log(selected)
     setValue(value);
+    setSelected(selected);
+  }
+  function previewHandler (e, err) {
+    if (err.errMsg.indexOf('preview:fail') !== -1) {
+      Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
+    }
   }
   return <Page>
     <Header>
@@ -30,14 +37,15 @@ function Demo () {
     </Header>
 		<Container>
       <InputLocation
-        // type="choose"
-        autoLocation
+        type="choose"
+        // autoLocation
         // readOnly={false}
-        // readOnly={true}
-        selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
+        readOnly={true}
+        selected={selected}
         value={value}
         placeholder="请点击获取位置信息"
         onChange={changeHandler}
+        preview={previewHandler}
       />
     </Container>
   </Page>

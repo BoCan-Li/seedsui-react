@@ -46,6 +46,7 @@ export default {
   'hint_file_failed_to_load': '文件加载失败',
   'hint_hideloading_after_showloading': 'showLoading后才能hideLoading',
   'hint_address_failed': '获取地址失败, 请稍后重试',
+  'hint_location_preview_fail': '坐标不正确, 预览失败',
   'hint_location_success': '定位成功',
   'hint_location_timeout': '定位超时',
   'hint_location_failed': '定位失败, 请检查定位权限是否开启',
