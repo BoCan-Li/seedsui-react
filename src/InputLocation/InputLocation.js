@@ -105,6 +105,10 @@ const InputLocation = forwardRef(({
             show: true
           });
           setViewMapShow(true);
+          // 增加历史记录
+          Bridge.addHistoryBack(() => {
+            hideViewMap();
+          }, 'componentLocation=1');
           preview(e, {errMsg: `preview:ok`})
         } else {
           if (typeof preview === 'function') {
@@ -142,6 +146,10 @@ const InputLocation = forwardRef(({
         setChooseMapInit(true);
       }
       setChooseMapShow(true);
+      // 增加历史记录
+      Bridge.addHistoryBack(() => {
+        hideChooseMap()
+      }, 'componentLocation=1');
       return;
     }
     // 定位中...
@@ -190,11 +198,24 @@ const InputLocation = forwardRef(({
     });
   }
 
-  // 选点
+  // 地图预览
+  function hideViewMap () {
+    setViewMapShow(false);
+    if (window.location.href.indexOf('componentLocation=') !== -1) {
+      window.history.go(-1)
+    }
+  }
+  // 地图选点
   function chooseHandler (e, value, data) {
-    setChooseMapShow(false)
+    setChooseMapShow(false);
     const address = data && data.address ? data.address : ''
     if (onChange) onChange({target: refEl.current}, address, data);
+  }
+  function hideChooseMap () {
+    setChooseMapShow(false)
+    if (window.location.href.indexOf('componentLocation=') !== -1) {
+      window.history.go(-1)
+    }
   }
 
   // 计算class, 防止重要class被覆盖
@@ -227,7 +248,7 @@ const InputLocation = forwardRef(({
       header={viewMapData.address ? <div className="map-bar border-b">{viewMapData.address}</div> : null}
       points={[viewMapData.point]}
       portal={context.portal || document.getElementById('root') || document.body}
-      onHide={() => setViewMapShow(false)}
+      onHide={hideViewMap}
     />}
     {chooseMapInit && <MapChoose
       ak={ak}
@@ -236,7 +257,7 @@ const InputLocation = forwardRef(({
       point={chooseMapData && chooseMapData.point ? chooseMapData.point : null}
       address={chooseMapData && chooseMapData.address ? chooseMapData.address : null}
       portal={context.portal || document.getElementById('root') || document.body}
-      onHide={() => setChooseMapShow(false)}
+      onHide={hideChooseMap}
       onChange={chooseHandler}
     />}
   </Fragment>
