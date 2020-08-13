@@ -77,9 +77,12 @@ const Dropdown = forwardRef(({
       setShow(true);
     }
   }
-  function onClickMask () {
+  function onClickMask (e) {
     setActiveIndex(-1);
     setShow(false);
+    if (dialogProps && dialogProps.maskAttribute && dialogProps.maskAttribute.onClick) {
+      dialogProps.maskAttribute.onClick(e)
+    }
   }
   // 构建新数据
   function buildList (newTabs) {
@@ -124,11 +127,15 @@ const Dropdown = forwardRef(({
       <DropdownDialog
         show={show}
         dialogProps={{
+          ...(dialogProps || {}),
           maskAttribute: {
+            ...(dialogProps && dialogProps.maskAttribute ? dialogProps.maskAttribute : {}),
             onClick: onClickMask,
-            style: {top: offsetTop + 'px'}
+            style: {
+              top: offsetTop + 'px',
+              ...(dialogProps && dialogProps.maskAttribute && dialogProps.maskAttribute.style ? dialogProps.maskAttribute.style : {})
+            }
           },
-          ...(dialogProps || {})
         }}
 
         list={menus}

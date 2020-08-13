@@ -1795,7 +1795,7 @@ const [items, setItems] = useState([{
     }]
   }]);
 
-function onChange (e, tabs) {
+function changeHandler (e, tabs) {
     var newItems = Object.clone(items);
     tabs.forEach((item, index) => {
       newItems[index].id = item.id;
@@ -1805,7 +1805,7 @@ function onChange (e, tabs) {
   }
 
 <Header>
-  <Dropdown list={items} listRoot={root} onChange={onChange}/>
+  <Dropdown list={items} listRoot={root} onChange={changeHandler}/>
   {/* 只要单个弹窗可如下:
   const root = [{
     "id": "1",
