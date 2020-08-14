@@ -226,7 +226,7 @@ var Bridge = {
         })
       }
     }
-    if (Device.compareVersion(Device.platformVersion, '6.6.2') < 0 && uploadParams.ext) {
+    if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0 && uploadParams.ext) {
       delete uploadParams.ext
     }
     console.log('外勤WK内核上传')
