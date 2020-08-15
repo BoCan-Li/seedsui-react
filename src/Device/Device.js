@@ -207,8 +207,9 @@ var Device = (function () {
       let infos = userAgent.split(';')
       for (let info of infos) {
         if (info.indexOf('Build') !== -1) {
-          model = info.trim().split(' ')[0]
-          break;
+          info = info.trim()
+          model = info.substring(0, info.indexOf(' Build'))
+          break
         }
       }
       if (!model) model = ''
