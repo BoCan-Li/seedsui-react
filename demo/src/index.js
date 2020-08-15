@@ -10,12 +10,16 @@ import {
   MapUtil,
   MapChoose,
   Context,
-  InputLocation
+  InputLocation,
+  Device,
 } from '../../src';
 import locale from '../../src/locale/index.js';
 function Demo () {
   useEffect(() => {
     Bridge.debug = true
+    let model = '';
+    let userAgent = navigator.userAgent;
+    console.log(Device.model)
   }, [])
   const [value, setValue] = useState('南京南站');
   const [selected, setSelected] = useState({longitude: 118.798128, latitude: 31.968592, address: '南京南站'});

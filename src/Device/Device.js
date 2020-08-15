@@ -1,6 +1,7 @@
 // Device
 var Device = (function () {
-  var ua = navigator.userAgent.toLowerCase()
+  var userAgent = navigator.userAgent
+  var ua = userAgent.toLowerCase()
   // 内核
   var kernel = ''
   if (ua.indexOf('trident') > -1) {
@@ -78,6 +79,7 @@ var Device = (function () {
   }
   updatePlatform()
 
+  // 以下两个方法都不准备
   // 获得苹果机型
   function appleModel() { // 获取设备型号
     if (ua && /(iphone|ipad|ipod|ios)/i.test(ua)) {
@@ -88,7 +90,8 @@ var Device = (function () {
     }
     return ''
   }
-  function getAppleDevice() { // 获取苹果设备名称
+  // 获取苹果设备名称
+  function getAppleDevice() {
     // iPhoneX | iPhoneXS
     if (/iphone/gi.test(ua) && (window.screen.height === 812 && window.screen.width === 375)) return 'iPhoneX'
     // iPhoneXSM | iPhoneXSR
@@ -197,6 +200,28 @@ var Device = (function () {
     if (window.screen.height) return window.screen.height
     if (window.screen.availHeight) return window.screen.availHeight
   }
+  // 获取手机型号(ios返回版本号, 因为ios取不到型号)
+  function getModel () {
+    let model = ''
+    if (userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)) {
+      let infos = userAgent.split(';')
+      for (let info of infos) {
+        if (info.indexOf('Build') !== -1) {
+          model = info.trim().split(' ')[0]
+          break;
+        }
+      }
+      if (!model) model = ''
+    } else {
+      let iosVersion = ''
+      let iosExp = userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
+      if (iosExp && iosExp[1]) {
+        iosVersion = iosExp[1].replace(/_/igm, '.')
+      }
+      model = `iPhone ${iosVersion}`
+    }
+    return model
+  }
   return {
     protocol: window.location.protocol,
     host: window.location.host,
@@ -205,6 +230,7 @@ var Device = (function () {
     device: device,
     os: os,
     osVersion: osVersion,
+    model: getModel(),
     platform: platform,
     platformVersion: platformVersion,
     appleDevice: getAppleDevice(),
