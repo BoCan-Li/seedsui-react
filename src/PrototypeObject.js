@@ -386,3 +386,14 @@ Object.getArgs = function (e, parameters) {
   }
   return args
 }
+
+// json数据排序
+Object.sortJsonKey = function (json) {
+  var keys = Object.keys(json).sort()
+  var newObj = {}
+  for(var i = 0; i < keys.length; i++){
+    var key = keys[i]
+    newObj[key] = json[key]
+  }
+  return newObj
+}

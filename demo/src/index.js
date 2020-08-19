@@ -21,36 +21,29 @@ function Demo () {
     let userAgent = navigator.userAgent;
     console.log(Device.model)
   }, [])
-  const [value, setValue] = useState('南京南站');
-  const [selected, setSelected] = useState({longitude: 118.798128, latitude: 31.968592, address: '南京南站'});
-  // {longitude: 118.798128, latitude: 31.968592, address: '南京南站'}
-  function changeHandler (e, value, selected) {
-    console.log(e.target);
-    console.log(selected)
-    setValue(value);
-    setSelected(selected);
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
+  function go1 () {
+    setShow1(true)
+    Bridge.addHistoryBack(() => {
+      setShow1(false)
+    }, `componentIndex=1`);
   }
-  function previewHandler (e, err) {
-    if (err.errMsg.indexOf('preview:fail') !== -1) {
-      Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
-    }
+  function go2 () {
+    setShow2(true)
+    Bridge.addHistoryBack(() => {
+      setShow2(false)
+    }, `componentIndex=2`);
   }
   return <Page>
     <Header>
       <Titlebar caption="hh"/>
     </Header>
 		<Container>
-      <InputLocation
-        type="choose"
-        // autoLocation
-        // readOnly={false}
-        // readOnly={true}
-        selected={selected}
-        value={value}
-        placeholder="请点击获取位置信息"
-        onChange={changeHandler}
-        preview={previewHandler}
-      />
+      <div onClick={go1}>路由1</div>
+      <div onClick={go2}>路由2</div>
+      {show1 && <div>路由1:显示</div>}
+      {show2 && <div>路由2:显示</div>}
     </Container>
   </Page>
 }
