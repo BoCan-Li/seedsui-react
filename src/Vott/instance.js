@@ -156,14 +156,17 @@ var Vott = function (container, params) {
     s.svg.classList.add(s.params.activeClass)
     // 计算宽高
     s.scale = 1
+    let containerWidth = s.container.clientWidth || (s.container.style.width ? s.container.style.width.replace(/px/, '') : '')
+    let containerHeight = s.container.clientHeight || (s.container.style.height ? s.container.style.height.replace(/px/, '') : '')
     if (target.width > target.height) { // 宽图计算
-      s.scale = s.container.clientWidth / target.width
+      s.scale = containerWidth / target.width
     } else { // 长图计算
-      s.scale = s.container.clientHeight / target.height
+      s.scale = containerHeight / target.height
     }
     var width = target.width * s.scale
     var height = target.height * s.scale
-    s.svg.setAttribute('style', `width:${width};height:${height}`)
+    s.container.style.width = width + 'px'
+    s.svg.setAttribute('style', `width:${width}px;height:${height}px`)
     // 设置背景图
     s.svg.style.backgroundImage = `url(${s.params.src})`
     // 渲染多边形
@@ -456,7 +459,6 @@ var Vott = function (container, params) {
     var polygon = []
     var page = 0
     points.split(',').forEach(function (point, i) {
-      // debugger
       if (i !== 0 && i % 2 === 0) {
         page++
       }
