@@ -165,7 +165,7 @@ var Vott = function (container, params) {
     }
     var width = target.width * s.scale
     var height = target.height * s.scale
-    s.container.style.width = width + 'px'
+    if (!s.container.style.width) s.container.style.width = width + 'px'
     s.svg.setAttribute('style', `width:${width}px;height:${height}px`)
     // 设置背景图
     s.svg.style.backgroundImage = `url(${s.params.src})`
