@@ -29,115 +29,90 @@ function Demo () {
 		}
 	]);
 	const [items, setItems] = useState([{
-			// "id": "",
-			// "name": "分类",
-			id: "4622400720177680517",
-			name: "碳酸饮料",
-			multiple: true,
-			"data": [{
-				"id": "",
-				"name": "全部",
-				"children": []
-			}, {
-				"id": "7938034417512813758",
-				"name": "饮料",
-				"children": [{
-					"id": "4622400720177680517",
-					"name": "碳酸饮料"
-				}, {
-					"id": "5800049423243362222",
-					"name": "茶饮料"
-				}, {
-					"id": "5789432343240798823",
-					"name": "功能饮料"
-				}, {
-					"id": "6413548566139705252",
-					"name": "饮用水"
-				}, {
-					"id": "6936207795217715766",
-					"name": "中草药饮料"
-				}, {
-					"id": "8746408135758103957",
-					"name": "蛋白质饮料"
-				}, {
-					"id": "7268945622944992066",
-					"name": "果味饮料"
-				}, {
-					"id": "9138462844675316911",
-					"name": "咖啡"
-				}]
-			}, {
-				"id": "7746459719734369628",
-				"name": "零食",
-				"children": [{
-					"id": "9134066222295231258",
-					"name": "蜜饯果干"
-				}, {
-					"id": "5394487194098598325",
-					"name": "坚果炒货"
-				}, {
-					"id": "9070533848545878912",
-					"name": "早餐面包"
-				}, {
-					"id": "5240328190253910837",
-					"name": "糖巧果冻"
-				}]
-			}]
-		}, {
+		"id": "",
+		"name": "分类",
+		"data": [{
+			"children": [],
+			"parentid": "-2",
 			"id": "",
-			"name": "品牌",
-			multiple: true,
-			"data": [{
-				"id": "",
-				"name": "全部"
-			}, {
-				"id": "其他",
-				"name": "其他"
-			}, {
-				"id": "美汁源",
-				"name": "美汁源"
-			}, {
-				"id": "可口",
-				"name": "可口"
-			}, {
-				"id": "宏宝莱",
-				"name": "宏宝莱"
-			}, {
-				"id": "康师傅",
-				"name": "康师傅"
-			}, {
-				"id": "百事",
-				"name": "百事"
-			}, {
-				"id": "卫岗",
-				"name": "卫岗"
-			}, {
-				"id": "蒙牛",
-				"name": "蒙牛"
-			}, {
-				"id": "伊利",
-				"name": "伊利"
-			}, {
-				"id": "三只松鼠",
-				"name": "三只松鼠"
-			}]
+			"name": "全部",
+			"show_order": -1
 		}, {
+			"children": [{
+				"parentid": "5298852258867337850",
+				"id": "6951581541740822152",
+				"name": "shuiguo11",
+				"show_order": 0
+			}],
+			"parentid": "",
+			"id": "5298852258867337850",
+			"name": "水果",
+			"show_order": 0
+		}, {
+			"children": [],
+			"parentid": "",
+			"id": "7108460982772612211",
+			"name": "零食",
+			"show_order": 0
+		}, {
+			"children": [],
+			"parentid": "",
+			"id": "5542709513952588402",
+			"name": "日用品",
+			"show_order": 0
+		}, {
+			"children": [],
+			"parentid": "",
+			"id": "4787857868379989507",
+			"name": "饮料",
+			"show_order": 0
+		}, {
+			"children": [],
+			"parentid": "",
+			"id": "4911558233711003598",
+			"name": "果冻",
+			"show_order": 6
+		}]
+	}, {
+		"id": "",
+		"name": "品牌",
+		"data": [{
 			"id": "",
-			"name": "筛选",
-			// multiple: true,
-			"data": [{
-				"id": "",
-				"name": "全部"
-			}, {
-				"parentid": "-1",
-				"id": "new",
-				"name": "新品"
-			}, {
-				"parentid": "-1",
-				"id": "importance",
-				"name": "重点"
-			}]
-		}]);
+			"name": "全部"
+		}, {
+			"id": "乐事",
+			"name": "乐事"
+		}, {
+			"id": "百事",
+			"name": "百事"
+		}, {
+			"id": "康师傅",
+			"name": "康师傅"
+		}, {
+			"id": "可口",
+			"name": "可口"
+		}, {
+			"id": "百饮",
+			"name": "百饮"
+		}]
+	}, {
+		"id": "",
+		"name": "筛选",
+		"data": [{
+			"id": "",
+			"name": "全部",
+			"value": ""
+		}, {
+			"id": "new",
+			"name": "新品"
+		}, {
+			"id": "hot",
+			"name": "热销"
+		}, {
+			"id": "sale",
+			"name": "促销"
+		}]
+	}]);
 	
 	function changeHandler (e, tabs) {
 		var newItems = Object.clone(items);
@@ -148,6 +123,8 @@ function Demo () {
 		console.log(newItems)
 		setItems(newItems)
 	}
+	console.log('渲染')
+	console.log(items)
   return <Page>
 		<Header>
 			<Dropdown list={items} listRoot={root} onChange={changeHandler}/>

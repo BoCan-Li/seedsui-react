@@ -30,8 +30,7 @@ const Dropdown = forwardRef(({
     const newTabs = [];
     for (let item of list) {
       newTabs.push({
-        id: item.id,
-        name: item.name,
+        ...item,
         ricon: <span className='icon tab-icon shape-triangle-down'></span>
       });
     };
@@ -127,8 +126,13 @@ const Dropdown = forwardRef(({
     name = name.join(',');
     
     const newTabs = Object.clone(tabs);
+    // 设置选中的id和name
     newTabs[activeIndex].id = id;
     newTabs[activeIndex].name = name;
+    // 删除增加的ricon属性
+    for (let tab of newTabs) {
+      delete tab.ricon
+    }
     // 如果选中根节点
     if (isRoot) {
       newTabs[activeIndex].name = listRoot[activeIndex].name;

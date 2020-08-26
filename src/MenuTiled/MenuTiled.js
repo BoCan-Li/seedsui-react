@@ -36,14 +36,13 @@ const MenuTiled = forwardRef(({
   function fmtList () {
     if (!list || !list.length) return [];
     let listStr = JSON.stringify(list);
+    var newList = Object.clone(list);
     if (!multiple) { // 单选需要children
       if (listStr.indexOf('"children"') === -1) {
-        var newList = Object.clone(list);
         return newList.deepTree()
       }
     } else if (multiple) { // 多选需要拉平数据, 并对根节点(id为空)做根处理
       if (listStr.indexOf('"children"') !== -1 || listStr.indexOf('"parentid"') === -1) { // 有children或者没有parentid, 需要拉平数据
-        var newList = Object.clone(list);
         // 因为树只支持拉平数据, 并且必须层级分明, 所以要对id为空的根节点做根处理
         let flattenTree = newList.flattenTree();
         // 提取根节点共同的parentid, 为根节点(例如: 全部)的id
@@ -63,7 +62,6 @@ const MenuTiled = forwardRef(({
         updateTreeRoot(list, rootParentId);
 
         // 更新选中的根节点
-        data = flattenTree;
         if (selected && selected.length) updateTreeSelectedRoot();
         return list;
       }
@@ -215,8 +213,8 @@ const MenuTiled = forwardRef(({
         />}
       </div>
       <div className="menutiled-handler">
-        <a className={`menutiled-cancel`} onClick={cancel}>{locale('cancel') || '取消'}</a>
-        <a className={`menutiled-submit`} onClick={submit}>{locale('ok') || '确定'}</a>
+        <span className={`menutiled-cancel`} onClick={cancel}>{locale('cancel') || '取消'}</span>
+        <span className={`menutiled-submit`} onClick={submit}>{locale('ok') || '确定'}</span>
       </div>
     </div>
   );
