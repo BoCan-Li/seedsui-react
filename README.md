@@ -1806,41 +1806,41 @@ function changeHandler (e, tabs) {
 
 <Header>
   <Dropdown list={items} listRoot={root} onChange={changeHandler}/>
-  {/* 只要单个弹窗可如下:
-  const root = [{
-    "id": "1",
-    "name": "分类",
-  },
-  {
+</Header>
+{/* 只要单个弹窗可如下:
+const root = [{
+  "id": "1",
+  "name": "分类",
+},
+{
+  "id": "2",
+  "name": "品牌",
+},
+{
+  "id": "3",
+  "name": "筛选",
+}]
+const [selected, setSelected] = useState();
+function onSelected (e, value, selected) {
+  setSelected(selected)
+}
+<DropdownDialog
+  dialogProps={{
+    maskAttribute: {
+      onClick: () => console.log(1),
+      style: {top: '44px'}
+    }
+  }}
+  show={true}
+
+  list={root}
+  selected={[{
     "id": "2",
     "name": "品牌",
-  },
-  {
-    "id": "3",
-    "name": "筛选",
-  }]
-  const [selected, setSelected] = useState();
-  function onSelected (e, value, selected) {
-		setSelected(selected)
-	}
-  <DropdownDialog
-    dialogProps={{
-      maskAttribute: {
-        onClick: () => console.log(1),
-        style: {top: '44px'}
-      }
-    }}
-    show={true}
-
-    list={root}
-    selected={[{
-      "id": "2",
-      "name": "品牌",
-    }]}
-    onChange={(e, value, selected) => ()}
-  />
-   */}
-</Header>
+  }]}
+  onChange={(e, value, selected) => ()}
+/>
+  */}
 ```
 [返回目录](#component)
 
@@ -3756,6 +3756,7 @@ function clickMarquee (...params) {
 ### 属性
 ```javascript
 <MenuTiled
+  multiple={是否多选 bool, 默认false} // 为true时, 将会处理id为空的项为根节点, 补充id='根节点id或者-1'、parentid='-2'、isroot='1', 同时onChange返回的options有变化
   list={列表 array, 默认无} // [{id: '1', name: '测试数据1', children:[]}]
   selected={选中集合 array, 默认无} // [{id: '1', name: '测试数据1'}]
   onChange={点击 func(e, value, selected, data), 默认无} // 回调里返回的data为格式化后的list
@@ -5220,6 +5221,7 @@ showMsg = (msg) => {
   split={分隔符 string, 默认','}
   multiple={是否需要多选 bool, 默认false} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
+  arrowAutoShow={箭头自动显示, 有下级时才显示箭头 bool, 默认true}
   extend={展开收缩 number, 默认0} // 1.全部展开 -1.全部收缩 0.不工作
   bar={选中项聚合展现栏 string | node, 默认无}
 

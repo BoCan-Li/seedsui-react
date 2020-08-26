@@ -6,6 +6,7 @@ const Tree = forwardRef(({
   split = ',',
   multiple = false, // 是否需要多选
   checkbox = true, // 是否可选
+  arrowAutoShow = true, // 箭头自动显示, 有下级时才显示箭头
   extend = 0, // 1.全部展开 -1.全部收缩 0.不工作
   bar, // 选中栏
 
@@ -45,6 +46,7 @@ const Tree = forwardRef(({
       data: data,
       multiple,
       checkbox,
+      arrowAutoShow,
       bar,
       buttonAddClass: buttonAddAttribute.className,
       onClickAdd: buttonAddAttribute.onClick,

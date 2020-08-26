@@ -19,6 +19,7 @@ const Dropdown = forwardRef(({
   const [activeIndex, setActiveIndex] = useState(-1);
   const [tabs, setTabs] = useState([]);
   const [selected, setSelected] = useState('');
+  const [menusMultiple, setMenusMultiple] = useState(false);
   const [menus, setMenus] = useState([]);
   const [offsetTop, setOffsetTop] = useState(0);
   const [show, setShow] = useState(false);
@@ -68,6 +69,7 @@ const Dropdown = forwardRef(({
   
   function onClickTab (e, item, index) {
     setSelected([tabs[index]]);
+    setMenusMultiple(list[index].multiple);
     setMenus(list[index].data);
     if (activeIndex >= 0) { // 隐藏弹框
       setActiveIndex(-1);
@@ -107,8 +109,10 @@ const Dropdown = forwardRef(({
       newTabs[activeIndex].id = item.id;
       newTabs[activeIndex].name = item.name;
     }
-    setActiveIndex(-1);
-    setShow(false);
+    if (!menusMultiple){
+      setActiveIndex(-1);
+      setShow(false);
+    }
     // 触发onChange事件
     if (onChange) onChange(e, buildList(newTabs));
   }
@@ -137,7 +141,7 @@ const Dropdown = forwardRef(({
             }
           },
         }}
-
+        multiple={menusMultiple}
         list={menus}
         selected={selected}
         onChange={onSelected}

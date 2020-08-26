@@ -12,6 +12,7 @@ var Tree = function (container, params) {
     // DOM
     multiple: true, // 是否需要多选
     checkbox: false, // 是否可选
+    arrowAutoShow: true, // 箭头自动显示, 有下级时才显示箭头
     bar: null,
     barOptionClass: 'tree-bar-button',
     barButtonDelClass: 'tree-bar-button-del',
@@ -92,10 +93,9 @@ var Tree = function (container, params) {
     for (var n in option) {
       lineDataHTML += 'data-' + n + '="' + option[n] + '" '
     }
-
     // tree-icon和tree-title的html
     copyOption.html = '<div class="' + s.params.iconClass + '">' +
-      '<i class="' + s.params.arrowClass + '"></i>' +
+      (s.params.arrowAutoShow && option.isLeaf ? '' : '<i class="' + s.params.arrowClass + '"></i>') +
       '</div>' +
       '<div class="' + s.params.titleClass + '">' + option.name + '</div>'
     // Callback onData
@@ -168,7 +168,7 @@ var Tree = function (container, params) {
       return
     }
     // if (!s.params.data[0].id || !s.params.data[0].parentid || !s.params.data[0].name) {
-    if (!s.params.data[0].id || !s.params.data[0].name) { // 有些根节点没有parentid
+    if (!s.params.data[0].hasOwnProperty('id') || !s.params.data[0].name) { // 有些根节点没有parentid, 有些根节点(例如: 全部)id为空
       console.log('SeedsUI Error：Tree的Data数据格式不正确，请检查data参数是否有id、name、parentid属性')
       return
     }
@@ -323,7 +323,7 @@ var Tree = function (container, params) {
   }
   s.addSelected = function (opts, isClick) {
     if (!opts.id || !opts.name || !opts.parentid) {
-      console.error('addSelected:id、name、parentid三个参数不正确')
+      console.log('addSelected:id、name、parentid三个参数不正确')
       return
     }
     

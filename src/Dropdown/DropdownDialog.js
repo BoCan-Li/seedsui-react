@@ -6,6 +6,7 @@ const DropdownDialog = forwardRef(({
   show,
   dialogProps = {},
 
+  multiple,
   list,
   selected,
   onChange,
@@ -21,6 +22,7 @@ const DropdownDialog = forwardRef(({
       {...dialogProps}
     >
       <MenuTiled
+        multiple={multiple}
         list={list}
         selected={selected}
         onChange={onChange}
