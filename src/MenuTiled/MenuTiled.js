@@ -1,5 +1,6 @@
 // require PrototypeArray.js
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useRef, useEffect, useState, useContext, forwardRef } from 'react';
+import Context from './../Context/instance.js';
 import Tree from './../Tree';
 
 const slotClass = 'menutiled-slot';
@@ -21,8 +22,13 @@ const MenuTiled = forwardRef(({
   //   name: '',
   //   children: []
   // }]
+  cancelAttribute = {},
   ...others
 }, ref) =>  {
+  // context
+  const context = useContext(Context) || {};
+  const locale = context.locale || function (key) {return key || ''};
+  
   const [viewGroups, setViewGroups] = useState(null); // 分组显示数据
   let [data, setData] = useState(list) // 将list转换成标准格式
 
@@ -46,7 +52,8 @@ const MenuTiled = forwardRef(({
         updateTreeRoot(flattenTree, rootParentId);
         
         // 更新选中的根节点
-        if (selected && selected.length) updateTreeSelectedRoot(flattenTree);
+        data = flattenTree;
+        if (selected && selected.length) updateTreeSelectedRoot();
         return flattenTree;
       }
       if (listStr.indexOf('"parentid"') !== -1) { // 已经拉平的数据需要对id为空的数据做根处理
@@ -56,7 +63,8 @@ const MenuTiled = forwardRef(({
         updateTreeRoot(list, rootParentId);
 
         // 更新选中的根节点
-        if (selected && selected.length) updateTreeSelectedRoot(list);
+        data = flattenTree;
+        if (selected && selected.length) updateTreeSelectedRoot();
         return list;
       }
     }
@@ -68,6 +76,9 @@ const MenuTiled = forwardRef(({
     if (!multiple) setViewGroups([data])
   }, [list])
 
+  /*
+   *  单选
+   */
   // 点击选项
   function click (e) {
     if (e.target.classList.contains(tagClass)) { // 点击项
@@ -93,13 +104,30 @@ const MenuTiled = forwardRef(({
   
   // 判断是否选中
   function isSelected (id) {
-    if (!Array.isArray(selected) || !id) return false;
+    if (!Array.isArray(selected) || !selected || !selected.length) return false;
     for (let item of selected) {
       if (item.id === id) return true;
     }
     return false;
   }
 
+  /*
+   *  多选
+   */
+  const refTree = useRef(null);
+  const [multipleSelected, setMultipleSelected] = useState(selected);
+  useEffect(() => {
+    if (!multipleSelected || !multipleSelected.length) {
+      return;
+    }
+    if (refTree && refTree.current && refTree.current.instance && refTree.current.instance.current) {
+      let instance = refTree.current.instance;
+      instance.current.removeAllSelected()
+      for (var item of multipleSelected) {
+        instance.current.addSelected(item)
+      }
+    }
+  }, [multipleSelected])
   // 多选, 提取根节点共同的parentid, 为根节点(例如: 全部)的id
   function getRootParentId (flattenTree) {
     let rootParentId = '-1';
@@ -124,26 +152,47 @@ const MenuTiled = forwardRef(({
     }
   }
   // 多选时, list数据被转换: id为空的根节点被补充id和parentid=-2还有isroot=1, 所以selected也需要处理, 才能让树选中
-  function updateTreeSelectedRoot (flattenTree) {
+  function updateTreeSelectedRoot () {
     for (let selectedItem of selected) {
-      if (!selectedItem.id) {
-        let rootParentId = getRootParentId(flattenTree);
+      if (!selectedItem.id) { // 根节点处理
+        let rootParentId = getRootParentId(data);
         selectedItem.parentid = '-2'
         selectedItem.id = rootParentId
         selectedItem.isroot = '1'
       }
+      if (selectedItem.id && !selectedItem.parentid) { // 非根节点补充parentid
+        for (let item of data) {
+          if (selectedItem.id === item.id) {
+            selectedItem.parentid = item.parentid;
+          }
+        }
+      }
     }
+    setMultipleSelected(selected)
   }
-  // 多选树
+  // 多选, 点击选中节点
   function changeTree (e, value, options) {
-    console.log('修改')
-    console.log(options)
-    onChange(e, value, options, data)
+    setMultipleSelected(options)
   }
-  // console.log(selected)
+  // 多选, 点击确定
+  function submit (e) {
+    let val = [];
+    if (multipleSelected && multipleSelected.length) {
+      for (let item of multipleSelected) {
+        val.push(item.name);
+      }
+    }
+    if (onChange) onChange(e, val.join(','), multipleSelected, data)
+  }
+  function cancel (e) {
+    if (selected && selected.length) {
+      updateTreeSelectedRoot()
+    }
+    if (cancelAttribute && cancelAttribute.onClick) cancelAttribute.onClick(e);
+  }
   return (
-    <div ref={ref} {...others} className={`menutiled${others.className ? ' ' + others.className : ''}`} onClick={click}>
-      <div className="menutiled-wrapper">
+    <div ref={ref} {...others} className={`menutiled${others.className ? ' ' + others.className : ''}${multiple ? ' multiple' : ''}`} onClick={click}>
+      <div className={`menutiled-wrapper`}>
         {/* 单选样式 */}
         {!multiple && (viewGroups || []).map((group, groupIndex) => {
           return <div key={groupIndex} className={`${groupIndex ? slotSubClass : slotClass}`}>
@@ -157,12 +206,17 @@ const MenuTiled = forwardRef(({
         })}
         {/* 多选样式 */}
         {multiple && data && data.length > 0 && <Tree
+          ref={refTree}
           list={data}
-          selected={selected}
+          selected={multipleSelected}
           multiple
           checkbox
           onChange={changeTree}
         />}
+      </div>
+      <div className="menutiled-handler">
+        <a className={`menutiled-cancel`} onClick={cancel}>{locale('cancel') || '取消'}</a>
+        <a className={`menutiled-submit`} onClick={submit}>{locale('ok') || '确定'}</a>
       </div>
     </div>
   );

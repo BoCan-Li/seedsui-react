@@ -4886,9 +4886,19 @@ a {
   @menutiled-tag-bg-active: transparent;
   .menutiled{
     background-color: @menutiled-bg;
+    &.multiple{
+      .menutiled-wrapper{
+        height: 300px;
+      }
+      .menutiled-handler{
+        .flex;
+      }
+    }
   }
   .menutiled-wrapper{
     .flex;
+    max-height: 100%;
+    overflow: auto;
     // 多选树结构
     .tree-box{
       width: 100%;
@@ -4974,36 +4984,38 @@ a {
     font-size: 18px;
     margin-right: 4px;
   }
-  // .menutiled-handler{
-  //   .flex;
-  //   padding-top: @1px;
-  //   .border-t;
-  // }
-  // .menutiled-cancel{
-  //   .flex !important;
-  //   .flex-1;
-  //   border-width: 0 !important;
-  //   width: 100%;
-  //   height: 40px;
-  // }
-  // .menutiled-submit{
-  //   .flex !important;
-  //   .flex-1;
-  //   border-width: 0 !important;
-  //   width: 100%;
-  //   height: 40px;
+  .menutiled-handler{
+    display: none;
+    padding-top: @1px;
+    .border-t;
+  }
+  .menutiled-cancel,.menutiled-submit{
+    .flex;
+    .flex-1;
+    .flex-middle;
+    .flex-center;
+    border-width: 0;
+  }
+  .menutiled-cancel{
+    width: 100%;
+    height: 40px;
+    color: @body-color;
+  }
+  .menutiled-submit{
+    width: 100%;
+    height: 40px;
 
-  //   color: @primary-color;
-  //   background-color:@primary-bg;
-  //   border-color: @primary-border;
-  //   @{primary-property}: @primary-value;
-  //   &:active,&.active{
-  //     color:@primary-color-active;
-  //     background-color:@primary-bg-active;
-  //     border-color:@primary-border-active;
-  //     @{primary-property-active}: @primary-value-active;
-  //   }
-  // }
+    color: @primary-color;
+    background-color:@primary-bg;
+    border-color: @primary-border;
+    @{primary-property}: @primary-value;
+    &:active,&.active{
+      color:@primary-color-active;
+      background-color:@primary-bg-active;
+      border-color:@primary-border-active;
+      @{primary-property-active}: @primary-value-active;
+    }
+  }
 }
 
 
@@ -7301,6 +7313,8 @@ a {
     height: 100%;
     position: relative;
     transition-property: transform;
+    background-repeat: no-repeat;
+    background-position: center;
   }
   .swiper-slide-invisible-blank {
     visibility: hidden;

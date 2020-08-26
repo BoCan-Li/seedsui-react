@@ -29,8 +29,10 @@ function Demo () {
 		}
 	]);
 	const [items, setItems] = useState([{
-			"id": "",
-			"name": "分类",
+			// "id": "",
+			// "name": "分类",
+			id: "4622400720177680517",
+			name: "碳酸饮料",
 			multiple: true,
 			"data": [{
 				"id": "",
@@ -138,13 +140,14 @@ function Demo () {
 		}]);
 	
 	function changeHandler (e, tabs) {
-			var newItems = Object.clone(items);
-			tabs.forEach((item, index) => {
-				newItems[index].id = item.id;
-				newItems[index].name = item.name;
-			});
-			setItems(newItems)
-		}
+		var newItems = Object.clone(items);
+		tabs.forEach((item, index) => {
+			newItems[index].id = item.id;
+			newItems[index].name = item.name;
+		});
+		console.log(newItems)
+		setItems(newItems)
+	}
   return <Page>
 		<Header>
 			<Dropdown list={items} listRoot={root} onChange={changeHandler}/>

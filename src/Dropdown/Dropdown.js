@@ -18,7 +18,7 @@ const Dropdown = forwardRef(({
   });
   const [activeIndex, setActiveIndex] = useState(-1);
   const [tabs, setTabs] = useState([]);
-  const [selected, setSelected] = useState('');
+  let [selected, setSelected] = useState([]);
   const [menusMultiple, setMenusMultiple] = useState(false);
   const [menus, setMenus] = useState([]);
   const [offsetTop, setOffsetTop] = useState(0);
@@ -68,7 +68,16 @@ const Dropdown = forwardRef(({
   }, [list]) // eslint-disable-line
   
   function onClickTab (e, item, index) {
-    setSelected([tabs[index]]);
+    let ids = tabs[index].id.split(',');
+    let names = tabs[index].name.split(',');
+    selected = [];
+    for (let [index, id] of ids.entries()) {
+      selected.push({
+        id: id,
+        name: names[index]
+      })
+    }
+    setSelected(selected);
     setMenusMultiple(list[index].multiple);
     setMenus(list[index].data);
     if (activeIndex >= 0) { // 隐藏弹框
@@ -86,35 +95,52 @@ const Dropdown = forwardRef(({
       dialogProps.maskAttribute.onClick(e)
     }
   }
-  // 构建新数据
-  function buildList (newTabs) {
-    let newList = Object.clone(list);
-    newTabs.forEach((item, index) => {
-      newList[index].id = item.id;
-      newList[index].name = listRoot && listRoot[index] && listRoot[index].id === item.id ? listRoot[index].name : item.name;
-    });
-    return newList;
+  // 选中项是否是根节点
+  function selectedIsRoot (selected) {
+    if (!selected || !selected.length) return false;
+    if (!listRoot || !listRoot.length) return false;
+    if (selected.length === 1) {
+      if (menusMultiple) {
+        return selected[0].isroot === '1'
+      }
+      for (let tab of listRoot) {
+        if (tab.id === selected[0].id) return true;
+      }
+    }
+    return false;
   }
   function onSelected (e, value, selected, data) {
     if (!selected || !selected.length) return;
-    const item = selected[0];
-    if (item.children && item.children.length > 0) return;
+    // 单选展开
+    if (selected[0].children && selected[0].children.length > 0) return;
+    // 判断是否是根节点
+    let isRoot = selectedIsRoot(selected);
+    
+    // 选中id和name
+    let id = [];
+    let name = [];
+    for (let selectedItem of selected) {
+      id.push(selectedItem.id);
+      name.push(selectedItem.name);
+    }
+    id = id.join(',');
+    name = name.join(',');
+    
     const newTabs = Object.clone(tabs);
-    // 如果选中的标题是全部,则显示原始标题,例如:点击分类,选择全部,则应当显示分类
-    if (item.id === list[activeIndex].id) {
-      newTabs[activeIndex].id = list[activeIndex].id;
-      newTabs[activeIndex].name = list[activeIndex].name;
-    // 设置选中的标题显示在tabbar上
-    } else {
-      newTabs[activeIndex].id = item.id;
-      newTabs[activeIndex].name = item.name;
+    newTabs[activeIndex].id = id;
+    newTabs[activeIndex].name = name;
+    // 如果选中根节点
+    if (isRoot) {
+      newTabs[activeIndex].name = listRoot[activeIndex].name;
     }
-    if (!menusMultiple){
-      setActiveIndex(-1);
-      setShow(false);
-    }
+    // if (!menusMultiple){
+      
+    // }
+    setActiveIndex(-1);
+    setShow(false);
     // 触发onChange事件
-    if (onChange) onChange(e, buildList(newTabs));
+    setSelected(selected);
+    if (onChange) onChange(e, newTabs);
   }
   return (
     <Fragment>

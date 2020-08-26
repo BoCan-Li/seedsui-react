@@ -27,6 +27,9 @@ const DropdownDialog = forwardRef(({
         selected={selected}
         onChange={onChange}
         {...menutiledProps}
+        cancelAttribute={{
+          onClick: dialogProps.maskAttribute && dialogProps.maskAttribute.onClick ? dialogProps.maskAttribute.onClick : null
+        }}
       />
     </Dialog>
   )
