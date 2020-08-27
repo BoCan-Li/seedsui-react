@@ -9,10 +9,11 @@ var Tree = function (container, params) {
   var defaults = {
     // DATA
     data: null, // [{id: '', name: '', parentid: ''}]
+    selectedAutoClear: false, // 自动清理不存在的选中节点
     // DOM
     multiple: true, // 是否需要多选
     checkbox: false, // 是否可选
-    arrowAutoShow: true, // 箭头自动显示, 有下级时才显示箭头
+    arrowAutoShow: false, // 箭头自动显示, 有下级时才显示箭头
     bar: null,
     barOptionClass: 'tree-bar-button',
     barButtonDelClass: 'tree-bar-button-del',
@@ -223,10 +224,28 @@ var Tree = function (container, params) {
   s.isSelected = function (id, parentid) {
     var currentFlag = false
     var parentFlag = false
+
+    // 判断当前数据中是否有此父级, 如果没有父级, 则删除此选中节点
+    if (s.params.selectedAutoClear) {
+      var hasParentIdNode = false
+      for (var i = 0, opt; opt = s.params.data[i++];) { // eslint-disable-line
+        if (opt.id === parentid) {
+          hasParentIdNode = true
+          break
+        }
+      }
+
+      if (!hasParentIdNode) {
+        delete s.selected[parentid]
+      }
+    }
+
     // 判断当前和父级是否被选中
     if (s.selected[id]) {
       currentFlag = true
     }
+
+    // 父级选中也认为是被选中
     if (s.selected[parentid]) {
       parentFlag = true
     }

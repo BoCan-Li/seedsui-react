@@ -74,6 +74,7 @@ function Demo () {
 			"show_order": 6
 		}]
 	}, {
+		multiple: true,
 		"id": "",
 		"name": "品牌",
 		"data": [{

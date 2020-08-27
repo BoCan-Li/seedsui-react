@@ -96,8 +96,8 @@ const Dropdown = forwardRef(({
   }
   // 选中项是否是根节点
   function selectedIsRoot (selected) {
-    if (!selected || !selected.length) return false;
     if (!listRoot || !listRoot.length) return false;
+    if (!selected || !selected.length) return true;
     if (selected.length === 1) {
       if (menusMultiple) {
         return selected[0].isroot === '1'
@@ -109,26 +109,28 @@ const Dropdown = forwardRef(({
     return false;
   }
   function onSelected (e, value, selected, data) {
-    if (!selected || !selected.length) return;
-    // 单选展开
-    if (selected[0].children && selected[0].children.length > 0) return;
+    const newTabs = Object.clone(tabs);
     // 判断是否是根节点
     let isRoot = selectedIsRoot(selected);
-    
-    // 选中id和name
-    let id = [];
-    let name = [];
-    for (let selectedItem of selected) {
-      id.push(selectedItem.id);
-      name.push(selectedItem.name);
+    if (!selected || !selected.length) {
+    } else {
+      // 单选展开
+      if (selected[0].children && selected[0].children.length > 0) return;
+      
+      // 选中id和name
+      let id = [];
+      let name = [];
+      for (let selectedItem of selected) {
+        id.push(selectedItem.id);
+        name.push(selectedItem.name);
+      }
+      id = id.join(',');
+      name = name.join(',');
+      // 设置选中的id和name
+      newTabs[activeIndex].id = id;
+      newTabs[activeIndex].name = name;
     }
-    id = id.join(',');
-    name = name.join(',');
     
-    const newTabs = Object.clone(tabs);
-    // 设置选中的id和name
-    newTabs[activeIndex].id = id;
-    newTabs[activeIndex].name = name;
     // 删除增加的ricon属性
     for (let tab of newTabs) {
       delete tab.ricon
@@ -136,10 +138,8 @@ const Dropdown = forwardRef(({
     // 如果选中根节点
     if (isRoot) {
       newTabs[activeIndex].name = listRoot[activeIndex].name;
+      newTabs[activeIndex].id = listRoot[activeIndex].id;
     }
-    // if (!menusMultiple){
-      
-    // }
     setActiveIndex(-1);
     setShow(false);
     // 触发onChange事件

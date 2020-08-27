@@ -6,7 +6,7 @@ const Tree = forwardRef(({
   split = ',',
   multiple = false, // 是否需要多选
   checkbox = true, // 是否可选
-  arrowAutoShow = true, // 箭头自动显示, 有下级时才显示箭头
+  arrowAutoShow = false, // 箭头自动显示, 有下级时才显示箭头
   extend = 0, // 1.全部展开 -1.全部收缩 0.不工作
   bar, // 选中栏
 
@@ -15,6 +15,7 @@ const Tree = forwardRef(({
   buttonDelAttribute = {}, // {className: '', onClick: func()}
 
   selected = [], // 选中项: [{id: '', name: '', parentid: ''}]
+  selectedAutoClear = false, // 自动清理不存在的选中节点
   list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
   getChildren,
@@ -44,6 +45,7 @@ const Tree = forwardRef(({
     console.log('初始化, 是否多选:' + multiple)
     instance.current = new Instance(elTree, {
       data: data,
+      selectedAutoClear: selectedAutoClear,
       multiple,
       checkbox,
       arrowAutoShow,
@@ -134,9 +136,7 @@ const Tree = forwardRef(({
       for (let id in s.selected) {
         value.push(s.selected[id].name);
       }
-      if (value.join(',')) {
-        onChange(s, value.join(','), Object.values(s.selected))
-      }
+      onChange(s, value.join(','), Object.values(s.selected))
     }
   }
 

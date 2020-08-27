@@ -5221,7 +5221,7 @@ showMsg = (msg) => {
   split={分隔符 string, 默认','}
   multiple={是否需要多选 bool, 默认false} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
-  arrowAutoShow={箭头自动显示, 有下级时才显示箭头 bool, 默认true}
+  arrowAutoShow={箭头自动显示, 有下级时才显示箭头 bool, 默认false}
   extend={展开收缩 number, 默认0} // 1.全部展开 -1.全部收缩 0.不工作
   bar={选中项聚合展现栏 string | node, 默认无}
 
@@ -5231,6 +5231,7 @@ showMsg = (msg) => {
   
   selected={选中项 array, 默认无} // 选中项: [{id: '', id: ''}]
   list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
+  selectedAutoClear={自动清理不存在的选中节点 bool, 默认false}
 
   getChildren={动态渲染子元素 Promise, 默认无} // 信息过大的情况, 先只渲染部门再渲染人员, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: "", parentid: ""])时会渲染, resolve('错误')则停留在选择页面不进行渲染操作
   onChange={点击底层节点 func(s, value, selected), 默认无}

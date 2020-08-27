@@ -206,7 +206,9 @@ const MenuTiled = forwardRef(({
         {multiple && data && data.length > 0 && <Tree
           ref={refTree}
           list={data}
+          arrowAutoShow
           selected={multipleSelected}
+          selectedAutoClear
           multiple
           checkbox
           onChange={changeTree}
