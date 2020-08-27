@@ -16,7 +16,7 @@ const SelectGroup = forwardRef(({
 }, ref) =>  {
   // 过滤非法数据
   list = list.filter(item => {
-    if (!item || (!item.id && !item.name)) return false;
+    if (!item || (!item.name)) return false;
     return true;
   });
 
@@ -26,33 +26,33 @@ const SelectGroup = forwardRef(({
     for (let item of list) {
       if (selected && selected.length) { // selected匹配选中项
         for (let selectedItem of selected) {
-          if (item.id === selectedItem.id) {
-            selectedMap[item.id] = item;
+          if ((item.id !== undefined && item.id === selectedItem.id) || item.name === selectedItem.name) {
+            selectedMap[item.id || item.name] = item;
           }
         }
       } else if (others.value && others.value.split(pickerProps.split || ',').indexOf(item.name) !== -1) { // value匹配选中项
-        selectedMap[item.id] = item;
+        selectedMap[item.id || item.name] = item;
       }
     }
   }
   updateSelectedMap();
   // 判断是否选中
   function isSelected (currentItem) {
-    if (selectedMap[currentItem.id]) return true;
+    if (selectedMap[currentItem.id || currentItem.name]) return true;
     return false;
   }
   // 点击事件
   function clickHandler (e, checked, item, index) {
     if (!others.readOnly) { // 非只读时才能修改选中值
       if (multiple) { // 多选
-        if (selectedMap[item.id]) {
-          delete selectedMap[item.id];
+        if (selectedMap[item.id || item.name]) {
+          delete selectedMap[item.id || item.name];
         } else {
-          selectedMap[item.id] = item;
+          selectedMap[item.id || item.name] = item;
         }
       } else { // 单选
         selectedMap = {
-          [item.id]: item
+          [item.id || item.name]: item
         }
       }
     }

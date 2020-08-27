@@ -31,7 +31,7 @@ const Picker = forwardRef(({
       n.classList.remove('active');
       if (selected && selected.length) {
         for (let option of selected) {
-          if (option.id === list[i].id) {
+          if ((option.id !== undefined && option.id === list[i].id) || option.name === list[i].name) {
             n.classList.add('active');
           }
         }
