@@ -18,8 +18,8 @@ var Imgmark = function (container, params) {
 
     /*
     Callbacks:
-    success: function(Imgmark)
-    fail: function(Imgmark)
+    onSuccess: function(Imgmark)
+    onError: function(e, {errMsg: ''})
     */
   }
   params = params || {}
@@ -117,15 +117,16 @@ var Imgmark = function (container, params) {
     s.container.style.WebkitTransform = `scale(${scale}) translate(-50%,-50%)`
     s.container.style.WebkitTransformOrigin = `0 0`
     // Callback
-    if (s.params.success) s.params.success(s)
+    s.event = e
+    if (s.params.onSuccess) s.params.onSuccess(s)
   }
   s.onError = function (e) {
     if (s.loadingContainer) s.loadingContainer.classList.remove(s.params.activeClass)
     if (s.errorContainer) s.errorContainer.classList.add(s.params.activeClass)
     s.container.classList.remove(s.params.activeClass)
-    s.event = e
     // Callback
-    if (s.params.fail) s.params.fail({errMsg: '', event: e})
+    s.event = e
+    if (s.params.onError) s.params.onError(e, {errMsg: ''})
   }
   // 主函数
   s.init = function () {

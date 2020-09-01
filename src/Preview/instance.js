@@ -33,8 +33,8 @@ var Preview = function (params) {
     Callbacks:
     onClick: function(Preview)
     onClickBack: function(Preview)
-    success: function(Preview)
-    fail: function(Preview)
+    onSuccess: function(Preview)
+    onError: function(e, {errMsg: ''})
     onShowSuccess: function(Preview)
     onShowError: function(Preview)
     */
@@ -125,7 +125,7 @@ var Preview = function (params) {
     s.removePreview()
     var img = new Image()
     img.src = s.params.src
-    img.addEventListener('load', function () {
+    img.addEventListener('load', function (e) {
       if (img.width > img.height) { // 宽图
         img.style.height = '100%'
       } else { // 高图
@@ -174,13 +174,14 @@ var Preview = function (params) {
         s.container.style.backgroundColor = '#000'
       }, 100)
       // Callback
-      if (s.params.success) s.params.success(s)
+      s.event = e
+      if (s.params.onSuccess) s.params.onSuccess(s)
     }, false)
     img.addEventListener('error', function (e) {
       s.validSrc = false // 图片地址无效
       s.event = e
       // Callback
-      if (s.params.fail) s.params.fail({errMsg: '', event: e})
+      if (s.params.onError) s.params.onError(e, {errMsg: `${locale('hint_image_failed_to_load') || '图片加载失败'}`})
     }, false)
   }
   s.update()

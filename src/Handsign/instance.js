@@ -193,10 +193,11 @@ var Handsign = function (container, params) {
       var pos = s.calcPosition(width, height, imgP) // 画布上放置xy坐标
       s.ctx.drawImage(img, sx, sy, swidth, sheight, pos.x, pos.y, width, height)
       // 成功回调
-      if (opts.success) opts.success({event: e})
+      s.event = e
+      if (opts.onSuccess) opts.onSuccess(s)
     }
     img.onerror = function (err) {
-      if (opts.fail) opts.fail({errMsg: '非法的图片格式', event: err})
+      if (opts.onError) opts.onError(err, {errMsg: '非法的图片格式'})
     }
   }
   // 绘制文字
