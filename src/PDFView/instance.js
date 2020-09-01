@@ -143,10 +143,12 @@ var PDFView = function (container, params) {
             })
           }).catch((err) => {
             console.log(err)
+            s.showError()
             if (params.fail) params.fail({errMsg: '读取PDF页面失败'})
           })
         }).catch(function (error) {
           console.log(error)
+          s.showError()
           if (params.fail) params.fail({errMsg: 'pdf格式不正确'})
         })
       },
@@ -369,6 +371,16 @@ var PDFView = function (container, params) {
     var pageDOM = s.createPage()
     s.showPageNodata(pageDOM)
   }
+  // 预览失败
+  s.showError = function () {
+    // Callback onLoad
+    if (s.params.onLoad) s.params.onLoad(s)
+    if (!s.wrapper) return
+    // 页面显示错误
+    s.wrapper.innerHTML = ''
+    var pageDOM = s.createPage()
+    s.showPageError(pageDOM)
+  }
   // canvas转成图片
   s.canvasToPng = function (canvas) {
     var dataURL = canvas.toDataURL('image/png', 1.0);
@@ -443,6 +455,7 @@ var PDFView = function (container, params) {
     } catch (error) {
       console.log('SeedsUI: pdfjs库加载失败')
       console.log(error)
+      s.showError()
       if (params.fail) params.fail({errMsg: 'pdfjs库加载失败'})
     }
   }
@@ -487,7 +500,7 @@ var PDFView = function (container, params) {
     }).catch(function (error) {
       console.log('SeedsUI: pdf格式不正确')
       console.log(error)
-      s.showNoData()
+      s.showError()
     })
   }
 

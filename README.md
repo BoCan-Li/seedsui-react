@@ -4615,29 +4615,23 @@ const Logo = {
 import PDFView from 'seedsui-react/lib/PDFView';
 import pdfsrc from './../assets/pdfview.js'
 
-this.state = {
-  pageElements: [
-    {
-      page: '1',
-      element: <Input/>
-    },{
-      page: '2',
-      element: <Input/>
-    }
-  ]
-}
+const pdfsrc = '/pdfview.pdf';
+const refPDFView = useRef(null);
+const pageElements = [
+  {
+    page: '1',
+    element: <Input/>
+  },{
+    page: '2',
+    element: <Input/>
+  }
+]
 
-submit = () => {
-  // 格式化为[{page: 0, x: 0, y: 0, value: ''}]
-  let elements = (this.refs.$PDFView.instance.getPageElements() || []).map((element) => {
-    return {
-      page: element.page,
-      x: element.x,
-      y: element.y,
-      value: element.$el ? element.$el.children[0].value || '' : ''
-    }
-  });
-  console.log(elements)
+function scrollToPage (page) { // eslint-disable-line
+  if (isNaN(page)) return;
+  if (refPDFView.current.scrollToPage) {
+    refPDFView.current.scrollToPage(page)
+  }
 }
 
 // 图片
@@ -4648,12 +4642,12 @@ submit = () => {
 <PDFView src={pdfsrc} cMapUrl="/demo/assets/cmaps/" params={{rows: 3}}/>
 // PDF表单元素
 <PDFView
-  ref="$PDFView"
+  ref={refPDFView}
   zoom={false}
   src={pdfsrc}
   cMapUrl="/demo/assets/cmaps/"
-  insertPageElements={this.state.pageElements}
-  params={{rows: 3, onLoad: this.onLoad}}
+  insertPageElements={pageElements}
+  params={{rows: 3, onLoad: () => console.log('加载完成')}}
 />
 ```
 [返回目录](#component)
