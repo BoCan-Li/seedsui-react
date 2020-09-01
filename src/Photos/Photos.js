@@ -7,6 +7,7 @@ const Photos = forwardRef(({
   list, // [{id: '', name: '', thumb: '', src: ''}]
   upload, // 上传按钮覆盖的dom
   uploading, // 是否上传中
+  beforeChoose, // 选择前校验
   onChoose, // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete,
   onClick,
@@ -15,14 +16,16 @@ const Photos = forwardRef(({
 }, ref) =>  {
   const [previewCurrent, setPreviewCurrent] = useState(null);
   // 点击整个photos容器
-  function click (event) {
+  async function click (event) {
     const e = event.nativeEvent;
     const target = e.target;
     if (target.type === 'file') {
       target.value = ''; // 防止选择重复图片时不触发
     }
     if (target.classList.contains('photos-upload')) { // 点击添加
-      if (onChoose) onChoose(e);
+      let choose = true;
+      if (typeof beforeChoose === 'function') choose = await beforeChoose()
+      if (choose && onChoose) onChoose(e);
     } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
       if (index && onClick) onClick(e, list[index], Number(index));
@@ -36,10 +39,12 @@ const Photos = forwardRef(({
     }
   }
   // file框选择
-  function fileChange (event) {
+  async function fileChange (event) {
     const e = event.nativeEvent;
     if (type === 'video') e.targetType = 'video';
-    if (onChoose) onChoose(e);
+    let choose = true;
+    if (typeof beforeChoose === 'function') choose = await beforeChoose()
+    if (choose && onChoose) onChoose(e);
     e.stopPropagation();
   }
   // 图片加载完成

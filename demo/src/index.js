@@ -8,35 +8,44 @@ import {
   Bridge,
   Container,
   MapUtil,
-  PDFView,
+  Photos,
 } from '../../src';
 
 function Demo () {
   useEffect(() => {
   }, [])
-	const pdfsrc = '/demo/assets/pdfview.pdf';
-	const refPDFView = useRef(null);
-	const pageElements = [
-		{
-			page: '1',
-			element: <div>111</div>
-		},{
-			page: '2',
-			element: <div>222</div>
-		}
-	]
+	const list = [{
+		id: '1',
+		thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
+		src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+	},{
+		id: '2',
+		thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
+		src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
+	}];
+	
+	function onClick (...params) {
+		console.log('点击')
+		console.log(...params)
+	}
+	function onChoose (...params) {
+		console.log('选择')
+		console.log(...params)
+	}
+	function onDelete (...params) {
+		console.log('删除')
+		console.log(...params)
+	}
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<PDFView
-				ref={refPDFView}
-				zoom={false}
-				src={pdfsrc}
-				cMapUrl="/demo/assets/cmaps/"
-				insertPageElements={pageElements}
-				params={{rows: 3, onLoad: () => console.log('加载完成')}}
+			<Photos
+				list={list}
+				onChoose={onChoose}
+				onDelete={onDelete}
+				onClick={onClick}
 			/>
     </Container>
   </Page>

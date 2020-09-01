@@ -4118,6 +4118,7 @@ import Peg from 'seedsui-react/lib/Peg';
   list={照片列表 array, 默认无} // [{thumb: '', src: '', children: node}]
   upload={上传按钮覆盖的dom node, 默认无}
   uploading={是否上传中 bool, 默认无}
+  beforeChoose={选择照片前校验 func, 默认无, 返回false则不选择}
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
   onClick={点击一项 func(e, item, index), 默认无}
