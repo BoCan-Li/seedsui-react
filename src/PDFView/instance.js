@@ -83,37 +83,40 @@ var PDFView = function (container, params) {
   }
   // 更新params
   s.updateParams = function (params = {}) {
-    // 记录自定义元素是否发生变化
-    var isChangePageElements = false
-    if (JSON.stringify(params.pageElements) !== JSON.stringify(s.params.pageElements)) {
-      isChangePageElements = true
-    }
     // 更新s.params
     for (var param in params) {
       s.params[param] = params[param]
     }
-    // 更新自定义元素
-    if (isChangePageElements) {
-      s.updatePageElements()
-    }
   }
   // 更新DOM
-  s.update = function (params) {
+  s.update = function (params = {}) {
+    // 更新DOM
     if (!s.container) return
-
     s.wrapper = s.container.querySelector('.' + s.params.wrapperClass) || null
-
     if (!s.wrapper) {
       s.create()
     }
 
-    // 重新加载
-    if (s.init) {
+    // 更新参数
+    s.updateParams(params)
+
+    // 更新自定义元素(传入元素的情况下才更新插入元素)
+    if (params.pageElements !== undefined) s.updatePageElements()
+
+    // 更新源src或者pictures
+    if ((params.src || params.pictures) && s.loadPDF) {
+      // 页数初始化, 从0开始
       s.page = 0
-      s.wrapper.innerHTML = ''
-      s.updateParams(params)
-      s.init()
+      // 重新加载pdf
+      s.load()
     }
+    // 重新加载
+    // if (s.init) {
+    //   s.page = 0
+    //   s.wrapper.innerHTML = ''
+    //   s.updateParams(params)
+    //   s.init()
+    // }
   }
   s.update()
   /* --------------------
@@ -180,9 +183,15 @@ var PDFView = function (container, params) {
   }
   // 更新渲染的所有页面元素
   s.updatePageElements = function () {
+    // 清空所有插入元素
+    let elementBoxes = s.wrapper.querySelectorAll('.' + s.params.elementsClass)
+    for (let elementBox of elementBoxes) {
+      elementBox.innerHTML = ''
+    }
+    // 插入新的元素
     var pagesDOM = s.wrapper.querySelectorAll('.' + s.params.pageClass)
     for (let [page, pageDOM] of pagesDOM.entries()) {
-      s.renderPageElements(page + 1, pageDOM);
+      s.renderPageElements(page + 1, pageDOM)
     }
   }
   // 渲染页面元素
@@ -316,6 +325,20 @@ var PDFView = function (container, params) {
     s.hidePage(pageDOM)
     var nodata = pageDOM.querySelector('.' + s.params.nodataClass)
     nodata.classList.remove(s.params.hideClass)
+  }
+  // 截取已有页面, 防止更新时上次的页面大于此次页面长度(暂无没用到)
+  s.totalPagesSlice = function () {
+    var pages = s.wrapper.querySelectorAll('.' + s.params.pageClass)
+    var pagesLen = pages.length
+    function removeLastPage () {
+      if (pagesLen <= s.total) {
+        return
+      }
+      pages[pages.length - 1].parentNode.removeChild(pages[pages.length - 1])
+      pagesLen--
+      removeLastPage()
+    }
+    removeLastPage()
   }
   // 创建一页
   s.createPage = function (pageIndex) {
@@ -490,7 +513,6 @@ var PDFView = function (container, params) {
     var param = s.getDocumentParam(s.params.src)
     PDFJS.getDocument(param).then(function (pdf) { // eslint-disable-line
       if (!s.wrapper) return
-
       s.pdf = pdf // 设置pdf
       s.total = s.pdf.numPages // 总页数
       s.rows = !s.params.rows || s.params.rows > s.total ? s.total : s.params.rows

@@ -41,46 +41,23 @@ const PDFView = forwardRef(({
     init()
   }, []) // eslint-disable-line
 
-  // 更新src或者params
-  // function usePrevious(value) {
-  //   const ref = useRef();
-  //   useEffect(() => {
-  //     ref.current = value;
-  //   });
-  //   return ref.current;
-  // }
-  // const prevSrc = usePrevious(src)
-  // const prevPictures = usePrevious(pictures)
-  // const prevParams = usePrevious(params)
+  // 更新src或者pictures
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+  const prevSrc = usePrevious(src)
+  const prevPictures = usePrevious(pictures)
 
-  // useEffect(() => {
-  //   console.log(prevSrc)
-  //   // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
-  //   if ((src && src !== prevSrc) || (JSON.stringify(pictures) !== JSON.stringify(prevPictures))) {
-  //     console.log('更新src')
-  //     if (!refEl.current.instance) {
-  //       init()
-  //     } else {
-  //       if (refEl.current.instance.update) {
-  //         refEl.current.instance.update({
-  //           ...params,
-  //           pictures,
-  //           src,
-  //           cMapUrl
-  //         })
-  //       }
-  //     }
-  //   }
-  //   // 如果修改参数的话, 只需要更新参数即可
-  //   if (JSON.stringify(params) !== JSON.stringify(prevParams)) {
-  //     console.log('更新params')
-  //     if (!refEl.current.instance) {
-  //       init()
-  //     } else {
-  //       refEl.current.instance.updateParams(params)
-  //     }
-  //   }
-  // }, [src, pictures, params]) // eslint-disable-line
+  useEffect(() => {
+    // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
+    if (refEl.current && refEl.current.instance && (src && src !== prevSrc || JSON.stringify(pictures) !== JSON.stringify(prevPictures))) {
+      init()
+    }
+  }, [src, pictures]) // eslint-disable-line
 
   // 一页加载完成后回调
   function onLoad (s) {
@@ -117,6 +94,8 @@ const PDFView = forwardRef(({
       }
     }
   }
+
+  // 初始化PDF
   function init () {
     if (!src && !pictures) {
       console.warn('SeedsUI: PDFView请传入src或者pictures');
@@ -142,9 +121,18 @@ const PDFView = forwardRef(({
       instance();
     }
   }
-  // 实例化
+  // 实例化和更新
   function instance (rows) {
-    if (refEl.current.instance) return
+    // 更新
+    if (refEl.current.instance) {
+      // 更新一页的条数和src
+      refEl.current.instance.update({
+        rows: rows,
+        src: src
+      });
+      return;
+    }
+    // 实例化
     refEl.current.instance = new Instance(refEl.current, {
       loadHTML: locale['in_loading'] || '加载中',
       errorHTML: locale['hint_file_failed_to_load'] || '文件加载失败',

@@ -8,44 +8,46 @@ import {
   Bridge,
   Container,
   MapUtil,
-  Photos,
+  PDFView,
 } from '../../src';
 
 function Demo () {
   useEffect(() => {
+		setTimeout(() => {
+			setSrc('/demo/assets/pdfview.pdf');
+			setTimeout(() => {
+				setPageElements([
+					{
+						page: '2',
+						element: <div key="2" style={{lineHeight: '16px', backgroundColor: 'green'}}>2</div>
+					}
+				])
+			}, 2000)
+		}, 5000);
   }, [])
-	const list = [{
-		id: '1',
-		thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
-		src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
-	},{
-		id: '2',
-		thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-		src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-	}];
-	
-	function onClick (...params) {
-		console.log('点击')
-		console.log(...params)
-	}
-	function onChoose (...params) {
-		console.log('选择')
-		console.log(...params)
-	}
-	function onDelete (...params) {
-		console.log('删除')
-		console.log(...params)
-	}
+	const refPDFView = useRef(null);
+	const [src, setSrc] = useState('/demo/assets/pdfview2.pdf');
+	const [pageElements, setPageElements] = useState([
+		{
+			page: '1',
+			element: <div key="1" style={{lineHeight: '16px', backgroundColor: 'red'}}>1</div>
+		},{
+			page: '2',
+			element: <div key="2" style={{lineHeight: '16px', backgroundColor: 'red'}}>2</div>
+		}
+	]);
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<Photos
-				list={list}
-				onChoose={onChoose}
-				onDelete={onDelete}
-				onClick={onClick}
+			<PDFView
+				ref={refPDFView}
+				zoom={false}
+				src={src}
+				cMapUrl="/demo/assets/cmaps/"
+				insertPageElements={pageElements}
+				params={{rows: 3, onLoad: () => console.log('加载完成')}}
 			/>
     </Container>
   </Page>
@@ -53,14 +55,15 @@ function Demo () {
 
 
 Bridge.ready(() => {
+	render(<Demo/>, document.querySelector('#demo'))
   // 加载百度地图js库
-  MapUtil.load({
-    ak: '3pTjiH1BXLjASHeBmWUuSF83',
-    success: () => {
-      render(<Demo/>, document.querySelector('#demo'))
-    },
-    fail: () => {
-      console.log('加载失败')
-    }
-  })
+  // MapUtil.load({
+  //   ak: '3pTjiH1BXLjASHeBmWUuSF83',
+  //   success: () => {
+  //     render(<Demo/>, document.querySelector('#demo'))
+  //   },
+  //   fail: () => {
+  //     console.log('加载失败')
+  //   }
+  // })
 });

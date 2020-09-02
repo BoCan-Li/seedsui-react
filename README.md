@@ -4614,19 +4614,18 @@ const Logo = {
 ### 示例
 ```javascript
 import PDFView from 'seedsui-react/lib/PDFView';
-import pdfsrc from './../assets/pdfview.js'
 
-const pdfsrc = '/pdfview.pdf';
+const pdfsrc = '/demo/assets/pdfview.pdf';
 const refPDFView = useRef(null);
-const pageElements = [
+const [pageElements, setPageElements] = useState([
   {
     page: '1',
-    element: <Input/>
+    element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>1</div>
   },{
     page: '2',
-    element: <Input/>
+    element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>2</div>
   }
-]
+]);
 
 function scrollToPage (page) { // eslint-disable-line
   if (isNaN(page)) return;
