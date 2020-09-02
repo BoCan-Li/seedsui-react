@@ -54,7 +54,10 @@ const PDFView = forwardRef(({
 
   useEffect(() => {
     // 修改PDF原文件, 刷新整个页面, 从第1页开始重新渲染
-    if (refEl.current && refEl.current.instance && (src && src !== prevSrc || JSON.stringify(pictures) !== JSON.stringify(prevPictures))) {
+    if (
+      refEl.current && refEl.current.instance &&
+      (src !== prevSrc || JSON.stringify(pictures) !== JSON.stringify(prevPictures))
+    ) {
       init()
     }
   }, [src, pictures]) // eslint-disable-line
