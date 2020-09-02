@@ -157,10 +157,13 @@ var Vott = function (container, params) {
     s.scale = 1
     let containerWidth = s.container.clientWidth || (s.container.style.width ? s.container.style.width.replace(/px/, '') : '')
     let containerHeight = s.container.clientHeight || (s.container.style.height ? s.container.style.height.replace(/px/, '') : '')
-    if (target.width > target.height) { // 宽图计算
-      s.scale = containerWidth / target.width
-    } else { // 长图计算
-      s.scale = containerHeight / target.height
+    // 使用最小比例, 以保证不超出外层容器
+    let widthScale = containerWidth / target.width
+    let heightScale = containerHeight / target.height
+    if (widthScale < heightScale) {
+      s.scale = widthScale
+    } else {
+      s.scale = heightScale
     }
     var width = target.width * s.scale
     var height = target.height * s.scale
