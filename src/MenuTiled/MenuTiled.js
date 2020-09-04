@@ -215,8 +215,8 @@ const MenuTiled = forwardRef(({
         />}
       </div>
       <div className="menutiled-handler">
-        <span className={`menutiled-cancel`} onClick={cancel}>{locale('cancel') || '取消'}</span>
-        <span className={`menutiled-submit`} onClick={submit}>{locale('ok') || '确定'}</span>
+        <span className={`menutiled-cancel`} onClick={cancel}>{locale('取消', 'cancel')}</span>
+        <span className={`menutiled-submit`} onClick={submit}>{locale('确定', 'ok')}</span>
       </div>
     </div>
   );

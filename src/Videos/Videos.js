@@ -25,7 +25,7 @@ const Videos = forwardRef(({
     }
     if (!preview) return;
     if (!item.src) {
-      Bridge.showToast(locale('no_param_src') || '没有参数src', {mask: false})
+      Bridge.showToast(locale('没有参数src', 'no_param_src'), {mask: false})
     }
     // 客户端预览视频有问题, 所以使用h5预览
     setPreivewItem(item);

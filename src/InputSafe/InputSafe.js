@@ -14,15 +14,15 @@ const InputSafe = forwardRef(({
     return <ul ref={ref} {...others} className={`input-safe lvl${lvl}${others.className ? ' ' + others.className : ''}`}> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{locale('low') || '弱'}</span>
+        <span className="input-safe-caption">{locale('弱', 'low')}</span>
       </li> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{locale('medium') || '中'}</span>
+        <span className="input-safe-caption">{locale('中', 'medium')}</span>
       </li> 
       <li> 
         <div className="input-safe-progress"></div>
-        <span className="input-safe-caption">{locale('strong') || '强'}</span>
+        <span className="input-safe-caption">{locale('强', 'strong')}</span>
       </li> 
     </ul>;
 })

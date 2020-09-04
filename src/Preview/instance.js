@@ -181,7 +181,7 @@ var Preview = function (params) {
       s.validSrc = false // 图片地址无效
       s.event = e
       // Callback
-      if (s.params.onError) s.params.onError(e, {errMsg: `${locale('hint_image_failed_to_load') || '图片加载失败'}`})
+      if (s.params.onError) s.params.onError(e, {errMsg: `${locale('图片加载失败', 'hint_image_failed_to_load')}`})
     }, false)
   }
   s.update()
@@ -228,7 +228,7 @@ var Preview = function (params) {
       s.addHash() // 增加hash
       s.showMask()
     } else {
-      if (s.params.onShowError) s.params.onShowError(s, locale('hint_image_failed_to_load') || '图片加载失败')
+      if (s.params.onShowError) s.params.onShowError(s, locale('图片加载失败', 'hint_image_failed_to_load'))
     }
   }
   /* --------------------

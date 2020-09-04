@@ -160,12 +160,12 @@ const Emoji = forwardRef(({
           <InputPre
             className="emoji-edit-input"
             value={tempValue}
-            placeholder={placeholder || locale('say_something') || '说点什么吧...'}
+            placeholder={placeholder || locale('说点什么吧...', 'say_something')}
             {...inputProps}
             onChange={change}
           />
           <i className={`icon emoji-edit-icon`}></i>
-          <Button {...otherSubmitAttribute} className={`emoji-edit-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`} disabled={!tempValue}>{otherSubmitAttribute.caption || (locale('submit') || '提交')}</Button>
+          <Button {...otherSubmitAttribute} className={`emoji-edit-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`} disabled={!tempValue}>{otherSubmitAttribute.caption || (locale('提交', 'submit'))}</Button>
         </div>
         <Carrousel
           {...carrouselProps}

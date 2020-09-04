@@ -11,17 +11,17 @@ var CanvasUtil = {
       return errMsg
     }
     if (isNaN(opts.y)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}y${locale('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}y${locale('参数不正确', 'wrong_parameter')}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.width)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}width${locale('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale('参数不正确', 'wrong_parameter')}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.height)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('method') || '方法'}width${locale('wrong_parameter') || '参数不正确'}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale('参数不正确', 'wrong_parameter')}`
       console.warn(errMsg)
       return errMsg
     }

@@ -9,7 +9,7 @@ function Close ({
   const locale = context.locale || function (key) {return key || ''};
   return (
     <div {...props} className={`map-close${props.className ? ' ' + props.className : ''}`} >
-      <div className={`map-close-label`}>{locale('close') || '关闭'}</div>
+      <div className={`map-close-label`}>{locale('关闭', 'close')}</div>
     </div>
   )
 }

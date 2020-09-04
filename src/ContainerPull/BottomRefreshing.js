@@ -17,7 +17,7 @@ const BottomError = forwardRef(({
   return <div className="SID-Dragrefresh-BottomContainer containerpull-pull" style={{height: '50px'}} {...others}>
     {!children && <div className="containerpull-pull-box">
       <div className="containerpull-pull-icon containerpull-pull-icon-loading"></div>
-      <div className="containerpull-pull-caption">{locale('loading') || '正在加载...'}</div>
+      <div className="containerpull-pull-caption">{locale('正在加载...', 'loading')}</div>
     </div>}
     {children}
   </div>

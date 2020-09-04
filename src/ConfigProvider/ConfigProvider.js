@@ -49,8 +49,8 @@ export default class ConfigProvider extends Component {
     }
     if (data) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
     return {
-      locale: function (key, variable) {
-        if (!data) return key || '';
+      locale: function (remark, key, variable) {
+        if (!data) return remark || key || '';
         // 获取key的值
         if (key) {
           let value = data[key] || '';
@@ -60,7 +60,11 @@ export default class ConfigProvider extends Component {
               value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
             }
           }
-          return value || key;
+          return value || remark || key;
+        }
+        // 如果有remark, 没有key, 则返回remark
+        if (remark) {
+          return remark
         }
         return data
       },

@@ -19,7 +19,7 @@ var Bridge = {
   tel: function (number) {
     var self = this
     if (Device.device === 'pc') {
-      self.showToast(locale('hint_only_mobile') || '此功能仅可在手机中使用', {mask: false})
+      self.showToast(locale('此功能仅可在手机中使用', 'hint_only_mobile'), {mask: false})
       return
     }
     if (isNaN(number)) return
@@ -64,13 +64,13 @@ var Bridge = {
     if (!self.loading) {
       self.loading = new Loading({
         ...params,
-        caption: params.caption || (locale('loading') || '正在加载...'),
+        caption: params.caption || (locale('正在加载...', 'loading')),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       });
     } else {
       self.loading.updateParams({
         ...params,
-        caption: params.caption || (locale('loading') || '正在加载...'),
+        caption: params.caption || (locale('正在加载...', 'loading')),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       })
     }
@@ -90,8 +90,8 @@ var Bridge = {
       self.alert = new Alert({
         ...params,
         html: msg,
-        buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
-        buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
+        buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
+        buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
           else e.hide()
@@ -100,8 +100,8 @@ var Bridge = {
     } else {
       if (params) {
         self.alert.updateParams({
-          buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
-          buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
+          buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
+          buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
           ...params,
           html: msg,
         })
@@ -129,8 +129,8 @@ var Bridge = {
     } else {
       if (params) {
         self.confirm.updateParams({
-          buttonSubmitHTML: locale('ok') || '确定', // 实例化时需要国际化
-          buttonCancelHTML: locale('cancel') || '取消', // 实例化时需要国际化
+          buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
+          buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
           ...params,
           html: msg,
           onClickSubmit: function (e) {
@@ -185,12 +185,12 @@ var Bridge = {
     var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getWeather:${locale('hint_weather_failed') || '获取天气失败, 请稍后重试'}` + err})
+        if (params.fail) params.fail({errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}` + err})
       } else {
         if (data.results && data.results.length) {
           if (params.success) params.success(data.results)
         } else {
-          if (params.fail) params.fail({errMsg: `getWeather:${locale('hint_weather_failed') || '获取天气失败, 请稍后重试'}`})
+          if (params.fail) params.fail({errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}`})
         }
       }
     })
@@ -226,14 +226,14 @@ var Bridge = {
         console.log(error)
       }
     } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      self.showConfirm(self.confirmCaption || (locale('confirm_quit_page') || '您确定要离开此页面吗?'), {
+      self.showConfirm(self.confirmCaption || (locale('您确定要离开此页面吗?', 'confirm_quit_page')), {
         success: (e) => {
           e.hide()
           _history.go(_backLvl)
         }
       });
     } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      self.showConfirm(self.confirmCaption || (locale('confirm_quit_page') || '您确定要离开此页面吗?'), {
+      self.showConfirm(self.confirmCaption || (locale('您确定要离开此页面吗?', 'confirm_quit_page')), {
         success: (e) => {
           e.hide()
           self.closeWindow()

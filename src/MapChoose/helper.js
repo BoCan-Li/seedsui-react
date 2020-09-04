@@ -66,7 +66,7 @@ export default {
     if (self.loadTimeout) window.clearTimeout(self.loadTimeout);
     self.loadTimeout = setTimeout(() => {
       Bridge.hideLoading();
-      callback(locale('hint_map_init_timeout') || '初始化地图超时, 请检查当前网络是否稳定');
+      callback(locale('初始化地图超时, 请检查当前网络是否稳定', 'hint_map_init_timeout'));
     }, 20000);
   },
   // 获取中心点

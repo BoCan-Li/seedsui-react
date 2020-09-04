@@ -85,8 +85,8 @@ const Alert = forwardRef(({
           {children}
         </div>
         <div className="alert-handler">
-          {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption || locale('cancel') || '取消'}</a>}
-          {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption || locale('ok') || '确定'}</a>}
+          {cancelAttribute.onClick && <a {...cancelAttribute} className={`alert-cancel button lg${cancelAttribute.className ? ' ' + cancelAttribute.className : ''}`}>{cancelCaption || locale('取消', 'cancel')}</a>}
+          {submitAttribute.onClick && <a {...submitAttribute} className={`alert-submit button lg${submitAttribute.className ? ' ' + submitAttribute.className : ''}`}>{submitCaption || locale('确定', 'ok')}</a>}
         </div>
       </div>
     </div>,

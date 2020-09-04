@@ -323,7 +323,7 @@ var Bridge = {
       filePath: params.url
     }, (res) => {
       if (res.code === '1') {
-        if (params.success) params.success({errMsg: `previewFile:ok${locale('hint_previewFile_success') || '预览文件成功'}`})
+        if (params.success) params.success({errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`})
       } else {
         if (params.fail) params.fail({errMsg: `previewFile:fail${res.message}`})
       }
@@ -432,15 +432,15 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!params.uploadDir) {
-      self.showToast(locale('hint_no_upload_dir') || '没有上传目录', {mask: false})
+      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
       return
     }
     if (!params.localId) {
-      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
       return
     }
     if (!params.tenantId) {
-      self.showToast(locale('hint_upload_image_must_tenantId') || '没有上传企业id', {mask: false})
+      self.showToast(locale('没有上传企业id', 'hint_upload_image_must_tenantId'), {mask: false})
       return
     }
     // 上传不能包含'LocalResource://imageid'
@@ -478,7 +478,7 @@ var Bridge = {
   previewImage: function (params) {
     var self = this
     if (!params.urls || !params.urls.length) {
-      self.showToast(locale('hint_preview_image_must_urls') || '没有预览图片地址', {mask: false})
+      self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
       return
     }
     self.invoke('previewImage', params)

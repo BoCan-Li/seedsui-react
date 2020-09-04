@@ -123,7 +123,7 @@ const Actionsheet = forwardRef(({
             return <a {...otherOptionAttribute} className={`actionsheet-option${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ' border-b'}`} key={index} data-index={index}>{item.caption}</a>
           })}
         </div>
-        {cancelAttribute.onClick && <a {...otherCancelAttribute} className={`actionsheet-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{cancelCaption || locale('cancel')}</a>}
+        {cancelAttribute.onClick && <a {...otherCancelAttribute} className={`actionsheet-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{cancelCaption || locale('取消', 'cancel')}</a>}
       </div>
     </div>,
     portal || context.portal || document.getElementById('root') || document.body

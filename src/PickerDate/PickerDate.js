@@ -86,11 +86,11 @@ const PickerDate = forwardRef(({
   
   function update () {
     instance.current.updateParams({
-      yyUnit: typeof locale('unit_year') === 'string' ? locale('unit_year') : '年',
-      MMUnit: typeof locale('unit_month') === 'string' ? locale('unit_month') : '月',
-      ddUnit: typeof locale('unit_date') === 'string' ? locale('unit_date') : '日',
-      hhUnit: typeof locale('unit_hour') === 'string' ? locale('unit_hour') : '时',
-      mmUnit: typeof locale('unit_minute') === 'string' ? locale('unit_minute') : '分'
+      yyUnit: locale('年', 'unit_year'),
+      MMUnit: locale('月', 'unit_month'),
+      ddUnit: locale('日', 'unit_date'),
+      hhUnit: locale('时', 'unit_hour'),
+      mmUnit: locale('分', 'unit_minute')
     });
     const def = getDefault();
     instance.current.setDefaults(def);
@@ -120,7 +120,7 @@ const PickerDate = forwardRef(({
       // 如果不是合法的日期格式
       const e = instance.current ? instance.current : {};
       if (!defaultValue || !defaultValue.isDate(split)) {
-        if (onError) onError(e, {errMsg: `${locale('hint_invalid_date') || '无效的日期格式'}`});
+        if (onError) onError(e, {errMsg: `${locale('无效的日期格式', 'hint_invalid_date')}`});
       } else {
         let dateValues = defaultValue.split(split)
         defaultYear = dateValues[0]
@@ -130,7 +130,7 @@ const PickerDate = forwardRef(({
     } else if (type === 'month') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isMonth(split)) {
-        if (onError) onError(e, {errMsg: `${locale('hint_invalid_date') || '无效的日期格式'}, YYYY-MM-DD`});
+        if (onError) onError(e, {errMsg: `${locale('无效的日期格式', 'hint_invalid_date')}, YYYY-MM-DD`});
       } else {
         let monthValues = defaultValue.split(split)
         defaultYear = monthValues[0]
@@ -139,7 +139,7 @@ const PickerDate = forwardRef(({
     } else if (type === 'datetime') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isDateTime(split, timeSplit)) {
-        if (onError) onError(e, {errMsg: `${locale('hint_invalid_date') || '无效的日期格式'}, YYYY-MM-DD hh:mm`});
+        if (onError) onError(e, {errMsg: `${locale('无效的日期格式', 'hint_invalid_date')}, YYYY-MM-DD hh:mm`});
       } else {
         let values = defaultValue.split(' ')
         let dateValues = values[0].split(split || '-')
@@ -153,7 +153,7 @@ const PickerDate = forwardRef(({
     } else if (type === 'time') {
       // 如果不是合法的日期格式
       if (!defaultValue || !defaultValue.isTime(split, timeSplit)) {
-        if (onError) onError(e, {errMsg: `${locale('hint_invalid_date') || '无效的日期格式'}, hh${timeSplit || ':'}mm`});
+        if (onError) onError(e, {errMsg: `${locale('无效的日期格式', 'hint_invalid_date')}, hh${timeSplit || ':'}mm`});
       } else {
         let timeValues = defaultValue.split(timeSplit || ':')
         defaultHour = timeValues[0]
@@ -180,7 +180,7 @@ const PickerDate = forwardRef(({
         yearsData = data.year.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('unit_year') || '年')
+            'name': '' + n + (locale('年', 'unit_year'))
           }
         })
       }
@@ -188,7 +188,7 @@ const PickerDate = forwardRef(({
         monthsData = data.month.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('unit_month') || '月')
+            'name': '' + n + (locale('月', 'unit_month'))
           }
         })
       }
@@ -196,7 +196,7 @@ const PickerDate = forwardRef(({
         daysData = data.day.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('unit_date') || '日')
+            'name': '' + n + (locale('日', 'unit_date'))
           }
         })
       }
@@ -204,7 +204,7 @@ const PickerDate = forwardRef(({
         hoursData = data.hour.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('unit_hour') || '时')
+            'name': '' + n + (locale('时', 'unit_hour'))
           }
         })
       }
@@ -212,7 +212,7 @@ const PickerDate = forwardRef(({
         minutesData = data.minute.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('unit_minute') || '分')
+            'name': '' + n + (locale('分', 'unit_minute'))
           }
         })
       }
@@ -250,11 +250,11 @@ const PickerDate = forwardRef(({
       onClickSubmit: clickSubmit,
       onScrollEnd: scrollEnd,
       onHid: (e) => {},
-      yyUnit: locale('unit_year') || '年',
-      MMUnit: locale('unit_month') || '月',
-      ddUnit: locale('unit_date') || '日',
-      hhUnit: locale('unit_hour') || '时',
-      mmUnit: locale('unit_minute') || '分'
+      yyUnit: locale('年', 'unit_year'),
+      MMUnit: locale('月', 'unit_month'),
+      ddUnit: locale('日', 'unit_date'),
+      hhUnit: locale('时', 'unit_hour'),
+      mmUnit: locale('分', 'unit_minute')
     })
     if (show && instance) {
       setTimeout(function(){
@@ -278,8 +278,8 @@ const PickerDate = forwardRef(({
     <div ref={refEl} {...otherMaskAttribute} className={`mask picker-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}`}>
       <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
         <div className="picker-header">
-          <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || (locale('cancel') || '取消')}</a>
-          <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || (locale('finish') || '完成')}</a>
+          <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || locale('取消', 'cancel')}</a>
+          <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || locale('完成', 'finish')}</a>
         </div>
         <div className="picker-wrapper">
           <div className="picker-layer">

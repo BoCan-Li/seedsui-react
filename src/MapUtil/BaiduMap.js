@@ -91,13 +91,13 @@ var BaiduMap = function (id, params) {
     geolocation.getCurrentPosition(function (res) {
       if (!res) { // 如果返回结果为null的话, 则返回
         console.log('没有开启定位权限')
-        if (options.fail) options.fail(`${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`)
+        if (options.fail) options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
         return
       }
       const status = this.getStatus()
       if (status === BMAP_STATUS_SUCCESS) { // 定位成功
         const result = {
-          errMsg: `${locale('hint_location_success') || '定位成功'}`,
+          errMsg: `${locale('定位成功', 'hint_location_success')}`,
           latitude: res.point.lat,
           longitude: res.point.lng,
           speed: null,
@@ -112,11 +112,11 @@ var BaiduMap = function (id, params) {
         if (options.success) options.success(result)
       } else if (status === BMAP_STATUS_TIMEOUT) { // 定位超时
         console.log('定位超时')
-        options.fail({errMsg: `${locale('hint_location_timeout') || '定位超时'}`})
+        options.fail({errMsg: `${locale('定位超时', 'hint_location_timeout')}`})
       } else {
         console.log('定位失败')
         // BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED
-        if (options.fail) options.fail(`${locale('hint_location_failed') || '定位失败,请检查定位权限是否开启'}`)
+        if (options.fail) options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
       }
     }, {
       enableHighAccuracy: true, // 是否要求浏览器获取最佳效果，同浏览器定位接口参数。默认为false
@@ -828,18 +828,18 @@ var BaiduMap = function (id, params) {
   s.drawBoundary = function (area, options, callback = {}, pureData) {
     var boundary = new BMap.Boundary()
     if (!area) {
-      console.warn(`${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`)
+      console.warn(`${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale('例如“江苏省南京市建邺区”', 'hint_for_example_address')}`)
       callback.fail && callback.fail({
-        errMsg: `${locale('hint_pass_in_parameters') || '请传入参数'}area, ${locale('hint_for_example_address') || '例如“江苏省南京市建邺区”'}`
+        errMsg: `${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale('例如“江苏省南京市建邺区”', 'hint_for_example_address')}`
       })
       return
     }
     boundary.get(area, function (res) { // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(`${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area: ${area}不是一个合法的值`)
+        console.warn(`${locale('请传入正确的参数', 'hint_pass_in_correct_parameters')}area: ${area}不是一个合法的值`)
         callback.fail && callback.fail({
-          errMsg: `${locale('hint_pass_in_correct_parameters') || '请传入正确的参数'}area: ${area}不是一个合法的值`
+          errMsg: `${locale('请传入正确的参数', 'hint_pass_in_correct_parameters')}area: ${area}不是一个合法的值`
         })
         return
       }
@@ -873,7 +873,7 @@ var BaiduMap = function (id, params) {
   s.drawPolygon = function (polygon, options = {}){
     let bdPolygon = s.pointsToBdPolygon(polygon, options)
     if (!bdPolygon) {
-      console.warn(`drawPolygon: ${locale('hint_pass_in_parameters') || '请传入参数'}{polygon: {}}${locale('or') || '或者'}{points: []}`)
+      console.warn(`drawPolygon: ${locale('请传入参数', 'hint_pass_in_parameters')}{polygon: {}}${locale('或者', 'or')}{points: []}`)
       return null
     }
     // 设置多边型的边线颜色，参数为合法的CSS颜色值
@@ -1004,22 +1004,22 @@ var BaiduMap = function (id, params) {
   // 添加右键菜单
   s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
-      console.warn(`addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}overlay`)
+      console.warn(`addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}overlay`)
       options.fail && options.fail({
-        errMsg: `addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}overlay`
+        errMsg: `addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}overlay`
       })
       return
     }
     if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn(`addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`)
+      console.warn(`addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}{menus: [{text: "", handler: func()}]}`)
       options.fail && options.fail({
-        errMsg: `addContextMenu: ${locale('hint_pass_in_parameters') || '请传入参数'}{menus: [{text: "", handler: func()}]}`
+        errMsg: `addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}{menus: [{text: "", handler: func()}]}`
       })
       return
     }
     var markerMenu = new BMap.ContextMenu()
     for (let [index, opt] of options.menus.entries()) {
-      markerMenu.addItem(new BMap.MenuItem(opt.text || (locale('menu') || '菜单'), function () {
+      markerMenu.addItem(new BMap.MenuItem(opt.text || (locale('菜单', 'menu')), function () {
         opt.handler(opt, index)
       }))
     }

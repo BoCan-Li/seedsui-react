@@ -19,7 +19,7 @@ const InputStar = forwardRef(({
     if (num < min) {
       if (onError) {
         onError(e, {
-          errMsg: `${locale('hint_cannot_be_less_than') || '不能小于'}${min}${locale('star') || '颗星'}`,
+          errMsg: `${locale('不能小于', 'hint_cannot_be_less_than')}${min}${locale('颗星', 'star')}`,
           select: num,
           min: min,
           value: min,

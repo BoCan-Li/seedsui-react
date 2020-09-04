@@ -46,7 +46,7 @@ export default {
     if (self.loadTimeout) window.clearTimeout(self.loadTimeout);
     self.loadTimeout = setTimeout(() => {
       Bridge.hideLoading();
-      callback(locale('hint_map_init_timeout') || '初始化地图超时, 请检查当前网络是否稳定');
+      callback(locale('初始化地图超时, 请检查当前网络是否稳定', 'hint_map_init_timeout'));
     }, 20000);
   },
   // 标记: 绘制全部标记
@@ -125,7 +125,7 @@ export default {
     let bdPoint = GeoUtil.coordtransform(point);
     bdPoint = this.mapUtil.pointToBdPoint(bdPoint);
     if (!self.label) {
-      self.label = self.mapUtil.drawLabel(bdPoint, locale('radius_of_m', [radius]) || `半径${radius}米`, {
+      self.label = self.mapUtil.drawLabel(bdPoint, locale(`半径${radius}米`, 'radius_of_m', [radius]), {
         offset: {
           width: 0,
           height: 14
@@ -136,7 +136,7 @@ export default {
       })
     } else {
       self.label.setPosition(bdPoint)
-      self.label.setContent(locale('radius_of_m', [Math.trunc(radius, 2)]) || `半径${Math.trunc(radius, 2)}米`)
+      self.label.setContent(locale(`半径${Math.trunc(radius, 2)}米`, 'radius_of_m', [Math.trunc(radius, 2)]))
     }
   },
   // 绘制圆形
@@ -215,7 +215,7 @@ export default {
         console.log('绘制区域完成');
       },
       fail: (err) => {
-        Bridge.showToast(locale('hint_map_no_boundary_data', [districtName]) || `暂无${districtName}的边界数据`, {mask: false});
+        Bridge.showToast(locale(`暂无${districtName}的边界数据`, 'hint_map_no_boundary_data', [districtName]), {mask: false});
       }
     });
   },

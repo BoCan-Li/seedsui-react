@@ -38,7 +38,7 @@ function Context({
   return (
     <Instance.Provider
       value={{
-        locale: function (key, variable) {
+        locale: function (remark, key, variable) {
           if (!data) return key || '';
           // 获取key的值
           if (key) {
@@ -49,7 +49,11 @@ function Context({
                 value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
               }
             }
-            return value || key;
+            return value || remark || key;
+          }
+          // 如果有remark, 没有key, 则返回remark
+          if (remark) {
+            return remark
           }
           return data
         },

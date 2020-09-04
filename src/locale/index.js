@@ -1,5 +1,5 @@
-// 此库主要用于非组件的js中, 使用locale('变量{0}, 变量{1}', ['替换变量0', '替换变量1'])获取value值
-export default function (key, variable) {
+// 此库主要用于非组件的js中, 使用locale('备注', '变量{0}, 变量{1}', ['替换变量0', '替换变量1'])获取value值
+export default function (remark, key, variable) {
   let locale = {}
   try {
     // 国际化文件
@@ -15,14 +15,18 @@ export default function (key, variable) {
   }
   // 获取key的值
   if (key) {
-    let value = locale[key] || '';
+    let value = locale[key] || ''
     if (value && variable && Array.isArray(variable) && variable.length) {
       for (let i = 0; i < variable.length; i++) {
-        if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
-        value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
+        if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue
+        value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i])
       }
     }
-    return value || key;
+    return value || remark || key
+  }
+  // 如果有remark, 没有key, 则返回remark
+  if (remark) {
+    return remark
   }
   return locale
 }

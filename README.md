@@ -90,56 +90,11 @@ import Chat from 'seedsui-react/lib/Chat';
 ## 国际化文件
 [中文国际化文件](https://unpkg.com/seedsui-react/lib/locale/zh_CN.js)
 [英文国际化文件](https://unpkg.com/seedsui-react/lib/locale/en_US.js)
-## 国际化自定义
-#### src/locale/index.js:
-```js
-export default function (key) {
-  // let language = navigator.language;
-  const ua = navigator.userAgent.toLowerCase()
-  let language = 'zh_CN';
-  if (ua.indexOf('lang=zh_CN') !== -1) {
-    language = 'zh_CN';
-  } else if (ua.indexOf('lang=en_US') !== -1) {
-    language = 'en_US';
-  } else {
-    language = 'zh_CN';
-  }
-  // seeds国际化文件
-  let seedsLocale = require(`seedsui-react/lib/locale/${language}.js`);
-  if (seedsLocale.default) seedsLocale = seedsLocale.default;
-  // 本地国际化文件
-  let appLocale = require(`./${language}`);
-  if (appLocale.default) appLocale = appLocale.default;
-  // 合并国际化文件
-  let locale = Object.assign({}, seedsLocale, appLocale)
-  // 设置语言
-  locale.locale_language = language;
-  if (key) return locale[key] || '';
-  return locale;
-}
-```
-#### src/locale/en_US.js:
-```js
-export default {
-  'my_contract': 'My contract',
-  'to_be_filled': 'To be filled',
-  'to_be_signed': 'To be signed',
-  'signed': 'Signed',
-  'archived': 'Archived'
-}
-```
-#### src/locale/zh_CN.js:
-```js
-export default {
-  'my_contract': '我的合同',
-  'to_be_filled': '待填写',
-  'to_be_signed': '待签署',
-  'signed': '已签署',
-  'archived': '已归档'
-}
-```
+[国际化自定义示例](https://unpkg.com/seedsui-react/lib/locale/index.demo)
 #### 全局配置国际化
 ```js
+// 国际化
+import locale from 'utils/locale';
 import Context from 'seedsui-react/lib/Context';
 ReactDOM.render(
   <Context locale={locale()}>
@@ -151,17 +106,17 @@ ReactDOM.render(
 
 #### js中引用国际化
 ```js
-import locale from './../../locale';
+import locale from 'utils/locale';
 
-locale('my_contract') || '我的合同'
+locale('我的合同', 'key')
 ```
 
 #### 函数组件中引用国际化
 ```js
 import Context from 'seedsui-react/lib/Context/instance.js';
 
-const context = useContext(Context) || {};
-const locale = context.locale || {};
+let {locale} = useContext(Context);
+if (!locale) locale = function (remark) {return remark || ''}
 ```
 
 #### class组件中引用国际化
@@ -172,11 +127,33 @@ class Test extends Component {
   static contextType = Context;
   componentDidMount() {
     let {locale} = this.context;
-    if (!locale) locale = {}
+    if (!locale) locale = function (remark) {return remark || ''}
   }
 }
 ```
 
+#### 简单示例
+```javascript
+import InputDate from 'seedsui-react/lib/InputDate';
+import zhCN from 'seedsui-react/lib/locale/zh_CN';
+import enUS from 'seedsui-react/lib/locale/en_US';
+import Context from 'seedsui-react/lib/Context';
+
+const [locale, setLocale] = useState(zhCN);
+
+function useZh {
+  setLocale(zhCN);
+}
+function useEn () {
+  setLocale(enUS);
+}
+
+<input type="button" value="英文" onClick={useEn}/>
+<input type="button" value="中文" onClick={useZh}/>
+<Context portal={document.getElementById('demo')} locale={locale}>
+  <InputDate type="datetime"/>
+</Context>
+```
 
 # 组件规范
 > 为了使开发者不感觉到使用SeedsUI是在学习一种新的语言，所以SeedsUI整体设计尽量使用W3C和React的规范，使开发者感觉到仍然在使用React原生DOM在开发，从而能够节省更多的学习时间和使用体验：

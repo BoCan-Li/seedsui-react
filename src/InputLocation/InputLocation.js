@@ -34,10 +34,10 @@ const InputLocation = forwardRef(({
   const context = useContext(Context) || {};
   const locale = context.locale || function (key) {return key || ''};
   if (!loadingValue || typeof loadingValue !== 'string') {
-    loadingValue = locale('location') || '定位中...';
+    loadingValue = locale('定位中...', 'location');
   }
   if (!failedValue || typeof failedValue !== 'string') {
-    failedValue = locale('hint_location_failed') || '定位失败, 请检查定位权限是否开启'
+    failedValue = locale('定位失败, 请检查定位权限是否开启', 'hint_location_failed')
   }
 
   useEffect(() => {
@@ -112,7 +112,7 @@ const InputLocation = forwardRef(({
           preview(e, {errMsg: `preview:ok`})
         } else {
           if (typeof preview === 'function') {
-            preview(e, {errMsg: `preview:fail${locale('hint_location_preview_fail') || '坐标不正确, 预览失败'}`})
+            preview(e, {errMsg: `preview:fail${locale('坐标不正确, 预览失败', 'hint_location_preview_fail')}`})
           }
         }
       }

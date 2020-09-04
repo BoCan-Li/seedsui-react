@@ -201,11 +201,11 @@ var Bridge = {
     var uploadParams = Object.clone(params)
     var self = this
     if (!params.uploadDir) {
-      self.showToast(locale('hint_no_upload_dir') || '没有上传目录', {mask: false})
+      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
       return
     }
     if (!params.localId) {
-      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
       return
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
@@ -248,11 +248,11 @@ var Bridge = {
    uploadFile: function (argParams = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('hint_upload_file_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
+      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {mask: false})
       return
     }
     if (!argParams.localId) {
-      self.showToast(locale('hint_no_upload_localeid') || '没有上传地址', {mask: false})
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
       return
     }
     let params = {
@@ -285,7 +285,7 @@ var Bridge = {
   chooseVideo: function (argParams = {}) {
     const self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('hint_choose_video_version') || '此功能需要升级至6.6.0及以上的客户端', {mask: false})
+      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_choose_video_version'), {mask: false})
       return
     }
     let params = {

@@ -46,7 +46,7 @@ const MapChoose = forwardRef(({
 
   useEffect(() => {
     if (!window.BMap && !ak) {
-      setErrMsg(locale('hint_map_ak') || '请传入百度地图ak');
+      setErrMsg(locale('请传入百度地图ak', 'hint_map_ak'));
       return;
     }
     MapUtil.load({
@@ -55,7 +55,7 @@ const MapChoose = forwardRef(({
         initData();
       },
       fail: () => {
-        setErrMsg(locale('hint_map_failed_load') || '地图库加载失败, 请稍后再试');
+        setErrMsg(locale('地图库加载失败, 请稍后再试', 'hint_map_failed_load'));
       }
     })
     // 移除组件时注销
@@ -74,12 +74,12 @@ const MapChoose = forwardRef(({
   // 初始化地图
   function initData () {
     if (!window.BMap) { // 如果有高德地图, 则加上 || !window.AMap
-      setErrMsg(locale('hint_map_failed_load') || '地图库加载失败, 请稍后再试');
+      setErrMsg(locale('地图库加载失败, 请稍后再试', 'hint_map_failed_load'));
       return;
     }
     console.log('初始化地图' + center)
     if (!refWrapperEl.current) {
-      setErrMsg(locale('hint_map_no_container') || '地图容器不存在');
+      setErrMsg(locale('地图容器不存在', 'hint_map_no_container'));
       return;
     }
     // 拖拽结束回调
@@ -184,10 +184,10 @@ const MapChoose = forwardRef(({
     </Container>
     <Footer className="map-footer">
       <div className="map-footer-content">
-        <p className="map-footer-content-caption">{locale('current_location') || '当前位置'}</p>
+        <p className="map-footer-content-caption">{locale('当前位置', 'current_location')}</p>
         <p className="map-footer-content-sndcaption">{addr}</p>
       </div>
-      {addr && <span className="map-footer-submit" onClick={submitHandler}>{locale('ok') || '确定'}</span>}
+      {addr && <span className="map-footer-submit" onClick={submitHandler}>{locale('确定', 'ok')}</span>}
     </Footer>
     {errMsg && <Notice caption={errMsg}/>}
   </Page>;

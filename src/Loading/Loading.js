@@ -9,7 +9,7 @@ const Loading = forwardRef(({
   iconAttribute,
   captionAttribute = {},
   children,
-  caption = locale('loading'),
+  caption = locale('加载中...', 'loading'),
   ...others
 }, ref) =>  {
   let content = null ;

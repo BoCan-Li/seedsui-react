@@ -10,7 +10,7 @@ function Location ({
   return (
     <div {...props} className={`map-location${props.className ? ' ' + props.className : ''}`}>
       <div className={`map-location-icon`}></div>
-      <div className={`map-location-label`}>{locale('reposition') || '重新定位'}</div>
+      <div className={`map-location-label`}>{locale('重新定位', 'reposition')}</div>
     </div>
   )
 }

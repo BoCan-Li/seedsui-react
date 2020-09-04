@@ -1,4 +1,4 @@
-import React, {useState, useRef, createRef, useEffect, Fragment} from 'react'
+import React, {useState} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
 import {
@@ -7,48 +7,31 @@ import {
 	Titlebar,
   Bridge,
   Container,
-  MapUtil,
-  PDFView,
+	Context,
+	InputDate
 } from '../../src';
 
+import zhCN from '../../src/locale/zh_CN';
+import enUS from '../../src/locale/en_US';
+
 function Demo () {
-  useEffect(() => {
-		setTimeout(() => {
-			setSrc('/demo/assets/pdfview.pdf');
-			setTimeout(() => {
-				setPageElements([
-					{
-						page: '2',
-						element: <div key="2" style={{lineHeight: '16px', backgroundColor: 'green'}}>2</div>
-					}
-				])
-			}, 2000)
-		}, 5000);
-  }, [])
-	const refPDFView = useRef(null);
-	const [src, setSrc] = useState('/demo/assets/pdfview2.pdf');
-	const [pageElements, setPageElements] = useState([
-		{
-			page: '1',
-			element: <div key="1" style={{lineHeight: '16px', backgroundColor: 'red'}}>1</div>
-		},{
-			page: '2',
-			element: <div key="2" style={{lineHeight: '16px', backgroundColor: 'red'}}>2</div>
-		}
-	]);
+  const [locale, setLocale] = useState(zhCN);
+	function useZh () {
+		setLocale(zhCN);
+	}
+	function useEn () {
+		setLocale(enUS);
+	}
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<PDFView
-				ref={refPDFView}
-				zoom={false}
-				src={src}
-				cMapUrl="/demo/assets/cmaps/"
-				insertPageElements={pageElements}
-				params={{rows: 3, onLoad: () => console.log('加载完成')}}
-			/>
+			<input type="button" value="英文" onClick={useEn}/>
+			<input type="button" value="中文" onClick={useZh}/>
+			<Context portal={document.getElementById('demo')} locale={locale}>
+				<InputDate type="datetime"/>
+			</Context>
     </Container>
   </Page>
 }

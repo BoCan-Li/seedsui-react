@@ -145,13 +145,13 @@ const VideoFull = forwardRef(({
   // 实例化
   async function initInstance () {
     if (!src) {
-      console.error(locale('hint_video_src') || '请传入视频源');
-      if (onError) onError(e, {errMsg: locale('hint_video_src') || '请传入视频源'});
+      console.error(locale('请传入视频源', 'hint_video_src'));
+      if (onError) onError(e, {errMsg: locale('请传入视频源', 'hint_video_src')});
       return;
     }
     if (!await loadSdk()) {
-      console.error(locale('hint_video_sdk_load_failed') || '加载播放器库出错, 请稍后再试');
-      if (onError) onError(e, {errMsg: locale('hint_video_sdk_load_failed') || '加载播放器库出错, 请稍后再试'});
+      console.error(locale('加载播放器库出错, 请稍后再试', 'hint_video_sdk_load_failed'));
+      if (onError) onError(e, {errMsg: locale('加载播放器库出错, 请稍后再试', 'hint_video_sdk_load_failed')});
       return
     }
     if (!window.Aliplayer) {

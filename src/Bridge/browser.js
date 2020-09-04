@@ -83,7 +83,7 @@ var Bridge = {
   chooseImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
       return
     }
     var res = {
@@ -97,13 +97,13 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
       return
     }
     self.showLoading()
     setTimeout(() => {
       self.hideLoading()
-      self.showToast(locale('uploaded_completed') || '上传完成', {mask: false})
+      self.showToast(locale('上传完成', 'uploaded_completed'), {mask: false})
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
@@ -118,12 +118,12 @@ var Bridge = {
   previewImage: function (params = {}) {
     var self = this;
     if (!params.urls || !params.urls.length) {
-      self.showToast(`urls${locale('wrong_parameter') || '参数不正确'}, ${locale('cannot_preview') || '无法预览'}`, {mask: false})
+      self.showToast(`urls${locale('参数不正确', 'wrong_parameter')}, ${locale('无法预览', 'cannot_preview')}`, {mask: false})
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      self.showToast(`index${locale('wrong_parameter') || '参数不正确'}, ${locale('cannot_preview') || '无法预览'}`, {mask: false})
+      self.showToast(`index${locale('参数不正确', 'wrong_parameter')}, ${locale('无法预览', 'cannot_preview')}`, {mask: false})
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -136,7 +136,7 @@ var Bridge = {
           if (params.success) params.success(s)
         },
         fail: function () {
-          self.showToast(`${locale('invalid_image_src') || '图片地址无效'}`, {mask: false})
+          self.showToast(`${locale('图片地址无效', 'invalid_image_src')}`, {mask: false})
         }
       })
     } else {
@@ -170,7 +170,7 @@ var Bridge = {
   getContactMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success([
@@ -187,7 +187,7 @@ var Bridge = {
   getContact: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success({
@@ -279,7 +279,7 @@ var Bridge = {
   getCustomerMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     const result = []
@@ -295,7 +295,7 @@ var Bridge = {
   getCustomer: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success({
@@ -306,7 +306,7 @@ var Bridge = {
   getCustomerType: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success({
@@ -317,7 +317,7 @@ var Bridge = {
   getCustomerAreaMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success([
@@ -334,7 +334,7 @@ var Bridge = {
   getCustomerArea: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success({
@@ -345,12 +345,12 @@ var Bridge = {
   // 部门插件
   getDepartmentMore: function (params) {
     var self = this
-    self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+    self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
   },
   getDepartment: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     params.success({
@@ -362,7 +362,7 @@ var Bridge = {
   getGoods: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在外勤客户端中使用', {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
       return
     }
     if (params.success) params.success({
@@ -409,23 +409,23 @@ var Bridge = {
             let errMsg = '';
             switch(error.code) {
               case error.PERMISSION_DENIED:
-                errMsg = `getLocation:fail ${locale('hint_location_failed_PERMISSION_DENIED') || '定位失败,用户拒绝请求地理定位'}`
+                errMsg = `getLocation:fail ${locale('定位失败,用户拒绝请求地理定位', 'hint_location_failed_PERMISSION_DENIED')}`
                 break;
               case error.POSITION_UNAVAILABLE:
-                console.log(`${locale('hint_location_failed_POSITION_UNAVAILABLE') || '定位失败,位置信息是不可用'}`)
-                errMsg = `getLocation:fail ${locale('hint_location_failed_POSITION_UNAVAILABLE') || '定位失败,位置信息是不可用'}`
+                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_POSITION_UNAVAILABLE')}`)
+                errMsg = `getLocation:fail ${locale('定位失败,位置信息是不可用', 'hint_location_failed_POSITION_UNAVAILABLE')}`
                 break;
               case error.TIMEOUT:
-                console.log(`${locale('hint_location_failed_TIMEOUT') || '定位失败,位置信息是不可用'}`)
-                errMsg = `getLocation:fail ${locale('hint_location_failed_TIMEOUT') || '定位失败,请求获取用户位置超时'}`
+                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_TIMEOUT')}`)
+                errMsg = `getLocation:fail ${locale('定位失败,请求获取用户位置超时', 'hint_location_failed_TIMEOUT')}`
                 break;
               case error.UNKNOWN_ERROR:
-                console.log(`${locale('hint_location_failed_UNKNOWN_ERROR') || '定位失败,位置信息是不可用'}`)
-                errMsg = `getLocation:fail ${locale('hint_location_failed_UNKNOWN_ERROR') || '定位失败,定位系统失效'}`
+                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_UNKNOWN_ERROR')}`)
+                errMsg = `getLocation:fail ${locale('定位失败,定位系统失效', 'hint_location_failed_UNKNOWN_ERROR')}`
                 break;
               default:
-                console.log(`${locale('hint_location_failed') || '定位失败'}`)
-                errMsg = `getLocation:fail ${locale('hint_location_failed') || '定位失败'}`
+                console.log(`${locale('定位失败', 'hint_location_failed')}`)
+                errMsg = `getLocation:fail ${locale('定位失败', 'hint_location_failed')}`
             }
             let res = {errMsg: errMsg}
             if (params.fail) params.fail(res)
@@ -438,8 +438,8 @@ var Bridge = {
           }
         )
       } else {
-        console.log(`${locale('hint_location_failed_not_supported') || '当前浏览器不支持定位'}`)
-        let res = {errMsg: `getLocation:fail ${locale('hint_location_failed_not_supported') || '当前浏览器不支持定位'}`}
+        console.log(`${locale('当前浏览器不支持定位', 'hint_location_failed_not_supported')}`)
+        let res = {errMsg: `getLocation:fail ${locale('当前浏览器不支持定位', 'hint_location_failed_not_supported')}`}
         if (params.fail) params.fail(res)
         self.getLocationTask(res)
       }
@@ -479,8 +479,8 @@ var Bridge = {
   getLocationMap: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_wqapp') || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `getLocationMap:${locale('hint_only_wqapp') || '此功能仅可在微信或APP中使用'}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp'), {mask: false})
+      if (params.fail) params.fail({errMsg: `getLocationMap:${locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp')}`})
       return
     }
     setTimeout(function () {
@@ -495,8 +495,8 @@ var Bridge = {
   scanQRCode: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `scanQRCode:${locale('hint_scan_failed') || '扫码失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
+      if (params.fail) params.fail({errMsg: `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`})
       return
     }
     setTimeout(function () {
@@ -515,11 +515,11 @@ var Bridge = {
   previewFile: function (params) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('hint_only_app_and_wx') || '此功能仅可在微信或APP中使用', {mask: false})
-      if (params.fail) params.fail({errMsg: `previewFile:fail${locale('hint_previewFile_failed') || '预览文件失败'}, ${locale('hint_try_again_later') || '请稍后重试'}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
+      if (params.fail) params.fail({errMsg: `previewFile:fail${locale('预览文件失败', 'hint_previewFile_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`})
       return
     }
-    if (params.success) params.success({errMsg: `previewFile:ok${locale('hint_previewFile_success') || '预览文件成功'}`})
+    if (params.success) params.success({errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`})
     if (params.url) window.location.href = params.url
   }
 }
