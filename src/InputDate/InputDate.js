@@ -25,7 +25,6 @@ const InputDate = forwardRef(({
   const [show, setShow] = useState(false)
   // context
   const context = useContext(Context) || {};
-  console.log(context)
   const locale = context.locale || function (key) {return key || ''};
   // 日期纠正
   function correctDate (val) {
