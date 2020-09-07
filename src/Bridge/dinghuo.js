@@ -371,7 +371,7 @@ var Bridge = {
     }
     self.locationTask = []
     console.log('调用定位...')
-    self.invoke('getLocation', 'gcj02', (res) => {
+    self.invoke('getLocation', params.type || 'gcj02', (res) => {
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒
         if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)

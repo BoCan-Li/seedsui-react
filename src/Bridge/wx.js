@@ -103,10 +103,10 @@ var Bridge = {
     console.log('调用定位...')
     wx.getLocation({ // eslint-disable-line
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-      type: 'gcj02',
+      type: params.type || 'gcj02',
       success: (res) => {
         // 将位置信息存储到cookie中60秒
-        if (res.latitude && res.latitude) {
+        if (res.longitude && res.latitude) {
           if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
           if (params.success) params.success(res)
         } else {
