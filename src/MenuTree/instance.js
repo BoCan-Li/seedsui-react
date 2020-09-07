@@ -15,6 +15,7 @@ var MenuTree = function (container, params) {
     /*
     callbacks
     onClick:function(item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
+    onExtendActive: function(item, isActived, isExtend) // 展开选中项时触发, 如若有此属性, 展开选中项时也将移除同级所有的选中项与展开项
     */
   }
   /* 参数data: [{
@@ -170,15 +171,18 @@ var MenuTree = function (container, params) {
         // }
       // }
     } else {
-      // 移除同级所有的选中项与展开项
-      var container = target.parentNode.parentNode
-      var actives = container.querySelectorAll('.' + s.params.activeClass)
-      for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
-        // var tag = li.querySelector('.' + s.params.tagClass)
-        if (tag) {
-          tag.classList.remove(s.params.extendClass)
-          tag.classList.remove(s.params.activeClass)
+      // 点击非选中项, 移除同级所有的选中项与展开项
+      if (!target.classList.contains(s.params.activeClass) || s.params.onExtendActive) {
+        var container = target.parentNode.parentNode
+        var actives = container.querySelectorAll('.' + s.params.activeClass)
+        for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
+          // var tag = li.querySelector('.' + s.params.tagClass)
+          if (tag) {
+            tag.classList.remove(s.params.extendClass)
+            tag.classList.remove(s.params.activeClass)
+          }
         }
+        if (s.params.onExtendActive) s.params.onExtendActive(s, item, isActived, isExtend)
       }
       // 添加当前节点为选中项和展开项
       target.classList.add(s.params.extendClass)

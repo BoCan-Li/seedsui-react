@@ -3798,6 +3798,7 @@ function nClickMenu (e, value, selected, data) {
   list={列表项 array, 默认无} // 数据: [{id: '', name: '', parentid: ''}]
 
   onChange={点击节点 func(s, value, selected), 默认无}
+  onExtendActive={展开选中项时触发 func(s, value, selected), 默认无} // 如若有此属性, 展开选中项时也将移除同级所有的选中项与展开项
 
   onClick={点击节点 func(s, value, item, isActived, isExtend, childrenCount), 默认无}
   onClickLeaf={点击底层节点 func(s, value, item, isActived), 默认无}

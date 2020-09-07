@@ -7,6 +7,7 @@ const MenuTree = forwardRef(({
   list = [], // 数据: [{id: '', name: '', parentid: ''}]
 
   onChange, // func(e, value, selected)
+  onExtendActive, // func(e, value, selected) 展开选中项时触发, 如若有此属性, 展开选中项时也将移除同级所有的选中项与展开项
 
   onClick,
   onClickLeaf,
@@ -43,7 +44,8 @@ const MenuTree = forwardRef(({
     instance.current = new Instance(refEl.current, {
       data: data,
       selectedId: selected && selected.length ? selected[0].id : '',
-      onClick: click // (item, isActive, isExtend: true展开 | false收缩)
+      onClick: click, // (item, isActive, isExtend: true展开 | false收缩)
+      onExtendActive: onExtendActive ? click : null
     });
   }, [])
 
@@ -57,8 +59,12 @@ const MenuTree = forwardRef(({
     var childrenCount = item.children && item.children.length ? item.children.length : 0;
 
     // 点击回调
-    if (onClick) onClick(s, item.name, item, isActived, isExtend, childrenCount);
-    if (!isActived && onChange) onChange(s, item.name, [item])
+    if (onClick) onClick(s, item.name, [item], isActived, isExtend, childrenCount);
+    if (!isActived) {
+      if (onChange) onChange(s, item.name, [item])
+    } else {
+      if (onExtendActive) onExtendActive(s, item.name, [item])
+    }
     if (item.isLeaf === true && onClickLeaf) onClickLeaf(s, item.name, item, isActived, isExtend, childrenCount);
   }
 
