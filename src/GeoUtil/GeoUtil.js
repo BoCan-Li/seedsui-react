@@ -338,17 +338,19 @@ var GeoUtil = {};
     }
 
     // 方法总结
+    let longitude = Number(point[0])
+    let latitude = Number(point[1])
     if (from === 'gcj02' && to === 'bd09') {
-      return gcj02tobd09(point[0], point[1])
+      return gcj02tobd09(longitude, latitude)
     }
     if (from === 'bd09' && to === 'gcj02') {
-      return bd09togcj02(point[0], point[1])
+      return bd09togcj02(longitude, latitude)
     }
     if (from === 'wgs84' && to === 'gcj02') {
-      return wgs84togcj02(point[0], point[1])
+      return wgs84togcj02(longitude, latitude)
     }
     if (from === 'gcj02' && to === 'wgs84') {
-      return gcj02towgs84(point[0], point[1])
+      return gcj02towgs84(longitude, latitude)
     }
     console.log('GeoUtil coordtransform: form或者to参数不正确, 返回原坐标')
     return point

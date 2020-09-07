@@ -7,11 +7,9 @@ import {
 	Titlebar,
   Bridge,
   Container,
-	MenuTree
+	// MenuTree,
+	GeoUtil
 } from '../../src';
-
-import zhCN from '../../src/locale/zh_CN';
-import enUS from '../../src/locale/en_US';
 
 const mockList = [
   {id: '2', name: '测试数据2', parentid: '-1'},
@@ -24,8 +22,14 @@ const mockList = [
 
 function Demo () {
 	useEffect(() => {
+		// let point = GeoUtil.coordtransform(['118.729426','31.983005'], 'wgs84', 'gcj02')
+		// Bridge.showAlert(JSON.stringify(point))
+
 		Bridge.getLocation({
-			success: () => {}
+			success: (res) => {
+				Bridge.showAlert(JSON.stringify([res.longitude, res.latitude]));
+				// self.showAlert((JSON.stringify([res.longitude, res.latitude]) + ';' + JSON.stringify(point)))
+			}
 		})
 	})
   const [list, setList] = useState(mockList)
@@ -50,9 +54,10 @@ function Demo () {
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<MenuTree list={list} selected={selected} onChange={onChange} onExtendActive={extendActive}/>
-			<input type="button" value="置空" onClick={clearData}/>
-			<input type="button" value="显示" onClick={addData}/>
+			1
+			{/* <MenuTree list={list} selected={selected} onChange={onChange} onExtendActive={extendActive}/> */}
+			{/* <input type="button" value="置空" onClick={clearData}/>
+			<input type="button" value="显示" onClick={addData}/> */}
     </Container>
   </Page>
 }
