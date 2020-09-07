@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
 import {
@@ -23,6 +23,11 @@ const mockList = [
 ];
 
 function Demo () {
+	useEffect(() => {
+		Bridge.getLocation({
+			success: () => {}
+		})
+	})
   const [list, setList] = useState(mockList)
 	const [selected, setSelected] = useState([{id: 'I', name: '测试数据1-b-I', parentid: 'b'}])
 	function clearData () {

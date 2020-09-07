@@ -1,5 +1,6 @@
 import DB from './../DB'
 import Device from './../Device'
+import GeoUtil from './../GeoUtil'
 import locale from './../locale'
 
 var Bridge = {
