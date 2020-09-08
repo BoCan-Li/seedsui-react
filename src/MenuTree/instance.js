@@ -181,7 +181,6 @@ var MenuTree = function (container, params) {
   s.resetSibling = function (target) {
     var container = target.parentNode.parentNode
     var actives = container.querySelectorAll('.' + s.params.activeClass)
-    console.log(actives)
     for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
       // var tag = li.querySelector('.' + s.params.tagClass)
       if (tag) {
