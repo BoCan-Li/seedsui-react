@@ -11,7 +11,6 @@ var MenuTree = function (container, params) {
     extendClass: 'extend',
 
     selectedId: '', // 默认选中项的id
-    // collapseResetChildren: true, // 收缩时, 重置子节点
     /*
     callbacks
     onClick:function(item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
@@ -162,27 +161,14 @@ var MenuTree = function (container, params) {
     // 如果已经展开,则收缩
     if (isExtend) {
       target.classList.remove(s.params.extendClass)
-      // 收缩时, 重置子节点
-      // if (s.params.collapseResetChildren) {
-        // var tags = target.nextElementSibling.querySelectorAll('.' + s.params.tagClass)
-        // for (var i = 0, subtag; subtag = tags[i++];) { // eslint-disable-line
-        //   subtag.classList.remove(s.params.extendClass)
-        //   subtag.classList.remove(s.params.activeClass)
-        // }
-      // }
     } else {
-      // 点击非选中项, 移除同级所有的选中项与展开项
-      if (!target.classList.contains(s.params.activeClass) || s.params.onExtendActive) {
-        var container = target.parentNode.parentNode
-        var actives = container.querySelectorAll('.' + s.params.activeClass)
-        for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
-          // var tag = li.querySelector('.' + s.params.tagClass)
-          if (tag) {
-            tag.classList.remove(s.params.extendClass)
-            tag.classList.remove(s.params.activeClass)
-          }
+      if (!target.classList.contains(s.params.activeClass)) { // 点击非选中项, 移除同级所有的选中项与展开项
+        s.resetSibling(target)
+      } else if (s.params.onExtendActive) {
+        if (target.classList.contains(s.params.activeClass) && !target.classList.contains(s.params.extendClass)) { // 点击选中项展开时, 移除同级所有的选中项与展开项
+          s.resetSibling(target)
+          if (typeof s.params.onExtendActive === 'function') s.params.onExtendActive(s, item, isActived, isExtend)
         }
-        if (s.params.onExtendActive) s.params.onExtendActive(s, item, isActived, isExtend)
       }
       // 添加当前节点为选中项和展开项
       target.classList.add(s.params.extendClass)
@@ -190,6 +176,19 @@ var MenuTree = function (container, params) {
     }
 
     if (s.params.onClick) s.params.onClick(s, item, isActived, isExtend)
+  }
+  // 移除同级所有的选中项与展开项
+  s.resetSibling = function (target) {
+    var container = target.parentNode.parentNode
+    var actives = container.querySelectorAll('.' + s.params.activeClass)
+    console.log(actives)
+    for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
+      // var tag = li.querySelector('.' + s.params.tagClass)
+      if (tag) {
+        tag.classList.remove(s.params.extendClass)
+        tag.classList.remove(s.params.activeClass)
+      }
+    }
   }
   // 主函数
   s.init = function () {

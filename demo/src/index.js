@@ -7,8 +7,7 @@ import {
 	Titlebar,
   Bridge,
   Container,
-	// MenuTree,
-	GeoUtil
+	MenuTree,
 } from '../../src';
 
 const mockList = [
@@ -22,30 +21,17 @@ const mockList = [
 
 function Demo () {
 	useEffect(() => {
-		// let point = GeoUtil.coordtransform(['118.729426','31.983005'], 'wgs84', 'gcj02')
-		// Bridge.showAlert(JSON.stringify(point))
-
-		Bridge.getLocation({
-			success: (res) => {
-				Bridge.showAlert(JSON.stringify([res.longitude, res.latitude]));
-				// self.showAlert((JSON.stringify([res.longitude, res.latitude]) + ';' + JSON.stringify(point)))
-			}
-		})
 	})
   const [list, setList] = useState(mockList)
 	const [selected, setSelected] = useState([{id: 'I', name: '测试数据1-b-I', parentid: 'b'}])
-	function clearData () {
-		setList([])
-	}
-	function addData () {
-		setList(mockList)
-	}
 	function onChange (e, value, selected) {
+		console.log('change:==============================')
 		console.log(e.target)
 		console.log(value, selected)
 		setSelected(selected);
 	}
 	function extendActive (e, value, selected) {
+		console.log('extend:==============================')
 		console.log(e.target)
 		console.log(value, selected)
 	}
@@ -54,10 +40,12 @@ function Demo () {
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			1
-			{/* <MenuTree list={list} selected={selected} onChange={onChange} onExtendActive={extendActive}/> */}
-			{/* <input type="button" value="置空" onClick={clearData}/>
-			<input type="button" value="显示" onClick={addData}/> */}
+			<MenuTree
+				list={list}
+				selected={selected}
+				onChange={onChange}
+				onExtendActive={extendActive}
+			/>
     </Container>
   </Page>
 }
