@@ -442,126 +442,129 @@ hr:extend(.border-b){
 
 
 // flex 共用的弹性布局, 因为可能要覆盖原display, 所以要放到下面
-.flex{
-  display:-webkit-box;
-}
-.inline-flex{
-  display:-webkit-inline-box;
-}
-.flex-0{
-  -webkit-box-flex:	0.0;
-}
-.flex-1{
-  -webkit-box-flex:1.0;
-}
-.flex-vertical{ // box方向
-  /* autoprefixer: off */
-  -webkit-box-orient:vertical;
-}
-.flex-horizontal{
-  /* autoprefixer: off */
-  -webkit-box-orient:horizontal;
-}
-.flex-left{ // box内部水平对齐
-  -webkit-box-pack:start;
-}
-.flex-center{
-  -webkit-box-pack:center;
-}
-.flex-right{
-  -webkit-box-pack:end;
-}
-.flex-top{ // box内部垂直对齐
-  -webkit-box-align:start;
-}
-.flex-middle{
-  -webkit-box-align:center;
-}
-.flex-bottom{
-  -webkit-box-align:end;
-}
-.flex-middlecenter{ // box对齐方式
-  -webkit-box-pack:center;
-  -webkit-box-align:center;
-}
-// 如果不考虑andriod4, 支持flex的话, 则使用flex代替box
 // .flex{
-//   display:flex;
+//   display:-webkit-box;
 // }
 // .inline-flex{
-//   display:inline-flex;
+//   display:-webkit-inline-box;
 // }
 // .flex-0{
-//   flex:0;
+//   -webkit-box-flex:	0.0;
 // }
 // .flex-1{
-//   flex:1;
+//   -webkit-box-flex:1.0;
 // }
-// .flex-wrap{
-//   flex-wrap: wrap;
-// }
-// .flex-vertical{ // flex方向
-//   flex-direction:column;
+// .flex-vertical{ // box方向
+//   /* autoprefixer: off */
+//   -webkit-box-orient:vertical;
 // }
 // .flex-horizontal{
-//   flex-direction:row;
+//   /* autoprefixer: off */
+//   -webkit-box-orient:horizontal;
 // }
-// .flex-vertical-reverse{
-//   flex-direction:column-reverse;
-// }
-// .flex-horizontal-reverse{
-//   flex-direction:row-reverse;
-// }
-// .flex-left{ // flex内部水平对齐
-//   justify-content:flex-start;
+// .flex-left{ // box内部水平对齐
+//   -webkit-box-pack:start;
 // }
 // .flex-center{
-//   justify-content:center;
+//   -webkit-box-pack:center;
 // }
 // .flex-right{
-//   justify-content:flex-end;
+//   -webkit-box-pack:end;
 // }
-// .flex-between{
-//   justify-content:space-between;
-// }
-// .flex-around{
-//   justify-content:space-around;
-// }
-// .flex-top{ // flex内部垂直对齐
-//   align-items:flex-start;
+// .flex-top{ // box内部垂直对齐
+//   -webkit-box-align:start;
 // }
 // .flex-middle{
-//   align-items:center;
+//   -webkit-box-align:center;
 // }
 // .flex-bottom{
-//   align-items:flex-end;
+//   -webkit-box-align:end;
 // }
-// .flex-stretch{
-//   align-items:stretch;
+// .flex-middlecenter{ // box对齐方式
+//   -webkit-box-pack:center;
+//   -webkit-box-align:center;
 // }
-// .flex-middlecenter{ // flex对齐方式
-//   justify-content:center;
-//   align-items:center;
-// }
-// .flex-baseline{ // 垂直居中对齐
-//   align-items:baseline;
-// }
+// 如果不考虑andriod4, 支持flex的话, 则使用flex代替box
+.flex{
+  display:flex;
+}
+.inline-flex{
+  display:inline-flex;
+}
+.flex-0{
+  flex:0;
+}
+.flex-none{
+  flex:none;
+}
+.flex-1{
+  flex:1;
+}
+.flex-wrap{
+  flex-wrap: wrap;
+}
+.flex-vertical{ // flex方向
+  flex-direction:column;
+}
+.flex-horizontal{
+  flex-direction:row;
+}
+.flex-vertical-reverse{
+  flex-direction:column-reverse;
+}
+.flex-horizontal-reverse{
+  flex-direction:row-reverse;
+}
+.flex-left{ // flex内部水平对齐
+  justify-content:flex-start;
+}
+.flex-center{
+  justify-content:center;
+}
+.flex-right{
+  justify-content:flex-end;
+}
+.flex-between{
+  justify-content:space-between;
+}
+.flex-around{
+  justify-content:space-around;
+}
+.flex-top{ // flex内部垂直对齐
+  align-items:flex-start;
+}
+.flex-middle{
+  align-items:center;
+}
+.flex-bottom{
+  align-items:flex-end;
+}
+.flex-stretch{
+  align-items:stretch;
+}
+.flex-middlecenter{ // flex对齐方式
+  justify-content:center;
+  align-items:center;
+}
+.flex-baseline{ // 垂直居中对齐
+  align-items:baseline;
+}
 
-// .flex-shrink>div{
-//   width:100%;
-//   transform-style: preserve-3d;
-//   flex-shrink: 0;
-// }
+.flex-shrink>div{
+  width:100%;
+  transform-style: preserve-3d;
+  flex-shrink: 0;
+}
 
-// .flex-self-stretch{ // flex自身对齐:设置后则覆盖父容器
-//   align-self:stretch;
-// }
-// .flex-self-top{
-//   align-self:flex-start;
-// }
-// .flex-self-middle{
-//   align-self:center;
-// }
-// .flex-self-bottom{
-//   align-self:flex-end;
-// }
+.flex-self-stretch{ // flex自身对齐:设置后则覆盖父容器
+  align-self:stretch;
+}
+.flex-self-top{
+  align-self:flex-start;
+}
+.flex-self-middle{
+  align-self:center;
+}
+.flex-self-bottom{
+  align-self:flex-end;
+}
