@@ -860,6 +860,9 @@ var BaiduMap = function (id, params) {
         }
         polygons.push(polygon);
       }
+      boundary.bdPolygons = bdPolygons
+      boundary.bdPolygonsPath = bdPolygonsPath
+      boundary.polygons = polygons
       callback.success && callback.success({...res, bdPolygons, bdPolygonsPath, polygons})
     })
     return boundary
