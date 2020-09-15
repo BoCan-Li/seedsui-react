@@ -936,10 +936,8 @@ var BaiduMap = function (id, params) {
   /**
     * 绘制标记
     * @param {Point} point [lng, lat]
-    * @param {Object} options {
-        point {Point}: {lng: ,lat: },
-        options {Object}: 
-        {
+    * @param {Object} opt {
+        options: {
           offset: {width: , height: }
           icon: {backgroundImage: url(), backgroundSize: ''}
           enableMassClear: Boolean	是否在调用map.clearOverlays清除此覆盖物，默认为true
@@ -951,19 +949,23 @@ var BaiduMap = function (id, params) {
           shadow: Icon	阴影图标
           title: String	鼠标移到marker上的显示内容
         },
-        info {
-          style: {样式属性参考styleToBdIcon}
-        }
+        info: {
+          style: Object 弹出窗口样式属性参考styleToBdIcon,
+          html: String 弹出窗口HTML
+        },
+        currentData: 点击事件带入数据,
+        onClick: 点击事件
     * }
     * @return {Marker} 标记对象
     */
-  s.drawMarker = function (point, opt = {}){ // {options: {}, info: {}}
+  s.drawMarker = function (point, opt = {}) { // {options: {}, info: {}, data: null}
     // 绘制位置
     const bdPoint = s.pointToBdPoint(point)
     if (!bdPoint) return null
+    // 弹出窗口
+    if (!opt.info) opt.info = {}
     // 绘制图标
     if (!opt.options) opt.options = {}
-    if (!opt.info) opt.info = {}
     const marker = new BMap.Marker(bdPoint,
       {
         offset: s.whToBdSize(opt.options.offset),
@@ -982,6 +984,10 @@ var BaiduMap = function (id, params) {
     // 点击显示弹框
     if (opt.onClick) {
       marker.addEventListener('click', function (e) {
+        // 弹出窗口
+        if (opt.info.html) e.infoWindow = s.htmlToBdInfoWindow(opt.info.html)
+        // 点击数据
+        e.currentData = opt.currentData || null
         opt.onClick(e)
       })
     }
