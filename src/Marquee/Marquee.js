@@ -74,7 +74,4 @@ const Marquee = forwardRef(({
   );
 })
 
-export default React.memo(Marquee, (prevProps, nextProps) => {
-  if ((prevProps.list || []).equals((nextProps.list || []))) return true
-  return false;
-})
+export default Marquee

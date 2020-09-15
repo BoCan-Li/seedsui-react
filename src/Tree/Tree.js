@@ -199,10 +199,4 @@ const Tree = forwardRef(({
   );
 })
 
-export default React.memo(Tree, (prevProps, nextProps) => {
-  // if ((prevProps.selected || []).length !== (nextProps.selected || []).length) return false;
-  if (prevProps.bar !== nextProps.bar) return false;
-  if (prevProps.extend !== nextProps.extend) return false;
-  if (JSON.stringify(prevProps.list) === JSON.stringify(nextProps.list)) return true;
-  return false;
-})
+export default Tree

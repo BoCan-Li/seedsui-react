@@ -50,9 +50,42 @@ var Bridge = {
   logOut: function logOut() {
     wq.invoke('logout') // eslint-disable-line
   },
-  // 打开新的窗口
+  /**
+    * 打开新的窗口
+    * @param {Object} params {title: '自定义标题', url: '打开地址(h5:为打开老内容)', target: '_self'}}
+    */
   openWindow: function (params = {}) {
-    wq.openWindow(params) // eslint-disable-line
+    // 新内核打开老内核
+    if (params.url.indexOf('h5:') === 0) {
+      if (Device.os === 'andriod') {
+        let url = params.url
+        if (url.indexOf('h5:/') === 0) {
+          url = `${window.origin}${url.replace(/^h5:/, '')}`
+        }
+        wq.invoke('nativeComponent', {
+          android: {
+            name: 'org.apache.cordova.WqCordovaActivity',
+            params: {
+              url: url,
+              title: params.title || ''
+            }
+          }
+        }, () => {});
+        if (params.target === '_self') self.back()
+      } else if (Device.os === 'ios') {
+        let option = params
+        if (!params.cancel && params.target === '_self') {
+          option.cancel = function () {
+            setTimeout(() => {
+              self.back()
+            }, 500)
+          }
+        }
+        wq.openWindow(option)
+      }
+    } else { // 新内核间跳转
+      wq.openWindow(params) // eslint-disable-line
+    }
   },
   // 关闭窗口
   closeWindow: function () {

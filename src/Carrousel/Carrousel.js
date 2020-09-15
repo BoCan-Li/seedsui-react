@@ -145,13 +145,3 @@ const Carrousel = forwardRef(({
 })
 
 export default Carrousel
-// export default React.memo(Carrousel, (prevProps, nextProps) => {
-//   if (prevProps.activeIndex !== nextProps.activeIndex) return false;
-//   // 列表或者子元素一致则不要触发更新
-//   const prevChildren = React.Children.toArray(prevProps.children) || [];
-//   const nextChildren = React.Children.toArray(nextProps.children) || [];
-//   if ((prevProps.list || []).length === (nextProps.list || []).length && prevChildren.length === nextChildren.length && (prevProps.list || []).equals((prevProps.list || []))) {
-//     return true;
-//   }
-//   return false;
-// })

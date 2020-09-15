@@ -42,6 +42,9 @@ var Bridge = {
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
+    if (params.target === '_self') {
+      window.location.replace(params.url)
+    }
     if (Device.device === 'pc') {
       window.open(params.url)
       return

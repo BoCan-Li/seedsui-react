@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useRef, useState, useEffect} from 'react'
 import {render} from 'react-dom'
 import '../../src/PrototypeObject.js';
 import {
@@ -7,44 +7,50 @@ import {
 	Titlebar,
   Bridge,
   Container,
-	MenuTree,
+	InputPicker
 } from '../../src';
 
-const mockList = [
-  {id: '2', name: '测试数据2', parentid: '-1'},
-  {id: '1', name: '测试数据1', parentid: '-1'},
-  {id: 'a', name: '测试数据1-a', parentid: '1'},
-  {id: 'b', name: '测试数据1-b', parentid: '1'},
-  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
-  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
-];
-
 function Demo () {
+	const [val, setVal] = useState('1');
 	useEffect(() => {
-	})
-  const [list, setList] = useState(mockList)
-	const [selected, setSelected] = useState([{id: 'I', name: '测试数据1-b-I', parentid: 'b'}])
+		setTimeout(() => {
+			setVal('2');
+			console.log('修改值')
+		}, 3000);
+	}, [])
+  const list = [
+		{
+			id: '1',
+			name: '111'
+		},
+		{
+			id: '2',
+			name: '222'
+		},
+		{
+			id: '3',
+			name: '333'
+		}
+	];
+	const [value, setValue] = useState('');
+
 	function onChange (e, value, selected) {
-		console.log('change:==============================')
+		console.log(val)
 		console.log(e.target)
 		console.log(value, selected)
-		setSelected(selected);
-	}
-	function extendActive (e, value, selected) {
-		console.log('extend:==============================')
-		console.log(e.target)
-		console.log(value, selected)
-	}
+		setValue(value);
+	}	
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<MenuTree
+			<InputPicker
 				list={list}
-				selected={selected}
+				value={value}
 				onChange={onChange}
-				onExtendActive={extendActive}
+				placeholder="请选择"
+				className="border-b"
 			/>
     </Container>
   </Page>

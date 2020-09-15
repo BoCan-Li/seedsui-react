@@ -44,8 +44,8 @@ const MenuTree = forwardRef(({
     instance.current = new Instance(refEl.current, {
       data: data,
       selectedId: selected && selected.length ? selected[0].id : '',
-      onClick: click, // (item, isActive, isExtend: true展开 | false收缩)
-      onExtendActive: onExtendActive ? true : null
+      onExtendActive: onExtendActive ? true : null,
+      onClick: click  // (item, isActive, isExtend: true展开 | false收缩)
     });
   }, [])
 
@@ -60,9 +60,9 @@ const MenuTree = forwardRef(({
 
     // 点击回调
     if (onClick) onClick(s, item.name, [item], isActived, isExtend, childrenCount);
-    if (!isActived) {
+    if (!isActived) { // 选中菜单变化
       if (onChange) onChange(s, item.name, [item])
-    } else if (!isExtend) {
+    } else if (!isExtend) { // 选中菜单展开
       if (onExtendActive) onExtendActive(s, item.name, [item])
     }
     if (item.isLeaf === true && onClickLeaf) onClickLeaf(s, item.name, item, isActived, isExtend, childrenCount);
@@ -74,7 +74,4 @@ const MenuTree = forwardRef(({
   );
 })
 
-export default React.memo(MenuTree, (prevProps, nextProps) => {
-  if (JSON.stringify(prevProps.list) === JSON.stringify(nextProps.list)) return true;
-  return false;
-})
+export default MenuTree
