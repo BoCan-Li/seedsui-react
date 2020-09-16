@@ -148,6 +148,10 @@ var Bridge = {
   // 打开新的窗口
   openWindow: function (params, callback) {
     var self = this
+    if (params.url) {
+      if (params.url.indexOf('h5:') === 0) params.url = params.url.replace(/^h5:/, '')
+      else if (params.url.indexOf('webview:') === 0) params.url = params.url.replace(/^webview:/, '')
+    }
     self.invoke('openWindow', params, callback)
   },
   // 关闭当前窗

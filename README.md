@@ -3932,14 +3932,10 @@ import Notice from 'seedsui-react/lib/Notice';
 ```javascript
 import NumBox from 'seedsui-react/lib/NumBox';
 
-this.state = {
-  value: ''
-}
+const [value, setValue] = useState('');
 
-onChangeNum = (e, val) => {
-  this.setState({
-    value: val
-  })
+function changeNum (e, val) {
+  setValue(val);
 }
 
 <NumBox
@@ -3948,8 +3944,8 @@ onChangeNum = (e, val) => {
   min={0}
   max={4}
   required
-  value={this.state.value}
-  onChange={this.onChangeNum}
+  value={value}
+  onChange={changeNum}
 />
 ```
 [返回目录](#component)

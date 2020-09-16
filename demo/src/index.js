@@ -6,52 +6,23 @@ import {
 	Header,
 	Titlebar,
   Bridge,
-  Container,
-	InputPicker
+  Container
 } from '../../src';
 
 function Demo () {
-	const [val, setVal] = useState('1');
-	useEffect(() => {
-		setTimeout(() => {
-			setVal('2');
-			console.log('修改值')
-		}, 3000);
-	}, [])
-  const list = [
-		{
-			id: '1',
-			name: '111'
-		},
-		{
-			id: '2',
-			name: '222'
-		},
-		{
-			id: '3',
-			name: '333'
-		}
-	];
-	const [value, setValue] = useState('');
-
-	function onChange (e, value, selected) {
-		console.log(val)
-		console.log(e.target)
-		console.log(value, selected)
-		setValue(value);
-	}	
+	function show () {
+		Bridge.openWindow({
+			title: '百度',
+			url: 'h5:https://www.baidu.com/',
+			target: '_self'
+		})
+	}
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<InputPicker
-				list={list}
-				value={value}
-				onChange={onChange}
-				placeholder="请选择"
-				className="border-b"
-			/>
+			<input type="button" value="打开cordova" onClick={show}></input>
     </Container>
   </Page>
 }

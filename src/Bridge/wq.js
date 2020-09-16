@@ -55,12 +55,15 @@ var Bridge = {
     * @param {Object} params {title: '自定义标题', url: '打开地址(h5:为打开老内容)', target: '_self'}}
     */
   openWindow: function (params = {}) {
+    var self = this
     // 新内核打开老内核
     if (params.url.indexOf('h5:') === 0) {
       if (Device.os === 'andriod') {
         let url = params.url
         if (url.indexOf('h5:/') === 0) {
           url = `${window.origin}${url.replace(/^h5:/, '')}`
+        } else {
+          url = `${url.replace(/^h5:/, '')}`
         }
         wq.invoke('nativeComponent', {
           android: {
@@ -70,7 +73,7 @@ var Bridge = {
               title: params.title || ''
             }
           }
-        }, () => {});
+        }, () => {})
         if (params.target === '_self') self.back()
       } else if (Device.os === 'ios') {
         let option = params

@@ -42,14 +42,17 @@ var Bridge = {
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
+    let url = params.url
+    if (url.indexOf('h5:') === 0) url = url.replace(/^h5:/, '')
+    else if (url.indexOf('webview:') === 0) url = url.replace(/^webview:/, '')
     if (params.target === '_self') {
-      window.location.replace(params.url)
+      window.location.replace(url)
     }
     if (Device.device === 'pc') {
-      window.open(params.url)
+      window.open(url)
       return
     }
-    if (params.url) window.location.href = params.url
+    if (url) window.location.href = url
   },
   // 关闭窗口
   closeWindow: function () {
