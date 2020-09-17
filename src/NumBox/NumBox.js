@@ -21,6 +21,7 @@ const NumBox = forwardRef(({
   // 自动获取焦点
   autoFocus, // 渲染时自动获取焦点
   autoSelect, // 渲染时自动选中
+  clickButtonFocus, // 点击加减按钮获取焦点
   // 左右图标
   licon,
   liconAttribute,
@@ -170,7 +171,9 @@ const NumBox = forwardRef(({
     // Callback
     change(event, val);
     if (minusAttribute.onClick) minusAttribute.onClick(e, val);
-    focus();
+    if (clickButtonFocus) {
+      focus();
+    }
   };
   // 点击加
   function clickPlus (e) {
@@ -179,7 +182,9 @@ const NumBox = forwardRef(({
     // Callback
     change(event, val);
     if (plusAttribute.onClick) plusAttribute.onClick(e, val);
-    focus();
+    if (clickButtonFocus) {
+      focus();
+    }
   };
   // 点击容器
   function click (e) {

@@ -44,6 +44,8 @@ const InputText = forwardRef(({
     return refEl.current
   });
 
+  const [clearShow, setClearShow] = useState(false);
+
   useEffect(() => {
     let val = refElInput.current.value;
     // 更新清除按钮
@@ -52,21 +54,27 @@ const InputText = forwardRef(({
     if (pre) {
       preAutoSize(val);
     }
+    // 自动获取焦点
     if (autoFocus) {
       focus();
     }
   }, []) // eslint-disable-line
 
+  // 更新清空按钮
+  useEffect(() => {
+    if (refElInput.current) {
+      updateState(refElInput.current.value)
+    }
+  }, [value])
+
+  // 更新默认值
   useEffect(() => {
     if ((defaultValue || defaultValue === '') && refElInput.current) {
       if (refElInput.current.value !== defaultValue) {
-        console.log(defaultValue)
         refElInput.current.value = defaultValue;
       }
     }
   }, [defaultValue])
-
-  const [clearShow, setClearShow] = useState(false);
 
   // 更新清除按钮
   function updateState (val) {

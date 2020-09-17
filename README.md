@@ -3909,6 +3909,7 @@ import Notice from 'seedsui-react/lib/Notice';
   // 自动获取焦点
   autoFocus={渲染时自动获取焦点 bool, 默认false}
   autoSelect={渲染时自动选中 bool, 默认false}
+  clickButtonFocus={点击加减按钮获取焦点 bool, 默认false}
 
   // 左右图标
   licon={左图标 node, 默认无}

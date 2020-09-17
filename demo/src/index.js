@@ -6,23 +6,30 @@ import {
 	Header,
 	Titlebar,
   Bridge,
-  Container
+  Container,
+  InputText
 } from '../../src';
 
 function Demo () {
-	function show () {
-		Bridge.openWindow({
-			title: '百度',
-			url: 'h5:https://www.baidu.com/',
-			target: '_self'
-		})
-	}
+  const [value, setValue] = useState('');
+  useEffect(() => {
+    setTimeout(() => {
+      setValue('1234123')
+    }, 1000);
+  }, []) // eslint-disable-line
+	function changeNum (e, val) {
+    setValue(val);
+  }
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-			<input type="button" value="打开cordova" onClick={show}></input>
+      <InputText
+        clear
+        value={value}
+        onChange={changeNum}
+      />
     </Container>
   </Page>
 }
