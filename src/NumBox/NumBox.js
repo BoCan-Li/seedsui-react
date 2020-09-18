@@ -27,9 +27,6 @@ const NumBox = forwardRef(({
   liconAttribute,
   ricon,
   riconAttribute,
-  // 清除按键
-  clear,
-  clearAttribute,
   // events
   onClick,
   onChange,
@@ -51,20 +48,11 @@ const NumBox = forwardRef(({
 
   const [minDisabled, setMinDisabled] = useState(false);
   const [maxDisabled, setMaxDisabled] = useState(false);
-  const [clearShow, setClearShow] = useState(false);
 
   useEffect(() => {
     let val = refElInput.current.value || '';
     updateState(val);
   }, []) // eslint-disable-line
-
-  useEffect(() => {
-    if ((defaultValue || defaultValue === '') && refElInput.current) {
-      if (refElInput.current.value !== defaultValue) {
-        refElInput.current.value = defaultValue;
-      }
-    }
-  }, [defaultValue])
 
   // 更新禁用状态
   function updateState (val) {
@@ -77,11 +65,6 @@ const NumBox = forwardRef(({
       setMaxDisabled(true);
     } else {
       setMaxDisabled(false);
-    }
-    if (val) {
-      setClearShow(true);
-    } else {
-      setClearShow(false);
     }
   }
 
@@ -191,9 +174,6 @@ const NumBox = forwardRef(({
     e.stopPropagation();
     if (disabled) return;
     var target = e.target;
-    if (clear && target.classList.contains('clearicon')) {
-      clickClear(e);
-    }
     if (liconAttribute && liconAttribute.onClick && target.classList.contains('licon')) {
       liconAttribute.onClick(e, refElInput.current.value);
       return;
@@ -215,15 +195,6 @@ const NumBox = forwardRef(({
       return;
     }
     if (onClick) onClick(e, refElInput.current.value);
-  }
-  // 点击清除
-  function clickClear (e) {
-    focus();
-    let event = {target: refElInput.current};
-    if (clear && typeof clear === 'function') clear(event, '');
-    // Callback
-    change(event, '');
-    e.stopPropagation();
   }
   // render
   function getInputDOM () {
@@ -255,7 +226,6 @@ const NumBox = forwardRef(({
   // 剔除掉onClick事件, 因为在容器onClick已经回调了
   let otherLiconAttribute = filterProps(liconAttribute)
   let otherRiconAttribute = filterProps(riconAttribute)
-  let otherClearAttribute = filterProps(clearAttribute)
   return (
     <div ref={refEl} {...others} disabled={(min >= max) || disabled} className={`numbox${others.className ? ' ' + others.className : ''}`} onClick={click}>
       <input
@@ -268,8 +238,6 @@ const NumBox = forwardRef(({
       {licon && licon}
       {otherLiconAttribute && !Object.isEmptyObject(otherLiconAttribute) && <i {...otherLiconAttribute} className={`licon icon${otherLiconAttribute.className ? ' ' + liconAttribute.className : ''}`}></i>}
       {getInputDOM()}
-      {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-      {clearShow && !readOnly && !disabled && clear && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
       {otherRiconAttribute && !Object.isEmptyObject(otherRiconAttribute) && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
       {ricon && ricon}
       <input

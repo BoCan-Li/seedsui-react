@@ -3916,11 +3916,7 @@ import Notice from 'seedsui-react/lib/Notice';
   liconAttribute={左图标属性 object, 默认无}
   ricon={右图标 node, 默认无}
   riconAttribute={右图标属性 object, 默认无}
-
-  // 清除按钮
-  clear={清除 bool | func(e, ''), 默认无}
-  clearAttribute={清除图标属性 object, 默认无}
-
+  
   // events
   onClick={点击容器 func(e), 默认无}
   onChange={值发生变化 func(e, value), 默认无}

@@ -7,17 +7,12 @@ import {
 	Titlebar,
   Bridge,
   Container,
-  InputText
+  NumBox
 } from '../../src';
 
 function Demo () {
-  const [value, setValue] = useState('');
-  useEffect(() => {
-    setTimeout(() => {
-      setValue('1234123')
-    }, 1000);
-  }, []) // eslint-disable-line
-	function changeNum (e, val) {
+	const [value, setValue] = useState('');
+  function changeNum (e, val) {
     setValue(val);
   }
   return <Page>
@@ -25,8 +20,12 @@ function Demo () {
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-      <InputText
-        clear
+      <NumBox
+        className="lg"
+        digits={2}
+        min={0}
+        max={4}
+        required
         value={value}
         onChange={changeNum}
       />
