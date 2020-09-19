@@ -151,6 +151,7 @@ const Tree = forwardRef(({
 
   // 点击
   function click (s) {
+    if (!s.targetLine) return;
     if (refEl.current) s.target = refEl.current;
     let data = Object.clone(list);
     if (JSON.stringify(data).indexOf('"children"') !== -1) {

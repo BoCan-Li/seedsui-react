@@ -86,7 +86,24 @@ var Tree = function (container, params) {
   s.selected = {}
   // 异步渲染时需要用临时数据, 所以设置_data用于渲染
   var _data = s.params.data
+  // 判断当前id节点下是否有子节点
+  s.hasChildren = function (id) {
+    for (var i = 0; i < _data.length; i++) {
+      var option = _data[i]
+      if (option.parentid === id) return true
+    }
+    return false
+  }
+  // 构建项
   s.buildOption = function (option) {
+    // 如果设置自动显隐箭头, 则判断当前项是否有下级节点
+    if (s.params.arrowAutoShow) {
+      if (s.hasChildren(option.id)) {
+        delete option.isLeaf
+      } else {
+        option.isLeaf = true
+      }
+    }
     // 拷贝option，方便传入回调中而不影响原option
     var copyOption = Object.create(option)
     // line的data-xxx属性html
@@ -465,6 +482,7 @@ var Tree = function (container, params) {
     } else if (s.targetLine) { // 点击其它元素,但s.targetLine存在的情况下
       // 展开与收缩
       s.targetLine.classList.toggle(s.params.extendClass)
+      if (!s.targetLine.nextElementSibling) return
       var lines = s.targetLine.nextElementSibling.querySelectorAll('li > .' + s.params.lineClass)
       /* eslint-disable */
       for (var i = 0, line; line = lines[i++];) {
