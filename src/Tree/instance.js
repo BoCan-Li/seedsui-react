@@ -363,6 +363,9 @@ var Tree = function (container, params) {
       return
     }
     
+    // 如果禁止多选, 则只先移除所有选中
+    if (!s.params.multiple) s.removeAllSelected()
+
     if (s.selected[opts.id]) {
       console.log('addSelected:您要选中的节点已经选中')
       return
@@ -372,9 +375,6 @@ var Tree = function (container, params) {
       console.log('addSelected:您要选中的节点已经选中')
       return
     }
-
-    // 如果禁止多选, 则只先移除所有选中
-    if (!s.params.multiple) s.removeAllSelected()
 
     // bar上添加选中
     s.addBarOption(opts)

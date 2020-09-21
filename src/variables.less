@@ -8732,6 +8732,7 @@ a {
       display: block;
     }
   }
+  // 选中隐藏子节点的选择框
   .tree-line.active{
     &, &+ul{
       color: #333;
@@ -8740,6 +8741,12 @@ a {
       display: none;
     }
     .tree-button-del{
+      .flex;
+    }
+  }
+  // 单选不隐藏子节点选择框
+  .tree.tree-type-radio .tree-line.active{
+    & + ul .tree-button-add{
       .flex;
     }
   }

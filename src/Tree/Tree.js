@@ -195,7 +195,7 @@ const Tree = forwardRef(({
 
   return (
     <div ref={refEl} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
-      <ul {...treeAttribute} className={`tree${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
+      <ul {...treeAttribute} className={`tree${multiple ? '' : ' tree-type-radio'}${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
     </div>
   );
 })
