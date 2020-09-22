@@ -3166,6 +3166,10 @@ fail = (e, error) => {
   onChange={值发生变化 func(e, value), 默认无}
   onBlur={失去焦点 func(e, value), 默认无}
   onFocus={获取焦点 func(e, value), 默认无}
+  onCompositionStart={输入开始时 func(e, value), 默认无}
+  onCompositionUpdate={输入进行中 func(e, value), 默认无}
+  onCompositionEnd={输入完成时 func(e, value), 默认无}
+  onInput={输入时 func(e, value), 默认无}
 
   // 右侧内容
   rcaption={右侧内容 node, 默认无}

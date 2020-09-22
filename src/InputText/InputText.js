@@ -32,6 +32,10 @@ const InputText = forwardRef(({
   children,
   // events
   onClick,
+  onCompositionStart, // 输入开始时
+  onCompositionUpdate, // 输入进行中
+  onCompositionEnd, // 输入完成时
+  onInput,
   onChange,
   onBlur,
   onFocus,
@@ -48,12 +52,9 @@ const InputText = forwardRef(({
 
   useEffect(() => {
     let val = refElInput.current.value;
-    // 更新清除按钮
-    updateState(val);
-    // 更新高度
-    if (pre) {
-      preAutoSize(val);
-    }
+    // 更新清除按钮和自适应的高度
+    updateClear(val);
+    preAutoSize(val);
     // 自动获取焦点
     if (autoFocus) {
       focus();
@@ -63,21 +64,13 @@ const InputText = forwardRef(({
   // 更新清空按钮
   useEffect(() => {
     if (refElInput.current) {
-      updateState(refElInput.current.value)
+      updateClear(refElInput.current.value)
+      preAutoSize(refElInput.current.value)
     }
-  }, [value])
-
-  // 更新默认值
-  useEffect(() => {
-    if ((defaultValue || defaultValue === '') && refElInput.current) {
-      if (refElInput.current.value !== defaultValue) {
-        refElInput.current.value = defaultValue;
-      }
-    }
-  }, [defaultValue])
+  }, [value]) // eslint-disable-line
 
   // 更新清除按钮
-  function updateState (val) {
+  function updateClear (val) {
     if (typeof val === 'number') {
       val = String(val)
     }
@@ -89,8 +82,32 @@ const InputText = forwardRef(({
   }
   // 自动扩充功能
   function preAutoSize (val) {
+    if (!pre) return;
     refElPre.current.children[0].innerText = val;
     refElInput.current.style.height = refElPre.current.clientHeight + 'px';
+  }
+  // 校验maxLength和max、min
+  function correctNumber (originVal) {
+    let val = originVal;
+    if (typeof val === 'number') val = String(val)
+    // 最大长度
+    if (maxLength && val && val.length > maxLength) {
+      val = val.substring(0, maxLength)
+    }
+    // 小数位截取
+    if (!isNaN(digits)) {
+      if (val.indexOf('.') !== -1) {
+        val = val.substring(0, val.indexOf('.') + Number(digits) + 1)
+      }
+    }
+    // 输入时只校验最大值、小数点、最大长度、返回错误
+    if (!isNaN(max) && !isNaN(val)) {
+      if (val > max) val = max;
+    }
+    if (!isNaN(min) && !isNaN(val)) {
+      if (val < min) val = min;
+    }
+    return val;
   }
   // 点击加减号清除时获取焦点
   function focus () {
@@ -98,18 +115,28 @@ const InputText = forwardRef(({
     refElInput.current.focus();
     if (autoSelect) refElInput.current.select();
   }
+  // 清空按钮控制
+  function inputHandler (event) {
+    var e = event.nativeEvent;
+    // 修改值时有渲染延迟, 更新清空按钮和自适应的高度
+    setTimeout(() => {
+      updateClear(e.target.value)
+      preAutoSize(e.target.value)
+    }, 100)
+    // Callback
+    if (onInput) onInput(e, e.target.value)
+  }
   // 修改值回调
-  function change (e, val) {
-    if (defaultValue || defaultValue === '') {
-      e.target.value = val;
+  function changeHandler (e, value, callback) {
+    var target = e.target;
+    var val = typeof value === 'string' || typeof value === 'number' ? value : target.value;
+    // 校验maxLength和max、min
+    if (val !== '') {
+      val = correctNumber(target.value);
     }
-    // 更新清空按钮
-    updateState(val);
-    // 更新自动扩充功能
-    if (pre) {
-      preAutoSize(val);
+    if (callback) {
+      callback(e, val)
     }
-    if (onChange) onChange(e, val);
   }
 
   // 点击容器
@@ -143,46 +170,24 @@ const InputText = forwardRef(({
       e.stopPropagation();
     }
   }
-  function correctNumber (originVal) {
-    let val = originVal;
-    if (typeof val === 'number') val = String(val)
-    // 最大长度
-    if (maxLength && val && val.length > maxLength) {
-      val = val.substring(0, maxLength)
-    }
-    // 小数位截取
-    if (!isNaN(digits)) {
-      if (val.indexOf('.') !== -1) {
-        val = val.substring(0, val.indexOf('.') + Number(digits) + 1)
-      }
-    }
-    // 输入时只校验最大值、小数点、最大长度、返回错误
-    if (!isNaN(max) && !isNaN(val)) {
-      if (val > max) val = max;
-    }
-    if (!isNaN(min) && !isNaN(val)) {
-      if (val < min) val = min;
-    }
-    return val;
-  }
-  // 文本框事件
-  function changeHandler (e) {
-    var target = e.target;
-    var val = target.value
-    if (val !== '') {
-      val = correctNumber(target.value);
-    }
-    // onChange
-    change(e, val);
-  }
   // 点击清除
-  function clickClear (e) {
+  function clickClear (event) {
     focus();
-    let event = {target: refElInput.current};
-    if (clear && typeof clear === 'function') clear(event, '');
+    let e = {target: refElInput.current};
+    if (clear && typeof clear === 'function') clear(e, '');
     // Callback
-    change(event, '');
-    e.stopPropagation();
+    if (onChange) {
+      onChange(e, '');
+    } else if (!value) { // 有value没有onChange本身就清空不掉, 所以要控制这种情况不允许清空
+      e.target.value = '';
+    }
+    // 修改值时有渲染延迟, 更新清空按钮和自适应的高度
+    setTimeout(() => {
+      updateClear(e.target.value)
+      preAutoSize(e.target.value)
+    }, 100)
+    
+    event.stopPropagation();
   }
   // render
   function getInputDOM () {
@@ -222,7 +227,11 @@ const InputText = forwardRef(({
           disabled={disabled}
           className={`input-pre`}
           placeholder={placeholder}
-          onChange={changeHandler}
+          onChange={onChange ? (e) => changeHandler(e, null, onChange) : null}
+          onCompositionStart={onCompositionStart ? (e) => changeHandler(e, null, onCompositionStart) : null}
+          onCompositionUpdate={onCompositionUpdate ? (e) => changeHandler(e, null, onCompositionUpdate) : null}
+          onCompositionEnd={onCompositionEnd ? (e) => changeHandler(e, null, onCompositionEnd) : null}
+          onInput={inputHandler}
           onBlur={onBlur}
           onFocus={onFocus}
         ></textarea>
@@ -242,7 +251,11 @@ const InputText = forwardRef(({
         readOnly={readOnly}
         disabled={disabled}
         placeholder={placeholder}
-        onChange={changeHandler}
+        onChange={onChange ? (e) => changeHandler(e, null, onChange) : null}
+        onCompositionStart={onCompositionStart ? (e) => changeHandler(e, null, onCompositionStart) : null}
+        onCompositionUpdate={onCompositionUpdate ? (e) => changeHandler(e, null, onCompositionUpdate) : null}
+        onCompositionEnd={onCompositionEnd ? (e) => changeHandler(e, null, onCompositionEnd) : null}
+        onInput={inputHandler}
         onBlur={onBlur}
         onFocus={onFocus}
         className={`input-area${otherInputAttribute.className ? ' ' + otherInputAttribute.className : ''}`}
@@ -262,9 +275,15 @@ const InputText = forwardRef(({
       disabled={disabled}
       readOnly={readOnly}
       placeholder={placeholder}
-      onChange={changeHandler}
+      onChange={onChange ? (e) => changeHandler(e, null, onChange) : null}
+      onCompositionStart={onCompositionStart ? (e) => changeHandler(e, null, onCompositionStart) : null}
+      onCompositionUpdate={onCompositionUpdate ? (e) => changeHandler(e, null, onCompositionUpdate) : null}
+      onCompositionEnd={onCompositionEnd ? (e) => changeHandler(e, null, onCompositionEnd) : null}
+      onInput={inputHandler}
       autoFocus={autoFocus}
-      onBlur={onBlur} onFocus={onFocus} />;
+      onBlur={onBlur}
+      onFocus={onFocus}
+    />;
   }
 
   // 过滤已经回调的属性
