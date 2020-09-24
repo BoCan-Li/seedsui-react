@@ -38,7 +38,7 @@ window.Date.prototype.lastYearDate = function () {
   return this
 }
 // 返回当月共多少天
-window.Date.prototype.getYearDate = function () {
+window.Date.prototype.getYearDays = function () {
   return this.isLeap() ? 366 : 365
 }
 
@@ -89,7 +89,7 @@ window.Date.prototype.lastSeasonDate = function () {
   return this
 }
 // 返回当季共多少天
-window.Date.prototype.getSeasonDate = function () {
+window.Date.prototype.getSeasonDays = function () {
   // 季度
   var count = Math.ceil((this.getMonth() + 1) / 3)
   // 平闰年2月的差别
@@ -110,7 +110,7 @@ window.Date.prototype.month = function (month) {
     if (/^\d{1,2}$/.test(month)) {
       targetMonth = month - 1
       targetMaxDate = new Date(this.getFullYear(), targetMonth + 1, 0).getDate()
-      if (this.getMonthDate() > targetMaxDate) {
+      if (this.getMonthDays() > targetMaxDate) {
         this.setMonth(targetMonth, targetMaxDate)
       } else {
         this.setMonth(targetMonth)
@@ -120,7 +120,7 @@ window.Date.prototype.month = function (month) {
       targetYear = Number(arr[1])
       targetMonth = arr[2] - 1
       targetMaxDate = new Date(targetYear, targetMonth + 1, 0).getDate()
-      if (this.getMonthDate() > targetMaxDate) {
+      if (this.getMonthDays() > targetMaxDate) {
         this.setYear(targetYear)
         this.setMonth(targetMonth, targetMaxDate)
       } else {
@@ -141,7 +141,8 @@ window.Date.prototype.prevMonth = function (count) {
   } else {
     this.setMonth(targetMonth)
   }
-  return targetMonth < 10 ? '0' + targetMonth : targetMonth
+  return this
+  // return targetMonth < 10 ? '0' + targetMonth : targetMonth
 }
 // 下一月
 window.Date.prototype.nextMonth = function (count) {
@@ -152,17 +153,20 @@ window.Date.prototype.nextMonth = function (count) {
   } else {
     this.setMonth(targetMonth)
   }
-  return targetMonth < 10 ? '0' + targetMonth : targetMonth
+  return this
+  // return targetMonth < 10 ? '0' + targetMonth : targetMonth
 }
 // 一月
 window.Date.prototype.firstMonth = function () {
   this.setMonth(0)
-  return '01'
+  return this
+  // return '01'
 }
 // 十二月
 window.Date.prototype.lastMonth = function () {
   this.setMonth(11)
-  return '12'
+  return this
+  // return '12'
 }
 // 当月第一天
 window.Date.prototype.firstMonthDate = function () {
@@ -175,17 +179,17 @@ window.Date.prototype.lastMonthDate = function () {
   return this
 }
 // 返回当月共多少天
-window.Date.prototype.getMonthDate = function () {
+window.Date.prototype.getMonthDays = function () {
   return new Date(this.getFullYear(), this.getMonth() + 1, '0').getDate()
 }
 
 /*
   * 周操作
   * */
-// 周几,参数:zh_cn
+// 周几,参数:zh_CN
 window.Date.prototype.day = function (language) {
   var chDay = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
-  if (language === 'zh_cn') {
+  if (language === 'zh_CN') {
     return chDay[this.getDay()]
   }
   return this.getDay()
