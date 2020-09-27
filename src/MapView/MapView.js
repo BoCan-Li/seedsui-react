@@ -33,7 +33,7 @@ function MapView ({
 }) {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
 
   const refWrapperEl = useRef(null);
   const [errMsg, setErrMsg] = useState('');

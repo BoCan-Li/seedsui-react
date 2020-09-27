@@ -33,7 +33,7 @@ const PDFView = forwardRef(({
   });
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   // 总页数
   let [total, setTotal] = useState(0)
   // 初始化

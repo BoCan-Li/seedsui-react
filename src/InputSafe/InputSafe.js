@@ -8,7 +8,7 @@ const InputSafe = forwardRef(({
 }, ref) =>  {
     // context
     const context = useContext(Context) || {};
-    const locale = context.locale || function (key) {return key || ''};
+    const locale = context.locale || function (remark) {return remark || ''};
 
     var lvl = value.safeLvl();
     return <ul ref={ref} {...others} className={`input-safe lvl${lvl}${others.className ? ' ' + others.className : ''}`}> 

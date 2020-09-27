@@ -75,7 +75,7 @@ function ShareTip({
   }
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   return createPortal(
     <div className={`mask share-mask${maskAttribute.className ? ' ' + maskAttribute.className : ''}${show ? ' active' : ''}`} {...maskAttribute} onClick={handlerClick}>
       <div className="share-tip-arrow"></div>

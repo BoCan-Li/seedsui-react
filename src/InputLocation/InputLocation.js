@@ -32,7 +32,7 @@ const InputLocation = forwardRef(({
   let [chooseMapData, setChooseMapData] = useState(null);
 
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   if (!loadingValue || typeof loadingValue !== 'string') {
     loadingValue = locale('定位中...', 'location');
   }

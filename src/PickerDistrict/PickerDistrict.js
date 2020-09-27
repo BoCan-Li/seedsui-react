@@ -39,7 +39,7 @@ const PickerDistrict = forwardRef(({
   // 声明ref
   const refElBody = useRef(null);
   // context
-  const context = {};
+  const context = useContext(Context) || {};
 
   // 页签和列表
   let [tabs, setTabs] = useState([])

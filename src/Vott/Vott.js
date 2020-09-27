@@ -37,7 +37,7 @@ const Vott = forwardRef(({
   const instance = useRef(null)
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   useEffect(() => {
     if (instance.current) instance.current.updateParams(params);
   }, [params])

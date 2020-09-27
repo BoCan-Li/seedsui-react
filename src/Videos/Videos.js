@@ -13,7 +13,7 @@ const Videos = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   
   const refVideoFull = useRef(null);
   // h5预览

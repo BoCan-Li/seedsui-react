@@ -24,7 +24,7 @@ const Picker = forwardRef(({
   });
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   useEffect(() => {
     if (!list || !list.length) return;
     [].slice.call(refEl.current.querySelectorAll('.pickerselect-option')).forEach((n, i) => {

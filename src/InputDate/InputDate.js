@@ -25,7 +25,7 @@ const InputDate = forwardRef(({
   const [show, setShow] = useState(false)
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   // 日期纠正
   function correctDate (val) {
     const split = pickerProps.split || '-';

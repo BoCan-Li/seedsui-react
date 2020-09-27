@@ -6,7 +6,7 @@ function Location ({
 }) {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   return (
     <div {...props} className={`map-location${props.className ? ' ' + props.className : ''}`}>
       <div className={`map-location-icon`}></div>

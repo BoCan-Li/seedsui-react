@@ -113,7 +113,7 @@ const Picker = forwardRef(({
 
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   // 剔除掉onClick事件, 因为在instance时已经回调了
   const otherMaskAttribute = filterProps(maskAttribute)
   const otherSubmitAttribute = filterProps(submitAttribute)

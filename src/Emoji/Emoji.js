@@ -32,7 +32,7 @@ const Emoji = forwardRef(({
   });
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   let [tempValue, setTempValue] = useState(value);
   const instance = useRef(null)
   // 自动扩充功能

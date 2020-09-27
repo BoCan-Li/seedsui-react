@@ -27,7 +27,7 @@ const MenuTiled = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
   
   const [viewGroups, setViewGroups] = useState(null); // 分组显示数据
   let [data, setData] = useState(list) // 将list转换成标准格式

@@ -22,7 +22,7 @@ const Actionsheet = forwardRef(({
 }, ref) =>  {
   // context
   const context = useContext(Context) || {};
-  const locale = context.locale || function (key) {return key || ''};
+  const locale = context.locale || function (remark) {return remark || ''};
 
   function click (e) {
     var target = e.target;
