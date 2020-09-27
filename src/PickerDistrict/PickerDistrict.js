@@ -1,9 +1,12 @@
+// require (PrototypeArray.js), 使用了: deepTree, getDeepTreeNodesByNames
 import React, {useContext, useState, useEffect, useRef, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
 import treeData from './instance.data.js';
  
 // 数据
+let initTabs = []; // 根据key或者name获取tabs, property用于区分是key还是value比较
+let currentSelected = null;
 let currentData = null; // 省市区
 let streets = []; // 街道临时存储
 
@@ -36,7 +39,7 @@ const PickerDistrict = forwardRef(({
   // 声明ref
   const refElBody = useRef(null);
   // context
-  const context = useContext(Context) || {};
+  const context = {};
 
   // 页签和列表
   let [tabs, setTabs] = useState([])
@@ -64,52 +67,25 @@ const PickerDistrict = forwardRef(({
     return parent.children
   }
 
-  // 根据key或者name获取tabs, property用于区分是key还是value比较
-  let initTabs = [];
-  function getTabs (values, property) {
-    if (!values || !values.length) return null
-    if (property !== 'id' || property !== 'name') property = 'name'
-    initTabs = []
-    var levels = 0 // 层级
-    function getRow (parentid, list, value) {
-      for (let item of list) {
-        // 模糊匹配
-        if (item[property].indexOf(value) > -1 || value.indexOf(item[property]) > -1) {
-          initTabs.push({
-            parentid: parentid,
-            ...item
-          })
-          const children = item.children;
-          // 下一层级
-          levels++
-          if (values[levels] && children) {
-            getRow(item.id, children, values[levels])
-          }
-        }
-      }
-    }
-    getRow('', currentData, values[0])
-    // 如果省市区不对,则返回空
-    return initTabs
-  }
-
   // 数据初始化
   useEffect(() => {
-    initCurrentData();
-  }, [data]); // eslint-disable-line
-  // 初始化数据
-  async function initCurrentData () {
-    // 初始化数据
-    currentData = null;
-    if (typeof getData === 'function') {
-      currentData = await getData();
-    } else if (Array.isArray(data)){
-      currentData = data;
+    if (show) {
+      loadCurrentData();
     }
-    if (currentData && currentData.length) {
+  }, [show]); // eslint-disable-line
+  // 获取数据
+  async function loadCurrentData () {
+    // 初始化数据
+    let newData = null;
+    if (typeof getData === 'function') {
+      newData = await getData();
+    } else if (Array.isArray(data)){
+      newData = data;
+    }
+    if (newData && newData.length) {
       if (dataFormat && (dataFormat.parentPropertyName || dataFormat.namePropertyName || dataFormat.idPropertyName || dataFormat.childPropertyName)) {
         try {
-          let dataStr = JSON.stringify(currentData);
+          let dataStr = JSON.stringify(newData);
           if (dataFormat.parentPropertyName) {
             dataStr = dataStr.replace(new RegExp(dataFormat.parentPropertyName, 'igm'), 'parentid');
           }
@@ -122,22 +98,60 @@ const PickerDistrict = forwardRef(({
           if (dataFormat.childPropertyName) {
             dataStr = dataStr.replace(new RegExp(dataFormat.childPropertyName, 'igm'), 'parentid');
           }
-          currentData = JSON.parse(dataStr);
+          newData = JSON.parse(dataStr);
         } catch (error) {
-          currentData = null;
+          newData = null;
         }
       } else {
-        currentData = data;
+        newData = data;
       }
     }
-    
-    // 初始化tabs
+    if (newData && newData.length) {
+      currentData = newData.deepTree();
+    }
+    // 初始化选中项
+    loadSelected();
+    // 渲染页面
+    init();
+  }
+  // 获取选中数据
+  function loadSelected () {
+    // 有选中数据直接返回选中数据
     if (selected && selected.length) {
-      initTabs = getTabs(selected.map((item) => { // eslint-disable-line
-        return item.id
-      }), 'id')
-    } else if (value) {
-      initTabs = getTabs(value.split(split || '-'), 'name')
+      // 如果选中项的参数不全, 则返回空
+      for (let item of selected) {
+        if (!item.id || !item.name) {
+          currentSelected = null;
+          return null;
+        }
+      }
+      currentSelected = selected;
+      return selected;
+    }
+    // 没有城市数据返回空
+    if (!currentData || !currentData.length) {
+      currentSelected = null;
+      return null;
+    }
+    // 没有选中数据从value中取
+    let values = [];
+    if (value && value.split(split)) {
+      values = value.split(split);
+    }
+    if (!values || !values.length) {
+      currentSelected = null;
+      return null;
+    }
+    // 根据values取出选中数据
+    currentSelected = currentData.getDeepTreeNodesByNames(values);
+    return currentSelected;
+  }
+  // 初始化数据
+  function init () {
+    initTabs = [];
+    // 初始化tabs
+    if (currentSelected && currentSelected.length) {
+      initTabs = currentSelected;
     }
     if (initTabs && initTabs.length) {
       initTabs[initTabs.length - 1].name = '请选择'
@@ -299,7 +313,7 @@ const PickerDistrict = forwardRef(({
         </div>
         <div className="picker-district-body" ref={refElBody}>
           {list && list.map((item, index) => {
-            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex].id === item.id ? ' active' : ''}`}>
+            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex] && tabs[tabIndex].id === item.id ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
               <div className="picker-district-option-caption">{item.name}</div>
             </div>

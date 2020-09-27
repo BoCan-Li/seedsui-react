@@ -119,7 +119,10 @@ window.Array.prototype.sameIndexs = function () {
   @格式 [{id: '', name: '', children: {}}]
   @return [{id: '', name: '', parentid: ''}, {id: '', name: '', parentid: ''}]
  ----------------------------------------------------- */
-window.Array.prototype.flattenTree = function (parentIdName, nodeIdName) {
+window.Array.prototype.flattenTree = function (propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   if (!Array.isArray(list) || !list.length) return list
   return _buildTreeToFlatten(list, parentIdName, nodeIdName)
@@ -153,7 +156,9 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
 }
 
 // 取出无父节点的顶层数据, 即[{id: '', name: '', parentid: '-1' 或没有parentid}]
-window.Array.prototype.getFlattenTreeRoots = function (parentIdName) {
+window.Array.prototype.getFlattenTreeRoots = function (propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+
   var list = this
   var rootIds = list.getFlattenTreeRootIds()
   var roots = []
@@ -165,7 +170,9 @@ window.Array.prototype.getFlattenTreeRoots = function (parentIdName) {
 }
 
 // 取出扁平数据的顶层id集合, 无parentid, 则修改为'-1'
-window.Array.prototype.getFlattenTreeRootIds = function (parentIdName) {
+window.Array.prototype.getFlattenTreeRootIds = function (propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+
   var list = this
   var parentIdMap = {}
   // 取出所有的parentid
@@ -185,7 +192,9 @@ window.Array.prototype.getFlattenTreeRootIds = function (parentIdName) {
 }
 
 // 根据id, 取出此id的下级节点数据, 即[{id: '', name: '', parentid: ''}]
-window.Array.prototype.getFlattenTreeChildren = function (id, parentIdName) {
+window.Array.prototype.getFlattenTreeChildren = function (id, propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  
   var list = this
   var children = []
   for (var i = 0, child; child = list[i++];) { // eslint-disable-line
@@ -197,7 +206,10 @@ window.Array.prototype.getFlattenTreeChildren = function (id, parentIdName) {
 }
 
 // 根据id, 取出此id的后代节点数据, 即[{id: '', name: '', parentid: ''}]
-window.Array.prototype.getFlattenTreeDescendants = function (id, parentIdName, nodeIdName) {
+window.Array.prototype.getFlattenTreeDescendants = function (id, propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   var descendants = []
   function buildChildren (list, id) {
@@ -213,7 +225,9 @@ window.Array.prototype.getFlattenTreeDescendants = function (id, parentIdName, n
 }
 
 // 根据id, 取出此id的上级节点数据, 即[{id: '', name: '', parentid: ''}]
-window.Array.prototype.getFlattenTreeParent = function (parentId, parentIdName, nodeIdName) {
+window.Array.prototype.getFlattenTreeParent = function (parentId, propertyConfig) {
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   var parents = []
   for (var i = 0, node; node = list[i++];) { // eslint-disable-line
@@ -225,7 +239,10 @@ window.Array.prototype.getFlattenTreeParent = function (parentId, parentIdName, 
 }
 
 // 根据id, 取出此id的前代节点数据, 即[{id: '', name: '', parentid: ''}]
-window.Array.prototype.getFlattenTreePredecessors = function (parentId, parentIdName, nodeIdName) {
+window.Array.prototype.getFlattenTreePredecessors = function (parentId, propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   var predecessors = []
   function buildParent (list, parentId) {
@@ -241,7 +258,9 @@ window.Array.prototype.getFlattenTreePredecessors = function (parentId, parentId
 }
 
 // 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
-window.Array.prototype.getFlattenTreeNode = function (id, parentIdName, nodeIdName) {
+window.Array.prototype.getFlattenTreeNode = function (id, propertyConfig) {
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   var item = list.filter(function (option) {
     if (option[nodeIdName || 'id'] === id) return true
@@ -259,7 +278,10 @@ window.Array.prototype.getFlattenTreeNode = function (id, parentIdName, nodeIdNa
   @格式 [{id: '', name: '', parentid: ''}, {id: '', name: '', parentid: ''}]
   @return [{id: '', name: '', children: {}}]
  ----------------------------------------------------- */
-window.Array.prototype.deepTree = function (parentIdName, nodeIdName) {
+window.Array.prototype.deepTree = function (propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = this
   if (!Array.isArray(list) || !list.length) return list
 
@@ -287,7 +309,10 @@ window.Array.prototype.deepTree = function (parentIdName, nodeIdName) {
 }
 
 // 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
-window.Array.prototype.getDeepTreeNode = function (id, parentIdName, nodeIdName) {
+window.Array.prototype.getDeepTreeNode = function (id, propertyConfig) {
+  var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
+  var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
+
   var list = Object.clone(this)
   var temp = [] // 用于存储children
   // 先将第一层节点放入temp
@@ -310,4 +335,36 @@ window.Array.prototype.getDeepTreeNode = function (id, parentIdName, nodeIdName)
     delete item.children
   }
   return {}
+}
+
+
+// 根据name集合, 取出此name节点的数据, 即[{id: '', name: '', parentid: ''}]
+window.Array.prototype.getDeepTreeNodesByNames = function (names, propertyConfig) {
+  var nodeNameName = propertyConfig && propertyConfig.nodeNameName ? propertyConfig.nodeNameName : 'name'
+
+  var selected = [] // 构建选中项
+  var list = Object.clone(this)
+  var temp = [] // 用于存储children
+  // 先将第一层节点放入temp
+  for (var i = 0; i < list.length; i++) {
+    temp.push(list[i])
+  }
+  var level = 0
+  while (temp.length) {
+    // 取出一项, 并移除此项
+    var item = temp.shift()
+    var name = names[level]
+    if (!name) break
+    if (item[nodeNameName].indexOf(name) !== -1 || name.indexOf(item[nodeNameName]) !== -1) {
+      selected.push(item)
+      // 此项children合并到temp
+      if (item.children && item.children.length) {
+        temp = item.children
+      }
+      // 删除此项children
+      delete item.children
+      level++
+    }
+  }
+  return selected
 }
