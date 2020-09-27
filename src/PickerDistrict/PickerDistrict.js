@@ -97,32 +97,31 @@ const PickerDistrict = forwardRef(({
     } else if (Array.isArray(data)){
       newData = data;
     }
-    if (newData && newData.length) {
-      if (dataFormat && (dataFormat.parentPropertyName || dataFormat.namePropertyName || dataFormat.idPropertyName || dataFormat.childPropertyName)) {
-        try {
-          let dataStr = JSON.stringify(newData);
-          if (dataFormat.parentPropertyName) {
-            dataStr = dataStr.replace(new RegExp(dataFormat.parentPropertyName, 'igm'), 'parentid');
-          }
-          if (dataFormat.namePropertyName) {
-            dataStr = dataStr.replace(new RegExp(dataFormat.namePropertyName, 'igm'), 'name');
-          }
-          if (dataFormat.idPropertyName) {
-            dataStr = dataStr.replace(new RegExp(dataFormat.idPropertyName, 'igm'), 'id');
-          }
-          if (dataFormat.childPropertyName) {
-            dataStr = dataStr.replace(new RegExp(dataFormat.childPropertyName, 'igm'), 'parentid');
-          }
-          newData = JSON.parse(dataStr);
-        } catch (error) {
-          newData = null;
+    // 格式化数据
+    if (newData && newData.length && dataFormat && (dataFormat.parentPropertyName || dataFormat.namePropertyName || dataFormat.idPropertyName || dataFormat.childPropertyName)) {
+      try {
+        let dataStr = JSON.stringify(newData);
+        if (dataFormat.parentPropertyName) {
+          dataStr = dataStr.replace(new RegExp(dataFormat.parentPropertyName, 'igm'), 'parentid');
         }
-      } else {
-        newData = data;
+        if (dataFormat.namePropertyName) {
+          dataStr = dataStr.replace(new RegExp(dataFormat.namePropertyName, 'igm'), 'name');
+        }
+        if (dataFormat.idPropertyName) {
+          dataStr = dataStr.replace(new RegExp(dataFormat.idPropertyName, 'igm'), 'id');
+        }
+        if (dataFormat.childPropertyName) {
+          dataStr = dataStr.replace(new RegExp(dataFormat.childPropertyName, 'igm'), 'parentid');
+        }
+        newData = JSON.parse(dataStr);
+      } catch (error) {
+        newData = null;
       }
     }
     if (newData && newData.length) {
       currentData = newData.deepTree();
+    } else {
+      currentData = null;
     }
     // 初始化选中项
     loadSelected();
