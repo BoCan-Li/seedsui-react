@@ -137,9 +137,9 @@ const PDFView = forwardRef(({
     }
     // 实例化
     refEl.current.instance = new Instance(refEl.current, {
-      loadHTML: locale['in_loading'] || '加载中',
-      errorHTML: locale['hint_file_failed_to_load'] || '文件加载失败',
-      nodataHTML: locale['no_data'] || '暂无数据',
+      loadHTML: locale('加载中', 'in_loading'),
+      errorHTML: locale('文件加载失败', 'hint_file_failed_to_load'),
+      nodataHTML: locale('暂无数据', 'no_data'),
       ...params,
       pictures,
       src,
@@ -202,9 +202,9 @@ const PDFView = forwardRef(({
           </div>
         </div>
         <img alt="" className="pdf-page-img hide"/>
-        <div className="pdf-page-load">{params.loadHTML !== undefined ? params.loadHTML : (locale['in_loading'] || '加载中')}</div>
-        <div className="pdf-page-error hide">{params.errorHTML !== undefined ? params.errorHTML : (locale['hint_file_failed_to_load'] || '文件加载失败')}</div>
-        <div className="pdf-page-nodata hide">{params.nodataHTML !== undefined ? params.nodataHTML : (locale['no_date'] || '暂无数据')}</div>
+        <div className="pdf-page-load">{params.loadHTML !== undefined ? params.loadHTML : locale('加载中', 'in_loading')}</div>
+        <div className="pdf-page-error hide">{params.errorHTML !== undefined ? params.errorHTML : locale('文件加载失败', 'hint_file_failed_to_load')}</div>
+        <div className="pdf-page-nodata hide">{params.nodataHTML !== undefined ? params.nodataHTML : locale('暂无数据', 'no_date')}</div>
       </div>);
     }
     return DOM;

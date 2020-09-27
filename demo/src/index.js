@@ -33,7 +33,7 @@ function getStreet (districtId) {
   })
 }
 
-const [value, setValue] = useState('');
+const [value, setValue] = useState('新疆-双河');
 
 function onChange (e, value, selected) {
   console.log(e.target)
@@ -142,7 +142,6 @@ function getData () {
         placeholder="请选择"
         className="border-b"
         pickerProps={{
-          getData: getData,
           getStreet: getStreet
         }}
       />
