@@ -6022,6 +6022,7 @@ a {
     }
   }
   .picker-district-body{
+    position: relative;
     .flex-1;
     overflow: auto;
     padding: 10px 12px;
@@ -6056,6 +6057,42 @@ a {
     line-height: 14px;
     font-size: 14px;
     margin-right: 4px;
+  }
+  .picker-district-error, .picker-district-load{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    .flex;
+    .flex-middle;
+    .flex-center;
+    .flex-vertical;
+  }
+  .picker-district-error-icon{
+    font-family: 'iconfont';
+    &:extend(.icon-notice-data all);
+    font-size: 80px;
+    &:extend(.size80 all);
+    color: @sub;
+  }
+  .picker-district-error-label{
+    color: @sub;
+    margin-top: 8px;
+    font-size: @font-size-sm;
+  }
+  .picker-district-load-icon{
+  }
+  .picker-district-load-label{
+    color: @sub;
+    margin-top: 8px;
+    font-size: @font-size-sm;
+  }
+  .picker-district-error{
+    pointer-events: none;
   }
 }
 

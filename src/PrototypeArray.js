@@ -193,6 +193,7 @@ window.Array.prototype.getFlattenTreeRootIds = function (propertyConfig) {
 
 // 根据id, 取出此id的下级节点数据, 即[{id: '', name: '', parentid: ''}]
 window.Array.prototype.getFlattenTreeChildren = function (id, propertyConfig) {
+  if (typeof id === 'number') id = String(id)
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
   
   var list = this
@@ -207,6 +208,7 @@ window.Array.prototype.getFlattenTreeChildren = function (id, propertyConfig) {
 
 // 根据id, 取出此id的后代节点数据, 即[{id: '', name: '', parentid: ''}]
 window.Array.prototype.getFlattenTreeDescendants = function (id, propertyConfig) {
+  if (typeof id === 'number') id = String(id)
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
   var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
 
@@ -226,6 +228,7 @@ window.Array.prototype.getFlattenTreeDescendants = function (id, propertyConfig)
 
 // 根据id, 取出此id的上级节点数据, 即[{id: '', name: '', parentid: ''}]
 window.Array.prototype.getFlattenTreeParent = function (parentId, propertyConfig) {
+  if (typeof parentId === 'number') parentId = String(parentId)
   var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
 
   var list = this
@@ -240,6 +243,7 @@ window.Array.prototype.getFlattenTreeParent = function (parentId, propertyConfig
 
 // 根据id, 取出此id的前代节点数据, 即[{id: '', name: '', parentid: ''}]
 window.Array.prototype.getFlattenTreePredecessors = function (parentId, propertyConfig) {
+  if (typeof parentId === 'number') parentId = String(parentId)
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
   var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
 
@@ -259,6 +263,7 @@ window.Array.prototype.getFlattenTreePredecessors = function (parentId, property
 
 // 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
 window.Array.prototype.getFlattenTreeNode = function (id, propertyConfig) {
+  if (typeof id === 'number') id = String(id)
   var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
 
   var list = this
@@ -310,6 +315,7 @@ window.Array.prototype.deepTree = function (propertyConfig) {
 
 // 根据id, 取出此id节点的数据, 即{id: '', name: '', parentid: ''}
 window.Array.prototype.getDeepTreeNode = function (id, propertyConfig) {
+  if (typeof id === 'number') id = String(id)
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
   var nodeIdName = propertyConfig && propertyConfig.nodeIdName ? propertyConfig.nodeIdName : 'id'
 

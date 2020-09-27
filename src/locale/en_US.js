@@ -59,6 +59,7 @@ export default {
   'current_location': 'Current location',
   'reposition': 'Reposition',
   'hint_weather_failed': 'Weather failed',
+  'hint_getdata_failed': 'Get data failed',
   'confirm_quit_page': 'Confirm quit?',
   'unit_year': 'Y', // 未使用,YYYY年
   'unit_month': 'M', // 未使用,MM月

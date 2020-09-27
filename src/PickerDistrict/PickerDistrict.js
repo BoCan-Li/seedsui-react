@@ -40,11 +40,14 @@ const PickerDistrict = forwardRef(({
   const refElBody = useRef(null);
   // context
   const context = useContext(Context) || {};
+  const locale = context.locale || function (remark) {return remark || ''};
 
   // 页签和列表
   let [tabs, setTabs] = useState([])
   let [tabIndex, setTabIndex] = useState(0)
   let [list, setList] = useState([])
+  let [errMsg, setErrMsg] = useState('');
+  let [loading, setLoading] = useState(false);
 
   // 设置列表, 如果类型为省时, 则不显示直辖市, 类型为市时, 则不显示直辖市的区
   function isLeaf () { // 判断点击的是否是底层
@@ -63,8 +66,12 @@ const PickerDistrict = forwardRef(({
     if (!parentid || parentid === '-1') {
       return currentData;
     }
-    let parent = currentData.getDeepTreeNode(parentid)
-    return parent.children
+    if (currentData && currentData.length) {
+      let parent = currentData.getDeepTreeNode(parentid)
+      return parent.children
+    }
+    setErrMsg(locale('暂无数据', 'no_data'));
+    return []
   }
 
   // 数据初始化
@@ -78,7 +85,15 @@ const PickerDistrict = forwardRef(({
     // 初始化数据
     let newData = null;
     if (typeof getData === 'function') {
+      setLoading(true);
       newData = await getData();
+      if (typeof newData === 'string') {
+        setErrMsg(newData)
+      }
+      if (!newData) {
+        setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
+      }
+      setLoading(false);
     } else if (Array.isArray(data)){
       newData = data;
     }
@@ -111,8 +126,12 @@ const PickerDistrict = forwardRef(({
     }
     // 初始化选中项
     loadSelected();
+    // 初始化tabbar
+    initTabBar();
     // 渲染页面
-    init();
+    if (currentData && currentData.length) {
+      initList();
+    }
   }
   // 获取选中数据
   function loadSelected () {
@@ -146,10 +165,9 @@ const PickerDistrict = forwardRef(({
     currentSelected = currentData.getDeepTreeNodesByNames(values);
     return currentSelected;
   }
-  // 初始化数据
-  function init () {
+  // 初始化tabs
+  function initTabBar () {
     initTabs = [];
-    // 初始化tabs
     if (currentSelected && currentSelected.length) {
       initTabs = currentSelected;
     }
@@ -162,11 +180,56 @@ const PickerDistrict = forwardRef(({
         name: '请选择'
       }
     }
-    // 初始化列表
-    let initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
     setTabs(initTabs)
     setTabIndex(initTabs.length - 1)
+  }
+  // 初始化列表
+  async function initList () {
+    let initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
+    if (!initList && initTabs[initTabs.length - 1].id && String(initTabs[initTabs.length - 1].id).length >= 9) {
+      await loadStreets(initTabs[initTabs.length - 2].id);
+      if (Array.isArray(streets) && streets && streets.length) {
+        initList = streets
+      } else {
+        initList = []
+      }
+    }
     setList(initList)
+  }
+  // 获取街道, 失败返回false, 成功返回true
+  async function loadStreets (id) {
+    return new Promise(async (resolve) => {
+      setLoading(true);
+      try {
+        streets = await getStreet(id)
+      } catch (error) {
+        streets = null;
+        setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
+        setLoading(false);
+        resolve(false);
+        return;
+      }
+      setLoading(false);
+      // 返回字符串, 说明有错
+      if (typeof streets === 'string') {
+        streets = null;
+        setErrMsg(streets)
+        resolve(false)
+        return;
+      }
+      // 如果返回不是数组, 则认为没有街道
+      if (!streets || streets instanceof Array === false) {
+        streets = null;
+        resolve(true)
+        return;
+      }
+      // 增加街道标识
+      streets = (streets || []).map((street) => {
+        street.isStreet = true
+        return street
+      })
+      resolve(true)
+    })
   }
 
   // 如果列表发生变化, 则查找选中项
@@ -186,6 +249,7 @@ const PickerDistrict = forwardRef(({
   }
   // 点击tab
   function onClickTab (tab, index) {
+    setErrMsg('');
     // 点击街道
     if (tab.isStreet && streets && streets.length) {
       setTabIndex(index)
@@ -242,23 +306,6 @@ const PickerDistrict = forwardRef(({
     // 没有children, 并且有街道请求, 则获取街道
     if (!option.children || !option.children.length) {
       if (!option.isStreet && getStreet) {
-        streets = await getStreet(option.id)
-        // 如果返回不是数组, 则认为返回错误
-        if (streets instanceof Array === false) {
-          return
-        }
-        // 返回街道为空直接提交
-        if (!streets || !streets.length) {
-          setTabs(spliceTabs)
-          onSubmit(e, option)
-          return
-        }
-        // 增加街道标识
-        streets = (streets || []).map((street) => {
-          street.isStreet = true
-          return street
-        })
-        setList(streets)
         // 设置tabs
         // spliceTabs[spliceTabs.length - 1].name = option.name
         spliceTabs.push({
@@ -268,6 +315,16 @@ const PickerDistrict = forwardRef(({
         })
         setTabs(spliceTabs)
         setTabIndex(spliceTabs.length - 1)
+
+        // 设置列表
+        let success = await loadStreets(option.id);
+        // 返回街道为空直接提交
+        if (success && (!Array.isArray(streets) || !streets || !streets.length)) {
+          setTabs(spliceTabs)
+          onSubmit(e, option)
+          return
+        }
+        setList(streets)
         return
       }
       // 街道直接提交
@@ -319,6 +376,16 @@ const PickerDistrict = forwardRef(({
             </div>
           })}
         </div>
+        {errMsg && <div className="picker-district-error">
+          <div className="picker-district-error-icon"></div>
+          <div className="picker-district-error-label">{errMsg}</div>
+        </div>}
+        {loading && <div className="picker-district-load">
+          <div className="picker-district-load-icon"></div>
+          <div className="picker-district-load-label">
+            {locale('加载中...', 'in_loading')}
+          </div>
+        </div>}
       </div>
     </div>,
     portal || context.portal || document.getElementById('root') || document.body

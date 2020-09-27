@@ -59,6 +59,7 @@ export default {
   'current_location': '当前位置',
   'reposition': '重新定位',
   'hint_weather_failed': '获取天气失败, 请稍后重试',
+  'hint_getdata_failed': '获取数据失败, 请稍后重试',
   'confirm_quit_page': '您确定要离开此页面吗?',
   'unit_year': '年', // 未使用,YYYY年
   'unit_month': '月', // 未使用,MM月
