@@ -306,16 +306,6 @@ const PickerDistrict = forwardRef(({
     // 没有children, 并且有街道请求, 则获取街道
     if (!option.children || !option.children.length) {
       if (!option.isStreet && getStreet) {
-        // 设置tabs
-        // spliceTabs[spliceTabs.length - 1].name = option.name
-        spliceTabs.push({
-          parentid: option.id,
-          id: '',
-          name: '请选择'
-        })
-        setTabs(spliceTabs)
-        setTabIndex(spliceTabs.length - 1)
-
         // 设置列表
         let success = await loadStreets(option.id);
         // 返回街道为空直接提交
@@ -325,6 +315,16 @@ const PickerDistrict = forwardRef(({
           return
         }
         setList(streets)
+
+        // 设置tabs
+        // spliceTabs[spliceTabs.length - 1].name = option.name
+        spliceTabs.push({
+          parentid: option.id,
+          id: '',
+          name: '请选择'
+        })
+        setTabs(spliceTabs)
+        setTabIndex(spliceTabs.length - 1)
         return
       }
       // 街道直接提交
