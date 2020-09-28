@@ -202,17 +202,17 @@ const PickerDistrict = forwardRef(({
       try {
         streets = await getStreet(id)
       } catch (error) {
-        streets = null;
         setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
         setLoading(false);
+        streets = null;
         resolve(false);
         return;
       }
       setLoading(false);
       // 返回字符串, 说明有错
       if (typeof streets === 'string') {
-        streets = null;
         setErrMsg(streets)
+        streets = null;
         resolve(false)
         return;
       }
