@@ -6,6 +6,8 @@ export default function (remark, key, variable) {
     if (localStorage.getItem('_seedsui_locale')) {
       locale = JSON.parse(localStorage.getItem('_seedsui_locale')) || {}
     } else {
+      console.log(remark, key, variable)
+      console.log('没有配置国际化, 默认读取国际化文件zh_CN')
       locale = require(`./zh_CN.js`) // 默认国际化文件, en_US和zh_CN
       if (locale.default) locale = locale.default
       if (locale && Object.keys(locale).length) localStorage.setItem('_seedsui_locale', JSON.stringify(locale))

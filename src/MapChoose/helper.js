@@ -129,7 +129,6 @@ export default {
   drawMarker: function (point) {
     var self = this;
     if (!point) {
-      debugger
       console.error('绘制标记: 定位坐标参数不能为空');
       return null;
     }

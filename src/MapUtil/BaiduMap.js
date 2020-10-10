@@ -2,6 +2,7 @@
 // 引入 PrototypeObject.js: Object.getUnitNum, Object.loadScript
 // 引入 PrototypeString.js: Object.getUnitNum方法中使用toNumber()
 import locale from './../locale'
+import GeoUtil from './../GeoUtil'
 
 /**
   * 初始化百度地图
@@ -372,21 +373,35 @@ var BaiduMap = function (id, params) {
   }
   /**
     * 将[lng, lat]转换为百度点Point对象
+    * @param {Any} point [lng, lat]或{lng: , lat: }或{longitude: , latitude: }
+    * @param {String} type 'wgs84 | gcj02'
+    * @return {Array<Point>}
+    */
+  s.pointToArrayPoint = function (point) {
+    if (point instanceof BMap.Point) {
+      return [point.lng, point.lat]
+    }
+    if (Array.isArray(point) && point[0] && point[1]) {
+      return point
+    }
+    if (point && point.lng && point.lat) {
+      return [point.lng, point.lat]
+    }
+    if (point && point.longitude && point.latitude) {
+      return [point.longitude, point.latitude]
+    }
+    return null
+  }
+  /**
+    * 将[lng, lat]转换为百度点Point对象
     * @param {Array} point [lng, lat]
     * @param {String} type 'wgs84 | gcj02'
     * @return {Array<Point>}
     */
   s.pointToBdPoint = function (point) {
-    if (point instanceof BMap.Point) {
-      return point
-    }
-    if (Array.isArray(point) && point[0] && point[1]) {
-      return new BMap.Point(point[0], point[1])
-    }
-    if (point && point.lng && point.lat) {
-      return new BMap.Point(point.lng, point.lat)
-    }
-    return null
+    let arrPoint = s.pointToArrayPoint(point)
+    if (!arrPoint) return null
+    return new BMap.Point(arrPoint[0], arrPoint[1])
   }
   /**
     * 将[[lng, lat]]转换为百度点Point对象集合
@@ -455,22 +470,25 @@ var BaiduMap = function (id, params) {
   /**
     * 地址逆解析
     * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02'
+    * @param {String} type 'wgs84 | gcj02 | bd09'
     * @return {Promise} result: {status: 0 成功, point 坐标, address 地址}
     */
   s.getAddress = function (point, type) {
     return new Promise(async (resolve) => {
       // 格式化坐标
-      const fmtResult =  await s.pointConvertBdPoint(point, type)
-      if (fmtResult.code !== '1') return
+      let arrPoint = s.pointToArrayPoint(point)
+      if (!arrPoint) {
+        resolve(null)
+        return
+      }
+      let bdPoint = GeoUtil.coordtransform(arrPoint, type, 'bd09')
+      bdPoint = new BMap.Point(bdPoint[0], bdPoint[1])
       // 逆解析
       var geocoder = new BMap.Geocoder()
-      geocoder.getLocation(fmtResult.point, (res) => {
+      geocoder.getLocation(bdPoint, (res) => {
         // 对结果进行格式化
         let result = res
         if (res.addressComponents) {
-          result.longitude = point[0]
-          result.latitude = point[1]
           result.point = point
           result.province = res.addressComponents.province
           result.city = res.addressComponents.city

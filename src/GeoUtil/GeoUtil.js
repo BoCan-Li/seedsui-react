@@ -253,6 +253,7 @@ var GeoUtil = {};
       console.log('GeoUtil coordtransform: point参数不正确')
       return null
     }
+    if (from === to) return point
     // 定义一些常量
     var x_PI = 3.14159265358979324 * 3000.0 / 180.0
     var PI = 3.1415926535897932384626
@@ -371,6 +372,7 @@ var GeoUtil = {};
       console.log('GeoUtil coordstransform: points参数不正确, 应当传入[[lng, lat], [lng, lat]]')
       return points
     }
+    if (from === to) return points
     return points.map((point) => {
       return GeoUtil.coordtransform(point, from, to)
     })
