@@ -248,12 +248,15 @@ var GeoUtil = {};
     * @param {String} to 转换坐标类型 'wgs84 | gcj02 | bd09'
     * @return {Point} 错误返回null
     */
-  GeoUtil.coordtransform = function (point, from = 'gcj02', to = 'bd09') {
+  GeoUtil.coordtransform = function (point, from, to) {
     if (!point || point.length !== 2) {
       console.log('GeoUtil coordtransform: point参数不正确')
       return null
     }
     if (from === to) return point
+    if (from === to) return point
+    if (!from) return point
+    if (!to) return point
     // 定义一些常量
     var x_PI = 3.14159265358979324 * 3000.0 / 180.0
     var PI = 3.1415926535897932384626
@@ -373,6 +376,8 @@ var GeoUtil = {};
       return points
     }
     if (from === to) return points
+    if (!from) return points
+    if (!to) return points
     return points.map((point) => {
       return GeoUtil.coordtransform(point, from, to)
     })
