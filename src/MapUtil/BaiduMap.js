@@ -59,7 +59,8 @@ var BaiduMap = function (id, params) {
   const {
     BMap, BMapLib = {},
     BMAP_ANCHOR_BOTTOM_LEFT, BMAP_ANCHOR_BOTTOM_RIGHT, BMAP_ANCHOR_TOP_RIGHT,
-    BMAP_DRAWING_POLYGON, BMAP_NAVIGATION_CONTROL_ZOOM,
+    BMAP_DRAWING_POLYGON, BMAP_DRAWING_POLYLINE, BMAP_DRAWING_CIRCLE, BMAP_DRAWING_RECTANGLE, BMAP_DRAWING_MARKER,
+    BMAP_NAVIGATION_CONTROL_ZOOM,
     BMAP_STATUS_SUCCESS, BMAP_STATUS_TIMEOUT, BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED,
     BMAP_ANCHOR_TOP_LEFT, BMAP_NAVIGATION_CONTROL_LARGE
   } = window
@@ -136,21 +137,6 @@ var BaiduMap = function (id, params) {
     //   if (options.fail) options.fail({errMsg: res.message})
     // })
     // s.map.addControl(geolocationControl)
-  }
-
-  // 创建鼠标绘制管理类
-  s.createDrawingManager = function () {
-    s.drawingManager = new BMapLib.DrawingManager(s.map, {
-      isOpen: false, // 是否开启绘制模式
-      drawingToolOptions: {
-        anchor: BMAP_ANCHOR_TOP_RIGHT, // 位置
-        offset: new BMap.Size(5, 5), // 偏离值
-      },
-      circleOptions: s.params.styleOptions, // 圆的样式
-      polylineOptions: s.params.styleOptions, // 线的样式
-      polygonOptions: s.params.styleOptions, // 多边形的样式
-      rectangleOptions: s.params.styleOptions // 矩形的样式
-    })
   }
 
   /**
@@ -810,8 +796,11 @@ var BaiduMap = function (id, params) {
     if (!overlay) return
     s.map.removeOverlay(overlay)
   }
-  // 启用手动绘制
-  // 设置当前的绘制模式，参数DrawingType，为5个可选常量: 
+
+  /**
+    * 创建鼠标绘制管理类,设置当前的绘制模式, 参考http://api.map.baidu.com/library/DrawingManager/1.4/docs/symbols/BMapLib.DrawingManager.html#constructor
+    * @param {CONST} type
+    */
   // BMAP_DRAWING_MARKER 画点 
   // BMAP_DRAWING_CIRCLE 画圆 
   // BMAP_DRAWING_POLYLINE 画线 
@@ -823,6 +812,56 @@ var BaiduMap = function (id, params) {
   // polygoncomplete(overlay) {Polygon} 绘制多边形完成后，派发的事件接口
   // polylinecomplete(overlay) {Polyline} 绘制线完成后，派发的事件接口
   // rectanglecomplete(overlay) {Polygon} 绘制矩形完成后，派发的事件接口
+  s.createDrawingManager = function (options = {}) {
+    if (typeof options !== 'object') options = {}
+    let type = options.drawingType || BMAP_DRAWING_POLYGON
+    let opts = {
+      isOpen: typeof options.isOpen === 'boolean' ? options.isOpen : false, // 是否开启绘制模式
+      drawingType: type
+    }
+    // 是否添加绘制工具栏控件
+    if (typeof options.enableDrawingTool === 'boolean') {
+      opts.enableDrawingTool = options.enableDrawingTool
+    }
+    // 绘制工具栏控件配置
+    if (typeof options.drawingToolOptions === 'object') {
+      opts.drawingToolOptions = options.drawingToolOptions
+      // {
+      //   anchor: BMAP_ANCHOR_TOP_RIGHT, // 位置
+      //   offset: new BMap.Size(5, 5), // 偏离值
+      // }
+    }
+    // 多边形的样式
+    if (type === BMAP_DRAWING_POLYGON) {
+      opts.polygonOptions = s.params.styleOptions
+    }
+    // 多边线的样式
+    if (type === BMAP_DRAWING_POLYLINE) {
+      opts.polylineOptions = s.params.styleOptions
+    }
+    // 圆的样式
+    if (type === BMAP_DRAWING_CIRCLE) {
+      opts.circleOptions = s.params.styleOptions
+    }
+    // 矩形的样式
+    if (type === BMAP_DRAWING_RECTANGLE) {
+      opts.rectangleOptions = s.params.styleOptions
+    }
+    // 点样式
+    if (type === BMAP_DRAWING_MARKER) {
+      opts.markerOptions = s.params.styleOptions
+    }
+    // 设置样式
+    if (options.polygonOptions) opts.polygonOptions = options.polygonOptions
+    if (options.polylineOptions) opts.polylineOptions = options.polylineOptions
+    if (options.circleOptions) opts.circleOptions = options.circleOptions
+    if (options.rectangleOptions) opts.rectangleOptions = options.rectangleOptions
+    if (options.markerOptions) opts.markerOptions = options.markerOptions
+
+    s.drawingManager = new BMapLib.DrawingManager(s.map, opts)
+    return s.drawingManager
+  }
+  // 启用手动绘制
   s.enableManualDraw = function (type) {
     if (s.drawingManager) {
       s.drawingManager.open()
