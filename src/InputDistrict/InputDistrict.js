@@ -62,6 +62,7 @@ const InputDistrict = forwardRef(({
       onClick={onClickInput}
     />
     <PickerDistrict
+      type={type}
       {...pickerProps}
       maskAttribute={{
         ...pickerProps.maskAttribute,
@@ -76,7 +77,6 @@ const InputDistrict = forwardRef(({
         onClick: onClickCancel
       }}
       selected={selected}
-      type={type}
       value={value}
       show={pickerProps.show === undefined ? show : pickerProps.show}
     />

@@ -20,7 +20,8 @@ const PickerDistrict = forwardRef(({
       namePropertyName: 'name', // 将name改为name
       childPropertyName: 'child',  // 将child改为children
     }*/
-    getData, // 异步获取数据
+    getData, // 异步获取省市区数据
+    firstLevelCitys = ['北京', '天津', '上海', '重庆'], // 直辖市特别市没有省
     split = '-',
 
     type = '', // province | city | district | street
@@ -55,8 +56,16 @@ const PickerDistrict = forwardRef(({
       if (tabIndex === 0) return true;
     } else if (type === 'city') {
       if (tabIndex === 1) return true;
+      // 直辖市特别市没有省, 为0级节点
+      if (firstLevelCitys.indexOf(tabs[0].name.replace('市', '')) !== -1) {
+        return true;
+      }
     } else if (type === 'district') {
       if (tabIndex === 2) return true;
+      // 直辖市特别市没有省, 它们的区为1级节点
+      if (tabIndex === 1 && firstLevelCitys.indexOf(tabs[0].name) !== -1) {
+        return true;
+      }
     }
     return false;
   }

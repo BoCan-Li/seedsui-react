@@ -4328,7 +4328,15 @@ import Player from 'seedsui-react/lib/Player';
 <PickerDistrict
   portal={传送dom object, 默认document.getElementById('root')}
   data={数据源 array, 默认内置数据源}
-  dataFormat={数据源格式化 object, 默认如注释} // {idPropertyName: 'id', namePropertyName: 'name', childPropertyName: 'children'}
+  dataFormat={数据源格式化 object, 默认如注释}
+  /*{
+    parentPropertyName: 'pId', // 将pId改成parentid
+    idPropertyName: 'id', // 将id改为id
+    namePropertyName: 'name', // 将name改为name
+    childPropertyName: 'child',  // 将child改为children
+  }*/
+  getData={异步获取省市区信息 Promise, 默认读取data} // 如果需要接口获取省市区, 可以通过此属性获取, 返回一个Promise对象, resolve([id: "", name: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则显示错误信息, 并不进行选择操作
+  firstLevelCitys={直辖市特别市没有省 Array<String>, 默认['北京', '天津', '上海', '重庆']} // 当type设置为city时, 将把一级城市做为市级选择返回
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认''} // province | city | district | street
   show={*显隐 bool, 默认false}
