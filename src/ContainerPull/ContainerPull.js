@@ -3,13 +3,10 @@ import Container from './../Container';
 import Instance from './instance.js';
 import Context from './../Context/instance.js';
 
-let pullRefreshTimeout = null
-
 const ContainerPull = forwardRef(({
   onTopRefresh,
   onBottomRefresh,
-  refreshing, // true: 正在刷新 false: 刷新完成
-  // lazyLoad,
+  refreshing, // true|1:正在刷新; false|0:刷新完成; 其它:不执行刷新
   children,
   ...others
 }, ref) =>  {
@@ -30,6 +27,9 @@ const ContainerPull = forwardRef(({
     instance.current.params.onBottomRefresh = bottomRefresh; // 底部刷新,加载下一页
   }
   
+  // 初始化
+  if (refreshing === 0) refreshing = false;
+  else if (refreshing === 1) refreshing = true;
   useEffect(() => {
     instance.current = new Instance({
       // threshold: 100,
@@ -81,31 +81,53 @@ const ContainerPull = forwardRef(({
     });
   }, []) // eslint-disable-line
 
+  // 刷新完成, 重置状态
+  function refreshed () {
+    instance.current.isLoading = false;
+    if (instance.current.touches.posY) { // 如果头部展开, 则隐藏头部
+      instance.current.hideTop(); // 隐藏头部
+    }
+  }
+
   // 底部刷新
   function bottomRefresh () {
-    if (refreshing) return;
-    if (!refreshing) {
+    // 如果没有设置刷新状态refreshing, 则不刷新
+    if (refreshing !== true && refreshing !== false) {
+      refreshed();
+      return;
+    }
+    // 正在刷新不触发底部刷新
+    if (refreshing === true) return;
+    // 刷新完成触发底部刷新
+    if (refreshing === false) {
       onBottomRefresh();
-    } else if (refreshing === '') { // 为空表示所有数据已经加载完成
-      if (instance.current) instance.current.isLoading = false // 暂无数据时, 设置为可刷新
     }
   }
 
   // 控制刷新
+  const pullRefreshTimeout = useRef();
   useEffect(() => {
     if (!instance.current) return
-    if (refreshing === true) { // 正在刷新
+    // 如果没有设置刷新状态refreshing, 则不刷新
+    if (refreshing !== true && refreshing !== false) {
+      refreshed();
+      return;
+    }
+    // 正在刷新
+    if (refreshing === true) {
       instance.current.isLoading = true;
-    } else if (refreshing === false) { // 刷新完成
-      if (instance.current.touches.posY) { // 如果头部展开, 则隐藏头部
-        instance.current.hideTop(); // 隐藏头部
-      }
+      return;
+    }
+    // 刷新完成
+    if (refreshing === false) {
+      // 刷新完成, 重置状态
+      refreshed();
       // 判断是否没有滚动条, 如果没有滚动条会再次触发onBottomRefresh方法
-      if (pullRefreshTimeout) {
-        window.clearTimeout(pullRefreshTimeout)
+      if (pullRefreshTimeout.current) {
+        window.clearTimeout(pullRefreshTimeout.current)
       }
-      pullRefreshTimeout = setTimeout(() => { // 因为页面渲染需要时间, 所以需要等渲染完成后再判断有无滚动条
-        instance.current.isLoading = false;
+      // 因为页面渲染需要时间, 所以需要等渲染完成后再判断有无滚动条
+      pullRefreshTimeout.current = setTimeout(() => {
         if (!instance.current.hasScroll()) {
           console.log('刷新完成,但没有滚动条,继续加载...')
           bottomRefresh()
@@ -115,7 +137,7 @@ const ContainerPull = forwardRef(({
         }
       }, 500);
     }
-  }, [refreshing, onBottomRefresh, onTopRefresh]) // eslint-disable-line
+  }, [refreshing]) // eslint-disable-line
 
   return <Container ref={refEl} {...others}>
     <div ref={refElTop} className="SID-Dragrefresh-TopContainer containerpull-pull">

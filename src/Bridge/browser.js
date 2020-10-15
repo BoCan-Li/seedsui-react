@@ -124,12 +124,12 @@ var Bridge = {
   previewImage: function (params = {}) {
     var self = this;
     if (!params.urls || !params.urls.length) {
-      self.showToast(`urls${locale('参数不正确', 'wrong_parameter')}, ${locale('无法预览', 'cannot_preview')}`, {mask: false})
+      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('没有预览图片地址', 'hint_preview_image_must_urls')})
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      self.showToast(`index${locale('参数不正确', 'wrong_parameter')}, ${locale('无法预览', 'cannot_preview')}`, {mask: false})
+      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')})
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -142,7 +142,7 @@ var Bridge = {
           if (params.success) params.success(s)
         },
         fail: function () {
-          self.showToast(`${locale('图片地址无效', 'invalid_image_src')}`, {mask: false})
+          if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')})
         }
       })
     } else {

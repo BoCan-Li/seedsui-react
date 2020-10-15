@@ -14,7 +14,7 @@ var Bridge = {
       return
     }
     wx.invoke(api, params, function (res) {
-        callback && callback(res)
+      callback && callback(res)
     })
     /* eslint-enable */
   },
@@ -111,13 +111,11 @@ var Bridge = {
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)
-          else self.showToast('没有获取到经纬度', {mask: false})
         }
         self.getLocationTask(res)
       },
       fail: (res) => {
         if (params.fail) params.fail(res)
-        else self.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
         self.getLocationTask(res)
       },
       complete: (res) => {
@@ -177,9 +175,7 @@ var Bridge = {
         params.success(wxRes)
       },
       fail: function (res) {
-        var self = this
         if (params.fail) params.fail(res)
-        else self.showToast(res.errMsg, {mask: false})
       },
       cancel: function (res) {
         if (params.cancel) params.cancel(res)

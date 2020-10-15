@@ -1176,7 +1176,7 @@ function add () {
 <ContainerPull
   onTopRefresh={头部刷新 func(s)}
   onBottomRefresh={底部刷新 func(s)}
-  refreshing={是否正在刷新 bool, 默认false} // true: 正在刷新 false: 刷新完成
+  refreshing={是否正在刷新 bool, 默认false} // true|1:正在刷新; false|0:刷新完成; 其它:不执行刷新
   lazyLoad={懒人加载 string, 默认无} // scroll 滚动加载 | queue 队列加载
   {...others}
 >

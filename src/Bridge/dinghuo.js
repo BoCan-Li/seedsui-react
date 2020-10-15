@@ -12,20 +12,49 @@ var Bridge = {
     // 返回物理按键绑定
     self.addBackPress()
     self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp', 'reloadByApp'])
+    self.invoke('config', {auth: false})
+  },
+  /**
+	   * 统一处理桥接返回结果
+	   * @param {string} api 桥接名称
+	   * @param {object} response 返回结果
+	   * @param {function|object} callback 回调函数
+	   */
+  handler: function (api, response, callback) {
+    if (!callback) return
+    if (typeof callback === 'function') {
+      callback(response)
+      return
+    }
+    if (typeof callback !== 'object') return
+    var msg = response && response.errMsg ? response.errMsg : ''
+    if (msg) {
+      var index = msg.indexOf(':')
+      var res = msg.substring(index + 1)
+      switch (res) {
+        case 'ok':
+          if (callback.success) callback.success(response)
+          break
+        case 'cancel':
+          if (callback.cancel) callback.cancel(response)
+          break
+        default:
+          if (callback.fail) callback.fail(response)
+      }
+    }
+    callback.complete && callback.complete(response)
   },
   // 公共方法，通过桥接调用原生方法公共入口
-  invoke: function (name, param, callback) {
+  invoke: function (api, params, callback) {
     var self = this
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
       /* eslint-disable */
       self.setup(function(bridge) {
-        bridge.callHandler(name, param, function(response) {
-          if (callback) {
-            try {
-              callback(JSON.parse(response))
-            } catch (e) {
-              callback(response)
-            }
+        bridge.callHandler(api, params, function(response) {
+          try {
+            self.handler(api, JSON.parse(response), callback)
+          } catch (e) {
+            self.handler(api, response, callback)
           }
         })
       })
@@ -33,23 +62,21 @@ var Bridge = {
     } else if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
       // 注册分类页面事件
       if (window.WebViewJavascriptBridge) {
-        window.WebViewJavascriptBridge.callHandler(name, param && JSON.stringify(param), function (response) {
-          if (callback) {
-            try {
-              callback(JSON.parse(response))
-            } catch (e) {
-              callback(response)
-            }
+        window.WebViewJavascriptBridge.callHandler(api, params && JSON.stringify(params), function (response) {
+          try {
+            self.handler(api, JSON.parse(response), callback)
+          } catch (e) {
+            self.handler(api, response, callback)
           }
         })
       } else {
         document.addEventListener('WebViewJavascriptBridgeReady', () => {
-          window.WebViewJavascriptBridge.callHandler(name, param && JSON.stringify(param), function (response) {
+          window.WebViewJavascriptBridge.callHandler(api, params && JSON.stringify(params), function (response) {
             if (callback) {
               try {
-                callback(JSON.parse(response))
+                self.handler(api, JSON.parse(response), callback)
               } catch (e) {
-                callback(response)
+                self.handler(api, response, callback)
               }
             }
           })
@@ -146,28 +173,33 @@ var Bridge = {
     self.invoke('logOut')
   },
   // 打开新的窗口
-  openWindow: function (params, callback) {
+  openWindow: function (params) {
     var self = this
+    params = params || {}
     if (params.url) {
       if (params.url.indexOf('h5:') === 0) params.url = params.url.replace(/^h5:/, '')
       else if (params.url.indexOf('webview:') === 0) params.url = params.url.replace(/^webview:/, '')
     }
-    self.invoke('openWindow', params, callback)
+    self.invoke('openWindow', {
+      title: params.title || '',
+      url: params.url
+    }, params);
   },
   // 关闭当前窗
-  closeWindow: function (callback) {
+  closeWindow: function (params) {
     var self = this
-    self.invoke('closeWindow', null, callback)
+    params = params || {}
+    self.invoke('closeWindow', {}, params)
   },
   /**
     * 修改原生标题
     * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
-    * @param {Function} callback 回调
     */
-  setTitle: function (params, callback) {
+  setTitle: function (params) {
     var self = this
+    params = params || {}
     if (params && params.title) document.title = params.title
-    self.invoke('setTitle', params, callback)
+    self.invoke('setTitle', params)
   },
   // 客户端添加返回绑定
   addBackPress: function (callback) {
@@ -309,46 +341,42 @@ var Bridge = {
     self.invoke('openFile', params, callback)
   },
   /**
-    * 文件操作: 预览文件
-    * @param {Object} params
-    * params: {
-    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
-    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
-    *  size: 1048576 // 需要预览文件的字节大小(必填)
-    * }
-    */
+	   * 预览文件接口(新客户端中支持)
+	   * @param {object} params
+	   * @prop {string} url 需要预览文件的地址
+	   * @prop {string} name 需要预览文件的文件名（不填的话截取url的最后部分）
+	   * @prop {number} size 需要预览文件的字节大小
+	   * @example
+	   * Bridge.previewFile({
+	   *    url: 'http://www.waiqin365.com/p/v3/assets/bannerbg7.png',
+	   *    name: '外勤365.png',
+	   *    size: 15312
+	   * })
+	   */
   previewFile: function (params) {
-    if (!params) {
-      console.warn('[SeedsUI cordova内核]previewFile:fail没有传入参数')
-      return
-    }
     var self = this
-    self.invoke('openFile', {
-      filePath: params.url
-    }, (res) => {
-      if (res.code === '1') {
-        if (params.success) params.success({errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`})
-      } else {
-        if (params.fail) params.fail({errMsg: `previewFile:fail${res.message}`})
-      }
-    })
+    params = params || {}
+    self.invoke('previewFile', params, params)
   },
-  /* -----------------------------------------------------
-    扫描二维码并返回结果
-    @return {resultStr:''}
-  ----------------------------------------------------- */
+  /**
+	   * 扫描二维码并返回结果
+	   * @param {object} params 
+	   */
   scanQRCode: function (params) {
     var self = this
-    self.invoke('scanQRCode', null, params.success)
+    params = params || {}
+    self.invoke('scanQRCode', {
+      desc: params.desc || '',
+      needResult: params.needResult || 0,
+      scanType: params.scanType || ['qrCode', 'barCode']
+    }, params)
   },
   /**
     * 获取当前地理位置
     * @param {Object} params
-    * params: {
-    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * cache {Number}: 默认60秒缓存防重复定位
-    * }
-    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    * @prop {String} type 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    * @prop {Number} cache 默认60秒缓存防重复定位
+    * @return {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
     */
   getLocation: function (params = {}) {
     var self = this
@@ -367,7 +395,6 @@ var Bridge = {
       if (params.success) params.success(appLocation)
       return
     }
-
     // 调用定位
     if (self.locationTask) {
       self.locationTask.push(params)
@@ -376,15 +403,14 @@ var Bridge = {
     self.locationTask = []
     console.log('调用定位...')
     self.invoke('getLocation', params.type || 'gcj02', (res) => {
-      if (res && res.latitude) {
-        // 将位置信息存储到cookie中60秒
+      // 将位置信息存储到cookie中60秒
+      if (res.longitude && res.latitude) {
         if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
         if (params.success) params.success(res)
       } else {
-        res.errMsg = {errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启'}
         if (params.fail) params.fail(res)
-        else self.showToast('定位失败,请检查订货365定位权限是否开启', {mask: false})
       }
+      if (params.complete) params.complete(res)
       self.getLocationTask(res)
     })
   },
@@ -392,6 +418,10 @@ var Bridge = {
     获取当前网络状态
     @return {networkType:'返回网络类型2g，3g，4g，wifi'}
   ----------------------------------------------------- */
+  /**
+    * 获取当前网络状态
+    * @param {Function} callback({networkType:'返回网络类型2g，3g，4g，wifi'})
+    */
   getNetworkType: function (callback) {
     var self = this
     self.invoke('getNetworkType', null, callback)
@@ -403,6 +433,7 @@ var Bridge = {
       count: 1, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      // 老客户端水印
       watermark: {
         orderNo: '编号',
         submitName: '提交人',
@@ -410,18 +441,23 @@ var Bridge = {
         cmLocation: '31.982473, 118.730515',
         isWaterMark: '1', // 是否启用水印
       },
+      // 新客户端水印
+      watermark: ['第一行文字', '第二行文字']
       success({localIds:['LocalResource://imageid'+id]})
     * }
     */
   chooseImage: function (params) {
     var self = this
-    console.log('订货chooseImage', params)
-    self.invoke('chooseImage', params, function (res) {
-      res.localIds = res.localIds.map(function (id) {
-        return 'LocalResource://imageid' + id
-      })
-      if (params.success) params.success(res)
-    })
+    params = params || {}
+    self.invoke('chooseImage', {
+      scene: '1|2',
+      count: params.count || 9,
+      sizeType: params.sizeType || ['original', 'compressed'],
+      sourceType: params.sourceType || ['album', 'camera'],
+      watermark: params.watermark || [],
+      isSaveToAlbum: params.isSaveToAlbum || 1,
+      isAI: params.isAI || 0
+    }, params)
   },
   /**
     * 照片上传, ios测试环境无法上传
@@ -433,18 +469,19 @@ var Bridge = {
       success: func(res)
     * }
     */
-  uploadImage: function (params = {}) {
+  uploadImage: function (params) {
     var self = this
+    params = params || {}
     if (!params.uploadDir) {
-      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
       return
     }
     if (!params.localId) {
-      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
       return
     }
     if (!params.tenantId) {
-      self.showToast(locale('没有上传企业id', 'hint_upload_image_must_tenantId'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传企业id', 'hint_upload_image_must_tenantId')})
       return
     }
     // 上传不能包含'LocalResource://imageid'
@@ -452,22 +489,37 @@ var Bridge = {
       params.localId = params.localId.replace(/LocalResource:\/\/imageid/igm, '')
     }
     // ios判断: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
-    // 格式化params
-    var uploadParams = {
-      tenantId: params.tenantId,
-      localIds: [params.localId],
-      uploadDir: params.uploadDir
-    }
-    if (params.isAI) uploadParams.isAI = params.isAI
-    console.log('订货客户端上传', uploadParams)
-    self.invoke('uploadImage', uploadParams) // 安卓没有回调, ios回调返回{result: true}
-    if (params.success) {
-      params.success({
-        errMsg: 'uploadImage:ok',
-        path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
-        serverId: params.localId,
-        tenantId: params.tenantId
-      })
+    if (params.async) { // 老客户端使用异步上传
+      console.log('订货客户端异步上传', params)
+      if (params.localId) params.localIds = [params.localId]
+      self.invoke('uploadImage', params) // 安卓没有回调, ios回调返回{result: true}
+      if (params.success) {
+        params.success({
+          errMsg: 'uploadImage:ok',
+          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+          serverId: params.localId,
+          tenantId: params.tenantId
+        })
+      }
+    } else { // 同步上传
+      console.log('订货客户端同步上传', params)
+      // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
+      let menuId = Device.getUrlParameter('menuId') || ''
+      let ext = params.ext || {}
+      if (menuId) {
+        ext = {
+          menuId: menuId,
+          ...(params.ext || {})
+        }
+      }
+      self.invoke('uploadImage', {
+	      tenantId: params.tenantId || '',
+	      uploadDir: params.uploadDir || '',
+	      fileName: params.fileName || '',
+	      localId: params.localId,
+	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1,
+	      ext: ext
+	    }, params);
     }
   },
   /**
@@ -481,11 +533,12 @@ var Bridge = {
     */
   previewImage: function (params) {
     var self = this
+    params = params || {}
     if (!params.urls || !params.urls.length) {
-      self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('没有预览图片地址', 'hint_preview_image_must_urls')})
       return
     }
-    self.invoke('previewImage', params)
+    self.invoke('previewImage', params, params)
   },
   /* -----------------------------------------------------
     监听/取消监听物理返回事件(仅android)

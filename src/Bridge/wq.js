@@ -3,6 +3,46 @@ import Device from './../Device'
 import GeoUtil from './../GeoUtil'
 import locale from './../locale'
 
+/**
+ * ios下加载桥接方法
+ * @param {function} callback 
+ */
+const setup = function (callback) {
+  /* eslint-disable */
+  if (window.WebViewJavascriptBridge) {
+    return callback(WebViewJavascriptBridge)
+  }
+  if (window.WVJBCallbacks) {
+    return window.WVJBCallbacks.push(callback)
+  }
+  window.WVJBCallbacks = [callback]
+  var WVJBIframe = document.createElement('iframe')
+  WVJBIframe.style.display = 'none'
+  // WVJBIframe.src = 'https://__bridge_loaded__'
+  WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__' // 针对ios wk内核
+  document.documentElement.appendChild(WVJBIframe)
+  setTimeout(function () {
+    document.documentElement.removeChild(WVJBIframe)
+  }, 0)
+  /* eslint-enable */
+}
+/**
+ * android下加载桥接方法
+ * @param {function} callback 回调函数
+ */
+/* eslint-disable */
+const connectJsBridge = function (callback) {
+  if (window.WebViewJavascriptBridge) {
+    callback(WebViewJavascriptBridge)
+  } else {
+    document.addEventListener('WebViewJavascriptBridgeReady', function () {
+      callback(WebViewJavascriptBridge)
+    }, false)
+  }
+}
+/* eslint-enable */
+
+    
 var Bridge = {
   /**
    * 定制功能
@@ -29,6 +69,39 @@ var Bridge = {
       self.addBackPress()
     })
     /* eslint-enable */
+  },
+
+  // 注册事件
+  registerHandler: function (events) {
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
+      /* eslint-disable */
+      setup(function (bridge) {
+        events.forEach((eventName) => {
+          bridge.registerHandler(eventName, function (data) {
+            // alert(JSON.stringify(data))
+            const event = new CustomEvent(eventName, { detail: data })
+            // 分发事件
+            window.dispatchEvent(event)
+          })
+        })
+      })
+      /* eslint-enable */
+    } else if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
+      /* eslint-disable */
+      connectJsBridge(function (bridge) {
+        events.forEach((eventName) => {
+          bridge.registerHandler(eventName, function (data) {
+            // alert(JSON.stringify(data))
+            const event = new CustomEvent(eventName, {
+              detail: data
+            })
+            // 分发事件
+            window.dispatchEvent(event)
+          })
+        })
+      })
+      /* eslint-enable */
+    }
   },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
@@ -91,8 +164,8 @@ var Bridge = {
     }
   },
   // 关闭窗口
-  closeWindow: function () {
-    wq.closeWindow() // eslint-disable-line
+  closeWindow: function (params) {
+    wq.closeWindow(params) // eslint-disable-line
   },
   /**
     * 修改原生标题
@@ -129,11 +202,9 @@ var Bridge = {
   /**
     * 获取当前地理位置
     * @param {Object} params
-    * params: {
-    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * cache {Number}: 默认60秒缓存防重复定位
-    * }
-    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+    * @prop {String} type 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+    * @prop {Number} cache 默认60秒缓存防重复定位
+    * @return {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
     */
   getLocation: function (params = {}) {
     var self = this
@@ -175,13 +246,11 @@ var Bridge = {
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)
-          else self.showToast('没有获取到经纬度', {mask: false})
         }
         self.getLocationTask(res)
       },
       fail: (res) => {
         if (params.fail) params.fail(res)
-        else self.showToast('定位失败,请检查微信定位权限是否开启', {mask: false})
         self.getLocationTask(res)
       },
       complete: (res) => {
@@ -193,19 +262,17 @@ var Bridge = {
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode (params = {}) {
+  scanQRCode: function (params = {}) {
     var self = this
     wq.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],
       desc: params.desc || '二维码／条码',
       success: function (res) {
-        if (!params.success) return;
-        params.success(res)
+        if (params.success) params.success(res)
       },
       fail: function (res) {
         if (params.fail) params.fail(res)
-        else self.showToast(res.errMsg, {mask: false})
       },
       cancel: function (res) {
         if (params.cancel) params.cancel(res)
@@ -244,11 +311,11 @@ var Bridge = {
     var uploadParams = Object.clone(params)
     var self = this
     if (!params.uploadDir) {
-      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
       return
     }
     if (!params.localId) {
-      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
       return
     }
     if (params.tenantId) uploadParams.tenantId = params.tenantId
@@ -288,31 +355,23 @@ var Bridge = {
       success: func(res)
     * }
     */
-   uploadFile: function (argParams = {}) {
+  uploadFile: function (params) {
     var self = this
+    params = params || {}
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {mask: false})
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version')})
       return
     }
-    if (!argParams.localId) {
-      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
+    if (!params.localId) {
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
       return
     }
-    let params = {
-      url: argParams.url || `/fileupload/v1/doUpload.do?uploadPath=file`,
-      filePath: argParams.localId,
+    self.invoke('uploadFile', {
+      url: params.url || `/fileupload/v1/doUpload.do?uploadPath=file`,
+      filePath: params.localId,
       name: 'file',
-      formData: argParams.data,
-    }
-    self.invoke('uploadFile', params, function (res) {
-      if (res.errMsg === 'uploadFile:ok') {
-        if (!argParams.success) return
-        argParams.success(res)
-      } else {
-        if (!argParams.fail) return
-        argParams.fail(res)
-      }
-    })
+      formData: params.data
+    }, params)
   },
   /**
     * 选择、录制视频
@@ -325,29 +384,32 @@ var Bridge = {
       success({localIds:[src]})
     * }
     */
-  chooseVideo: function (argParams = {}) {
+  chooseVideo: function (params) {
     const self = this
+    params = params || {}
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_choose_video_version'), {mask: false})
+      if (params.fail) params.fail(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_choose_video_version'))
       return
     }
-    let params = {
-      sourceType: argParams.sourceType || ['album','camera'],
-      maxDuration: argParams.maxDuration || 10,
-      camera: argParams.camera || 'back',
-      compressed: argParams.sizeType && argParams.sizeType.length && argParams.sizeType.indexOf('compressed') === -1 ? false : true
-    }
     console.log('外勤WK内核chooseVideo', params)
-    self.invoke('chooseVideo', params, function (res) {
+    self.invoke('chooseVideo', {
+      sourceType: params.sourceType || ['album','camera'],
+      maxDuration: params.maxDuration || 10,
+      camera: params.camera || 'back',
+      compressed: params.sizeType && params.sizeType.length && params.sizeType.indexOf('compressed') === -1 ? false : true
+    }, function (res) {
       // 标准化回调参数: 将tempFilePath改为localId
       if (res.tempFilePath) {
         res.localIds = [res.tempFilePath]
       }
-      if (res.errMsg === 'chooseVideo:ok') {
-        if (argParams.success) argParams.success(res)
+      if (res.errMsg.indexOf('chooseVideo:ok') !== -1) {
+        if (params.success) params.success(res)
+      } else if (res.errMsg.indexOf('chooseVideo:cancel') !== -1) {
+        if (params.cancel) params.cancel(res)
       } else {
-        if (argParams.fail) argParams.fail(res)
+        if (params.fail) params.fail(res)
       }
+      if (params.complete) params.complete(res)
     })
   },
   /**
