@@ -8,36 +8,48 @@ import {
   Bridge,
   Container,
   MapUtil,
-  InputLocation
+  InputDistrict
 } from '../../src';
 
 function Demo () {
-  const [value, setValue] = useState('');
-  function changeHandler (e, value, data) {
-    console.log(e.target);
-    console.log(data)
-    setValue(value);
+  // 获取街道
+  function getStreet (districtId) {
+    return new Promise((resolve) => {
+      resolve([
+        {
+          "parentid": districtId,
+          "name": "街道1",
+          "id": "1",
+        },
+        {
+          "parentid": districtId,
+          "name": "街道2",
+          "id": "2",
+        }
+      ])
+    })
   }
-  function previewHandler (e, err) {
-    if (err.errMsg.indexOf('preview:fail') !== -1) {
-      Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
-    }
+
+  const [value, setValue] = useState('');
+
+  function onChange (e, value, selected) {
+    console.log(e.target)
+    console.log(value, selected)
+    setValue(value);
   }
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-      <InputLocation
-        // type="choose"
-        autoLocation
-        readOnly={false}
-        // readOnly={true}
-        selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
+      <InputDistrict
         value={value}
-        placeholder="请点击获取位置信息"
-        onChange={changeHandler}
-        preview={previewHandler}
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
+        pickerProps={{
+          getStreet: getStreet
+        }}
       />
     </Container>
   </Page>

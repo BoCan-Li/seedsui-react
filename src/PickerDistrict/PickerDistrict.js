@@ -2,16 +2,26 @@
 import React, {useContext, useState, useEffect, useRef, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import Context from '../Context/instance.js';
-import treeData from './instance.data.js';
+import treeData from './china.js';
  
 // 数据
 let initTabs = []; // 根据key或者name获取tabs, property用于区分是key还是value比较
-let currentSelected = null;
-let currentData = null; // 省市区
-let streets = []; // 街道临时存储
+// 国家
+let currentCountrySelected = null;
+let currentCountry = null;
+// 省市区
+let currentDataSelected = null;
+let currentData = null;
+// 街道临时存储
+let streets = [];
 
 const PickerDistrict = forwardRef(({
     portal,
+    // 获取国家数据
+    country,
+    getCountry,
+
+    // 获取省市区数据
     data = treeData,
     dataFormat,
     /*{
@@ -133,7 +143,7 @@ const PickerDistrict = forwardRef(({
       currentData = null;
     }
     // 初始化选中项
-    loadSelected();
+    await loadSelected();
     // 初始化tabbar
     initTabBar();
     // 渲染页面
@@ -142,45 +152,71 @@ const PickerDistrict = forwardRef(({
     }
   }
   // 获取选中数据
-  function loadSelected () {
-    // 有选中数据直接返回选中数据
-    if (selected && selected.length) {
-      // 如果选中项的参数不全, 则返回空
-      for (let item of selected) {
-        if (!item.id || !item.name) {
-          currentSelected = null;
-          return null;
+  async function loadSelected () {
+    return new Promise(async (resolve) => {
+      // 有选中数据直接返回选中数据
+      if (selected && selected.length) {
+        // 如果选中项的参数不全, 则返回空
+        for (let item of selected) {
+          if (!item.id || !item.name) {
+            currentDataSelected = null;
+            resolve(currentDataSelected);
+            return currentDataSelected;
+          }
+        }
+        currentDataSelected = selected;
+        resolve(currentDataSelected);
+        return currentDataSelected;
+      }
+      // 没有城市数据返回空
+      if (!currentData || !currentData.length) {
+        currentDataSelected = null;
+        resolve(currentDataSelected);
+        return currentDataSelected;
+      }
+      // 没有选中数据从value中取
+      let values = [];
+      if (value && value.split(split)) {
+        values = value.split(split);
+      }
+      if (!values || !values.length) {
+        currentDataSelected = null;
+        resolve(currentDataSelected);
+        return currentDataSelected;
+      }
+      // 根据values取出选中数据
+      currentDataSelected = currentData.getDeepTreeNodesByNames(values);
+      // 如果有街道时长度会不一致, 则需要查询街道
+      if (currentDataSelected && currentDataSelected.length && currentDataSelected.length === values.length - 1) {
+        let districtOption = currentDataSelected[currentDataSelected.length - 1]; // 获取区数据
+        let streetName = values[values.length - 1]; // 获取街道名
+        let success = await loadStreets(districtOption.id);
+        // 返回街道为空直接提交
+        if (success && (!Array.isArray(streets) || !streets || !streets.length)) {
+          resolve(currentDataSelected);
+          return currentDataSelected;
+        }
+        for (let street of streets) {
+          if (street.name === streetName) {
+            currentDataSelected.push(street);
+            break;
+          }
         }
       }
-      currentSelected = selected;
-      return selected;
-    }
-    // 没有城市数据返回空
-    if (!currentData || !currentData.length) {
-      currentSelected = null;
-      return null;
-    }
-    // 没有选中数据从value中取
-    let values = [];
-    if (value && value.split(split)) {
-      values = value.split(split);
-    }
-    if (!values || !values.length) {
-      currentSelected = null;
-      return null;
-    }
-    // 根据values取出选中数据
-    currentSelected = currentData.getDeepTreeNodesByNames(values);
-    return currentSelected;
+      resolve(currentDataSelected);
+      return currentDataSelected;
+    });
   }
   // 初始化tabs
   function initTabBar () {
     initTabs = [];
-    if (currentSelected && currentSelected.length) {
-      initTabs = currentSelected;
+    if (currentDataSelected && currentDataSelected.length) {
+      initTabs = Object.clone(currentDataSelected);
     }
     if (initTabs && initTabs.length) {
-      initTabs[initTabs.length - 1].name = '请选择'
+      if (!initTabs[initTabs.length - 1].name) {
+        initTabs[initTabs.length - 1].name = '请选择'
+      }
     } else {
       initTabs[0] = {
         parentid: '',
@@ -194,7 +230,8 @@ const PickerDistrict = forwardRef(({
   // 初始化列表
   async function initList () {
     let initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
-    if (!initList && initTabs[initTabs.length - 1].id && String(initTabs[initTabs.length - 1].id).length >= 9) {
+    // 如果末级节点没有列表, 则认为是街道
+    if (!initList && initTabs[initTabs.length - 1].id) {
       await loadStreets(initTabs[initTabs.length - 2].id);
       if (Array.isArray(streets) && streets && streets.length) {
         initList = streets

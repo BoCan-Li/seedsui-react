@@ -1,6 +1,6 @@
 import React, {forwardRef, useRef, useImperativeHandle, useContext, useEffect} from 'react';
 import {createPortal} from 'react-dom';
-import treeData from './../PickerDistrict/instance.data.js';
+import treeData from './../PickerDistrict/china.js';
 import Instance from './instance.js';
 import Context from '../Context/instance.js';
 
