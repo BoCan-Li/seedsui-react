@@ -17,7 +17,7 @@ let streets = [];
 
 const PickerDistrict = forwardRef(({
     portal,
-    // 获取国家数据
+    // 获取国家数据, 不传则默认中国
     country,
     getCountry,
 
@@ -99,49 +99,15 @@ const PickerDistrict = forwardRef(({
       loadCurrentData();
     }
   }, [show]); // eslint-disable-line
-  // 获取数据
+  // 第一步: 获取国家和省市区
   async function loadCurrentData () {
-    // 初始化数据
-    let newData = null;
-    if (typeof getData === 'function') {
-      setLoading(true);
-      newData = await getData();
-      if (typeof newData === 'string') {
-        setErrMsg(newData)
-      }
-      if (!newData) {
-        setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
-      }
-      setLoading(false);
-    } else if (Array.isArray(data)){
-      newData = data;
+    // 获取国家
+    if (country || typeof getCountry === 'function') {
+      let countrySuccess = await loadCountries();
+      if (!countrySuccess) return;
     }
-    // 格式化数据
-    if (newData && newData.length && dataFormat && (dataFormat.parentPropertyName || dataFormat.namePropertyName || dataFormat.idPropertyName || dataFormat.childPropertyName)) {
-      try {
-        let dataStr = JSON.stringify(newData);
-        if (dataFormat.parentPropertyName) {
-          dataStr = dataStr.replace(new RegExp(dataFormat.parentPropertyName, 'igm'), 'parentid');
-        }
-        if (dataFormat.namePropertyName) {
-          dataStr = dataStr.replace(new RegExp(dataFormat.namePropertyName, 'igm'), 'name');
-        }
-        if (dataFormat.idPropertyName) {
-          dataStr = dataStr.replace(new RegExp(dataFormat.idPropertyName, 'igm'), 'id');
-        }
-        if (dataFormat.childPropertyName) {
-          dataStr = dataStr.replace(new RegExp(dataFormat.childPropertyName, 'igm'), 'parentid');
-        }
-        newData = JSON.parse(dataStr);
-      } catch (error) {
-        newData = null;
-      }
-    }
-    if (newData && newData.length) {
-      currentData = newData.deepTree();
-    } else {
-      currentData = null;
-    }
+    // 获取省市区
+    await loadData();
     // 初始化选中项
     await loadSelected();
     // 初始化tabbar
@@ -151,7 +117,7 @@ const PickerDistrict = forwardRef(({
       initList();
     }
   }
-  // 获取选中数据
+  // 第二步: 获取选中数据
   async function loadSelected () {
     return new Promise(async (resolve) => {
       // 有选中数据直接返回选中数据
@@ -207,7 +173,7 @@ const PickerDistrict = forwardRef(({
       return currentDataSelected;
     });
   }
-  // 初始化tabs
+  // 第三步: 初始化tabs
   function initTabBar () {
     initTabs = [];
     if (currentDataSelected && currentDataSelected.length) {
@@ -227,7 +193,7 @@ const PickerDistrict = forwardRef(({
     setTabs(initTabs)
     setTabIndex(initTabs.length - 1)
   }
-  // 初始化列表
+  // 第四步: 结合选中数据, 初始化列表
   async function initList () {
     let initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
     // 如果末级节点没有列表, 则认为是街道
@@ -241,7 +207,110 @@ const PickerDistrict = forwardRef(({
     }
     setList(initList)
   }
-  // 获取街道, 失败返回false, 成功返回true
+
+  // 工具方法: 获取国家, 失败返回false, 成功返回true
+  async function loadCountries () {
+    return new Promise(async (resolve) => {
+      // 如果传入国家数据, 则使用此数据
+      if (Array.isArray(country) && country.length) {
+        if (country[0].id && country[0].name) {
+          currentCountry = country;
+          resolve(currentCountry);
+          return currentCountry;
+        }
+        currentCountry = null;
+        resolve(currentCountry);
+        setErrMsg(locale(`country参数不正确`, 'wrong_parameter'))
+        return currentCountry;
+      }
+      // 如果没有获取国家的方法, 则返回空
+      if (!getCountry) {
+        currentCountry = null;
+        resolve(currentCountry);
+        return currentCountry;
+      }
+      // 有获取国家的方法时, 加载国家数据
+      setLoading(true);
+      try {
+        currentCountry = await getCountry()
+      } catch (error) {
+        setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
+        setLoading(false);
+        currentCountry = null;
+        resolve(currentCountry);
+        return;
+      }
+      setLoading(false);
+      // 返回字符串, 说明有错
+      if (typeof currentCountry === 'string') {
+        setErrMsg(currentCountry)
+        currentCountry = null;
+        resolve(currentCountry)
+        return;
+      }
+      // 如果返回不是数组, 则认为没有街道
+      if (!currentCountry || currentCountry instanceof Array === false) {
+        currentCountry = null;
+        resolve(currentCountry)
+        return;
+      }
+      // 增加街道标识
+      currentCountry = (currentCountry || []).map((item) => {
+        item.isCountry = true
+        return item
+      })
+      resolve(currentCountry)
+    })
+  }
+
+  // 工具方法: 获取省市区
+  async function loadData (id) {
+    return new Promise(async (resolve) => {
+      let newData = null;
+      if (typeof getData === 'function') {
+        setLoading(true);
+        newData = await getData(id);
+        if (typeof newData === 'string') {
+          setErrMsg(newData)
+        }
+        if (!newData) {
+          setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
+        }
+        setLoading(false);
+      } else if (Array.isArray(data)){
+        newData = data;
+      }
+      // 格式化数据
+      if (newData && newData.length && dataFormat && (dataFormat.parentPropertyName || dataFormat.namePropertyName || dataFormat.idPropertyName || dataFormat.childPropertyName)) {
+        try {
+          let dataStr = JSON.stringify(newData);
+          if (dataFormat.parentPropertyName) {
+            dataStr = dataStr.replace(new RegExp(dataFormat.parentPropertyName, 'igm'), 'parentid');
+          }
+          if (dataFormat.namePropertyName) {
+            dataStr = dataStr.replace(new RegExp(dataFormat.namePropertyName, 'igm'), 'name');
+          }
+          if (dataFormat.idPropertyName) {
+            dataStr = dataStr.replace(new RegExp(dataFormat.idPropertyName, 'igm'), 'id');
+          }
+          if (dataFormat.childPropertyName) {
+            dataStr = dataStr.replace(new RegExp(dataFormat.childPropertyName, 'igm'), 'parentid');
+          }
+          newData = JSON.parse(dataStr);
+        } catch (error) {
+          newData = null;
+        }
+      }
+      if (newData && newData.length) {
+        currentData = newData.deepTree();
+      } else {
+        currentData = null;
+      }
+      resolve(currentData)
+    });
+  }
+
+  // 工具方法: 获取街道, 失败返回false, 成功返回true
   async function loadStreets (id) {
     return new Promise(async (resolve) => {
       setLoading(true);
@@ -251,7 +320,7 @@ const PickerDistrict = forwardRef(({
         setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
         setLoading(false);
         streets = null;
-        resolve(false);
+        resolve(streets);
         return;
       }
       setLoading(false);
@@ -259,13 +328,13 @@ const PickerDistrict = forwardRef(({
       if (typeof streets === 'string') {
         setErrMsg(streets)
         streets = null;
-        resolve(false)
+        resolve(streets)
         return;
       }
       // 如果返回不是数组, 则认为没有街道
       if (!streets || streets instanceof Array === false) {
         streets = null;
-        resolve(true)
+        resolve(streets)
         return;
       }
       // 增加街道标识
@@ -273,7 +342,7 @@ const PickerDistrict = forwardRef(({
         street.isStreet = true
         return street
       })
-      resolve(true)
+      resolve(streets)
     })
   }
 
@@ -352,9 +421,9 @@ const PickerDistrict = forwardRef(({
     if (!option.children || !option.children.length) {
       if (!option.isStreet && getStreet) {
         // 设置列表
-        let success = await loadStreets(option.id);
+        await loadStreets(option.id);
         // 返回街道为空直接提交
-        if (success && (!Array.isArray(streets) || !streets || !streets.length)) {
+        if (!Array.isArray(streets) || !streets || !streets.length) {
           setTabs(spliceTabs)
           onSubmit(e, option)
           return

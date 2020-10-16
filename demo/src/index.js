@@ -30,7 +30,7 @@ function Demo () {
     })
   }
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState('北京-东城-街道1');
 
   function onChange (e, value, selected) {
     console.log(e.target)
