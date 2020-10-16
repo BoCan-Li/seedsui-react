@@ -10,6 +10,8 @@ import {
   MapUtil,
   InputDistrict
 } from '../../src';
+import country from '../../src/PickerDistrict/country.js';
+import china from '../../src/PickerDistrict/china.js';
 
 function Demo () {
   // 获取街道
@@ -19,23 +21,44 @@ function Demo () {
         {
           "parentid": districtId,
           "name": "街道1",
-          "id": "1",
+          "id": "11",
         },
         {
           "parentid": districtId,
           "name": "街道2",
+          "id": "22",
+        }
+      ])
+    })
+  }
+
+  // 获取省市区
+  function getData (id) {
+    return new Promise((resolve) => {
+      // resolve(china)
+      resolve([
+        {
+          "parentid": id,
+          "name": "城市1",
+          "id": "1",
+        },
+        {
+          "parentid": id,
+          "name": "城市2",
           "id": "2",
         }
       ])
     })
   }
 
-  const [value, setValue] = useState('北京-东城-街道1');
+  const [value, setValue] = useState('美国');
+  const [selected, setSelected] = useState([{id: '86', name: '中国'}]);
 
-  function onChange (e, value, selected) {
+  function onChange (e, value, selectedMap) {
     console.log(e.target)
-    console.log(value, selected)
+    console.log(value, selectedMap)
     setValue(value);
+    setSelected(selectedMap);
   }
   return <Page>
 		<Header>
@@ -48,7 +71,10 @@ function Demo () {
         placeholder="请选择"
         className="border-b"
         pickerProps={{
-          getStreet: getStreet
+          countries: country,
+          getStreets: getStreet,
+          getData: getData
+          // selected: selected
         }}
       />
     </Container>

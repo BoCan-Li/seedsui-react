@@ -2853,7 +2853,7 @@ function onChange (e, value, selected) {
   placeholder="请选择"
   className="border-b"
   pickerProps={{
-    getStreet: getStreet
+    getStreets: getStreet
   }}
 />
 ```
@@ -4327,7 +4327,6 @@ import Player from 'seedsui-react/lib/Player';
 ```javascript
 <PickerDistrict
   portal={传送dom object, 默认document.getElementById('root')}
-  data={数据源 array, 默认内置数据源}
   dataFormat={数据源格式化 object, 默认如注释}
   /*{
     parentPropertyName: 'pId', // 将pId改成parentid
@@ -4335,7 +4334,11 @@ import Player from 'seedsui-react/lib/Player';
     namePropertyName: 'name', // 将name改为name
     childPropertyName: 'child',  // 将child改为children
   }*/
-  getData={异步获取省市区信息 Promise, 默认读取data} // 如果需要接口获取省市区, 可以通过此属性获取, 返回一个Promise对象, resolve([id: "", name: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则显示错误信息, 并不进行选择操作
+  data={数据源 array, 默认内置数据源}
+  getData={异步获取省市区信息 Promise, 默认读取data} // 如果需要接口获取省市区, 可以通过此属性获取, 返回一个Promise对象, resolve([id: "1", name: "街道"])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则显示错误信息, 并不进行选择操作
+  countries={国家数据 array, 默认无} // 有此数据时将变成支持选国家
+  getCountries={异步获取国家信息 Promise, 默认读取data} // 如果需要接口获取国家, 可以通过此属性获取, 返回一个Promise对象, resolve([id: "1", name: "国家"])时会渲染国家, resolve([])时会显示为空, resolve('错误')则显示错误信息, 并不进行选择操作
+
   firstStageCitys={直辖市特别市没有省 Array<String>, 默认['北京', '天津', '上海', '重庆']} // 当type设置为city时, 将把一级城市做为市级选择返回
   split={分隔符 string, 默认'-'}
   type={类型 string, 默认''} // province | city | district | street
@@ -4345,7 +4348,7 @@ import Player from 'seedsui-react/lib/Player';
   maskAttribute={遮罩属性 object, 默认无}
   submitAttribute={确定按钮属性 object, 默认无}
   cancelAttribute={取消按钮属性 object, 默认无}
-  getStreet={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则停留在选择页面不进行选择操作
+  getStreets={获取街道信息 Promise, 默认无, 没有此属性则只能选到区} // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象, resolve([id: "", name: ""])时会渲染街道, resolve([])时会直接选中区, resolve('错误')则停留在选择页面不进行选择操作
 />
 ```
 ### 示例

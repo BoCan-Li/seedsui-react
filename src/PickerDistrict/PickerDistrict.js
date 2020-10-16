@@ -6,46 +6,46 @@ import treeData from './china.js';
  
 // 数据
 let initTabs = []; // 根据key或者name获取tabs, property用于区分是key还是value比较
+// 选中项[{id: '', name: ''}]
+let currentSelected = null;
 // 国家
-let currentCountrySelected = null;
-let currentCountry = null;
+let currentCountries = null;
 // 省市区
-let currentDataSelected = null;
 let currentData = null;
 // 街道临时存储
-let streets = [];
+let currentStreets = [];
 
 const PickerDistrict = forwardRef(({
-    portal,
-    // 获取国家数据, 不传则默认中国
-    country,
-    getCountry,
+  portal,
+  // 获取国家数据, 不传则默认中国
+  countries,
+  getCountries,
 
-    // 获取省市区数据
-    data = treeData,
-    dataFormat,
-    /*{
-      parentPropertyName: 'pId', // 将pId改成parentid
-      idPropertyName: 'id', // 将id改为id
-      namePropertyName: 'name', // 将name改为name
-      childPropertyName: 'child',  // 将child改为children
-    }*/
-    getData, // 异步获取省市区数据
-    firstStageCitys = ['北京', '天津', '上海', '重庆'], // 直辖市特别市没有省
-    split = '-',
+  // 获取省市区数据
+  data = treeData,
+  dataFormat,
+  /*{
+    parentPropertyName: 'pId', // 将pId改成parentid
+    idPropertyName: 'id', // 将id改为id
+    namePropertyName: 'name', // 将name改为name
+    childPropertyName: 'child',  // 将child改为children
+  }*/
+  getData, // 异步获取省市区数据
+  firstStageCitys = ['北京', '天津', '上海', '重庆'], // 直辖市特别市没有省
+  split = '-',
 
-    type = '', // province | city | district | street
-    show,
-    value, // '北京-东城区'
-    selected, // [{id: '', name: ''}]
+  type = '', // province | city | district | street
+  show,
+  value, // '北京-东城区'
+  selected, // [{id: '', name: ''}]
 
-    maskAttribute = {},
-    submitAttribute = {},
-    cancelAttribute = {},
+  maskAttribute = {},
+  submitAttribute = {},
+  cancelAttribute = {},
 
-    // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
-    getStreet,
-    ...others
+  // 获取街道信息, 因为街道信息过大, 所以必须通过请求获取, 返回一个Promise对象
+  getStreets,
+  ...others
 }, ref) => {
   // 声明ref
   const refElBody = useRef(null);
@@ -80,7 +80,7 @@ const PickerDistrict = forwardRef(({
     return false;
   }
 
-  // 获取父节点下所有的子节点
+  // 获取省市区父节点下所有的子节点
   function getParentChildren (parentid) {
     if (!parentid || parentid === '-1') {
       return currentData;
@@ -102,9 +102,9 @@ const PickerDistrict = forwardRef(({
   // 第一步: 获取国家和省市区
   async function loadCurrentData () {
     // 获取国家
-    if (country || typeof getCountry === 'function') {
-      let countrySuccess = await loadCountries();
-      if (!countrySuccess) return;
+    if (countries || typeof getCountries === 'function') {
+      let countriesSuccess = await loadCountries();
+      if (!countriesSuccess) return;
     }
     // 获取省市区
     await loadData();
@@ -113,7 +113,7 @@ const PickerDistrict = forwardRef(({
     // 初始化tabbar
     initTabBar();
     // 渲染页面
-    if (currentData && currentData.length) {
+    if ((currentCountries && currentCountries.length) || (currentData && currentData.length)) {
       initList();
     }
   }
@@ -125,59 +125,66 @@ const PickerDistrict = forwardRef(({
         // 如果选中项的参数不全, 则返回空
         for (let item of selected) {
           if (!item.id || !item.name) {
-            currentDataSelected = null;
-            resolve(currentDataSelected);
-            return currentDataSelected;
+            currentSelected = null;
+            resolve(currentSelected);
+            return currentSelected;
           }
         }
-        currentDataSelected = selected;
-        resolve(currentDataSelected);
-        return currentDataSelected;
+        currentSelected = selected;
+        resolve(currentSelected);
+        return currentSelected;
       }
-      // 没有城市数据返回空
-      if (!currentData || !currentData.length) {
-        currentDataSelected = null;
-        resolve(currentDataSelected);
-        return currentDataSelected;
-      }
+
       // 没有选中数据从value中取
       let values = [];
       if (value && value.split(split)) {
         values = value.split(split);
       }
       if (!values || !values.length) {
-        currentDataSelected = null;
-        resolve(currentDataSelected);
-        return currentDataSelected;
+        currentSelected = null;
+        resolve(currentSelected);
+        return currentSelected;
+      }
+
+      currentSelected = null;
+      // 如果有国家
+      if (Array.isArray(currentCountries) && currentCountries.length) {
+        let country = getCountryByName(values.shift());
+        if (country) currentSelected = [country];
+      }
+      // 没有城市数据返回直接返回
+      if (!currentData || !currentData.length) {
+        resolve(currentSelected);
+        return currentSelected;
       }
       // 根据values取出选中数据
-      currentDataSelected = currentData.getDeepTreeNodesByNames(values);
+      currentSelected = (currentSelected || []).concat(currentData.getDeepTreeNodesByNames(values));
       // 如果有街道时长度会不一致, 则需要查询街道
-      if (currentDataSelected && currentDataSelected.length && currentDataSelected.length === values.length - 1) {
-        let districtOption = currentDataSelected[currentDataSelected.length - 1]; // 获取区数据
+      if (currentSelected && currentSelected.length && currentSelected.length === (currentCountries && currentCountries.length ? values.length : values.length - 1)) {
+        let districtOption = currentSelected[currentSelected.length - 1]; // 获取区数据
         let streetName = values[values.length - 1]; // 获取街道名
         let success = await loadStreets(districtOption.id);
         // 返回街道为空直接提交
-        if (success && (!Array.isArray(streets) || !streets || !streets.length)) {
-          resolve(currentDataSelected);
-          return currentDataSelected;
+        if (success && (!Array.isArray(currentStreets) || !currentStreets || !currentStreets.length)) {
+          resolve(currentSelected);
+          return currentSelected;
         }
-        for (let street of streets) {
+        for (let street of currentStreets) {
           if (street.name === streetName) {
-            currentDataSelected.push(street);
+            currentSelected.push(street);
             break;
           }
         }
       }
-      resolve(currentDataSelected);
-      return currentDataSelected;
+      resolve(currentSelected);
+      return currentSelected;
     });
   }
   // 第三步: 初始化tabs
   function initTabBar () {
     initTabs = [];
-    if (currentDataSelected && currentDataSelected.length) {
-      initTabs = Object.clone(currentDataSelected);
+    if (currentSelected && currentSelected.length) {
+      initTabs = Object.clone(currentSelected);
     }
     if (initTabs && initTabs.length) {
       if (!initTabs[initTabs.length - 1].name) {
@@ -190,82 +197,121 @@ const PickerDistrict = forwardRef(({
         name: '请选择'
       }
     }
+    // 选中国家与选中省市区有些区别, 选中国家需要直接显示省份, 所以要默认增加一项
+    if (initTabs.length === 1 && currentCountries && currentCountries.length) {
+      initTabs.push({
+        parentid: '',
+        id: '',
+        name: '请选择'
+      });
+    }
     setTabs(initTabs)
     setTabIndex(initTabs.length - 1)
   }
   // 第四步: 结合选中数据, 初始化列表
   async function initList () {
-    let initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
-    // 如果末级节点没有列表, 则认为是街道
-    if (!initList && initTabs[initTabs.length - 1].id) {
-      await loadStreets(initTabs[initTabs.length - 2].id);
-      if (Array.isArray(streets) && streets && streets.length) {
-        initList = streets
-      } else {
-        initList = []
+    let initList = [];
+    // 选中国家与选中省市区有些区别, 选中国家需要直接显示省份
+    if (initTabs.length === 2 && currentCountries && currentCountries.length) {
+      await loadData(initTabs[initTabs.length - 1].id);
+      if (currentData) initList = currentData;
+    } else {
+      initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
+      if (!initList && initTabs[initTabs.length - 2].id) { // 如果末级节点没有列表, 则认为是街道
+        await loadStreets(initTabs[initTabs.length - 2].id);
+        if (currentStreets && currentStreets.length) initList = currentStreets;
       }
     }
     setList(initList)
   }
 
   // 工具方法: 获取国家, 失败返回false, 成功返回true
+  function formatCountries (list) {
+    return (list || []).map((item) => {
+      item.isCountry = true
+      return item
+    })
+  }
+  function getCountryByName (countryName) {
+    for (let item of currentCountries) {
+      if (item.name.indexOf(countryName) !== -1 || countryName.indexOf(item.name) !== -1) {
+        return item;
+      }
+    }
+    return null;
+  }
   async function loadCountries () {
     return new Promise(async (resolve) => {
       // 如果传入国家数据, 则使用此数据
-      if (Array.isArray(country) && country.length) {
-        if (country[0].id && country[0].name) {
-          currentCountry = country;
-          resolve(currentCountry);
-          return currentCountry;
+      if (Array.isArray(countries) && countries.length) {
+        if (countries[0].id && countries[0].name) {
+          currentCountries = formatCountries(countries);
+          resolve(currentCountries);
+          return currentCountries;
         }
-        currentCountry = null;
-        resolve(currentCountry);
-        setErrMsg(locale(`country参数不正确`, 'wrong_parameter'))
-        return currentCountry;
+        currentCountries = null;
+        resolve(currentCountries);
+        setErrMsg(`countries${locale('参数不正确', 'wrong_parameter')}`)
+        return currentCountries;
       }
       // 如果没有获取国家的方法, 则返回空
-      if (!getCountry) {
-        currentCountry = null;
-        resolve(currentCountry);
-        return currentCountry;
+      if (!getCountries) {
+        currentCountries = null;
+        resolve(currentCountries);
+        return currentCountries;
       }
       // 有获取国家的方法时, 加载国家数据
       setLoading(true);
       try {
-        currentCountry = await getCountry()
+        currentCountries = await getCountries()
       } catch (error) {
         setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
         setLoading(false);
-        currentCountry = null;
-        resolve(currentCountry);
+        currentCountries = null;
+        resolve(currentCountries);
         return;
       }
       setLoading(false);
       // 返回字符串, 说明有错
-      if (typeof currentCountry === 'string') {
-        setErrMsg(currentCountry)
-        currentCountry = null;
-        resolve(currentCountry)
+      if (typeof currentCountries === 'string') {
+        setErrMsg(currentCountries)
+        currentCountries = null;
+        resolve(currentCountries)
         return;
       }
       // 如果返回不是数组, 则认为没有街道
-      if (!currentCountry || currentCountry instanceof Array === false) {
-        currentCountry = null;
-        resolve(currentCountry)
+      if (!currentCountries || currentCountries instanceof Array === false) {
+        currentCountries = null;
+        resolve(currentCountries)
         return;
       }
-      // 增加街道标识
-      currentCountry = (currentCountry || []).map((item) => {
-        item.isCountry = true
-        return item
-      })
-      resolve(currentCountry)
+      resolve(formatCountries(currentCountries))
     })
   }
 
   // 工具方法: 获取省市区
   async function loadData (id) {
     return new Promise(async (resolve) => {
+      // 如果有国家, 则加载此国家下的省市区
+      if (Array.isArray(currentCountries) && currentCountries.length) {
+        // 获取选中国家的id, 用于获取此国家下的省市区
+        if (!id && (value || selected)) {
+          if (Array.isArray(selected) && selected.length) {
+            id = selected[0].id;
+          } else if (value) {
+            let countryName = value.split(split)[0];
+            let country = getCountryByName(countryName);
+            if (country && country.id) id = country.id;
+          }
+        }
+        // 没有国家id, 说明还没有选中的国家
+        if (!id) {
+          currentData = null;
+          resolve(currentData)
+          return currentData;
+        }
+      }
+      // 获取省市区
       let newData = null;
       if (typeof getData === 'function') {
         setLoading(true);
@@ -315,34 +361,34 @@ const PickerDistrict = forwardRef(({
     return new Promise(async (resolve) => {
       setLoading(true);
       try {
-        streets = await getStreet(id)
+        currentStreets = await getStreets(id)
       } catch (error) {
         setErrMsg(locale('获取数据失败', 'hint_getdata_failed'))
         setLoading(false);
-        streets = null;
-        resolve(streets);
+        currentStreets = null;
+        resolve(currentStreets);
         return;
       }
       setLoading(false);
       // 返回字符串, 说明有错
-      if (typeof streets === 'string') {
-        setErrMsg(streets)
-        streets = null;
-        resolve(streets)
+      if (typeof currentStreets === 'string') {
+        setErrMsg(currentStreets)
+        currentStreets = null;
+        resolve(currentStreets)
         return;
       }
       // 如果返回不是数组, 则认为没有街道
-      if (!streets || streets instanceof Array === false) {
-        streets = null;
-        resolve(streets)
+      if (!currentStreets || currentStreets instanceof Array === false) {
+        currentStreets = null;
+        resolve(currentStreets)
         return;
       }
       // 增加街道标识
-      streets = (streets || []).map((street) => {
+      currentStreets = (currentStreets || []).map((street) => {
         street.isStreet = true
         return street
       })
-      resolve(streets)
+      resolve(currentStreets)
     })
   }
 
@@ -363,14 +409,21 @@ const PickerDistrict = forwardRef(({
   }
   // 点击tab
   function onClickTab (tab, index) {
+    debugger
     setErrMsg('');
     // 点击街道
-    if (tab.isStreet && streets && streets.length) {
+    if (tab.isStreet && currentStreets && currentStreets.length) {
       setTabIndex(index)
-      setList(streets)
+      setList(currentStreets)
       return
     }
-    // 点击非街道
+    // 点击国家
+    if (index === 0 && currentCountries && currentCountries.length) {
+      setTabIndex(index)
+      setList(currentCountries)
+      return
+    }
+    // 点击省市区
     let children = getParentChildren(tab.parentid)
     if (children) {
       setTabIndex(index)
@@ -417,34 +470,42 @@ const PickerDistrict = forwardRef(({
       return;
     }
 
-    // 没有children, 并且有街道请求, 则获取街道
-    if (!option.children || !option.children.length) {
-      if (!option.isStreet && getStreet) {
-        // 设置列表
-        await loadStreets(option.id);
-        // 返回街道为空直接提交
-        if (!Array.isArray(streets) || !streets || !streets.length) {
+    if (option.isCountry) { // 点击国家
+      await loadData(option.id);
+      // 设置下级list
+      setList(currentData)
+    } else { // 点击省市区
+      // 没有children, 并且有街道请求, 则获取街道
+      if (!option.children || !option.children.length) {
+        if (!option.isStreet && getStreets) {
+          // 设置列表
+          await loadStreets(option.id);
+          // 返回街道为空直接提交
+          if (!Array.isArray(currentStreets) || !currentStreets || !currentStreets.length) {
+            setTabs(spliceTabs)
+            onSubmit(e, option)
+            return
+          }
+          setList(currentStreets)
+
+          // 设置tabs
+          // spliceTabs[spliceTabs.length - 1].name = option.name
+          spliceTabs.push({
+            parentid: option.id,
+            id: '',
+            name: '请选择'
+          })
           setTabs(spliceTabs)
-          onSubmit(e, option)
+          setTabIndex(spliceTabs.length - 1)
           return
         }
-        setList(streets)
-
-        // 设置tabs
-        // spliceTabs[spliceTabs.length - 1].name = option.name
-        spliceTabs.push({
-          parentid: option.id,
-          id: '',
-          name: '请选择'
-        })
+        // 街道直接提交
         setTabs(spliceTabs)
-        setTabIndex(spliceTabs.length - 1)
-        return
+        onSubmit(e, option);
+        return;
       }
-      // 街道直接提交
-      setTabs(spliceTabs)
-      onSubmit(e, option);
-      return;
+      // 设置下级list
+      setList(option.children)
     }
 
     // 补充请选择的空项
@@ -456,9 +517,6 @@ const PickerDistrict = forwardRef(({
 
     setTabs(spliceTabs)
     setTabIndex(tabLen)
-    
-    // 设置下级list
-    setList(option.children)
   }
   return createPortal(
     <div
