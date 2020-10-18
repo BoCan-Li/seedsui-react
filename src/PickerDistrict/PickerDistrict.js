@@ -34,7 +34,7 @@ const PickerDistrict = forwardRef(({
   firstStageCitys = ['北京', '天津', '上海', '重庆'], // 直辖市特别市没有省
   split = '-',
 
-  type = '', // province | city | district | street
+  type = '', // country | province | city | district | street
   show,
   value, // '北京-东城区'
   selected, // [{id: '', name: ''}]
@@ -198,7 +198,7 @@ const PickerDistrict = forwardRef(({
       }
     }
     // 选中国家与选中省市区有些区别, 选中国家需要直接显示省份, 所以要默认增加一项
-    if (initTabs.length === 1 && currentCountries && currentCountries.length) {
+    if (initTabs.length === 1 && initTabs[0].id && currentCountries && currentCountries.length) {
       initTabs.push({
         parentid: '',
         id: '',
@@ -212,10 +212,14 @@ const PickerDistrict = forwardRef(({
   async function initList () {
     let initList = [];
     // 选中国家与选中省市区有些区别, 选中国家需要直接显示省份
-    if (initTabs.length === 2 && currentCountries && currentCountries.length) {
-      await loadData(initTabs[initTabs.length - 1].id);
-      if (currentData) initList = currentData;
-    } else {
+    if (initTabs.length <= 2 && currentCountries && currentCountries.length) {
+      if (initTabs.length === 2) { // 已有选中国家, 直接展示省列表
+        await loadData(initTabs[initTabs.length - 2].id);
+        if (currentData) initList = currentData;
+      } else if (initTabs.length === 1) { // 没有选中国家, 显示国家列表
+        initList = currentCountries;
+      }
+    } else { // 选中省市区街道, 则显示当前选中的层级列表
       initList = getParentChildren(initTabs[initTabs.length - 1].parentid || '')
       if (!initList && initTabs[initTabs.length - 2].id) { // 如果末级节点没有列表, 则认为是街道
         await loadStreets(initTabs[initTabs.length - 2].id);
@@ -409,7 +413,6 @@ const PickerDistrict = forwardRef(({
   }
   // 点击tab
   function onClickTab (tab, index) {
-    debugger
     setErrMsg('');
     // 点击街道
     if (tab.isStreet && currentStreets && currentStreets.length) {
@@ -421,6 +424,12 @@ const PickerDistrict = forwardRef(({
     if (index === 0 && currentCountries && currentCountries.length) {
       setTabIndex(index)
       setList(currentCountries)
+      return
+    }
+    // 点击省(有国家的情况下), 其parentid为国家id, 所以在currentData里找不到数据
+    if (index === 1 && currentCountries && currentCountries.length) {
+      setTabIndex(index)
+      setList(currentData)
       return
     }
     // 点击省市区

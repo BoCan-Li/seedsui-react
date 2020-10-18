@@ -2813,7 +2813,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   {...others} // InputText组件
 />
 ```
-### 示例
+### 省市区街道示例
 ```javascript
 import InputDistrict from 'seedsui-react/lib/InputDistrict';
 
@@ -2854,6 +2854,73 @@ function onChange (e, value, selected) {
   className="border-b"
   pickerProps={{
     getStreets: getStreet
+  }}
+/>
+```
+
+### 国家地区选择示例
+```javascript
+import InputDistrict from 'seedsui-react/lib/InputDistrict';
+
+const [value, setValue] = useState('');
+const [selected, setSelected] = useState([
+  {id: '86', name: '中国'} // 设置一个选中国家, 默认显示此国家下的省份, 否则将需要先选择国家
+]);
+// 获取省市区
+function getData (id) {
+  console.log('获取省市区')
+  return new Promise((resolve) => {
+    resolve([
+      {
+        "parentid": id,
+        "name": "城市1",
+        "id": "1",
+      },
+      {
+        "parentid": id,
+        "name": "城市2",
+        "id": "2",
+      }
+    ])
+  })
+}
+// 获取街道
+function getStreet (districtId) {
+  console.log('获取街道')
+  return new Promise((resolve) => {
+    resolve([
+      {
+        "parentid": districtId,
+        "name": "街道1",
+        "id": "11",
+      },
+      {
+        "parentid": districtId,
+        "name": "街道2",
+        "id": "22",
+      }
+    ])
+  })
+}
+
+// 修改地址
+function onChange (e, value, selectedMap) {
+  console.log(e.target)
+  console.log(value, selectedMap)
+  setValue(value);
+  setSelected(selectedMap);
+}
+
+<InputDistrict
+  value={value}
+  onChange={onChange}
+  placeholder="请选择"
+  className="border-b"
+  pickerProps={{
+    countries: country,
+    getStreets: getStreet,
+    getData: getData,
+    selected: selected
   }}
 />
 ```

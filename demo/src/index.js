@@ -14,8 +14,32 @@ import country from '../../src/PickerDistrict/country.js';
 import china from '../../src/PickerDistrict/china.js';
 
 function Demo () {
+
+  const [value, setValue] = useState('');
+  const [selected, setSelected] = useState([
+    {id: '86', name: '中国'} // 设置一个选中国家, 默认显示此国家下的省份, 否则将需要先选择国家
+  ]);
+  // 获取省市区
+  function getData (id) {
+    console.log('获取省市区')
+    return new Promise((resolve) => {
+      resolve([
+        {
+          "parentid": id,
+          "name": "城市1",
+          "id": "1",
+        },
+        {
+          "parentid": id,
+          "name": "城市2",
+          "id": "2",
+        }
+      ])
+    })
+  }
   // 获取街道
   function getStreet (districtId) {
+    console.log('获取街道')
     return new Promise((resolve) => {
       resolve([
         {
@@ -32,28 +56,7 @@ function Demo () {
     })
   }
 
-  // 获取省市区
-  function getData (id) {
-    return new Promise((resolve) => {
-      // resolve(china)
-      resolve([
-        {
-          "parentid": id,
-          "name": "城市1",
-          "id": "1",
-        },
-        {
-          "parentid": id,
-          "name": "城市2",
-          "id": "2",
-        }
-      ])
-    })
-  }
-
-  const [value, setValue] = useState('美国');
-  const [selected, setSelected] = useState([{id: '86', name: '中国'}]);
-
+  // 修改地址
   function onChange (e, value, selectedMap) {
     console.log(e.target)
     console.log(value, selectedMap)
@@ -73,8 +76,8 @@ function Demo () {
         pickerProps={{
           countries: country,
           getStreets: getStreet,
-          getData: getData
-          // selected: selected
+          getData: getData,
+          selected: selected
         }}
       />
     </Container>
@@ -83,15 +86,15 @@ function Demo () {
 
 
 Bridge.ready(() => {
-	// render(<Demo/>, document.querySelector('#demo'))
+	render(<Demo/>, document.querySelector('#demo'))
   // 加载百度地图js库
-  MapUtil.load({
-    ak: '3pTjiH1BXLjASHeBmWUuSF83',
-    success: () => {
-      render(<Demo/>, document.querySelector('#demo'))
-    },
-    fail: () => {
-      console.log('加载失败')
-    }
-  })
+  // MapUtil.load({
+  //   ak: '3pTjiH1BXLjASHeBmWUuSF83',
+  //   success: () => {
+  //     render(<Demo/>, document.querySelector('#demo'))
+  //   },
+  //   fail: () => {
+  //     console.log('加载失败')
+  //   }
+  // })
 });
