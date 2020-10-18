@@ -2807,7 +2807,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 
   // Picker
   selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
-  type={城市类型 string, 默认''} // province | city | district | street
+  type={城市类型 string, 默认''} // country | province | city | district | street (其中province、city、district、street,只有中国时才生效, 因为只有中国有省市区)
   pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
 
   {...others} // InputText组件

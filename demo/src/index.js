@@ -70,6 +70,7 @@ function Demo () {
 		<Container>
       <InputDistrict
         value={value}
+        // type="country"
         onChange={onChange}
         placeholder="请选择"
         className="border-b"

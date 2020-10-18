@@ -34,7 +34,7 @@ const PickerDistrict = forwardRef(({
   firstStageCitys = ['北京', '天津', '上海', '重庆'], // 直辖市特别市没有省
   split = '-',
 
-  type = '', // country | province | city | district | street
+  type = '', // country | province | city | district | street (其中province、city、district、street,只有中国时才生效, 因为只有中国有省市区)
   show,
   value, // '北京-东城区'
   selected, // [{id: '', name: ''}]
@@ -62,19 +62,25 @@ const PickerDistrict = forwardRef(({
 
   // 设置列表, 如果类型为省时, 则不显示直辖市, 类型为市时, 则不显示直辖市的区
   function isLeaf () { // 判断点击的是否是底层
-    if (type === 'province') {
+    if (type === 'country') {
       if (tabIndex === 0) return true;
-    } else if (type === 'city') {
-      if (tabIndex === 1) return true;
-      // 直辖市特别市没有省, 为0级节点
-      if (firstStageCitys.indexOf(tabs[0].name.replace('市', '')) !== -1) {
-        return true;
-      }
-    } else if (type === 'district') {
-      if (tabIndex === 2) return true;
-      // 直辖市特别市没有省, 它们的区为1级节点
-      if (tabIndex === 1 && firstStageCitys.indexOf(tabs[0].name) !== -1) {
-        return true;
+    }
+    // 没有国家且为中国行政区划时才生效, 因为只有中国有省市区
+    if (!currentCountries || !currentCountries.length) {
+      if (type === 'province') {
+        if (tabIndex === 0) return true;
+      } else if (type === 'city') {
+        if (tabIndex === 1) return true;
+        // 直辖市特别市没有省, 为0级节点
+        if (firstStageCitys.indexOf(tabs[0].name.replace('市', '')) !== -1) {
+          return true;
+        }
+      } else if (type === 'district') {
+        if (tabIndex === 2) return true;
+        // 直辖市特别市没有省, 它们的区为1级节点
+        if (tabIndex === 1 && firstStageCitys.indexOf(tabs[0].name) !== -1) {
+          return true;
+        }
       }
     }
     return false;
@@ -198,7 +204,7 @@ const PickerDistrict = forwardRef(({
       }
     }
     // 选中国家与选中省市区有些区别, 选中国家需要直接显示省份, 所以要默认增加一项
-    if (initTabs.length === 1 && initTabs[0].id && currentCountries && currentCountries.length) {
+    if (initTabs.length === 1 && type !== 'country' && initTabs[0].id && currentCountries && currentCountries.length) {
       initTabs.push({
         parentid: '',
         id: '',
