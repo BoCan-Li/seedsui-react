@@ -8,7 +8,7 @@ import {
   Bridge,
   Container,
   MapUtil,
-  InputDistrict
+  InputLocation
 } from '../../src';
 import country from '../../src/PickerDistrict/country.js';
 import china from '../../src/PickerDistrict/china.js';
@@ -68,18 +68,11 @@ function Demo () {
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-      <InputDistrict
+      <InputLocation
         value={value}
-        // type="country"
         onChange={onChange}
         placeholder="请选择"
         className="border-b"
-        pickerProps={{
-          countries: country,
-          getStreets: getStreet,
-          getData: getData,
-          selected: selected
-        }}
       />
     </Container>
   </Page>

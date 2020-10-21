@@ -9,11 +9,11 @@ var Bridge = {
   // 自定义操作
   invoke: function (api, params, callback) {
     /* eslint-disable */
-    if (!wx.invoke) {
+    if (!top.wx.invoke) {
       console.log('没有wx.invoke的方法')
       return
     }
-    wx.invoke(api, params, function (res) {
+    top.wx.invoke(api, params, function (res) {
       callback && callback(res)
     })
     /* eslint-enable */
@@ -44,13 +44,13 @@ var Bridge = {
   },
   // 关闭窗口
   closeWindow: function () {
-    wx.closeWindow() // eslint-disable-line
+    top.wx.closeWindow() // eslint-disable-line
   },
   // 客户端返回绑定
   addBackPress: function (callback) {
     var self = this
-    if (wx.onHistoryBack) { // eslint-disable-line
-      wx.onHistoryBack(() => { // eslint-disable-line
+    if (top.wx.onHistoryBack) { // eslint-disable-line
+      top.wx.onHistoryBack(() => { // eslint-disable-line
         if (callback) {
           callback()
         } else {
@@ -62,8 +62,8 @@ var Bridge = {
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    if (wx.onHistoryBack) { // eslint-disable-line
-      wx.onHistoryBack(() => { // eslint-disable-line
+    if (top.wx.onHistoryBack) { // eslint-disable-line
+      top.wx.onHistoryBack(() => { // eslint-disable-line
         return true
       })
     }
@@ -101,7 +101,7 @@ var Bridge = {
     }
     self.locationTask = []
     console.log('调用定位...')
-    wx.getLocation({ // eslint-disable-line
+    top.wx.getLocation({ // eslint-disable-line
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: params.type || 'gcj02',
       success: (res) => {
@@ -128,7 +128,7 @@ var Bridge = {
    * 返回：{resultStr:''}
    * */
   scanQRCode (params = {}) {
-    wx.scanQRCode({ // eslint-disable-line
+    top.wx.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],
       desc: params.desc || '二维码／条码',
@@ -186,13 +186,13 @@ var Bridge = {
     })
   },
   chooseImage: function (params) {
-    wx.chooseImage(params) // eslint-disable-line
+    top.wx.chooseImage(params) // eslint-disable-line
   },
   uploadImage: function (params) {
-    wx.uploadImage(params) // eslint-disable-line
+    top.wx.uploadImage(params) // eslint-disable-line
   },
   previewImage: function (params) {
-    wx.previewImage(params) // eslint-disable-line
+    top.wx.previewImage(params) // eslint-disable-line
   },
   /**
     * 文件操作: 预览文件
@@ -204,7 +204,7 @@ var Bridge = {
     * }
     */
   previewFile: function (params) {
-    wx.previewFile(params) // eslint-disable-line
+    top.wx.previewFile(params) // eslint-disable-line
   }
 }
 

@@ -630,7 +630,7 @@ var BaiduMap = function (id, params) {
     // marginTop和marginLeft
     let marginTop = Object.getUnitNum(style.marginTop)
     let marginLeft = Object.getUnitNum(style.marginLeft)
-    let anchor = s.whToBdSize({width: marginTop || 0, height: marginLeft || 0})
+    let anchor = marginTop && marginLeft ? s.whToBdSize({width: marginTop || 0, height: marginLeft || 0}) : null
     // width和height
     let width = Object.getUnitNum(style.width)
     let height = Object.getUnitNum(style.height)
