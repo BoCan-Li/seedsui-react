@@ -30,9 +30,7 @@ export default {
         type: 'zoom'
       },
       // 中心位置
-      center: {
-        center: center
-      }
+      center: center
     });
     mapUtil.map.addEventListener('load', (e) => {
       Bridge.hideLoading();

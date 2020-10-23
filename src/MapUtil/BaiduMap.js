@@ -140,37 +140,6 @@ var BaiduMap = function (id, params) {
   }
 
   /**
-    * 地图显示城市
-    * @param {Object} options {
-    *  {String || Point} center 地名或者坐标点, 默认北京的坐标
-    *  {Number} zoom 如果center为地名时可以忽略此参数, 如果是坐标点则需要设置它3-19级, 默认18级
-    * }
-    * @return {Void}
-    */
-  s.centerAndZoom = function (options = {}) {
-    if (!options.center && !options.currentPosition) {
-      return
-    }
-    // 默认定位到南京
-    let center = options.center || new BMap.Point(118.787066, 32.007779)
-    let zoom = options.zoom || 12
-    s.map.centerAndZoom(center, zoom)
-    // 设置自动定位
-    if (options.currentPosition) {
-      s.getLocation({
-        success: (res) => {
-          if (res.longitude && res.latitude) {
-            center = new BMap.Point(res.longitude, res.latitude)
-          }
-          s.map.centerAndZoom(center, zoom)
-        },
-        fail: () => {
-          s.map.centerAndZoom(center, zoom)
-        }
-      })
-    }
-  }
-  /**
     * 自动切换到有覆盖物的视图
     * @param {Point} point [lng, lat]
     * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
@@ -1105,7 +1074,7 @@ var BaiduMap = function (id, params) {
     }
     // 中心位置
     if (s.params.center) {
-      s.centerAndZoom(s.params.center)
+      s.map.centerAndZoom(s.params.center)
     }
     // 开启鼠标滚轮缩放
     s.map.enableScrollWheelZoom(true)
