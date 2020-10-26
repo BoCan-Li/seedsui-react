@@ -88,22 +88,26 @@ var Bridge = {
     var self = this
     if (!self.alert) {
       self.alert = new Alert({
-        ...params,
-        html: msg,
         buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
         buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
           else e.hide()
-        }
-      });
+        },
+        ...params,
+        html: msg
+      }); 
     } else {
       if (params) {
         self.alert.updateParams({
           buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
           buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
+          onClickSubmit: function (e) {
+            if (params.success) params.success(e)
+            else e.hide()
+          },
           ...params,
-          html: msg,
+          html: msg
         })
       }
     }
@@ -115,24 +119,25 @@ var Bridge = {
     var self = this
     if (!self.confirm) {
       self.confirm = new Alert({
-        ...params,
-        html: msg,
+        buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
+        buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
         onClickSubmit: function (e) {
           if (params.success) params.success(e)
+          else e.hide()
         },
         onClickCancel: function(e) {
           e.errMsg = ''
           if (params.fail) params.fail(e)
           else e.hide()
-        }
+        },
+        ...params,
+        html: msg
       })
     } else {
       if (params) {
         self.confirm.updateParams({
           buttonSubmitHTML: locale('确定', 'ok'), // 实例化时需要国际化
           buttonCancelHTML: locale('取消', 'cancel'), // 实例化时需要国际化
-          ...params,
-          html: msg,
           onClickSubmit: function (e) {
             if (params.success) params.success(e)
           },
@@ -140,7 +145,9 @@ var Bridge = {
             e.errMsg = ''
             if (params.fail) params.fail(e)
             else e.hide()
-          }
+          },
+          ...params,
+          html: msg
         })
       }
     }
