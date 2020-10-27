@@ -17,10 +17,9 @@ function Demo () {
   
   const [value, setValue] = useState('1');
   useEffect(() => {
-    confirm();
-    setTimeout(() => {
-      setValue('3');
-    }, 3000);
+    Bridge.showLoading();
+    Bridge.hideLoading();
+    console.log(Bridge.isLoading());
   }, [])
   // 修改地址
   function confirm (e) {

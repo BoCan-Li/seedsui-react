@@ -872,7 +872,7 @@ var BaiduMap = function (id, params) {
       var bdPolygons = []
       var bdPolygonsPath = []
       for (var i = 0; i < count; i++) {
-        bdPolygons[i] = new BMap.Polygon(res.boundaries[i], options || s.params.styleOptions)
+        bdPolygons[i] = new BMap.Polygon(res.boundaries[i], {...(s.params.styleOptions || {}), ...(options || {})})
         if (!pureData) s.map.addOverlay(bdPolygons[i]) // 添加覆盖物
         bdPolygonsPath = bdPolygonsPath.concat(bdPolygons[i].getPath())
       }

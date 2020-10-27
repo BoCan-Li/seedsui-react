@@ -82,6 +82,11 @@ var Bridge = {
       self.loading.hide()
     }
   },
+  isLoading: function () {
+    var self = this
+    if (!self.loading) return false
+    return self.loading.mask.classList.contains(self.loading.params.loadingActiveClass)
+  },
   // 弹出Alert
   alert: null,
   showAlert: function (msg, params = {}) {
