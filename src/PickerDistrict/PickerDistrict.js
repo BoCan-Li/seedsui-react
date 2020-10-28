@@ -410,6 +410,8 @@ const PickerDistrict = forwardRef(({
     let activeEl = refElBody.current.querySelector('.active')
     if (activeEl) {
       refElBody.current.scrollTop = activeEl.offsetTop - activeEl.clientHeight * 2 - 20;
+    } else {
+      refElBody.current.scrollTop = 0;
     }
   }, [list]);
 
