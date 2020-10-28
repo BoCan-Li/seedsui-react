@@ -438,8 +438,14 @@ const PickerDistrict = forwardRef(({
       setList(currentData)
       return
     }
+    
     // 点击省市区
     let children = getParentChildren(tab.parentid)
+    // 点击末级“请选择”, 直接获取上级的children
+    if (index === tabs.length - 1 && !tab.parentid && tabs.length > 1) {
+      children = getParentChildren(tabs[index - 1].id)
+    }
+
     if (children) {
       setTabIndex(index)
       setList(children)
