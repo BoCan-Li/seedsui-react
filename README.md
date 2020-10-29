@@ -178,14 +178,14 @@ function useEn () {
 - [Carrousel](#carrousel) 轮播(Swiper的简化版)
 - [Chat](#chat) 聊天
 - [Checkbox](#checkbox) 复选框
-- [ConfigProvider](#configprovider) 全局配置(已废弃)
+- [ConfigProvider](#configprovider) 全局配置(已使用Context代替)
 - [Container](#container) container主体
 - [ContainerPull](#containerpull) 带下拉刷新功能的container主体
 - [Context](#context) 全局配置
 - [Counter](#counter) 计数器
 - [Dialog](#dialog) 自定义弹出框
 - [Dot](#dot) 小点点
-- [Dragrefresh](#dragrefresh) 下拉刷新
+- [Dragrefresh](#dragrefresh) 下拉刷新(已使用ContainerPull代替)
 - [Dropdown](#dropdown) 页签菜单
 - [Emoji](#emoji) 表情
 - [Footer](#footer) page底部
@@ -1523,8 +1523,10 @@ import Dot from 'seedsui-react/lib/Dot';
 
 
 
-## Dragrefresh(即将废弃,使用ContainerPull组件代替)
+## Dragrefresh
 [下拉刷新](https://unpkg.com/seedsui-react/src/lib/Dragrefresh/Dragrefresh.js)
+### 说明
+此组件已废弃,此属性于react16.3发布新的context后已废弃, 建议使用[ContainerPull](#containerpull)代替
 ### 属性
 ```javascript
 <Dragrefresh
