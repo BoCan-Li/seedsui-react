@@ -133,7 +133,7 @@ const Carrousel = forwardRef(({
         })}
       {/* 轮播页 */}
       {list.length === 0 && childrenArr && childrenArr.map((item, index) => {
-        return <div className="carrousel-slide" key={index}>{item}</div>
+        return <div {...slideAttribute} className={`carrousel-slide${slideAttribute.className ? ' ' + slideAttribute.className : ''}`} key={index}>{item}</div>
       })}
     </div>
     {pagination === true && <div {...paginationAttribute} className={`carrousel-pagination${paginationAttribute.className ? ' ' + paginationAttribute.className : ''}`}></div>}
