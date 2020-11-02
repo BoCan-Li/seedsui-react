@@ -395,7 +395,7 @@ var Carrousel = function (container, params) {
     if (s.params.loop) {
       s.activeIndexTruth += s.params.slidesPerView
     }
-    console.log(`更新:${s.activeIndex},${s.activeIndexTruth}`)
+    console.log(`Carrousel: 更新选中${s.activeIndex},${s.activeIndexTruth}`)
     s.updateSlides()
     s.updateBullets()
     s.createLoop()

@@ -137,11 +137,11 @@ var Bridge = {
       self.preview = new Preview({
         src: src,
         layerHTML: layerHTML,
-        success: function (s) {
+        onSuccess: function (s) {
           s.show()
           if (params.success) params.success(s)
         },
-        fail: function () {
+        onError: function () {
           if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')})
         }
       })

@@ -107,12 +107,12 @@ const PDFView = forwardRef(({
     // 如果设置了插入元素, 则需要通过react Node渲染完成后, 再实例化
     if (insertPageElements && insertPageElements.length && src) {
       new Instance().getPDF(src, {
-        success: (pdf) => {
+        onSuccess: (s, pdf) => {
           total = pdf.total;
           setTotal(total);
           instance(total);
         },
-        fail: () => {
+        onError: () => {
           instance();
         }
       });

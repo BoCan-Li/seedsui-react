@@ -122,10 +122,10 @@ var PDFView = function (container, params) {
   /* --------------------
   Methods
   -------------------- */
-  // 提供给外部使用的工具方法: 获取pdf信息, params: {success: func(), fail: func()}
+  // 提供给外部使用的工具方法: 获取pdf信息, params: {onSuccess: func(s), onError: func(s, {errMsg})}
   s.getPDF = function (src, params = {}) {
     s.loadPDFScript({
-      success: function () {
+      onSuccess: function () {
         var param = s.getDocumentParam(src)
         // base64访问, 直接读取data, 不需要发请求
         if (src.indexOf('data:application/pdf;base64,') === 0) {
@@ -139,7 +139,7 @@ var PDFView = function (container, params) {
           s.pdf = pdf // 设置pdf
           s.pdf.getPage(1).then((page) => {
             let viewport = page.getViewport(1)
-            if (params.success) params.success({
+            if (params.onSuccess) params.onSuccess(s, {
               total: s.pdf.numPages,
               width: viewport.width,
               height: viewport.height
@@ -147,15 +147,15 @@ var PDFView = function (container, params) {
           }).catch((err) => {
             console.log(err)
             s.showError()
-            if (params.fail) params.fail({errMsg: '读取PDF页面失败'})
+            if (params.onError) params.onError(s, {errMsg: '读取PDF页面失败'})
           })
         }).catch(function (error) {
           console.log(error)
           s.showError()
-          if (params.fail) params.fail({errMsg: 'pdf格式不正确'})
+          if (params.onError) params.onError(s, {errMsg: 'pdf格式不正确'})
         })
       },
-      fail: params.fail
+      onError: params.onError
     })
   }
   // 获取所有元素
@@ -427,8 +427,8 @@ var PDFView = function (container, params) {
       s.loadImg()
     } else if (s.params.src) { // PDF加载
       s.loadPDFScript({
-        success: s.loadPDF,
-        fail: s.showNoData
+        onSuccess: s.loadPDF,
+        onError: s.showNoData
       })
     } else {
       s.showNoData()
@@ -443,7 +443,7 @@ var PDFView = function (container, params) {
     var scriptPdf = document.getElementById('_seedsui_pdfview_lib_')
     var scriptPdfWork = document.getElementById('_seedsui_pdfview_work_')
     if (scriptPdf && scriptPdfWork && scriptPdf.getAttribute('data-complete') === '1' && scriptPdfWork.getAttribute('data-complete') === '1') {
-      if (params.success) params.success()
+      if (params.onSuccess) params.onSuccess(s)
       return
     }
     try {
@@ -464,7 +464,7 @@ var PDFView = function (container, params) {
         if (!loadCount) loadCount = 1
         else loadCount++
         if (loadCount === 2) {
-          if (params.success) params.success()
+          if (params.onSuccess) params.onSuccess(s)
         }
       }
       scriptPdfWork.onload = function () {
@@ -472,14 +472,14 @@ var PDFView = function (container, params) {
         if (!loadCount) loadCount = 1
         else loadCount++
         if (loadCount === 2) {
-          if (params.success) params.success()
+          if (params.onSuccess) params.onSuccess(s)
         }
       }
     } catch (error) {
       console.log('SeedsUI: pdfjs库加载失败')
       console.log(error)
       s.showError()
-      if (params.fail) params.fail({errMsg: 'pdfjs库加载失败'})
+      if (params.onError) params.onError(s, {errMsg: 'pdfjs库加载失败'})
     }
   }
   // 构建PDFJS的参数

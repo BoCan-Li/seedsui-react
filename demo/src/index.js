@@ -7,54 +7,41 @@ import {
 	Titlebar,
   Bridge,
   Container,
-  Button,
-  Carrousel
+  PDFView
 } from '../../src';
-
 function Demo () {
-  const imgList1 = [
-    {
-      bg: 'http://thumbs.dreamstime.com/b/%E5%A4%A9%E9%99%85%E6%B5%B7%E6%B5%B7%E6%B4%8B%E5%92%8C%E8%93%9D%E5%A4%A9%E8%83%8C%E6%99%AF%E5%AE%89%E9%9D%99-100160983.jpg'
-    },
-    {
-      bg: 'http://photo.tuchong.com/24951/f/32312037.jpg'
-    }
-  ]
-  const imgList2 = [
-    {
-      bg: 'http://youimg1.c-ctrip.com/target/tg/616/052/178/ceeddf2de3a74df184bcacc9e6b3123c.jpg'
-    },
-    {
-      bg: 'http://img1.cache.netease.com/catchpic/4/45/45F29E5ABA21EBBE1E8B50C2FA6D8EB4.jpg'
-    }
-  ]
-  
-  const [list, setList] = useState(imgList1);
-  const [activeIndex, setActiveIndex] = useState(0);
-  
-  function onCarrouselChange (s) {
-    console.log(s.activeIndex)
-    setActiveIndex(s.activeIndex)
-  }
-  function onCarrouselClick (s, item) {
-    console.log(item);
-  }
+  const pdfsrc = '/demo/assets/pdfview1.pdf';
+	const refPDFView = useRef(null);
+	const [pageElements, setPageElements] = useState([
+		{
+			page: '1',
+			element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>1</div>
+		},{
+			page: '2',
+			element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>2</div>
+		}
+	]);
+
+	function scrollToPage (page) { // eslint-disable-line
+		if (isNaN(page)) return;
+		if (refPDFView.current.scrollToPage) {
+			refPDFView.current.scrollToPage(page)
+		}
+	}
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-      <Button onClick={() => setActiveIndex(0)}>第1页</Button>
-      {/* <Button onClick={() => setList(imgList2)}>换列表</Button> */}
-        <Carrousel
-          list={list}
-          style={{height: '300px'}}
-          pagination
-          loop
-          activeIndex={activeIndex}
-          onChange={onCarrouselChange}
-          onClick={onCarrouselClick}
-        />
+		{/* <PDFView pictures={["/demo/assets/pdfview.png"]}/> */}
+    <PDFView
+  ref={refPDFView}
+  zoom={false}
+  src={pdfsrc}
+  cMapUrl="/demo/assets/cmaps/"
+  insertPageElements={pageElements}
+  params={{rows: 3, onLoad: () => console.log('加载完成')}}
+/>
     </Container>
   </Page>
 }
