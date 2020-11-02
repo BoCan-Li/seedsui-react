@@ -39,16 +39,18 @@ const Carrousel = forwardRef(({
   const childrenArr = React.Children.toArray(children);
   const instance = useRef(null)
 
-  function slideToIndex () {
+  function slideToIndex (currentSpeed) {
+    if (!instance || !instance.current) return;
     // 设置选中项
     let len = childrenArr.length || (list || []).length;
-    if (!isNaN(activeIndex) && activeIndex <= len - 1) {
-      instance.current.slideTo(activeIndex, speed, false)
+    if (typeof activeIndex === 'number' && activeIndex <= len - 1) {
+      instance.current.slideTo(activeIndex, typeof currentSpeed === 'number' ? currentSpeed : speed, false)
     }
   }
 
   function update () {
     if (!instance.current || !instance.current.updateParams) return
+    instance.current.activeIndex = activeIndex;
     instance.current.updateParams({
       height: style && style.height ? style.height : null,
       width: style && style.width ? style.width : null,
@@ -58,13 +60,15 @@ const Carrousel = forwardRef(({
       loop: loop,
       imgLoadSrc: defaultSrc
     });
-    // 设置选中项
-    slideToIndex()
   }
   useEffect(() => {
     // 只有list或children发生变化时才更新
     update();
-  }, [list, children, activeIndex]); // eslint-disable-line
+  }, [list, children]); // eslint-disable-line
+
+  useEffect(() => {
+    slideToIndex();
+  }, [activeIndex]) // eslint-disable-line
 
   useEffect(() => {
     if (!refEl || !refEl.current) return
@@ -83,8 +87,14 @@ const Carrousel = forwardRef(({
     if (!(style && style.height) && list.length && delay) {
       setTimeout(() => {
         instance.current.updateContainerSize();
-        slideToIndex()
+        if (typeof activeIndex === 'number' && activeIndex > 0) {
+          slideToIndex(0);
+        }
       }, delay);
+    } else {
+      if (typeof activeIndex === 'number' && activeIndex > 0) {
+        slideToIndex(0);
+      }
     }
   }, []) // eslint-disable-line
 

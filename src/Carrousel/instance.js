@@ -388,11 +388,14 @@ var Carrousel = function (container, params) {
 
   // 更新
   s.update = function () {
-    s.activeIndex = 0
-    s.activeIndexTruth = 0
-    if (s.params.loop) {
-      s.activeIndexTruth = s.params.slidesPerView
+    if (!s.activeIndex || typeof s.activeIndex !== 'number' || s.activeIndex < 0 || s.activeIndex > s.slides.length - 1) {
+      s.activeIndex = 0
     }
+    s.activeIndexTruth = s.activeIndex
+    if (s.params.loop) {
+      s.activeIndexTruth += s.params.slidesPerView
+    }
+    console.log(`更新:${s.activeIndex},${s.activeIndexTruth}`)
     s.updateSlides()
     s.updateBullets()
     s.createLoop()
@@ -404,23 +407,17 @@ var Carrousel = function (container, params) {
     s.updateLazyImg()
     // active到第一项
     if (s.touches && s.touches.posX) {
-      s.slideTo(0, 0)
+      s.slideTo(s.activeIndex, 0, false)
     }
   }
   // 更新params
   s.updateParams = function (params = {}) {
-    // 记录之前的选项
-    var prevActiveIndex = s.activeIndex;
+    // 更新参数
     for (var param in params) {
       s.params[param] = params[param]
     }
     // 更新DOM
     s.update()
-    // 滑动到之前选中项
-    if (prevActiveIndex < s.slides.length) {
-      s.activeIndex = prevActiveIndex
-      s.slideTo(prevActiveIndex, 0, 0)
-    }
   }
   s.update()
   if (s.slides.length <= 0) {

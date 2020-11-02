@@ -859,7 +859,7 @@ const imgList2 = [
 const [list, setList] = useState(imgList1);
 const [activeIndex, setActiveIndex] = useState(0);
 
-onCarrouselChange = async (s) => {
+function onCarrouselChange () {
   setActiveIndex(s.activeIndex)
 }
 
