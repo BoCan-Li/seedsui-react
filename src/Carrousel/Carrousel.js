@@ -25,7 +25,7 @@ const Carrousel = forwardRef(({
   list = [], // [{bg: 'xx', img: 'xx', iconAttribute: {}, caption: 'xx'}]
   enableOnChange = true, // 手动调用slideTo方法是否触发onChange事件回调
   speed = 300, // 动画过渡的速度
-  onClick, // func(s, e)
+  onClick, // func(s, item, index)
   onChange,
   delay = 500, // 延迟初始化秒数
 

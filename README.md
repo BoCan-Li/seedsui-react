@@ -869,7 +869,7 @@ function onCarrouselChange () {
 <Carrousel
   className="carrousel-page"
   style={{top: '84px'}}
-  onChange={(s) => setActiveIndex(s.activeIndex)}
+  onChange={onCarrouselChange}
   activeIndex={activeIndex}
 >
   <Page>第一页</Page>
@@ -884,7 +884,7 @@ function onCarrouselChange () {
   pagination
   loop
   activeIndex={activeIndex}
-  onChange={(s) => setActiveIndex(s.activeIndex)}
+  onChange={onCarrouselChange}
 />
 ```
 [返回目录](#component)
