@@ -8,27 +8,6 @@ npm install seedsui-react --save
 
 # 导入组件
 
-## 静态导入
-工程化项目
-```js
-import 'seedsui-react/build/seedsui.min.css';
-import {Chat} from 'seedsui-react';
-```
-HTML项目
-```css
-<link rel="stylesheet" href="https://unpkg.com/seedsui-react/build/seedsui.min.css">
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/react/16.4.0/umd/react.development.js"></script>
-<script src="https://cdn.bootcss.com/react-dom/16.4.0/umd/react-dom.development.js"></script>
-<script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.min.js"></script>
-<script src="https://unpkg.com/seedsui-react/build/seedsui-react.min.js"></script>
-<script type="text/babel">
-  ReactDOM.render(
-    <seedsui.Chat>聊天框</seedsui.Chat>,
-    document.getElementById('root')
-  );
-</script>
-```
 ## 动态导入
 
 - 支持Less(如果工程已经支持了忽悠此条)：
@@ -58,33 +37,12 @@ ReactDOM.render(
 );
 ```
 
-#### js中引用国际化
-```js
-import locale from 'utils/locale';
+#### 文件中使用国际化
 
-locale('我的合同', 'key')
+```bash
+参考assets/locale/README.md
 ```
 
-#### 函数组件中引用国际化
-```js
-import Context from 'seedsui-react/lib/Context/instance.js';
-
-let {locale} = useContext(Context);
-if (!locale) locale = function (remark) {return remark || ''}
-```
-
-#### class组件中引用国际化
-```js
-import Context from 'seedsui-react/lib/Context/instance.js';
-
-class Test extends Component {
-  static contextType = Context;
-  componentDidMount() {
-    let {locale} = this.context;
-    if (!locale) locale = function (remark) {return remark || ''}
-  }
-}
-```
 
 #### 简单示例
 ```javascript
@@ -110,11 +68,14 @@ function useEn () {
 ```
 
 # 组件规范
-> 为了使开发者不感觉到使用SeedsUI是在学习一种新的语言，所以SeedsUI整体设计尽量使用W3C和React的规范，使开发者感觉到仍然在使用React原生DOM在开发，从而能够节省更多的学习时间和使用体验：
+> 为了使开发者不感觉到使用SeedsUI是在学习一种新的语言，所以SeedsUI整体API的设计尽量使用W3C和React的规范，使开发者感觉到仍然在使用React原生DOM在开发，从而能够节省更多的学习时间和使用体验：
 
-- 所有事件第一个参数都为e: 文本框为:(e, value); 列表类为(e, item, index); 选项类为(e, value, options)
-- 所有组件内dom属性都使用xxAttribute
-- 所有组件内组件属性都使用xxProps
+- 所有事件名称均为on开头, 例如onChange
+- 所有事件第一个参数都为e: 文本框为:(e, value); 列表类为(e, item, index); 选项类为(e, value, selected)
+- 所有入参或者出参的selected, 格式均为[{id: '', name: ''}]
+- 所有组件内dom属性后缀都使用Attribute, 例如maskAttribute
+- 所有组件内组件属性后缀都使用Props, 例如pickerProps
+
 
 # Component
 - [Actionsheet](#actionsheet) 卡片弹框

@@ -7,41 +7,17 @@ import {
 	Titlebar,
   Bridge,
   Container,
-  PDFView
+  Debugger
 } from '../../src';
 function Demo () {
-  const pdfsrc = '/demo/assets/pdfview1.pdf';
-	const refPDFView = useRef(null);
-	const [pageElements, setPageElements] = useState([
-		{
-			page: '1',
-			element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>1</div>
-		},{
-			page: '2',
-			element: <div style={{lineHeight: '16px', backgroundColor: 'red'}}>2</div>
-		}
-	]);
-
-	function scrollToPage (page) { // eslint-disable-line
-		if (isNaN(page)) return;
-		if (refPDFView.current.scrollToPage) {
-			refPDFView.current.scrollToPage(page)
-		}
-	}
+  useEffect(() => {
+    Debugger.vconsoleLogger(document.querySelector('.header'));
+  }, [])
   return <Page>
 		<Header>
 			<Titlebar caption="SeedsUI"/>
 		</Header>
 		<Container>
-		{/* <PDFView pictures={["/demo/assets/pdfview.png"]}/> */}
-    <PDFView
-  ref={refPDFView}
-  zoom={false}
-  src={pdfsrc}
-  cMapUrl="/demo/assets/cmaps/"
-  insertPageElements={pageElements}
-  params={{rows: 3, onLoad: () => console.log('加载完成')}}
-/>
     </Container>
   </Page>
 }
