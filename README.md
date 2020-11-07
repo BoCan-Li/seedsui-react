@@ -72,7 +72,7 @@ function useEn () {
 
 - 所有事件名称均为on开头, 例如onChange
 - 所有事件第一个参数都为e: 文本框为:(e, value); 选项类为(e, value, selected, index(列表时传))
-- 所有入参或者出参的selected, 格式均为[{id: '', name: ''}]
+- 所有选择类控件, selected入参或者出参, 格式均为[{id: '', name: ''}]
 - 所有组件内dom属性后缀都使用Attribute, 例如maskAttribute
 - 所有组件内组件属性后缀都使用Props, 例如pickerProps
 
