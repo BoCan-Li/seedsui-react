@@ -66,7 +66,7 @@ const Dropdown = forwardRef(({
     refresh()
   }, [list]) // eslint-disable-line
   
-  function onClickTab (e, item, index) {
+  function handleClickTab (e, value, options, index) {
     let ids = tabs[index].id.split(',');
     let names = tabs[index].name.split(',');
     selected = [];
@@ -87,7 +87,7 @@ const Dropdown = forwardRef(({
       setShow(true);
     }
   }
-  function onClickMask (e) {
+  function handleClickMask (e) {
     setActiveIndex(-1);
     setShow(false);
     if (dialogProps && dialogProps.maskAttribute && dialogProps.maskAttribute.onClick) {
@@ -108,7 +108,7 @@ const Dropdown = forwardRef(({
     }
     return false;
   }
-  function onSelected (e, value, selected, data) {
+  function handleSelected (e, value, selected, data) {
     const newTabs = Object.clone(tabs);
     // 判断是否是根节点
     let isRoot = selectedIsRoot(selected);
@@ -144,7 +144,14 @@ const Dropdown = forwardRef(({
     setShow(false);
     // 触发onChange事件
     setSelected(selected);
-    if (onChange) onChange(e, newTabs);
+    let names = [];
+    if (newTabs && newTabs.length) {
+      names = newTabs.map((tab) => {
+        return tab.name;
+      });
+      names = names.join(',');
+    }
+    if (onChange) onChange(e, names, newTabs);
   }
   return (
     <Fragment>
@@ -153,7 +160,7 @@ const Dropdown = forwardRef(({
         ref={refElTabbar}
         exceptOnClickActive={false}
         list={tabs}
-        onClick={onClickTab}
+        onChange={handleClickTab}
         activeIndex={activeIndex}
         className="tabbar-dropdown tabbar-tiled border-b"
         {...tabbarProps}
@@ -164,7 +171,7 @@ const Dropdown = forwardRef(({
           ...(dialogProps || {}),
           maskAttribute: {
             ...(dialogProps && dialogProps.maskAttribute ? dialogProps.maskAttribute : {}),
-            onClick: onClickMask,
+            onClick: handleClickMask,
             style: {
               top: offsetTop + 'px',
               ...(dialogProps && dialogProps.maskAttribute && dialogProps.maskAttribute.style ? dialogProps.maskAttribute.style : {})
@@ -174,7 +181,7 @@ const Dropdown = forwardRef(({
         multiple={menusMultiple}
         list={menus}
         selected={selected}
-        onChange={onSelected}
+        onChange={handleSelected}
         menutiledProps={menutiledProps}
       />
     </Fragment>

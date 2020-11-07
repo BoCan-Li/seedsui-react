@@ -19,9 +19,10 @@ const Videos = forwardRef(({
   // h5预览
   const [previewItem, setPreivewItem] = useState(null);
   // 点击预览
-  function click (e, item, index) {
+  function handleClick (e, src, options, index) {
+    let item = options[0];
     if (onClick) {
-      onClick(e, item, index);
+      onClick(e, src, options, index);
     }
     if (!preview) return;
     if (!item.src) {
@@ -58,7 +59,7 @@ const Videos = forwardRef(({
     <Photos
       ref={ref}
       {...others}
-      onClick={click}
+      onClick={handleClick}
       // onChoose={choose}
       type="video"
       preview={false}

@@ -71,7 +71,7 @@ function useEn () {
 > 为了使开发者不感觉到使用SeedsUI是在学习一种新的语言，所以SeedsUI整体API的设计尽量使用W3C和React的规范，使开发者感觉到仍然在使用React原生DOM在开发，从而能够节省更多的学习时间和使用体验：
 
 - 所有事件名称均为on开头, 例如onChange
-- 所有事件第一个参数都为e: 文本框为:(e, value); 列表类为(e, item, index); 选项类为(e, value, selected)
+- 所有事件第一个参数都为e: 文本框为:(e, value); 选项类为(e, value, selected, index(列表时传))
 - 所有入参或者出参的selected, 格式均为[{id: '', name: ''}]
 - 所有组件内dom属性后缀都使用Attribute, 例如maskAttribute
 - 所有组件内组件属性后缀都使用Props, 例如pickerProps
@@ -188,7 +188,7 @@ function useEn () {
   animation={动画 string, 默认'slideUp'}  // slideLeft | slideRight | slideUp | slideDown | zoom | fade | none
   duration={动画时长 number, 默认无}
 
-  list={*按钮项 array, 如: [{caption: string}]}
+  list={*按钮项 array, 如: [{name: string}]}
 
   maskAttribute={遮罩属性 object, 默认无} // mask actionsheet-mask
   groupAttribute={主体属性 object, 默认无} // actionsheet-group
@@ -197,30 +197,28 @@ function useEn () {
   cancelCaption={取消按钮文字 node, 默认'取消'}
   cancelAttribute={取消按钮属性 object, 默认无} // actionsheet-cancel, 有onClick属性才显示确定按钮
 
-  onClick={点击项 func(e, item, index)}
+  onChange={点击项 func(e, value, selected, index)}
 />
 ```
 ### 示例
 ```javascript
 import Actionsheet from 'seedsui-react/lib/Actionsheet';
 const [show, setShow] = useState(false);
-function onClick (e, item, index) {
-  console.log(e, item, index)
+function handleChange (e, value, selected, index) {
+  console.log(e, value, selected, index)
 }
-function onShow (...param) {
-  console.log(...param)
+function onShow () {
   setShow(true);
 }
-function onHide (...param) {
-  console.log(...param)
+function onHide () {
   setShow(false)
 }
 
 <input type="button" value="显示" onClick={onShow}/>
 <Actionsheet
   show={show}
-  list={[{caption: '菜单1'}, {caption: '菜单2'}]}
-  onClick={onClick}
+  list={[{name: '菜单1'}, {name: '菜单2'}]}
+  onChange={handleChange}
   cancelAttribute={{
     onClick: onHide
   }}
@@ -329,9 +327,9 @@ function onClick () {
   {...others}
   list={照片列表 array, 默认无} // [{thumb: '', src: '', children: node}]
   uploading={是否上传中 bool, 默认无}
-  onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
-  onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
-  onClick={点击一项 func(e, item, index), 默认无}
+  onChoose={点击上传按钮 func(e), 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
+  onDelete={点击删除选择 func(e, src, selected, index), 默认无, 有此属性才会显示删除按钮}
+  onClick={点击一项 func(e, src, selected, index), 默认无}
 />
 ```
 ### 示例
@@ -345,24 +343,24 @@ const list = [{
   src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
 }];
 
-function onClick (...params) {
+function handleClick (e, src, selected, index) {
   console.log('点击')
-  console.log(...params)
+  console.log(e, src, selected, index)
 }
-function onChoose (...params) {
+function handleChoose (e) {
   console.log('选择')
-  console.log(...params)
+  console.log(e.target)
 }
-function onDelete (...params) {
+function handleDelete (e, src, selected, index) {
   console.log('删除')
-  console.log(...params)
+  console.log(e, src, selected, index)
 }
 
 <Attach
   list={list}
-  onChoose={onChoose}
-  onDelete={onDelete}
-  onClick={onClick}
+  onChoose={handleChoose}
+  onDelete={handleDelete}
+  onClick={handleClick}
 />
 ```
 [返回目录](#component)
@@ -1559,9 +1557,9 @@ loadData = () => {
 <Dropdown
   top={头部距离 number, 默认0}
   disabled={是否禁用 bool, 默认false}
-  onChange={选中菜单发生变化 func(e, [{id: '', caption: ''}])}
+  onChange={选中菜单发生变化 func(e, value, [{id: '', caption: ''}])}
   listRoot={一级菜单 array, 默认无} // 一级标题, 有可能和数据的id相同但名称不同
-  list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+  list={菜单 array, 默认无} // 格式:[{id: '', name: '分类', data: [{id: '1', name: '测试数据1', children:[]}]}]
   tabbarProps={Tabbar组件弹框属性 object, 默认无}
   dialogProps={Dialog组件弹框属性 object, 默认无}
   menutiledProps={MenuTiled组件弹框属性 object, 默认无}
@@ -1689,7 +1687,7 @@ const [items, setItems] = useState([{
     }]
   }]);
 
-function changeHandler (e, tabs) {
+function handleChange (e, value, tabs) {
     var newItems = Object.clone(items);
     tabs.forEach((item, index) => {
       newItems[index].id = item.id;
@@ -1699,7 +1697,7 @@ function changeHandler (e, tabs) {
   }
 
 <Header>
-  <Dropdown list={items} listRoot={root} onChange={changeHandler}/>
+  <Dropdown list={items} listRoot={root} onChange={handleChange}/>
 </Header>
 {/* 只要单个弹窗可如下:
 const root = [{
@@ -3675,7 +3673,7 @@ import Mark from 'seedsui-react/lib/Mark';
   autoPlay={一次滚动停留时长 number, 默认2000} // 为0时不再滚动
   direction={移动方向 string, 默认'top'} // 'top | bottom | left | right'
   loop={是否循环 bool, 默认true}
-  onClick={点击 func(e, item, index), 默认无}
+  onClick={点击 func(e, value, selected, index), 默认无}
   {...others} // 容器属性
 />
 ```
@@ -3692,12 +3690,12 @@ const list = [
     name: '标题标题2'
   }
 ];
-function clickMarquee (...params) {
+function handleClick (...params) {
   console.log(...params)
 }
 <Marquee
   list={list}
-  onClick={clickMarquee}
+  onClick={handleClick}
   autoPlay={5000}
   step={48}
   optionAttribute={{
@@ -4080,7 +4078,7 @@ import Peg from 'seedsui-react/lib/Peg';
   beforeChoose={选择照片前校验 func, 默认无, 返回false则不选择}
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器会显示file框onChoose(e), 并监听file框change事件
   onDelete={点击删除选择 func, 默认无, 有此属性才会显示删除按钮}
-  onClick={点击一项 func(e, item, index), 默认无}
+  onClick={点击一项 func(e, src, selected, index), 默认无}
   preview={是否预览 bool, 默认true, 是否支持单击预览}
 />
 ```
@@ -4097,24 +4095,24 @@ const list = [{
   src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
 }];
 
-function onClick (...params) {
+function handleClick (...params) {
   console.log('点击')
   console.log(...params)
 }
-function onChoose (...params) {
+function handleChoose (...params) {
   console.log('选择')
   console.log(...params)
 }
-function onDelete (...params) {
+function handleDelete (...params) {
   console.log('删除')
   console.log(...params)
 }
 
 <Photos
   list={list}
-  onChoose={onChoose}
-  onDelete={onDelete}
-  onClick={onClick}
+  onChoose={handleChoose}
+  onDelete={handleDelete}
+  onClick={handleClick}
 />
 ```
 [返回目录](#component)
@@ -4954,7 +4952,7 @@ function zoomHandler () {
   tiled={宽度等分 bool, 默认宽度弹性伸缩}
   disabled={是否禁用 bool, 默认无}
   exceptOnClickActive={排除点击选中的菜单 bool, 默认true}
-  onClick={点击页签 func(e, item, index), 默认无}
+  onChange={点击页签 func(e, value, selected, index), 默认无}
   activeIndex={选中项 number, 默认0}
 />
 ```
@@ -4963,17 +4961,18 @@ function zoomHandler () {
 import Tabbar from 'seedsui-react/lib/Tabbar';
 
 const tabbar = [
-  {caption: '月', dateType: '0'},
-  {caption: '季', dateType: '1'},
-  {caption: '年', dateType: '2'}
+  {name: '月', dateType: '0'},
+  {name: '季', dateType: '1'},
+  {name: '年', dateType: '2'}
 ];
-const tabActiveIndex = 0;
+const [activeIndex, setActiveIndex] = useState(0);
 
-onClickTab = (item, index) => {
-  console.log(item, index)
+function handleClick (e, value, selected, index) {
+  console.log(e, value, selected, index)
+  setActiveIndex(index);
 }
 
-<Tabbar list={tabbar} activeIndex={tabActiveIndex} onClick={this.onClickTab}/>
+<Tabbar list={tabbar} activeIndex={activeIndex} onChange={handleClick}/>
 ```
 [返回目录](#component)
 
@@ -5655,7 +5654,7 @@ function playVideo () {
 ```javascript
 <Videos
   onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
-  onClick={点击一项 func(e, item, index), 默认点击预览视频}
+  onClick={点击一项 func(e, src, selected, index), 默认点击预览视频}
   preview={是否预览 bool, 默认true, 是否支持单击预览}
   {...others} // 其它属性与Photos一致
 />
@@ -5673,24 +5672,24 @@ const list = [{
   src: 'https://www.w3school.com.cn/i/movie.ogg'
 }];
 
-function onClick (...params) {
+function handleClick (...params) {
   console.log('点击')
   console.log(...params)
 }
-function onChoose (...params) {
+function handleChoose (...params) {
   console.log('选择')
   console.log(...params)
 }
-function onDelete (...params) {
+function handleDelete (...params) {
   console.log('删除')
   console.log(...params)
 }
 
 <Videos
   list={list}
-  onChoose={onChoose}
-  onDelete={onDelete}
-  onClick={onClick}
+  onChoose={handleChoose}
+  onDelete={handleDelete}
+  onClick={handleClick}
 />
 ```
 [返回目录](#component)

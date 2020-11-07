@@ -475,7 +475,7 @@ const PickerDistrict = forwardRef(({
     }
   }
   // 点击选项
-  async function onClickOption (e, option) {
+  async function handleClickOption (e, option) {
     // 截取tabs
     let tabLen = tabIndex + 1
     let spliceTabs = Object.clone(tabs).splice(0, tabLen)
@@ -565,7 +565,7 @@ const PickerDistrict = forwardRef(({
         </div>
         <div className="picker-district-body" ref={refElBody}>
           {list && list.map((item, index) => {
-            return <div key={index} onClick={(e) => onClickOption(e, item)} className={`picker-district-option${tabs[tabIndex] && tabs[tabIndex].id === item.id ? ' active' : ''}`}>
+            return <div key={index} onClick={(e) => handleClickOption(e, item)} className={`picker-district-option${tabs[tabIndex] && tabs[tabIndex].id === item.id ? ' active' : ''}`}>
               <div className="picker-district-option-icon"></div>
               <div className="picker-district-option-caption">{item.name}</div>
             </div>

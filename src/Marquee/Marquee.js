@@ -68,7 +68,7 @@ const Marquee = forwardRef(({
   return (
     <ul ref={refEl} {...others} className={`marquee${others.className ? ' ' + others.className : ''}`}>
       {list && list.map((item, index) => {
-        return <li key={index} {...otherOptionAttribute} className={`marquee-li${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ''}`} style={Object.assign({height: step + 'px'}, otherOptionAttribute.style || {})} onClick={(e) => {if (onClick) onClick(e, item, index)}}>{item.name}</li>
+        return <li key={index} {...otherOptionAttribute} className={`marquee-li${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ''}`} style={Object.assign({height: step + 'px'}, otherOptionAttribute.style || {})} onClick={(e) => {if (onClick) onClick(e, item.name, [item], index)}}>{item.name}</li>
       })}
     </ul>
   );

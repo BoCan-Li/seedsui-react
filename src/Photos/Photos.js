@@ -28,14 +28,14 @@ const Photos = forwardRef(({
       if (choose && onChoose) onChoose(e);
     } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
-      if (index && onClick) onClick(e, list[index], Number(index));
+      if (index && onClick) onClick(e, list[index].src, [list[index]], Number(index));
       // 预览
       if (preview) {
         setPreviewCurrent(Number(index));
       }
     } else if (target.classList.contains('photos-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
-      if (index && onDelete) onDelete(e, list[index], Number(index));
+      if (index && onDelete) onDelete(e, list[index].src, [list[index]], Number(index));
     }
   }
   // file框选择

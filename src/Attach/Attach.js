@@ -45,10 +45,10 @@ const Attach = forwardRef(({
     const target = e.target;
     if (target.classList.contains('attach-item')) { // 点击一行
       const index = target.getAttribute('data-index');
-      if (index && onClick) onClick(e, list[index], Number(index));
+      if (index && onClick) onClick(e, list[index].src, [list[index]], Number(index));
     } else if (target.classList.contains('attach-item-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
-      if (index && onDelete) onDelete(e, list[index], Number(index));
+      if (index && onDelete) onDelete(e, list[index].src, [list[index]], Number(index));
     }
   }
   // file框选择

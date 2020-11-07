@@ -8,7 +8,7 @@ const Actionsheet = forwardRef(({
   animation = 'slideUp',  // slideLeft | slideRight | slideUp | slideDown | zoom | fade
   duration,
 
-  list, // [{caption: string, onClick: func}]
+  list, // [{name: string, onClick: func}]
 
   maskAttribute = {},
   groupAttribute = {},
@@ -17,7 +17,7 @@ const Actionsheet = forwardRef(({
   cancelCaption = '',
   cancelAttribute = {},
 
-  onClick,
+  onChange,
   ...others
 }, ref) =>  {
   // context
@@ -37,7 +37,7 @@ const Actionsheet = forwardRef(({
     // 区分点击事件
     e.stopPropagation()
     if (target.classList.contains('actionsheet-option') && optionAttribute.onClick) {
-      optionAttribute.onClick(e, item, index);
+      optionAttribute.onClick(e, item.name, [item]);
       return;
     }
     if (target.classList.contains('actionsheet-group') && groupAttribute.onClick) {
@@ -52,7 +52,7 @@ const Actionsheet = forwardRef(({
       cancelAttribute.onClick(e);
       return;
     }
-    if (onClick) onClick(e, item, index);
+    if (onChange) onChange(e, item.name, [item], index);
   }
 
   // 构建动画
@@ -120,7 +120,7 @@ const Actionsheet = forwardRef(({
       >
         <div {...otherGroupAttribute} className={`actionsheet-group${otherGroupAttribute.className ? ' ' + otherGroupAttribute.className : ''}`}>
           {list && list.map((item, index) => {
-            return <a {...otherOptionAttribute} className={`actionsheet-option${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ' border-b'}`} key={index} data-index={index}>{item.caption}</a>
+            return <a {...otherOptionAttribute} className={`actionsheet-option${otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ' border-b'}`} key={index} data-index={index}>{item.name}</a>
           })}
         </div>
         {cancelAttribute.onClick && <a {...otherCancelAttribute} className={`actionsheet-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{cancelCaption || locale('取消', 'cancel')}</a>}

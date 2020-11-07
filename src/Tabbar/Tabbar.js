@@ -28,17 +28,17 @@ const Tabbar = forwardRef(({
   tiled, // 宽度等分, 默认宽度弹性伸缩
   disabled,
   exceptOnClickActive = true, // 排除点击选中的菜单
-  onClick,
+  onChange,
   activeIndex = 0,
   ...others
 }, ref) =>  {
-  function click (e) {
+  function handleClick (e) {
     const target = e.target;
     if (exceptOnClickActive && target.classList.contains('active')) return;
     const index = target.getAttribute('data-index');
     if (!index) return;
-    if (onClick) {
-      onClick(e, list[index], Number(index));
+    if (onChange) {
+      onChange(e, list[index].name || list[index].caption, [list[index]], Number(index));
       e.stopPropagation();
     }
   }
@@ -109,7 +109,7 @@ const Tabbar = forwardRef(({
   const tabsDOM = getTabsDOM();
   
   return (
-    <ul ref={ref} {...others} className={tabbarClassName} disabled={disabled} style={tabbarStyle} onClick={click}>
+    <ul ref={ref} {...others} className={tabbarClassName} disabled={disabled} style={tabbarStyle} onClick={handleClick}>
       {tabsDOM}
     </ul>
   );
