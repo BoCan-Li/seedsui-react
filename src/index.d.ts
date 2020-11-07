@@ -1,4 +1,4 @@
-import './index.less';
+import './../assets/style/main.less';
 
 import './PrototypeArray.js';
 import './PrototypeMath.js';

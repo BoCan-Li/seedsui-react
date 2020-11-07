@@ -30,68 +30,22 @@ import {Chat} from 'seedsui-react';
 </script>
 ```
 ## 动态导入
-用于工程化项目,建议使用动态导入, 以节省打包文件体积, 动态导入需要Less环境支持：
+
+- 支持Less(如果工程已经支持了忽悠此条)：
 ```js
 npm install less less-loader --save-dev
 ```
+```js
 修改 webpack.config.dev.js 和 webpack.config.prod.js 配置文件:<br>
 搜索“/\.css”，修改规则为/\.css|.less$/,use -> {loader: require.resolve('less-loader')}
 
-```js
-// 加载样式
-import './../../assets/style/main.less'; // 全局 main.less, 见下节main.less
-// 加载seedsui库
-import 'seedsui-react/lib/PrototypeArray.js';
-import 'seedsui-react/lib/PrototypeMath.js';
-import 'seedsui-react/lib/PrototypeObject.js';
-import 'seedsui-react/lib/PrototypeString.js';
-import 'seedsui-react/lib/PrototypeDate.js';
-
-// 导入组件
-import Chat from 'seedsui-react/lib/Chat';
-```
-### main.less:
-```less
-/*
- * seedsui样式(seedsui组件样式增减在assets/seedsui/components.less中)
- */
-@import "../seedsui/index.less";
-
-/*
- * 全局通用样式
- */
-```
-### src/assets/seedsui/index.less:
-```less
-// 图标
-// @import "../../../node_modules/seedsui-react/lib/seedsui-iconfont.less";
-@import "iconfont.less";
-// 变量,依赖图标,换肤文件
-// @import "../../../node_modules/seedsui-react/lib/seedsui-variables.less";
-@import "variables.less";
-
-// 组件,依赖变量库
-// @import "../../../node_modules/seedsui-react/lib/seedsui-components.less";
-@import "components.less";
 ```
 
-#### src/assets/seedsui/iconfont.less:
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-iconfont.less), 放入src/assets/seedsui/iconfont.less后修改
+- 拷贝assets文件
 
-#### src/assets/seedsui/variables.less:
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-variables.less),放入src/assets/seedsui/variables.less后修改
+- 入口文件, 参考assets/seedsui/src-index.js
 
-
-#### src/assets/seedsui/components.less:<br/>
-[下载模板](https://unpkg.com/seedsui-react/lib/seedsui-components.less),放入src/assets/seedsui/components.less后修改
-
-
-# 国际化
-## 国际化文件
-[中文国际化文件](https://unpkg.com/seedsui-react/lib/locale/zh_CN.js)
-[英文国际化文件](https://unpkg.com/seedsui-react/lib/locale/en_US.js)
-[国际化自定义示例](https://unpkg.com/seedsui-react/lib/locale/index.demo)
-#### 全局配置国际化
+## 全局配置国际化
 ```js
 // 国际化
 import locale from 'utils/locale';
