@@ -1075,6 +1075,8 @@ var BaiduMap = function (id, params) {
     // 中心位置
     if (s.params.center) {
       s.map.centerAndZoom(s.params.center)
+    } else {
+      s.map.centerAndZoom('北京')
     }
     // 开启鼠标滚轮缩放
     s.map.enableScrollWheelZoom(true)
