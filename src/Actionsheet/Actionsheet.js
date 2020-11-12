@@ -34,7 +34,7 @@ const Actionsheet = forwardRef(({
       index = Number(index);
       item = list[index] || null;
     }
-    if (item.onClick) {
+    if (item && item.onClick) {
       list[index].onClick(e, item.name, [item]);
       return;
     }
