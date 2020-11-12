@@ -24,7 +24,7 @@ const Actionsheet = forwardRef(({
   const context = useContext(Context) || {};
   const locale = context.locale || function (remark) {return remark || ''};
 
-  function click (e) {
+  function handleClick (e) {
     var target = e.target;
     // 获取值
     var item = null;
@@ -34,11 +34,17 @@ const Actionsheet = forwardRef(({
       index = Number(index);
       item = list[index] || null;
     }
+    if (item.onClick) {
+      list[index].onClick(e, item.name, [item]);
+      return;
+    }
     // 区分点击事件
     e.stopPropagation()
-    if (target.classList.contains('actionsheet-option') && optionAttribute.onClick) {
-      optionAttribute.onClick(e, item.name, [item]);
-      return;
+    if (target.classList.contains('actionsheet-option')) {
+      if (optionAttribute.onClick) {
+        optionAttribute.onClick(e, item.name, [item]);
+        return;
+      }
     }
     if (target.classList.contains('actionsheet-group') && groupAttribute.onClick) {
       groupAttribute.onClick(e);
@@ -110,7 +116,7 @@ const Actionsheet = forwardRef(({
       {...otherMaskAttribute}
       className={`mask actionsheet-mask${otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''}${show ? ' active' : ''}`}
       style={Object.assign({}, durationStyle, otherMaskAttribute.style || {})}
-      onClick={click}
+      onClick={handleClick}
     >
       <div
         data-animation={animation}
