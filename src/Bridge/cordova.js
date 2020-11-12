@@ -422,6 +422,7 @@ var Bridge = {
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       isAI: '1',
+      validate: 0,// 0：不校验，1：货架陈列，2：冰箱，3：端架陈列，4：地堆，5：割箱
       watermark: {
         photoType: '标题',
         customerName: '客户',
@@ -487,6 +488,9 @@ var Bridge = {
       if (params.watermark.isAiPicCheck) chooseParams.isAiPicCheck = params.watermark.isAiPicCheck
       if (params.watermark.selectItems) chooseParams.selectItems = params.watermark.selectItems
       delete chooseParams.watermark
+    }
+    if (params.validate) {
+      chooseParams.validate = validate;
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
