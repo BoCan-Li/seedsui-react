@@ -43,7 +43,9 @@ const Dropdown = forwardRef(({
       let maskTop = top;
       if (!maskTop) {
         setTimeout(() => {
-          maskTop = refElTabbar.current.offsetTop + 40;
+          let rect = refElTabbar.current.getBoundingClientRect();
+          // maskTop = refElTabbar.current.offsetTop + 40;
+          maskTop = rect.top + 40;
           resolve(maskTop)
         }, 100);
       } else {
