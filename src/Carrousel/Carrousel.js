@@ -36,7 +36,11 @@ const Carrousel = forwardRef(({
   useImperativeHandle(ref, () => {
     return refEl.current
   });
-  const childrenArr = React.Children.toArray(children);
+  let childrenArr = React.Children.toArray(children);
+  childrenArr = childrenArr.filter((child) => {
+    if (typeof child !== 'object') return false;
+    return true;
+  })
   const instance = useRef(null)
 
   function slideToIndex (currentSpeed) {
