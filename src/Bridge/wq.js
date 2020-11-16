@@ -3,46 +3,6 @@ import Device from './../Device'
 import GeoUtil from './../GeoUtil'
 import locale from './../locale'
 
-/**
- * ios下加载桥接方法
- * @param {function} callback 
- */
-const setup = function (callback) {
-  /* eslint-disable */
-  if (window.WebViewJavascriptBridge) {
-    return callback(WebViewJavascriptBridge)
-  }
-  if (window.WVJBCallbacks) {
-    return window.WVJBCallbacks.push(callback)
-  }
-  window.WVJBCallbacks = [callback]
-  var WVJBIframe = document.createElement('iframe')
-  WVJBIframe.style.display = 'none'
-  // WVJBIframe.src = 'https://__bridge_loaded__'
-  WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__' // 针对ios wk内核
-  document.documentElement.appendChild(WVJBIframe)
-  setTimeout(function () {
-    document.documentElement.removeChild(WVJBIframe)
-  }, 0)
-  /* eslint-enable */
-}
-/**
- * android下加载桥接方法
- * @param {function} callback 回调函数
- */
-/* eslint-disable */
-const connectJsBridge = function (callback) {
-  if (window.WebViewJavascriptBridge) {
-    callback(WebViewJavascriptBridge)
-  } else {
-    document.addEventListener('WebViewJavascriptBridgeReady', function () {
-      callback(WebViewJavascriptBridge)
-    }, false)
-  }
-}
-/* eslint-enable */
-
-    
 var Bridge = {
   /**
    * 定制功能
@@ -71,11 +31,44 @@ var Bridge = {
     /* eslint-enable */
   },
 
+  // ios下加载桥接方法
+  setup: function (callback) {
+    /* eslint-disable */
+    if (window.WebViewJavascriptBridge) {
+      return callback(WebViewJavascriptBridge)
+    }
+    if (window.WVJBCallbacks) {
+      return window.WVJBCallbacks.push(callback)
+    }
+    window.WVJBCallbacks = [callback]
+    var WVJBIframe = document.createElement('iframe')
+    WVJBIframe.style.display = 'none'
+    // WVJBIframe.src = 'https://__bridge_loaded__'
+    WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__' // 针对ios wk内核
+    document.documentElement.appendChild(WVJBIframe)
+    setTimeout(function () {
+      document.documentElement.removeChild(WVJBIframe)
+    }, 0)
+    /* eslint-enable */
+  },
+  // android下加载桥接方法
+  connectJsBridge: function (callback) {
+    /* eslint-disable */
+    if (window.WebViewJavascriptBridge) {
+      callback(WebViewJavascriptBridge)
+    } else {
+      document.addEventListener('WebViewJavascriptBridgeReady', function () {
+        callback(WebViewJavascriptBridge)
+      }, false)
+    }
+    /* eslint-enable */
+  },
   // 注册事件
   registerHandler: function (events) {
+    var self = this
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
       /* eslint-disable */
-      setup(function (bridge) {
+      self.setup(function (bridge) {
         events.forEach((eventName) => {
           bridge.registerHandler(eventName, function (data) {
             // alert(JSON.stringify(data))
@@ -88,7 +81,7 @@ var Bridge = {
       /* eslint-enable */
     } else if (/(Android)/i.test(navigator.userAgent)) { /* 判断Android */
       /* eslint-disable */
-      connectJsBridge(function (bridge) {
+      self.connectJsBridge(function (bridge) {
         events.forEach((eventName) => {
           bridge.registerHandler(eventName, function (data) {
             // alert(JSON.stringify(data))
@@ -110,10 +103,6 @@ var Bridge = {
       return
     }
     callback(false)
-  },
-  // 获得版本信息
-  getAppVersion: function () {
-    return window.navigator.appVersion
   },
   // 返回首页
   goHome: function () {

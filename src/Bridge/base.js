@@ -15,6 +15,10 @@ var Bridge = {
   * 基础功能:start
   */
   debug: false,
+  // 获得版本信息
+  getAppVersion: function () {
+    return window.navigator.appVersion
+  },
   // 拨打电话
   tel: function (number) {
     var self = this

@@ -26,10 +26,6 @@ var Bridge = {
     }
     callback(false)
   },
-  // 获得版本信息
-  getAppVersion: function () {
-    return window.navigator.appVersion
-  },
   // 返回首页
   goHome: function () {
     window.history.go(-1)

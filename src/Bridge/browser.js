@@ -28,10 +28,6 @@ var Bridge = {
     }
     callback(false)
   },
-  // 获得版本信息
-  getAppVersion: function () {
-    return window.navigator.appVersion
-  },
   // 退出到登陆页面
   logOut: function logOut() {
     console.log('logOut方法仅在app上工作');
