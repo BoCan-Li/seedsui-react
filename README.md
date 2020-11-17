@@ -1556,6 +1556,7 @@ loadData = () => {
 ```javascript
 <Dropdown
   top={头部距离 number, 默认0}
+  portal={加载框传送至dom object, 默认无} // 不设置protal, 则不传送
   disabled={是否禁用 bool, 默认false}
   onChange={选中菜单发生变化 func(e, value, [{id: '', caption: ''}])}
   listRoot={一级菜单 array, 默认无} // 一级标题, 有可能和数据的id相同但名称不同

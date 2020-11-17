@@ -4,10 +4,11 @@ import DropdownDialog from './DropdownDialog';
 
 const Dropdown = forwardRef(({
   top,
+  portal,
   disabled,
   onChange,
-  listRoot, // 一级标题, 有可能id相同但名称不同 [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
-  list, // [{name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
+  listRoot, // 一级标题, 有可能id相同但名称不同 [{id: '', name: '分类'}, {id: '', name: '品牌'}, {id: '', name: '筛选'}]
+  list, // [{id: '', name: '分类', data: [{id: '1',name: '测试数据1',children:[]}]}]
   tabbarProps = {},
   dialogProps = {},
   menutiledProps = {}
@@ -17,26 +18,24 @@ const Dropdown = forwardRef(({
     return refElTabbar.current
   });
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [tabs, setTabs] = useState([]);
   let [selected, setSelected] = useState([]);
   const [menusMultiple, setMenusMultiple] = useState(false);
   const [menus, setMenus] = useState([]);
   const [offsetTop, setOffsetTop] = useState(0);
   const [show, setShow] = useState(false);
 
-  function refresh () {
-    if (!list) return;
-    // Tabbar 和 MenuTiled
-    const newTabs = [];
+  // 改造tab数据
+  let tabs = [];
+  if (Array.isArray(list) && list.length) {
     for (let item of list) {
-      newTabs.push({
+      tabs.push({
         ...item,
         ricon: <span className='icon tab-icon shape-triangle-down'></span>
       });
     };
-    setTabs(newTabs);
   }
 
+  // 初始化遮罩距离顶部间距
   function getMaskTop () {
     return new Promise((resolve) => {
       // 计算距离头部
@@ -45,7 +44,7 @@ const Dropdown = forwardRef(({
         setTimeout(() => {
           let rect = refElTabbar.current.getBoundingClientRect();
           // maskTop = refElTabbar.current.offsetTop + 40;
-          maskTop = rect.top + 40;
+          maskTop = rect.top + (refElTabbar.current.clientHeight || 40);
           resolve(maskTop)
         }, 100);
       } else {
@@ -58,16 +57,11 @@ const Dropdown = forwardRef(({
     async function fetchData () {
       let maskTop = await getMaskTop();
       setOffsetTop(maskTop);
-      // 更新数据
-      refresh();
     }
     fetchData();
   }, []) // eslint-disable-line
 
-  useEffect(() => {
-    refresh()
-  }, [list]) // eslint-disable-line
-  
+  // 点击Tabbar, 选中此项, 并显示或者隐藏Dialog
   function handleClickTab (e, value, options, index) {
     let ids = tabs[index].id.split(',');
     let names = tabs[index].name.split(',');
@@ -89,6 +83,8 @@ const Dropdown = forwardRef(({
       setShow(true);
     }
   }
+
+  // 点击遮罩隐藏
   function handleClickMask (e) {
     setActiveIndex(-1);
     setShow(false);
@@ -96,6 +92,7 @@ const Dropdown = forwardRef(({
       dialogProps.maskAttribute.onClick(e)
     }
   }
+
   // 选中项是否是根节点
   function selectedIsRoot (selected) {
     if (!listRoot || !listRoot.length) return false;
@@ -110,8 +107,9 @@ const Dropdown = forwardRef(({
     }
     return false;
   }
+
+  // 选中项
   function handleSelected (e, value, selected, data) {
-    const newTabs = Object.clone(tabs);
     // 判断是否是根节点
     let isRoot = selectedIsRoot(selected);
     if (!selected || !selected.length) {
@@ -129,31 +127,31 @@ const Dropdown = forwardRef(({
       id = id.join(',');
       name = name.join(',');
       // 设置选中的id和name
-      newTabs[activeIndex].id = id;
-      newTabs[activeIndex].name = name;
+      tabs[activeIndex].id = id;
+      tabs[activeIndex].name = name;
     }
     
     // 删除增加的ricon属性
-    for (let tab of newTabs) {
+    for (let tab of tabs) {
       delete tab.ricon
     }
     // 如果选中根节点
     if (isRoot) {
-      newTabs[activeIndex].name = listRoot[activeIndex].name;
-      newTabs[activeIndex].id = listRoot[activeIndex].id;
+      tabs[activeIndex].name = listRoot[activeIndex].name;
+      tabs[activeIndex].id = listRoot[activeIndex].id;
     }
     setActiveIndex(-1);
     setShow(false);
     // 触发onChange事件
     setSelected(selected);
     let names = [];
-    if (newTabs && newTabs.length) {
-      names = newTabs.map((tab) => {
+    if (tabs && tabs.length) {
+      names = tabs.map((tab) => {
         return tab.name;
       });
       names = names.join(',');
     }
-    if (onChange) onChange(e, names, newTabs);
+    if (onChange) onChange(e, names, tabs);
   }
   return (
     <Fragment>
@@ -171,6 +169,7 @@ const Dropdown = forwardRef(({
         show={show}
         dialogProps={{
           ...(dialogProps || {}),
+          portal: portal,
           maskAttribute: {
             ...(dialogProps && dialogProps.maskAttribute ? dialogProps.maskAttribute : {}),
             onClick: handleClickMask,
