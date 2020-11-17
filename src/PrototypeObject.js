@@ -60,6 +60,7 @@ Object.clone = function (obj) {
 }
 
 /**
+  * IE11不支持, 不允许使用
   * 用于get请求,将Json参数转为params字符串
   * @param {Object} obj 格式: {key1: 'value1', key2: 'value2'}
   * @param {String} splitter 分割符, 仅在深度对象{obj: {key1: 'value1', key2: 'value2'}}或{obj: [{key1: 'value1'},{key1: 'value1'}]}时工作
