@@ -341,7 +341,7 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: '微信js加载失败'})
+          options.fail({errMsg: locale('微信js加载失败', 'hint_wx_failed_to_load')})
         }
       }
     } else if (platform === 'waiqin') { // 外勤cordova
@@ -355,7 +355,7 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: '外勤cordova加载失败'})
+          options.fail({errMsg: locale('外勤cordova加载失败', 'hint_cordova_failed_to_load')})
         }
       }
     } else if (platform === 'wq') { // 外勤jssdk
@@ -368,7 +368,7 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: '外勤js加载失败'})
+          options.fail({errMsg: locale('外勤js加载失败', 'hint_wq_failed_to_load')})
         }
       }
     } else if (platform === 'dinghuo') {

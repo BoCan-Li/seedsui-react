@@ -1097,7 +1097,7 @@ async function scriptLoad (params = {}) {
   return new Promise(async (resolve) => {
     // 加载绘制库
     if (params.library && params.library.indexOf('draw') !== -1) {
-      let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js', null, 'DrawingManager_min')
+      let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js')
       if (!drawRes) {
         if (params.fail) params.fail({errMsg: '加载地图失败'})
         resolve('加载地图失败')

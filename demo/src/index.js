@@ -10,6 +10,19 @@ import {
   Dropdown
 } from '../../src';
 function Demo () {
+	useEffect(() => {
+		async function fetchData () {
+			let script1 = await Object.loadScript('https://api.map.baidu.com/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200415105918', (res) => {
+				console.log(res)
+			});
+			console.log(script1);
+			let script2 = await Object.loadScript('https://api.map.baidu.com1/getscript?v=3.0&ak=3pTjiH1BXLjASHeBmWUuSF83&services=&t=20200415105918', (res) => {
+				console.log(res)
+			});
+			console.log(script2);
+		}
+		fetchData();
+	})
   const [root, setRoot] = useState([
 		{
 			"id": "",

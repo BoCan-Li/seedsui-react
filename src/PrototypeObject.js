@@ -340,30 +340,23 @@ Object.getUnitNum = function (unit) {
 
 
 
-// 动态加载script的方法, attrs: [{defer: 'defer}]
-Object.loadScript = function (src, attrs = [], id) {
+// 动态加载script的方法
+Object.loadScript = function (src, opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts
+    opts = {}
+  }
   return new Promise((resolve) => {
-    if (!id || !document.getElementById(id)) { // 没有bmap, 需要加载库
-      var script = document.createElement('script')
-      if (id) script.id = id
-      script.src = src
-      if (attrs && attrs.length) {
-        for (let attr of attrs) {
-          for (let n in attr) {
-            script[n] = attr[n]
-          }
-        }
-      }
-      document.body.appendChild(script)
-      script.onload = function () {
+    const loadScript = require('./loadscript.js')
+    loadScript(src, opts, (error, script) => {
+      if (error) {
+        resolve(null)
+        if (typeof cb === 'function') cb(null)
+      } else {
         resolve(script)
+        if (typeof cb === 'function') cb(script)
       }
-      script.onerror = function () {
-        resolve(false)
-      }
-    } else {
-      resolve(true)
-    }
+    })
   })
 }
 
