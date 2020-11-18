@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext, useState} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useEffect, useContext} from 'react';
 import Instance from './instance.js';
 import BridgeBrowser from './../Bridge/browser';
 import Context from '../Context/instance.js';

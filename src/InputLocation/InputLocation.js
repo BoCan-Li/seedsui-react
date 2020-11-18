@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment, useDebugValue} from 'react';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment} from 'react';
 import InputText from './../InputText';
 import Bridge from './../Bridge';
 import MapView from './../MapView';

@@ -3082,24 +3082,20 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 ```javascript
 import InputStar from '../lib/InputStar';
 
-this.state = {
-  value: 0
-}
+const [value, setValue] = useState(0);
 
-onChange = (e, value) => {
-  this.setState({
-    value
-  })
+function onChange (e, value) {
+  setValue(value);
 }
-fail = (e, error) => {
+function onError (e, error) {
   console.log(error)
 }
 
 <InputStar
   min={3}
-  value={this.state.value}
-  onChange={this.onChange}
-  fail={this.fail}
+  value={value}
+  onChange={onChange}
+  onError={onError}
 />
 ```
 [返回目录](#component)

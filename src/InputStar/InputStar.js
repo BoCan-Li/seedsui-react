@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useContext} from 'react';
 import Star from './../Star';
 import Context from '../Context/instance.js';
 
