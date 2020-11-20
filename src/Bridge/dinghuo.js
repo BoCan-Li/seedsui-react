@@ -14,6 +14,36 @@ var Bridge = {
     self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp', 'reloadByApp'])
     self.invoke('config', {auth: false})
   },
+  /**
+   * 统一处理桥接返回结果
+   * @param {string} api 桥接名称
+   * @param {object} response 返回结果
+   * @param {function|object} callback 回调函数
+   */
+  handler: function (response, callback) {
+    if (!callback) return
+    if (typeof callback === 'function') {
+      callback(response)
+      return
+    }
+    if (typeof callback !== 'object') return
+    var msg = response && response.errMsg ? response.errMsg : ''
+    if (msg) {
+      var index = msg.indexOf(':')
+      var res = msg.substring(index + 1)
+      switch (res) {
+        case 'ok':
+          if (callback.success) callback.success(response)
+          break
+        case 'cancel':
+          if (callback.cancel) callback.cancel(response)
+          break
+        default:
+          if (callback.fail) callback.fail(response)
+      }
+    }
+    callback.complete && callback.complete(response)
+  },
   // 公共方法，通过桥接调用原生方法公共入口
   invoke: function (name, param, callback) {
     var self = this
@@ -416,13 +446,29 @@ var Bridge = {
     */
   chooseImage: function (params) {
     var self = this
-    console.log('订货chooseImage', params)
-    self.invoke('chooseImage', params, function (res) {
-      res.localIds = res.localIds.map(function (id) {
-        return 'LocalResource://imageid' + id
+    params = params || {}
+    if (params.async) { // 老客户端选择照片
+      console.log('老订货chooseImage', params)
+      self.invoke('chooseImage', params, function (res) {
+        res.localIds = res.localIds.map(function (id) {
+          return 'LocalResource://imageid' + id
+        })
+        if (params.success) params.success(res)
       })
-      if (params.success) params.success(res)
-    })
+    } else { // 新客户端选择照片
+      console.log('新订货chooseImage', params)
+      self.invoke('chooseImage', {
+        scene: '1|2',
+        count: params.count || 9,
+        sizeType: params.sizeType || ['original', 'compressed'],
+        sourceType: params.sourceType || ['album', 'camera'],
+        watermark: params.watermark || [],
+        isSaveToAlbum: params.isSaveToAlbum || 1,
+        isAI: params.isAI || 0
+      }, (response) => {
+        self.handler(response, params)
+      })
+    }
   },
   /**
     * 照片上传, ios测试环境无法上传
@@ -434,7 +480,7 @@ var Bridge = {
       success: func(res)
     * }
     */
-  uploadImage: function (params = {}) {
+  uploadImage: function (params) {
     var self = this
     params = params || {}
     if (!params.uploadDir) {
@@ -454,22 +500,39 @@ var Bridge = {
       params.localId = params.localId.replace(/LocalResource:\/\/imageid/igm, '')
     }
     // ios判断: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
-    // 格式化params
-    var uploadParams = {
-      tenantId: params.tenantId,
-      localIds: [params.localId],
-      uploadDir: params.uploadDir
-    }
-    if (params.isAI) uploadParams.isAI = params.isAI
-    console.log('订货客户端上传', uploadParams)
-    self.invoke('uploadImage', uploadParams) // 安卓没有回调, ios回调返回{result: true}
-    if (params.success) {
-      params.success({
-        errMsg: 'uploadImage:ok',
-        path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
-        serverId: params.localId,
-        tenantId: params.tenantId
-      })
+    if (params.async) { // 老客户端使用异步上传
+      console.log('老订货客户端异步上传', params)
+      if (params.localId) params.localIds = [params.localId]
+      self.invoke('uploadImage', params) // 安卓没有回调, ios回调返回{result: true}
+      if (params.success) {
+        params.success({
+          errMsg: 'uploadImage:ok',
+          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+          serverId: params.localId,
+          tenantId: params.tenantId
+        })
+      }
+    } else { // 新客户端同步上传
+      console.log('新订货客户端同步上传', params)
+      // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
+      let menuId = Device.getUrlParameter('menuId') || ''
+      let ext = params.ext || {}
+      if (menuId) {
+        ext = {
+          menuId: menuId,
+          ...(params.ext || {})
+        }
+      }
+      self.invoke('uploadImage', {
+	      tenantId: params.tenantId || '',
+	      uploadDir: params.uploadDir || '',
+	      fileName: params.fileName || '',
+	      localId: params.localId,
+	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1,
+	      ext: ext
+	    }, (response) => {
+        self.handler(response, params)
+      });
     }
   },
   /**

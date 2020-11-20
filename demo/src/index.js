@@ -11,22 +11,25 @@ import {
 } from '../../src';
 function Demo () {
 	const [value, setValue] = useState(0);
+	useEffect(() => {
+		Bridge.showToast('111')
+	}, []) // eslint-disable-line
 	function onChange (e, value) {
 		setValue(value);
 	}
-	function onError (e, error) {
-		console.log(error)
+	function chooseImage (e, error) {
+		Bridge.chooseImage({
+			async: true,
+			count: 1
+		});
 	}
+
   return <Page>
 		<Header>
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<InputStar
-				value={value}
-				onChange={onChange}
-				onError={onError}
-			/>
+			<input type="button" value="选照片" onClick={chooseImage}/>
     </Container>
   </Page>
 }
