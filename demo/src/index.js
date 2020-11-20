@@ -10,17 +10,17 @@ import {
   InputStar
 } from '../../src';
 function Demo () {
-	const [value, setValue] = useState(0);
+	const [value, setValue] = useState();
 	useEffect(() => {
-		Bridge.showToast('111')
+		Bridge.config();
 	}, []) // eslint-disable-line
-	function onChange (e, value) {
-		setValue(value);
-	}
-	function chooseImage (e, error) {
+	function chooseImage () {
 		Bridge.chooseImage({
 			async: true,
-			count: 1
+			count: 2,
+			success: (res) => {
+				setValue(res.localIds);
+			}
 		});
 	}
 
@@ -30,6 +30,9 @@ function Demo () {
 		</Header>
 		<Container>
 			<input type="button" value="选照片" onClick={chooseImage}/>
+			{value && value.map((localId) => {
+				return <img src={localId}/>
+			})}
     </Container>
   </Page>
 }

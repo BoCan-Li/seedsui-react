@@ -12,37 +12,6 @@ var Bridge = {
     // 返回物理按键绑定
     self.addBackPress()
     self.registerHandler(['getGoodsByApp', 'getCartGoodsByApp', 'onBackPress', 'setOnlineByApp', 'reloadByApp'])
-    self.invoke('config', {auth: false})
-  },
-  /**
-   * 统一处理桥接返回结果
-   * @param {string} api 桥接名称
-   * @param {object} response 返回结果
-   * @param {function|object} callback 回调函数
-   */
-  handler: function (response, callback) {
-    if (!callback) return
-    if (typeof callback === 'function') {
-      callback(response)
-      return
-    }
-    if (typeof callback !== 'object') return
-    var msg = response && response.errMsg ? response.errMsg : ''
-    if (msg) {
-      var index = msg.indexOf(':')
-      var res = msg.substring(index + 1)
-      switch (res) {
-        case 'ok':
-          if (callback.success) callback.success(response)
-          break
-        case 'cancel':
-          if (callback.cancel) callback.cancel(response)
-          break
-        default:
-          if (callback.fail) callback.fail(response)
-      }
-    }
-    callback.complete && callback.complete(response)
   },
   // 公共方法，通过桥接调用原生方法公共入口
   invoke: function (name, param, callback) {
@@ -446,34 +415,13 @@ var Bridge = {
     */
   chooseImage: function (params) {
     var self = this
-    params = params || {}
-    if (params.async) { // 老客户端选择照片
-      console.log('老订货chooseImage', params)
-      self.invoke('chooseImage', {
-        ...params,
-        count: params.count || 9,
-        sizeType: params.sizeType || ['original', 'compressed'],
-        sourceType: params.sourceType || ['album', 'camera']
-      }, function (res) {
-        res.localIds = res.localIds.map(function (id) {
-          return 'LocalResource://imageid' + id
-        })
-        if (params.success) params.success(res)
+    console.log('订货chooseImage', params)
+    self.invoke('chooseImage', params, function (res) {
+      res.localIds = res.localIds.map(function (id) {
+        return 'LocalResource://imageid' + id
       })
-    } else { // 新客户端选择照片
-      console.log('新订货chooseImage', params)
-      self.invoke('chooseImage', {
-        scene: '1|2',
-        count: params.count || 9,
-        sizeType: params.sizeType || ['original', 'compressed'],
-        sourceType: params.sourceType || ['album', 'camera'],
-        watermark: params.watermark || [],
-        isSaveToAlbum: params.isSaveToAlbum || 1,
-        isAI: params.isAI || 0
-      }, (response) => {
-        self.handler(response, params)
-      })
-    }
+      if (params.success) params.success(res)
+    })
   },
   /**
     * 照片上传, ios测试环境无法上传
@@ -485,19 +433,18 @@ var Bridge = {
       success: func(res)
     * }
     */
-  uploadImage: function (params) {
+  uploadImage: function (params = {}) {
     var self = this
-    params = params || {}
     if (!params.uploadDir) {
-      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
+      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
       return
     }
     if (!params.localId) {
-      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
       return
     }
     if (!params.tenantId) {
-      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传企业id', 'hint_upload_image_must_tenantId')})
+      self.showToast(locale('没有上传企业id', 'hint_upload_image_must_tenantId'), {mask: false})
       return
     }
     // 上传不能包含'LocalResource://imageid'
@@ -505,39 +452,22 @@ var Bridge = {
       params.localId = params.localId.replace(/LocalResource:\/\/imageid/igm, '')
     }
     // ios判断: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
-    if (params.async) { // 老客户端使用异步上传
-      console.log('老订货客户端异步上传', params)
-      if (params.localId) params.localIds = [params.localId]
-      self.invoke('uploadImage', params) // 安卓没有回调, ios回调返回{result: true}
-      if (params.success) {
-        params.success({
-          errMsg: 'uploadImage:ok',
-          path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
-          serverId: params.localId,
-          tenantId: params.tenantId
-        })
-      }
-    } else { // 新客户端同步上传
-      console.log('新订货客户端同步上传', params)
-      // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
-      let menuId = Device.getUrlParameter('menuId') || ''
-      let ext = params.ext || {}
-      if (menuId) {
-        ext = {
-          menuId: menuId,
-          ...(params.ext || {})
-        }
-      }
-      self.invoke('uploadImage', {
-	      tenantId: params.tenantId || '',
-	      uploadDir: params.uploadDir || '',
-	      fileName: params.fileName || '',
-	      localId: params.localId,
-	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1,
-	      ext: ext
-	    }, (response) => {
-        self.handler(response, params)
-      });
+    // 格式化params
+    var uploadParams = {
+      tenantId: params.tenantId,
+      localIds: [params.localId],
+      uploadDir: params.uploadDir
+    }
+    if (params.isAI) uploadParams.isAI = params.isAI
+    console.log('订货客户端上传', uploadParams)
+    self.invoke('uploadImage', uploadParams) // 安卓没有回调, ios回调返回{result: true}
+    if (params.success) {
+      params.success({
+        errMsg: 'uploadImage:ok',
+        path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+        serverId: params.localId,
+        tenantId: params.tenantId
+      })
     }
   },
   /**
@@ -551,9 +481,8 @@ var Bridge = {
     */
   previewImage: function (params) {
     var self = this
-    params = params || {}
     if (!params.urls || !params.urls.length) {
-      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('没有预览图片地址', 'hint_preview_image_must_urls')})
+      self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
       return
     }
     self.invoke('previewImage', params)
