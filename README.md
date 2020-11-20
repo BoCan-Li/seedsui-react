@@ -132,7 +132,7 @@ function useEn () {
 - [List](#list) 列表
 - [ListPull](#listpull) 可推动列表
 - [Loading](#loading) 加载中
-- [LotteryWheel](#lotterywheel) 奖品轮播
+- [LotteryWheel](#lotterywheel) 抽奖
 - [MapChoose](#MapChoose) 地图选点
 - [MapView](#MapView) 地图预览
 - [Mark](#mark) 标记
@@ -3399,7 +3399,7 @@ import Loading from 'seedsui-react/lib/Loading';
 
 
 ## LotteryWheel
-[签名](https://unpkg.com/seedsui-react/src/lib/LotteryWheel/LotteryWheel.js)
+[抽奖](https://unpkg.com/seedsui-react/src/lib/LotteryWheel/LotteryWheel.js)
 ### 属性
 ```javascript
 <LotteryWheel
