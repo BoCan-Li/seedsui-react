@@ -496,7 +496,7 @@ var Bridge = {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
       return
     }
-    if (!params.tenantId) {
+    if (params.async && !params.tenantId) {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传企业id', 'hint_upload_image_must_tenantId')})
       return
     }
@@ -536,6 +536,14 @@ var Bridge = {
 	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1,
 	      ext: ext
 	    }, (response) => {
+        if (response.errMsg.indexOf('uploadImage:ok') !== -1) {
+          response = {
+            errMsg: 'uploadImage:ok',
+            path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
+            serverId: response.serverId,
+            tenantId: params.tenantId
+          }
+        }
         self.handler(response, params)
       });
     }

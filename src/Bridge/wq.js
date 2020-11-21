@@ -297,8 +297,8 @@ var Bridge = {
     * }
     */
   uploadImage: function (params = {}) {
+    // var self = this
     var uploadParams = Object.clone(params)
-    var self = this
     if (!params.uploadDir) {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
       return
@@ -315,12 +315,12 @@ var Bridge = {
       ...(params.ext || {})
     }
     // 构建成功回调的参数
-    uploadParams.success = function () {
+    uploadParams.success = function (res) {
       if (params.success) {
         params.success({
           errMsg: 'uploadImage:ok',
           path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
-          serverId: params.serverId,
+          serverId: res && res.serverId ? res.serverId : '',
           tenantId: params.tenantId
         })
       }

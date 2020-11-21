@@ -14,12 +14,22 @@ function Demo () {
 	useEffect(() => {
 		Bridge.config();
 	}, []) // eslint-disable-line
-	function chooseImage () {
+	function getphoto () {
 		Bridge.chooseImage({
-			async: true,
+			// async: true,
 			count: 2,
 			success: (res) => {
-				setValue(res.localIds);
+				Bridge.uploadImage({
+					// async: true,
+					uploadDir: 'cuxiao/202011',
+					localId: res.localIds[0],
+					success: (res) => {
+						alert(JSON.stringify(res))
+					},
+					fail: (res) => {
+						alert(JSON.stringify(res))
+					}
+				})
 			}
 		});
 	}
@@ -29,7 +39,7 @@ function Demo () {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<input type="button" value="选照片" onClick={chooseImage}/>
+			<input type="button" value="选照片" onClick={getphoto}/>
 			{value && value.map((localId) => {
 				return <img src={localId}/>
 			})}
