@@ -254,7 +254,6 @@ var GeoUtil = {};
       return null
     }
     if (from === to) return point
-    if (from === to) return point
     if (!from) return point
     if (!to) return point
     // 定义一些常量
