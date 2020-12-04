@@ -449,19 +449,19 @@ var Bridge = {
     params = params || {}
     if (params.async) { // 老客户端选择照片
       console.log('老订货chooseImage', params)
-      let chooseOptions = {
+      let chooseParams = {
         count: params.count || 9,
         sizeType: params.sizeType || ['original', 'compressed'],
         sourceType: params.sourceType || ['album', 'camera']
       }
       if (Object.prototype.toString.call(params.watermark) === '[object Object]' && params.watermark.isWaterMark === '1') {
-        if (params.watermark.orderNo) chooseOptions.orderNo = params.watermark.orderNo // 编号
-        if (params.watermark.submitName) chooseOptions.submitName = params.watermark.submitName // 提交人
-        if (params.watermark.customerName) chooseOptions.customerName = params.watermark.customerName // 客户
-        if (params.watermark.cmLocation) chooseOptions.cmLocation = params.watermark.cmLocation // 偏差
-        chooseOptions.isWaterMark = '1'
+        if (params.watermark.orderNo) chooseParams.orderNo = params.watermark.orderNo // 编号
+        if (params.watermark.submitName) chooseParams.submitName = params.watermark.submitName // 提交人
+        if (params.watermark.customerName) chooseParams.customerName = params.watermark.customerName // 客户
+        if (params.watermark.cmLocation) chooseParams.cmLocation = params.watermark.cmLocation // 偏差
+        chooseParams.isWaterMark = '1'
       }
-      self.invoke('chooseImage', chooseOptions, function (res) {
+      self.invoke('chooseImage', chooseParams, function (res) {
         if (!res) res = {}
         if (!res.localIds) res.localIds = []
         res.localIds = res.localIds.map(function (id) {
