@@ -449,16 +449,31 @@ var Bridge = {
     params = params || {}
     if (params.async) { // 老客户端选择照片
       console.log('老订货chooseImage', params)
-      self.invoke('chooseImage', {
-        ...params,
+      let chooseOptions = {
         count: params.count || 9,
         sizeType: params.sizeType || ['original', 'compressed'],
         sourceType: params.sourceType || ['album', 'camera']
-      }, function (res) {
+      }
+      if (Object.prototype.toString.call(params.watermark) === '[object Object]' && params.watermark.isWaterMark === '1') {
+        if (params.watermark.orderNo) chooseOptions.orderNo = params.watermark.orderNo // 编号
+        if (params.watermark.submitName) chooseOptions.submitName = params.watermark.submitName // 提交人
+        if (params.watermark.customerName) chooseOptions.customerName = params.watermark.customerName // 客户
+        if (params.watermark.cmLocation) chooseOptions.cmLocation = params.watermark.cmLocation // 偏差
+        chooseOptions.isWaterMark = '1'
+      }
+      self.invoke('chooseImage', chooseOptions, function (res) {
+        if (!res) res = {}
+        if (!res.localIds) res.localIds = []
         res.localIds = res.localIds.map(function (id) {
           return 'LocalResource://imageid' + id
         })
-        if (params.success) params.success(res)
+        if (Array.isArray(res.localIds) && res.localIds.length) {
+          if (params.success) params.success(res)
+        } else if (Array.isArray(res.localIds) && res.localIds.length === 0) {
+          if (params.cancel) params.cancel({errMsg: 'chooseImage:cancel'})
+        } else {
+          if (params.fail) params.fail({errMsg: 'chooseImage:fail'})
+        }
       })
     } else { // 新客户端选择照片
       console.log('新订货chooseImage', params)
