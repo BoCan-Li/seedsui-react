@@ -127,7 +127,7 @@ var Bridge = {
         } else {
           url = `${url.replace(/^h5:/, '')}`
         }
-        wq.invoke('nativeComponent', {
+        wq.invoke('nativeComponent', { // eslint-disable-line
           android: {
             name: 'org.apache.cordova.WqCordovaActivity',
             params: {
@@ -146,7 +146,7 @@ var Bridge = {
             }, 500)
           }
         }
-        wq.openWindow(option)
+        wq.openWindow(option) // eslint-disable-line
       }
     } else { // 新内核间跳转
       wq.openWindow(params) // eslint-disable-line
@@ -252,7 +252,6 @@ var Bridge = {
    * 返回：{resultStr:''}
    * */
   scanQRCode: function (params = {}) {
-    var self = this
     wq.scanQRCode({ // eslint-disable-line
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],

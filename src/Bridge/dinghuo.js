@@ -548,7 +548,7 @@ var Bridge = {
 	      uploadDir: params.uploadDir || '',
 	      fileName: params.fileName || '',
 	      localId: params.localId,
-	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1,
+	      isShowProgressTips: 0 == params.isShowProgressTips ? 0 : 1, // eslint-disable-line
 	      ext: ext
 	    }, (response) => {
         if (response.errMsg.indexOf('uploadImage:ok') !== -1) {

@@ -214,14 +214,14 @@ var Bridge = {
   // 客户端默认返回控制
   back: function (argHistory, argBackLvl) {
     // 因为有可能是监听绑定, this指向有可能是window, 所以需要指定self
-    var self = _bridge_self
+    var self = window._bridge_self
     // 返回操作对象与返回层级
     var _history = window.history
     if (argHistory && argHistory.go) _history = argHistory
     var _backLvl = argBackLvl || -1
     
     // 返回类型
-    var isFromApp = Device.getUrlParameter('isFromApp', location.search) || ''
+    var isFromApp = Device.getUrlParameter('isFromApp', window.location.search) || ''
     // 如果已经有h5返回监听, 优先执行h5返回监听
     if (window.onHistoryBacks && Object.keys(window.onHistoryBacks).length === 0) {
       window.onHistoryBacks = null

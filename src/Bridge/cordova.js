@@ -490,7 +490,7 @@ var Bridge = {
       delete chooseParams.watermark
     }
     if (params.validate) {
-      chooseParams.validate = validate;
+      chooseParams.validate = params.validate
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line
@@ -571,36 +571,36 @@ var Bridge = {
     * current:'当前显示的资源序号或者当前资源的url链接',
     * }
     */
-  previewImage: function (argParams) {
+  previewImage: function (params) {
     var self = this
-    if (!argParams.urls || !argParams.urls.length) {
+    if (!params.urls || !params.urls.length) {
       self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
       return
     }
     // 格式化index
     var position = 0
-    if (argParams && argParams.index) position = argParams.index
-    if (typeof current === 'number') {
-      position = current;
-    } else if (typeof current === 'string') {
-      for (let [index, source] of list.entries()) {
-        if (source.src === current) position = index;
+    if (params && params.index) position = params.index
+    if (typeof params.current === 'number') {
+      position = params.current;
+    } else if (typeof params.current === 'string') {
+      for (let [index, source] of params.urls.entries()) {
+        if (source.src === params.current) position = index;
       }
     }
     // 格式化urls
     var photos = []
-    if (argParams && argParams.urls && argParams.urls.length) {
-      photos = argParams.urls.map((item) => {
+    if (params && params.urls && params.urls.length) {
+      photos = params.urls.map((item) => {
         return {
           path: item
         }
       })
     }
-    var params = {
+    var previewParams = {
       position: position,
       photos: photos
     }
-    wq.wqphoto.photoPreview(JSON.stringify(params)) // eslint-disable-line
+    wq.wqphoto.photoPreview(JSON.stringify(previewParams)) // eslint-disable-line
   },
   /**
     * 视频文件上传
@@ -611,27 +611,28 @@ var Bridge = {
       success: func(res)
     * }
     */
-   uploadFile: function (argParams = {}) {
+   uploadFile: function (params = {}) {
     var self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
       self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {mask: false})
       return
     }
-    if (!argParams.localId) {
+    if (!params.localId) {
       self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
       return
     }
-    let params = argParams.localId.split(':');
-    if (params.length !== 2) {
+    let localIds = params.localId.split(':');
+    if (localIds.length !== 2) {
       self.showToast(locale('localeId错误', 'hint_error_localeid'), {mask: false})
       return
     }
     window.wq.wqio.uploadFile(JSON.stringify({ // 拍摄完后开始上传文件
       filePathList: [{path: params[1], fileAlias: params[0]}],
-      url: uploadDir
+      url: params.uploadDir
     }))
     setTimeout(() => {
-      if (argParams.success) argParams.success({
+      if (params.success) params.success({
+        errMsg: 'uploadFile:ok',
         filePath: params[1],
         fileName: params[0]
       })

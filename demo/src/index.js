@@ -32,6 +32,7 @@ function Demo () {
 			success: (res) => {
 				alert(JSON.stringify(res))
 				Bridge.uploadImage({
+					ext: {a: '1'},
 					async: true,
 					uploadDir: 'cuxiao/202011',
 					localId: res.localIds[0],
