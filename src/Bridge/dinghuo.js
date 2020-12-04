@@ -450,7 +450,7 @@ var Bridge = {
     if (params.async) { // 老客户端选择照片
       console.log('老订货chooseImage', params)
       let chooseParams = {
-        count: params.count || 9,
+        count: 1, // 老客户端一次上传多张容易出问题, 所以只允许一次传一张
         sizeType: params.sizeType || ['original', 'compressed'],
         sourceType: params.sourceType || ['album', 'camera']
       }
@@ -519,11 +519,6 @@ var Bridge = {
     if (params.async) { // 老客户端使用异步上传
       console.log('老订货客户端异步上传', params)
       // 安卓没有回调, ios回调返回{result: true}
-      self.invoke('uploadImage', {
-        uploadDir: params.uploadDir,
-        tenantId: params.tenantId || '',
-        localIds: [params.localId]
-      })
       if (params.success) {
         params.success({
           errMsg: 'uploadImage:ok',
@@ -532,6 +527,14 @@ var Bridge = {
           tenantId: params.tenantId || ''
         })
       }
+      // 旧客户端上传完成后将会删除, 所以延迟上传, 以保证页面显示正确
+      setTimeout(() => {
+        self.invoke('uploadImage', {
+          uploadDir: params.uploadDir,
+          tenantId: params.tenantId || '',
+          localIds: [params.localId]
+        })
+      }, 1000)
     } else { // 新客户端同步上传
       console.log('新订货客户端同步上传', params)
       // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
