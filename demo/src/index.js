@@ -18,21 +18,21 @@ function Demo () {
 	}, []) // eslint-disable-line
 	function getphoto () {
 		Bridge.chooseImage({
-			// async: true,
-			// watermark: {
-      //   orderNo: '编号',
-      //   submitName: '提交人',
-      //   customerName: '客户',
-      //   cmLocation: '31.982473, 118.730515',
-      //   isWaterMark: '1', // 是否启用水印
-			// },
-			watermark: ['第一行', '第二行'],
+			async: true,
+			watermark: {
+        orderNo: '编号',
+        submitName: '提交人',
+        customerName: '客户',
+        cmLocation: '31.982473, 118.730515',
+        isWaterMark: '1', // 是否启用水印
+			},
+			// watermark: ['第一行', '第二行'],
 			count: 2,
 			sourceType: ['camera'],
 			success: (res) => {
 				alert(JSON.stringify(res))
 				Bridge.uploadImage({
-					// async: true,
+					async: true,
 					uploadDir: 'cuxiao/202011',
 					localId: res.localIds[0],
 					tenantId: '7320333869003283336',

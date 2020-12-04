@@ -507,12 +507,8 @@ var Bridge = {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
       return
     }
-    if (!params.localId) {
+    if (typeof params.localId !== 'string' || !params.localId) {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
-      return
-    }
-    if (params.async && !params.tenantId) {
-      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传企业id', 'hint_upload_image_must_tenantId')})
       return
     }
     // 上传不能包含'LocalResource://imageid'
@@ -522,14 +518,18 @@ var Bridge = {
     // ios判断: navigator.userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
     if (params.async) { // 老客户端使用异步上传
       console.log('老订货客户端异步上传', params)
-      if (params.localId) params.localIds = [params.localId]
-      self.invoke('uploadImage', params) // 安卓没有回调, ios回调返回{result: true}
+      // 安卓没有回调, ios回调返回{result: true}
+      self.invoke('uploadImage', {
+        uploadDir: params.uploadDir,
+        tenantId: params.tenantId || '',
+        localIds: [params.localId]
+      })
       if (params.success) {
         params.success({
           errMsg: 'uploadImage:ok',
           path: `${params.uploadDir}/${params.localId}`, // 前后不带/, 并且不带企业参数的上传路径
           serverId: params.localId,
-          tenantId: params.tenantId
+          tenantId: params.tenantId || ''
         })
       }
     } else { // 新客户端同步上传
