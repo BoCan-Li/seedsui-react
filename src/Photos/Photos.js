@@ -1,4 +1,4 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef, useState, useRef} from 'react';
 import Preview from './../Preview';
 import Bridge from './../Bridge';
 
@@ -14,38 +14,60 @@ const Photos = forwardRef(({
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   ...others
 }, ref) =>  {
+  // 因为在click事件内改变数据的可能性, 所以更新句柄, 防止synchronization模式读取创建时的状态
+  const onChooseRef = useRef()
+  const onDeleteRef = useRef()
+  const onClickRef = useRef()
+  onChooseRef.current = onChoose
+  onDeleteRef.current = onDelete
+  onClickRef.current = onClick
+
   const [previewCurrent, setPreviewCurrent] = useState(null);
   // 点击整个photos容器
-  async function click (event) {
+  async function handleClick (event) {
     const e = event.nativeEvent;
     const target = e.target;
     if (target.type === 'file') {
       target.value = ''; // 防止选择重复图片时不触发
     }
     if (target.classList.contains('photos-upload')) { // 点击添加
-      let choose = true;
+      let choose = true
       if (typeof beforeChoose === 'function') choose = await beforeChoose()
-      if (choose && onChoose) onChoose(e);
+      console.log('是否允许选择:' + choose)
+      // 允许选择
+      if (choose) {
+        if (fileRef && fileRef.current) { // PC端点击file框
+          // 触发点击
+          if (navigator.userAgent.indexOf('Trident') > -1) { // IE浏览器
+            fileRef.current.click()
+          } else { // 其它浏览器
+            var targetEvent = document.createEvent('MouseEvents')
+            targetEvent.initEvent('click', true, true)
+            fileRef.current.dispatchEvent(targetEvent)
+          }
+        } else { // 手机端点击div
+          if (onChooseRef && onChooseRef.current) onChooseRef.current(e)
+        }
+      }
     } else if (target.classList.contains('photos-item')) { // 点击照片
       const index = target.getAttribute('data-index');
-      if (index && onClick) onClick(e, list[index].src, [list[index]], Number(index));
+      if (index && onClickRef && onClickRef.current) onClickRef.current(e, list[index].src, [list[index]], Number(index));
       // 预览
       if (preview) {
         setPreviewCurrent(Number(index));
       }
     } else if (target.classList.contains('photos-delete')) { // 点击删除
       const index = target.parentNode.getAttribute('data-index');
-      if (index && onDelete) onDelete(e, list[index].src, [list[index]], Number(index));
+      if (index && onDeleteRef && onDeleteRef.current) onDeleteRef.current(e, list[index].src, [list[index]], Number(index));
     }
   }
   // file框选择
-  async function fileChange (event) {
-    const e = event.nativeEvent;
-    if (type === 'video') e.targetType = 'video';
-    let choose = true;
-    if (typeof beforeChoose === 'function') choose = await beforeChoose()
-    if (choose && onChoose) onChoose(e);
-    e.stopPropagation();
+  const fileRef = useRef(null)
+  async function handleFileChange (event) {
+    const e = event.nativeEvent
+    if (type === 'video') e.targetType = 'video'
+    if (onChooseRef && onChooseRef.current) onChooseRef.current(e)
+    e.stopPropagation()
   }
   // 图片加载完成
   function load (e) {
@@ -62,7 +84,7 @@ const Photos = forwardRef(({
     ref={ref}
     {...others}
     className={`photos${others.className ? ' ' + others.className: ''}`}
-    onClick={click}
+    onClick={handleClick}
   >
     {list && list.length > 0 && list.map((item, index) => {
       return <div
@@ -90,10 +112,10 @@ const Photos = forwardRef(({
       {/* 拍照或者视频图标 */}
       <div className={`photos-upload-icon${type === 'video' ? ' video' : ''}`}></div>
       {/* 录相 */}
-      {type === 'video' && Bridge.platform !== 'wq' && Bridge.platform !== 'waiqin' && <input type="file" name="uploadVideo" onChange={fileChange} accept="video/*" capture="camcorder"/>}
+      {type === 'video' && Bridge.platform !== 'wq' && Bridge.platform !== 'waiqin' && <input ref={fileRef} type="file" className="photos-upload-file-video" name="uploadVideo" onChange={handleFileChange} accept="video/*" capture="camcorder"/>}
       {/* 拍照 */}
       {/* PC端使用file框 */}
-      {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input type="file" name="uploadPhoto" onChange={fileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
+      {type !== 'video' && !navigator.userAgent.toLowerCase().match(/applewebkit.*mobile.*/) && <input ref={fileRef} type="file" className="photos-upload-file-photo" name="uploadPhoto" onChange={handleFileChange} accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp"/>}
       {upload && upload}
       {uploading && <div className="photos-upload-loading">
         <div className="photos-upload-loading-icon"></div>

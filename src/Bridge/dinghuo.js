@@ -434,7 +434,7 @@ var Bridge = {
       count: 1, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      watermark: {
+      watermark: { // 老订货, 新订货使用数组行显示
         orderNo: '编号',
         submitName: '提交人',
         customerName: '客户',
