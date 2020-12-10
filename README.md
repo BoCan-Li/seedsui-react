@@ -104,7 +104,6 @@ function useEn () {
 - [Dropdown](#dropdown) 页签菜单
 - [Emoji](#emoji) 表情
 - [Footer](#footer) page底部
-- [Grid](#grid) 栅格
 - [Group](#group) 分组
 - [Handsign](#handsign) 手写签名
 - [Header](#header) page头部
@@ -129,7 +128,6 @@ function useEn () {
 - [InputText](#inputtext) 文本框
 - [Jcrop](#jcrop) 图片裁切
 - [Legend](#legend) 标题
-- [List](#list) 列表
 - [ListPull](#listpull) 可推动列表
 - [Loading](#loading) 加载中
 - [LotteryWheel](#lotterywheel) 抽奖
@@ -145,6 +143,7 @@ function useEn () {
 - [Page](#page) 页面
 - [PagePull](#pagepull) 可推动页面
 - [Peg](#peg) 小竖条
+- [Photos](#photos) 照片列表
 - [Picker](#picker) 滚动选择弹框
 - [PickerCity](#pickercity) 城市选择弹框(即将废弃, 使用PickerDistrict代替)
 - [PickerDate](#pickerdate) 日期选择弹框
@@ -154,7 +153,6 @@ function useEn () {
 - [Progress](#progress) 进度条
 - [PDFView](#pdfview) PDF文件预览
 - [Radio](#radio) 单选框
-- [SearchBoard](#searchboard) 搜索面板
 - [PickerSelect](#pickerselect) 选择弹框
 - [Star](#star) 星星
 - [Stencil](#stencil) 加载模板
