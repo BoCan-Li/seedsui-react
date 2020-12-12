@@ -10,15 +10,34 @@ var Bridge = {
   platform: 'wq',
   // 自定义操作
   invoke: function (api, params, callback) {
-    /* eslint-disable */
-    if (!wq.invoke) {
+    if (!wq.invoke) { // eslint-disable-line
       console.log('没有wq.invoke的方法')
       return
     }
-    wq.invoke(api, params, function (res) {
-        callback && callback(res)
+    wq.invoke(api, params, function (response) { // eslint-disable-line
+      if (!callback) return
+      if (typeof callback === 'function') {
+        callback(response)
+        return
+      }
+      if (typeof callback !== 'object') return
+      var msg = response && response.errMsg ? response.errMsg : ''
+      if (msg) {
+        var index = msg.indexOf(':')
+        var res = msg.substring(index + 1)
+        switch (res) {
+          case 'ok':
+            if (callback.success) callback.success(response)
+            break
+          case 'cancel':
+            if (callback.cancel) callback.cancel(response)
+            break
+          default:
+            if (callback.fail) callback.fail(response)
+        }
+      }
+      callback.complete && callback.complete(response)
     })
-    /* eslint-enable */
   },
   // 配置鉴权
   config: function () {
@@ -71,7 +90,6 @@ var Bridge = {
       self.setup(function (bridge) {
         events.forEach((eventName) => {
           bridge.registerHandler(eventName, function (data) {
-            // alert(JSON.stringify(data))
             const event = new CustomEvent(eventName, { detail: data })
             // 分发事件
             window.dispatchEvent(event)
@@ -84,7 +102,6 @@ var Bridge = {
       self.connectJsBridge(function (bridge) {
         events.forEach((eventName) => {
           bridge.registerHandler(eventName, function (data) {
-            // alert(JSON.stringify(data))
             const event = new CustomEvent(eventName, {
               detail: data
             })

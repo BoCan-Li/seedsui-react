@@ -340,6 +340,66 @@ var Bridge = {
     self.invoke('openFile', params, callback)
   },
   /**
+    * 视频文件上传
+    * @param {Object} params
+    * {
+      uploadDir: '目录/年月',
+      localId: 'localId',
+      success: func(res)
+    * }
+    */
+  uploadFile: function (params) {
+    var self = this
+    params = params || {}
+    if (!params.localId) {
+      if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传地址', 'hint_no_upload_localeid')})
+      return
+    }
+    self.invoke('uploadFile', {
+      url: params.url || `/fileupload/v1/doUpload.do?uploadPath=file`,
+      filePath: params.localId,
+      name: 'file',
+      formData: params.data
+    }, (response) => {
+      self.handler(response, params)
+    })
+  },
+  /**
+    * 选择、录制视频
+    * @param {Object} params
+    * {
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      maxDuration: 10, // 最大录相时长
+      camera: 'back', // back || front，默认拉起的是前置或者后置摄像头。非必填，默认back
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success({localIds:[src]})
+    * }
+    */
+  chooseVideo: function (params) {
+    const self = this
+    params = params || {}
+    console.log('[SeedsUI 订货]chooseVideo', params)
+    self.invoke('chooseVideo', {
+      sourceType: params.sourceType || ['album','camera'],
+      maxDuration: params.maxDuration || 10,
+      camera: params.camera || 'back',
+      compressed: params.sizeType && params.sizeType.length && params.sizeType.indexOf('compressed') === -1 ? false : true
+    }, function (res) {
+      // 标准化回调参数: 将tempFilePath改为localId
+      if (res.tempFilePath) {
+        res.localIds = [res.tempFilePath]
+      }
+      if (res.errMsg.indexOf('chooseVideo:ok') !== -1) {
+        if (params.success) params.success(res)
+      } else if (res.errMsg.indexOf('chooseVideo:cancel') !== -1) {
+        if (params.cancel) params.cancel(res)
+      } else {
+        if (params.fail) params.fail(res)
+      }
+      if (params.complete) params.complete(res)
+    })
+  },
+  /**
     * 文件操作: 预览文件
     * @param {Object} params
     * params: {
@@ -350,7 +410,7 @@ var Bridge = {
     */
   previewFile: function (params) {
     if (!params) {
-      console.warn('[SeedsUI cordova内核]previewFile:fail没有传入参数')
+      console.warn('[SeedsUI 订货]previewFile:fail没有传入参数')
       return
     }
     var self = this
