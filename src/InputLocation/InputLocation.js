@@ -1,9 +1,9 @@
-import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment} from 'react';
-import InputText from './../InputText';
-import Bridge from './../Bridge';
-import MapView from './../MapView';
-import MapChoose from './../MapChoose';
-import Context from '../Context/instance.js';
+import React, {forwardRef, useRef, useImperativeHandle, useContext, useState, useEffect, Fragment} from 'react'
+import InputText from './../InputText'
+import Bridge from './../Bridge'
+import MapView from './../MapView'
+import MapChoose from './../MapChoose'
+import Context from '../Context/instance.js'
 
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const InputLocation = forwardRef(({
@@ -19,6 +19,10 @@ const InputLocation = forwardRef(({
   selected, // {latitude: '纬度', longitude: '经度', address:'地址'}
   ...others
 }, ref) =>  {
+  // 因为在click事件内改变数据的可能性, 所以更新句柄, 防止synchronization模式读取创建时的状态
+  const onChangeRef = useRef()
+  onChangeRef.current = onChange
+
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
     return refEl.current
@@ -46,7 +50,7 @@ const InputLocation = forwardRef(({
       if (autoLocation) {
         if (selected && selected.latitude && selected.longitude) {
           if (selected.address) { // 有地址, 则定位完成
-            if (onChange) onChange({target: refEl.current}, selected.address, selected);
+            if (onChangeRef && onChangeRef.current) onChangeRef.current({target: refEl.current}, selected.address, selected)
           } else { // 无地址, 则需要地址逆解析
             setStatus('-1'); // 定位中...
             const result = await Bridge.getAddress({ // 只支持gcj02
@@ -57,9 +61,9 @@ const InputLocation = forwardRef(({
             if (address) {
               setStatus('1')
               // 回调onChange
-              if (onChange) onChange({target: refEl.current}, address, result);
+              if (onChangeRef && onChangeRef.current) onChangeRef.current({target: refEl.current}, address, result)
               // 自动定位设置选择地图的数据
-              chooseMapData = {
+              chooseMapData = { // eslint-disable-line
                 point: [selected.longitude, selected.latitude],
                 address: address
               };
@@ -161,7 +165,7 @@ const InputLocation = forwardRef(({
         if (data.address) {
           // 赋值
           if (onChange) {
-            onChange(e, data.address, data);
+            if (onChangeRef && onChangeRef.current) onChangeRef.current(e, data.address, data)
             setStatus('1');
             // 自动定位设置选择地图的数据
             setChooseMapData({
@@ -176,7 +180,7 @@ const InputLocation = forwardRef(({
           longitude: data.longitude
         });
         const address = result && result.address ? result.address : ''
-        if (onChange) onChange(e, address, result);
+        if (onChangeRef && onChangeRef.current) onChangeRef.current(e, address, result)
         if (address) {
           setStatus('1')
           // 自动定位设置选择地图的数据
@@ -190,7 +194,7 @@ const InputLocation = forwardRef(({
       },
       fail: (res) => {
         // 赋值
-        if (onChange) onChange(e, '', null)
+        if (onChangeRef && onChangeRef.current) onChangeRef.current(e, '', null)
         setStatus('0')
         // 提示定位失败
         // Bridge.showToast(res.errMsg, {mask: false});
@@ -209,7 +213,7 @@ const InputLocation = forwardRef(({
   function chooseHandler (e, value, data) {
     setChooseMapShow(false);
     const address = data && data.address ? data.address : ''
-    if (onChange) onChange({target: refEl.current}, address, data);
+    if (onChangeRef && onChangeRef.current) onChangeRef.current({target: refEl.current}, address, data)
   }
   function hideChooseMap () {
     setChooseMapShow(false)

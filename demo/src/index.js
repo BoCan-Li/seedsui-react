@@ -22,6 +22,7 @@ const list = [{
 }];
 
 function Demo () {
+	let [nums, setNums] = useState(null)
 	useEffect(() => {
 		// 连续点击10次, 显示vconsole
 		Debugger.vconsoleLogger(document.getElementById('vconsoleHandler'));
@@ -29,6 +30,8 @@ function Demo () {
 
 	function handleClick (...params) {
 		console.log('点击')
+		nums = [1,2,3]
+		setNums(nums)
 		console.log(...params)
 	}
 	function handleChoose (...params) {
@@ -45,6 +48,7 @@ function Demo () {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
+			{nums && nums.length > 0 && nums.map((num) => num)}
 			<Photos
 				list={list}
 				onChoose={handleChoose}
