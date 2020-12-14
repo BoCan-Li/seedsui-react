@@ -372,7 +372,7 @@ var Bridge = {
       return
     }
     self.invoke('uploadFile', {
-      url: params.url || `/fileupload/v1/doUpload.do?uploadPath=file`,
+      url: params.url || `https://cloud.waiqin365.com/fileupload/v1/doUpload.do?uploadPath=file`,
       filePath: params.localId,
       name: 'file',
       formData: params.data
