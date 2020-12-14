@@ -539,6 +539,7 @@ var Bridge = {
       console.log('新订货chooseImage', params)
       self.invoke('chooseImage', {
         scene: '1|2',
+        width: params.width || 1024,
         count: params.count || 9,
         sizeType: params.sizeType || ['original', 'compressed'],
         sourceType: params.sourceType || ['album', 'camera'],
