@@ -9,6 +9,11 @@ const Videos = forwardRef(({
   onClick,
   // onChoose,
   preview = true, // 是否支持单击预览, readOnly为true时才生效
+  onPreviewHide,
+  // 显隐路由
+  routePath = 'componentIndex=1',
+  // 属性
+  videoFullProps = {},
   ...others
 }, ref) =>  {
   // context
@@ -28,12 +33,21 @@ const Videos = forwardRef(({
     if (!item.src) {
       Bridge.showToast(locale('没有参数src', 'no_param_src'), {mask: false})
     }
+    // 增加历史记录
+    Bridge.addHistoryBack(() => {
+      closePreview('history')
+    }, `${routePath}`)
     // 客户端预览视频有问题, 所以使用h5预览
-    setPreivewItem(item);
+    setPreivewItem(item)
   }
   // 关闭h5预览
-  function closePreview () {
-    setPreivewItem(null);
+  function closePreview (closeType) {
+    if (window.location.href.indexOf(routePath) !== -1) {
+      window.history.go(-1)
+    } else {
+      setPreivewItem(null)
+      if (onPreviewHide) onPreviewHide(closeType)
+    }
   }
   /*
   // h5录相
@@ -74,6 +88,7 @@ const Videos = forwardRef(({
       bar={
         <div className="videofull-close" onClick={closePreview}></div>
       }
+      {...videoFullProps}
     />}
     {/* 录相 */}
     {/* {showRecord && <Camera

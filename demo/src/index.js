@@ -7,31 +7,36 @@ import {
 	Titlebar,
   Bridge,
 	Container,
-	Photos,
+	Videos,
   Debugger
 } from '../../src';
 
 const list = [{
   id: '1',
   thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
-  src: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320'
+  src: 'https://player.alicdn.com/video/aliyunmedia.mp4'
 },{
   id: '2',
   thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
-  src: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg'
-}];
+  src: 'https://www.w3school.com.cn/i/movie.ogg'
+}]
 
 function Demo () {
 	let [nums, setNums] = useState(null)
+	function handleHide () {
+		console.log('绑定')
+	}
 	useEffect(() => {
+		Bridge.addBackPress(handleHide);
 		// 连续点击10次, 显示vconsole
 		Debugger.vconsoleLogger(document.getElementById('vconsoleHandler'));
+		return () => {
+			console.log('解除绑定')
+		}
 	}, []) // eslint-disable-line
 
 	function handleClick (...params) {
 		console.log('点击')
-		nums = [1,2,3]
-		setNums(nums)
 		console.log(...params)
 	}
 	function handleChoose (...params) {
@@ -42,19 +47,22 @@ function Demo () {
 		console.log('删除')
 		console.log(...params)
 	}
+	function handleHide () {
+		console.log('隐藏')
+	}
   return <Fragment>
 	<Page>
 		<Header>
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			{nums && nums.length > 0 && nums.map((num) => num)}
-			<Photos
+			<Videos
 				list={list}
 				onChoose={handleChoose}
 				onDelete={handleDelete}
 				onClick={handleClick}
-				beforeChoose={() => false}
+				onPreviewHide={handleHide}
+				
 			/>
     </Container>
   </Page>

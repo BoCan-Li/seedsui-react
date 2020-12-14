@@ -5648,15 +5648,19 @@ function playVideo () {
 ### 属性
 ```javascript
 <Videos
-  onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
+  // onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
   onClick={点击一项 func(e, src, selected, index), 默认点击预览视频}
   preview={是否预览 bool, 默认true, 是否支持单击预览}
+  onPreviewHide={关闭预览回调 func, 默认无}
+  routePath={显隐路由路径 string, 默认'componentIndex=1'}
+  videoFullProps={预览组件配置 object, 默认无}
   {...others} // 其它属性与Photos一致
 />
 ```
 ### 示例
 ```javascript
-import Videos from 'seedsui-react/lib/Videos';
+import Videos from 'seedsui-react/lib/Videos'
+
 const list = [{
   id: '1',
   thumb: 'https://image-test.waiqin365.com/6069734652819592543/blog/201912/8194157084989375804.png?x-oss-process=style/zk320',
@@ -5665,7 +5669,7 @@ const list = [{
   id: '2',
   thumb: 'https://img.zcool.cn/community/01a9a65dfad975a8012165189a6476.jpg',
   src: 'https://www.w3school.com.cn/i/movie.ogg'
-}];
+}]
 
 function handleClick (...params) {
   console.log('点击')
