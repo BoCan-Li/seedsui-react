@@ -2,16 +2,18 @@ import DB from './../DB'
 import Device from './../Device'
 import locale from './../locale'
 
+var self = null
+
 var Bridge = {
   /**
   * 定制功能
   */
   platform: 'waiqin',
   config: function () {
-    var self = this
+    self = this
     document.addEventListener('deviceready', () => {
       self.addBackPress()
-    })
+    }, false)
   },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
@@ -44,15 +46,23 @@ var Bridge = {
   closeWindow: function () {
     wq.wqload.wqClosePage() // eslint-disable-line
   },
+  // 防止返回事件叠加绑定
+  cordovaMonitorBack: null,
+  handleCordovaMonitorBack: function () {
+    if (self.cordovaMonitorBack) self.cordovaMonitorBack()
+    else self.back()
+  },
   // 客户端返回绑定
   addBackPress: function (callback) {
     var self = this
-    document.addEventListener('backbutton', callback || self.back, false) // eslint-disable-line
+    if (callback) self.cordovaMonitorBack = callback
+    else self.cordovaMonitorBack = null
+    document.addEventListener('backbutton', self.handleCordovaMonitorBack, false) // eslint-disable-line
   },
   // 客户端移除返回绑定
-  removeBackPress: function (callback) {
+  removeBackPress: function () {
     var self = this
-    document.removeEventListener('backbutton', callback || self.back, false) // eslint-disable-line
+    document.removeEventListener('backbutton', self.handleCordovaMonitorBack, false) // eslint-disable-line
   },
   /**
     * 支付宝支付

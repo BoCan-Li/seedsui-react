@@ -25,6 +25,7 @@ const InputText = forwardRef(({
   riconAttribute,
   // 清除按键
   clear,
+  clearReadOnly,
   clearAttribute,
   // 右侧内容
   rcaption,
@@ -60,6 +61,16 @@ const InputText = forwardRef(({
       focus();
     }
   }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (!readOnly || !pre) return
+    setTimeout(() => {
+      let val = refElInput.current.value
+      // 更新清除按钮和自适应的高度
+      updateClear(val)
+      preAutoSize(val)
+    }, 100)
+  }, [value]) // eslint-disable-line
 
   // 更新清空按钮
   useEffect(() => {
@@ -174,7 +185,8 @@ const InputText = forwardRef(({
   function clickClear (event) {
     focus();
     let e = {target: refElInput.current};
-    if (clear && typeof clear === 'function') clear(e, '');
+    if (clear && typeof clear === 'function') clear(e, '')
+    else if (clearReadOnly && typeof clearReadOnly === 'function') clearReadOnly(e, '')
     // Callback
     if (onChange) {
       onChange(e, '');
@@ -303,7 +315,7 @@ const InputText = forwardRef(({
     {getInputDOM()}
     {children && children}
     {/* clearicon仅用于点击区分, 没有实际的样式用途 */}
-    {clearShow && clear && !readOnly && !disabled && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
+    {clearShow && (clearReadOnly || clear) && (clearReadOnly || !readOnly) && !disabled && <i {...otherClearAttribute} className={`icon clearicon${otherClearAttribute.className ? ' ' + otherClearAttribute.className : ' ricon close-icon-clear size18'}`}></i>}
     {riconAttribute && <i {...otherRiconAttribute} className={`ricon icon${otherRiconAttribute.className ? ' ' + otherRiconAttribute.className : ''}`}></i>}
     {ricon && ricon}
     {rcaption && rcaption}

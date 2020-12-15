@@ -188,7 +188,7 @@ var Bridge = {
       wq.onHistoryBack(() => { // eslint-disable-line
         if (callback) {
           callback()
-          self.addBackPress()
+          self.addBackPress(callback)
         } else {
           self.back()
           self.addBackPress()

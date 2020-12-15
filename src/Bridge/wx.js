@@ -49,6 +49,7 @@ var Bridge = {
       top.wx.onHistoryBack(() => { // eslint-disable-line
         if (callback) {
           callback()
+          self.addBackPress(callback)
         } else {
           self.back()
         }

@@ -7,7 +7,8 @@ import {
 	Titlebar,
   Bridge,
 	Container,
-	Videos,
+	InputLocation,
+	MapUtil,
   Debugger
 } from '../../src';
 
@@ -22,47 +23,35 @@ const list = [{
 }]
 
 function Demo () {
-	let [nums, setNums] = useState(null)
-	function handleHide () {
-		console.log('绑定')
-	}
-	useEffect(() => {
-		Bridge.addBackPress(handleHide);
-		// 连续点击10次, 显示vconsole
-		Debugger.vconsoleLogger(document.getElementById('vconsoleHandler'));
-		return () => {
-			console.log('解除绑定')
-		}
-	}, []) // eslint-disable-line
-
-	function handleClick (...params) {
-		console.log('点击')
-		console.log(...params)
-	}
-	function handleChoose (...params) {
-		console.log('选择')
-		console.log(...params)
-	}
-	function handleDelete (...params) {
-		console.log('删除')
-		console.log(...params)
-	}
-	function handleHide () {
-		console.log('隐藏')
-	}
+	
+const [value, setValue] = useState('');
+function changeHandler (e, value) {
+	console.log(value)
+	setValue(value);
+}
+function handlePreview (e, err) {
+  if (typeof err === 'object' && err.errMsg.indexOf('preview:fail') !== -1) {
+    Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
+  }
+}
+function handleHide (type) {
+	console.log('关闭' + type)
+}
   return <Fragment>
 	<Page>
 		<Header>
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<Videos
-				list={list}
-				onChoose={handleChoose}
-				onDelete={handleDelete}
-				onClick={handleClick}
+			<InputLocation
+				clearReadOnly
+				autoLocation
+				pre
+				value={value}
+				placeholder="请点击获取位置信息"
+				onChange={changeHandler}
 				onPreviewHide={handleHide}
-				
+				preview={handlePreview}
 			/>
     </Container>
   </Page>
@@ -72,15 +61,15 @@ function Demo () {
 
 
 Bridge.ready(() => {
-	render(<Demo/>, document.querySelector('#demo'))
+	// render(<Demo/>, document.querySelector('#demo'))
   // 加载百度地图js库
-  // MapUtil.load({
-  //   ak: '3pTjiH1BXLjASHeBmWUuSF83',
-  //   success: () => {
-  //     render(<Demo/>, document.querySelector('#demo'))
-  //   },
-  //   fail: () => {
-  //     console.log('加载失败')
-  //   }
-  // })
+  MapUtil.load({
+    ak: '3pTjiH1BXLjASHeBmWUuSF83',
+    success: () => {
+      render(<Demo/>, document.querySelector('#demo'))
+    },
+    fail: () => {
+      console.log('加载失败')
+    }
+  })
 });

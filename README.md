@@ -2864,7 +2864,9 @@ function onChange (e, value, selectedMap) {
   autoLocation={自动定位 bool, 默认无}
   onClick={点击 func(e, value), 默认无}
   onChange={值改变 func(e, value), 默认无}
-  preview={是否预览 bool|func(e, {errMsg: 'preview:ok'}), 默认true, 是否支持单击预览, readOnly为true时才生效}
+  preview={是否预览 bool|func(e, value 或者 {errMsg: 'preview:fail'}), 默认true, 是否支持单击预览, readOnly为true时才生效}
+  onPreviewHide={关闭预览回调 func(), 默认无}
+  routePath={显隐路由路径 string, 默认'componentPage=1'}
   {...others}
 />
 ```
@@ -5651,8 +5653,8 @@ function playVideo () {
   // onChoose={点击上传按钮 func, 默认无, 有此属性才会显示上传按钮} // 浏览器默认调用录相控件Camera
   onClick={点击一项 func(e, src, selected, index), 默认点击预览视频}
   preview={是否预览 bool, 默认true, 是否支持单击预览}
-  onPreviewHide={关闭预览回调 func, 默认无}
-  routePath={显隐路由路径 string, 默认'componentIndex=1'}
+  onPreviewHide={关闭预览回调 func(), 默认无}
+  routePath={显隐路由路径 string, 默认'componentPage=1'}
   videoFullProps={预览组件配置 object, 默认无}
   {...others} // 其它属性与Photos一致
 />

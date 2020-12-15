@@ -84,9 +84,9 @@ const MapChoose = forwardRef(({
     }
     // 拖拽结束回调
     helper.onDragEnd = function (res) {
-      addr = res && res.address ? res.address : '';
-      setAddr(addr);
-      setData(res);
+      addr = res && res.address ? res.address : ''
+      setAddr(addr)
+      setData(res)
     }
     // 初始化地图
     helper.initMap(refWrapperEl.current, center, (result) => {
@@ -130,6 +130,10 @@ const MapChoose = forwardRef(({
   // 提交
   function submitHandler () {
     if (onChange) {
+      if (data && data.point && data.point.length === 2) {
+        data.longitude = data.point[0]
+        data.latitude = data.point[1]
+      }
       onChange({target: refEl.current}, addr, data)
     }
   }

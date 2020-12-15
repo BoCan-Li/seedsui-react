@@ -54,7 +54,7 @@ export default {
         // 显示坐标点
         self.showMarker();
         // 地址逆解析
-        let result = await self.getAddress(point);
+        let result = await self.getAddress(point)
         if (self.onDragEnd) {
           self.onDragEnd(result)
         }
@@ -137,8 +137,8 @@ export default {
       }, 500);
       return;
     }
-    let bdPoint = GeoUtil.coordtransform(point);
-    bdPoint = self.mapUtil.pointToBdPoint(bdPoint); // eslint-disable-line
+    let bdPoint = GeoUtil.coordtransform(point, 'gcj02', 'bd09')
+    bdPoint = self.mapUtil.pointToBdPoint(bdPoint) // eslint-disable-line
     if (!bdPoint) {
       console.error('绘制标记: 定位坐标错误');
       return null;
@@ -157,7 +157,9 @@ export default {
       self.marker.setPosition(bdPoint);
     }
     // 只绘制一个定位到地图中心点
-    self.mapUtil.centerToPoints(bdPoint);
+    setTimeout(() => {
+      self.mapUtil.centerToPoints(bdPoint)
+    }, 500)
   },
   hideMarker: function () {
     var self = this;

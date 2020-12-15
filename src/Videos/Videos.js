@@ -9,9 +9,9 @@ const Videos = forwardRef(({
   onClick,
   // onChoose,
   preview = true, // 是否支持单击预览, readOnly为true时才生效
-  onPreviewHide,
+  onPreviewHide, // 关闭预览回调
   // 显隐路由
-  routePath = 'componentIndex=1',
+  routePath = 'componentPage=1',
   // 属性
   videoFullProps = {},
   ...others
@@ -29,7 +29,7 @@ const Videos = forwardRef(({
     if (onClick) {
       onClick(e, src, options, index);
     }
-    if (!preview) return;
+    if (!preview) return
     if (!item.src) {
       Bridge.showToast(locale('没有参数src', 'no_param_src'), {mask: false})
     }
@@ -37,6 +37,8 @@ const Videos = forwardRef(({
     Bridge.addHistoryBack(() => {
       closePreview('history')
     }, `${routePath}`)
+    // preview回调
+    if (typeof preview === 'function') preview(e, src, options, index)
     // 客户端预览视频有问题, 所以使用h5预览
     setPreivewItem(item)
   }

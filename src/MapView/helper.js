@@ -29,6 +29,10 @@ export default {
         position: 'bottom-right',
         type: 'zoom'
       },
+      // 禁用点击景点弹出详细信息的方法
+      mapOptions: {
+        enableMapClick: false
+      },
       // 中心位置
       center: center
     });
@@ -89,7 +93,8 @@ export default {
   drawMarker: function (point, marker) {
     var self = this;
     self.marker = marker;
-    let bdPoint = GeoUtil.coordtransform(point);
+    // 国测局转百度坐标
+    let bdPoint = GeoUtil.coordtransform(point, 'gcj02', 'bd09')
     bdPoint = self.mapUtil.pointToBdPoint(bdPoint); // eslint-disable-line
     if (!bdPoint) {
       console.error('绘制标记: 定位坐标错误');
