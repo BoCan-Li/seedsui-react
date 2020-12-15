@@ -7,6 +7,7 @@ import Context from './../Context/instance.js';
 
 const Videos = forwardRef(({
   onClick,
+  showPlay = false,
   // onChoose,
   preview = true, // 是否支持单击预览, readOnly为true时才生效
   onPreviewHide, // 关闭预览回调
@@ -79,6 +80,11 @@ const Videos = forwardRef(({
       // onChoose={choose}
       type="video"
       preview={false}
+      children={showPlay ? ( // 视频播放图标
+        <div className="photos-item-video">
+          <div className="photos-item-video-icon"></div>
+        </div>
+      ) : null}
     />
     {/* h5预览 */}
     {previewItem && <VideoFull

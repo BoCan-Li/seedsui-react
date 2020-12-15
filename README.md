@@ -2875,27 +2875,28 @@ function onChange (e, value, selectedMap) {
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
 const [value, setValue] = useState('');
-function changeHandler (e, value, data) {
-  console.log(e.target);
-  console.log(data)
-  setValue(value);
+function changeHandler (e, value) {
+	console.log(value)
+	setValue(value);
 }
-function previewHandler (e, err) {
-  if (err.errMsg.indexOf('preview:fail') !== -1) {
+function handlePreview (e, err) {
+  if (typeof err === 'object' && err.errMsg.indexOf('preview:fail') !== -1) {
     Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
   }
 }
+function handleHide (type) {
+	console.log('关闭' + type)
+}
 
 <InputLocation
-  // type="choose"
+  clearReadOnly
   autoLocation
-  // readOnly={false}
-  readOnly={true}
-  selected={{longitude: 118.798128, latitude: 31.968592, address: '南京南站'}}
+  pre
   value={value}
   placeholder="请点击获取位置信息"
   onChange={changeHandler}
-  preview={previewHandler}
+  onPreviewHide={handleHide}
+  preview={handlePreview}
 />
 ```
 

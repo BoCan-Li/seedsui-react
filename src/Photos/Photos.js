@@ -98,10 +98,6 @@ const Photos = forwardRef(({
         {item.thumb && <img className="photos-item-img" src={item.thumb} alt="" onLoad={load} onError={error}/>}
         <div className="photos-item-error"></div>
         <div className="photos-item-load"></div>
-        {/* 视频播放图标 */}
-        {type === 'video' && <div className="photos-item-video">
-          <div className="photos-item-video-icon"></div>
-        </div>}
         {onDelete && <div className="photos-delete">
           <div className="photos-delete-icon"></div>
         </div>}
