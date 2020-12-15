@@ -2856,7 +2856,7 @@ function onChange (e, value, selectedMap) {
 ```javascript
 <InputLocation
   ak={地图ak,地图预览和选择地点时需要传入, 如果地图已经加载, 则不需要传入ak}
-  selected={选中地址经纬度信息 string, 默认无} // 用于只读时, 点击预览地图{latitude: '纬度', longitude: '经度', address:'地址'}
+  value={选中地址经纬度信息 string, 默认无, 出入参一致} // 用于只读时, 点击预览地图{latitude: '纬度', longitude: '经度', address:'地址', value: ''}
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}
   failedValue={定位错误显示文字 string, 默认'定位失败, 请检查定位权限是否开启', 基础className'input-text'}
   readOnly={文本是否只读 bool, 默认无} // 无: 点击整行定位; false: 允许手动修改位置信息; true: 只读,点击无效;
