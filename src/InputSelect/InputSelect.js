@@ -1,10 +1,11 @@
-import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
-import InputText from './../InputText';
-import PickerSelect from './../PickerSelect';
-import CheckboxGroup from './CheckboxGroup';
+import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react'
+import InputText from './../InputText'
+import PickerSelect from './../PickerSelect'
+import CheckboxGroup from './CheckboxGroup'
 
 const InputSelect = forwardRef(({
   checkbox,
+  checkboxGroupAttribute,
   // Input
   onClick,
   onChange,
@@ -68,7 +69,8 @@ const InputSelect = forwardRef(({
   if (checkbox) {
     return <CheckboxGroup
       ref={refEl}
-      list={list}
+      checkboxGroupAttribute={checkboxGroupAttribute}
+      
       // Input
       onClick={onClick}
       onChange={onChange}
@@ -103,7 +105,7 @@ const InputSelect = forwardRef(({
       show={pickerProps.show === undefined ? show : pickerProps.show}
       multiple={multiple}
     />
-  </Fragment>;
+  </Fragment>
 })
 
 export default InputSelect

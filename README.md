@@ -2720,7 +2720,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   onChange={值改变 func(e, value, option), 默认无}
 
   // Picker
-  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
+  selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: '', parentid: ''}]
   type={城市类型 string, 默认''} // country | province | city | district | street (其中province、city、district、street,只有中国时才生效, 因为只有中国有省市区)
   pickerProps={PickerCity组件弹框属性 object, 默认无} // className: picker
 
@@ -3045,6 +3045,9 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 ### 属性
 ```javascript
 <InputSelect
+  checkbox={checkbox模式渲染 bool, 默认无}
+  checkboxGroupAttribute={checkbox模式div属性 object, 默认无}
+
   // Input
   onClick={点击文本框 func(e, value), 默认无}
   onChange={值改变 func(e, value, options), 默认无}

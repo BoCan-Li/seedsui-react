@@ -1,8 +1,9 @@
-import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
-import Checkbox from './../Checkbox';
-import Radio from './../Radio';
+import React, {forwardRef} from 'react'
+import Checkbox from './../Checkbox'
+import Radio from './../Radio'
 
 const SelectGroup = forwardRef(({
+  checkboxGroupAttribute = {},
   // Input
   onClick,
   onChange,
@@ -66,7 +67,7 @@ const SelectGroup = forwardRef(({
     if (!others.readOnly && onChange) onChange(e, value, Object.values(selectedMap));
     if (onClick) onClick(e, value);
   }
-  return <div ref={ref} className={`inputselect-checkbox-group${others.className ? ' ' + others.className : ''}`}>
+  return <div ref={ref} id={others.id ? others.id : ''} {...checkboxGroupAttribute} className={`inputselect-checkbox-group${others.className ? ' ' + others.className : ''}`}>
     {list.map((item, index) => {
       return <div className={`inputselect-checkbox-item`} key={index}>
         {multiple && <Checkbox
