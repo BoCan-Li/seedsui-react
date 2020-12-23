@@ -25,10 +25,9 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    const ua = navigator.userAgent;
-    var verExp = ua.match(/WqAppVersion\/.{0,}(\d+\.\d+\.\d+)/);
-    if (verExp && verExp[1]) return verExp[1].trim();
-    return '';
+    var verExp = navigator.userAgent.match(/WqAppVersion\/([\w.]*)/)
+    if (verExp && verExp[1]) return verExp[1].trim()
+    return ''
   },
   // 返回首页
   goHome: function () {

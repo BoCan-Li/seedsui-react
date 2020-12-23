@@ -13,7 +13,9 @@ import {
 } from '../../src';
 
 function Demo () {
-	
+	useEffect(() => {
+		console.log(Bridge.getAppVersion())
+	}, [])
 const [value, setValue] = useState('');
 function changeHandler (e, value) {
 	console.log(value)

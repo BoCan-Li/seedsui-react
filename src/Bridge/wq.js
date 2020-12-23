@@ -121,6 +121,12 @@ var Bridge = {
     }
     callback(false)
   },
+  // 获得版本信息
+  getAppVersion: function () {
+    var verExp = navigator.userAgent.match(/WqAppVersion\/([\w.]*)/)
+    if (verExp && verExp[1]) return verExp[1].trim()
+    return ''
+  },
   // 返回首页
   goHome: function () {
     window.history.go(-1)

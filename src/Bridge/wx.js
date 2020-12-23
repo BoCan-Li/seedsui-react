@@ -18,6 +18,12 @@ var Bridge = {
     })
     /* eslint-enable */
   },
+  // 获得版本信息
+  getAppVersion: function () {
+    var verExp = navigator.userAgent.match(/MicroMessenger\/([\w.]*)/)
+    if (verExp && verExp[1]) return verExp[1].trim()
+    return ''
+  },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
     if (rule && window.location.href.indexOf(rule) >= 0) {
