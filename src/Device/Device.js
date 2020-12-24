@@ -41,15 +41,15 @@ var Device = (function () {
       platform = 'browser'
     } else if (ua.indexOf('miniprogram') > -1) {
       platform = 'miniprogram'
-      platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+      platformMatch = ua.match(/micromessenger\/([\w.]*)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
     } else if (ua.indexOf('wxwork') > -1) {
       platform = 'wework'
-      platformMatch = ua.match(/wxwork\/([0-9.]+)/i)
+      platformMatch = ua.match(/wxwork\/([\w.]*)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
     } else if (ua.indexOf('micromessenger') > -1) {
       platform = 'wechat'
-      platformMatch = ua.match(/micromessenger\/([0-9.]+)/i)
+      platformMatch = ua.match(/micromessenger\/([\w.]*)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
     } else if (ua.indexOf('mqqbrowser') > -1) {
       platform = 'qq'
@@ -57,7 +57,7 @@ var Device = (function () {
       platform = 'uc'
     } else if (ua.indexOf('dinghuoappversion') > -1) {
       platform = 'dinghuo'
-      platformMatch = ua.match(/dinghuoappversion\/\s*([0-9.]+)/)
+      platformMatch = ua.match(/dinghuoappversion\/([\w.]*)/)
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
     } else if (ua.indexOf('wqappversion') > -1) {
       // 外勤cordova内核

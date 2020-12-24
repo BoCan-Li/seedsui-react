@@ -1,6 +1,8 @@
 import DB from './../DB'
 import Device from './../Device'
 
+var self = null
+
 var Bridge = {
   /**
    * 定制功能
@@ -20,9 +22,7 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    var verExp = navigator.userAgent.match(/MicroMessenger\/([\w.]*)/)
-    if (verExp && verExp[1]) return verExp[1].trim()
-    return ''
+    return Device.platformVersion
   },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
@@ -48,28 +48,25 @@ var Bridge = {
   closeWindow: function () {
     top.wx.closeWindow() // eslint-disable-line
   },
+  // 防止返回事件叠加绑定
+  monitorBack: null,
   // 客户端返回绑定
   addBackPress: function (callback) {
-    var self = this
+    self = this
+    if (callback) self.monitorBack = callback
+    else self.monitorBack = null
     if (top.wx.onHistoryBack) { // eslint-disable-line
-      top.wx.onHistoryBack(() => { // eslint-disable-line
-        if (callback) {
-          callback()
-          self.addBackPress(callback)
-        } else {
-          self.back()
-        }
+      top.wx.onHistoryBack(function () { // eslint-disable-line
+        if (self.monitorBack) self.monitorBack()
+        else self.back()
+        self.addBackPress(self.monitorBack)
         return false
       })
     }
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    if (top.wx.onHistoryBack) { // eslint-disable-line
-      top.wx.onHistoryBack(() => { // eslint-disable-line
-        return true
-      })
-    }
+    self.monitorBack = null
   },
   /**
     * 获取当前地理位置
@@ -81,7 +78,7 @@ var Bridge = {
     * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
     */
   getLocation: function (params = {}) {
-    var self = this
+    self = this
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
     if (appLocation === 'undefined') {

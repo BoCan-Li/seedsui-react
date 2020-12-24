@@ -25,9 +25,7 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    var verExp = navigator.userAgent.match(/WqAppVersion\/([\w.]*)/)
-    if (verExp && verExp[1]) return verExp[1].trim()
-    return ''
+    return Device.platformVersion
   },
   // 返回首页
   goHome: function () {
@@ -53,14 +51,14 @@ var Bridge = {
   },
   // 客户端返回绑定
   addBackPress: function (callback) {
-    var self = this
+    self = this
     if (callback) self.cordovaMonitorBack = callback
     else self.cordovaMonitorBack = null
     document.addEventListener('backbutton', self.handleCordovaMonitorBack, false) // eslint-disable-line
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    var self = this
+    self = this
     document.removeEventListener('backbutton', self.handleCordovaMonitorBack, false) // eslint-disable-line
   },
   /**
@@ -205,7 +203,7 @@ var Bridge = {
     @params {src: '视频地址', title: '标题'}
   ----------------------------------------------------- */
   previewVideo: function (params = {}) {
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
       self.showToast('视频播放功能需要升级至6.2.2及以上的客户端', {mask: false})
       return
@@ -229,7 +227,7 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒'}
   ----------------------------------------------------- */
   videoRecord: function (params = {}) {
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
       self.showToast(locale('视频录制功能需要升级至6.2.2及以上的客户端', 'hint_video_record_version'), {mask: false})
       return
@@ -249,7 +247,7 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: ''}
   ----------------------------------------------------- */
   videoUpload: function (params = {}) {
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
       self.showToast(locale('视频上传功能需要升级至6.2.2及以上的客户端', 'hint_video_upload_version'), {mask: false})
       return
@@ -269,7 +267,7 @@ var Bridge = {
     @return {result: '1', ID: '宴会id', secs: '毫秒', vid: '仅在hasUpload=1的情况下返回', hasVideo: '0|1', hasUpload: '0|1}
   ----------------------------------------------------- */
   videoInfo: function (params = {}) {
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
       self.showToast(locale('视频功能需要升级至6.2.2及以上的客户端', 'hint_video_info_version'), {mask: false})
       return
@@ -287,7 +285,7 @@ var Bridge = {
     @return {resultStr:''}
   ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
-    var self = this
+    self = this
     wq.wqhardware.getQrCode((res) => { // eslint-disable-line
       if (res && res.qrCode) {
         var wqRes = res
@@ -326,7 +324,7 @@ var Bridge = {
     }
   ----------------------------------------------------- */
   getLocation: function (params = {}) {
-    var self = this
+    self = this
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
     if (appLocation === 'undefined') {
@@ -399,7 +397,7 @@ var Bridge = {
     }
   ----------------------------------------------------- */
   getLocationMap: function (params = {}) {
-    var self = this
+    self = this
     wq.wqlocation.getLocationMap((res) => { // eslint-disable-line
       if (res && res.wqLatitude) {
         let result = res
@@ -528,7 +526,7 @@ var Bridge = {
     * }
     */
   uploadImage: function (params = {}) {
-    var self = this
+    self = this
     if (!params.uploadDir) {
       self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
       return;
@@ -581,7 +579,7 @@ var Bridge = {
     * }
     */
   previewImage: function (params) {
-    var self = this
+    self = this
     if (!params.urls || !params.urls.length) {
       self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
       return
@@ -621,7 +619,7 @@ var Bridge = {
     * }
     */
    uploadFile: function (params = {}) {
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
       self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {mask: false})
       return
@@ -715,7 +713,7 @@ var Bridge = {
     }, JSON.stringify(params))
   },
   getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
-    var self = this
+    self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
       self.showToast(locale('此功能需要升级至6.2.2及以上的客户端', 'hint_get_customer_area_more_version'), {mask: false})
       return
@@ -768,7 +766,7 @@ var Bridge = {
     @params {ios: {url: '', params: {}}, android: {url: '', params: {}}}默认为打开一个webview页面
   ----------------------------------------------------- */
   openNativePage: function (params = {ios: {}, android: {}}) {
-    var self = this
+    self = this
     if (!params.ios.url) {
       self.showToast(locale('ios参数url不能为空', 'hint_open_native_page_must_ios_url'), {mask: false})
       return

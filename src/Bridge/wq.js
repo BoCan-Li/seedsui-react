@@ -3,6 +3,8 @@ import Device from './../Device'
 import GeoUtil from './../GeoUtil'
 import locale from './../locale'
 
+var self = null
+
 var Bridge = {
   /**
    * 定制功能
@@ -41,7 +43,7 @@ var Bridge = {
   },
   // 配置鉴权
   config: function () {
-    var self = this
+    self = this
     /* eslint-disable */
     wq.config({auth: false})
     wq.ready(function(){
@@ -84,7 +86,7 @@ var Bridge = {
   },
   // 注册事件
   registerHandler: function (events) {
-    var self = this
+    self = this
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { /* 判断iPhone|iPad|iPod|iOS */
       /* eslint-disable */
       self.setup(function (bridge) {
@@ -123,9 +125,7 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    var verExp = navigator.userAgent.match(/WqAppVersion\/([\w.]*)/)
-    if (verExp && verExp[1]) return verExp[1].trim()
-    return ''
+    return Device.platformVersion
   },
   // 返回首页
   goHome: function () {
@@ -140,7 +140,7 @@ var Bridge = {
     * @param {Object} params {title: '自定义标题', url: '打开地址(h5:为打开老内容)', target: '_self'}}
     */
   openWindow: function (params = {}) {
-    var self = this
+    self = this
     // 新内核打开老内核
     if (params.url.indexOf('h5:') === 0) {
       if (Device.os === 'andriod') {
@@ -187,29 +187,25 @@ var Bridge = {
     if (params && params.title) document.title = params.title
     wq.setTitle(params) // eslint-disable-line
   },
+  // 防止返回事件叠加绑定
+  monitorBack: null,
   // 客户端返回绑定
   addBackPress: function (callback) {
-    var self = this
+    self = this
+    if (callback) self.monitorBack = callback
+    else self.monitorBack = null
     if (wq.onHistoryBack) { // eslint-disable-line
-      wq.onHistoryBack(() => { // eslint-disable-line
-        if (callback) {
-          callback()
-          self.addBackPress(callback)
-        } else {
-          self.back()
-          self.addBackPress()
-        }
+      wq.onHistoryBack(function () { // eslint-disable-line
+        if (self.monitorBack) self.monitorBack()
+        else self.back()
+        self.addBackPress(self.monitorBack)
         return false
       })
     }
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
-    if (wq.onHistoryBack) { // eslint-disable-line
-      wq.onHistoryBack(() => { // eslint-disable-line
-        return true
-      })
-    }
+    self.monitorBack = null
   },
   /**
     * 获取当前地理位置
@@ -219,7 +215,7 @@ var Bridge = {
     * @return {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
     */
   getLocation: function (params = {}) {
-    var self = this
+    self = this
     // 先从cookie中读取位置信息
     var appLocation = DB.getCookie('app_location')
     if (appLocation === 'undefined') {
@@ -319,7 +315,7 @@ var Bridge = {
     * }
     */
   uploadImage: function (params = {}) {
-    // var self = this
+    // self = this
     var uploadParams = Object.clone(params)
     if (!params.uploadDir) {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('没有上传目录', 'hint_no_upload_dir')})
@@ -367,7 +363,7 @@ var Bridge = {
     * }
     */
   uploadFile: function (params) {
-    var self = this
+    self = this
     params = params || {}
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
       if (params.fail) params.fail({errMsg: 'uploadImage:fail' + locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version')})
@@ -378,7 +374,7 @@ var Bridge = {
       return
     }
     self.invoke('uploadFile', {
-      url: params.url || `https://cloud.waiqin365.com/fileupload/v1/doUpload.do?uploadPath=file`,
+      url: params.url || `${window.origin}/fileupload/v1/doUpload.do?uploadPath=file`,
       filePath: params.localId,
       name: 'file',
       formData: params.data

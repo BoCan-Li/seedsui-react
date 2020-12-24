@@ -161,9 +161,7 @@ var Bridge = {
   },
   // 获得版本信息
   getAppVersion: function () {
-    var verExp = navigator.userAgent.toLowerCase().match(/dinghuoappversion\/([\w.]*)/)
-    if (verExp && verExp[1]) return verExp[1].trim()
-    return ''
+    return Device.platformVersion
   },
   // 去首页
   goHome: function (callback) {
