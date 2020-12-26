@@ -360,7 +360,8 @@ var Bridge = {
       }
     } else if (platform === 'wq') { // 外勤jssdk
       // 用开发d目录可以使用新功能
-      script.src = options.wqSrc || '//res.waiqin365.com/d/open/js/waiqin365.min.js?v=1.0.4'
+      var d = new Date()
+      script.src = options.wqSrc || `//res.waiqin365.com/d/open/js/waiqin365.min.js?v=${d.getMonth() + '' + d.getDate()}`
       script.onload = function () {
         self.initHistory()
         if (callback) callback()

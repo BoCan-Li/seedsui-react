@@ -536,13 +536,15 @@ var Bridge = {
       console.log('新订货chooseImage', params)
       self.invoke('chooseImage', {
         scene: '1|2',
-        width: params.width || 1024,
-        count: params.count || 9,
-        sizeType: params.sizeType || ['original', 'compressed'],
-        sourceType: params.sourceType || ['album', 'camera'],
-        watermark: params.watermark || [],
-        isSaveToAlbum: params.isSaveToAlbum || 1,
-        isAI: params.isAI || 0
+	      count: params.count || 9,
+	      sizeType: params.sizeType || ['original', 'compressed'],
+	      sourceType: params.sourceType || ['album', 'camera'],
+	      watermark: params.watermark || [],
+	      width: params.width || 1024,
+	      isSaveToAlbum: params.isSaveToAlbum || 1,
+	      isAI: params.isAI || 0,
+	      validate: params.validate || 0,
+        direction: params.direction || ''
       }, (response) => {
         self.handler(response, params)
       })
