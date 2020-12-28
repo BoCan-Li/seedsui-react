@@ -7,6 +7,7 @@ import Context from '../Context/instance.js';
 const PickerDate = forwardRef(({
   portal,
   data, // {year: [], month: [], day: [], hour: [], minute: []}
+  params = {}, // 设置实例化参数
   split = '-',
   timeSplit = ':',
 
@@ -232,6 +233,7 @@ const PickerDate = forwardRef(({
     // render数据
     instance.current = new Instance({
       mask: refEl.current,
+      ...params,
       split: split,
       timeSplit: timeSplit,
       viewType: type,

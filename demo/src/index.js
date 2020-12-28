@@ -7,7 +7,7 @@ import {
 	Titlebar,
   Bridge,
 	Container,
-	InputLocation,
+	InputDate,
 	MapUtil,
   Debugger
 } from '../../src';
@@ -35,16 +35,7 @@ function handleHide (type) {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<InputLocation
-				clearReadOnly
-				autoLocation
-				pre
-				value={value}
-				placeholder="请点击获取位置信息"
-				onChange={changeHandler}
-				onPreviewHide={handleHide}
-				preview={handlePreview}
-			/>
+			<InputDate/>
     </Container>
   </Page>
 	<div id="vconsoleHandler" style={{position: 'absolute', top: 0, left: '50%', marginLeft: '-50px', width: '100px', height: '30px', zIndex: '999'}}></div>

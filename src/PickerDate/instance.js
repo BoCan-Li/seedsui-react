@@ -30,8 +30,8 @@ var PickerDate = function (params) {
     defaultHour: '',
     defaultMinute: '',
 
-    minYear: nowDate.getFullYear() - 10, // 1950
-    maxYear: nowDate.getFullYear() + 10, // 2050
+    minYear: nowDate.getFullYear() - 120, // 120年前
+    maxYear: nowDate.getFullYear() + 120, // 120年后
 
     yyUnit: '年',
     MMUnit: '月',
