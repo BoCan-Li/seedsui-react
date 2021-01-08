@@ -496,8 +496,11 @@ var Bridge = {
       if (params.watermark.selectItems) chooseParams.selectItems = params.watermark.selectItems
       delete chooseParams.watermark
     }
-    if (params.validate) {
-      chooseParams.validate = params.validate
+    if (!isNaN(params.validate)) {
+      chooseParams.validate = params.validate || 0
+    }
+    if (!isNaN(params.scene)) {
+      chooseParams.scene = params.scene || 0
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
     wq.wqphoto.getPhoto((result) => { // eslint-disable-line

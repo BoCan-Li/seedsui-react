@@ -35,7 +35,7 @@ function handleHide (type) {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<InputDate/>
+			<InputDate type="datetime"/>
     </Container>
   </Page>
 	<div id="vconsoleHandler" style={{position: 'absolute', top: 0, left: '50%', marginLeft: '-50px', width: '100px', height: '30px', zIndex: '999'}}></div>
