@@ -66,6 +66,7 @@ var Bridge = {
   },
   // 客户端移除返回绑定
   removeBackPress: function () {
+    self = this
     self.monitorBack = null
   },
   /**

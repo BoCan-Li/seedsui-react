@@ -544,7 +544,7 @@ var Bridge = {
 	      isSaveToAlbum: params.isSaveToAlbum || 1,
 	      isAI: params.isAI || 0,
         validate: params.validate || 0,
-        scene: params.scene || 0,
+        sceneValidate: params.sceneValidate || 0,
         direction: params.direction || ''
       }, (response) => {
         self.handler(response, params)
