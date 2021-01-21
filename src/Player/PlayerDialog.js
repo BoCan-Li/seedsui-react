@@ -31,7 +31,7 @@ export default class PlayerDialog extends Component {
           <source src={src} />
           您的浏览器不支持 video 标签。
         </video>
-        <div className="voice-line"></div>
+        <div className="video-line"></div>
         <div className="video-close" onClick={onHide}></div>
       </div>,
       portal || this.context.portal || document.getElementById('root') || document.body

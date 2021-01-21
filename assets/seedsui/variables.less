@@ -5358,6 +5358,26 @@ a {
     @media only screen and (device-width: 414px) and (height: 807px) and (-webkit-device-pixel-ratio:2) {
       bottom: 34px;
     }
+
+    // iphoneX、iphoneXs、iphoneXR
+    @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+      bottom: 34px;
+    }
+    @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
+      bottom: 34px;
+    }
+    @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:2) {
+      bottom: 34px;
+    }
+
+    // iPhone 12 and iPhone 12 Pro
+    @media only screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) {
+      bottom: 34px;
+    }
+    // iPhone 12 Pro Max
+    @media only screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+      bottom: 34px;
+    }
   }
 
   // Page
@@ -6005,7 +6025,18 @@ a {
       overflow: hidden;
       background-color: black;
     }
-    .voice-line{
+    video{
+      max-height: 400px;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: black;
+    }
+    .video-box{
+      width: 258px;
+      height: 258px;
+    }
+    .video-line{
       width: 1px;
       background-color: white;
       height: 50px;

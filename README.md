@@ -4985,14 +4985,10 @@ function handleClick (e, value, selected, index) {
 ### 属性
 ```javascript
 <Ticket
-  style={容器style object, 默认无}
-  className={左侧容器className string, 默认无, 基础'ticket'}
-  legendStyle={左侧容器style object, 默认无}
-  legendClassName={左侧容器className string, 默认无, 基础'ticket-legend'}
   legend={左侧容器 node, 默认无}
-  containerStyle={左侧容器style object, 默认无}
-  containerClassName={内容className string, 默认无, 基础'ticket-container'}
-  onClick={点击页签 func(e), 默认无}
+  legendAttribute={左侧容器style object, 默认无}
+  contentAttribute={内容className string, 默认无, 基础'ticket-container'}
+  children
   {...others}
 />
 ```
