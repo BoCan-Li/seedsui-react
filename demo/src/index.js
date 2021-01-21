@@ -11,16 +11,16 @@ import {
 	MapUtil,
   Debugger
 } from '../../src';
-
+window.getAddressDefault = (params, type) => {
+	console.log(params, type)
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve({address: '南京1'})
+		}, 1000)
+	})
+}
 function Demo () {
 	useEffect(() => {
-		window.getAddressDefault = () => {
-			return new Promise((resolve) => {
-				setTimeout(() => {
-					resolve({address: '南京'})
-				}, 1000)
-			})
-		}
 		console.log(Bridge.getAppVersion())
 	}, [])
 	const [value, setValue] = useState('');
