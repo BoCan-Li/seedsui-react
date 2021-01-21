@@ -446,9 +446,13 @@ var BaiduMap = function (id, params) {
         if (res.addressComponents) {
           result.point = point
           result.province = res.addressComponents.province
+          // result.provinceNumber
           result.city = res.addressComponents.city
+          // result.cityNumber
           result.district = res.addressComponents.district
+          // result.districtNumber
           result.street = res.addressComponents.street
+          // result.streetNumber
         }
         resolve(result)
       })
