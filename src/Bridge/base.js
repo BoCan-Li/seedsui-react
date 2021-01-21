@@ -182,7 +182,7 @@ var Bridge = {
     * @return {Promise} result: {status: 0 成功, points 百度坐标}
     */
   getAddress: function (params = {}, type = 'gcj02') {
-    if (window.getAddressDefault && typeof window.getAddressDefault === 'function') return window.getAddressDefault()
+    if (window.getAddressDefault && typeof window.getAddressDefault === 'function') return window.getAddressDefault(params = {}, type = 'gcj02')
     return new Promise(async (resolve) => {
       const mapUtil = new MapUtil()
       if (!window.BMap) {
