@@ -55,11 +55,11 @@ const InputLocation = forwardRef(({
           if (value.address) { // 有地址, 则定位完成
             if (onChangeRef && onChangeRef.current) onChangeRef.current({target: refEl.current}, value)
           } else { // 无地址, 则需要地址逆解析
-            setStatus('-1'); // 定位中...
+            setStatus('-1') // 定位中...
             const result = await Bridge.getAddress({ // 只支持gcj02
               latitude: value.latitude,
               longitude: value.longitude
-            });
+            })
             const address = result && result.address ? result.address : ''
             result.value = address
             if (address) {

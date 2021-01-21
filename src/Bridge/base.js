@@ -182,6 +182,8 @@ var Bridge = {
     * @return {Promise} result: {status: 0 成功, points 百度坐标}
     */
   getAddress: function (params = {}, type = 'gcj02') {
+    var self = this
+    if (typeof self.getAddressDefaultFn === 'function') return self.getAddressDefaultFn()
     return new Promise(async (resolve) => {
       const mapUtil = new MapUtil()
       if (!window.BMap) {
@@ -191,6 +193,10 @@ var Bridge = {
       const result = await mapUtil.getAddress([params.longitude, params.latitude], type)
       resolve(result)
     })
+  },
+  getAddressDefault: function (getAddress) {
+    var self = this
+    self.getAddressDefaultFn = getAddress
   },
   /**
     * 百度地图:获得天气

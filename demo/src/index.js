@@ -14,6 +14,13 @@ import {
 
 function Demo () {
 	useEffect(() => {
+		Bridge.getAddressDefault(() => {
+			return new Promise((resolve) => {
+				setTimeout(() => {
+					resolve({address: '南京'})
+				}, 1000)
+			})
+		})
 		console.log(Bridge.getAppVersion())
 	}, [])
 	const [value, setValue] = useState('');
