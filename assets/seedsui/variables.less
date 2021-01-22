@@ -5338,7 +5338,10 @@ a {
     bottom: 0;
     left: 0;
     z-index:0;
-    
+  }
+
+  // 适配刘海屏
+  .pages.ios-bang{
     // 适配齐流海: iphoneX、iphoneXs、iphoneXR, 微信头部高度88, 小程序头部高度87, 减掉头部高度为实际高度
     @media only screen and (device-width: 375px) and (height: 724px) and (-webkit-device-pixel-ratio: 3) {
       bottom: 34px;
