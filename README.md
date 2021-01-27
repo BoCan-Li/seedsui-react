@@ -2775,6 +2775,7 @@ function onChange (e, value, selected) {
 ### 国家地区选择示例
 ```javascript
 import InputDistrict from 'seedsui-react/lib/InputDistrict';
+import country from 'seedsui-react/lib/PickerDistrict/country.js';
 
 const [value, setValue] = useState('');
 const [selected, setSelected] = useState([
