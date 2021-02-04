@@ -4511,7 +4511,7 @@ import Progress from 'seedsui-react/lib/Progress';
 
 
 ## QRCode
-[进度条](https://unpkg.com/seedsui-react/src/lib/QRCode/QRCode.js)
+[生成二维码](https://unpkg.com/seedsui-react/src/lib/QRCode/QRCode.js)
 ### 属性
 ```javascript
 <QRCode
@@ -5182,6 +5182,7 @@ showMsg = (msg) => {
   split={分隔符 string, 默认','}
   multiple={是否需要多选 bool, 默认false} // 只有设置checkbox为true才生效
   checkbox={是否支持选择 bool, 默认无}
+  checkStrictly={是否启用严格模式 bool, 默认true} // 严格模式, 父子节点选中状态不再关联
   arrowAutoShow={箭头自动显示, 有下级时才显示箭头 bool, 默认false}
   extend={展开收缩 number, 默认0} // 1.全部展开 -1.全部收缩 0.不工作
   bar={选中项聚合展现栏 string | node, 默认无}

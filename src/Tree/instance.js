@@ -13,6 +13,7 @@ var Tree = function (container, params) {
     // DOM
     multiple: true, // 是否需要多选
     checkbox: false, // 是否可选
+    checkStrictly: true, // 严格模式, 父子节点选中状态不再关联
     arrowAutoShow: false, // 箭头自动显示, 有下级时才显示箭头
     bar: null,
     barOptionClass: 'tree-bar-button',
@@ -37,6 +38,7 @@ var Tree = function (container, params) {
     idAttr: 'data-id',
     parentidAttr: 'data-parentid',
     nameAttr: 'data-name',
+    dataAttr: 'data-node'
 
     /*
     callbacks
@@ -105,12 +107,15 @@ var Tree = function (container, params) {
       }
     }
     // 拷贝option，方便传入回调中而不影响原option
-    var copyOption = Object.create(option)
+    var copyOption = Object.clone(option)
     // line的data-xxx属性html
     var lineDataHTML = ''
-    for (var n in option) {
-      lineDataHTML += 'data-' + n + '="' + option[n] + '" '
+    if (typeof option === 'object' && Object.keys(option).length) {
+      lineDataHTML += `${s.params.dataAttr}="${encodeURIComponent(JSON.stringify(option))}" ${s.params.idAttr}="${option.id}"`
     }
+    // for (var n in option) {
+    //   lineDataHTML += 'data-' + n + '="' + option[n] + '" '
+    // }
     // tree-icon和tree-title的html
     copyOption.html = '<div class="' + s.params.iconClass + '">' +
       (s.params.arrowAutoShow && option.isLeaf ? '' : '<i class="' + s.params.arrowClass + '"></i>') +
@@ -151,8 +156,8 @@ var Tree = function (container, params) {
       // }
     }
 
-    // 父级和当前都被选中,则移除当前选中项
-    if (s.isSelected(option.id, option.parentid) === 2) {
+    // 严格模式下, 父级和当前都被选中,则移除当前选中项
+    if (s.params.checkStrictly && s.isSelected(option.id, option.parentid) === 2) {
       s.removeSelected(option.id)
     }
 
@@ -212,11 +217,11 @@ var Tree = function (container, params) {
   }
   // 获得数据
   s.getDataByTarget = function (target) {
-    var opts = {}
-    for (var i = 0, att; att = target.attributes[i++];) { // eslint-disable-line
-      if (att.nodeName.indexOf('data-') !== -1) {
-        opts[att.nodeName.substring(5)] = att.nodeValue
-      }
+    var opts = target.getAttribute(s.params.dataAttr)
+    if (opts.length) {
+      opts = JSON.parse(decodeURIComponent(opts))
+    } else {
+      opts = {}
     }
     return opts
   }
@@ -336,6 +341,7 @@ var Tree = function (container, params) {
     }
     if (isClick && s.params.onChange) {
       console.log('删除节点')
+      s.checkStrictly(id, 0)
       s.params.onChange(s)
     }
   }
@@ -358,9 +364,15 @@ var Tree = function (container, params) {
     }
   }
   s.addSelected = function (opts, isClick) {
-    if (!opts.id || !opts.name || !opts.parentid) {
-      console.log('addSelected:id、name、parentid三个参数不正确')
+    if (!opts.id || !opts.name) {
+      console.log('addSelected:id、name个参数不正确')
       return
+    } else if (!opts.parentid) {
+      // 严格模式下必须包含parentid
+      if (s.params.checkStrictly && !opts.parentid) {
+        console.log('addSelected:parentid三个参数不正确')
+        return
+      }
     }
     
     // 如果禁止多选, 则只先移除所有选中
@@ -370,8 +382,8 @@ var Tree = function (container, params) {
       console.log('addSelected:您要选中的节点已经选中')
       return
     }
-    
-    if (s.isSelected(opts.id, opts.parentid)) {
+    // 严格模式下不允许选中已选中父节点的子节点
+    if (s.params.checkStrictly && s.isSelected(opts.id, opts.parentid)) {
       console.log('addSelected:您要选中的节点已经选中')
       return
     }
@@ -388,7 +400,21 @@ var Tree = function (container, params) {
 
     if (isClick && s.params.onChange) {
       console.log('选中节点')
+      s.checkStrictly(opts.id)
       s.params.onChange(s)
+    }
+  }
+  // 非严格模式, 新增或者删除后代节点
+  s.checkStrictly = function (id, type) {
+    // 严格模式, 父子节点选中状态不再关联
+    if (s.params.checkStrictly || !s.selected) return
+    let descendants = s.params.data.getFlattenTreeDescendants(id)
+    for (let node of descendants) {
+      if (type === 0) {
+        s.removeSelected(node.id)
+      } else {
+        s.addSelected(node)
+      }
     }
   }
   // bar上添加选中

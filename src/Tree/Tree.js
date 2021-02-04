@@ -6,6 +6,7 @@ const Tree = forwardRef(({
   split = ',',
   multiple = false, // 是否需要多选
   checkbox = true, // 是否可选
+  checkStrictly = true, // 严格模式, 父子节点选中状态不再关联
   arrowAutoShow = false, // 箭头自动显示, 有下级时才显示箭头
   extend = 0, // 1.全部展开 -1.全部收缩 0.不工作
   bar, // 选中栏
@@ -31,8 +32,61 @@ const Tree = forwardRef(({
   const refEl = useRef(null)
   useImperativeHandle(ref, () => {
     return refEl.current
-  });
-  const instance = useRef(null);
+  })
+  const instance = useRef(null)
+
+  // 比较变化
+  function usePrevious(value) {
+    const ref = useRef()
+    useEffect(() => {
+      ref.current = value
+    })
+    return ref.current
+  }
+  const prevSelected = usePrevious(selected)
+
+  // 比较选中是否不同, 不同更新树
+  useEffect(() => {
+    // console.log(prevSelected)
+    // console.log(selected)
+    if (!prevSelected || !selected) return
+    let delIds = [] // 删除项
+    let addOptions = [] // 新增项
+    
+    // 上次的对象
+    let prevSelectedMap = {}
+    for (let item of prevSelected) {
+      prevSelectedMap[item.id] = item
+    }
+
+    // 上次的对象
+    let selectedMap = {}
+    for (let item of selected) {
+      selectedMap[item.id] = item
+    }
+    // 此次比上次多的为新增
+    for (let id in selectedMap) {
+      // 新增项
+      if (!prevSelectedMap[id]) {
+        addOptions.push(selectedMap[id])
+      }
+    }
+    // 此次比上次少的为删除
+    for (let id in prevSelectedMap) {
+      // 新增项
+      if (!selectedMap[id]) {
+        delIds.push(id)
+      }
+    }
+    // 更新删除项
+    for (let id of delIds) {
+      instance.current.removeSelected(id)
+    }
+    // 更新新增项
+    for (let option of addOptions) {
+      instance.current.addSelected(option)
+    }
+  }, [selected]) // eslint-disable-line
 
   useEffect(() => {
     if (instance.current) return;
@@ -48,6 +102,7 @@ const Tree = forwardRef(({
       selectedAutoClear: selectedAutoClear,
       multiple,
       checkbox,
+      checkStrictly,
       arrowAutoShow,
       bar,
       buttonAddClass: buttonAddAttribute.className,
@@ -194,10 +249,10 @@ const Tree = forwardRef(({
   }
 
   return (
-    <div ref={refEl} {...others} className={`tree-box${others.className ? ' ' + others.className : ''}`}>
+    <div ref={refEl} {...others} className={`tree-box${checkStrictly ? ' tree-strictly' : ''}${others.className ? ' ' + others.className : ''}`}>
       <ul {...treeAttribute} className={`tree${multiple ? '' : ' tree-type-radio'}${treeAttribute.className ? ' ' + treeAttribute.className : ''}`}></ul>
     </div>
-  );
+  )
 })
 
 export default Tree
