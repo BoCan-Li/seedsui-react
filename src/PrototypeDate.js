@@ -228,7 +228,11 @@ window.Date.prototype.sunday = function () {
 // 周一
 window.Date.prototype.monday = function () {
   var day = this.getDay()
-  this.setTime(this.getTime() + this.dayMilliSecond * (1 - day))
+  var prevDay = 1 - day
+  if (day === 0) {
+    prevDay = -6
+  }
+  this.setTime(this.getTime() + this.dayMilliSecond * prevDay)
   return this
 }
 // 周二
