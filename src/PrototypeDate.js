@@ -214,13 +214,17 @@ window.Date.prototype.nextWeek = function (count) {
 // 周日,日历都是从周日开始的
 window.Date.prototype.sunday = function () {
   var day = this.getDay()
-  this.setTime(this.getTime() - this.dayMilliSecond * day)
+  // 星期天返回0
+  if (day === 0) return this
+  day = 7 - day
+  this.setTime(this.getTime() + this.dayMilliSecond * day)
   return this
 }
 // 周一
 window.Date.prototype.monday = function () {
   var day = this.getDay()
   var prevDay = 1 - day
+  // 星期天返回0
   if (day === 0) {
     prevDay = -6
   }
