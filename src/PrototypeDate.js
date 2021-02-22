@@ -186,14 +186,6 @@ window.Date.prototype.getMonthDays = function () {
 /*
   * 周操作
   * */
-// 周几,参数:zh_CN
-window.Date.prototype.day = function (language) {
-  var chDay = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' }
-  if (language === 'zh_CN') {
-    return chDay[this.getDay()]
-  }
-  return this.getDay()
-}
 // 周数
 window.Date.prototype.week = function (count) {
   // 当年的1月1日

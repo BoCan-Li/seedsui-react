@@ -1,4 +1,5 @@
-import Picker from './../Picker/instance.js';
+import Picker from './../Picker/instance.js'
+import locale from './../locale'
 
 var PickerDate = function (params) {
   var nowDate = new Date()
@@ -33,11 +34,11 @@ var PickerDate = function (params) {
     minYear: nowDate.getFullYear() - 120, // 120年前
     maxYear: nowDate.getFullYear() + 120, // 120年后
 
-    yyUnit: '年',
-    MMUnit: '月',
-    ddUnit: '日',
-    hhUnit: '时',
-    mmUnit: '分',
+    yyUnit: '', // 年
+    MMUnit: '', // 月
+    ddUnit: '', // 日
+    hhUnit: '', // 时
+    mmUnit: '', // 分
   }
   params = params || {}
   for (var def in defaults) {
@@ -157,6 +158,24 @@ var PickerDate = function (params) {
   /* ----------------
   Method
   ---------------- */
+  // 获取国际化的日期
+  s.getLocaleDayString = function (date) {
+    if (date instanceof Date === false) return ''
+    let day = date.getDay()
+    let days = [
+      locale('', 'picker_monday'),
+      locale('', 'picker_tuesday'),
+      locale('', 'picker_wednesday'),
+      locale('', 'picker_thursday'),
+      locale('', 'picker_friday'),
+      locale('', 'picker_saturday'),
+      locale('', 'picker_sunday')
+    ]
+    // 星期天返回0
+    if (day === 0) day = 7
+    return days[day - 1]
+  }
+  // 获取选中项目的文本值
   s.getActiveText = function (activeData) {
     var activeKeys = activeData.map(function (n, i, a) {
       return n['id']
@@ -165,6 +184,23 @@ var PickerDate = function (params) {
     else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + s.params.timeSplit + activeKeys[4]
     else if (s.params.viewType === 'time') return activeKeys[0] + s.params.timeSplit + activeKeys[1]
     else if (s.params.viewType === 'month') return activeKeys[0] + s.params.split + activeKeys[1]
+  }
+  // 增加周几显示
+  s.getActiveWeekText = function () {
+    const options = s.activeOptions
+    let value = s.activeText = s.getActiveText(s.activeOptions)
+    for (var i = 0; i < options.length; i++) {
+      // 只有年月日、年月日时分才显示周几
+      if ((s.params.viewType === 'date' || s.params.viewType === 'datetime') && i === 3) {
+        if (value.isDateTime() || value.isDate()) {
+          let day = s.getLocaleDayString(value.toDate())
+          value = value.split(' ')
+          value[0] += ' ' + day
+          value = value.join(' ')
+        }
+      }
+    }
+    return value
   }
   s.setDefaultsByKeys = function (activeKeys) {
     if (s.params.viewType === 'date' || s.params.viewType === 'datetime' || s.params.viewType === 'month') {

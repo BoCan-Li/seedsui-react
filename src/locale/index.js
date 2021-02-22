@@ -24,10 +24,10 @@ export default function (remark, key, variable) {
         value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i])
       }
     }
-    return value || remark || key
+    return value || remark || ''
   }
   // 如果有remark, 没有key, 则返回remark
-  if (remark) {
+  if (typeof remark === 'string') {
     return remark
   }
   return locale

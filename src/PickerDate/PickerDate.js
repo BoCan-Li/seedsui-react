@@ -81,21 +81,29 @@ const PickerDate = forwardRef(({
       var defaultDay = e.activeOptions[2]['id']
       e.updateDays(year, month, defaultDay) // 更新总天数
     }
+    // 是否显示标题
+    if (e.headerTitle) {
+      e.headerTitle.innerHTML = e.getActiveWeekText()
+    }
     // Callback
     if (onScrollEnd) onScrollEnd(e)
   }
   
   function update () {
     instance.current.updateParams({
-      yyUnit: locale('年', 'unit_year'),
-      MMUnit: locale('月', 'unit_month'),
-      ddUnit: locale('日', 'unit_date'),
-      hhUnit: locale('时', 'unit_hour'),
-      mmUnit: locale('分', 'unit_minute')
-    });
+      yyUnit: locale('', 'picker_unit_year'),
+      MMUnit: locale('', 'picker_unit_month'),
+      ddUnit: locale('', 'picker_unit_date'),
+      hhUnit: locale('', 'picker_unit_hour'),
+      mmUnit: locale('', 'picker_unit_minute')
+    })
     const def = getDefault();
     instance.current.setDefaults(def);
     instance.current.update();
+    // 是否显示标题
+    if (instance.current.headerTitle) {
+      instance.current.headerTitle.innerHTML = instance.current.getActiveWeekText()
+    }
   }
   function getDefault () {
     var defaultValue = value;
@@ -181,7 +189,7 @@ const PickerDate = forwardRef(({
         yearsData = data.year.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('年', 'unit_year'))
+            'name': '' + n + (locale('', 'picker_unit_year')) // 年
           }
         })
       }
@@ -189,7 +197,7 @@ const PickerDate = forwardRef(({
         monthsData = data.month.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('月', 'unit_month'))
+            'name': '' + n + (locale('', 'picker_unit_month')) // 月
           }
         })
       }
@@ -197,7 +205,7 @@ const PickerDate = forwardRef(({
         daysData = data.day.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('日', 'unit_date'))
+            'name': '' + n + (locale('', 'picker_unit_date')) // 日
           }
         })
       }
@@ -205,7 +213,7 @@ const PickerDate = forwardRef(({
         hoursData = data.hour.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('时', 'unit_hour'))
+            'name': '' + n + (locale('', 'picker_unit_hour')) // 时
           }
         })
       }
@@ -213,7 +221,7 @@ const PickerDate = forwardRef(({
         minutesData = data.minute.map((n) => {
           return {
             'id': '' + n,
-            'name': '' + n + (locale('分', 'unit_minute'))
+            'name': '' + n + (locale('', 'picker_unit_minute')) // 分
           }
         })
       }
@@ -252,11 +260,11 @@ const PickerDate = forwardRef(({
       onClickSubmit: clickSubmit,
       onScrollEnd: scrollEnd,
       onHid: (e) => {},
-      yyUnit: locale('年', 'unit_year'),
-      MMUnit: locale('月', 'unit_month'),
-      ddUnit: locale('日', 'unit_date'),
-      hhUnit: locale('时', 'unit_hour'),
-      mmUnit: locale('分', 'unit_minute')
+      yyUnit: locale('', 'picker_unit_year'), // 年
+      MMUnit: locale('', 'picker_unit_month'), // 月
+      ddUnit: locale('', 'picker_unit_date'), // 日
+      hhUnit: locale('', 'picker_unit_hour'), // 时
+      mmUnit: locale('', 'picker_unit_minute') // 分
     })
     if (show && instance) {
       setTimeout(function(){
@@ -281,6 +289,7 @@ const PickerDate = forwardRef(({
       <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
         <div className="picker-header">
           <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || locale('取消', 'cancel')}</a>
+          <div className="picker-header-title"></div>
           <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || locale('完成', 'finish')}</a>
         </div>
         <div className="picker-wrapper">

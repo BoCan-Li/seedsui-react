@@ -167,6 +167,7 @@ const PickerCity = forwardRef(({
       <div {...others} className={`picker${others.className ? ' ' + others.className : ''}`}>
         <div className="picker-header">
           <a {...otherCancelAttribute} className={`picker-cancel${otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''}`}>{otherCancelAttribute.caption || locale('取消', 'cancel')}</a>
+          <div className="picker-header-title"></div>
           <a {...otherSubmitAttribute} className={`picker-submit${otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''}`}>{otherSubmitAttribute.caption || locale('完成', 'finish')}</a>
         </div>
         <div className="picker-wrapper">

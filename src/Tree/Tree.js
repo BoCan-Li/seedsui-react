@@ -49,7 +49,7 @@ const Tree = forwardRef(({
   useEffect(() => {
     // console.log(prevSelected)
     // console.log(selected)
-    if (!prevSelected || !selected) return
+    if (!prevSelected || !selected || !Array.isArray(prevSelected)) return
     let delIds = [] // 删除项
     let addOptions = [] // 新增项
     
