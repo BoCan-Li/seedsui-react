@@ -6,10 +6,12 @@ import {
 	Titlebar,
   Bridge,
 	Container,
-	MenuTiled,
+	Context,
 	MapUtil,
   InputDate
 } from '../../src'
+
+import enUS from '../../src/locale/en_US'
 
 function Demo () {
   return <Fragment>
@@ -18,7 +20,9 @@ function Demo () {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<InputDate/>
+      <Context locale={enUS}>
+			  <InputDate/>
+      </Context>
     </Container>
   </Page>
 	</Fragment>
