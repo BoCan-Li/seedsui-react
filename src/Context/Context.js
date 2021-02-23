@@ -1,5 +1,6 @@
-import React from 'react';
-import Instance from './instance';
+import React from 'react'
+import Instance from './instance'
+import getLocaleValue from './../locale'
 
 function Context({
   locale = {},
@@ -34,28 +35,12 @@ function Context({
     console.log('读取默认国际化文件zh_CN')
     data = require(`./../locale/zh_CN.js`)
   }
-  if (data && Object.keys(data).length) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
+  if (data && Object.keys(data).length) window.localeData = data
   return (
     <Instance.Provider
       value={{
         locale: function (remark, key, variable) {
-          if (!data) return key || '';
-          // 获取key的值
-          if (key) {
-            let value = data[key] || '';
-            if (value && variable && Array.isArray(variable) && variable.length) {
-              for (let i = 0; i < variable.length; i++) {
-                if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
-                value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
-              }
-            }
-            return value || remark || key;
-          }
-          // 如果有remark, 没有key, 则返回remark
-          if (remark) {
-            return remark
-          }
-          return data
+          return getLocaleValue(remark, key, variable)
         },
         language: language,
         portal: portal

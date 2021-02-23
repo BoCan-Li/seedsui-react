@@ -64,18 +64,18 @@ export default {
   'hint_weather_failed': 'Weather failed',
   'hint_getdata_failed': 'Get data failed',
   'confirm_quit_page': 'Confirm quit?',
-  'picker_unit_year': '', // 未使用,YYYY年, Y
-  'picker_unit_month': '', // 未使用,MM月, M
-  'picker_unit_date': '', // 未使用,DD日, D
-  'picker_unit_hour': '', // 未使用,hh时, h
-  'picker_unit_minute': '', // 未使用,mm分, m
-  'picker_unit_second': '', // 未使用,ss秒, s
-  'picker_unit_week': 'W', // 未使用,ss秒, 周
-  'unit_week': 'W', // 未使用,WW周
-  'unit_weeks_before': 'the', // 未使用,第EE周
-  'unit_weeks_after': 'weeks', // 未使用,第EE周
-  'unit_season': 'Q', // 未使用,Q
-  'the': 'The',
+  'picker_unit_year': '', // YYYY年, Y
+  'picker_unit_month': '', // MM月, M
+  'picker_unit_date': '', // DD日, D
+  'picker_unit_hour': '', // hh时, h
+  'picker_unit_minute': '', // mm分, m
+  'picker_monday': 'Mon',
+  'picker_tuesday': 'Tue',
+  'picker_wednesday': 'Wed',
+  'picker_thursday': 'Thu',
+  'picker_friday': 'Fri',
+  'picker_saturday': 'Sat',
+  'picker_sunday': 'Sun',
   'th_image_failed_to_upload': 'th image failed to upload',
   're_photo_upload': 'Re photo upload',
   'copied_to_the_clipboard': 'Copied to the clipboard',
@@ -115,12 +115,5 @@ export default {
   'hint_map_no_container': 'No map container',
   'hint_map_init_timeout': 'Init map timeout',
   'hint_map_no_boundary_data': 'No {0}\'s boundary data',
-  'radius_of_m': 'Radius of {0} m',
-  'picker_monday': 'Mon',
-  'picker_tuesday': 'Tue',
-  'picker_wednesday': 'Wed',
-  'picker_thursday': 'Thu',
-  'picker_friday': 'Fri',
-  'picker_saturday': 'Sat',
-  'picker_sunday': 'Sun'
+  'radius_of_m': 'Radius of {0} m'
 }

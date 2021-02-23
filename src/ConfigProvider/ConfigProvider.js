@@ -1,5 +1,6 @@
-import {Component} from 'react';
-import PropTypes from 'prop-types';
+import {Component} from 'react'
+import PropTypes from 'prop-types'
+import getLocaleValue from './../locale'
 
 export default class ConfigProvider extends Component {
   static propTypes = {
@@ -47,26 +48,10 @@ export default class ConfigProvider extends Component {
     } else {
       data = locale
     }
-    if (data) localStorage.setItem('_seedsui_locale', JSON.stringify(data))
+    if (data) window.localeData = data
     return {
       locale: function (remark, key, variable) {
-        if (!data) return remark || key || '';
-        // 获取key的值
-        if (key) {
-          let value = data[key] || '';
-          if (value && variable && Array.isArray(variable) && variable.length) {
-            for (let i = 0; i < variable.length; i++) {
-              if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue;
-              value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i]);
-            }
-          }
-          return value || remark || key;
-        }
-        // 如果有remark, 没有key, 则返回remark
-        if (remark) {
-          return remark
-        }
-        return data
+        return getLocaleValue(remark, key, variable)
       },
       language,
       portal,

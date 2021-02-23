@@ -1,6 +1,5 @@
 import React, {useRef, useState, useEffect, Fragment} from 'react'
 import {render} from 'react-dom'
-import '../../src/PrototypeObject.js';
 import {
   Page,
 	Header,
@@ -11,6 +10,7 @@ import {
 	MapUtil,
   InputDate
 } from '../../src'
+
 function Demo () {
   return <Fragment>
 	<Page>

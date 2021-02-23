@@ -163,13 +163,13 @@ var PickerDate = function (params) {
     if (date instanceof Date === false) return ''
     let day = date.getDay()
     let days = [
-      locale('', 'picker_monday'),
-      locale('', 'picker_tuesday'),
-      locale('', 'picker_wednesday'),
-      locale('', 'picker_thursday'),
-      locale('', 'picker_friday'),
-      locale('', 'picker_saturday'),
-      locale('', 'picker_sunday')
+      locale('周一', 'picker_monday'),
+      locale('周二', 'picker_tuesday'),
+      locale('周三', 'picker_wednesday'),
+      locale('周四', 'picker_thursday'),
+      locale('周五', 'picker_friday'),
+      locale('周六', 'picker_saturday'),
+      locale('周日', 'picker_sunday')
     ]
     // 星期天返回0
     if (day === 0) day = 7

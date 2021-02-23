@@ -64,18 +64,18 @@ export default {
   'hint_weather_failed': '获取天气失败, 请稍后重试',
   'hint_getdata_failed': '获取数据失败, 请稍后重试',
   'confirm_quit_page': '您确定要离开此页面吗?',
-  'picker_unit_year': '', // 未使用,YYYY年, 年
-  'picker_unit_month': '', // 未使用,MM月, 月
-  'picker_unit_date': '', // 未使用,DD日, 日
-  'picker_unit_hour': '', // 未使用,hh时, 时
-  'picker_unit_minute': '', // 未使用,mm分, 分
-  'picker_unit_second': '', // 未使用,ss秒, 秒
-  'picker_unit_week': '周', // 未使用,ss秒, 周
-  'unit_week': '周', // 未使用,WW周
-  'unit_weeks_before': '第', // 未使用,第EE周
-  'unit_weeks_after': '周', // 未使用,第EE周
-  'unit_season': '季', // 未使用,Q
-  'the': '第',
+  'picker_unit_year': '', // YYYY年, 年
+  'picker_unit_month': '', // MM月, 月
+  'picker_unit_date': '', // DD日, 日
+  'picker_unit_hour': '', // hh时, 时
+  'picker_unit_minute': '', // mm分, 分
+  'picker_monday': '周一',
+  'picker_tuesday': '周二',
+  'picker_wednesday': '周三',
+  'picker_thursday': '周四',
+  'picker_friday': '周五',
+  'picker_saturday': '周六',
+  'picker_sunday': '周日',
   'th_image_failed_to_upload': '张图片上传失败',
   're_photo_upload': '请重新拍照上传',
   'copied_to_the_clipboard': '复制到剪贴板成功',
@@ -115,12 +115,5 @@ export default {
   'hint_map_no_container': '地图容器不存在',
   'hint_map_init_timeout': '初始化地图超时, 请检查当前网络是否稳定',
   'hint_map_no_boundary_data': '暂无{0}的边界数据',
-  'radius_of_m': '半径{0}米',
-  'picker_monday': '周一',
-  'picker_tuesday': '周二',
-  'picker_wednesday': '周三',
-  'picker_thursday': '周四',
-  'picker_friday': '周五',
-  'picker_saturday': '周六',
-  'picker_sunday': '周日'
+  'radius_of_m': '半径{0}米'
 }
