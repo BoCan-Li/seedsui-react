@@ -9,7 +9,7 @@ var PickerDate = function (params) {
   var defaults = {
     split: '-',
     timeSplit: ':',
-    
+
     viewType: 'date', // 'date','month','time','datetime'
     isSimpleYear: false,
 
@@ -48,7 +48,7 @@ var PickerDate = function (params) {
   }
   var s = new Picker(params)
 
-  function trim (str) {
+  function trim(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '')
   }
   // 更新params
@@ -107,15 +107,15 @@ var PickerDate = function (params) {
   s.updateDetault()
 
   // 从非自定义日数据的自然日中更新
-  function updateDaysForDefault (year, month) {
+  function updateDaysForDefault(year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
     var currentLastDay = s.days[s.days.length - 1]['id']
     if (lastDay === currentLastDay) return
     if (lastDay > currentLastDay) {
       for (var i = 1 + parseInt(currentLastDay, 10); i <= lastDay; i++) {
         s.days.push({
-          'id': '' + i,
-          'name': '' + i + s.params.ddUnit
+          id: '' + i,
+          name: '' + i + s.params.ddUnit,
         })
       }
     } else if (lastDay < currentLastDay) {
@@ -125,7 +125,7 @@ var PickerDate = function (params) {
   }
 
   // 从自定义的日数据daysData中更新
-  function updateDaysForCustom (year, month) {
+  function updateDaysForCustom(year, month) {
     var lastDay = '' + new Date(year, month, 0).getDate()
     var currentLastDay = s.days[s.days.length - 1]['id']
     var customData = s.params.daysData
@@ -136,7 +136,8 @@ var PickerDate = function (params) {
       })
     } else if (lastDay < currentLastDay) {
       for (var j = currentLastDay; j > lastDay; j--) {
-        s.days.forEach(function (n) { // eslint-disable-line
+        s.days.forEach(function (n) {
+          // eslint-disable-line
           if (n['id'] === '' + j) s.days.pop()
         })
       }
@@ -169,7 +170,7 @@ var PickerDate = function (params) {
       locale('周四', 'picker_thursday'),
       locale('周五', 'picker_friday'),
       locale('周六', 'picker_saturday'),
-      locale('周日', 'picker_sunday')
+      locale('周日', 'picker_sunday'),
     ]
     // 星期天返回0
     if (day === 0) day = 7
@@ -180,18 +181,30 @@ var PickerDate = function (params) {
     var activeKeys = activeData.map(function (n, i, a) {
       return n['id']
     })
-    if (s.params.viewType === 'date') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2]
-    else if (s.params.viewType === 'datetime') return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2] + ' ' + activeKeys[3] + s.params.timeSplit + activeKeys[4]
+    if (s.params.viewType === 'date')
+      return activeKeys[0] + s.params.split + activeKeys[1] + s.params.split + activeKeys[2]
+    else if (s.params.viewType === 'datetime')
+      return (
+        activeKeys[0] +
+        s.params.split +
+        activeKeys[1] +
+        s.params.split +
+        activeKeys[2] +
+        ' ' +
+        activeKeys[3] +
+        s.params.timeSplit +
+        activeKeys[4]
+      )
     else if (s.params.viewType === 'time') return activeKeys[0] + s.params.timeSplit + activeKeys[1]
     else if (s.params.viewType === 'month') return activeKeys[0] + s.params.split + activeKeys[1]
   }
   // 增加周几显示
   s.getActiveWeekText = function () {
     const options = s.activeOptions
-    let value = s.activeText = s.getActiveText(s.activeOptions)
+    let value = (s.activeText = s.getActiveText(s.activeOptions))
     for (var i = 0; i < options.length; i++) {
       // 只有年月日、年月日时分才显示周几
-      if ((s.params.viewType === 'date' || s.params.viewType === 'datetime') && i === 3) {
+      if ((s.params.viewType === 'date' || s.params.viewType === 'datetime') && i === 2) {
         if (value.isDateTime() || value.isDate()) {
           let day = s.getLocaleDayString(value.toDate())
           value = value.split(' ')
@@ -203,7 +216,11 @@ var PickerDate = function (params) {
     return value
   }
   s.setDefaultsByKeys = function (activeKeys) {
-    if (s.params.viewType === 'date' || s.params.viewType === 'datetime' || s.params.viewType === 'month') {
+    if (
+      s.params.viewType === 'date' ||
+      s.params.viewType === 'datetime' ||
+      s.params.viewType === 'month'
+    ) {
       if (activeKeys[0]) s.setDefaultYear(activeKeys[0])
       if (activeKeys[1]) s.setDefaultMonth(activeKeys[1])
       if (activeKeys[2]) s.setDefaultDay(activeKeys[2])
@@ -226,7 +243,7 @@ var PickerDate = function (params) {
   ---------------- */
 
   // 添加数据
-  function addMonthSlot () {
+  function addMonthSlot() {
     // 年
     s.years = []
     if (s.params.yearsData) {
@@ -234,8 +251,10 @@ var PickerDate = function (params) {
     } else {
       for (var yyyy = s.params.minYear; yyyy <= s.params.maxYear; yyyy++) {
         s.years.push({
-          'id': '' + yyyy,
-          'name': s.params.isSimpleYear ? yyyy.toString().substring(2, 4) + s.params.yyUnit : yyyy + s.params.yyUnit
+          id: '' + yyyy,
+          name: s.params.isSimpleYear
+            ? yyyy.toString().substring(2, 4) + s.params.yyUnit
+            : yyyy + s.params.yyUnit,
         })
       }
     }
@@ -249,15 +268,15 @@ var PickerDate = function (params) {
       for (var MM = 1; MM <= 12; MM++) {
         var _MM = MM.toString().length === 1 ? '0' + MM : MM
         s.months.push({
-          'id': '' + _MM,
-          'name': _MM + s.params.MMUnit
+          id: '' + _MM,
+          name: _MM + s.params.MMUnit,
         })
       }
     }
     s.addSlot(s.months, s.params.defaultMonth, s.params.monthClass)
   }
 
-  function addDateSlot () {
+  function addDateSlot() {
     addMonthSlot()
     // 日
     s.days = []
@@ -268,15 +287,15 @@ var PickerDate = function (params) {
       for (var dd = 1; dd <= currentMaxday; dd++) {
         var _dd = dd.toString().length === 1 ? '0' + dd : dd
         s.days.push({
-          'id': '' + _dd,
-          'name': _dd + s.params.ddUnit
+          id: '' + _dd,
+          name: _dd + s.params.ddUnit,
         })
       }
     }
     s.addSlot(s.days, s.params.defaultDay, s.params.dayClass)
   }
 
-  function addTimeSlot () {
+  function addTimeSlot() {
     // 时
     s.hours = []
     if (s.params.hoursData) {
@@ -285,8 +304,8 @@ var PickerDate = function (params) {
       for (var hh = 0; hh <= 23; hh++) {
         var _hh = hh.toString().length === 1 ? '0' + hh : hh
         s.hours.push({
-          'id': '' + _hh,
-          'name': _hh + s.params.hhUnit
+          id: '' + _hh,
+          name: _hh + s.params.hhUnit,
         })
       }
     }
@@ -299,20 +318,20 @@ var PickerDate = function (params) {
       for (var mm = 0; mm <= 59; mm++) {
         var _mm = mm.toString().length === 1 ? '0' + mm : mm
         s.minutes.push({
-          'id': '' + _mm,
-          'name': _mm + s.params.mmUnit
+          id: '' + _mm,
+          name: _mm + s.params.mmUnit,
         })
       }
     }
     s.addSlot(s.minutes, s.params.defaultMinute, s.params.minuteClass)
   }
 
-  function addDateTime () {
+  function addDateTime() {
     addDateSlot()
     addTimeSlot()
   }
 
-  function initSlots () {
+  function initSlots() {
     switch (s.params.viewType) {
       case 'date':
         addDateSlot()

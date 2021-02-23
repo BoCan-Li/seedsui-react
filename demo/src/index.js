@@ -18,7 +18,7 @@ function Demo () {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-			<InputDate type="datetime"/>
+			<InputDate/>
     </Container>
   </Page>
 	</Fragment>
