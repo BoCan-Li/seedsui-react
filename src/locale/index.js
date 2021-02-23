@@ -21,7 +21,12 @@ export default function (remark, key, variable) {
     // 替换变量
     if (value && variable && Array.isArray(variable) && variable.length) {
       for (let i = 0; i < variable.length; i++) {
-        if (typeof variable[i] !== 'number' && typeof variable[i] !== 'boolean' && typeof variable[i] !== 'string') continue
+        if (
+          typeof variable[i] !== 'number' &&
+          typeof variable[i] !== 'boolean' &&
+          typeof variable[i] !== 'string'
+        )
+          continue
         value = value.replace(new RegExp(`\\{${i}\\}`, 'g'), variable[i])
       }
     }
