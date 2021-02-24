@@ -8,7 +8,7 @@ import {
 	Container,
 	Context,
 	MapUtil,
-  InputDate
+  InputPicker
 } from '../../src'
 
 import enUS from '../../src/locale/en_US'
@@ -21,7 +21,7 @@ function Demo () {
 		</Header>
 		<Container>
       <Context locale={enUS}>
-			  <InputDate/>
+			  <InputPicker list={[{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'}, {id: '4', name: '4'}, {id: '5', name: '5'}]}/>
       </Context>
     </Container>
   </Page>

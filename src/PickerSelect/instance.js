@@ -18,6 +18,7 @@ var PickerSelect = function (params) {
     pickerActiveClass: 'active',
 
     headerClass: 'picker-header',
+    headerTitleClass: 'picker-header-title',
     headerSubmitClass: 'picker-submit',
     headerSubmitText: '完成', // 实例化时需要国际化
     headerCancelClass: 'picker-cancel',
@@ -74,6 +75,13 @@ var PickerSelect = function (params) {
     return header
   }
 
+  // 新建标题
+  s.createHeaderTitle = function () {
+    var headerTitle = document.createElement('div')
+    headerTitle.setAttribute('class', s.params.headerTitleClass)
+    return headerTitle
+  }
+
   // 新建Header按钮
   s.createHeaderSubmit = function () {
     var headerSubmit = document.createElement('a')
@@ -111,6 +119,7 @@ var PickerSelect = function (params) {
       s.header = s.mask.querySelector('.' + s.params.headerClass)
       s.headerSubmit = s.mask.querySelector('.' + s.params.headerSubmitClass)
       s.headerCancel = s.mask.querySelector('.' + s.params.headerCancelClass)
+      s.headerTitle = s.mask.querySelector('.' + s.params.headerTitleClass)
       s.wrapper = s.mask.querySelector('.' + s.params.wrapperClass)
       return
     }
@@ -119,9 +128,11 @@ var PickerSelect = function (params) {
     s.header = s.createHeader()
     s.headerSubmit = s.createHeaderSubmit()
     s.headerCancel = s.createHeaderCancel()
+    s.headerTitle = s.createHeaderTitle()
     s.wrapper = s.createWrapper()
 
     s.header.appendChild(s.headerCancel)
+    s.header.appendChild(s.headerTitle)
     s.header.appendChild(s.headerSubmit)
 
     s.picker.appendChild(s.header)
