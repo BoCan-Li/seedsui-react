@@ -143,7 +143,7 @@ var Bridge = {
     self = this
     // 新内核打开老内核
     if (params.url.indexOf('h5:') === 0) {
-      if (Device.os === 'andriod') {
+      if (Device.os === 'android') {
         let url = params.url
         if (url.indexOf('h5:/') === 0) {
           url = `${window.origin}${url.replace(/^h5:/, '')}`

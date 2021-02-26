@@ -183,9 +183,9 @@ var Picker = function (params) {
       s.overflowContainer.appendChild(s.mask)
     }
     // 兼容安卓部分机型touch事件不工作的问题
-    var andriodExp = navigator.userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)
-    if (andriodExp && andriodExp[1]) {
-      if (andriodExp[1] < '5.0') s.mask.setAttribute('onTouchStart', '')
+    var androidExp = navigator.userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)
+    if (androidExp && androidExp[1]) {
+      if (androidExp[1] < '5.0') s.mask.setAttribute('onTouchStart', '')
     }
   }
   s.update()

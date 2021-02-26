@@ -23,11 +23,11 @@ var Device = (function () {
   // 系统
   var os = ''
   var osVersion = ''
-  var andriodExp = ua.match(/android\s*(\d*\.*\d*)/)
+  var androidExp = ua.match(/android\s*(\d*\.*\d*)/)
   var iosExp = ua.match(/cpu iphone os (.*?) like mac os/)
-  if (andriodExp) {
-    os = 'andriod'
-    osVersion = andriodExp[1]
+  if (androidExp) {
+    os = 'android'
+    osVersion = androidExp[1]
   } else if (iosExp) {
     os = 'ios'
     osVersion = iosExp[1]
@@ -127,7 +127,7 @@ var Device = (function () {
     window.addEventListener('offline', handleOffline, false)
   }
 
-  // 适配刘海屏和andriod5.0以下的手机
+  // 适配刘海屏和android5.0以下的手机
   function adapterIPhoneX(el) {
     var root = document.getElementById('root')
     if (el && Object.prototype.toString.call(el).indexOf('[object HTML') === 0) root = el

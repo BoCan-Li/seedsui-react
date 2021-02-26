@@ -288,7 +288,7 @@ var Bridge = {
   },
   /**
     * 获取订货包名
-    * @param {Function} callback({result: 'cn.com.wq.ordergoods'}), ios包名cn.com.wq.ordergoods, andriod包名com.waiqin365.dhcloud
+    * @param {Function} callback({result: 'cn.com.wq.ordergoods'}), ios包名cn.com.wq.ordergoods, android包名com.waiqin365.dhcloud
     */
   getIdentification: function (callback) {
     var self = this
