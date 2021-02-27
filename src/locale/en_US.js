@@ -9,6 +9,7 @@ export default {
   'invalid_image_src': 'Invalid image src',
   'hint_image_failed_to_load': 'Image failed to load',
   'hint_wx_failed_to_load': 'Failed to load wx js',
+  'hint_wxwork_failed_to_load': 'Failed to load wxwork js',
   'hint_cordova_failed_to_load': 'Failed to load cordova js',
   'hint_wq_failed_to_load': 'Failed to load waiqin js',
   'hint_choose_image_failed': 'Choose image failed',

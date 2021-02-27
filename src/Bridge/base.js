@@ -342,8 +342,23 @@ var Bridge = {
     if (platform === 'wechat' || platform === 'wework' || platform === 'miniprogram') { // 微信
       script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
       script.onload = function () {
-        self.initHistory()
-        if (callback) callback()
+        if (platform === 'wework') {
+          var wxworkScript = document.createElement('script')
+          wxworkScript.type = 'text/javascript'
+          wxworkScript.defer = 'defer'
+          wxworkScript.src = options.wxworkSrc || '//open.work.weixin.qq.com/wwopen/js/jwxwork-1.0.0.js'
+          wxworkScript.onload = function () {
+            self.initHistory()
+            if (callback) callback()
+          }
+          wxworkScript.onerror = function () {
+            options.fail({errMsg: locale('企业微信js加载失败', 'hint_wxwork_failed_to_load')})
+          }
+          document.body.appendChild(wxworkScript)
+        } else {
+          self.initHistory()
+          if (callback) callback()
+        }
       }
       if (options.fail) {
         script.onerror = function () {

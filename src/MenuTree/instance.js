@@ -40,12 +40,22 @@ var MenuTree = function (container, params) {
     return
   }
   s.initData = function (list, ulContainer) {
-    for (var i = 0, option; option = list[i++];) { // eslint-disable-line
+    for (var i = 0, option; (option = list[i++]); ) { // eslint-disable-line
       var li = document.createElement('li')
-      var html = '<div data-index="' + i + '" data-id="' + option.id + '" class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
-      '<p class="menutree-tag-font">' + option.name + '</p>' +
-      (option.children && option.children.length > 0 ? '<i class="menutree-more"></i>' : '') +
-      '</div>'
+      var html =
+        '<div data-index="' +
+        i +
+        '" data-id="' +
+        option.id +
+        '" class="' +
+        s.params.tagClass +
+        (option.id === s.params.selectedId ? ' active' : '') +
+        '">' +
+        '<p class="menutree-tag-font">' +
+        option.name +
+        '</p>' +
+        (option.children && option.children.length > 0 ? '<i class="menutree-more"></i>' : '') +
+        '</div>'
       li.innerHTML = html
       ulContainer.appendChild(li)
       if (option.children && option.children.length > 0) {
@@ -61,9 +71,18 @@ var MenuTree = function (container, params) {
   Method
   ------------------ */
   // 设置选中项
-  s.setSelectedId = function (id) {
-    s.params.selectedId = id
+  s.addSelected = function (option) {
+    if (typeof option !== 'object' || !option.id) return
+    let els = document.querySelectorAll('[data-id]')
+    for (let i = 0, el; (el = els[i++]); ) {
+      el.classList.remove(s.params.activeClass)
+      if (el.getAttribute('data-id') === String(option.id)) {
+        el.classList.add(s.params.activeClass)
+      }
+    }
+    s.updateActive()
   }
+
   // 重新设置数据
   s.setData = function (data) {
     s.params.data = data
@@ -71,7 +90,7 @@ var MenuTree = function (container, params) {
     if (!data || !data.length) {
       return
     }
-    
+
     s.initData(data, s.container)
     s.updateActive()
   }
@@ -82,7 +101,12 @@ var MenuTree = function (container, params) {
   // 如果子节点有选中的话, 父节点也要选中并且展开
   s.updateActive = function () {
     var actives = s.container.querySelectorAll('.' + s.params.activeClass)
-    if (actives.length === 1 && actives[0].parentNode && actives[0].parentNode.parentNode && actives[0].parentNode.parentNode.previousElementSibling) {
+    if (
+      actives.length === 1 &&
+      actives[0].parentNode &&
+      actives[0].parentNode.parentNode &&
+      actives[0].parentNode.parentNode.previousElementSibling
+    ) {
       var tag = actives[0].parentNode.parentNode.previousElementSibling
       s.setActive(tag)
     }
@@ -90,7 +114,11 @@ var MenuTree = function (container, params) {
   s.setActive = function (target) {
     target.classList.add(s.params.activeClass)
     target.classList.add(s.params.extendClass)
-    if (target.parentNode && target.parentNode.parentNode && target.parentNode.parentNode.previousElementSibling) {
+    if (
+      target.parentNode &&
+      target.parentNode.parentNode &&
+      target.parentNode.parentNode.previousElementSibling
+    ) {
       var tag = target.parentNode.parentNode.previousElementSibling
       s.setActive(tag)
     }
@@ -156,18 +184,24 @@ var MenuTree = function (container, params) {
     // isExtend
     var isExtend = target.classList.contains(s.params.extendClass)
     // item
-    const id = target.getAttribute('data-id');
-    let item = s.params.data.getDeepTreeNode(id);
+    const id = target.getAttribute('data-id')
+    let item = s.params.data.getDeepTreeNode(id)
     // 如果已经展开,则收缩
     if (isExtend) {
       target.classList.remove(s.params.extendClass)
     } else {
-      if (!target.classList.contains(s.params.activeClass)) { // 点击非选中项, 移除同级所有的选中项与展开项
+      if (!target.classList.contains(s.params.activeClass)) {
+        // 点击非选中项, 移除同级所有的选中项与展开项
         s.resetSibling(target)
       } else if (s.params.onExtendActive) {
-        if (target.classList.contains(s.params.activeClass) && !target.classList.contains(s.params.extendClass)) { // 点击选中项展开时, 移除同级所有的选中项与展开项
+        if (
+          target.classList.contains(s.params.activeClass) &&
+          !target.classList.contains(s.params.extendClass)
+        ) {
+          // 点击选中项展开时, 移除同级所有的选中项与展开项
           s.resetSibling(target)
-          if (typeof s.params.onExtendActive === 'function') s.params.onExtendActive(s, item, isActived, isExtend)
+          if (typeof s.params.onExtendActive === 'function')
+            s.params.onExtendActive(s, item, isActived, isExtend)
         }
       }
       // 添加当前节点为选中项和展开项
@@ -181,7 +215,7 @@ var MenuTree = function (container, params) {
   s.resetSibling = function (target) {
     var container = target.parentNode.parentNode
     var actives = container.querySelectorAll('.' + s.params.activeClass)
-    for (var i = 0, tag; tag = actives[i++];) { // eslint-disable-line
+    for (var i = 0, tag; (tag = actives[i++]); ) { // eslint-disable-line
       // var tag = li.querySelector('.' + s.params.tagClass)
       if (tag) {
         tag.classList.remove(s.params.extendClass)

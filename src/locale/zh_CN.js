@@ -9,6 +9,7 @@ export default {
   'invalid_image_src': '图片地址无效',
   'hint_image_failed_to_load': '图片加载失败',
   'hint_wx_failed_to_load': '微信js加载失败',
+  'hint_wxwork_failed_to_load': '企业微信js加载失败',
   'hint_cordova_failed_to_load': '外勤cordova加载失败',
   'hint_wq_failed_to_load': '外勤js加载失败',
   'hint_choose_image_failed': '选择图片失败, 请稍后再试',
