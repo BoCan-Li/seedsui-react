@@ -37,7 +37,7 @@ const MenuTree = forwardRef(
       } else {
         instance.current.setData([])
       }
-    }, [list])
+    }, [list]) // eslint-disable-line
 
     useEffect(() => {
       if (instance.current) return
@@ -52,7 +52,7 @@ const MenuTree = forwardRef(
         onClick: click, // (item, isActive, isExtend: true展开 | false收缩)
       })
       refEl.current.instance = instance
-    }, [])
+    }, []) // eslint-disable-line
 
     // 比较变化
     function usePrevious(value) {

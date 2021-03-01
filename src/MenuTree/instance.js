@@ -72,7 +72,7 @@ var MenuTree = function (container, params) {
   ------------------ */
   // 设置选中项
   s.addSelected = function (option) {
-    if (typeof option !== 'object' || !option.id) return
+    if (typeof option !== 'object' || !option.name) return
     let els = document.querySelectorAll('[data-id]')
     for (let i = 0, el; (el = els[i++]); ) {
       el.classList.remove(s.params.activeClass)
