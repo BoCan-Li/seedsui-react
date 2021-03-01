@@ -116,5 +116,6 @@ export default {
   'hint_map_no_container': 'No map container',
   'hint_map_init_timeout': 'Init map timeout',
   'hint_map_no_boundary_data': 'No {0}\'s boundary data',
-  'radius_of_m': 'Radius of {0} m'
+  'radius_of_m': 'Radius of {0} m',
+  'picker_district_title': 'Please district'
 }

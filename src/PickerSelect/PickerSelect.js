@@ -65,7 +65,7 @@ const Picker = forwardRef(
       return value.join(split || ',')
     }
     // 点击遮罩
-    function onClick(e) {
+    function handleClick(e) {
       if (e.target.classList.contains('picker-mask')) {
         // 点击遮罩
         if (maskAttribute.onClick) maskAttribute.onClick(e)
@@ -106,7 +106,7 @@ const Picker = forwardRef(
     // 过滤已经回调的属性
     function filterProps(props) {
       if (!props) return {}
-      const { onClick, ...otherProps } = props
+      const { caption, onClick, ...otherProps } = props
       return { ...otherProps }
     }
     // 如果没有数据, 则不显示
@@ -123,7 +123,7 @@ const Picker = forwardRef(
         className={`mask picker-mask${
           otherMaskAttribute.className ? ' ' + otherMaskAttribute.className : ''
         }${show ? ' active' : ''}`}
-        onClick={onClick}
+        onClick={handleClick}
       >
         <div
           {...others}
@@ -135,19 +135,19 @@ const Picker = forwardRef(
             <a
               {...otherCancelAttribute}
               className={`picker-cancel${
-                otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''
+                cancelAttribute.className ? ' ' + cancelAttribute.className : ''
               }`}
             >
-              {otherCancelAttribute.caption || locale('取消', 'cancel')}
+              {cancelAttribute.caption || locale('取消', 'cancel')}
             </a>
             <div className="picker-header-title"></div>
             <a
               {...otherSubmitAttribute}
               className={`picker-submit${
-                otherSubmitAttribute.className ? ' ' + submitAttribute.className : ''
+                submitAttribute.className ? ' ' + submitAttribute.className : ''
               }${multiple ? '' : ' disabled'}`}
             >
-              {otherSubmitAttribute.caption || locale('完成', 'finish')}
+              {submitAttribute.caption || locale('完成', 'finish')}
             </a>
           </div>
           <div className="pickerselect-wrapper">
@@ -157,7 +157,7 @@ const Picker = forwardRef(
                   key={index}
                   {...otherOptionAttribute}
                   className={`pickerselect-option${
-                    otherOptionAttribute.className ? ' ' + otherOptionAttribute.className : ''
+                    optionAttribute.className ? ' ' + optionAttribute.className : ''
                   }`}
                   data-index={index}
                 >

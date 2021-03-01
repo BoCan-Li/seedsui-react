@@ -8,21 +8,90 @@ import {
 	Container,
 	Context,
 	MapUtil,
-  InputPicker
+  InputDistrict,
+  InputDate
 } from '../../src'
 
 import enUS from '../../src/locale/en_US'
 
 function Demo () {
+  // 获取街道
+function getStreet (districtId) {
+  return new Promise((resolve) => {
+    Bridge.showLoading();
+    setTimeout(() => {
+      Bridge.hideLoading();
+      resolve([
+        {
+          "parentid": districtId,
+          "name": "街道1",
+          "id": "1",
+        },
+        {
+          "parentid": districtId,
+          "name": "街道2",
+          "id": "2",
+        }
+      ])
+    }, 500);
+  })
+}
+
+const [value, setValue] = useState('');
+
+function onChange (e, value, selected) {
+  console.log(e.target)
+  console.log(value, selected)
+  setValue(value);
+}
+
   return <Fragment>
 	<Page>
 		<Header>
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-      <Context locale={enUS}>
-			  <InputPicker list={[{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'}, {id: '4', name: '4'}, {id: '5', name: '5'}]}/>
-      </Context>
+      <InputDistrict
+        value={value}
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
+        pickerProps={{
+          getStreets: getStreet,
+          cancelAttribute: {
+            show: true
+          },
+          submitAttribute: {
+            show: true,
+            onClick: function (e, value, options) {
+              if (!options.length) {
+                Bridge.showToast('至少选择省份', {mask: false})
+                return false
+              }
+              setValue(value);
+              console.log(e, value, options)
+            }
+          }
+        }}
+      />
+      
+      <InputDate
+        value={value}
+        onChange={onChange}
+        placeholder="请选择"
+        className="border-b"
+        pickerProps={{
+          submitAttribute: {
+            onClick: function (e, value, options) {
+              if (!options.length) {
+                Bridge.showToast('至少选择省份', {mask: false})
+                return false
+              }
+              console.log(e, value, options)
+            }
+          }
+        }}
+      />
     </Container>
   </Page>
 	</Fragment>

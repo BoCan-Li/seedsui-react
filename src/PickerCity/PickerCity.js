@@ -167,7 +167,7 @@ const PickerCity = forwardRef(
     // 过滤已经回调的属性
     function filterProps(props) {
       if (!props) return {}
-      const { onClick, ...otherProps } = props
+      const { caption, onClick, ...otherProps } = props
       return { ...otherProps }
     }
     // 剔除掉onClick事件, 因为在instance时已经回调了
@@ -187,19 +187,19 @@ const PickerCity = forwardRef(
             <a
               {...otherCancelAttribute}
               className={`picker-cancel${
-                otherCancelAttribute.className ? ' ' + otherCancelAttribute.className : ''
+                cancelAttribute.className ? ' ' + cancelAttribute.className : ''
               }`}
             >
-              {otherCancelAttribute.caption || locale('取消', 'cancel')}
+              {cancelAttribute.caption || locale('取消', 'cancel')}
             </a>
             <div className="picker-header-title"></div>
             <a
               {...otherSubmitAttribute}
               className={`picker-submit${
-                otherSubmitAttribute.className ? ' ' + otherSubmitAttribute.className : ''
+                submitAttribute.className ? ' ' + submitAttribute.className : ''
               }`}
             >
-              {otherSubmitAttribute.caption || locale('完成', 'finish')}
+              {submitAttribute.caption || locale('完成', 'finish')}
             </a>
           </div>
           <div className="picker-wrapper">

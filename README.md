@@ -2628,7 +2628,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 <InputCity
   // Input
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, option), 默认无}
+  onChange={值改变 func(e, value, option), 默认无} // 如果设置了pickerProps: {submitAttribute: {onClick: func()}}, onChange则不再生效
 
   // Picker
   selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: ''}]
@@ -2683,7 +2683,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
   min={最小值 func(e, value), 默认无} // YYYY-MM-DD
   max={最大值 func(e, value), 默认无} // YYYY-MM-DD
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, option), 默认无}
+  onChange={值改变 func(e, value, option), 默认无} // 如果设置了pickerProps: {submitAttribute: {onClick: func()}}, onChange则不再生效
   fail={错误 func(e, {msg: '', select: '', min: '', value: ''}), 默认无}
 
   // Picker
@@ -2717,7 +2717,7 @@ import IndexBar from 'seedsui-react/lib/IndexBar';
 <InputDistrict
   // Input
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, option), 默认无}
+  onChange={值改变 func(e, value, option), 默认无} // 如果设置了pickerProps: {submitAttribute: {onClick: func()}}, onChange则不再生效
 
   // Picker
   selected={选中项 array, 默认无} // 传入selected时, 选中项则不取value中的值 [{id: '', name: '', parentid: ''}]
@@ -2930,7 +2930,7 @@ function handleHide (type) {
 <InputPicker
   // Input
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, option), 默认无}
+  onChange={值改变 func(e, value, option), 默认无} // 如果设置了pickerProps: {submitAttribute: {onClick: func()}}, onChange则不再生效
 
   // Picker
   list={选择列表 array, 默认无} // [{id: '', name: ''}]
@@ -3051,7 +3051,7 @@ import InputSafe from 'seedsui-react/lib/InputSafe';
 
   // Input
   onClick={点击文本框 func(e, value), 默认无}
-  onChange={值改变 func(e, value, options), 默认无}
+  onChange={值改变 func(e, value, options), 默认无} // 如果设置了pickerProps: {submitAttribute: {onClick: func()}}, onChange则不再生效
 
   // Picker
   multiple={是否允许多选 bool, 默认false}

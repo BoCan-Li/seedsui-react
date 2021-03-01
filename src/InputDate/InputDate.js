@@ -115,11 +115,9 @@ const InputDate = forwardRef(({
     if (val === false) return
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      pickerProps.submitAttribute.onClick(e, val, options);
-      return;
-    }
-    // 赋值
-    if (onChange) {
+      // 允许确定错误时中断隐藏
+      if (pickerProps.submitAttribute.onClick(e, val, options) === false) return
+    } else if (onChange) {
       onChange(e, val, options);
     }
     // 隐藏框

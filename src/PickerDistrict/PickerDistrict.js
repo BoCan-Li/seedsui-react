@@ -416,11 +416,20 @@ const PickerDistrict = forwardRef(({
   }, [list]);
 
   // 点击面板
-  function onClickPanel (e) {
+  function handleClickContainer (e) {
+    if (e.target.classList.contains('picker-district-submit')) {
+      let options = getOptions()
+      let optionsStr = getOptionsStr(options)
+      if (submitAttribute && submitAttribute.onClick) {
+        submitAttribute.onClick(e, optionsStr, options)
+      }
+    } else if (e.target.classList.contains('picker-district-cancel')) {
+      if (cancelAttribute.onClick) cancelAttribute.onClick(e)
+    }
     e.stopPropagation()
   }
   // 点击tab
-  function onClickTab (tab, index) {
+  function handleClickTab (tab, index) {
     setErrMsg('');
     // 点击街道
     if (tab.isStreet && currentStreets && currentStreets.length) {
@@ -456,7 +465,13 @@ const PickerDistrict = forwardRef(({
   // 构建选中项
   function getOptions (lastOption) {
     let options = Object.clone(tabs)
-    options[options.length - 1] = lastOption
+    if (options.length) {
+      if (lastOption) { // 替换掉最后一项请选择
+        options[options.length - 1] = lastOption
+      } else if (!options[options.length - 1].parentid) { // 删除最后一项请选择
+        options.pop()
+      }
+    }
     return options
   }
   function getOptionsStr (options) {
@@ -467,7 +482,7 @@ const PickerDistrict = forwardRef(({
     return val.join(split)
   }
   // 提交
-  function onSubmit (e, option) {
+  function handleSubmit (e, option) {
     let options = getOptions(option)
     let optionsStr = getOptionsStr(options)
     if (submitAttribute && submitAttribute.onClick) {
@@ -489,7 +504,7 @@ const PickerDistrict = forwardRef(({
     // 如果设置类型为省市区, 则直接提交
     if (isLeaf()) {
       setTabs(spliceTabs)
-      onSubmit(e, option);
+      handleSubmit(e, option);
       return;
     }
 
@@ -506,7 +521,7 @@ const PickerDistrict = forwardRef(({
           // 返回街道为空直接提交
           if (!Array.isArray(currentStreets) || !currentStreets || !currentStreets.length) {
             setTabs(spliceTabs)
-            onSubmit(e, option)
+            handleSubmit(e, option)
             return
           }
           setList(currentStreets)
@@ -524,7 +539,7 @@ const PickerDistrict = forwardRef(({
         }
         // 街道直接提交
         setTabs(spliceTabs)
-        onSubmit(e, option);
+        handleSubmit(e, option);
         return;
       }
       // 设置下级list
@@ -541,6 +556,17 @@ const PickerDistrict = forwardRef(({
     setTabs(spliceTabs)
     setTabIndex(tabLen)
   }
+
+  // 过滤已经回调的属性
+  function filterProps(props) {
+    if (!props) return {}
+    const { show, caption, onClick, ...otherProps } = props
+    return { ...otherProps }
+  }
+  // 剔除掉onClick事件, 因为在instance时已经回调了
+  const otherSubmitAttribute = filterProps(submitAttribute)
+  const otherCancelAttribute = filterProps(cancelAttribute)
+
   return createPortal(
     <div
       ref={ref}
@@ -551,14 +577,32 @@ const PickerDistrict = forwardRef(({
         data-animation="slideUp"
         {...others}
         className={`picker-district${others.className ? ' ' + others.className : ' popup-animation bottom-center'}${show ? ' active' : ''}`}
-        onClick={onClickPanel}
+        onClick={handleClickContainer}
       >
         <div className="picker-district-header">
-          请选择所在地区
+          {cancelAttribute && cancelAttribute.show && <a
+            {...otherCancelAttribute}
+            className={`picker-district-cancel${
+              cancelAttribute.className ? ' ' + cancelAttribute.className : ''
+            }`}
+          >
+            {cancelAttribute.caption || locale('取消', 'cancel')}
+          </a>}
+          <div className="picker-district-header-title">
+            {locale('请选择所在地区', 'picker_district_title')}
+          </div>
+          {submitAttribute && submitAttribute.show && <a
+            {...otherSubmitAttribute}
+            className={`picker-district-submit${
+              submitAttribute.className ? ' ' + submitAttribute.className : ''
+            }`}
+          >
+            {submitAttribute.caption || locale('完成', 'finish')}
+          </a>}
         </div>
         <div className="picker-district-tabbar">
           {tabs.map((tab, index) => {
-            return <div onClick={() => onClickTab(tab, index)} className={`picker-district-tab${index === tabIndex ? ' active' : ''}`} key={index}>
+            return <div onClick={() => handleClickTab(tab, index)} className={`picker-district-tab${index === tabIndex ? ' active' : ''}`} key={index}>
               {tab.name}
             </div>
           })}

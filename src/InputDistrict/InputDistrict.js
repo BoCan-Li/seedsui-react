@@ -11,10 +11,7 @@ const InputDistrict = forwardRef(({
 
   // Picker
   type = '', // province | city | district | street
-  pickerProps = {
-    maskAttribute: {},
-    submitAttribute: {}
-  },
+  pickerProps = {}, // maskAttribute: {}, submitAttribute: {}
   ...others
 }, ref) =>  {
   let [show, setShow] = useState(false);
@@ -35,10 +32,9 @@ const InputDistrict = forwardRef(({
   // 点击确定按钮
   function onClickSubmit (e, value, options) {
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      pickerProps.submitAttribute.onClick(e, value, options);
-    }
-    // 赋值
-    if (onChange) {
+      // 允许确定错误时中断隐藏
+      if (pickerProps.submitAttribute.onClick(e, value, options) === false) return
+    } else if (onChange) {
       onChange(e, value, options);
     }
     // 隐藏框

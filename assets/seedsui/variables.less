@@ -5911,11 +5911,42 @@ a {
     background-color: white;
     // 动画使用.popup-animation
   }
+  // 头部
   .picker-district-header{
+    .flex;
+    .flex-middle;
+  }
+  .picker-district-header-title{
+    .text-center;
+    .flex-1;
+    font-size: @font-size-lg;
     height: 60px;
     line-height: 60px;
-    text-align: center;
-    font-size: @font-size-lg;
+  }
+  // 按钮
+  .picker-district-submit{
+    display:block;
+    height:@32px;
+    line-height:@32px;
+    margin-right: @8px;
+    padding:0 @5px;
+    color: @picker-button-color;
+    &.disabled{
+      color: @picker-button-disabled-color;
+      pointer-events: none;
+    }
+  }
+  .picker-district-cancel{
+    display:block;
+    height:@32px;
+    line-height:@32px;
+    margin-left: @8px;
+    padding:0 @5px;
+    color: @picker-button-color;
+    &.disabled{
+      color: @picker-button-disabled-color;
+      pointer-events: none;
+    }
   }
   .picker-district-tabbar{
     .flex;

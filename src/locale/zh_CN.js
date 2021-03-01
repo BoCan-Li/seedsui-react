@@ -116,5 +116,6 @@ export default {
   'hint_map_no_container': '地图容器不存在',
   'hint_map_init_timeout': '初始化地图超时, 请检查当前网络是否稳定',
   'hint_map_no_boundary_data': '暂无{0}的边界数据',
-  'radius_of_m': '半径{0}米'
+  'radius_of_m': '半径{0}米',
+  'picker_district_title': '请选择所在地区'
 }

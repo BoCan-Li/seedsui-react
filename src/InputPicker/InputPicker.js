@@ -37,11 +37,9 @@ const InputPicker = forwardRef(({
     if (refEl.current) e.target = refEl.current
     // 确定按钮回调
     if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      pickerProps.submitAttribute.onClick(e, value, options);
-      return;
-    }
-    // 赋值
-    if (onChange) {
+      // 允许确定错误时中断隐藏
+      if (pickerProps.submitAttribute.onClick(e, value, options) === false) return
+    } else if (onChange) {
       onChange(e, value, options);
     }
     // 隐藏框
