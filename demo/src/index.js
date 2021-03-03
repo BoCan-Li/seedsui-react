@@ -6,7 +6,7 @@ import {
 	Titlebar,
   Bridge,
 	Container,
-	Context,
+	Device,
 	MapUtil,
   InputDistrict,
   InputDate
@@ -15,35 +15,38 @@ import {
 import enUS from '../../src/locale/en_US'
 
 function Demo () {
+  useEffect(() => {
+    console.log(Device.platform, Device.platformVersion)
+  }, [])
   // 获取街道
-function getStreet (districtId) {
-  return new Promise((resolve) => {
-    Bridge.showLoading();
-    setTimeout(() => {
-      Bridge.hideLoading();
-      resolve([
-        {
-          "parentid": districtId,
-          "name": "街道1",
-          "id": "1",
-        },
-        {
-          "parentid": districtId,
-          "name": "街道2",
-          "id": "2",
-        }
-      ])
-    }, 500);
-  })
-}
+  function getStreet (districtId) {
+    return new Promise((resolve) => {
+      Bridge.showLoading();
+      setTimeout(() => {
+        Bridge.hideLoading();
+        resolve([
+          {
+            "parentid": districtId,
+            "name": "街道1",
+            "id": "1",
+          },
+          {
+            "parentid": districtId,
+            "name": "街道2",
+            "id": "2",
+          }
+        ])
+      }, 500);
+    })
+  }
 
-const [value, setValue] = useState('');
+  const [value, setValue] = useState('');
 
-function onChange (e, value, selected) {
-  console.log(e.target)
-  console.log(value, selected)
-  setValue(value);
-}
+  function onChange (e, value, selected) {
+    console.log(e.target)
+    console.log(value, selected)
+    setValue(value);
+  }
 
   return <Fragment>
 	<Page>

@@ -39,9 +39,14 @@ var Device = (function () {
   function updatePlatform () {
     if (device === 'pc') {
       platform = 'browser'
-    } else if (ua.indexOf('miniprogram') > -1) {
-      platform = 'miniprogram'
-      platformMatch = ua.match(/micromessenger\/([\w.]*)/)
+    } else if (ua.indexOf('miniprogram') > -1 && ua.indexOf('micromessenger') > -1) {
+      if (ua.indexOf('wxwork') > -1) {
+        platform = 'weworkMiniprogram'
+        platformMatch = ua.match(/wxwork\/([\w.]*)/)
+      } else if (ua.indexOf('micromessenger') > -1) {
+        platform = 'wechatMiniprogram'
+        platformMatch = ua.match(/micromessenger\/([\w.]*)/)
+      }
       if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
     } else if (ua.indexOf('wxwork') > -1) {
       platform = 'wework'
