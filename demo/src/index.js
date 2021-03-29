@@ -8,98 +8,50 @@ import {
 	Container,
 	Device,
 	MapUtil,
-  InputDistrict,
-  InputDate
+  InputDate,
+  NumBox
 } from '../../src'
 
-import enUS from '../../src/locale/en_US'
+
+let interval = null
 
 function Demo () {
-  useEffect(() => {
-    console.log(Device.platform, Device.platformVersion)
-  }, [])
-  // 获取街道
-  function getStreet (districtId) {
-    return new Promise((resolve) => {
-      Bridge.showLoading();
-      setTimeout(() => {
-        Bridge.hideLoading();
-        resolve([
-          {
-            "parentid": districtId,
-            "name": "街道1",
-            "id": "1",
-          },
-          {
-            "parentid": districtId,
-            "name": "街道2",
-            "id": "2",
-          }
-        ])
-      }, 500);
+  const [value, setValue] = useState('1')
+  /*
+  const [count, setCount] = useState(10)
+
+  function handleCountDown () {
+    // interval = setTimeout(() => {
+    //   console.log(count)
+    //   if (count <= 0) {
+    //     clearTimeout(interval)
+    //   } else {
+    //     setCount(count - 1)
+    //     handleCountDown()
+    //   }
+    // }, 1000)
+    setCount((refCount) => {
+      console.log(refCount)
+      return count - 1
     })
+    console.log(count)
   }
-
-  const [value, setValue] = useState('');
-
-  function onChange (e, value, selected) {
-    console.log(e.target)
-    console.log(value, selected)
-    setValue(value);
+  */
+  function handleChange (e, value) {
+    setValue(value)
   }
-
-  return <Fragment>
-	<Page>
+  return <Page>
 		<Header>
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-      <InputDistrict
-        value={value}
-        onChange={onChange}
-        placeholder="请选择"
-        className="border-b"
-        pickerProps={{
-          getStreets: getStreet,
-          cancelAttribute: {
-            show: true
-          },
-          submitAttribute: {
-            show: true,
-            onClick: function (e, value, options) {
-              if (!options.length) {
-                Bridge.showToast('至少选择省份', {mask: false})
-                return false
-              }
-              setValue(value);
-              console.log(e, value, options)
-            }
-          }
-        }}
-      />
-      
-      <InputDate
-        value={value}
-        onChange={onChange}
-        placeholder="请选择"
-        className="border-b"
-        pickerProps={{
-          submitAttribute: {
-            onClick: function (e, value, options) {
-              if (!options.length) {
-                Bridge.showToast('至少选择省份', {mask: false})
-                return false
-              }
-              console.log(e, value, options)
-            }
-          }
-        }}
-      />
+      <InputDate value=""/>
+      {/* {count}
+      <div onClick={handleCountDown}>开始</div> */}
+      {/* <NumBox min={0} value={value} onChange={handleChange}/> */}
     </Container>
   </Page>
-	</Fragment>
 }
-
 
 Bridge.ready(() => {
 	// render(<Demo/>, document.querySelector('#demo'))

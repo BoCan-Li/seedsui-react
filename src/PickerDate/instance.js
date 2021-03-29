@@ -280,7 +280,7 @@ var PickerDate = function (params) {
     addMonthSlot()
     // 日
     s.days = []
-    var currentMaxday = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0).getDate()
+    var currentMaxday = new Date(s.params.defaultYear || nowDate.getFullYear(), s.params.defaultMonth || nowDate.getMonth() + 1, 0).getDate()
     if (s.params.daysData) {
       s.days = Object.clone(s.params.daysData)
     } else {
