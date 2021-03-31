@@ -1,3 +1,3 @@
-import GeoUtil from './GeoUtil.js';
+import GeoUtil from './GeoUtil.js'
 
-export default GeoUtil;
+export default GeoUtil

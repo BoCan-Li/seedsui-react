@@ -1,2 +1,2 @@
-export { default } from './InputPre';
-export * from './InputPre';
+export { default } from './InputPre'
+export * from './InputPre'

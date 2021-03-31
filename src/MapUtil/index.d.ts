@@ -1,2 +1,2 @@
-export { default } from './MapUtil';
-export * from './MapUtil';
+export { default } from './MapUtil'
+export * from './MapUtil'

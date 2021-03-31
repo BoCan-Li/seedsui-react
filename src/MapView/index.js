@@ -1,3 +1,3 @@
-import MapView from './MapView.js';
+import MapView from './MapView.js'
 
-export default MapView;
+export default MapView

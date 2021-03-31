@@ -1,3 +1,3 @@
-import InputSelect from './InputSelect.js';
+import InputSelect from './InputSelect.js'
 
-export default InputSelect;
+export default InputSelect

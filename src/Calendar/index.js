@@ -1,3 +1,3 @@
-import Calendar from './Calendar.js';
+import Calendar from './Calendar.js'
 
-export default Calendar;
+export default Calendar

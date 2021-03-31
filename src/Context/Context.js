@@ -2,13 +2,8 @@ import React from 'react'
 import Instance from './instance'
 import getLocaleValue from './../locale'
 
-function Context({
-  locale = {},
-  language,
-  portal,
-  children
-}) {
-  let data = null;
+function Context({ locale = {}, language, portal, children }) {
+  let data = null
   // 根据语言名称获取locale数据
   // function initLanguageLocale() {
   //   let seedsuiLocale = {};
@@ -48,7 +43,7 @@ function Context({
     >
       {children}
     </Instance.Provider>
-  );
+  )
 }
 
-export default Context;
+export default Context

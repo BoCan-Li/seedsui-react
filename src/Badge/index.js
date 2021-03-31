@@ -1,3 +1,3 @@
-import Badge from './Badge.js';
+import Badge from './Badge.js'
 
-export default Badge;
+export default Badge

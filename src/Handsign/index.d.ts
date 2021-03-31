@@ -1,2 +1,2 @@
-export { default } from './Handsign';
-export * from './Handsign';
+export { default } from './Handsign'
+export * from './Handsign'

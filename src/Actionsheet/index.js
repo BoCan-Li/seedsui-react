@@ -1,3 +1,3 @@
-import Actionsheet from './Actionsheet.js';
+import Actionsheet from './Actionsheet.js'
 
-export default Actionsheet;
+export default Actionsheet

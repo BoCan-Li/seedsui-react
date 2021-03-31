@@ -1,19 +1,25 @@
 // Animate
 var Animate = {
   // requestAnimationFrame兼容
-  requestAF: window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.oRequestAnimationFrame ||
-  window.msRequestAnimationFrame ||
-  function (handler) { return window.setTimeout(handler, 1000 / 60) },
+  requestAF:
+    window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (handler) {
+      return window.setTimeout(handler, 1000 / 60)
+    },
   // requestAnimationFrame兼容
-  cancelAF: window.cancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.mozCancelAnimationFrame ||
-  window.oCancelAnimationFrame ||
-  window.msCancelAnimationFrame ||
-  function (handler) { return window.clearTimeout(handler) },
+  cancelAF:
+    window.cancelAnimationFrame ||
+    window.webkitCancelAnimationFrame ||
+    window.mozCancelAnimationFrame ||
+    window.oCancelAnimationFrame ||
+    window.msCancelAnimationFrame ||
+    function (handler) {
+      return window.clearTimeout(handler)
+    },
   // 动画执行一次后销毁
   one: function (el, aniname) {
     var animExpr = new RegExp('\\s{0,}' + aniname, 'g')
@@ -22,9 +28,13 @@ var Animate = {
     }
     el.className += ' ' + aniname
     if (!el.hasEndEvent) {
-      el.addEventListener('webkitAnimationEnd', function (e) {
-        el.className = el.className.replace(animExpr, '')
-      }, false)
+      el.addEventListener(
+        'webkitAnimationEnd',
+        function (e) {
+          el.className = el.className.replace(animExpr, '')
+        },
+        false
+      )
       el.hasEndEvent = true
     }
   },
@@ -39,7 +49,7 @@ var Animate = {
       }
       clearInterval(interval)
     }, duration || 1000)
-  }
+  },
   // requestAnimationFrame帧率测试
   /* fps: function (callback, duration) {
     var fps = 0
@@ -56,6 +66,6 @@ var Animate = {
     }
     requestAnimationFrame(fpstest)
   } */
-};
+}
 
 export default Animate

@@ -53,7 +53,10 @@ var Dialog = function (params) {
   // Dialog(外层生成的包裹容器)
   s.dialog = null
   // OverflowContainer
-  s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  s.overflowContainer =
+    typeof s.params.overflowContainer === 'string'
+      ? document.querySelector(s.params.overflowContainer)
+      : s.params.overflowContainer
 
   // Mask
   s.updateMask = function () {
@@ -67,11 +70,17 @@ var Dialog = function (params) {
   // Wrapper
   s.updateWrapper = function () {
     // wrapper为注入内容, 必须存在实体DOM, 否则不能工作
-    s.wrapper = typeof s.params.wrapper === 'string' ? document.querySelector(s.params.wrapper) : s.params.wrapper
+    s.wrapper =
+      typeof s.params.wrapper === 'string'
+        ? document.querySelector(s.params.wrapper)
+        : s.params.wrapper
   }
   // Parent
   s.updateParent = function () {
-    s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
+    s.parent =
+      typeof s.params.parent === 'string'
+        ? document.querySelector(s.params.parent)
+        : s.params.parent
     // 没有parent的情况下, 取出wrapper的父级
     if (!s.parent && s.wrapper) {
       s.parent = s.wrapper.parentNode
@@ -83,7 +92,10 @@ var Dialog = function (params) {
     if (!s.dialog) {
       s.dialog = document.createElement('div')
     }
-    s.dialog.setAttribute('class', s.params.dialogClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
+    s.dialog.setAttribute(
+      'class',
+      s.params.dialogClass + (s.params.animationClass ? ' ' + s.params.animationClass : '')
+    )
     s.dialog.setAttribute('style', s.params.dialogCss)
     s.dialog.setAttribute(s.params.animationAttr, s.params.animation)
     s.dialog.style.webkitTransitionDuration = s.params.duration + 'ms'
@@ -130,7 +142,9 @@ var Dialog = function (params) {
     if (s.mask && s.wrapper && s.dialog) {
       s.updateDOM()
     }
-    if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+    if (s.params.mask)
+      s.mask =
+        typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask && s.mask.tagName) {
       s.dialog = s.mask.querySelector('.' + s.params.dialogClass)
       s.updateDOM()
@@ -189,14 +203,16 @@ var Dialog = function (params) {
     s.hideMask()
     s.hideDialog()
     // 显示滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
   }
   s.show = function () {
     s.isHid = false
     s.showMask()
     s.showDialog()
     // 禁用滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
   }
   s.toggle = function () {
     if (s.isHid) {

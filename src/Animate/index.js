@@ -1,3 +1,3 @@
-import Animate from './Animate.js';
+import Animate from './Animate.js'
 
-export default Animate;
+export default Animate

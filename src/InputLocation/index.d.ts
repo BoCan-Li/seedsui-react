@@ -1,2 +1,2 @@
-export { default } from './InputLocation';
-export * from './InputLocation';
+export { default } from './InputLocation'
+export * from './InputLocation'

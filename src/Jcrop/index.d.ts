@@ -1,2 +1,2 @@
-export { default } from './Jcrop';
-export * from './Jcrop';
+export { default } from './Jcrop'
+export * from './Jcrop'

@@ -1,2 +1,2 @@
-export { default } from './Animate';
-export * from './Animate';
+export { default } from './Animate'
+export * from './Animate'

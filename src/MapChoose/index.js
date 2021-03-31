@@ -1,3 +1,3 @@
-import MapChoose from './MapChoose.js';
+import MapChoose from './MapChoose.js'
 
-export default MapChoose;
+export default MapChoose

@@ -1,77 +1,74 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { forwardRef, useRef, useImperativeHandle } from 'react'
 
-export default class BiGauge extends Component {
-  static propTypes = {
-    duration: PropTypes.number, // 时长
-    rotate: PropTypes.number, // 最大270
-    delay: PropTypes.number, // 延时
-    
-    captionAttribute: PropTypes.object,
-    children: PropTypes.node,
-  };
+const BiGauge = forwardRef(
+  (
+    {
+      duration = 1000, // 时长
+      rotate = 0, // 最大270
+      delay = 100, // 延时
 
-  static defaultProps = {
-    duration: 1000,
-    rotate: 0,
-    delay: 100,
-  }
-
-  constructor(props, context) {
-    super(props, context);
-  }
-  getDuration = () => {
-    const {duration, rotate} = this.props;
-    return duration / 270 * rotate;
-  }
-  getRotate = () => {
-    const {rotate} = this.props;
-    return rotate > 270 ? 270 : rotate;
-  }
-  getBgLvl = () => {
-    const {rotate} = this.props;
-    const lvl = Math.round(rotate / 27)
-    return lvl > 10 ? 10 : 1;
-  }
-  // 只有延迟100毫秒动画才会生效
-  aniRotate = () => {
-    // 时长
-    const duration = this.getDuration();
-    // 旋转
-    const rotate = this.getRotate();
-    // 背景
-    const bgLvl = 'bg' + this.getBgLvl();
-    setTimeout(() => {
-      if (this.$el) {
-        this.$el.style.WebkitAnimationDuration = `${duration}ms`;
-        this.$el.classList.add(bgLvl);
-      }
-      if (this.$elPointer) {
-        this.$elPointer.style.WebkitTransitionDuration = `${duration}ms`;
-        this.$elPointer.style.WebkitTransform = `rotate(${rotate}deg)`;
-      }
-    }, this.props.delay);
-  }
-  render() {
-    const {
-      duration,
-      rotate,
-      delay,
-      captionAttribute = {},
+      captionAttribute,
       children,
       ...others
-    } = this.props;
+    },
+    ref
+  ) => {
+    const rootRef = useRef(null)
+    const pointerRef = useRef(null)
+    useImperativeHandle(ref, () => {
+      return rootRef.current
+    })
+    function getDuration() {
+      return (duration / 270) * rotate
+    }
+    function getRotate() {
+      return rotate > 270 ? 270 : rotate
+    }
+    function getBgLvl() {
+      const lvl = Math.round(rotate / 27)
+      return lvl > 10 ? 10 : 1
+    }
+    // 只有延迟100毫秒动画才会生效
+    function aniRotate() {
+      // 时长
+      const duration = getDuration()
+      // 旋转
+      const rotate = getRotate()
+      // 背景
+      const bgLvl = 'bg' + getBgLvl()
+      setTimeout(() => {
+        if (rootRef.current) {
+          rootRef.current.style.WebkitAnimationDuration = `${duration}ms`
+          rootRef.current.classList.add(bgLvl)
+        }
+        if (pointerRef.current) {
+          pointerRef.current.style.WebkitTransitionDuration = `${duration}ms`
+          pointerRef.current.style.WebkitTransform = `rotate(${rotate}deg)`
+        }
+      }, delay)
+    }
     // 动画旋转
-    this.aniRotate();
+    aniRotate()
     return (
-      <div ref={(el) => {this.$el = el;}} {...others} className={`bi-gauge-box${others.className ? ' ' + others.className : ''}`}>
+      <div
+        ref={rootRef}
+        {...others}
+        className={`bi-gauge-box${others.className ? ' ' + others.className : ''}`}
+      >
         <div className="bi-gauge">
-          <div ref={(el) => {this.$elPointer = el;}} className="bi-gauge-pointer"></div>
-          <div {...captionAttribute} className={`bi-gauge-caption${captionAttribute.className ? ' ' + captionAttribute.className : ''}`}>
+          <div ref={pointerRef} className="bi-gauge-pointer"></div>
+          <div
+            {...captionAttribute}
+            className={`bi-gauge-caption${
+              captionAttribute.className ? ' ' + captionAttribute.className : ''
+            }`}
+          >
             {children}
           </div>
         </div>
       </div>
-    );
+    )
   }
-}
+)
+
+export default BiGauge

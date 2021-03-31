@@ -1,3 +1,3 @@
-import Camera from './Camera.js';
+import Camera from './Camera.js'
 
-export default Camera;
+export default Camera

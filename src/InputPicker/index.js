@@ -1,3 +1,3 @@
-import InputPicker from './InputPicker.js';
+import InputPicker from './InputPicker.js'
 
-export default InputPicker;
+export default InputPicker

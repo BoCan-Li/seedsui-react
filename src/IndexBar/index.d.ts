@@ -1,2 +1,2 @@
-export { default } from './IndexBar';
-export * from './IndexBar';
+export { default } from './IndexBar'
+export * from './IndexBar'

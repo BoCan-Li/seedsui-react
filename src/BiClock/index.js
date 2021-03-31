@@ -1,3 +1,3 @@
-import BiClock from './BiClock.js';
+import BiClock from './BiClock.js'
 
-export default BiClock;
+export default BiClock

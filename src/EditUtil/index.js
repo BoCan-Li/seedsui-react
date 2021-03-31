@@ -1,3 +1,3 @@
-import EditUtil from './EditUtil.js';
+import EditUtil from './EditUtil.js'
 
-export default EditUtil;
+export default EditUtil

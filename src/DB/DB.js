@@ -1,19 +1,23 @@
 // DB 本地数据库
 var DB = (function () {
-  function checkManifest () {
-    window.addEventListener('updateready', function (e) {
-      console.log('离线缓存状态：' + window.applicationCache.status)
-      if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
-        window.applicationCache.swapCache()
-        if (window.confirm('发现此manifest文件有更新，是否更新？')) {
-          window.location.reload()
+  function checkManifest() {
+    window.addEventListener(
+      'updateready',
+      function (e) {
+        console.log('离线缓存状态：' + window.applicationCache.status)
+        if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+          window.applicationCache.swapCache()
+          if (window.confirm('发现此manifest文件有更新，是否更新？')) {
+            window.location.reload()
+          }
+        } else {
+          console.log('manifest文件没有变化')
         }
-      } else {
-        console.log('manifest文件没有变化')
-      }
-    }, false)
+      },
+      false
+    )
   }
-  function stringifyData (val) {
+  function stringifyData(val) {
     if (typeof val === 'number') {
       return '_number:' + val.toString()
     }
@@ -33,7 +37,7 @@ var DB = (function () {
       return '_json:' + JSON.stringify(val)
     }
   }
-  function parseData (val) {
+  function parseData(val) {
     if (!val) {
       return null
     }
@@ -98,7 +102,7 @@ var DB = (function () {
       var cookieStr = key + '=' + escape(value)
       if (second) {
         var expires = new Date()
-        expires.setTime(expires.getTime() + (second * 1000))
+        expires.setTime(expires.getTime() + second * 1000)
         cookieStr += ';expires=' + expires.toGMTString()
       }
       document.cookie = cookieStr
@@ -106,9 +110,10 @@ var DB = (function () {
     getCookie: function (key) {
       var arrCookie = document.cookie.split('; ')
       //遍历cookie数组, 处理每个cookie对
-      for (var i = 0, item; item = arrCookie[i++];) { // eslint-disable-line
-        var arrItem = item.split("=");
-        //找到名称为userId的cookie，并返回它的值 
+      // eslint-disable-next-line
+      for (var i = 0, item; (item = arrCookie[i++]); ) {
+        var arrItem = item.split('=')
+        //找到名称为userId的cookie，并返回它的值
         if (String(key) === arrItem[0]) {
           return unescape(arrItem[1])
         }
@@ -123,7 +128,7 @@ var DB = (function () {
         document.cookie = key + '=' + val + 'expires=' + expires.toGMTString()
       }
     },
-    clearCookie: function clearCookie () {
+    clearCookie: function clearCookie() {
       alert('抱歉，cookie不可以全部清空!')
     }
   }

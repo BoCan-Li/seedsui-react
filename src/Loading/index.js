@@ -1,3 +1,3 @@
-import Loading from './Loading.js';
+import Loading from './Loading.js'
 
-export default Loading;
+export default Loading

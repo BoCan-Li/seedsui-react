@@ -1,3 +1,3 @@
-import InputStar from './InputStar.js';
+import InputStar from './InputStar.js'
 
-export default InputStar;
+export default InputStar

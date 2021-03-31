@@ -1,3 +1,3 @@
-import MenuTree from './MenuTree.js';
+import MenuTree from './MenuTree.js'
 
-export default MenuTree;
+export default MenuTree

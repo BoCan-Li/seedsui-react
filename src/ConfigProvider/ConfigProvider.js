@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import getLocaleValue from './../locale'
 
@@ -19,13 +19,8 @@ export default class ConfigProvider extends Component {
   }
 
   getChildContext() {
-    let {
-      locale = {},
-      language,
-      portal,
-      onChange
-    } = this.props;
-    let data = null;
+    let { locale = {}, language, portal, onChange } = this.props
+    let data = null
     // 根据语言名称获取locale数据
     // function initLanguageLocale() {
     //   let seedsuiLocale = {};

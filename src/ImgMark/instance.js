@@ -80,7 +80,7 @@ var Imgmark = function (container, params) {
       else s.ctx.strokeStyle = s.params.strokeStyle
       if (item.lineWidth) s.ctx.lineWidth = item.lineWidth
       else s.ctx.lineWidth = s.params.lineWidth
-      if (item.setLineDash) s.ctx.setLineDash(item.setLineDash);
+      if (item.setLineDash) s.ctx.setLineDash(item.setLineDash)
       s.ctx.strokeRect(item.x1, item.y1, item.x2 - item.x1, item.y2 - item.y1)
     }
   }
@@ -126,7 +126,7 @@ var Imgmark = function (container, params) {
     s.container.classList.remove(s.params.activeClass)
     // Callback
     s.event = e
-    if (s.params.onError) s.params.onError(e, {errMsg: ''})
+    if (s.params.onError) s.params.onError(e, { errMsg: '' })
   }
   // 主函数
   s.init = function () {

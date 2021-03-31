@@ -1,3 +1,3 @@
-import jsonp from './jsonp.js';
+import jsonp from './jsonp.js'
 
-export default jsonp;
+export default jsonp

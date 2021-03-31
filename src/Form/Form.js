@@ -107,9 +107,13 @@ var Form = function (container, params) {
   }
   // callback表单提交
   if (s.params.onSubmit) {
-    this.container.addEventListener('submit', function (e) {
-      s.params.onSubmit(e, s.selected)
-    }, false)
+    this.container.addEventListener(
+      'submit',
+      function (e) {
+        s.params.onSubmit(e, s.selected)
+      },
+      false
+    )
   }
 }
 

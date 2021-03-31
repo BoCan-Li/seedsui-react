@@ -1,3 +1,3 @@
-import Jcrop from './Jcrop.js';
+import Jcrop from './Jcrop.js'
 
-export default Jcrop;
+export default Jcrop

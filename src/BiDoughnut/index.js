@@ -1,3 +1,3 @@
-import BiDoughnut from './BiDoughnut.js';
+import BiDoughnut from './BiDoughnut.js'
 
-export default BiDoughnut;
+export default BiDoughnut

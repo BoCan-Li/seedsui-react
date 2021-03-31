@@ -1,3 +1,3 @@
-import LotteryWheel from './LotteryWheel.js';
+import LotteryWheel from './LotteryWheel.js'
 
-export default LotteryWheel;
+export default LotteryWheel

@@ -9,7 +9,7 @@ var ImgLazy = function (params) {
     threshold: 300, // 滚动加载时，显示区域扩张上下像素
     loadAttr: 'data-load-src', // 加载地址
     errorAttr: 'data-error-src', // 错误地址
-    completeAttr: 'data-complete', // 完成加载, data-complete=0代表加载错误, =1代码加载正确
+    completeAttr: 'data-complete' // 完成加载, data-complete=0代表加载错误, =1代码加载正确
   }
   params = params || {}
   for (var def in defaults) {
@@ -20,7 +20,10 @@ var ImgLazy = function (params) {
   var s = this
   s.params = params
   // Container
-  s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  s.overflowContainer =
+    typeof s.params.overflowContainer === 'string'
+      ? document.querySelector(s.params.overflowContainer)
+      : s.params.overflowContainer
   if (!s.overflowContainer) {
     console.log('SeedsUI Error : Dragrefresh overflowContainer不存在，请检查页面中是否有此元素')
     return
@@ -42,7 +45,10 @@ var ImgLazy = function (params) {
   // 元素是否在显示区域内
   s.isInScreen = function (el) {
     var offsetTop = s.getOffsetTop(el)
-    if (offsetTop > s.scrollTop - s.params.threshold && offsetTop < parseInt(s.scrollTop, 10) + parseInt(window.innerHeight, 10)) {
+    if (
+      offsetTop > s.scrollTop - s.params.threshold &&
+      offsetTop < parseInt(s.scrollTop, 10) + parseInt(window.innerHeight, 10)
+    ) {
       return true
     }
     return false
@@ -68,7 +74,7 @@ var ImgLazy = function (params) {
     var target = e.target
     var imgTarget = target.$el
     imgTarget.setAttribute(s.params.completeAttr, '1')
-    
+
     // 渲染图片
     s.render(imgTarget, target.src)
     // console.log('加载图片' + target.src)
@@ -96,7 +102,9 @@ var ImgLazy = function (params) {
   var timer
   var millisec = 300
   s.getScrollTop = function () {
-    return s.overflowContainer === document.body ? document.documentElement.scrollTop : s.overflowContainer.scrollTop
+    return s.overflowContainer === document.body
+      ? document.documentElement.scrollTop
+      : s.overflowContainer.scrollTop
   }
   s.onScroll = function () {
     s.scrollTop = s.getScrollTop()
@@ -121,10 +129,12 @@ var ImgLazy = function (params) {
   -------------------- */
   s.load = function () {
     // 获取所有需要加载的图片
-    s.imgs = [].slice.call(s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']')).filter((n) => {
-      if (n.getAttribute(s.params.loadAttr)) return true
-      return false
-    })
+    s.imgs = [].slice
+      .call(s.overflowContainer.querySelectorAll('[' + s.params.loadAttr + ']'))
+      .filter((n) => {
+        if (n.getAttribute(s.params.loadAttr)) return true
+        return false
+      })
 
     // 队列加载
     if (s.params.load === 'queue') {
@@ -137,7 +147,7 @@ var ImgLazy = function (params) {
       // 图片路径和裂图路径
       var loadSrc = s.imgs[i].getAttribute(s.params.loadAttr)
       var errorSrc = s.imgs[i].getAttribute(s.params.imgErrorAttr) || ''
-      
+
       var flag = true
       if (s.params.load === 'scroll') flag = s.isInScreen(s.imgs[i]) // 滚动加载
       if (flag && !s.imgs[i].getAttribute(s.params.completeAttr)) {
@@ -163,21 +173,29 @@ var ImgLazy = function (params) {
     if (!s.imgs[i]) {
       return
     }
-    
+
     var image = new Image()
     image.$el = s.imgs[i]
     image.src = loadSrc
     image.errorSrc = errorSrc
-    image.addEventListener('load', function (e) {
-      console.log('加载第' + i + '张')
-      s.onLoad(e)
-      s.queue(i++)
-    }, false)
-    image.addEventListener('error', function (e) {
-      console.log('第' + i + '张加载失败')
-      s.onError(e)
-      s.queue(i++)
-    }, false)
+    image.addEventListener(
+      'load',
+      function (e) {
+        console.log('加载第' + i + '张')
+        s.onLoad(e)
+        s.queue(i++)
+      },
+      false
+    )
+    image.addEventListener(
+      'error',
+      function (e) {
+        console.log('第' + i + '张加载失败')
+        s.onError(e)
+        s.queue(i++)
+      },
+      false
+    )
   }
   s.update = function () {
     if (s.params.load === 'scroll') {

@@ -1,2 +1,2 @@
-export { default } from './Dragrefresh';
-export * from './Dragrefresh';
+export { default } from './Dragrefresh'
+export * from './Dragrefresh'

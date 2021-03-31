@@ -6,14 +6,18 @@ var self = null
 
 var Bridge = {
   /**
-  * 定制功能
-  */
+   * 定制功能
+   */
   platform: 'waiqin',
   config: function () {
     self = this
-    document.addEventListener('deviceready', () => {
-      self.addBackPress()
-    }, false)
+    document.addEventListener(
+      'deviceready',
+      () => {
+        self.addBackPress()
+      },
+      false
+    )
   },
   // 判断是否是主页
   isHomePage: function (callback, rule) {
@@ -33,7 +37,9 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function (msg) {
-    wq.wqload.wqBackToLogin(JSON.stringify({message: msg || '您的帐号因正在它处登录, 需要您重新登录'})) // eslint-disable-line
+    wq.wqload.wqBackToLogin(
+      JSON.stringify({ message: msg || '您的帐号因正在它处登录, 需要您重新登录' })
+    ) // eslint-disable-line
   },
   // 打开新的窗口
   openWindow: function (params, callback) {
@@ -62,64 +68,88 @@ var Bridge = {
     document.removeEventListener('backbutton', self.handleCordovaMonitorBack, false) // eslint-disable-line
   },
   /**
-    * 支付宝支付
-    * @param {Object} params
-    * @param {Function} callback
-    * @callback(result) {Object} {code: "0", message: "支付成功"}|{code: "-1", message: "支付失败"}|{code: "-1", message: "数据解析异常"}
-    */
+   * 支付宝支付
+   * @param {Object} params
+   * @param {Function} callback
+   * @callback(result) {Object} {code: "0", message: "支付成功"}|{code: "-1", message: "支付失败"}|{code: "-1", message: "数据解析异常"}
+   */
   alipay: function (params, callback) {
-    wq.wqpay.alipay((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, null, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqpay.alipay(
+      (result) => {
+        if (callback) callback(result)
+      },
+      null,
+      params ? JSON.stringify(params) : null
+    )
   },
   /**
-    * 商联支付
-    * @param {Object} params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
-    * @param {Function} callback 回调
-    */
+   * 商联支付
+   * @param {Object} params {appKey:'', dealerCode:'', orderId:'', payAmount:''}
+   * @param {Function} callback 回调
+   */
   slopenpay: function (params, callback) {
-    wq.wqpay.slopenpay((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, null, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqpay.slopenpay(
+      (result) => {
+        if (callback) callback(result)
+      },
+      null,
+      params ? JSON.stringify(params) : null
+    )
   },
   /**
-    * 大华捷通支付
-    * @param {Object} params {payChannel:'UPPay 云闪付  WXPay微信支付 AliPay 支付宝支付', payData:'服务端获取'}
-    * @param {Function} callback 回调
-    */
+   * 大华捷通支付
+   * @param {Object} params {payChannel:'UPPay 云闪付  WXPay微信支付 AliPay 支付宝支付', payData:'服务端获取'}
+   * @param {Function} callback 回调
+   */
   qmfpay: function (params, callback) {
-    wq.wqpay.qmfpay((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, null, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqpay.qmfpay(
+      (result) => {
+        if (callback) callback(result)
+      },
+      null,
+      params ? JSON.stringify(params) : null
+    )
   },
   /*
-  * 获取APP信息
-  * params: {operation: 'AllInfo'}
-  * */
-  getApp: function (callback, params = {operation: 'AllInfo'}) {
-    wq.wqapp.getApp((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, null, JSON.stringify(params))
+   * 获取APP信息
+   * params: {operation: 'AllInfo'}
+   * */
+  getApp: function (callback, params = { operation: 'AllInfo' }) {
+    // eslint-disable-next-line
+    wq.wqapp.getApp(
+      (result) => {
+        if (callback) callback(result)
+      },
+      null,
+      JSON.stringify(params)
+    )
   },
   /**
-    * 分享文本
-    * @param {Object} params
-    * {
-    * title: '标题(仅ios支持)',
-    * desc: '副标题(仅ios支持)',
-    * link: '链接(仅ios支持)',
-    * text: '文本(安卓只支持发送文本)',
-    * }
-    * @param {Function} callback 回调
-    */
-   shareText: function (params, callback) {
-    wq.wqsocial.wqWXSocialWithUrl((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, JSON.stringify({
-      title: params.title,
-      url: params.link,
-      description: params.desc
-    }))
+   * 分享文本
+   * @param {Object} params
+   * {
+   * title: '标题(仅ios支持)',
+   * desc: '副标题(仅ios支持)',
+   * link: '链接(仅ios支持)',
+   * text: '文本(安卓只支持发送文本)',
+   * }
+   * @param {Function} callback 回调
+   */
+  shareText: function (params, callback) {
+    // eslint-disable-next-line
+    wq.wqsocial.wqWXSocialWithUrl(
+      (result) => {
+        if (callback) callback(result)
+      },
+      JSON.stringify({
+        title: params.title,
+        url: params.link,
+        description: params.desc
+      })
+    )
   },
   /* -----------------------------------------------------
     文件操作
@@ -133,9 +163,13 @@ var Bridge = {
   })
   */
   isExistsFile: function (params, callback) {
-    wq.wqio.verifyFileHasExist((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqio.verifyFileHasExist(
+      (result) => {
+        if (callback) callback(result)
+      },
+      params ? JSON.stringify(params) : null
+    )
   },
   /* // 附件下载
   downloadFile({
@@ -147,9 +181,13 @@ var Bridge = {
   
   }) */
   downloadFile: function (params, callback) {
-    wq.wqio.downloadFile((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqio.downloadFile(
+      (result) => {
+        if (callback) callback(result)
+      },
+      params ? JSON.stringify(params) : null
+    )
   },
   /* // 附件打开
   openFile({
@@ -158,9 +196,13 @@ var Bridge = {
   
   }） */
   openFile: function (params, callback) {
-    wq.wqio.openFile((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null)
+    // eslint-disable-next-line
+    wq.wqio.openFile(
+      (result) => {
+        if (callback) callback(result)
+      },
+      params ? JSON.stringify(params) : null
+    )
   },
   /* // 附件转为base64
   wqUrlToBase64({
@@ -170,33 +212,46 @@ var Bridge = {
   
   }） */
   wqUrlToBase64: function (params, callback) {
-    wq.wqphoto.wqUrlToBase64((result) => { // eslint-disable-line
-      if (callback) callback(result)
-    }, params ? JSON.stringify(params) : null);
+    // eslint-disable-next-line
+    wq.wqphoto.wqUrlToBase64(
+      (result) => {
+        if (callback) callback(result)
+      },
+      params ? JSON.stringify(params) : null
+    )
   },
   /**
-    * 文件操作: 预览文件
-    * @param {Object} params
-    * params: {
-    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
-    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
-    *  size: 1048576 // 需要预览文件的字节大小(必填)
-    * }
-    */
+   * 文件操作: 预览文件
+   * @param {Object} params
+   * params: {
+   *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+   *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+   *  size: 1048576 // 需要预览文件的字节大小(必填)
+   * }
+   */
   previewFile: function (params) {
     if (!params) {
       console.warn('[SeedsUI cordova内核]previewFile:fail没有传入参数')
       return
     }
-    wq.wqio.openFile((res) => { // eslint-disable-line
-      if (res.flag === '1') {
-        if (params.success) params.success({errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`})
-      } else {
-        if (params.fail) params.fail({errMsg: `previewFile:fail${res.msg}`})
-      }
-    }, params ? JSON.stringify({
-      filePath: params.url
-    }) : null)
+    // eslint-disable-next-line
+    wq.wqio.openFile(
+      (res) => {
+        if (res.flag === '1') {
+          if (params.success)
+            params.success({
+              errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`
+            })
+        } else {
+          if (params.fail) params.fail({ errMsg: `previewFile:fail${res.msg}` })
+        }
+      },
+      params
+        ? JSON.stringify({
+            filePath: params.url
+          })
+        : null
+    )
   },
   /* -----------------------------------------------------
     视频播放
@@ -205,21 +260,24 @@ var Bridge = {
   previewVideo: function (params = {}) {
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast('视频播放功能需要升级至6.2.2及以上的客户端', {mask: false})
+      self.showToast('视频播放功能需要升级至6.2.2及以上的客户端', { mask: false })
       return
     }
-    wq.wqload.wqOpenCustomerPager(JSON.stringify({ // eslint-disable-line
-      IOSViewController: 'JNCVideoPlayerVC',
-      androidUIR: 'com.waiqin365.lightapp.jiannanchun.VideoPlayActivity',
-      androidParma: {
-        videoUrl: params.src,
-        title: params.title || '视频播放'
-      },
-      IOSParma: {
-        videoUrl: params.src,
-        title: params.title || '视频播放'
-      }
-    }))
+    // eslint-disable-next-line
+    wq.wqload.wqOpenCustomerPager(
+      JSON.stringify({
+        IOSViewController: 'JNCVideoPlayerVC',
+        androidUIR: 'com.waiqin365.lightapp.jiannanchun.VideoPlayActivity',
+        androidParma: {
+          videoUrl: params.src,
+          title: params.title || '视频播放'
+        },
+        IOSParma: {
+          videoUrl: params.src,
+          title: params.title || '视频播放'
+        }
+      })
+    )
   },
   /* -----------------------------------------------------
     视频录制
@@ -229,15 +287,19 @@ var Bridge = {
   videoRecord: function (params = {}) {
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(locale('视频录制功能需要升级至6.2.2及以上的客户端', 'hint_video_record_version'), {mask: false})
+      self.showToast(
+        locale('视频录制功能需要升级至6.2.2及以上的客户端', 'hint_video_record_version'),
+        { mask: false }
+      )
       return
     }
-    wq.wqjnc.videoRecord((res) => { // eslint-disable-line
-      if (res.result === '1'){
+    // eslint-disable-next-line
+    wq.wqjnc.videoRecord((res) => {
+      if (res.result === '1') {
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: 'videoRecord:录制失败'})
-        else self.showToast(locale('录制失败', 'hint_video_record_version'), {mask: false})
+        if (params.fail) params.fail({ errMsg: 'videoRecord:录制失败' })
+        else self.showToast(locale('录制失败', 'hint_video_record_version'), { mask: false })
       }
     }, JSON.stringify(params))
   },
@@ -249,15 +311,19 @@ var Bridge = {
   videoUpload: function (params = {}) {
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(locale('视频上传功能需要升级至6.2.2及以上的客户端', 'hint_video_upload_version'), {mask: false})
+      self.showToast(
+        locale('视频上传功能需要升级至6.2.2及以上的客户端', 'hint_video_upload_version'),
+        { mask: false }
+      )
       return
     }
-    wq.wqjnc.videoUpload((res) => { // eslint-disable-line
-      if (res.result === '1'){
+    // eslint-disable-next-line
+    wq.wqjnc.videoUpload((res) => {
+      if (res.result === '1') {
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: 'videoUpload:上传失败'})
-        else self.showToast(locale('上传失败', 'hint_upload_failed'), {mask: false})
+        if (params.fail) params.fail({ errMsg: 'videoUpload:上传失败' })
+        else self.showToast(locale('上传失败', 'hint_upload_failed'), { mask: false })
       }
     }, JSON.stringify(params))
   },
@@ -269,14 +335,20 @@ var Bridge = {
   videoInfo: function (params = {}) {
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(locale('视频功能需要升级至6.2.2及以上的客户端', 'hint_video_info_version'), {mask: false})
+      self.showToast(locale('视频功能需要升级至6.2.2及以上的客户端', 'hint_video_info_version'), {
+        mask: false
+      })
       return
     }
-    wq.wqjnc.videoInfo((res) => { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqjnc.videoInfo((res) => {
       if (res.result === '1') {
         if (params.success) params.success(res)
       } else {
-        if (params.fail) params.fail({errMsg: `videoInfo:${locale('未查到此视频信息', 'hint_video_info_failed')}`})
+        if (params.fail)
+          params.fail({
+            errMsg: `videoInfo:${locale('未查到此视频信息', 'hint_video_info_failed')}`
+          })
       }
     }, JSON.stringify(params))
   },
@@ -286,26 +358,40 @@ var Bridge = {
   ----------------------------------------------------- */
   scanQRCode: function (params = {}) {
     self = this
-    wq.wqhardware.getQrCode((res) => { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqhardware.getQrCode((res) => {
       if (res && res.qrCode) {
         var wqRes = res
         wqRes.resultStr = res.qrCode
         if (params && params.success) params.success(wqRes)
       } else {
-        if (params.fail) params.fail({errMsg: `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`})
-        else self.showToast(`scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`, {mask: false})
+        if (params.fail)
+          params.fail({
+            errMsg: `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale(
+              '请稍后重试',
+              'hint_try_again_later'
+            )}`
+          })
+        else
+          self.showToast(
+            `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale(
+              '请稍后重试',
+              'hint_try_again_later'
+            )}`,
+            { mask: false }
+          )
       }
     })
   },
   /**
-    * 获取当前地理位置
-    * @param {Object} params
-    * params: {
-    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * cache {Number}: 默认60秒缓存防重复定位
-    * }
-    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
-    */
+   * 获取当前地理位置
+   * @param {Object} params
+   * params: {
+   * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+   * cache {Number}: 默认60秒缓存防重复定位
+   * }
+   * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+   */
   /* -----------------------------------------------------
     获取当前地理位置 转为与微信的api一致, 原api如下:
     外勤365默认使用国测局'gcj02'定位,没有参数控制
@@ -349,7 +435,8 @@ var Bridge = {
     self.locationTask = []
     console.log('调用定位...')
     // 调用定位
-    wq.wqlocation.getLocationBackground((res) => { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqlocation.getLocationBackground((res) => {
       if (res && res.wqLatitude) {
         let result = res
         // 对结果进行格式化
@@ -366,16 +453,24 @@ var Bridge = {
         // result.street = res.street
         result.fake = res.mokelocation === 'true' || res.mokelocation === true
         // 将位置信息存储到cookie中60秒
-        if (params.cache) DB.setCookie('app_location', JSON.stringify(result) , params.cache || 60)
+        if (params.cache) DB.setCookie('app_location', JSON.stringify(result), params.cache || 60)
         if (params.success) params.success(result)
         self.getLocationTask(result)
       } else {
-        let res = {errMsg: `getLocation:fail${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`}
+        let res = {
+          errMsg: `getLocation:fail${locale(
+            '定位失败,请检查定位权限是否开启',
+            'hint_location_failed'
+          )}`
+        }
         if (params.fail) params.fail(res)
-        else self.showToast(locale('定位失败, 请检查定位权限是否开启', 'hint_location_failed'), {mask: false})
+        else
+          self.showToast(locale('定位失败, 请检查定位权限是否开启', 'hint_location_failed'), {
+            mask: false
+          })
         self.getLocationTask(res)
       }
-    }, JSON.stringify({locationType: '1'})) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
+    }, JSON.stringify({ locationType: '1' })) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
   /* -----------------------------------------------------
     获取当前地理位置带地图 转为与微信的api一致, 原api如下:
@@ -398,7 +493,8 @@ var Bridge = {
   ----------------------------------------------------- */
   getLocationMap: function (params = {}) {
     self = this
-    wq.wqlocation.getLocationMap((res) => { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqlocation.getLocationMap((res) => {
       if (res && res.wqLatitude) {
         let result = res
         // 对结果进行格式化
@@ -416,10 +512,20 @@ var Bridge = {
         result.fake = res.mokelocation === 'true' || res.mokelocation === true
         if (params.success) params.success(result)
       } else {
-        if (params.fail) params.fail({errMsg: `getLocationMap:fail${locale('定位失败, 请检查外勤365定位权限是否开启', 'hint_location_map_failed')}`})
-        else self.showToast(locale('定位失败, 请检查外勤365定位权限是否开启', 'hint_location_map_failed'), {mask: false})
+        if (params.fail)
+          params.fail({
+            errMsg: `getLocationMap:fail${locale(
+              '定位失败, 请检查外勤365定位权限是否开启',
+              'hint_location_map_failed'
+            )}`
+          })
+        else
+          self.showToast(
+            locale('定位失败, 请检查外勤365定位权限是否开启', 'hint_location_map_failed'),
+            { mask: false }
+          )
       }
-    }, JSON.stringify(Object.assign({editable: '1'}, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
+    }, JSON.stringify(Object.assign({ editable: '1' }, params))) // "0"双定位百度优先，"1"双定位高德优先，"2"单百度定位，"3"单高德定位
   },
   /**
     * 拍照、本地选图
@@ -503,20 +609,25 @@ var Bridge = {
       chooseParams.scene = params.scene || 0
     }
     console.log('外勤cordova内核chooseImage', chooseParams)
-    wq.wqphoto.getPhoto((result) => { // eslint-disable-line
-      if (params && params.success) {
-        // 格式化返回结果
-        var res = {
-          sourceType: operation === '0' ? 'camera' : 'album',
-          errMsg: 'chooseImage:ok',
-          localIds: result.map((item) => {
-            return item.src
-          }),
-          originRes: result
+    // eslint-disable-next-line
+    wq.wqphoto.getPhoto(
+      (result) => {
+        if (params && params.success) {
+          // 格式化返回结果
+          var res = {
+            sourceType: operation === '0' ? 'camera' : 'album',
+            errMsg: 'chooseImage:ok',
+            localIds: result.map((item) => {
+              return item.src
+            }),
+            originRes: result
+          }
+          params.success(res)
         }
-        params.success(res)
-      }
-    }, null, JSON.stringify(chooseParams))
+      },
+      null,
+      JSON.stringify(chooseParams)
+    )
   },
   /**
     * 照片上传
@@ -531,23 +642,27 @@ var Bridge = {
   uploadImage: function (params = {}) {
     self = this
     if (!params.uploadDir) {
-      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), {mask: false})
-      return;
+      self.showToast(locale('没有上传目录', 'hint_no_upload_dir'), { mask: false })
+      return
     }
     if (!params.localId || Object.isEmptyObject(params.localId)) {
-      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
-      return;
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), { mask: false })
+      return
     }
-    let filePathList = [{
-      path: params.localId
-    }]
+    let filePathList = [
+      {
+        path: params.localId
+      }
+    ]
     if (params.ext && params.ext.isAutoCheck === '1') {
-      filePathList = [{
-        isAI: '1',
-        path: params.localeId
-      }]
+      filePathList = [
+        {
+          isAI: '1',
+          path: params.localeId
+        }
+      ]
     }
-    
+
     // ext参数: isAutoCheck: '0'/'1'是否自动识别|cmId: 客户Id|appId：应用Id|menuId: 菜单Id(必填)|funcId: 表单Id
     let menuId = Device.getUrlParameter('menuId') || ''
     // 格式化params
@@ -563,7 +678,10 @@ var Bridge = {
     console.log('外勤Cordova内核上传', uploadParams)
     wq.wqphoto.startUpload(JSON.stringify(uploadParams)) // eslint-disable-line
     // 截取路径
-    var serverId = params.localId.substring(params.localId.lastIndexOf('/') + 1, params.localId.length)
+    var serverId = params.localId.substring(
+      params.localId.lastIndexOf('/') + 1,
+      params.localId.length
+    )
     if (params.success) {
       params.success({
         errMsg: 'uploadImage:ok',
@@ -574,27 +692,27 @@ var Bridge = {
     }
   },
   /**
-    * 图片预览
-    * @param {Object} params
-    * {
-    * urls:[],
-    * current:'当前显示的资源序号或者当前资源的url链接',
-    * }
-    */
+   * 图片预览
+   * @param {Object} params
+   * {
+   * urls:[],
+   * current:'当前显示的资源序号或者当前资源的url链接',
+   * }
+   */
   previewImage: function (params) {
     self = this
     if (!params.urls || !params.urls.length) {
-      self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), {mask: false})
+      self.showToast(locale('没有预览图片地址', 'hint_preview_image_must_urls'), { mask: false })
       return
     }
     // 格式化index
     var position = 0
     if (params && params.index) position = params.index
     if (typeof params.current === 'number') {
-      position = params.current;
+      position = params.current
     } else if (typeof params.current === 'string') {
       for (let [index, source] of params.urls.entries()) {
-        if (source.src === params.current) position = index;
+        if (source.src === params.current) position = index
       }
     }
     // 格式化urls
@@ -621,31 +739,37 @@ var Bridge = {
       success: func(res)
     * }
     */
-   uploadFile: function (params = {}) {
+  uploadFile: function (params = {}) {
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {mask: false})
+      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_upload_file_version'), {
+        mask: false
+      })
       return
     }
     if (!params.localId) {
-      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), {mask: false})
+      self.showToast(locale('没有上传地址', 'hint_no_upload_localeid'), { mask: false })
       return
     }
-    let localIds = params.localId.split(':');
+    let localIds = params.localId.split(':')
     if (localIds.length !== 2) {
-      self.showToast(locale('localeId错误', 'hint_error_localeid'), {mask: false})
+      self.showToast(locale('localeId错误', 'hint_error_localeid'), { mask: false })
       return
     }
-    window.wq.wqio.uploadFile(JSON.stringify({ // 拍摄完后开始上传文件
-      filePathList: [{path: params[1], fileAlias: params[0]}],
-      url: params.uploadDir
-    }))
-    setTimeout(() => {
-      if (params.success) params.success({
-        errMsg: 'uploadFile:ok',
-        filePath: params[1],
-        fileName: params[0]
+    window.wq.wqio.uploadFile(
+      JSON.stringify({
+        // 拍摄完后开始上传文件
+        filePathList: [{ path: params[1], fileAlias: params[0] }],
+        url: params.uploadDir
       })
+    )
+    setTimeout(() => {
+      if (params.success)
+        params.success({
+          errMsg: 'uploadFile:ok',
+          filePath: params[1],
+          fileName: params[0]
+        })
     }, 3000)
   },
   /**
@@ -662,29 +786,38 @@ var Bridge = {
   chooseVideo: function (argParams = {}) {
     const self = this
     if (Device.compareVersion(Device.platformVersion, '6.6.0') < 0) {
-      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_choose_video_version'), {mask: false})
+      self.showToast(locale('此功能需要升级至6.6.0及以上的客户端', 'hint_choose_video_version'), {
+        mask: false
+      })
       return
     }
-    window.wq.wqphoto.getVideo(res => {
-      res.localIds = [res.tempPath]
-      // 标准化回调参数: 将tempFilePath改为localId
-      if (res.path) {
-        res.localIds = [res.name + ':' + res.path]
-      }
-      if (argParams.success) argParams.success(res)
-    }, null, JSON.stringify({ maxtime: argParams.maxDuration || 10}))
+    window.wq.wqphoto.getVideo(
+      (res) => {
+        res.localIds = [res.tempPath]
+        // 标准化回调参数: 将tempFilePath改为localId
+        if (res.path) {
+          res.localIds = [res.name + ':' + res.path]
+        }
+        if (argParams.success) argParams.success(res)
+      },
+      null,
+      JSON.stringify({ maxtime: argParams.maxDuration || 10 })
+    )
   },
   /* -----------------------------------------------------
     人员插件
     @params {success: fn}
   ----------------------------------------------------- */
-  getContactMore: function (params = {}) { // {selectedIds: 'id,id', aclType: '0只能看到下属 不传或者其他的参数为全部人员,默认为空', success([{id: '', name: ''}])}
-    wq.wqcontact.getContactMore(function (args) { // eslint-disable-line
+  getContactMore: function (params = {}) {
+    // {selectedIds: 'id,id', aclType: '0只能看到下属 不传或者其他的参数为全部人员,默认为空', success([{id: '', name: ''}])}
+    // eslint-disable-next-line
+    wq.wqcontact.getContactMore(function (args) {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   getContact: function (params = {}) {
-    wq.wqcontact.getContact((args) => { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqcontact.getContact((args) => {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
@@ -700,33 +833,44 @@ var Bridge = {
     【6】获取当前人所属的经销商的上级经销商
     setEmployeeId: '1'自动补充semployeeId
   ----------------------------------------------------- */
-  getCustomerMore: function (params = {}) { // {isonline: '1.在线0.离线', selectedIds: 'id,id', setEmployeeId: '1', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', success([{id: '', name: ''}])}
-    wq.wqcustomer.getCustomerMore(function (args) { // eslint-disable-line
+  getCustomerMore: function (params = {}) {
+    // {isonline: '1.在线0.离线', selectedIds: 'id,id', setEmployeeId: '1', tradeType: '1客户 2经销商 3门店,默认1', superTradeType: '2经销商,指门店上级经销商默认无', hiddenAdd: '隐藏添加按钮,默认false', dms_type: 'dms类型', success([{id: '', name: ''}])}
+    // eslint-disable-next-line
+    wq.wqcustomer.getCustomerMore(function (args) {
       if (params.success) params.success(args)
-    }, JSON.stringify(Object.assign({hiddenAdd: true}, params)));
+    }, JSON.stringify(Object.assign({ hiddenAdd: true }, params)))
   },
   getCustomer: function (params = {}) {
-    wq.wqcustomer.getCustomer(function (args) { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqcustomer.getCustomer(function (args) {
       if (params.success) params.success(args)
-    }, JSON.stringify(Object.assign({hiddenAdd: true}, params)))
+    }, JSON.stringify(Object.assign({ hiddenAdd: true }, params)))
   },
-  getCustomerType: function (params = {}) { // {id: 'id', name: 'name', success({id: '', name: ''})}
-    wq.wqcustomer.getCustomerType(function (args) { // eslint-disable-line
+  getCustomerType: function (params = {}) {
+    // {id: 'id', name: 'name', success({id: '', name: ''})}
+    // eslint-disable-next-line
+    wq.wqcustomer.getCustomerType(function (args) {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
-  getCustomerAreaMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
+  getCustomerAreaMore: function (params = {}) {
+    // {selectedIds: 'id,id', success([{id: '', name: ''}])}
     self = this
     if (Device.compareVersion(Device.platformVersion, '6.2.2') < 0) {
-      self.showToast(locale('此功能需要升级至6.2.2及以上的客户端', 'hint_get_customer_area_more_version'), {mask: false})
+      self.showToast(
+        locale('此功能需要升级至6.2.2及以上的客户端', 'hint_get_customer_area_more_version'),
+        { mask: false }
+      )
       return
     }
-    wq.wqcustomer.getCustomerAreaMore(function (args) { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqcustomer.getCustomerAreaMore(function (args) {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
   getCustomerArea: function (params = {}) {
-    wq.wqcustomer.getCustomerArea(function (args) { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqcustomer.getCustomerArea(function (args) {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
@@ -734,13 +878,16 @@ var Bridge = {
     部门插件
     @params: {selectedIds: '',success: fn}
   ----------------------------------------------------- */
-  getDepartmentMore: function (params = {}) { // {selectedIds: 'id,id', success([{id: '', name: ''}])}
-    wq.wqdepartment.getDepartmentMore(function (args) { // eslint-disable-line
+  getDepartmentMore: function (params = {}) {
+    // {selectedIds: 'id,id', success([{id: '', name: ''}])}
+    // eslint-disable-next-line
+    wq.wqdepartment.getDepartmentMore(function (args) {
       if (params.success) params.success(args)
-    }, JSON.stringify(params));
+    }, JSON.stringify(params))
   },
   getDepartment: function (params = {}) {
-    wq.wqdepartment.getDepartment(function (args) { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqdepartment.getDepartment(function (args) {
       if (params.success) params.success(args)
     }, JSON.stringify(params))
   },
@@ -760,22 +907,27 @@ var Bridge = {
     }
   ----------------------------------------------------- */
   getGoods: function (params = {}) {
-    wq.wqproduct.wqSelectSingleProduct(function (args) { // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqproduct.wqSelectSingleProduct(function (args) {
       if (params.success) params.success(args)
-    }, JSON.stringify(params));
+    }, JSON.stringify(params))
   },
   /* -----------------------------------------------------
     打开原生窗口
     @params {ios: {url: '', params: {}}, android: {url: '', params: {}}}默认为打开一个webview页面
   ----------------------------------------------------- */
-  openNativePage: function (params = {ios: {}, android: {}}) {
+  openNativePage: function (params = { ios: {}, android: {} }) {
     self = this
     if (!params.ios.url) {
-      self.showToast(locale('ios参数url不能为空', 'hint_open_native_page_must_ios_url'), {mask: false})
+      self.showToast(locale('ios参数url不能为空', 'hint_open_native_page_must_ios_url'), {
+        mask: false
+      })
       return
     }
     if (!params.android.url) {
-      self.showToast(locale('android参数url不能为空', 'hint_open_native_page_must_android_url'), {mask: false})
+      self.showToast(locale('android参数url不能为空', 'hint_open_native_page_must_android_url'), {
+        mask: false
+      })
       return
     }
     window.wq.wqload.wqOpenCustomerPager({

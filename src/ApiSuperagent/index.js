@@ -1,3 +1,3 @@
-import ApiSuperagent from './ApiSuperagent.js';
+import ApiSuperagent from './ApiSuperagent.js'
 
-export default ApiSuperagent;
+export default ApiSuperagent

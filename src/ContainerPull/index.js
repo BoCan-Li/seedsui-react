@@ -1,3 +1,3 @@
-import ContainerPull from './ContainerPull.js';
+import ContainerPull from './ContainerPull.js'
 
-export default ContainerPull;
+export default ContainerPull

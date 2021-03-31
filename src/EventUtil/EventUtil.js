@@ -1,13 +1,13 @@
 //  EventUtil 事件函数
 var EventUtil = (function () {
   /**
-    * 多次点击事件
-    * @param {DOM} element 目标元素
-    * @param {String} type 事件名称, 此处固定为'countclick'
-    * @param {Function} handler 句柄, handler({code(1成功0失败): '1'或'0', count(点击次数): Number, ...e})
-    * @param {Boolean} isDetach 是否移除绑定事件
-    * @param {Object} params 定义配置, 配置为: {count(点击次数): Number, timeout(超时时长): Number}
-    */
+   * 多次点击事件
+   * @param {DOM} element 目标元素
+   * @param {String} type 事件名称, 此处固定为'countclick'
+   * @param {Function} handler 句柄, handler({code(1成功0失败): '1'或'0', count(点击次数): Number, ...e})
+   * @param {Boolean} isDetach 是否移除绑定事件
+   * @param {Object} params 定义配置, 配置为: {count(点击次数): Number, timeout(超时时长): Number}
+   */
   var _countClickEventHandler = function (e) {
     // 解析参数
     var target = e.currentTarget
@@ -40,10 +40,10 @@ var EventUtil = (function () {
     element.timeout = params && params.timeout ? params.timeout : 5000 // 点击间隔秒数
     element.handler = handler
     // 添加或移除事件
-    function attach () {
+    function attach() {
       element.addEventListener('click', _countClickEventHandler, false)
     }
-    function detach () {
+    function detach() {
       element.removeEventListener('click', _countClickEventHandler, false)
     }
     if (isDetach) {
@@ -53,12 +53,12 @@ var EventUtil = (function () {
     }
   }
   /**
-    * 触摸事件
-    * @param {DOM} element 目标元素
-    * @param {String} type 事件名称, 此函数处理tap | swipeleft | swiperight | swipedown | swipeup事件
-    * @param {Function} handler 句柄, handler(e)
-    * @param {Boolean} isDetach 是否移除绑定事件, 此为一函数对多type, 所以不允许移除事件, 只能移除句柄
-    */
+   * 触摸事件
+   * @param {DOM} element 目标元素
+   * @param {String} type 事件名称, 此函数处理tap | swipeleft | swiperight | swipedown | swipeup事件
+   * @param {Function} handler 句柄, handler(e)
+   * @param {Boolean} isDetach 是否移除绑定事件, 此为一函数对多type, 所以不允许移除事件, 只能移除句柄
+   */
   var _touchEvent = function (element, type, handler, isDetach) {
     var params = {
       threshold: 0
@@ -96,30 +96,37 @@ var EventUtil = (function () {
       }
 
       // 设置方向
-      if (touches.direction === 0) { // 设置滑动方向(-1上下 | 1左右)
+      if (touches.direction === 0) {
+        // 设置滑动方向(-1上下 | 1左右)
         touches.direction = Math.abs(touches.diffX) > Math.abs(touches.diffY) ? 1 : -1
       }
-      if (touches.direction === -1) { // 设置垂直方向(-1上 | 1下)
+      if (touches.direction === -1) {
+        // 设置垂直方向(-1上 | 1下)
         touches.vertical = touches.diffY < 0 ? 1 : -1
       }
-      if (touches.direction === 1) { // 设置左右方向(-1左 | 1右)
+      if (touches.direction === 1) {
+        // 设置左右方向(-1左 | 1右)
         touches.horizontal = touches.diffX < 0 ? 1 : -1
       }
 
       // swipeleft | swiperight | swipedown | swipeup 事件
-      if (touches.vertical === -1) { // 上
+      if (touches.vertical === -1) {
+        // 上
         if (Math.abs(touches.diffY) > params.threshold) {
           eventName = 'swipeup'
         }
-      } else if (touches.vertical === 1) { // 下
+      } else if (touches.vertical === 1) {
+        // 下
         if (Math.abs(touches.diffY) > params.threshold) {
           eventName = 'swipedown'
         }
-      } else if (touches.horizontal === -1) { // 左
+      } else if (touches.horizontal === -1) {
+        // 左
         if (Math.abs(touches.diffY) > params.threshold) {
           eventName = 'swipeleft'
         }
-      } else if (touches.horizontal === 1) { // 右
+      } else if (touches.horizontal === 1) {
+        // 右
         if (Math.abs(touches.diffY) > params.threshold) {
           eventName = 'swiperight'
         }
@@ -161,12 +168,12 @@ var EventUtil = (function () {
     }
   }
   /**
-    * 摇动事件
-    * @param {DOM} element 无
-    * @param {String} type 事件名称, 此函数处理shake事件
-    * @param {Function} handler 句柄, handler(e)
-    * @param {Boolean} isDetach 是否移除绑定事件
-    */
+   * 摇动事件
+   * @param {DOM} element 无
+   * @param {String} type 事件名称, 此函数处理shake事件
+   * @param {Function} handler 句柄, handler(e)
+   * @param {Boolean} isDetach 是否移除绑定事件
+   */
   var _shake_handler = null
   var _shake_threshold = 3000 // 晃动速度
   var _shake_lastUpdate = 0 // 设置最后更新时间, 用于对比
@@ -178,14 +185,24 @@ var EventUtil = (function () {
   var _shake_lastShakeZ = 0
   var _shakeEventHandler = function (e) {
     var acceleration = e.accelerationIncludingGravity // 获得重力加速
-    var curTime = new Date().getTime()// 获得当前时间戳
-    if ((curTime - _shake_lastUpdate) > 100) {
+    var curTime = new Date().getTime() // 获得当前时间戳
+    if (curTime - _shake_lastUpdate > 100) {
       var diffTime = curTime - _shake_lastUpdate // 时间差
       _shake_lastUpdate = curTime
       _shake_curShakeX = acceleration.x // x轴加速度
       _shake_curShakeY = acceleration.y // y轴加速度
       _shake_curShakeZ = acceleration.z // z轴加速度
-      var speed = Math.abs(_shake_curShakeX + _shake_curShakeY + _shake_curShakeZ - _shake_lastShakeX - _shake_lastShakeY - _shake_lastShakeZ) / diffTime * 10000
+      var speed =
+        (Math.abs(
+          _shake_curShakeX +
+            _shake_curShakeY +
+            _shake_curShakeZ -
+            _shake_lastShakeX -
+            _shake_lastShakeY -
+            _shake_lastShakeZ
+        ) /
+          diffTime) *
+        10000
       if (speed > _shake_threshold) {
         e.speed = speed
         if (_shake_handler) _shake_handler(e)
@@ -197,10 +214,10 @@ var EventUtil = (function () {
   }
   var _shakeEvent = function (element, type, handler, isDetach) {
     _shake_handler = handler
-    function attach () {
+    function attach() {
       window.addEventListener('devicemotion', _shakeEventHandler, false)
     }
-    function detach () {
+    function detach() {
       window.removeEventListener('devicemotion', _shakeEventHandler, false)
     }
     // 添加或移除事件
@@ -210,12 +227,13 @@ var EventUtil = (function () {
       attach()
     }
   }
-  
+
   /**
-    * 返回
-    */
+   * 返回
+   */
   return {
-    addHandler: function (element, type, handler, params) { // params用于多次点击时控制次数与时长
+    addHandler: function (element, type, handler, params) {
+      // params用于多次点击时控制次数与时长
       // 自定义事件 countclick
       if (type === 'countclick') {
         _countClickEvent(element, 'countclick', handler, false, params) // params: {count: 10, timeout: 5000}
@@ -231,7 +249,13 @@ var EventUtil = (function () {
         if (type === 'tap') type = 'click'
       } else {
         // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
-        if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
+        if (
+          type === 'tap' ||
+          type === 'swipeleft' ||
+          type === 'swiperight' ||
+          type === 'swipedown' ||
+          type === 'swipeup'
+        ) {
           _touchEvent(element, type, handler)
           return
         }
@@ -270,7 +294,13 @@ var EventUtil = (function () {
         if (type === 'tap') type = 'click'
       } else {
         // 自定义事件 tap | swipeleft | swiperight | swipedown | swipeup
-        if (type === 'tap' || type === 'swipeleft' || type === 'swiperight' || type === 'swipedown' || type === 'swipeup') {
+        if (
+          type === 'tap' ||
+          type === 'swipeleft' ||
+          type === 'swiperight' ||
+          type === 'swipedown' ||
+          type === 'swipeup'
+        ) {
           _touchEvent(element, type, handler, true)
           return
         }

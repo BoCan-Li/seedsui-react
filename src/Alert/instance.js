@@ -50,12 +50,12 @@ var Alert = function (params) {
   if (params.mask) {
     s.params.mask = params.mask
   }
-  
+
   s.params.parent = document.body // 创建于哪个元素下
   if (params.parent) {
     s.params.parent = params.parent
   }
-  
+
   s.params.overflowContainer = document.body
   if (params.overflowContainer) {
     s.params.overflowContainer = params.overflowContainer
@@ -70,7 +70,9 @@ var Alert = function (params) {
   s.buttonCancel = null
 
   // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
-  if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+  if (s.params.mask)
+    s.mask =
+      typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
 
   // Mask
   s.updateMask = function () {
@@ -78,7 +80,9 @@ var Alert = function (params) {
       console.log('没有parent')
       return
     }
-    if (!s.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+    if (!s.mask)
+      s.mask =
+        typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
       s.parent.appendChild(s.mask)
@@ -97,7 +101,10 @@ var Alert = function (params) {
       s.alert = document.createElement('div')
       s.mask.appendChild(s.alert)
     }
-    s.alert.setAttribute('class', s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
+    s.alert.setAttribute(
+      'class',
+      s.params.alertClass + (s.params.animationClass ? ' ' + s.params.animationClass : '')
+    )
     s.alert.setAttribute(s.params.animationAttr, s.params.animation)
     s.alert.style.webkitTransitionDuration = s.params.duration + 'ms'
   }
@@ -133,7 +140,7 @@ var Alert = function (params) {
     }
     s.handler.setAttribute('class', s.params.handlerClass)
   }
-  function createButton (html, className) {
+  function createButton(html, className) {
     var button = document.createElement('a')
     button.setAttribute('class', className)
     button.innerHTML = html
@@ -147,7 +154,7 @@ var Alert = function (params) {
     }
     if (!s.buttonCancel) s.buttonCancel = s.handler.querySelector('.' + s.params.buttonCancelClass)
     var className = s.params.buttonCancelClass + ' ' + s.params.buttonCancelExtendClass
-    
+
     // 如果有属性, 却没有取消按钮, 则创建一个
     if (s.params.onClickCancel && !s.buttonCancel) {
       s.buttonCancel = createButton(s.params.buttonCancelHTML, className)
@@ -200,8 +207,14 @@ var Alert = function (params) {
   // 更新DOM
   s.update = function () {
     // Parent | OverflowContainer
-    s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
-    s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+    s.parent =
+      typeof s.params.parent === 'string'
+        ? document.querySelector(s.params.parent)
+        : s.params.parent
+    s.overflowContainer =
+      typeof s.params.overflowContainer === 'string'
+        ? document.querySelector(s.params.overflowContainer)
+        : s.params.overflowContainer
     if (!s.parent) {
       console.log('没有parent')
       return
@@ -254,7 +267,8 @@ var Alert = function (params) {
     // 隐藏弹出框
     s.hideAlert()
     // 显示滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
     // 执行回调
     if (s.params.duration === 0) s.onTransitionEnd()
   }
@@ -265,7 +279,8 @@ var Alert = function (params) {
     // 显示弹出框
     s.showAlert()
     // 禁用滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
     // 执行回调
     if (s.params.duration === 0) s.onTransitionEnd()
   }

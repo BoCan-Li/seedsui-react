@@ -1,3 +1,3 @@
-import ConfigProvider from './ConfigProvider.js';
+import ConfigProvider from './ConfigProvider.js'
 
-export default ConfigProvider;
+export default ConfigProvider

@@ -97,12 +97,14 @@ var Handsign = function (container, params) {
   // 获取设备缩放比率
   s.getPixelRatio = function () {
     var context = s.ctx
-    var backingStore = context.backingStorePixelRatio ||
-        context.webkitBackingStorePixelRatio ||
-        context.mozBackingStorePixelRatio ||
-        context.msBackingStorePixelRatio ||
-        context.oBackingStorePixelRatio ||
-        context.backingStorePixelRatio || 1
+    var backingStore =
+      context.backingStorePixelRatio ||
+      context.webkitBackingStorePixelRatio ||
+      context.mozBackingStorePixelRatio ||
+      context.msBackingStorePixelRatio ||
+      context.oBackingStorePixelRatio ||
+      context.backingStorePixelRatio ||
+      1
     return (window.devicePixelRatio || 1) / backingStore
   }
   // 清除签名
@@ -125,34 +127,34 @@ var Handsign = function (container, params) {
   }
   // 计算top left bottom center的位置
   s.calcPosition = function (w, h, pos) {
-    var posArr = pos.split(' ').map(function (item, index){
+    var posArr = pos.split(' ').map(function (item, index) {
       var x = 0
       var y = 0
       // 如果是数字
       if (!isNaN(item)) {
-        if (index === 0) return {x: item}
-        if (index === 1) return {y: item}
+        if (index === 0) return { x: item }
+        if (index === 1) return { y: item }
       }
       // 如果是字符串
-      if (item === 'top') return {y: 0}
-      if (item === 'left') return {x: 0}
+      if (item === 'top') return { y: 0 }
+      if (item === 'left') return { x: 0 }
       if (item === 'right') {
         x = s.width < w ? 0 : s.width - w
-        return {x: x}
+        return { x: x }
       }
       if (item === 'bottom') {
         y = s.height < h ? 0 : s.height - h
-        return {y: y}
+        return { y: y }
       }
       if (item === 'center') {
         x = (s.width - w) / 2
-        return {x: x}
+        return { x: x }
       }
       if (item === 'middle') {
         y = (s.height - h) / 2
-        return {y: y}
+        return { y: y }
       }
-      return {x: 0, y: 0}
+      return { x: 0, y: 0 }
     })
     var posJson = {
       x: 0,
@@ -197,7 +199,7 @@ var Handsign = function (container, params) {
       if (opts.onSuccess) opts.onSuccess(s)
     }
     img.onerror = function (err) {
-      if (opts.onError) opts.onError(err, {errMsg: '非法的图片格式'})
+      if (opts.onError) opts.onError(err, { errMsg: '非法的图片格式' })
     }
   }
   // 绘制文字
@@ -217,7 +219,7 @@ var Handsign = function (container, params) {
     var height = fontSize
     var width = text.length * height
     var pos = s.calcPosition(width, height, fontPosition) // 画布上放置xy坐标
-    var calcY = pos.y === 0 ? Number(pos.y) + Number(height) : Number(pos.y) + Number(height) -5 // 文字垂直位置有整个高度的偏差
+    var calcY = pos.y === 0 ? Number(pos.y) + Number(height) : Number(pos.y) + Number(height) - 5 // 文字垂直位置有整个高度的偏差
     // 写字
     s.ctx.font = fontSize + 'px ' + fontFamily
     s.ctx.fillStyle = fontStyle

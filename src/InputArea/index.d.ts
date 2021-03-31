@@ -1,2 +1,2 @@
-export { default } from './InputArea';
-export * from './InputArea';
+export { default } from './InputArea'
+export * from './InputArea'

@@ -1,3 +1,3 @@
-import InputText from './InputText.js';
+import InputText from './InputText.js'
 
-export default InputText;
+export default InputText

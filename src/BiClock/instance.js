@@ -5,7 +5,7 @@ var BiClock = function (clock, params) {
     minuteClass: 'bi-clock-minute',
     time: '', // 格式08:30
     duration: '500',
-    delay: '0'
+    delay: '0',
   }
   params = params || {}
   for (var def in defaults) {
@@ -74,4 +74,4 @@ var BiClocks = function (params) {
   }
 }
 
-export {BiClocks, BiClock}
+export { BiClocks, BiClock }

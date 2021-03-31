@@ -7,8 +7,8 @@ import locale from './../locale'
 
 var Bridge = {
   /**
-    * 定制功能
-    */
+   * 定制功能
+   */
   platform: 'browser',
   // 初始化配置
   config: function (params = {}) {
@@ -30,7 +30,7 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function logOut() {
-    console.log('logOut方法仅在app上工作');
+    console.log('logOut方法仅在app上工作')
   },
   // 回到主页
   goHome: function () {
@@ -85,13 +85,16 @@ var Bridge = {
   chooseImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), { mask: false })
       return
     }
     var res = {
       sourceType: 'camera', // 微信返回的两种来源: 'camera', 'album'
       errMsg: 'chooseImage:ok',
-      localIds: ['https://static.zcool.cn/git_z/z/common/images/svg/logo.svg', 'https://static.zcool.cn/v3.5.180706.5/zcool/client/image/logo.png']
+      localIds: [
+        'https://static.zcool.cn/git_z/z/common/images/svg/logo.svg',
+        'https://static.zcool.cn/v3.5.180706.5/zcool/client/image/logo.png'
+      ]
     }
     if (params.success) params.success(res)
   },
@@ -99,13 +102,13 @@ var Bridge = {
   uploadImage: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), { mask: false })
       return
     }
     self.showLoading()
     setTimeout(() => {
       self.hideLoading()
-      self.showToast(locale('上传完成', 'uploaded_completed'), {mask: false})
+      self.showToast(locale('上传完成', 'uploaded_completed'), { mask: false })
       var res = {
         errMsg: 'uploadImage:ok',
         mediaUrl: '',
@@ -118,14 +121,18 @@ var Bridge = {
   // @params {urls:'需要预览的图片http链接列表',index:'图片索引',layerHTML:'图片上方的浮层'}
   preview: null,
   previewImage: function (params = {}) {
-    var self = this;
+    var self = this
     if (!params.urls || !params.urls.length) {
-      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('没有预览图片地址', 'hint_preview_image_must_urls')})
+      if (params.fail)
+        params.fail({
+          errMsg: 'previewImage:fail' + locale('没有预览图片地址', 'hint_preview_image_must_urls')
+        })
       return
     }
     var src = params.urls[params.index || 0]
     if (!src) {
-      if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')})
+      if (params.fail)
+        params.fail({ errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src') })
       return
     }
     var layerHTML = params.layerHTML || ''
@@ -138,7 +145,10 @@ var Bridge = {
           if (params.success) params.success(s)
         },
         onError: function () {
-          if (params.fail) params.fail({errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')})
+          if (params.fail)
+            params.fail({
+              errMsg: 'previewImage:fail' + locale('图片地址无效', 'invalid_image_src')
+            })
         }
       })
     } else {
@@ -172,116 +182,123 @@ var Bridge = {
   getContactMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success([
-      {
-        id: '4655721687632479006',
-        name: '员工1'
-      },
-      {
-        id: '4655721687632479007',
-        name: '员工2'
-      }
-    ])
+    if (params.success)
+      params.success([
+        {
+          id: '4655721687632479006',
+          name: '员工1'
+        },
+        {
+          id: '4655721687632479007',
+          name: '员工2'
+        }
+      ])
   },
   getContact: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success({
-      id: '4655721687632479006',
-      name: '员工1'
-    })
+    if (params.success)
+      params.success({
+        id: '4655721687632479006',
+        name: '员工1'
+      })
   },
   /* -----------------------------------------------------
     客户插件
   ----------------------------------------------------- */
-  customerMore: [{
-    "check": true,
-    "distance": 31,
-    "labelType": 0,
-    "addr": "南京市建邺区康文路康缘智汇港附近",
-    "approval_status": "3",
-    "code": "20180403004",
-    "cooperate_status": "1",
-    "district_id": "",
-    "id": "5330457627710680963",
-    "lat": "",
-    "location": "31.983362,118.73069",
-    "lon": "",
-    "manager_name": "",
-    "name": "客户门店经销商1",
-    "name_py": "20180403004 20180403004",
-    "trade_type": "3",
-    "type_id": "",
-    "type_image": ""
-  }, {
-    "check": true,
-    "distance": 5,
-    "labelType": 0,
-    "addr": "江苏省南京市建邺区康文路康缘智汇港附近",
-    "approval_status": "3",
-    "code": "storethree",
-    "cooperate_status": "1",
-    "district_id": "",
-    "id": "8834765014408029232",
-    "lat": "",
-    "location": "31.983679,118.730766",
-    "lon": "",
-    "manager_name": "",
-    "name": "客户门店经销商2",
-    "name_py": "mendian3 md3",
-    "trade_type": "3",
-    "type_id": "",
-    "type_image": ""
-  }, {
-    "addr": "南京市建邺区康文路南京金贝网络科技有限公司附近",
-    "approval_status": "3",
-    "check": false,
-    "code": "CUS000084",
-    "cooperate_status": "1",
-    "distance": -1,
-    "district_id": "-1",
-    "id": "8045732772848971055",
-    "labelType": 2,
-    "lat": "31.983311",
-    "location": "31.983311,118.730527",
-    "lon": "118.730527",
-    "manager_name": "大表哥",
-    "name": "客户门店经销商3",
-    "name_py": "201801171557 201801171557",
-    "trade_type": "3",
-    "type_id": "-1",
-    "type_image": ""
-  }, {
-    "addr": "南京市建邺区康文路南京金贝网络科技有限公司附近",
-    "approval_status": "3",
-    "check": true,
-    "code": "CUS000085",
-    "cooperate_status": "1",
-    "distance": 46,
-    "district_id": "",
-    "id": "8353170616312361122",
-    "labelType": 0,
-    "lat": "",
-    "location": "31.983301,118.730517",
-    "lon": "",
-    "manager_name": "",
-    "name": "客户门店经销商4",
-    "name_py": "201801171624 201801171624",
-    "trade_type": "3",
-    "type_id": "",
-    "type_image": ""
-  }],
+  customerMore: [
+    {
+      check: true,
+      distance: 31,
+      labelType: 0,
+      addr: '南京市建邺区康文路康缘智汇港附近',
+      approval_status: '3',
+      code: '20180403004',
+      cooperate_status: '1',
+      district_id: '',
+      id: '5330457627710680963',
+      lat: '',
+      location: '31.983362,118.73069',
+      lon: '',
+      manager_name: '',
+      name: '客户门店经销商1',
+      name_py: '20180403004 20180403004',
+      trade_type: '3',
+      type_id: '',
+      type_image: ''
+    },
+    {
+      check: true,
+      distance: 5,
+      labelType: 0,
+      addr: '江苏省南京市建邺区康文路康缘智汇港附近',
+      approval_status: '3',
+      code: 'storethree',
+      cooperate_status: '1',
+      district_id: '',
+      id: '8834765014408029232',
+      lat: '',
+      location: '31.983679,118.730766',
+      lon: '',
+      manager_name: '',
+      name: '客户门店经销商2',
+      name_py: 'mendian3 md3',
+      trade_type: '3',
+      type_id: '',
+      type_image: ''
+    },
+    {
+      addr: '南京市建邺区康文路南京金贝网络科技有限公司附近',
+      approval_status: '3',
+      check: false,
+      code: 'CUS000084',
+      cooperate_status: '1',
+      distance: -1,
+      district_id: '-1',
+      id: '8045732772848971055',
+      labelType: 2,
+      lat: '31.983311',
+      location: '31.983311,118.730527',
+      lon: '118.730527',
+      manager_name: '大表哥',
+      name: '客户门店经销商3',
+      name_py: '201801171557 201801171557',
+      trade_type: '3',
+      type_id: '-1',
+      type_image: ''
+    },
+    {
+      addr: '南京市建邺区康文路南京金贝网络科技有限公司附近',
+      approval_status: '3',
+      check: true,
+      code: 'CUS000085',
+      cooperate_status: '1',
+      distance: 46,
+      district_id: '',
+      id: '8353170616312361122',
+      labelType: 0,
+      lat: '',
+      location: '31.983301,118.730517',
+      lon: '',
+      manager_name: '',
+      name: '客户门店经销商4',
+      name_py: '201801171624 201801171624',
+      trade_type: '3',
+      type_id: '',
+      type_image: ''
+    }
+  ],
   customerMoreLen: 1,
   getCustomerMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
     const result = []
@@ -297,62 +314,66 @@ var Bridge = {
   getCustomer: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success({
-      id: '6468207804099075062',
-      name: '客户门店经销商1'
-    })
+    if (params.success)
+      params.success({
+        id: '6468207804099075062',
+        name: '客户门店经销商1'
+      })
   },
   getCustomerType: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success({
-      id: '5365268129453435373',
-      name: '客户类型1'
-    })
+    if (params.success)
+      params.success({
+        id: '5365268129453435373',
+        name: '客户类型1'
+      })
   },
   getCustomerAreaMore: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success([
-      {
-        id: '5365268129453435373',
-        name: '客户区域1'
-      },
-      {
-        id: '5365268129453435374',
-        name: '客户区域2'
-      }
-    ])
+    if (params.success)
+      params.success([
+        {
+          id: '5365268129453435373',
+          name: '客户区域1'
+        },
+        {
+          id: '5365268129453435374',
+          name: '客户区域2'
+        }
+      ])
   },
   getCustomerArea: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success({
-      id: '5365268129453435373',
-      name: '客户区域1'
-    })
+    if (params.success)
+      params.success({
+        id: '5365268129453435373',
+        name: '客户区域1'
+      })
   },
   // 部门插件
   getDepartmentMore: function (params) {
     var self = this
-    self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+    self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
   },
   getDepartment: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
     params.success({
@@ -364,36 +385,37 @@ var Bridge = {
   getGoods: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), {mask: false})
+      self.showToast(locale('此功能仅可在外勤客户端中使用', 'hint_only_wqapp'), { mask: false })
       return
     }
-    if (params.success) params.success({
-      id: '5343180131602024954',
-      name: '商品1',
-      propvalues: '', // 商品属性不带排序号
-      nameSpec: '', // 规格名称
-      productRemarks: '', // 备注
-      props: '', // 商品属性介绍
-      propDetail: '', // 商品属性详情
-      reportUnitName: '', // 报表单位名称
-      reportUnitID: '', // 报表单位ID
-      reportUnitRatio: '', // 报表单位比率
-    })
+    if (params.success)
+      params.success({
+        id: '5343180131602024954',
+        name: '商品1',
+        propvalues: '', // 商品属性不带排序号
+        nameSpec: '', // 规格名称
+        productRemarks: '', // 备注
+        props: '', // 商品属性介绍
+        propDetail: '', // 商品属性详情
+        reportUnitName: '', // 报表单位名称
+        reportUnitID: '', // 报表单位ID
+        reportUnitRatio: '' // 报表单位比率
+      })
   },
   /**
-    * 获取当前地理位置
-    * @param {Object} params
-    * params: {
-    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * timeout {Number}: 超时,
-    * cache {Number}: 默认60秒缓存防重复定位
-    * }
-    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
-    */
+   * 获取当前地理位置
+   * @param {Object} params
+   * params: {
+   * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+   * timeout {Number}: 超时,
+   * cache {Number}: 默认60秒缓存防重复定位
+   * }
+   * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+   */
   getLocation: function (params = {}) {
     var self = this
     if (!self.debug) {
-      if (navigator.geolocation){
+      if (navigator.geolocation) {
         // 调用定位
         if (self.locationTask) {
           self.locationTask.push(params)
@@ -403,45 +425,77 @@ var Bridge = {
         console.log('调用定位...')
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            var res = {errMsg: 'getLocation:ok', longitude: position.coords.longitude, latitude: position.coords.latitude, speed:'0.0', accuracy:'3.0.0'}
+            var res = {
+              errMsg: 'getLocation:ok',
+              longitude: position.coords.longitude,
+              latitude: position.coords.latitude,
+              speed: '0.0',
+              accuracy: '3.0.0'
+            }
             if (params.success) params.success(res)
             self.getLocationTask(res)
           },
           (error) => {
-            let errMsg = '';
-            switch(error.code) {
+            let errMsg = ''
+            switch (error.code) {
               case error.PERMISSION_DENIED:
-                errMsg = `getLocation:fail ${locale('定位失败,用户拒绝请求地理定位', 'hint_location_failed_PERMISSION_DENIED')}`
-                break;
+                errMsg = `getLocation:fail ${locale(
+                  '定位失败,用户拒绝请求地理定位',
+                  'hint_location_failed_PERMISSION_DENIED'
+                )}`
+                break
               case error.POSITION_UNAVAILABLE:
-                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_POSITION_UNAVAILABLE')}`)
-                errMsg = `getLocation:fail ${locale('定位失败,位置信息是不可用', 'hint_location_failed_POSITION_UNAVAILABLE')}`
-                break;
+                console.log(
+                  `${locale(
+                    '定位失败,位置信息是不可用',
+                    'hint_location_failed_POSITION_UNAVAILABLE'
+                  )}`
+                )
+                errMsg = `getLocation:fail ${locale(
+                  '定位失败,位置信息是不可用',
+                  'hint_location_failed_POSITION_UNAVAILABLE'
+                )}`
+                break
               case error.TIMEOUT:
-                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_TIMEOUT')}`)
-                errMsg = `getLocation:fail ${locale('定位失败,请求获取用户位置超时', 'hint_location_failed_TIMEOUT')}`
-                break;
+                console.log(
+                  `${locale('定位失败,位置信息是不可用', 'hint_location_failed_TIMEOUT')}`
+                )
+                errMsg = `getLocation:fail ${locale(
+                  '定位失败,请求获取用户位置超时',
+                  'hint_location_failed_TIMEOUT'
+                )}`
+                break
               case error.UNKNOWN_ERROR:
-                console.log(`${locale('定位失败,位置信息是不可用', 'hint_location_failed_UNKNOWN_ERROR')}`)
-                errMsg = `getLocation:fail ${locale('定位失败,定位系统失效', 'hint_location_failed_UNKNOWN_ERROR')}`
-                break;
+                console.log(
+                  `${locale('定位失败,位置信息是不可用', 'hint_location_failed_UNKNOWN_ERROR')}`
+                )
+                errMsg = `getLocation:fail ${locale(
+                  '定位失败,定位系统失效',
+                  'hint_location_failed_UNKNOWN_ERROR'
+                )}`
+                break
               default:
                 console.log(`${locale('定位失败', 'hint_location_failed')}`)
                 errMsg = `getLocation:fail ${locale('定位失败', 'hint_location_failed')}`
             }
-            let res = {errMsg: errMsg}
+            let res = { errMsg: errMsg }
             if (params.fail) params.fail(res)
             self.getLocationTask(res)
           },
           {
-            enableHighAcuracy: true, // 指示浏览器获取高精度的位置，默认为false  
-            timeout: 5000, // 指定获取地理位置的超时时间，默认不限时，单位为毫秒  
-            maximumAge: 2000 // 最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置。  
+            enableHighAcuracy: true, // 指示浏览器获取高精度的位置，默认为false
+            timeout: 5000, // 指定获取地理位置的超时时间，默认不限时，单位为毫秒
+            maximumAge: 2000 // 最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置。
           }
         )
       } else {
         console.log(`${locale('当前浏览器不支持定位', 'hint_location_failed_not_supported')}`)
-        let res = {errMsg: `getLocation:fail ${locale('当前浏览器不支持定位', 'hint_location_failed_not_supported')}`}
+        let res = {
+          errMsg: `getLocation:fail ${locale(
+            '当前浏览器不支持定位',
+            'hint_location_failed_not_supported'
+          )}`
+        }
         if (params.fail) params.fail(res)
         self.getLocationTask(res)
       }
@@ -470,9 +524,15 @@ var Bridge = {
     self.locationTask = []
     console.log('调用定位...')
     setTimeout(() => {
-      var res = {errMsg: 'getLocation:ok', longitude:'118.7347', latitude:'31.98114', speed:'0.0', accuracy:'3.0.0'}
+      var res = {
+        errMsg: 'getLocation:ok',
+        longitude: '118.7347',
+        latitude: '31.98114',
+        speed: '0.0',
+        accuracy: '3.0.0'
+      }
       // 将位置信息存储到cookie中60秒
-      if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
+      if (params.cache) DB.setCookie('app_location', JSON.stringify(res), params.cache || 60)
       if (params.success) params.success(res)
       self.getLocationTask(res)
     }, 2000)
@@ -481,15 +541,25 @@ var Bridge = {
   getLocationMap: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp'), {mask: false})
-      if (params.fail) params.fail({errMsg: `getLocationMap:${locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp')}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp'), { mask: false })
+      if (params.fail)
+        params.fail({
+          errMsg: `getLocationMap:${locale('此功能仅可在微信或APP中使用', 'hint_only_wqapp')}`
+        })
       return
     }
     setTimeout(function () {
-      if (params.success) params.success({longitude:'118.730515', latitude:'31.982473', speed:'0.0', accuracy:'3.0.0', address: '江苏省南京市新城科技园'})
+      if (params.success)
+        params.success({
+          longitude: '118.730515',
+          latitude: '31.982473',
+          speed: '0.0',
+          accuracy: '3.0.0',
+          address: '江苏省南京市新城科技园'
+        })
     }, 500)
   },
-  
+
   /*
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
@@ -497,31 +567,46 @@ var Bridge = {
   scanQRCode: function (params = {}) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
-      if (params.fail) params.fail({errMsg: `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), { mask: false })
+      if (params.fail)
+        params.fail({
+          errMsg: `scanQRCode:${locale('扫码失败', 'hint_scan_failed')}, ${locale(
+            '请稍后重试',
+            'hint_try_again_later'
+          )}`
+        })
       return
     }
     setTimeout(function () {
-      if (params.success) params.success({resultStr: '504823170310092750280333'})
+      if (params.success) params.success({ resultStr: '504823170310092750280333' })
     }, 500)
   },
   /**
-    * 文件操作: 预览文件
-    * @param {Object} params
-    * params: {
-    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
-    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
-    *  size: 1048576 // 需要预览文件的字节大小(必填)
-    * }
-    */
+   * 文件操作: 预览文件
+   * @param {Object} params
+   * params: {
+   *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+   *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+   *  size: 1048576 // 需要预览文件的字节大小(必填)
+   * }
+   */
   previewFile: function (params) {
     var self = this
     if (!self.debug) {
-      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), {mask: false})
-      if (params.fail) params.fail({errMsg: `previewFile:fail${locale('预览文件失败', 'hint_previewFile_failed')}, ${locale('请稍后重试', 'hint_try_again_later')}`})
+      self.showToast(locale('此功能仅可在微信或APP中使用', 'hint_only_app_and_wx'), { mask: false })
+      if (params.fail)
+        params.fail({
+          errMsg: `previewFile:fail${locale('预览文件失败', 'hint_previewFile_failed')}, ${locale(
+            '请稍后重试',
+            'hint_try_again_later'
+          )}`
+        })
       return
     }
-    if (params.success) params.success({errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`})
+    if (params.success)
+      params.success({
+        errMsg: `previewFile:ok${locale('预览文件成功', 'hint_previewFile_success')}`
+      })
     if (params.url) window.location.href = params.url
   }
 }

@@ -1,3 +1,3 @@
-import InputArea from './InputArea.js';
+import InputArea from './InputArea.js'
 
-export default InputArea;
+export default InputArea

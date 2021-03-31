@@ -1,2 +1,2 @@
-export { default } from './GeoUtil';
-export * from './GeoUtil';
+export { default } from './GeoUtil'
+export * from './GeoUtil'

@@ -1,3 +1,3 @@
-import Debugger from './Debugger.js';
+import Debugger from './Debugger.js'
 
-export default Debugger;
+export default Debugger

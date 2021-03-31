@@ -85,7 +85,8 @@ var Calendar = function (container, params) {
     return
   }
   s.container.width = s.container.clientWidth
-  if (!s.container.width) s.container.width = window.innerWidth || document.documentElement.clientWidth
+  if (!s.container.width)
+    s.container.width = window.innerWidth || document.documentElement.clientWidth
   // Header
   s.header = null
   s.title = null
@@ -148,7 +149,7 @@ var Calendar = function (container, params) {
 
     var weekNames = ['日', '一', '二', '三', '四', '五', '六']
     /* eslint-disable */
-    for (var i = 0, weekName; weekName = weekNames[i++];) {
+    for (var i = 0, weekName; (weekName = weekNames[i++]); ) {
       var week = document.createElement('div')
       week.setAttribute('class', s.params.weekClass)
       week.innerHTML = weekName
@@ -188,12 +189,15 @@ var Calendar = function (container, params) {
     return wrapperX
   }
   s.createDates = function () {
-    for (var i = 0; i < 3; i++) { // 注入到月
-      for (var j = 0; j < 6; j++) { // 注入行
+    for (var i = 0; i < 3; i++) {
+      // 注入到月
+      for (var j = 0; j < 6; j++) {
+        // 注入行
         var monthRow = document.createElement('div')
         monthRow.setAttribute('class', s.params.monthRowClass)
 
-        for (var k = 0; k < 7; k++) { // 注入到星期
+        for (var k = 0; k < 7; k++) {
+          // 注入到星期
           var elDate = document.createElement('div')
           elDate.setAttribute('class', s.params.dateClass)
           elDate.style.height = s.params.dateHeight + 'px'
@@ -266,16 +270,20 @@ var Calendar = function (container, params) {
     s.touches.posX = -s.container.width
     s.wrapperX.style.webkitTransform = 'translateX(' + s.touches.posX + 'px)'
   }
-  s.updateContainerHeight = function () { // 更新高度
-    if (s.params.viewType === 'month') { // 展开
+  s.updateContainerHeight = function () {
+    // 更新高度
+    if (s.params.viewType === 'month') {
+      // 展开
       s.touches.h = s.params.wrapperHeight
-    } else if (s.params.viewType === 'week') { // 收缩
+    } else if (s.params.viewType === 'week') {
+      // 收缩
       s.touches.h = s.params.dateHeight
     }
     s.wrapper.style.height = s.touches.h + 'px'
     s.wrapperY.style.webkitTransform = 'translateY(-' + s.touches.posY + 'px)'
   }
-  s.updateContainerWidth = function () { // 更新宽度
+  s.updateContainerWidth = function () {
+    // 更新宽度
     s.container.width = s.container.clientWidth
     s.wrapperX.width = s.container.width * 3 + 'px'
     /*
@@ -304,14 +312,16 @@ var Calendar = function (container, params) {
     s.addDuration()
     s.wrapperX.style.webkitTransform = 'translateX(' + s.touches.posX + 'px)'
     // 刷新数据
-    if (index === 0) { // 上一页
+    if (index === 0) {
+      // 上一页
       if (s.params.viewType === 'month') {
         s.activeDate.prevMonth()
       } else if (s.params.viewType === 'week') {
         s.wrapperY.style.webkitTransitionDuration = '0ms'
         s.activeDate.prevWeek()
       }
-    } else if (index === 2) { // 下一页
+    } else if (index === 2) {
+      // 下一页
       if (s.params.viewType === 'month') {
         s.activeDate.nextMonth()
       } else if (s.params.viewType === 'week') {
@@ -337,11 +347,13 @@ var Calendar = function (container, params) {
   }
   s.slideYTo = function (index) {
     s.addDuration()
-    if (index === 1) { // 展开
+    if (index === 1) {
+      // 展开
       s.params.viewType = 'month'
       s.touches.posY = 0
       s.draw(1)
-    } else if (index === -1) { // 收缩
+    } else if (index === -1) {
+      // 收缩
       s.params.viewType = 'week'
       s.touches.posY = s.touches.maxPosY
       s.draw(-1)
@@ -352,7 +364,12 @@ var Calendar = function (container, params) {
   // 绘制日历
   var today = new Date()
   s.isToday = function (date) {
-    if (date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()) return true
+    if (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    )
+      return true
     return false
   }
   s.data = []
@@ -387,7 +404,8 @@ var Calendar = function (container, params) {
       activeDate.format('YYYY-MM-DD')
     }
   }
-  s.draw = function (vertical) { // vertical:上下拖动(-1上 | 1下 | 其它为非上下拖动)
+  s.draw = function (vertical) {
+    // vertical:上下拖动(-1上 | 1下 | 其它为非上下拖动)
     // 更新选中日期
     s.updateData()
     // 注入身体
@@ -410,10 +428,16 @@ var Calendar = function (container, params) {
         s.dates[i].classList.add(s.params.selectedClass)
       }
       // 禁用日期
-      if (s.params.disableBeforeDate && s.data[i].setHours(0, 0, 0, 0) < s.params.disableBeforeDate.setHours(0, 0, 0, 0)) {
+      if (
+        s.params.disableBeforeDate &&
+        s.data[i].setHours(0, 0, 0, 0) < s.params.disableBeforeDate.setHours(0, 0, 0, 0)
+      ) {
         s.dates[i].classList.add(s.params.disableClass)
       }
-      if (s.params.disableAfterDate && s.data[i].setHours(0, 0, 0, 0) > s.params.disableAfterDate.setHours(0, 0, 0, 0)) {
+      if (
+        s.params.disableAfterDate &&
+        s.data[i].setHours(0, 0, 0, 0) > s.params.disableAfterDate.setHours(0, 0, 0, 0)
+      ) {
         s.dates[i].classList.add(s.params.disableClass)
       }
     }
@@ -422,7 +446,7 @@ var Calendar = function (container, params) {
     if (s.params.disableBeforeDate && s.activeDate < s.params.disableBeforeDate) {
       var msg = '禁止访问' + s.params.disableBeforeDate.format('YYYY年MM月DD日') + '前的日期'
       console.log('SeedsUI Warn：' + msg)
-      if (s.params.onError) s.params.onError(s, {errMsg: msg})
+      if (s.params.onError) s.params.onError(s, { errMsg: msg })
       s.activeDate.nextMonth()
       s.draw()
       return
@@ -430,7 +454,7 @@ var Calendar = function (container, params) {
     if (s.params.disableAfterDate && s.activeDate > s.params.disableAfterDate) {
       msg = '禁止访问' + s.params.disableAfterDate.format('YYYY年MM月DD日') + '后的日期'
       console.log('SeedsUI Warn：' + msg)
-      if (s.params.onError) s.params.onError(s, {errMsg: msg})
+      if (s.params.onError) s.params.onError(s, { errMsg: msg })
       s.activeDate.prevMonth()
       s.draw()
       return
@@ -547,17 +571,22 @@ var Calendar = function (container, params) {
       s.touches.direction = Math.abs(s.touches.diffX) > Math.abs(s.touches.diffY) ? 1 : -1
     }
 
-    if (s.touches.direction === 1) { // 左右滑动
+    if (s.touches.direction === 1) {
+      // 左右滑动
       var moveX = s.touches.posX - s.touches.diffX
-      if (moveX < 0 && Math.abs(moveX) < s.container.width * 2) { // 判断是否是边缘
-        s.touches.horizontal = moveX < s.touches.posX ? 1 : -1// 设置方向(左右)
+      if (moveX < 0 && Math.abs(moveX) < s.container.width * 2) {
+        // 判断是否是边缘
+        s.touches.horizontal = moveX < s.touches.posX ? 1 : -1 // 设置方向(左右)
         s.wrapperX.style.webkitTransform = 'translateX(' + moveX + 'px)'
       }
-    } else if (s.touches.direction === -1) { // 上下滑动
-      if (s.params.verticalDrag === true) { // 允许Y滑动的情况下
+    } else if (s.touches.direction === -1) {
+      // 上下滑动
+      if (s.params.verticalDrag === true) {
+        // 允许Y滑动的情况下
         var heightY = s.touches.h - s.touches.diffY
-        if (heightY > s.params.dateHeight && heightY < s.params.wrapperHeight) { // 判断是否是边缘
-          s.touches.vertical = heightY > s.touches.h ? 1 : -1// 设置方向(上下)
+        if (heightY > s.params.dateHeight && heightY < s.params.wrapperHeight) {
+          // 判断是否是边缘
+          s.touches.vertical = heightY > s.touches.h ? 1 : -1 // 设置方向(上下)
           s.dragY(heightY)
         }
       } else {
@@ -567,17 +596,24 @@ var Calendar = function (container, params) {
   }
   s.onTouchEnd = function (e) {
     e.stopPropagation()
-    if (s.touches.direction === 1) { // 左右滑动
+    if (s.touches.direction === 1) {
+      // 左右滑动
       if (Math.abs(s.touches.diffX) < s.params.threshold) s.touches.horizontal = 0
-      if (s.touches.horizontal === 1) s.slideXTo(2) // 下一页
-      else if (s.touches.horizontal === -1) s.slideXTo(0)// 上一页
-      else s.slideXTo(1)// 还原当前页
-    } else if (s.touches.direction === -1) { // 上下滑动
-      if (s.params.verticalDrag === true) { // 允许Y滑动的情况下
+      if (s.touches.horizontal === 1) s.slideXTo(2)
+      // 下一页
+      else if (s.touches.horizontal === -1) s.slideXTo(0)
+      // 上一页
+      else s.slideXTo(1) // 还原当前页
+    } else if (s.touches.direction === -1) {
+      // 上下滑动
+      if (s.params.verticalDrag === true) {
+        // 允许Y滑动的情况下
         if (Math.abs(s.touches.diffY) < s.params.threshold) s.touches.vertical = 0
-        if (s.touches.vertical === 1) s.slideYTo(1)// 展开
-        else if (s.touches.vertical === -1) s.slideYTo(-1)// 收缩
-        else s.slideYTo(0)// 还原当前页
+        if (s.touches.vertical === 1) s.slideYTo(1)
+        // 展开
+        else if (s.touches.vertical === -1) s.slideYTo(-1)
+        // 收缩
+        else s.slideYTo(0) // 还原当前页
       }
     }
 

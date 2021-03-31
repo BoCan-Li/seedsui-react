@@ -1,3 +1,3 @@
-import Bridge from './Bridge.js';
+import Bridge from './Bridge.js'
 
-export default Bridge;
+export default Bridge

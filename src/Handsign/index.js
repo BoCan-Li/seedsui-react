@@ -1,3 +1,3 @@
-import Handsign from './Handsign.js';
+import Handsign from './Handsign.js'
 
-export default Handsign;
+export default Handsign

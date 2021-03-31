@@ -1,2 +1,2 @@
-export { default } from './InputDate';
-export * from './InputDate';
+export { default } from './InputDate'
+export * from './InputDate'

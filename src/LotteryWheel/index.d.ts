@@ -1,2 +1,2 @@
-export { default } from './LotteryWheel';
-export * from './LotteryWheel';
+export { default } from './LotteryWheel'
+export * from './LotteryWheel'

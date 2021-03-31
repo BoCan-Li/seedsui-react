@@ -1,2 +1,2 @@
-export { default } from './BiClock';
-export * from './BiClock';
+export { default } from './BiClock'
+export * from './BiClock'

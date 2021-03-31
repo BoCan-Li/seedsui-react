@@ -1,2 +1,2 @@
-export { default } from './InputColor';
-export * from './InputColor';
+export { default } from './InputColor'
+export * from './InputColor'

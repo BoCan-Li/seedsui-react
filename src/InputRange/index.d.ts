@@ -1,2 +1,2 @@
-export { default } from './InputRange';
-export * from './InputRange';
+export { default } from './InputRange'
+export * from './InputRange'

@@ -1,3 +1,3 @@
-import InputPre from './InputPre.js';
+import InputPre from './InputPre.js'
 
-export default InputPre;
+export default InputPre

@@ -1,2 +1,2 @@
-export { default } from './BiGauge';
-export * from './BiGauge';
+export { default } from './BiGauge'
+export * from './BiGauge'

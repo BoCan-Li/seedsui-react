@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Instance from './instance.js';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Instance from './instance.js'
 
 export default class LotteryWheel extends Component {
   static propTypes = {
@@ -28,21 +28,20 @@ export default class LotteryWheel extends Component {
     spacing: PropTypes.number,
     // 保存
     suffix: PropTypes.string,
-    quality: PropTypes.number,
+    quality: PropTypes.number
   }
-  static defaultProps = {
-  }
+  static defaultProps = {}
   constructor(props) {
-    super(props);
+    super(props)
   }
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)) {
-      this.instance.params.data = this.props.data;
-      this.instance.init();
+      this.instance.params.data = this.props.data
+      this.instance.init()
     }
   }
-  componentDidMount () {
-    if (this.instance) return;
+  componentDidMount() {
+    if (this.instance) return
     var instance = new Instance(this.$el, {
       // 间隔
       spacing: this.props.spacing,
@@ -65,8 +64,8 @@ export default class LotteryWheel extends Component {
       // 保存
       suffix: this.props.suffix,
       quality: this.props.quality
-    });
-    this.instance = instance;
+    })
+    this.instance = instance
   }
   render() {
     const {
@@ -95,11 +94,18 @@ export default class LotteryWheel extends Component {
       suffix,
       quality,
       ...others
-    } = this.props;
+    } = this.props
     return (
-      <canvas ref={el => {this.$el = el;}} {...others} width={width} height={height}>
+      <canvas
+        ref={(el) => {
+          this.$el = el
+        }}
+        {...others}
+        width={width}
+        height={height}
+      >
         Canvas抽奖轮盘
       </canvas>
-    );
+    )
   }
 }

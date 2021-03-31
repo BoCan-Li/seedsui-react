@@ -16,8 +16,9 @@ var MediaUtil = {
     video.appendChild(source)
     return video
   },
-  getFileURL: function (file) { // 临时路径, file = input.files[0]
-    var url = null;
+  getFileURL: function (file) {
+    // 临时路径, file = input.files[0]
+    var url = null
     if (window.createObjcectURL !== undefined) {
       url = window.createOjcectURL(file)
     } else if (window.URL !== undefined) {
@@ -27,20 +28,24 @@ var MediaUtil = {
     }
     return url
   },
-  getFileSize: function (file) { // 文件大小
+  getFileSize: function (file) {
+    // 文件大小
     return file.size
   },
-  getFileType: function (file) { // 文件类型
+  getFileType: function (file) {
+    // 文件类型
     return file.type
   },
-  getFileBase64: function (file, callback) { // 转成base64
+  getFileBase64: function (file, callback) {
+    // 转成base64
     var reader = new FileReader()
     reader.onload = (e) => {
       callback(e.target.result)
     }
     reader.readAsDataURL(file)
   },
-  convertTime: function (sec) { // 将毫秒转成分秒
+  convertTime: function (sec) {
+    // 将毫秒转成分秒
     if (sec < 0) sec = -sec
     let sec_num = parseInt(sec, 10)
     let hours = Math.floor(sec_num / 3600)
@@ -57,10 +62,12 @@ var MediaUtil = {
     }
     return minutes + ':' + seconds
   },
-  convertSize: function (bytes) { // 转换成KB或者MB, 先*1000再/1000是为了防止精度丢失
+  convertSize: function (bytes) {
+    // 转换成KB或者MB, 先*1000再/1000是为了防止精度丢失
     if (isNaN(bytes)) return 0
-    if (bytes > 1024 * 1024) return (Math.round(bytes * 1000 / (1024 * 1024)) / 1000).toString() + 'MB'
-    return (Math.round(bytes * 1000 / 1024) / 1000).toString() + 'KB'
+    if (bytes > 1024 * 1024)
+      return (Math.round((bytes * 1000) / (1024 * 1024)) / 1000).toString() + 'MB'
+    return (Math.round((bytes * 1000) / 1024) / 1000).toString() + 'KB'
   },
   play: function (target) {
     target.play()
@@ -81,13 +88,15 @@ var MediaUtil = {
   autoplay: function (target, autoplay) {
     target.autoplay = autoplay || false
   },
-  isReady: function (target) { // 0.没有数据不能播放 1.当前帧已下载完成 2.可以播放 3.播放可继续而且应该不会中断
+  isReady: function (target) {
+    // 0.没有数据不能播放 1.当前帧已下载完成 2.可以播放 3.播放可继续而且应该不会中断
     if (target.readyState !== 4) {
       return false
     }
     return true
   },
-  toggleFullScreen: function (target) { // audio不支持全屏, 兼容性差
+  toggleFullScreen: function (target) {
+    // audio不支持全屏, 兼容性差
     if (target.requestFullscreen) {
       target.exitFullscreen()
     } else {
@@ -125,7 +134,8 @@ var MediaUtil = {
       return 4
     }
   },
-  rate: function (target, rate) { // 设置播放速度，默认为1.0秒
+  rate: function (target, rate) {
+    // 设置播放速度，默认为1.0秒
     if (!isNaN(rate)) {
       target.defaultPlaybackRate = rate
     }
@@ -175,12 +185,17 @@ var MediaUtil = {
     }
     return [type, codeType]
   },
-  isSupport: function (suffix) { // 是否支持此视频
+  isSupport: function (suffix) {
+    // 是否支持此视频
     var types = this.suffixTypes(suffix)
     var type = types[0]
     var codeType = types[1]
     var player = document.createElement('video')
-    if (type !== '' && codeType !== '' && (player.canPlayType(type) || player.canPlayType(codeType))) {
+    if (
+      type !== '' &&
+      codeType !== '' &&
+      (player.canPlayType(type) || player.canPlayType(codeType))
+    ) {
       return true
     }
     return false
@@ -188,7 +203,7 @@ var MediaUtil = {
   sourceType: function (src) {
     if (!src) return src
     return this.suffixTypes(src.substring(src.lastIndexOf('.') + 1, src.length).toLowerCase())[0]
-  },
+  }
   /* ---------------------------
     Events
     --------------------------- */

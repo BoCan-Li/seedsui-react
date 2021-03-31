@@ -1,3 +1,3 @@
-import InputRange from './InputRange.js';
+import InputRange from './InputRange.js'
 
-export default InputRange;
+export default InputRange

@@ -1,2 +1,2 @@
-export { default } from './ApiAxios';
-export * from './ApiAxios';
+export { default } from './ApiAxios'
+export * from './ApiAxios'

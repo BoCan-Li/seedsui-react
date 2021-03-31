@@ -1,3 +1,3 @@
-import Counter from './Counter.js';
+import Counter from './Counter.js'
 
-export default Counter;
+export default Counter

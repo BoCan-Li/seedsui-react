@@ -1,3 +1,3 @@
-import Ajax from './Ajax.js';
+import Ajax from './Ajax.js'
 
-export default Ajax;
+export default Ajax

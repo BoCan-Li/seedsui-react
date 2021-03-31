@@ -16,7 +16,7 @@ var emojis = {
   '[龇牙]': '[ziya]',
   '[惊讶]': '[jingya]',
   '[难过]': '[nanguo]',
-  
+
   '[得意]': '[deyi]',
   '[囧]': '[jiong]',
   '[抓狂]': '[zhuakuang]',
@@ -94,7 +94,6 @@ var emojis = {
   '[Yeah]': '[yeah]',
   '[抱拳]': '[baoquan]',
   '[来]': '[lai]',
-
 
   '[加油]': '[jiayou]',
   '[差劲]': '[chajin]',

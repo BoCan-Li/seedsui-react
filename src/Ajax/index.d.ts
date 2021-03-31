@@ -1,2 +1,2 @@
-export { default } from './Ajax';
-export * from './Ajax';
+export { default } from './Ajax'
+export * from './Ajax'

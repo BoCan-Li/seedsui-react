@@ -1,2 +1,2 @@
-export { default } from './InputStar';
-export * from './InputStar';
+export { default } from './InputStar'
+export * from './InputStar'

@@ -1,3 +1,3 @@
-import DB from './DB.js';
+import DB from './DB.js'
 
-export default DB;
+export default DB

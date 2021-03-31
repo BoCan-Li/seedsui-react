@@ -1,3 +1,3 @@
-import Carrousel from './Carrousel.js';
+import Carrousel from './Carrousel.js'
 
-export default Carrousel;
+export default Carrousel

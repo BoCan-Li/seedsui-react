@@ -1,2 +1,2 @@
-export { default } from './Notice';
-export * from './Notice';
+export { default } from './Notice'
+export * from './Notice'

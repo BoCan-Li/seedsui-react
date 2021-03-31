@@ -1,3 +1,3 @@
-import CanvasUtil from './CanvasUtil.js';
+import CanvasUtil from './CanvasUtil.js'
 
-export default CanvasUtil;
+export default CanvasUtil

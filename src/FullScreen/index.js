@@ -1,3 +1,3 @@
-import FullScreen from './FullScreen.js';
+import FullScreen from './FullScreen.js'
 
-export default FullScreen;
+export default FullScreen

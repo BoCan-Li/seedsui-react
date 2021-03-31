@@ -1,2 +1,2 @@
-export { default } from './BiDoughnut';
-export * from './BiDoughnut';
+export { default } from './BiDoughnut'
+export * from './BiDoughnut'

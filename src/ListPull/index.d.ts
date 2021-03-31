@@ -1,2 +1,2 @@
-export { default } from './ListPull';
-export * from './ListPull';
+export { default } from './ListPull'
+export * from './ListPull'

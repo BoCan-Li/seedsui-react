@@ -21,7 +21,8 @@ var FullScreen = {
       document.webkitFullscreenElement ||
       document.msFullscreenElement ||
       document.mozFullScreenElement ||
-      null)
+      null
+    )
   },
   // 是否全屏
   isFull: function (el) {
@@ -31,7 +32,11 @@ var FullScreen = {
   // 进入全屏
   enter: function (el) {
     var target = el || document.body
-    var requestMethod = target.requestFullScreen || target.webkitRequestFullScreen || target.mozRequestFullScreen || target.msRequestFullScreen
+    var requestMethod =
+      target.requestFullScreen ||
+      target.webkitRequestFullScreen ||
+      target.mozRequestFullScreen ||
+      target.msRequestFullScreen
     if (requestMethod) {
       requestMethod.call(target)
     } else if (typeof window.ActiveXObject !== 'undefined') {
@@ -46,14 +51,11 @@ var FullScreen = {
     var target = el || document
     if (document.exitFullscreen) {
       target.exitFullscreen()
-    }
-    else if (document.mozCancelFullScreen) {
+    } else if (document.mozCancelFullScreen) {
       target.mozCancelFullScreen()
-    }
-    else if (document.webkitExitFullscreen) {
+    } else if (document.webkitExitFullscreen) {
       target.webkitExitFullscreen()
-    }
-    else if (document.msExitFullscreen) {
+    } else if (document.msExitFullscreen) {
       target.msExitFullscreen()
     }
     return this

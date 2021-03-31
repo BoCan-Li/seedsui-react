@@ -21,38 +21,37 @@
 // });
 
 /* eslint-disable */
-(function (root) {
-
-  var Route = root.BackboneRoute = {
+;(function (root) {
+  var Route = (root.BackboneRoute = {
     init: function (map) {
-      var defaultAction = map['*'];
+      var defaultAction = map['*']
       if (defaultAction) {
-        Route.defaultAction = defaultAction;
-        delete map['*'];
+        Route.defaultAction = defaultAction
+        delete map['*']
       }
-      Route.routes = map;
-      init();
-      onchange();
+      Route.routes = map
+      init()
+      onchange()
     },
     routes: {},
-    defaultAction: null
-  };
+    defaultAction: null,
+  })
 
   function onchange(onChangeEvent) {
-    var newURL = onChangeEvent && onChangeEvent.newURL || window.location.hash;
-    var url = newURL.replace(/.*#/, '');
-    var found = false;
+    var newURL = (onChangeEvent && onChangeEvent.newURL) || window.location.hash
+    var url = newURL.replace(/.*#/, '')
+    var found = false
     for (var path in Route.routes) {
-      var reg = getRegExp(path);
-      var result = reg.exec(url);
+      var reg = getRegExp(path)
+      var result = reg.exec(url)
       if (result && result[0] && result[0] != '') {
-        var handler = Route.routes[path];
-        handler && handler.apply(null, result.slice(1));
-        found = true;
+        var handler = Route.routes[path]
+        handler && handler.apply(null, result.slice(1))
+        found = true
       }
     }
     if (!found && Route.defaultAction) {
-      Route.defaultAction();
+      Route.defaultAction()
     }
   }
 
@@ -62,25 +61,28 @@
    * @returns {RegExp}
    */
   function getRegExp(route) {
-    var optionalParam = /\((.*?)\)/g;
-    var namedParam = /(\(\?)?:\w+/g;
-    var splatParam = /\*\w+/g;
-    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-    route = route.replace(escapeRegExp, '\\$&')
+    var optionalParam = /\((.*?)\)/g
+    var namedParam = /(\(\?)?:\w+/g
+    var splatParam = /\*\w+/g
+    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g
+    route = route
+      .replace(escapeRegExp, '\\$&')
       .replace(optionalParam, '(?:$1)?')
       .replace(namedParam, function (match, optional) {
-        return optional ? match : '([^/?]+)';
+        return optional ? match : '([^/?]+)'
       })
-      .replace(splatParam, '([^?]*?)');
-    return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+      .replace(splatParam, '([^?]*?)')
+    return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$')
   }
 
   /**
    * 这段判断，引用于director：https://github.com/flatiron/director
    */
   function init() {
-    if ('onhashchange' in window && (document.documentMode === undefined
-      || document.documentMode > 7)) {
+    if (
+      'onhashchange' in window &&
+      (document.documentMode === undefined || document.documentMode > 7)
+    ) {
       // At least for now HTML5 history is available for 'modern' browsers only
       if (window.history === true) {
         // There is an old bug in Chrome that causes onpopstate to fire even
@@ -89,18 +91,16 @@
         // workaround seems to be to set the handler after the initial page load
         // http://code.google.com/p/chromium/issues/detail?id=63040
         setTimeout(function () {
-          window.onpopstate = onchange;
-        }, 500);
+          window.onpopstate = onchange
+        }, 500)
+      } else {
+        window.onhashchange = onchange
       }
-      else {
-        window.onhashchange = onchange;
-      }
-      window.mode = 'modern';
+      window.mode = 'modern'
     } else {
-      throw new Error('sorry, your browser doesn\'t support route');
+      throw new Error("sorry, your browser doesn't support route")
     }
   }
-
-})(window);
+})(window)
 /* eslint-enable */
-export default window.BackboneRoute;
+export default window.BackboneRoute

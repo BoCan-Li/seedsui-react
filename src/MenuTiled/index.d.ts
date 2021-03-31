@@ -1,2 +1,2 @@
-export { default } from './MenuTiled';
-export * from './MenuTiled';
+export { default } from './MenuTiled'
+export * from './MenuTiled'

@@ -50,15 +50,14 @@ var Ajax = {
           resolve(result)
         },
         fail: function (err) {
-          resolve({errMsg: `发送请求失败`, data: err})
-        }
+          resolve({ errMsg: `发送请求失败`, data: err })
+        },
       })
     })
-  }
+  },
 }
 
 export default Ajax
-
 
 // 示例:
 // Ajax.xhr({

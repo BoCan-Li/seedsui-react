@@ -1,3 +1,3 @@
-import ImgMark from './ImgMark.js';
+import ImgMark from './ImgMark.js'
 
-export default ImgMark;
+export default ImgMark

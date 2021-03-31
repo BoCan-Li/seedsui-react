@@ -1,3 +1,3 @@
-import Device from './Device.js';
+import Device from './Device.js'
 
-export default Device;
+export default Device

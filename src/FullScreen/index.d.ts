@@ -1,2 +1,2 @@
-export { default } from './FullScreen';
-export * from './FullScreen';
+export { default } from './FullScreen'
+export * from './FullScreen'

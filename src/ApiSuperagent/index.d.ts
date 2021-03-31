@@ -1,2 +1,2 @@
-export { default } from './ApiSuperagent';
-export * from './ApiSuperagent';
+export { default } from './ApiSuperagent'
+export * from './ApiSuperagent'

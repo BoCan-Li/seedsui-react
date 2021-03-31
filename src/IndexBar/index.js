@@ -1,3 +1,3 @@
-import IndexBar from './IndexBar.js';
+import IndexBar from './IndexBar.js'
 
-export default IndexBar;
+export default IndexBar

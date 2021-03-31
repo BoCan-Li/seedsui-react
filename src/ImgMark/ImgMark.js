@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Instance from './instance.js';
-import Bridge from './../Bridge';
-import BridgeBrowser from './../Bridge/browser';
-import Context from '../Context/instance.js';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Instance from './instance.js'
+import Bridge from './../Bridge'
+import BridgeBrowser from './../Bridge/browser'
+import Context from '../Context/instance.js'
 
 export default class ImgMark extends Component {
-  static contextType = Context;
+  static contextType = Context
   static propTypes = {
     // 数据源
     data: PropTypes.array, // [{strokeStyle: '', lineWidth: '', setLineDash: [], x1: '', y1: '', x2: '', y2: ''}]
@@ -37,33 +37,33 @@ export default class ImgMark extends Component {
     preview: true
   }
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
   }
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.instance) {
       let params = {}
       if (prevProps.isDrawSrc !== this.props.isDrawSrc) {
-        params.isDrawSrc = this.props.isDrawSrc;
+        params.isDrawSrc = this.props.isDrawSrc
       }
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
-        params.strokeStyle = this.props.strokeStyle;
+        params.strokeStyle = this.props.strokeStyle
       }
       if (prevProps.lineWidth !== this.props.lineWidth) {
-        params.lineWidth = this.props.lineWidth;
+        params.lineWidth = this.props.lineWidth
       }
       if (prevProps.quality !== this.props.quality) {
-        params.quality = this.props.quality;
+        params.quality = this.props.quality
       }
       if (prevProps.data !== this.props.data) {
-        params.data = this.props.data;
+        params.data = this.props.data
       }
       if (Object.getOwnPropertyNames(params) && Object.getOwnPropertyNames(params).length) {
-        this.instance.updateParams(params);
+        this.instance.updateParams(params)
       }
     }
   }
-  componentDidMount () {
-    if (this.instance) return;
+  componentDidMount() {
+    if (this.instance) return
     this.instance = new Instance(this.$canvas, {
       src: this.props.src,
       data: this.props.data,
@@ -74,7 +74,7 @@ export default class ImgMark extends Component {
       quality: this.props.quality,
       fail: this.fail,
       success: this.success
-    });
+    })
   }
   validSrc = false
   fail = () => {
@@ -87,29 +87,41 @@ export default class ImgMark extends Component {
     var layer = '' // 绘制的base64编码
     if (this.props.preview) {
       if (!this.validSrc) {
-        Bridge.showToast(`${locale('图片加载失败', 'hint_image_failed_to_load')}, ${locale('无法预览', 'cannot_preview')}`, {mask: false});
-        return;
+        Bridge.showToast(
+          `${locale('图片加载失败', 'hint_image_failed_to_load')}, ${locale(
+            '无法预览',
+            'cannot_preview'
+          )}`,
+          { mask: false }
+        )
+        return
       }
-      if (this.props.isDrawSrc) { // 绘制背景
-        layer = this.instance.save();
+      if (this.props.isDrawSrc) {
+        // 绘制背景
+        layer = this.instance.save()
         if (layer) {
-          Bridge.previewImage({urls: [layer], index: 0});
+          Bridge.previewImage({ urls: [layer], index: 0 })
         }
-      } else { // 不绘制背景
-        layer = this.instance.save();
-        var previewHTML = `<div class="preview-layer" style="background-image:url(${layer})"></div>`;
-        if (this.props.watermark) { // 水印
-          previewHTML += `<div class="preview-layer" style="background-image:url(${this.props.watermark});background-repeat: repeat; background-size:auto;"></div>`;
+      } else {
+        // 不绘制背景
+        layer = this.instance.save()
+        var previewHTML = `<div class="preview-layer" style="background-image:url(${layer})"></div>`
+        if (this.props.watermark) {
+          // 水印
+          previewHTML += `<div class="preview-layer" style="background-image:url(${this.props.watermark});background-repeat: repeat; background-size:auto;"></div>`
         }
-        BridgeBrowser.previewImage({urls: [this.props.src], layerHTML: previewHTML});
+        BridgeBrowser.previewImage({ urls: [this.props.src], layerHTML: previewHTML })
       }
     }
     if (this.props.onClick) this.props.onClick(layer)
   }
   render() {
     // 全局配置
-    let {locale} = this.context;
-    if (!locale) locale = function (remark) {return remark || ''};
+    let { locale } = this.context
+    if (!locale)
+      locale = function (remark) {
+        return remark || ''
+      }
     const {
       data,
       src,
@@ -125,26 +137,42 @@ export default class ImgMark extends Component {
       preview,
       children,
       ...others
-    } = this.props;
-    let isDrawSrcStyle = {};
+    } = this.props
+    let isDrawSrcStyle = {}
     if (!isDrawSrc) {
-      isDrawSrcStyle = {backgroundImage: `url(${src})`};
+      isDrawSrcStyle = { backgroundImage: `url(${src})` }
     }
     return (
-      <div ref={el => {this.$el = el;}} {...others} className={`imgmark${others.className ? ' ' + others.className : ''}`} style={Object({width: width, height: height}, style || {})} onClick={this.onClick}>
+      <div
+        ref={(el) => {
+          this.$el = el
+        }}
+        {...others}
+        className={`imgmark${others.className ? ' ' + others.className : ''}`}
+        style={Object({ width: width, height: height }, style || {})}
+        onClick={this.onClick}
+      >
         <div className={`imgmark-loading active`}>
           <div className={`imgmark-loading-icon`}></div>
         </div>
-        <canvas ref={el => {this.$canvas = el;}} className={`imgmark-wrapper`} style={isDrawSrcStyle}>
+        <canvas
+          ref={(el) => {
+            this.$canvas = el
+          }}
+          className={`imgmark-wrapper`}
+          style={isDrawSrcStyle}
+        >
           Canvas画板
         </canvas>
         <div className={`imgmark-error`}>
           <div className={`imgmark-error-icon`}></div>
-          <div className={`imgmark-error-caption`}>{locale('图片加载失败', 'hint_image_failed_to_load')}</div>
+          <div className={`imgmark-error-caption`}>
+            {locale('图片加载失败', 'hint_image_failed_to_load')}
+          </div>
         </div>
         {/* 内容 */}
         {children}
       </div>
-    );
+    )
   }
 }

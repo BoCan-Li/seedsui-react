@@ -1,3 +1,3 @@
-import BiGauge from './BiGauge.js';
+import BiGauge from './BiGauge.js'
 
-export default BiGauge;
+export default BiGauge

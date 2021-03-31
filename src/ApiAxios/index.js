@@ -1,3 +1,3 @@
-import ApiAxios from './ApiAxios.js';
+import ApiAxios from './ApiAxios.js'
 
-export default ApiAxios;
+export default ApiAxios

@@ -1,2 +1,2 @@
-export { default } from './ImgMark';
-export * from './ImgMark';
+export { default } from './ImgMark'
+export * from './ImgMark'

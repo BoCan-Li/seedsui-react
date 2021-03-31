@@ -1,2 +1,2 @@
-export { default } from './MapChoose';
-export * from './MapChoose';
+export { default } from './MapChoose'
+export * from './MapChoose'

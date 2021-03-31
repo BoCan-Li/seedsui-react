@@ -1,15 +1,17 @@
 // Carrousel 滑动控件
 
 var Carrousel = function (container, params) {
-  function getPureChildren (children, className) {
+  function getPureChildren(children, className) {
     var arr = []
     for (var i = 0; i < children.length; i++) {
       if (children[i].classList.contains(className)) arr.push(children[i])
     }
     return arr
   }
-  function getElementByParent (parent, selector) {
-    return (typeof selector === 'string' && selector !== '') ? parent.querySelector(selector) : selector
+  function getElementByParent(parent, selector) {
+    return typeof selector === 'string' && selector !== ''
+      ? parent.querySelector(selector)
+      : selector
   }
 
   /* --------------------
@@ -99,7 +101,7 @@ var Carrousel = function (container, params) {
   s.max = 0
   // Slides
   s.updateSlides = function () {
-    s.slides = getPureChildren(s.wrapper.children, s.params.slideClass)// [es6]s.slides=s.wrapper.querySelectorAll(':scope > .'+s.params.slideClass)
+    s.slides = getPureChildren(s.wrapper.children, s.params.slideClass) // [es6]s.slides=s.wrapper.querySelectorAll(':scope > .'+s.params.slideClass)
   }
   // loop dupSlides
   s.dupSlides = []
@@ -115,7 +117,8 @@ var Carrousel = function (container, params) {
     var dup
     s.slides.forEach(function (n, i, a) {
       if (i < s.params.slidesPerView) afterDupSlides.push(n.cloneNode(true))
-      if (i < s.slides.length && i >= s.slides.length - s.params.slidesPerView) beforeDupSlides.push(n.cloneNode(true))
+      if (i < s.slides.length && i >= s.slides.length - s.params.slidesPerView)
+        beforeDupSlides.push(n.cloneNode(true))
     })
     for (i = 0; i < afterDupSlides.length; i++) {
       dup = s.wrapper.appendChild(afterDupSlides[i])
@@ -134,7 +137,7 @@ var Carrousel = function (container, params) {
     var slideDuplicate = getPureChildren(s.wrapper.children, s.params.slideDuplicateClass)
     //  var slideDuplicate=s.wrapper.querySelectorAll(':scope > .'+s.params.slideDuplicateClass)
     /* eslint-disable */
-    for (var i = 0, slideDu; slideDu = slideDuplicate[i++];) {
+    for (var i = 0, slideDu; (slideDu = slideDuplicate[i++]); ) {
       s.wrapper.removeChild(slideDu)
     }
     /* eslint-enable */
@@ -157,7 +160,7 @@ var Carrousel = function (container, params) {
     diffY: 0,
     posX: 0
   }
-  function moveToIndex (speed) {
+  function moveToIndex(speed) {
     s.wrapper.style.webkitTransitionDuration = speed + 'ms'
     s.touches.posX = -s.activeIndexTruth * s.slideWidth
     s.wrapper.style.webkitTransform = 'translate(' + s.touches.posX + 'px,0px)'
@@ -227,10 +230,12 @@ var Carrousel = function (container, params) {
     s.activeIndex = s.activeIndexTruth
     if (s.params.loop) {
       s.activeIndex = s.activeIndexTruth - s.params.slidesPerView
-      if (s.max - s.params.slidesPerView === s.activeIndexTruth) { // 正向滑动
+      if (s.max - s.params.slidesPerView === s.activeIndexTruth) {
+        // 正向滑动
         s.activeIndex = 0
       }
-      if (s.activeIndex < 0) { // 反向滑动
+      if (s.activeIndex < 0) {
+        // 反向滑动
         s.activeIndex = s.slides.length + s.activeIndex
       }
     }
@@ -252,7 +257,7 @@ var Carrousel = function (container, params) {
     s.bullets[s.activeIndex].classList.add(s.params.bulletActiveClass)
   }
   // 获取屏幕宽度
-  function getScreenWidth () {
+  function getScreenWidth() {
     if (window.innerWidth) return window.innerWidth
     if (window.screen.width) return window.screen.width
     if (window.screen.availWidth) return window.screen.availWidth
@@ -287,7 +292,7 @@ var Carrousel = function (container, params) {
     } else if (/(\d+)px/.test(s.container.style.width)) {
       s.width = /(\d+)px/.exec(s.container.style.width)[1]
     } else {
-      s.width = (s.container.clientWidth ? s.container.clientWidth : getScreenWidth())
+      s.width = s.container.clientWidth ? s.container.clientWidth : getScreenWidth()
     }
     s.container.style.width = s.width + 'px'
     // Slide width
@@ -296,7 +301,7 @@ var Carrousel = function (container, params) {
     // Wrapper width
     s.wrapperWidth = s.slideWidth * s.max
     s.wrapper.style.width = s.wrapperWidth + 'px'
-    
+
     // Slide width
     s.slides.forEach(function (n, i, a) {
       n.style.width = s.slideWidth + 'px'
@@ -307,7 +312,7 @@ var Carrousel = function (container, params) {
       n.style.width = s.slideWidth + 'px'
     })
   }
-  
+
   // 更新高度
   s.updateHeight = function () {
     if (s.params.height && !isNaN(s.params.height)) {
@@ -316,10 +321,12 @@ var Carrousel = function (container, params) {
       s.height = /(\d+)px/.exec(s.params.height)[1]
     } else if (/(\d+)px/.test(s.container.style.height)) {
       s.height = /(\d+)px/.exec(s.container.style.height)[1]
-    } else if (s.container.classList.contains(s.params.pageClass)) { // 如果没有设置高度,且是页面轮播,则高度自适应
+    } else if (s.container.classList.contains(s.params.pageClass)) {
+      // 如果没有设置高度,且是页面轮播,则高度自适应
       s.height = null
-    } else { // 非页面轮播时,则需要计算高度
-      s.height = (s.container.clientHeight ? s.container.clientHeight : s.wrapper.clientHeight)
+    } else {
+      // 非页面轮播时,则需要计算高度
+      s.height = s.container.clientHeight ? s.container.clientHeight : s.wrapper.clientHeight
     }
     if (!s.height) return
     // Container height
@@ -355,7 +362,7 @@ var Carrousel = function (container, params) {
   // 图片懒加载
   var imgs = []
   var cacheImgs = []
-  function imgLoad (e) {
+  function imgLoad(e) {
     var target = e.target
     var imgTarget = imgs[target.index]
     if (!imgTarget) return
@@ -388,7 +395,12 @@ var Carrousel = function (container, params) {
 
   // 更新
   s.update = function () {
-    if (!s.activeIndex || typeof s.activeIndex !== 'number' || s.activeIndex < 0 || s.activeIndex > s.slides.length - 1) {
+    if (
+      !s.activeIndex ||
+      typeof s.activeIndex !== 'number' ||
+      s.activeIndex < 0 ||
+      s.activeIndex > s.slides.length - 1
+    ) {
       s.activeIndex = 0
     }
     s.activeIndexTruth = s.activeIndex
@@ -451,7 +463,7 @@ var Carrousel = function (container, params) {
   /* --------------------
   Touch Handler
   -------------------- */
-  function preventDefault (e) {
+  function preventDefault(e) {
     e.preventDefault()
   }
   s.onTouchStart = function (e) {
@@ -472,13 +484,16 @@ var Carrousel = function (container, params) {
     if (s.params.onSlideChange) s.params.onSlideChange(s)
 
     // 设置滑动方向
-    if (s.touches.direction === 0) { // 设置滑动方向(-1上下 | 1左右)
+    if (s.touches.direction === 0) {
+      // 设置滑动方向(-1上下 | 1左右)
       s.touches.direction = Math.abs(s.touches.diffX) > Math.abs(s.touches.diffY) ? 1 : -1
     }
-    if (s.touches.direction === -1) { // 设置垂直方向(-1上 | 1下)
+    if (s.touches.direction === -1) {
+      // 设置垂直方向(-1上 | 1下)
       s.touches.vertical = s.touches.diffY < 0 ? 1 : -1
     }
-    if (s.touches.direction === 1) { // 设置左右方向(-1左 | 1右)
+    if (s.touches.direction === 1) {
+      // 设置左右方向(-1左 | 1右)
       s.touches.horizontal = s.touches.diffX < 0 ? 1 : -1
     }
 
@@ -504,9 +519,12 @@ var Carrousel = function (container, params) {
     s.touches.endY = e.clientY || e.changedTouches[0].clientY
 
     // 单击事件
-    if (Math.abs(s.touches.startX - s.touches.endX) < 6 && Math.abs(s.touches.startY - s.touches.endY) < 6) {
+    if (
+      Math.abs(s.touches.startX - s.touches.endX) < 6 &&
+      Math.abs(s.touches.startY - s.touches.endY) < 6
+    ) {
       if (s.params.onClick) s.params.onClick(s)
-    // 滑动事件,左右拉动
+      // 滑动事件,左右拉动
     } else if (s.touches.direction === 1) {
       if (s.touches.diffX > s.params.threshold) {
         // 下一页
@@ -522,7 +540,7 @@ var Carrousel = function (container, params) {
     s.touches.direction = 0
     s.touches.vertical = 0
     s.touches.horizontal = 0
-    
+
     // 重新开启自动播放
     s.startAutoplay()
   }
@@ -573,7 +591,6 @@ var Carrousel = function (container, params) {
     }
   }
 
-  
   // 主函数
   s.init = function () {
     // s.update()

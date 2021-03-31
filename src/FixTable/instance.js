@@ -47,8 +47,8 @@ export default {
   colsWidth: [],
   // 设置容器尺寸
   updateContainerSize: function (container, leftFixed, rightFixed) {
-    var theadTable = container.querySelector('.fixtable-thead');
-    var tbodyTable = container.querySelector('.fixtable-tbody');
+    var theadTable = container.querySelector('.fixtable-thead')
+    var tbodyTable = container.querySelector('.fixtable-tbody')
 
     if (!theadTable || !tbodyTable) return
     // 容器总宽度
@@ -59,18 +59,18 @@ export default {
     this.colsWidth = []
     var tr = tbodyTable.querySelector('tr')
     if (!tr) return
-    [].slice.call(tr.children).forEach((td) => {
+    ;[].slice.call(tr.children).forEach((td) => {
       this.colsWidth.push(td.clientWidth)
     })
     // 生成col的html代码
-    var colHTML = '';
+    var colHTML = ''
     for (let colWidth of this.colsWidth) {
       colHTML += `<col style="width: ${colWidth}px; min-width: ${colWidth}px;">`
     }
     // 设置colgroup
-    [].slice.call(container.querySelectorAll('colgroup')).forEach((colgroup) => {
-      colgroup.innerHTML = colHTML;
-    });
+    ;[].slice.call(container.querySelectorAll('colgroup')).forEach((colgroup) => {
+      colgroup.innerHTML = colHTML
+    })
     // 左右固定
     var thead = theadTable.querySelector('thead')
     var tbody = tbodyTable.querySelector('tbody')
@@ -83,14 +83,14 @@ export default {
   },
   fixed: function (position, thead, tbody, fixedNums) {
     // 为指定列加上粘性定位
-    var theadTrs = thead.querySelectorAll('tr');
-    var tbodyTrs = tbody.querySelectorAll('tr');
-    [].slice.call(theadTrs).forEach((tr) => {
+    var theadTrs = thead.querySelectorAll('tr')
+    var tbodyTrs = tbody.querySelectorAll('tr')
+    ;[].slice.call(theadTrs).forEach((tr) => {
       this.fixedTd(position, tr, fixedNums)
-    });
-    [].slice.call(tbodyTrs).forEach((tr) => {
+    })
+    ;[].slice.call(tbodyTrs).forEach((tr) => {
       this.fixedTd(position, tr, fixedNums)
-    });
+    })
   },
   // 固定td, position: 'left || right'
   fixedTd: function (position, tr, fixedNums) {
@@ -133,14 +133,18 @@ export default {
   // 滚动修改左右滚动样式, 和底部加载
   onScroll: function (container, onBottomRefresh) {
     // 左右滚动样式, 为了显隐投影
-    var scrollLeft = container === document.body ? document.documentElement.scrollLeft : container.scrollLeft
+    var scrollLeft =
+      container === document.body ? document.documentElement.scrollLeft : container.scrollLeft
     var clientWidth = container.clientWidth
     var scrollWidth = container.scrollWidth
-    if (clientWidth !== scrollWidth) { // 有滚动条的情况
-      if (scrollLeft + clientWidth >= scrollWidth) { // 最右边
+    if (clientWidth !== scrollWidth) {
+      // 有滚动条的情况
+      if (scrollLeft + clientWidth >= scrollWidth) {
+        // 最右边
         container.classList.remove('fixtable-ping-right')
         container.classList.add('fixtable-ping-left')
-      } else if (scrollLeft === 0) { // 最左边
+      } else if (scrollLeft === 0) {
+        // 最左边
         container.classList.remove('fixtable-ping-left')
         container.classList.add('fixtable-ping-right')
       } else {
@@ -152,7 +156,8 @@ export default {
     if (!onBottomRefresh) return
     var clientHeight = container.clientHeight
     var scrollHeight = container.scrollHeight
-    var scrollTop = container === document.body ? document.documentElement.scrollTop : container.scrollTop
+    var scrollTop =
+      container === document.body ? document.documentElement.scrollTop : container.scrollTop
     if (scrollTop + clientHeight >= scrollHeight - 2) {
       onBottomRefresh()
     }

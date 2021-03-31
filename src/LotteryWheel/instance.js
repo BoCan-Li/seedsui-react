@@ -74,12 +74,14 @@ var LotteryWheel = function (container, params) {
   // 获取设备缩放比率
   s.getPixelRatio = function () {
     var context = s.ctx
-    var backingStore = context.backingStorePixelRatio ||
-        context.webkitBackingStorePixelRatio ||
-        context.mozBackingStorePixelRatio ||
-        context.msBackingStorePixelRatio ||
-        context.oBackingStorePixelRatio ||
-        context.backingStorePixelRatio || 1
+    var backingStore =
+      context.backingStorePixelRatio ||
+      context.webkitBackingStorePixelRatio ||
+      context.mozBackingStorePixelRatio ||
+      context.msBackingStorePixelRatio ||
+      context.oBackingStorePixelRatio ||
+      context.backingStorePixelRatio ||
+      1
     return (window.devicePixelRatio || 1) / backingStore
   }
   // 封装扇形函数, 参数: x坐标、y坐标、半径、起始角、结束角、是否逆时针
@@ -93,7 +95,7 @@ var LotteryWheel = function (container, params) {
     // 闭合路径
     s.ctx.closePath()
   }
-  s.slotDeg = 0  // 一槽的度数
+  s.slotDeg = 0 // 一槽的度数
   s.rad = 0 // 一度的弧度
   s.slotRad = 0 // 一槽的弧度
   // 更新一槽的弧度
@@ -114,7 +116,7 @@ var LotteryWheel = function (container, params) {
     s.ctx.lineWidth = item.bgLineWidth || s.params.bgLineWidth
 
     // 计算开始和结束角, 使开始位置从正上方开始
-    var startAngel = s.rad * (-90) - (s.slotRad / 2)
+    var startAngel = s.rad * -90 - s.slotRad / 2
     var endAngel = startAngel + s.slotRad
 
     // 设置中心点与旋转弧度, 旋转完再绘
@@ -142,12 +144,12 @@ var LotteryWheel = function (container, params) {
     s.ctx.fillText(item.text || '', xy, fontTop)
 
     // 绘图片
-    var img = s.imgs[index];
+    var img = s.imgs[index]
     if (img.getAttribute('data-complete') === '1') {
       var imgTop = (item.iconTop || s.params.iconTop) * ratio
       var imgWidth = (item.iconWidth || s.params.iconWidth) * ratio
       var imgHeight = (item.iconHeight || s.params.iconHeight) * ratio
-      s.ctx.drawImage(img, xy - (imgWidth / 2), imgTop, imgWidth, imgHeight);  
+      s.ctx.drawImage(img, xy - imgWidth / 2, imgTop, imgWidth, imgHeight)
     }
 
     // 还原绘前状态
@@ -264,7 +266,7 @@ var LotteryWheel = function (container, params) {
     s.playing = true
     if (!s.params.data || !s.params.data.length) return
     var baseRotate = (s.params.around || 6) * 360 // 转固定几圈, 并指向奖品的正中间
-    var rotate = (count + 1) * s.slotDeg - (s.slotDeg / 2)
+    var rotate = (count + 1) * s.slotDeg - s.slotDeg / 2
 
     s.wrapper.classList.add('animated')
     s.wrapper.style.WebkitTransform = 'rotate(' + (baseRotate - rotate) + 'deg)'

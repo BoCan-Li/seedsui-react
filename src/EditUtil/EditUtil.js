@@ -8,7 +8,8 @@ var EditUtil = {
   getTxtCusorPos: function (txt) {
     var cusorPos = -1
     // 非ie
-    if (txt.selectionStart) {// 非IE浏览器
+    if (txt.selectionStart) {
+      // 非IE浏览器
       cusorPos = txt.selectionStart
       return cusorPos
     }
@@ -22,7 +23,7 @@ var EditUtil = {
   },
   // 获取光标位置
   getDivCusorPos: function () {
-    var cusorPos = 0//  光标位置
+    var cusorPos = 0 //  光标位置
     // 非ie
     if (window.getSelection) {
       var selection = window.getSelection()
@@ -169,13 +170,17 @@ var EditUtil = {
   },
   isEnter: function () {
     // 监听键盘输入
-    window.addEventListener('keydown', function (e) {
-      var keynum = e.which || e.keyCode
-      if (keynum === '13') {
-        return true
-      }
-      return false
-    }, false)
+    window.addEventListener(
+      'keydown',
+      function (e) {
+        var keynum = e.which || e.keyCode
+        if (keynum === '13') {
+          return true
+        }
+        return false
+      },
+      false
+    )
   }
 }
 

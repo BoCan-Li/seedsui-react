@@ -1,2 +1,2 @@
-export { default } from './InputTel';
-export * from './InputTel';
+export { default } from './InputTel'
+export * from './InputTel'

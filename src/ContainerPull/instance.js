@@ -14,7 +14,7 @@ var ContainerPull = function (params) {
 
     isTopPosition: 0, // 如果scrollTop小于等于isTopPosition时，则认为是到顶部了(不建议修改)
 
-    topContainer: null, // 头部容器
+    topContainer: null // 头部容器
 
     /* callbacks
     onScroll: function(e) // 滚动
@@ -40,13 +40,19 @@ var ContainerPull = function (params) {
   var s = this
   s.params = params
   // Container
-  s.container = typeof s.params.container === 'string' ? document.querySelector(s.params.container) : s.params.container
+  s.container =
+    typeof s.params.container === 'string'
+      ? document.querySelector(s.params.container)
+      : s.params.container
   if (!s.container) {
     console.log('SeedsUI Error : ContainerPull container不存在，请检查页面中是否有此元素')
     return
   }
   // topContainer
-  s.topContainer = typeof s.params.topContainer === 'string' ? document.querySelector(s.params.topContainer) : s.params.topContainer
+  s.topContainer =
+    typeof s.params.topContainer === 'string'
+      ? document.querySelector(s.params.topContainer)
+      : s.params.topContainer
   if (!s.topContainer) {
     console.log('SeedsUI Warn : topContainer不存在，请检查页面中是否有此元素')
   }
@@ -101,7 +107,8 @@ var ContainerPull = function (params) {
   s.isBottom = function () {
     var clientHeight = s.container.clientHeight // || window.innerHeight
     var scrollHeight = s.container.scrollHeight
-    var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
+    var scrollTop =
+      s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
     // console.log(clientHeight + ':' + scrollHeight + ':' + scrollTop)
     if (scrollTop + clientHeight >= scrollHeight - 2) {
       return true
@@ -145,7 +152,7 @@ var ContainerPull = function (params) {
       // 头部动画监听
       s.topContainer[action]('webkitTransitionEnd', s.onTransitionEnd, false)
     }
-    
+
     // 绑定底部事件，区分一般容器和body
     if (touchTarget === document.body) {
       touchTarget = window
@@ -184,7 +191,11 @@ var ContainerPull = function (params) {
   s.preventMove = false
   s.onTouchStart = function (e) {
     s.startMouseMove = true
-    s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+    s.container.addEventListener(
+      s.isSupportTouch ? 'touchmove' : 'mousemove',
+      s.preventDefault,
+      false
+    )
     s.preventMove = true
     // 如果不在顶部，则不触发
     if (s.getScrollTop() <= s.params.isTopPosition) s.touches.isTop = true
@@ -220,12 +231,17 @@ var ContainerPull = function (params) {
       // 上拉阻止滚动条滚动
       if (s.preventMove === false) {
         console.log('上拉阻止滚动条滚动')
-        s.container.addEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+        s.container.addEventListener(
+          s.isSupportTouch ? 'touchmove' : 'mousemove',
+          s.preventDefault,
+          false
+        )
         s.preventMove = true
       }
       // 当前下拉坐标
       s.touches.currentPosY = s.touches.posY + s.touches.diffY
-      if (s.params.end && s.touches.currentPosY >= s.params.end) { // 头部下拉到结束位置
+      if (s.params.end && s.touches.currentPosY >= s.params.end) {
+        // 头部下拉到结束位置
         s.touches.currentPosY = s.params.end
         if (s.params.endRefresh) s.onTouchEnd() // 头部下拉到结束位置刷新
       } else {
@@ -245,7 +261,11 @@ var ContainerPull = function (params) {
     } else {
       if (s.preventMove === true) {
         console.log('滚动移除阻止滚动条')
-        s.container.removeEventListener(s.isSupportTouch ? 'touchmove' : 'mousemove', s.preventDefault, false)
+        s.container.removeEventListener(
+          s.isSupportTouch ? 'touchmove' : 'mousemove',
+          s.preventDefault,
+          false
+        )
         s.preventMove = false
       }
     }
@@ -257,9 +277,11 @@ var ContainerPull = function (params) {
     s.touches.vertical = 0
     // 下拉的情况
     if (s.touches.currentPosY > 0) {
-      if (s.touches.currentPosY > s.params.threshold) { // 如果大于hold值，则展示
+      if (s.touches.currentPosY > s.params.threshold) {
+        // 如果大于hold值，则展示
         s.showTop()
-      } else { // 小于则收起
+      } else {
+        // 小于则收起
         s.hideTop()
       }
     }
@@ -285,7 +307,8 @@ var ContainerPull = function (params) {
     }
   }
   s.getScrollTop = function (e) {
-    var scrollTop = s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
+    var scrollTop =
+      s.container === document.body ? document.documentElement.scrollTop : s.container.scrollTop
     return scrollTop
   }
   s.onScroll = function (e) {

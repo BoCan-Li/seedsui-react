@@ -1,12 +1,14 @@
-import React, {useContext} from 'react';
-import Context from './../../Context/instance.js';
+import React, { useContext } from 'react'
+import Context from './../../Context/instance.js'
 
-function Location ({
-  ...props
-}) {
+function Location({ ...props }) {
   // context
-  const context = useContext(Context) || {};
-  const locale = context.locale || function (remark) {return remark || ''};
+  const context = useContext(Context) || {}
+  const locale =
+    context.locale ||
+    function (remark) {
+      return remark || ''
+    }
   return (
     <div {...props} className={`map-location${props.className ? ' ' + props.className : ''}`}>
       <div className={`map-location-icon`}></div>
@@ -15,4 +17,4 @@ function Location ({
   )
 }
 
-export default Location;
+export default Location

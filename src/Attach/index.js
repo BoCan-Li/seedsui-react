@@ -1,3 +1,3 @@
-import Attach from './Attach.js';
+import Attach from './Attach.js'
 
-export default Attach;
+export default Attach

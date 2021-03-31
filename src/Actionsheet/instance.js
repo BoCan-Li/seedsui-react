@@ -22,7 +22,7 @@ var Actionsheet = function (params) {
     optionClass: 'actionsheet-option',
     buttonCancelClass: 'actionsheet-cancel',
     buttonCancelHTML: '取消', // 实例化时需要国际化
-    data: [] // [{text: '', handler: func()}]
+    data: [], // [{text: '', handler: func()}]
     /*
     Callbacks:
     option.handler:function(Actionsheet)
@@ -39,13 +39,17 @@ var Actionsheet = function (params) {
   var s = this
   s.params = params
   // Parent | OverflowContainer
-  s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
-  s.overflowContainer = typeof s.params.overflowContainer === 'string' ? document.querySelector(s.params.overflowContainer) : s.params.overflowContainer
+  s.parent =
+    typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
+  s.overflowContainer =
+    typeof s.params.overflowContainer === 'string'
+      ? document.querySelector(s.params.overflowContainer)
+      : s.params.overflowContainer
   if (!s.parent) {
-		console.warn('SeedsUI Error: IndexBar控件缺少parent')
-		return
-	}
-	if (!s.overflowContainer) s.overflowContainer = s.parent
+    console.warn('SeedsUI Error: IndexBar控件缺少parent')
+    return
+  }
+  if (!s.overflowContainer) s.overflowContainer = s.parent
   // Actionsheet | Mask
   s.actionsheet
   s.mask
@@ -57,7 +61,9 @@ var Actionsheet = function (params) {
       console.log('没有parent')
       return
     }
-    if (!s.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+    if (!s.mask)
+      s.mask =
+        typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (!s.mask || !s.mask.tagName) {
       s.mask = document.createElement('div')
       s.parent.appendChild(s.mask)
@@ -75,7 +81,10 @@ var Actionsheet = function (params) {
       s.actionsheet = document.createElement('div')
       s.mask.appendChild(s.actionsheet)
     }
-    s.actionsheet.setAttribute('class', s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : ''))
+    s.actionsheet.setAttribute(
+      'class',
+      s.params.actionsheetClass + (s.params.animationClass ? ' ' + s.params.animationClass : '')
+    )
     s.actionsheet.setAttribute(s.params.animationAttr, s.params.animation)
   }
   // Group
@@ -93,7 +102,8 @@ var Actionsheet = function (params) {
     // Options
     s.group.innerHTML = ''
     s.options = []
-    for (var [i, opt] of s.params.data.entries()) { // eslint-disable-line
+    // eslint-disable-next-line
+    for (var [i, opt] of s.params.data.entries()) {
       var option = document.createElement('a')
       option.setAttribute('class', s.params.optionClass)
       option.setAttribute('data-index', i)
@@ -163,7 +173,8 @@ var Actionsheet = function (params) {
     // 显示弹出框
     s.hideActionsheet()
     // 显示滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.remove(s.params.overflowContainerActiveClass)
   }
   s.show = function () {
     s.isHid = false
@@ -172,9 +183,11 @@ var Actionsheet = function (params) {
     // 显示弹出框
     s.showActionsheet()
     // 禁用滚动条
-    if (s.overflowContainer) s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
+    if (s.overflowContainer)
+      s.overflowContainer.classList.add(s.params.overflowContainerActiveClass)
   }
-  s.destroy = function () { // 销毁
+  s.destroy = function () {
+    // 销毁
     s.destroyMask()
   }
   /* ------------------
@@ -198,11 +211,14 @@ var Actionsheet = function (params) {
     s.event = e
     // 点击容器
     if (s.params.onClick) s.params.onClick(s)
-    if (e.target.classList.contains(s.params.maskClass)) { // 点击遮罩
+    if (e.target.classList.contains(s.params.maskClass)) {
+      // 点击遮罩
       s.onClickMask(s)
-    } else if (e.target.classList.contains(s.params.headerCancelClass)) { // 点击确定按钮
+    } else if (e.target.classList.contains(s.params.headerCancelClass)) {
+      // 点击确定按钮
       s.onClickCancel(s)
-    } else if (e.target.classList.contains(s.params.optionClass)) { // 点击项
+    } else if (e.target.classList.contains(s.params.optionClass)) {
+      // 点击项
       s.onClickOption(s)
     }
 
@@ -218,7 +234,7 @@ var Actionsheet = function (params) {
     var e = s.event
     var index = e.target.getAttribute('data-index')
     if (!isNaN(index)) {
-      if(s.params.data[index].handler instanceof Function) option.handler(s)
+      if (s.params.data[index].handler instanceof Function) option.handler(s)
     }
   }
   // Cancel

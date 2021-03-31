@@ -17,9 +17,9 @@ const MenuTree = forwardRef(
     },
     ref
   ) => {
-    const refEl = useRef(null)
+    const rootRef = useRef(null)
     useImperativeHandle(ref, () => {
-      return refEl.current
+      return rootRef.current
     })
     const instance = useRef(null)
 
@@ -45,13 +45,13 @@ const MenuTree = forwardRef(
       if (JSON.stringify(data).indexOf('"children"') === -1) {
         data = data.deepTree()
       }
-      instance.current = new Instance(refEl.current, {
+      instance.current = new Instance(rootRef.current, {
         data: data,
         selectedId: selected && selected.length ? selected[0].id : '',
         onExtendActive: onExtendActive ? true : null,
-        onClick: click, // (item, isActive, isExtend: true展开 | false收缩)
+        onClick: click // (item, isActive, isExtend: true展开 | false收缩)
       })
-      refEl.current.instance = instance
+      rootRef.current.instance = instance
     }, []) // eslint-disable-line
 
     // 比较变化
@@ -79,7 +79,7 @@ const MenuTree = forwardRef(
       instance.current.params.onClick = click
     }
     function click(s, item, isActived, isExtend) {
-      if (refEl.current) s.target = refEl.current
+      if (rootRef.current) s.target = rootRef.current
       // childrenCount
       var childrenCount = item.children && item.children.length ? item.children.length : 0
 
@@ -98,7 +98,7 @@ const MenuTree = forwardRef(
 
     return (
       <ul
-        ref={refEl}
+        ref={rootRef}
         {...others}
         className={`menutree${others.className ? ' ' + others.className : ''}`}
       ></ul>

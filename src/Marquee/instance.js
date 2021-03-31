@@ -29,7 +29,7 @@ var Marquee = function (container, params) {
   // Container
   s.container = typeof container === 'string' ? document.querySelector(container) : container
   // 定时器
-  s.interval =  null
+  s.interval = null
   // 循环
   s.updateLoop = function () {
     // 删除复制出来的div
@@ -67,7 +67,7 @@ var Marquee = function (container, params) {
   s.start = 0
   s.end = 0
   s.move = 0
-  s.update = function() {
+  s.update = function () {
     s.start = s.params.start
     s.end = s.params.end
     var range = s.params.end - s.params.start
@@ -103,7 +103,7 @@ var Marquee = function (container, params) {
   // 播放
   s.play = function () {
     if (s.interval) window.clearInterval(s.interval)
-    s.interval = window.setInterval(function() {
+    s.interval = window.setInterval(function () {
       s.move += s.params.step
       if (s.params.loop) {
         if (s.move >= s.end + s.params.step) {

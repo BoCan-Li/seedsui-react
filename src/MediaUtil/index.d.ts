@@ -1,2 +1,2 @@
-export { default } from './MediaUtil';
-export * from './MediaUtil';
+export { default } from './MediaUtil'
+export * from './MediaUtil'

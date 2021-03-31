@@ -11,17 +11,26 @@ var CanvasUtil = {
       return errMsg
     }
     if (isNaN(opts.y)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}y${locale('参数不正确', 'wrong_parameter')}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}y${locale(
+        '参数不正确',
+        'wrong_parameter'
+      )}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.width)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale('参数不正确', 'wrong_parameter')}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale(
+        '参数不正确',
+        'wrong_parameter'
+      )}`
       console.warn(errMsg)
       return errMsg
     }
     if (isNaN(opts.height)) {
-      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale('参数不正确', 'wrong_parameter')}`
+      errMsg = `SeedsUI Error:CanvasUtil.cropImg,${locale('方法', 'method')}width${locale(
+        '参数不正确',
+        'wrong_parameter'
+      )}`
       console.warn(errMsg)
       return errMsg
     }
@@ -35,20 +44,24 @@ var CanvasUtil = {
       document.body.appendChild(canvas)
     }
     var ctx = canvas.getContext('2d')
-    canvas.width = opts.width;
-    canvas.height = opts.height;
+    canvas.width = opts.width
+    canvas.height = opts.height
     var img = new Image()
     img.src = opts.src
     img.crossOrigin = 'Anonymous'
-    img.addEventListener('load', function () {
-      ctx.drawImage(img, opts.x, opts.y, opts.width, opts.height, 0, 0, opts.width, opts.height)
-      // 成功回调
-      try {
-        if (opts.success) opts.success(canvas.toDataURL(suffix, quality))
-      } catch (error) {
-        if (opts.fail) opts.fail({errMsg: error})
-      }
-    }, false)
+    img.addEventListener(
+      'load',
+      function () {
+        ctx.drawImage(img, opts.x, opts.y, opts.width, opts.height, 0, 0, opts.width, opts.height)
+        // 成功回调
+        try {
+          if (opts.success) opts.success(canvas.toDataURL(suffix, quality))
+        } catch (error) {
+          if (opts.fail) opts.fail({ errMsg: error })
+        }
+      },
+      false
+    )
   }
 }
 

@@ -1,2 +1,2 @@
-export { default } from './Photos';
-export * from './Photos';
+export { default } from './Attach'
+export * from './Attach'

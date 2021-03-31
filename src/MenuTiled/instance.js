@@ -14,7 +14,7 @@ var MenuTiled = function (container, params) {
     activeClass: 'active',
     extendClass: 'extend',
 
-    selectedId: '', // 默认选中项的id
+    selectedId: '' // 默认选中项的id
     /*
     callbacks
     onClick:function(s, item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
@@ -49,11 +49,24 @@ var MenuTiled = function (container, params) {
     var slot = document.createElement('div')
     slot.setAttribute('class', hasSlot ? s.params.slotSubClass : s.params.slotClass)
     var html = ''
-    for (var i = 0, option; option = list[i++];) { // eslint-disable-line
-      html += '<div data-index="' + i + '" data-id="' + option.id + '" class="' + s.params.tagClass + (option.id === s.params.selectedId ? ' active' : '') + '">' +
-      '<p class="menutiled-tag-font">' + option.name + '</p>' +
-      (option.children && option.children.length > 0 ? '<i class="' + s.params.iconMoreClass + '"></i>' : '<i class="' + s.params.iconChecked + '"></i>') +
-      '</div>'
+    // eslint-disable-next-line
+    for (var i = 0, option; (option = list[i++]); ) {
+      html +=
+        '<div data-index="' +
+        i +
+        '" data-id="' +
+        option.id +
+        '" class="' +
+        s.params.tagClass +
+        (option.id === s.params.selectedId ? ' active' : '') +
+        '">' +
+        '<p class="menutiled-tag-font">' +
+        option.name +
+        '</p>' +
+        (option.children && option.children.length > 0
+          ? '<i class="' + s.params.iconMoreClass + '"></i>'
+          : '<i class="' + s.params.iconChecked + '"></i>') +
+        '</div>'
     }
     slot.innerHTML = html
     container.appendChild(slot)
@@ -108,12 +121,12 @@ var MenuTiled = function (container, params) {
     // isExtend
     var isExtend = target.classList.contains(s.params.extendClass)
     // item
-    const id = target.getAttribute('data-id');
-    let item = s.params.data.getDeepTreeNode(id);
+    const id = target.getAttribute('data-id')
+    let item = s.params.data.getDeepTreeNode(id)
     // 如果已经展开,则收缩
     if (isExtend) {
       // target.classList.remove(s.params.extendClass)
-    // 如果没有展开,则展开并选中,有下级则新建下级节点
+      // 如果没有展开,则展开并选中,有下级则新建下级节点
     } else {
       // 移除下级节点
       var slot = target.parentNode
@@ -121,7 +134,8 @@ var MenuTiled = function (container, params) {
       if (nextSlot) slot.parentNode.removeChild(nextSlot)
       // 移除同级所有的选中项与展开项
       var tags = slot.children
-      for (var i = 0, tag; tag = tags[i++];) { // eslint-disable-line
+      // eslint-disable-next-line
+      for (var i = 0, tag; (tag = tags[i++]); ) {
         if (tag) {
           tag.classList.remove(s.params.extendClass)
           tag.classList.remove(s.params.activeClass)
@@ -135,7 +149,7 @@ var MenuTiled = function (container, params) {
         s.initData(item.children, s.container)
       }
     }
-    
+
     if (s.params.onClick) s.params.onClick(s, item, isActived, isExtend)
   }
   // 主函数

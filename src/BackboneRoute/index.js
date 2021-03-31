@@ -1,3 +1,3 @@
-import BackboneRoute from './BackboneRoute.js';
+import BackboneRoute from './BackboneRoute.js'
 
-export default BackboneRoute;
+export default BackboneRoute

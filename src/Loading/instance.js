@@ -28,10 +28,11 @@ var Loading = function (params) {
   }
   var s = this
   s.params = params
-  s.parent = typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
+  s.parent =
+    typeof s.params.parent === 'string' ? document.querySelector(s.params.parent) : s.params.parent
   s.mask = null
   s.loading = null
-  
+
   // Mask
   s.updateMask = function () {
     if (!s.mask || !s.mask.tagName) {
@@ -48,28 +49,49 @@ var Loading = function (params) {
     }
     s.loading.setAttribute('class', s.params.loadingClass + ' loading-floating animated')
     // 流光loading-floating
-    var html = '<div class="loading-floating-icon">' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
-        '<div class="loading-floating-blade"></div>' +
+    var html =
+      '<div class="loading-floating-icon">' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
+      '<div class="loading-floating-blade"></div>' +
       '</div>' +
-    '<div class="loading-floating-caption ' + s.params.captionClass + '">' + s.params.caption + '</div>';
-    if (s.params.type === 'filling') { // 填料环loading-filling
+      '<div class="loading-floating-caption ' +
+      s.params.captionClass +
+      '">' +
+      s.params.caption +
+      '</div>'
+    if (s.params.type === 'filling') {
+      // 填料环loading-filling
       s.loading.setAttribute('class', s.params.loadingClass + ' loading-filling')
-      html = '<div class="loading-filling-icon"></div>'+
-      '<div class="loading-filling-caption ' + s.params.captionClass + '">' + s.params.caption + '</div>';
-    } else if (s.params.type === 'custom') { // 自定义样式,icon
+      html =
+        '<div class="loading-filling-icon"></div>' +
+        '<div class="loading-filling-caption ' +
+        s.params.captionClass +
+        '">' +
+        s.params.caption +
+        '</div>'
+    } else if (s.params.type === 'custom') {
+      // 自定义样式,icon
       s.loading.setAttribute('class', s.params.loadingClass + ' loading-custom')
-      html = '<span class="' + s.params.iconClass + ' ' + s.params.icon + '"></span><p class="loading-custom-caption ' + s.params.captionClass + '">' + s.params.caption + '</p>'
+      html =
+        '<span class="' +
+        s.params.iconClass +
+        ' ' +
+        s.params.icon +
+        '"></span><p class="loading-custom-caption ' +
+        s.params.captionClass +
+        '">' +
+        s.params.caption +
+        '</p>'
     }
     s.loading.innerHTML = html
     s.caption = s.loading.querySelector('.' + s.params.captionClass)
@@ -113,7 +135,9 @@ var Loading = function (params) {
       s.updateDOM()
     }
     // 已有DOM则只更新DOM, 如果没有自定义则创建DOM
-    if (s.params.mask) s.mask = typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
+    if (s.params.mask)
+      s.mask =
+        typeof s.params.mask === 'string' ? document.querySelector(s.params.mask) : s.params.mask
     if (s.mask && s.mask.tagName) {
       s.loading = s.mask.querySelector('.' + s.params.loadingClass)
       s.updateDOM()

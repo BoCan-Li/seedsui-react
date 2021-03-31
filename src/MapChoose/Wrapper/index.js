@@ -1,16 +1,13 @@
-import React, {forwardRef} from 'react';
+import React, { forwardRef } from 'react'
 
-const Wrapper = forwardRef(({
-  ...props
-}, ref) =>  {
+const Wrapper = forwardRef(({ ...props }, ref) => {
   return (
     <div
       ref={ref}
       {...props}
       className={`map-container${props.className ? ' ' + props.className : ''}`}
-    >
-    </div>
-  );
+    ></div>
+  )
 })
 
-export default Wrapper;
+export default Wrapper

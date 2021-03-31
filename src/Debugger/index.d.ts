@@ -1,2 +1,2 @@
-export { default } from './Debugger';
-export * from './Debugger';
+export { default } from './Debugger'
+export * from './Debugger'

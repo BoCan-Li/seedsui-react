@@ -9,14 +9,15 @@ import {
 	Device,
 	MapUtil,
   InputDate,
-  NumBox
+  NumBox,
+  Notice
 } from '../../src'
 
 
 let interval = null
 
 function Demo () {
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('10')
   /*
   const [count, setCount] = useState(10)
 
@@ -48,7 +49,8 @@ function Demo () {
       <InputDate value=""/>
       {/* {count}
       <div onClick={handleCountDown}>开始</div> */}
-      {/* <NumBox min={0} value={value} onChange={handleChange}/> */}
+      <NumBox max={5} value={value} onChange={handleChange}/>
+      <Notice caption="11"/>
     </Container>
   </Page>
 }

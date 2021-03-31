@@ -1,3 +1,3 @@
-import Notice from './Notice.js';
+import Notice from './Notice.js'
 
-export default Notice;
+export default Notice

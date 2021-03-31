@@ -1,2 +1,2 @@
-export { default } from './Camera';
-export * from './Camera';
+export { default } from './Camera'
+export * from './Camera'

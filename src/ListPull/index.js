@@ -1,3 +1,3 @@
-import ListPull from './ListPull.js';
+import ListPull from './ListPull.js'
 
-export default ListPull;
+export default ListPull

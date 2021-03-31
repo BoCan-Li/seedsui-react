@@ -1,3 +1,3 @@
-import Dragrefresh from './Dragrefresh.js';
+import Dragrefresh from './Dragrefresh.js'
 
-export default Dragrefresh;
+export default Dragrefresh

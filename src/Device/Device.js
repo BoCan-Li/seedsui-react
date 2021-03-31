@@ -36,7 +36,7 @@ var Device = (function () {
   var platform = ''
   var platformVersion = ''
   var platformMatch = null
-  function updatePlatform () {
+  function updatePlatform() {
     if (device === 'pc') {
       platform = 'browser'
     } else if (ua.indexOf('miniprogram') > -1 && ua.indexOf('micromessenger') > -1) {
@@ -86,7 +86,8 @@ var Device = (function () {
 
   // 以下两个方法都不准备
   // 获得苹果机型
-  function appleModel() { // 获取设备型号
+  function appleModel() {
+    // 获取设备型号
     if (ua && /(iphone|ipad|ipod|ios)/i.test(ua)) {
       var m = ua.match(/mobile\/([\w.]*)/)
       if (m && m[1]) {
@@ -98,9 +99,11 @@ var Device = (function () {
   // 获取苹果设备名称
   function getAppleDevice() {
     // iPhoneX | iPhoneXS
-    if (/iphone/gi.test(ua) && (window.screen.height === 812 && window.screen.width === 375)) return 'iPhoneX'
+    if (/iphone/gi.test(ua) && window.screen.height === 812 && window.screen.width === 375)
+      return 'iPhoneX'
     // iPhoneXSM | iPhoneXSR
-    if (/iphone/gi.test(ua) && (window.screen.height === 896 && window.screen.width === 414)) return 'iPhoneXSM'
+    if (/iphone/gi.test(ua) && window.screen.height === 896 && window.screen.width === 414)
+      return 'iPhoneXSM'
     var model = appleModel()
     switch (model) {
       case '15b150':
@@ -195,18 +198,18 @@ var Device = (function () {
     return ''
   }
   // 获取屏幕宽高
-  function getScreenWidth () {
+  function getScreenWidth() {
     if (window.innerWidth) return window.innerWidth
     if (window.screen.width) return window.screen.width
     if (window.screen.availWidth) return window.screen.availWidth
   }
-  function getScreenHeight () {
+  function getScreenHeight() {
     if (window.innerHeight) return window.innerHeight
     if (window.screen.height) return window.screen.height
     if (window.screen.availHeight) return window.screen.availHeight
   }
   // 获取手机型号(ios返回版本号, 因为ios取不到型号)
-  function getModel () {
+  function getModel() {
     let model = ''
     if (userAgent.toLowerCase().match(/android\s*(\d*\.*\d*)/)) {
       let infos = userAgent.split(';')
@@ -222,7 +225,7 @@ var Device = (function () {
       let iosVersion = ''
       let iosExp = userAgent.toLowerCase().match(/cpu iphone os (.*?) like mac os/)
       if (iosExp && iosExp[1]) {
-        iosVersion = iosExp[1].replace(/_/igm, '.')
+        iosVersion = iosExp[1].replace(/_/gim, '.')
       }
       model = `iPhone ${iosVersion}`
     }
@@ -251,18 +254,22 @@ var Device = (function () {
     getUrlParameter: getUrlParameter,
     screenWidth: getScreenWidth(),
     screenHeight: getScreenHeight(),
-    compareVersion: function (s1, s2) { // 比较版本号, -1小于 0等于 1大于
+    compareVersion: function (s1, s2) {
+      // 比较版本号, -1小于 0等于 1大于
       // 不考虑字母
       function s2i(s) {
-        return s.split('').reduce(function (a, c) {
-          var code = c.charCodeAt(0)
-          if (48 <= code && code < 58) {
-            a.push(code - 48)
-          }
-          return a
-        }, []).reduce(function (a, c) {
-          return 10 * a + c
-        }, 0)
+        return s
+          .split('')
+          .reduce(function (a, c) {
+            var code = c.charCodeAt(0)
+            if (48 <= code && code < 58) {
+              a.push(code - 48)
+            }
+            return a
+          }, [])
+          .reduce(function (a, c) {
+            return 10 * a + c
+          }, 0)
       }
       var a = s1.split('.').map(function (s) {
         return s2i(s)

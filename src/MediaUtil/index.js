@@ -1,3 +1,3 @@
-import MediaUtil from './MediaUtil.js';
+import MediaUtil from './MediaUtil.js'
 
-export default MediaUtil;
+export default MediaUtil

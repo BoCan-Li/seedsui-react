@@ -1,3 +1,3 @@
-import FastClick from './FastClick.js';
+import FastClick from './FastClick.js'
 
-export default FastClick;
+export default FastClick

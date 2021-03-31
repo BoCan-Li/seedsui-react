@@ -1,2 +1,2 @@
-export { default } from './CanvasUtil';
-export * from './CanvasUtil';
+export { default } from './CanvasUtil'
+export * from './CanvasUtil'

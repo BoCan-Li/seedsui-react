@@ -1,3 +1,3 @@
-import Clipboard from './Clipboard.js';
+import Clipboard from './Clipboard.js'
 
-export default Clipboard;
+export default Clipboard

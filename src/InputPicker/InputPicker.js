@@ -1,87 +1,94 @@
-import React, {forwardRef, useRef, useImperativeHandle, Fragment, useState} from 'react';
-import InputText from './../InputText';
-import Picker from './../Picker';
+import React, { forwardRef, useRef, useImperativeHandle, Fragment, useState } from 'react'
+import InputText from './../InputText'
+import Picker from './../Picker'
 
-const InputPicker = forwardRef(({
-  // Input
-  onClick,
-  onChange,
+const InputPicker = forwardRef(
+  (
+    {
+      // Input
+      onClick,
+      onChange,
 
-  // Picker
-  list = [], // [{id: '', name: ''}]
-  selected,
-  pickerProps = {},
-  ...others
-}, ref) =>  {
-  const refEl = useRef(null)
-  useImperativeHandle(ref, () => {
-    return refEl.current
-  });
-  const [show, setShow] = useState(false)
-  // 点击文本框
-  function onClickInput (...parameter) {
-    if (onClick) onClick(...parameter);
-    if (others.readOnly) return;
-    setShow(true);
-  }
-  // 点击遮罩
-  function onClickMask (e) {
-    if (pickerProps && pickerProps.maskAttribute && pickerProps.maskAttribute.onClick) {
-      pickerProps.maskAttribute.onClick(e);
-      return;
+      // Picker
+      list = [], // [{id: '', name: ''}]
+      selected,
+      pickerProps = {},
+      ...others
+    },
+    ref
+  ) => {
+    const inputTextRef = useRef(null)
+    useImperativeHandle(ref, () => {
+      return inputTextRef.current
+    })
+    const [show, setShow] = useState(false)
+    // 点击文本框
+    function onClickInput(...parameter) {
+      if (onClick) onClick(...parameter)
+      if (others.readOnly) return
+      setShow(true)
     }
-    setShow(false);
-  }
-  // 点击确定按钮
-  function onClickSubmit (e, value, options) {
-    if (refEl.current) e.target = refEl.current
-    // 确定按钮回调
-    if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
-      // 允许确定错误时中断隐藏
-      if (pickerProps.submitAttribute.onClick(e, value, options) === false) return
-    } else if (onChange) {
-      onChange(e, value, options);
+    // 点击遮罩
+    function onClickMask(e) {
+      if (pickerProps && pickerProps.maskAttribute && pickerProps.maskAttribute.onClick) {
+        pickerProps.maskAttribute.onClick(e)
+        return
+      }
+      setShow(false)
     }
-    // 隐藏框
-    setShow(false)
-  }
-  // 点击取消按钮
-  function onClickCancel (e) {
-    if (refEl.current) e.target = refEl.current
-    if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
-      pickerProps.cancelAttribute.onClick(e);
-      return;
+    // 点击确定按钮
+    function onClickSubmit(e, value, options) {
+      if (inputTextRef.current) e.target = inputTextRef.current
+      // 确定按钮回调
+      if (pickerProps && pickerProps.submitAttribute && pickerProps.submitAttribute.onClick) {
+        // 允许确定错误时中断隐藏
+        if (pickerProps.submitAttribute.onClick(e, value, options) === false) return
+      } else if (onChange) {
+        onChange(e, value, options)
+      }
+      // 隐藏框
+      setShow(false)
     }
-    setShow(false);
-  }
-  // 过滤非法数据
-  list = list.filter(item => {
-    if (!item || (!item.id && !item.name)) return false;
-    return true;
-  });
+    // 点击取消按钮
+    function onClickCancel(e) {
+      if (inputTextRef.current) e.target = inputTextRef.current
+      if (pickerProps && pickerProps.cancelAttribute && pickerProps.cancelAttribute.onClick) {
+        pickerProps.cancelAttribute.onClick(e)
+        return
+      }
+      setShow(false)
+    }
+    // 过滤非法数据
+    list = list.filter((item) => {
+      if (!item || (!item.id && !item.name)) return false
+      return true
+    })
 
-  return <Fragment>
-    <InputText ref={refEl} {...others} readOnly onClick={onClickInput}/>
-    <Picker
-      {...pickerProps}
-      maskAttribute={{
-        ...pickerProps.maskAttribute,
-        onClick: onClickMask
-      }}
-      submitAttribute={{
-        ...pickerProps.submitAttribute,
-        onClick: onClickSubmit
-      }}
-      cancelAttribute={{
-        ...pickerProps.cancelAttribute,
-        onClick: onClickCancel
-      }}
-      list={list}
-      selected={selected}
-      value={others.value} 
-      show={pickerProps.show === undefined ? show : pickerProps.show}
-    />
-  </Fragment>;
-})
+    return (
+      <Fragment>
+        <InputText ref={inputTextRef} {...others} readOnly onClick={onClickInput} />
+        <Picker
+          {...pickerProps}
+          maskAttribute={{
+            ...pickerProps.maskAttribute,
+            onClick: onClickMask
+          }}
+          submitAttribute={{
+            ...pickerProps.submitAttribute,
+            onClick: onClickSubmit
+          }}
+          cancelAttribute={{
+            ...pickerProps.cancelAttribute,
+            onClick: onClickCancel
+          }}
+          list={list}
+          selected={selected}
+          value={others.value}
+          show={pickerProps.show === undefined ? show : pickerProps.show}
+        />
+      </Fragment>
+    )
+  }
+)
 
 export default InputPicker

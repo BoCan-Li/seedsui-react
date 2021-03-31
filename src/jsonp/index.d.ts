@@ -1,2 +1,2 @@
-export { default } from './jsonp';
-export * from './jsonp';
+export { default } from './jsonp'
+export * from './jsonp'

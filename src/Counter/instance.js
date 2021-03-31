@@ -31,11 +31,15 @@ var Counter = function (counter, params) {
   // To(结束数字)
   s.to = s.counter.getAttribute(s.params.toAttr) ? s.counter.getAttribute(s.params.toAttr) : 0
   // suffix(后缀)
-  s.suffix = s.counter.getAttribute(s.params.suffixAttr) ? s.counter.getAttribute(s.params.suffixAttr) : ''
+  s.suffix = s.counter.getAttribute(s.params.suffixAttr)
+    ? s.counter.getAttribute(s.params.suffixAttr)
+    : ''
   // Current(当前数字)
   s.current = s.from
   // Duration(执行秒数)
-  s.duration = s.counter.getAttribute(s.params.durationAttr) ? s.counter.getAttribute(s.params.durationAttr) : 5000
+  s.duration = s.counter.getAttribute(s.params.durationAttr)
+    ? s.counter.getAttribute(s.params.durationAttr)
+    : 5000
 
   // Diff(差值)
   s.diff = s.to - s.from
@@ -46,7 +50,8 @@ var Counter = function (counter, params) {
   s.step = 1
   // 毫秒/次
   s.milliSec = Math.round(s.params.maxMilliSec)
-  if (secNum > s.params.maxCountSec) { // 如果每秒走完的数字，大于最大每秒执行次数，则要步进加快
+  if (secNum > s.params.maxCountSec) {
+    // 如果每秒走完的数字，大于最大每秒执行次数，则要步进加快
     s.step = Math.round(secNum / s.params.maxCountSec)
     s.milliSec = s.params.maxMilliSec // 用最快的速度：50毫秒执行一次
   } else {
@@ -95,4 +100,4 @@ var Counters = function (params) {
   }
 }
 
-export {Counter, Counters}
+export { Counter, Counters }

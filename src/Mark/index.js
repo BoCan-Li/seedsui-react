@@ -1,3 +1,3 @@
-import Mark from './Mark.js';
+import Mark from './Mark.js'
 
-export default Mark;
+export default Mark

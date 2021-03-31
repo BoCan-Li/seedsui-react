@@ -4,7 +4,7 @@ var History = function (params) {
   Model
   ------------------------ */
   var defaults = {
-    storageKey: '_seedsui_history_',
+    storageKey: '_seedsui_history_'
     /* callbacks
     onInit:function(History)// 初始化
     onBack:function(History)// 返回
@@ -58,7 +58,7 @@ var History = function (params) {
       // 在不是hash路由时会刷新页面
       // window.location.href = window.location.href + route
       // 不刷新增加历史记录
-      let hash = '';
+      let hash = ''
       if (window.location.href.indexOf('#') !== -1) {
         hash = '#' + window.location.href.split('#')[1] + parameter
       } else if (window.location.href.indexOf('?') !== -1) {
@@ -66,9 +66,13 @@ var History = function (params) {
       } else {
         hash = parameter
       }
-      window.history.pushState({
-        href: hash
-      }, document.title, hash)
+      window.history.pushState(
+        {
+          href: hash
+        },
+        document.title,
+        hash
+      )
       s.list.push(window.location.href)
       s.saveList()
     }
@@ -82,9 +86,13 @@ var History = function (params) {
     // 是否添加到历史记录
     if (enableHistory) {
       try {
-        window.history.pushState({
-          href: hash
-        }, document.title, hash)
+        window.history.pushState(
+          {
+            href: hash
+          },
+          document.title,
+          hash
+        )
       } catch (err) {
         console.log('SeedsUI Error:添加history失败')
       }
@@ -98,9 +106,13 @@ var History = function (params) {
     // 是否添加到历史记录
     if (enableHistory) {
       try {
-        window.history.replaceState({
-          href: hash
-        }, document.title, hash)
+        window.history.replaceState(
+          {
+            href: hash
+          },
+          document.title,
+          hash
+        )
       } catch (err) {
         console.error('SeedsUI Error:替换history失败')
       }
@@ -141,13 +153,15 @@ var History = function (params) {
     }
 
     // 前进与后退
-    if (s.list.indexOf(s.currentHash) === -1) { // 前进
+    if (s.list.indexOf(s.currentHash) === -1) {
+      // 前进
       s.onForward()
       // Callback onForward
       if (s.params.onForward) s.params.onForward(s)
 
       // console.log('前进——当前hash：'+s.currentHash+'上个页面：'+s.prevHash)
-    } else { // 后退
+    } else {
+      // 后退
       s.onBack()
       // console.log('后退——当前hash：'+s.currentHash+'关闭页面：'+s.prevHash)
     }

@@ -1,3 +1,3 @@
-import EventUtil from './EventUtil.js';
+import EventUtil from './EventUtil.js'
 
-export default EventUtil;
+export default EventUtil

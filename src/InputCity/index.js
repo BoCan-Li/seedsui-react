@@ -1,3 +1,3 @@
-import InputCity from './InputCity.js';
+import InputCity from './InputCity.js'
 
-export default InputCity;
+export default InputCity

@@ -1,3 +1,3 @@
-import Legend from './Legend.js';
+import Legend from './Legend.js'
 
-export default Legend;
+export default Legend

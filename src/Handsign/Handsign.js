@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Instance from './instance.js';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Instance from './instance.js'
 
 export default class Handsign extends Component {
   static propTypes = {
@@ -20,49 +20,51 @@ export default class Handsign extends Component {
     height: 300
   }
   constructor(props) {
-    super(props);
+    super(props)
   }
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.instance) {
       let params = {}
       if (prevProps.strokeStyle !== this.props.strokeStyle) {
-        params.strokeStyle = this.props.strokeStyle;
+        params.strokeStyle = this.props.strokeStyle
       }
       if (prevProps.lineWidth !== this.props.lineWidth) {
-        params.lineWidth = this.props.lineWidth;
+        params.lineWidth = this.props.lineWidth
       }
       if (prevProps.quality !== this.props.quality) {
-        params.quality = this.props.quality;
+        params.quality = this.props.quality
       }
       if (prevProps.suffix !== this.props.suffix) {
-        params.suffix = this.props.suffix;
+        params.suffix = this.props.suffix
       }
       if (Object.getOwnPropertyNames(params) && Object.getOwnPropertyNames(params).length) {
-        this.instance.updateParams(params);
+        this.instance.updateParams(params)
       }
     }
   }
-  componentDidMount () {
-    if (this.instance) return;
+  componentDidMount() {
+    if (this.instance) return
     var instance = new Instance(this.$el, {
       strokeStyle: this.props.strokeStyle,
       lineWidth: this.props.lineWidth,
       quality: this.props.quality,
       suffix: this.props.suffix
-    });
-    this.instance = instance;
+    })
+    this.instance = instance
   }
   render() {
-    const {
-      strokeStyle,
-      lineWidth,
-      quality,
-      width,
-      height,
-      ...others
-    } = this.props;
+    const { strokeStyle, lineWidth, quality, width, height, ...others } = this.props
     return (
-      <canvas ref={el => {this.$el = el;}} {...others} width={width} height={height}>Canvas画板</canvas>
-    );
+      <canvas
+        ref={(el) => {
+          this.$el = el
+        }}
+        {...others}
+        width={width}
+        height={height}
+      >
+        Canvas画板
+      </canvas>
+    )
   }
 }

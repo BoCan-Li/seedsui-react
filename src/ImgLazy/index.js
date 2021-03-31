@@ -1,3 +1,3 @@
-import ImgLazy from './ImgLazy.js';
+import ImgLazy from './ImgLazy.js'
 
-export default ImgLazy;
+export default ImgLazy

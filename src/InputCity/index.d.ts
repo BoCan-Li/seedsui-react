@@ -1,2 +1,2 @@
-export { default } from './InputCity';
-export * from './InputCity';
+export { default } from './InputCity'
+export * from './InputCity'

@@ -6,7 +6,7 @@ import axios from 'axios'
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 // response中提取result
-function getResult (response) {
+function getResult(response) {
   let result = response.data || response
   if (typeof result === 'string') {
     try {
@@ -20,7 +20,7 @@ function getResult (response) {
 }
 
 // 构建get请求参数, get请求需要把url和data拼接起来
-function buildGetUrl (url, params) {
+function buildGetUrl(url, params) {
   if (!params || Object.isEmptyObject(params)) {
     return url
   }
@@ -34,7 +34,7 @@ function buildGetUrl (url, params) {
 }
 
 // jsonp上传
-function jsonp (url) {
+function jsonp(url) {
   return new Promise((resolve, reject) => {
     window.jsonCallBack = (result) => {
       resolve(result)
@@ -50,13 +50,14 @@ function jsonp (url) {
 }
 
 // 表单上传
-function formUpload (url, options) {
+function formUpload(url, options) {
   return new Promise((resolve) => {
-    if (!options.file) { // file文件框
+    if (!options.file) {
+      // file文件框
       console.warn('没有找到options.file, 无法上传')
       resolve({
         code: '0',
-        message: '没有找到options.file, 无法上传'
+        message: '没有找到options.file, 无法上传',
       })
       return
     }
@@ -65,29 +66,39 @@ function formUpload (url, options) {
     formData.append('file', options.file.files[0])
     // 发送请求
     const instance = axios.create({
-      withCredentials: true
+      withCredentials: true,
     })
-    instance.post(url, formData).then((response) => {
-      resolve(getResult(response))
-    }).catch((error) => {
-      if (Api.fail) Api.fail(error)
-      return Promise.reject(error)
-    })
+    instance
+      .post(url, formData)
+      .then((response) => {
+        resolve(getResult(response))
+      })
+      .catch((error) => {
+        if (Api.fail) Api.fail(error)
+        return Promise.reject(error)
+      })
   })
 }
 
 // 封装成Api类
 const Api = {
   fail: function (error) {
-    console.warn({error})
+    console.warn({ error })
   },
   setBaseURL: function (baseURL) {
     axios.defaults.baseURL = baseURL
   },
   request: function (url, params = {}) {
-    let {method, head, data, ...options} = params
+    let { method, head, data, ...options } = params
     // 设置method
-    if (method !== 'get' && method !== 'post' && method !== 'jsonp' && method !== 'upload' && method !== 'form-upload') method = 'get'
+    if (
+      method !== 'get' &&
+      method !== 'post' &&
+      method !== 'jsonp' &&
+      method !== 'upload' &&
+      method !== 'form-upload'
+    )
+      method = 'get'
     // 如果是jsonp, 则其它参数都没有意义了
     if (method === 'jsonp') {
       return jsonp(url)
@@ -100,35 +111,39 @@ const Api = {
       url: method === 'get' ? buildGetUrl(url, data) : url,
       method: method,
       headers: {
-        ...head
+        ...head,
       },
       data: method === 'get' ? null : data,
-      ...options
+      ...options,
     })
   },
   post: function (url, params = {}) {
-    return this.request(url, Object.assign({}, params, {method: 'post'}))
+    return this.request(url, Object.assign({}, params, { method: 'post' }))
   },
   get: function (url, params = {}) {
-    return this.request(url, Object.assign({}, params ,{method: 'get'}))
+    return this.request(url, Object.assign({}, params, { method: 'get' }))
   },
-  all: function (requests) { // requests: [{url: '', params: {}}]
+  all: function (requests) {
+    // requests: [{url: '', params: {}}]
     const methods = requests.map((request) => {
       return this.request(request.url, request.params)
     })
     return axios.all(methods)
   },
   jsonp: function (url, params = {}) {
-    return this.request(url, Object.assign({}, params, {method: 'jsonp'}))
-  }
+    return this.request(url, Object.assign({}, params, { method: 'jsonp' }))
+  },
 }
 
 // 响应拦截器
-axios.interceptors.response.use(response => {
-  return getResult(response)
-}, error => {
-  if (Api.fail) Api.fail(error)
-  return Promise.reject(error)
-})
+axios.interceptors.response.use(
+  (response) => {
+    return getResult(response)
+  },
+  (error) => {
+    if (Api.fail) Api.fail(error)
+    return Promise.reject(error)
+  }
+)
 
 export default Api

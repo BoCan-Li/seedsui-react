@@ -1,2 +1,2 @@
-export { default } from './FixTable';
-export * from './FixTable';
+export { default } from './FixTable'
+export * from './FixTable'

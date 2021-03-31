@@ -38,7 +38,7 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function logOut() {
-    console.log('logOut方法仅在app上工作');
+    console.log('logOut方法仅在app上工作')
   },
   // 打开新的窗口
   openWindow: function (params = {}) {
@@ -55,8 +55,10 @@ var Bridge = {
     self = this
     if (callback) self.monitorBack = callback
     else self.monitorBack = null
-    if (top.wx.onHistoryBack) { // eslint-disable-line
-      top.wx.onHistoryBack(function () { // eslint-disable-line
+    // eslint-disable-next-line
+    if (top.wx.onHistoryBack) {
+      // eslint-disable-next-line
+      top.wx.onHistoryBack(function () {
         if (self.monitorBack) self.monitorBack()
         else self.back()
         self.addBackPress(self.monitorBack)
@@ -70,14 +72,14 @@ var Bridge = {
     self.monitorBack = null
   },
   /**
-    * 获取当前地理位置
-    * @param {Object} params
-    * params: {
-    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    * cache {Number}: 默认60秒缓存防重复定位
-    * }
-    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
-    */
+   * 获取当前地理位置
+   * @param {Object} params
+   * params: {
+   * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+   * cache {Number}: 默认60秒缓存防重复定位
+   * }
+   * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
+   */
   getLocation: function (params = {}) {
     self = this
     // 先从cookie中读取位置信息
@@ -102,13 +104,14 @@ var Bridge = {
     }
     self.locationTask = []
     console.log('调用定位...')
-    top.wx.getLocation({ // eslint-disable-line
+    // eslint-disable-next-line
+    top.wx.getLocation({
       // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
       type: params.type || 'gcj02',
       success: (res) => {
         // 将位置信息存储到cookie中60秒
         if (res.longitude && res.latitude) {
-          if (params.cache) DB.setCookie('app_location', JSON.stringify(res) , params.cache || 60)
+          if (params.cache) DB.setCookie('app_location', JSON.stringify(res), params.cache || 60)
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)
@@ -128,13 +131,14 @@ var Bridge = {
    * 扫描二维码并返回结果
    * 返回：{resultStr:''}
    * */
-  scanQRCode (params = {}) {
-    top.wx.scanQRCode({ // eslint-disable-line
+  scanQRCode(params = {}) {
+    // eslint-disable-next-line
+    top.wx.scanQRCode({
       needResult: params.needResult || 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
       scanType: params.scanType || ['qrCode', 'barCode'],
       desc: params.desc || '二维码／条码',
       success: function (res) {
-        if (!params.success) return;
+        if (!params.success) return
         var wxRes = res
         // 如果没有设置prefix为false或者空,则清除前缀
         if (!params.prefix) {
@@ -196,14 +200,14 @@ var Bridge = {
     top.wx.previewImage(params) // eslint-disable-line
   },
   /**
-    * 文件操作: 预览文件
-    * @param {Object} params
-    * params: {
-    *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
-    *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
-    *  size: 1048576 // 需要预览文件的字节大小(必填)
-    * }
-    */
+   * 文件操作: 预览文件
+   * @param {Object} params
+   * params: {
+   *  url: '', // 需要预览文件的地址(必填，可以使用相对路径)
+   *  name: '', // 需要预览文件的文件名(不填的话取url的最后部分)
+   *  size: 1048576 // 需要预览文件的字节大小(必填)
+   * }
+   */
   previewFile: function (params) {
     top.wx.previewFile(params) // eslint-disable-line
   }

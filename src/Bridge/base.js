@@ -12,8 +12,8 @@ window._bridge_self = null
 
 var Bridge = {
   /**
-  * 基础功能:start
-  */
+   * 基础功能:start
+   */
   debug: false,
   // 获得版本信息
   getAppVersion: function () {
@@ -23,7 +23,7 @@ var Bridge = {
   tel: function (number) {
     var self = this
     if (Device.device === 'pc') {
-      self.showToast(locale('此功能仅可在手机中使用', 'hint_only_mobile'), {mask: false})
+      self.showToast(locale('此功能仅可在手机中使用', 'hint_only_mobile'), { mask: false })
       return
     }
     if (isNaN(number)) return
@@ -56,9 +56,12 @@ var Bridge = {
     }
     self.toast.show()
     if (params.success) {
-      setTimeout(() => {
-        params.success()
-      }, params.delay ? Math.round(params.delay / 2) : 1000)
+      setTimeout(
+        () => {
+          params.success()
+        },
+        params.delay ? Math.round(params.delay / 2) : 1000
+      )
     }
   },
   // 弹出loading
@@ -68,13 +71,13 @@ var Bridge = {
     if (!self.loading) {
       self.loading = new Loading({
         ...params,
-        caption: params.caption || (locale('正在加载...', 'loading')),
+        caption: params.caption || locale('正在加载...', 'loading'),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
-      });
+      })
     } else {
       self.loading.updateParams({
         ...params,
-        caption: params.caption || (locale('正在加载...', 'loading')),
+        caption: params.caption || locale('正在加载...', 'loading'),
         maskClass: 'mask loading-mask ' + (params.mask === false ? ' loading-propagation' : '')
       })
     }
@@ -105,7 +108,7 @@ var Bridge = {
         },
         ...params,
         html: msg
-      }); 
+      })
     } else {
       if (params) {
         self.alert.updateParams({
@@ -134,7 +137,7 @@ var Bridge = {
           if (params.success) params.success(e)
           else e.hide()
         },
-        onClickCancel: function(e) {
+        onClickCancel: function (e) {
           e.errMsg = ''
           if (params.fail) params.fail(e)
           else e.hide()
@@ -150,7 +153,7 @@ var Bridge = {
           onClickSubmit: function (e) {
             if (params.success) params.success(e)
           },
-          onClickCancel: function(e) {
+          onClickCancel: function (e) {
             e.errMsg = ''
             if (params.fail) params.fail(e)
             else e.hide()
@@ -162,7 +165,8 @@ var Bridge = {
     }
     self.confirm.show()
   },
-  getLocationTask: function (res) { // 记录定位任务, 防止重复定位
+  getLocationTask: function (res) {
+    // 记录定位任务, 防止重复定位
     let self = this
     if (self.locationTask && self.locationTask.length) {
       for (let locationTaskItem of self.locationTask) {
@@ -176,13 +180,14 @@ var Bridge = {
     self.locationTask = null
   },
   /**
-    * 百度地图:获取当前位置名称
-    * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
-    * @param {String} type 'wgs84 | gcj02', 默认gcj02
-    * @return {Promise} result: {status: 0 成功, points 百度坐标}
-    */
+   * 百度地图:获取当前位置名称
+   * @param {Object} params: {longitude: '', latitude: '', success: fn, fail: fn}
+   * @param {String} type 'wgs84 | gcj02', 默认gcj02
+   * @return {Promise} result: {status: 0 成功, points 百度坐标}
+   */
   getAddress: function (params = {}, type = 'gcj02') {
-    if (window.getAddressDefault && typeof window.getAddressDefault === 'function') return window.getAddressDefault(params, type)
+    if (window.getAddressDefault && typeof window.getAddressDefault === 'function')
+      return window.getAddressDefault(params, type)
     return new Promise(async (resolve) => {
       const mapUtil = new MapUtil()
       if (!window.BMap) {
@@ -194,20 +199,29 @@ var Bridge = {
     })
   },
   /**
-    * 百度地图:获得天气
-    * @param {Object} params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', success: fn, fail: fn}
-    * @returns {Object} 天气信息results
-    */
+   * 百度地图:获得天气
+   * @param {Object} params: {location: 'lng,lat|lng,lat|lng,lat' | '北京市|上海市', success: fn, fail: fn}
+   * @returns {Object} 天气信息results
+   */
   getWeather: function (params = {}) {
-    var url = 'http://api.map.baidu.com/telematics/v3/weather?location=' + (params.location || '南京市') + '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
+    var url =
+      'http://api.map.baidu.com/telematics/v3/weather?location=' +
+      (params.location || '南京市') +
+      '&output=json&ak=IlfRglMOvFxapn5eGrmAj65H'
     jsonp(url, null, (err, data) => {
       if (err) {
-        if (params.fail) params.fail({errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}` + err})
+        if (params.fail)
+          params.fail({
+            errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}` + err
+          })
       } else {
         if (data.results && data.results.length) {
           if (params.success) params.success(data.results)
         } else {
-          if (params.fail) params.fail({errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}`})
+          if (params.fail)
+            params.fail({
+              errMsg: `getWeather:${locale('获取天气失败, 请稍后重试', 'hint_weather_failed')}`
+            })
         }
       }
     })
@@ -220,7 +234,7 @@ var Bridge = {
     var _history = window.history
     if (argHistory && argHistory.go) _history = argHistory
     var _backLvl = argBackLvl || -1
-    
+
     // 返回类型
     var isFromApp = Device.getUrlParameter('isFromApp', window.location.search) || ''
     // 如果已经有h5返回监听, 优先执行h5返回监听
@@ -230,35 +244,46 @@ var Bridge = {
     if (window.onHistoryBacks || window.onHistoryBack) {
       isFromApp = ''
     }
-    if (isFromApp === '1') { // 关闭当前页面
+    if (isFromApp === '1') {
+      // 关闭当前页面
       try {
         self.closeWindow()
       } catch (error) {
         console.log(error)
       }
-    } else if (isFromApp === 'home') { // 返回首页
+    } else if (isFromApp === 'home') {
+      // 返回首页
       try {
         self.goHome()
       } catch (error) {
         console.log(error)
       }
-    } else if (isFromApp === 'confirm') { // 提示后返回上一页
-      self.showConfirm(self.confirmCaption || (locale('您确定要离开此页面吗?', 'confirm_quit_page')), {
-        success: (e) => {
-          e.hide()
-          _history.go(_backLvl)
+    } else if (isFromApp === 'confirm') {
+      // 提示后返回上一页
+      self.showConfirm(
+        self.confirmCaption || locale('您确定要离开此页面吗?', 'confirm_quit_page'),
+        {
+          success: (e) => {
+            e.hide()
+            _history.go(_backLvl)
+          }
         }
-      });
-    } else if (isFromApp === 'confirm-close') { // 提示后关闭当前页面
-      self.showConfirm(self.confirmCaption || (locale('您确定要离开此页面吗?', 'confirm_quit_page')), {
-        success: (e) => {
-          e.hide()
-          self.closeWindow()
+      )
+    } else if (isFromApp === 'confirm-close') {
+      // 提示后关闭当前页面
+      self.showConfirm(
+        self.confirmCaption || locale('您确定要离开此页面吗?', 'confirm_quit_page'),
+        {
+          success: (e) => {
+            e.hide()
+            self.closeWindow()
+          }
         }
-      });
+      )
     } else if (isFromApp === 'custom') {
       console.log('自定义')
-    } else { // 返加上一页
+    } else {
+      // 返加上一页
       _history.go(_backLvl)
     }
   },
@@ -270,10 +295,12 @@ var Bridge = {
   // 返回按键监听
   addHistoryBack: function (callback, urlParameter) {
     var self = this
-    if (urlParameter && callback) { // 绑定当前路由的回调
+    if (urlParameter && callback) {
+      // 绑定当前路由的回调
       if (!window.onHistoryBacks) window.onHistoryBacks = {}
       window.onHistoryBacks[window.location.href] = callback
-    } else if (!urlParameter && callback) { // 单监听返回的回调
+    } else if (!urlParameter && callback) {
+      // 单监听返回的回调
       window.onHistoryBack = callback
     }
     // 添加路由
@@ -297,19 +324,21 @@ var Bridge = {
     window.onHistoryBack = null
   },
   // 初始化历史记录监听
-  initHistory: function  () {
+  initHistory: function () {
     var self = this
     self.history = new History({
       onBack: () => {
         console.log('SeedsUI: 返回')
-        if (window.onHistoryBacks) { // 绑定当前路由的回调
+        if (window.onHistoryBacks) {
+          // 绑定当前路由的回调
           let callback = window.onHistoryBacks[window.location.href]
           if (callback) {
             delete window.onHistoryBacks[window.location.href]
             callback()
           }
         }
-        if (window.onHistoryBack) { // 单监听返回的回调
+        if (window.onHistoryBack) {
+          // 单监听返回的回调
           window.onHistoryBack()
         }
       }
@@ -317,29 +346,42 @@ var Bridge = {
     // self.history.initList()
   },
   /**
-    * 动态加载桥接库
-    * @param {Func} callback 加载完成回调
-    * @param {Object} options {isLoad: true(已加载, 则不再执行window.onload), wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs', fail: func({errMsg: ''})}
-    */
+   * 动态加载桥接库
+   * @param {Func} callback 加载完成回调
+   * @param {Object} options {isLoad: true(已加载, 则不再执行window.onload), wxSrc: '', wqCordovaSrc: '外勤cordovajs', wqSrc: '外勤jssdkjs', fail: func({errMsg: ''})}
+   */
   ready: function (callback, options = {}) {
     var self = this
     var platform = self.platform
-    if (platform !== 'wechat' && platform !== 'wework' && platform !== 'wechatMiniprogram' && platform !== 'weworkMiniprogram' && platform !== 'waiqin' && platform !== 'dinghuo' && platform !== 'wq') {
+    if (
+      platform !== 'wechat' &&
+      platform !== 'wework' &&
+      platform !== 'wechatMiniprogram' &&
+      platform !== 'weworkMiniprogram' &&
+      platform !== 'waiqin' &&
+      platform !== 'dinghuo' &&
+      platform !== 'wq'
+    ) {
       if (options.isLoad) {
         self.initHistory()
         if (callback) callback()
       } else {
-        window.addEventListener('load', () => {
-          self.initHistory()
-          if (callback) callback()
-        }, false)
-      }      
+        window.addEventListener(
+          'load',
+          () => {
+            self.initHistory()
+            if (callback) callback()
+          },
+          false
+        )
+      }
       return
     }
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.defer = 'defer'
-    if (platform === 'wechat' || platform === 'wechatMiniprogram') { // 微信
+    if (platform === 'wechat' || platform === 'wechatMiniprogram') {
+      // 微信
       script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
       script.onload = function () {
         self.initHistory()
@@ -347,10 +389,11 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: locale('微信js加载失败', 'hint_wx_failed_to_load')})
+          options.fail({ errMsg: locale('微信js加载失败', 'hint_wx_failed_to_load') })
         }
       }
-    } else if (platform === 'wework' || platform === 'weworkMiniprogram') { // 企业微信
+    } else if (platform === 'wework' || platform === 'weworkMiniprogram') {
+      // 企业微信
       script.src = options.wxworkSrc || '//res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js'
       script.onload = function () {
         self.initHistory()
@@ -358,11 +401,13 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: locale('企业微信js加载失败', 'hint_wxwork_failed_to_load')})
+          options.fail({ errMsg: locale('企业微信js加载失败', 'hint_wxwork_failed_to_load') })
         }
       }
-    } else if (platform === 'waiqin') { // 外勤cordova
-      script.src = options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
+    } else if (platform === 'waiqin') {
+      // 外勤cordova
+      script.src =
+        options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       script.onload = function () {
         document.addEventListener('deviceready', () => {
           self.initHistory()
@@ -372,13 +417,16 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: locale('外勤cordova加载失败', 'hint_cordova_failed_to_load')})
+          options.fail({ errMsg: locale('外勤cordova加载失败', 'hint_cordova_failed_to_load') })
         }
       }
-    } else if (platform === 'wq') { // 外勤jssdk
+    } else if (platform === 'wq') {
+      // 外勤jssdk
       // 用开发d目录可以使用新功能
       var d = new Date()
-      script.src = options.wqSrc || `//res.waiqin365.com/d/open/js/waiqin365.min.js?v=${d.getMonth() + '' + d.getDate()}`
+      script.src =
+        options.wqSrc ||
+        `//res.waiqin365.com/d/open/js/waiqin365.min.js?v=${d.getMonth() + '' + d.getDate()}`
       script.onload = function () {
         self.initHistory()
         if (callback) callback()
@@ -386,7 +434,7 @@ var Bridge = {
       }
       if (options.fail) {
         script.onerror = function () {
-          options.fail({errMsg: locale('外勤js加载失败', 'hint_wq_failed_to_load')})
+          options.fail({ errMsg: locale('外勤js加载失败', 'hint_wq_failed_to_load') })
         }
       }
     } else if (platform === 'dinghuo') {
@@ -397,12 +445,12 @@ var Bridge = {
     if (script.src) document.body.appendChild(script)
   },
   /**
-    * 修改原生标题
-    * @param {Object} params {title: '自定义标题'}
-    */
+   * 修改原生标题
+   * @param {Object} params {title: '自定义标题'}
+   */
   setTitle: function (params) {
     if (params && params.title) document.title = params.title
-  },
+  }
   /**
    * 基础功能:end
    */

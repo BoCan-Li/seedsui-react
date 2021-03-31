@@ -17,7 +17,7 @@ var BiGauge = function (container, params) {
 
     // animate
     delay: 0,
-    durationall: 2000
+    durationall: 2000,
 
     /* callbacks
     onChangeStart:function(Gauge)
@@ -37,17 +37,17 @@ var BiGauge = function (container, params) {
     console.log('SeedsUI Error：未找到Gauge的DOM对象，请检查传入参数是否正确')
     return
   }
-  s.point = s.container.querySelector(s.params.pointClass)// 指针
-  s.wave = s.container.querySelector(s.params.waveClass) || null// 波浪
-  s.value = s.container.querySelector(s.params.valueClass)// 指针值
+  s.point = s.container.querySelector(s.params.pointClass) // 指针
+  s.wave = s.container.querySelector(s.params.waveClass) || null // 波浪
+  s.value = s.container.querySelector(s.params.valueClass) // 指针值
 
-  s.percent = (s.params.currentValue - s.params.minValue) / (s.params.maxValue - s.params.minValue)// 当前值所占比例
+  s.percent = (s.params.currentValue - s.params.minValue) / (s.params.maxValue - s.params.minValue) // 当前值所占比例
 
-  s.duration = Math.round(s.percent * s.params.durationall)// 执行时间长度
+  s.duration = Math.round(s.percent * s.params.durationall) // 执行时间长度
   if (s.duration > s.params.durationall) {
     s.duration = s.params.durationall
   }
-  s.bgLvl = Math.round(s.percent * 10) + 1// 背景等级
+  s.bgLvl = Math.round(s.percent * 10) + 1 // 背景等级
   if (s.bgLvl < 1) s.bgLvl = 1
   if (s.bgLvl > 10) s.bgLvl = 10
 

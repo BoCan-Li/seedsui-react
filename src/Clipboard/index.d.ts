@@ -1,2 +1,2 @@
-export { default } from './Clipboard';
-export * from './Clipboard';
+export { default } from './Clipboard'
+export * from './Clipboard'

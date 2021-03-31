@@ -136,8 +136,8 @@ var PickerDate = function (params) {
       })
     } else if (lastDay < currentLastDay) {
       for (var j = currentLastDay; j > lastDay; j--) {
+        // eslint-disable-next-line
         s.days.forEach(function (n) {
-          // eslint-disable-line
           if (n['id'] === '' + j) s.days.pop()
         })
       }

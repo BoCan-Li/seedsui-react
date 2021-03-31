@@ -1,2 +1,2 @@
-export { default } from './Actionsheet';
-export * from './Actionsheet';
+export { default } from './Actionsheet'
+export * from './Actionsheet'

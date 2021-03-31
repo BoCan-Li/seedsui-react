@@ -1,2 +1,2 @@
-export { default } from './MapView';
-export * from './MapView';
+export { default } from './MapView'
+export * from './MapView'

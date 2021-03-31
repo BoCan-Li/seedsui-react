@@ -1,2 +1,2 @@
-export { default } from './BackboneRoute';
-export * from './BackboneRoute';
+export { default } from './BackboneRoute'
+export * from './BackboneRoute'

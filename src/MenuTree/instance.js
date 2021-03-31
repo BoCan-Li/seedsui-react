@@ -10,7 +10,7 @@ var MenuTree = function (container, params) {
     activeClass: 'active',
     extendClass: 'extend',
 
-    selectedId: '', // 默认选中项的id
+    selectedId: '' // 默认选中项的id
     /*
     callbacks
     onClick:function(item, isActived, isExtend) // 点击项的数据,是否是选中状态,是否是展开状态
@@ -40,7 +40,8 @@ var MenuTree = function (container, params) {
     return
   }
   s.initData = function (list, ulContainer) {
-    for (var i = 0, option; (option = list[i++]); ) { // eslint-disable-line
+    // eslint-disable-next-line
+    for (var i = 0, option; (option = list[i++]); ) {
       var li = document.createElement('li')
       var html =
         '<div data-index="' +
@@ -156,7 +157,7 @@ var MenuTree = function (container, params) {
     endX: 0,
     endY: 0,
     diffX: 0,
-    diffY: 0,
+    diffY: 0
   }
   s.onTouchStart = function (e) {
     s.touches.startX = e.touches[0].clientX
@@ -215,7 +216,8 @@ var MenuTree = function (container, params) {
   s.resetSibling = function (target) {
     var container = target.parentNode.parentNode
     var actives = container.querySelectorAll('.' + s.params.activeClass)
-    for (var i = 0, tag; (tag = actives[i++]); ) { // eslint-disable-line
+    // eslint-disable-next-line
+    for (var i = 0, tag; (tag = actives[i++]); ) {
       // var tag = li.querySelector('.' + s.params.tagClass)
       if (tag) {
         tag.classList.remove(s.params.extendClass)

@@ -1,3 +1,3 @@
-import InputTel from './InputTel.js';
+import InputTel from './InputTel.js'
 
-export default InputTel;
+export default InputTel

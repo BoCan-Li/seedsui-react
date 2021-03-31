@@ -5,10 +5,10 @@ import locale from './../locale'
 import GeoUtil from './../GeoUtil'
 
 /**
-  * 初始化百度地图
-  * @param {String} id 用于s.map = new BMap.Map(id)
-  * @param {Object} params 见defaults
-  */
+ * 初始化百度地图
+ * @param {String} id 用于s.map = new BMap.Map(id)
+ * @param {Object} params 见defaults
+ */
 var BaiduMap = function (id, params) {
   /* --------------------
   Model
@@ -27,7 +27,8 @@ var BaiduMap = function (id, params) {
       padding: '6px 15px',
       color: 'white',
       backgroundColor: 'rgba(0,0,0,0.74)',
-      boxShadow: '0 9px 28px 8px rgba(0,0,0,0.05), 0 6px 16px 0 rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12)',
+      boxShadow:
+        '0 9px 28px 8px rgba(0,0,0,0.05), 0 6px 16px 0 rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12)',
       borderRadius: '4px'
     }
     /*
@@ -57,12 +58,23 @@ var BaiduMap = function (id, params) {
   // 常量
   /* eslint-disable */
   const {
-    BMap, BMapLib = {},
-    BMAP_ANCHOR_BOTTOM_LEFT, BMAP_ANCHOR_BOTTOM_RIGHT, BMAP_ANCHOR_TOP_RIGHT,
-    BMAP_DRAWING_POLYGON, BMAP_DRAWING_POLYLINE, BMAP_DRAWING_CIRCLE, BMAP_DRAWING_RECTANGLE, BMAP_DRAWING_MARKER,
+    BMap,
+    BMapLib = {},
+    BMAP_ANCHOR_BOTTOM_LEFT,
+    BMAP_ANCHOR_BOTTOM_RIGHT,
+    BMAP_ANCHOR_TOP_RIGHT,
+    BMAP_DRAWING_POLYGON,
+    BMAP_DRAWING_POLYLINE,
+    BMAP_DRAWING_CIRCLE,
+    BMAP_DRAWING_RECTANGLE,
+    BMAP_DRAWING_MARKER,
     BMAP_NAVIGATION_CONTROL_ZOOM,
-    BMAP_STATUS_SUCCESS, BMAP_STATUS_TIMEOUT, BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED,
-    BMAP_ANCHOR_TOP_LEFT, BMAP_NAVIGATION_CONTROL_LARGE
+    BMAP_STATUS_SUCCESS,
+    BMAP_STATUS_TIMEOUT,
+    BMAP_STATUS_UNKNOWN_LOCATION,
+    BMAP_STATUS_PERMISSION_DENIED,
+    BMAP_ANCHOR_TOP_LEFT,
+    BMAP_NAVIGATION_CONTROL_LARGE
   } = window
   /* eslint-enable */
   // 鼠标绘制管理实例
@@ -75,57 +87,69 @@ var BaiduMap = function (id, params) {
     s.map = new BMap.Map(id, s.params.mapOptions)
   }
   /**
-    * 获取当前地理位置
-    * @param {Object} params
-    * params: {
-    *   type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-    *   cache {Number}: 默认10分钟缓存防重复定位, 单位毫秒
-    *   success {Function}: function ({
-    *     latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度',
-    *     province: '省', city: '市', district: '区', street: '街道', address: '详情地址'
-    *   }),
-    *   fail {Function}: function ()
-    * }
-    */
+   * 获取当前地理位置
+   * @param {Object} params
+   * params: {
+   *   type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
+   *   cache {Number}: 默认10分钟缓存防重复定位, 单位毫秒
+   *   success {Function}: function ({
+   *     latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度',
+   *     province: '省', city: '市', district: '区', street: '街道', address: '详情地址'
+   *   }),
+   *   fail {Function}: function ()
+   * }
+   */
   s.getLocation = function (options = {}) {
     console.log('调用定位...')
     var geolocation = new BMap.Geolocation()
-    geolocation.getCurrentPosition(function (res) {
-      if (!res) { // 如果返回结果为null的话, 则返回
-        console.log('没有开启定位权限')
-        if (options.fail) options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
-        return
-      }
-      const status = this.getStatus()
-      if (status === BMAP_STATUS_SUCCESS) { // 定位成功
-        const result = {
-          errMsg: `${locale('定位成功', 'hint_location_success')}`,
-          latitude: res.point.lat,
-          longitude: res.point.lng,
-          speed: null,
-          accuracy: null,
-          province: res.address.province,
-          city: res.address.city,
-          district: res.address.district,
-          street: res.address.street,
-          streetNumber: res.address.street_number
+    geolocation.getCurrentPosition(
+      function (res) {
+        if (!res) {
+          // 如果返回结果为null的话, 则返回
+          console.log('没有开启定位权限')
+          if (options.fail)
+            options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
+          return
         }
-        result.address = (result.province || '') + (result.city ? ' ,' + result.city : '') + (result.district ? ' ,' + result.district : '') + (result.street ? ' ,' + result.street : '')
-        if (options.success) options.success(result)
-      } else if (status === BMAP_STATUS_TIMEOUT) { // 定位超时
-        console.log('定位超时')
-        options.fail({errMsg: `${locale('定位超时', 'hint_location_timeout')}`})
-      } else {
-        console.log('定位失败')
-        // BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED
-        if (options.fail) options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
+        const status = this.getStatus()
+        if (status === BMAP_STATUS_SUCCESS) {
+          // 定位成功
+          const result = {
+            errMsg: `${locale('定位成功', 'hint_location_success')}`,
+            latitude: res.point.lat,
+            longitude: res.point.lng,
+            speed: null,
+            accuracy: null,
+            province: res.address.province,
+            city: res.address.city,
+            district: res.address.district,
+            street: res.address.street,
+            streetNumber: res.address.street_number
+          }
+          result.address =
+            (result.province || '') +
+            (result.city ? ' ,' + result.city : '') +
+            (result.district ? ' ,' + result.district : '') +
+            (result.street ? ' ,' + result.street : '')
+          if (options.success) options.success(result)
+        } else if (status === BMAP_STATUS_TIMEOUT) {
+          // 定位超时
+          console.log('定位超时')
+          options.fail({ errMsg: `${locale('定位超时', 'hint_location_timeout')}` })
+        } else {
+          console.log('定位失败')
+          // BMAP_STATUS_UNKNOWN_LOCATION, BMAP_STATUS_PERMISSION_DENIED
+          if (options.fail)
+            options.fail(`${locale('定位失败,请检查定位权限是否开启', 'hint_location_failed')}`)
+        }
+      },
+      {
+        enableHighAccuracy: true, // 是否要求浏览器获取最佳效果，同浏览器定位接口参数。默认为false
+        timeout: 5000, // 超时事件，单位为毫秒。默认为10秒
+        maximumAge: options.cache || 60000, // 允许返回指定事件内的缓存结果，单位为毫秒。如果为0，则每次请求都获取最新的定位结果。默认为10分钟
+        SDKLocation: false // 是否开启SDK辅助定位
       }
-    }, {
-      enableHighAccuracy: true, // 是否要求浏览器获取最佳效果，同浏览器定位接口参数。默认为false
-      timeout: 5000, // 超时事件，单位为毫秒。默认为10秒
-      maximumAge: options.cache || 60000, // 允许返回指定事件内的缓存结果，单位为毫秒。如果为0，则每次请求都获取最新的定位结果。默认为10分钟
-      SDKLocation: false // 是否开启SDK辅助定位
-    })
+    )
 
     // 添加定位控件
     // var geolocationControl = new BMap.GeolocationControl()
@@ -140,22 +164,24 @@ var BaiduMap = function (id, params) {
   }
 
   /**
-    * 自动切换到有覆盖物的视图
-    * @param {Point} point [lng, lat]
-    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
-    * @return {Void}
-    */
+   * 自动切换到有覆盖物的视图
+   * @param {Point} point [lng, lat]
+   * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
+   * @return {Void}
+   */
   s.centerToPoints = function (points, options) {
     var bdPoints = []
     if (points && points.length) {
       bdPoints = s.pointsToBdPoints(points)
     } else {
       var overlays = s.map.getOverlays()
-      for(var i = 0; i < overlays.length; i++) {
+      for (var i = 0; i < overlays.length; i++) {
         var overlay = overlays[i]
-        if (overlay instanceof BMap.Polygon) { // 多边形
+        if (overlay instanceof BMap.Polygon) {
+          // 多边形
           bdPoints = bdPoints.concat(overlay.getPath())
-        } else if (overlay instanceof BMap.Marker) { // 标记
+        } else if (overlay instanceof BMap.Marker) {
+          // 标记
           bdPoints = bdPoints.concat(overlay.point)
         }
       }
@@ -163,21 +189,21 @@ var BaiduMap = function (id, params) {
     s.map.setViewport(bdPoints, options || {})
   }
   /**
-    * 自动切换到有覆盖物的视图
-    * @param {Point} point [lng, lat]
-    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
-    * @return {Void}
-    */
+   * 自动切换到有覆盖物的视图
+   * @param {Point} point [lng, lat]
+   * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
+   * @return {Void}
+   */
   s.centerToPoint = function (point, options) {
     let bdPoint = s.pointToBdPoint(point)
     s.map.setViewport([bdPoint], options || {})
   }
   /**
-    * 自动切换到有覆盖物的视图
-    * @param {Circle} point [lng, lat]
-    * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
-    * @return {Void}
-    */
+   * 自动切换到有覆盖物的视图
+   * @param {Circle} point [lng, lat]
+   * @param {ViewportOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a0b4
+   * @return {Void}
+   */
   s.centerToCircle = function (circle, options) {
     if (circle instanceof BMap.Circle !== true) {
       return
@@ -187,11 +213,11 @@ var BaiduMap = function (id, params) {
     s.centerToPoints(circle.getPath(), options)
   }
   /**
-    * 标准坐标转成百度坐标
-    * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {code: '1' 成功, point: 百度坐标Point对象}
-    */
+   * 标准坐标转成百度坐标
+   * @param {Array} point [lng, lat]
+   * @param {String} type 'wgs84 | gcj02'
+   * @return {Promise} result: {code: '1' 成功, point: 百度坐标Point对象}
+   */
   s.pointConvertBdPoint = function (point, type = 'gcj02') {
     return new Promise((resolve) => {
       point = new BMap.Point(point[0], point[1])
@@ -213,11 +239,11 @@ var BaiduMap = function (id, params) {
           resolve(res)
         })
       } else {
-        resolve({code: '0', status: -1, point: point})
+        resolve({ code: '0', status: -1, point: point })
       }
     })
   }
-  function pointsConvertBdPoints (points, type = 'gcj02') {
+  function pointsConvertBdPoints(points, type = 'gcj02') {
     return new Promise((resolve) => {
       points = points.map((point) => {
         return new BMap.Point(point[0], point[1])
@@ -264,31 +290,32 @@ var BaiduMap = function (id, params) {
           resolve(res)
         })
       } else {
-        resolve({code: '0', status: -1, points: points, errMsg: '无需要转换'})
+        resolve({ code: '0', status: -1, points: points, errMsg: '无需要转换' })
       }
     })
   }
   /**
-    * 标准坐标转成百度坐标
-    * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Promise} result: {code: '1' 成功, points 百度坐标Point对象集合}
-    */
+   * 标准坐标转成百度坐标
+   * @param {Array} point [lng, lat]
+   * @param {String} type 'wgs84 | gcj02'
+   * @return {Promise} result: {code: '1' 成功, points 百度坐标Point对象集合}
+   */
   s.pointsConvertBdPoints = function (points, type = 'gcj02') {
     return new Promise(async (resolve) => {
       if (!Array.isArray(points) || !points.length) {
-        resolve({code: '0', points: points, errMsg: '没有传入points'})
+        resolve({ code: '0', points: points, errMsg: '没有传入points' })
       }
       points = points.map((point) => {
         return new BMap.Point(point[0], point[1])
       })
       let result = null
-      if (points.length > 10) { // 百度转换功能最多支持10条, 超过10条需要拆分开转
-        let sumPoints = [];
+      if (points.length > 10) {
+        // 百度转换功能最多支持10条, 超过10条需要拆分开转
+        let sumPoints = []
         let sumLength = points.length
-        async function pointsIterator () {
+        async function pointsIterator() {
           let splicePoints = points.splice(0, 10)
-          result = await pointsConvertBdPoints(splicePoints, type = 'gcj02')
+          result = await pointsConvertBdPoints(splicePoints, (type = 'gcj02'))
           if (result.code === '1') {
             sumPoints = sumPoints.concat(result.points)
             if (sumPoints.length < sumLength) {
@@ -304,7 +331,7 @@ var BaiduMap = function (id, params) {
         }
         pointsIterator()
       } else {
-        result = await pointsConvertBdPoints(points, type = 'gcj02')
+        result = await pointsConvertBdPoints(points, (type = 'gcj02'))
         resolve(result)
       }
       // var convertor = new BMap.Convertor()
@@ -327,11 +354,11 @@ var BaiduMap = function (id, params) {
     })
   }
   /**
-    * 将[lng, lat]转换为百度点Point对象
-    * @param {Any} point [lng, lat]或{lng: , lat: }或{longitude: , latitude: }
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Array<Point>}
-    */
+   * 将[lng, lat]转换为百度点Point对象
+   * @param {Any} point [lng, lat]或{lng: , lat: }或{longitude: , latitude: }
+   * @param {String} type 'wgs84 | gcj02'
+   * @return {Array<Point>}
+   */
   s.pointToArrayPoint = function (point) {
     if (point instanceof BMap.Point) {
       return [point.lng, point.lat]
@@ -348,33 +375,33 @@ var BaiduMap = function (id, params) {
     return null
   }
   /**
-    * 将[lng, lat]转换为百度点Point对象
-    * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Array<Point>}
-    */
+   * 将[lng, lat]转换为百度点Point对象
+   * @param {Array} point [lng, lat]
+   * @param {String} type 'wgs84 | gcj02'
+   * @return {Array<Point>}
+   */
   s.pointToBdPoint = function (point) {
     let arrPoint = s.pointToArrayPoint(point)
     if (!arrPoint) return null
     return new BMap.Point(arrPoint[0], arrPoint[1])
   }
   /**
-    * 将[[lng, lat]]转换为百度点Point对象集合
-    * @param {Array} points [[lng, lat], [lng, lat]]
-    * @param {String} type 'wgs84 | gcj02'
-    * @return {Point}
-    */
+   * 将[[lng, lat]]转换为百度点Point对象集合
+   * @param {Array} points [[lng, lat], [lng, lat]]
+   * @param {String} type 'wgs84 | gcj02'
+   * @return {Point}
+   */
   s.pointsToBdPoints = function (points) {
     return points.map((point) => {
       return s.pointToBdPoint(point)
     })
   }
   /**
-    * 将标准坐标转换为百度点Polygon对象
-    * @param {Array} points [[lng, lat], [lng, lat]]
-    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
-    * @return {Polygon}
-    */
+   * 将标准坐标转换为百度点Polygon对象
+   * @param {Array} points [[lng, lat], [lng, lat]]
+   * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+   * @return {Polygon}
+   */
   s.pointsToBdPolygon = function (points, options) {
     let bdPoints = s.pointsToBdPoints(points)
     // 校验是否有非法点
@@ -384,11 +411,11 @@ var BaiduMap = function (id, params) {
     return new BMap.Polygon(bdPoints, options)
   }
   /**
-    * 将标准多边形坐标转换为百度点Polygon对象
-    * @param {Array} polygons [[[lng, lat], [lng, lat]], [[lng, lat], [lng, lat]]]
-    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
-    * @return {Array<Polygon>}
-    */
+   * 将标准多边形坐标转换为百度点Polygon对象
+   * @param {Array} polygons [[[lng, lat], [lng, lat]], [[lng, lat], [lng, lat]]]
+   * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+   * @return {Array<Polygon>}
+   */
   s.polygonsToBdPolygons = function (polygons, options) {
     let bdPolygons = []
     for (let polygon of polygons) {
@@ -400,12 +427,12 @@ var BaiduMap = function (id, params) {
     return bdPolygons
   }
   /**
-    * 将[lng, lat]转换为百度点Circle对象
-    * @param {Array} point [lng, lat]
-    * @param {Number} radius 半径
-    * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
-    * @return {Circle}
-    */
+   * 将[lng, lat]转换为百度点Circle对象
+   * @param {Array} point [lng, lat]
+   * @param {Number} radius 半径
+   * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
+   * @return {Circle}
+   */
   s.pointToBdCircle = function (point, radius, options = {}) {
     let bdPoint = s.pointToBdPoint(point)
     if (!bdPoint) return null
@@ -416,18 +443,19 @@ var BaiduMap = function (id, params) {
       strokeOpacity: options.strokeOpacity || s.params.styleOptions.strokeOpacity,
       fillOpacity: options.fillOpacity || s.params.styleOptions.fillOpacity,
       strokeStyle: options.strokeStyle || s.params.styleOptions.strokeStyle, // solid或dashed
-      enableMassClear: typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+      enableMassClear:
+        typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
       // enableEditing: typeof options.enableEditing === 'boolean' ? options.enableEditing : false, // 是否启用线编辑，默认为false(此属性与enableEditing方法冲突, 不建议使用此属性)
-      enableClicking: typeof options.enableClicking === 'boolean' ? options.enableClicking : true, // 是否响应点击事件，默认为true
+      enableClicking: typeof options.enableClicking === 'boolean' ? options.enableClicking : true // 是否响应点击事件，默认为true
     }
     return new BMap.Circle(bdPoint, radius || 1000, circleOptions)
   }
   /**
-    * 地址逆解析
-    * @param {Array} point [lng, lat]
-    * @param {String} type 'wgs84 | gcj02 | bd09'
-    * @return {Promise} result: {status: 0 成功, point 坐标, address 地址}
-    */
+   * 地址逆解析
+   * @param {Array} point [lng, lat]
+   * @param {String} type 'wgs84 | gcj02 | bd09'
+   * @return {Promise} result: {status: 0 成功, point 坐标, address 地址}
+   */
   s.getAddress = function (point, type) {
     return new Promise(async (resolve) => {
       // 格式化坐标
@@ -459,11 +487,11 @@ var BaiduMap = function (id, params) {
     })
   }
   /**
-    * 本地搜索
-    * @param {String} city 城市名称
-    * @param {Number} lvl 地图显示级别
-    * @return {Void}
-    */
+   * 本地搜索
+   * @param {String} city 城市名称
+   * @param {Number} lvl 地图显示级别
+   * @return {Void}
+   */
   s.search = function (options = {}) {
     const local = new BMap.LocalSearch(s.map, {
       pageCapacity: options.rows || 20,
@@ -471,8 +499,8 @@ var BaiduMap = function (id, params) {
         // 判断状态是否正确
         if (local.getStatus() === BMAP_STATUS_SUCCESS) {
           var res = []
-          for (var i = 0; i < results.getCurrentNumPois(); i ++){
-            const item = results.getPoi(i);
+          for (var i = 0; i < results.getCurrentNumPois(); i++) {
+            const item = results.getPoi(i)
             res.push({
               id: item.uid,
               title: item.title,
@@ -485,11 +513,11 @@ var BaiduMap = function (id, params) {
               postcode: item.postcode,
               isAccurate: item.isAccurate,
               tags: item.tags
-            });
+            })
           }
-          if (options.success) options.success({code: '1', data: {list: res}});
+          if (options.success) options.success({ code: '1', data: { list: res } })
         } else {
-          if (options.fail) options.fail({code: '0', message: '查询失败'})
+          if (options.fail) options.fail({ code: '0', message: '查询失败' })
         }
       },
       panel: options.panelId || null // 结果面板id
@@ -498,19 +526,19 @@ var BaiduMap = function (id, params) {
     return local
   }
   /**
-    * px转不百度坐标Point对象, 老版的百度地图不是用坐标而是px
-    * @param {Object} px {x: , y: }
-    * @return {Point}
-    */
+   * px转不百度坐标Point对象, 老版的百度地图不是用坐标而是px
+   * @param {Object} px {x: , y: }
+   * @return {Point}
+   */
   s.pxToBdPoint = function (px) {
     if (!px) return null
     return new BMap.MercatorProjection().pointToLngLat(new BMap.Pixel(px.x, px.y))
   }
   /**
-    * 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
-    * @param {Points} points 点集合, 格式[[lng, lat], [lng, lat]]
-    * @return {Points} 格式[{lng: '', lat: ''}]
-    */
+   * 格式化points, 将[[lng, lat], [lng, lat]]转为[{lng: '', lat: ''}]
+   * @param {Points} points 点集合, 格式[[lng, lat], [lng, lat]]
+   * @return {Points} 格式[{lng: '', lat: ''}]
+   */
   s.pointsToArrayObject = function (points) {
     if (!points || !Array.isArray(points)) return []
     if (JSON.stringify(points).indexOf('lng') !== -1) return points
@@ -523,7 +551,8 @@ var BaiduMap = function (id, params) {
         lat = point[0]
       }
       return {
-        lng,lat
+        lng,
+        lat
       }
     })
   }
@@ -545,10 +574,10 @@ var BaiduMap = function (id, params) {
     return null
   }
   /**
-    * 两个值的数字字符串转成宽高数字
-    * @param {Object} position '0 0'
-    * @return {Object} {width: 0, height: 0}
-    */
+   * 两个值的数字字符串转成宽高数字
+   * @param {Object} position '0 0'
+   * @return {Object} {width: 0, height: 0}
+   */
   s.positionToWh = function (position) {
     let wh = position.split(' ')
     let w = null
@@ -556,7 +585,8 @@ var BaiduMap = function (id, params) {
     if (wh.length > 1) {
       w = Object.getUnitNum(wh[0])
       h = Object.getUnitNum(wh[1])
-    } else { // 只有一个值
+    } else {
+      // 只有一个值
       w = Object.getUnitNum(wh[0])
     }
     return {
@@ -565,20 +595,20 @@ var BaiduMap = function (id, params) {
     }
   }
   /**
-    * html转成百度InfoWindow对象
-    * @param {String} html
-    * @param {InfoWindowOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b8
-    * @return {InfoWindow} 窗口信息
-    */
+   * html转成百度InfoWindow对象
+   * @param {String} html
+   * @param {InfoWindowOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b8
+   * @return {InfoWindow} 窗口信息
+   */
   s.htmlToBdInfoWindow = function (html, options) {
     if (!html) return null
     return new BMap.InfoWindow(html, options)
   }
   /**
-    * 根据背景url()取出中间的url
-    * @param {String} backgroundImage 'url()'
-    * @return {String} 返回url
-    */
+   * 根据背景url()取出中间的url
+   * @param {String} backgroundImage 'url()'
+   * @return {String} 返回url
+   */
   s.getUrlByBackgroundImage = function (backgroundImage = '') {
     let match = backgroundImage.match(/^url\((.+)\)$/)
     if (match && match.length && match[1]) {
@@ -603,33 +633,40 @@ var BaiduMap = function (id, params) {
     // marginTop和marginLeft
     let marginTop = Object.getUnitNum(style.marginTop)
     let marginLeft = Object.getUnitNum(style.marginLeft)
-    let anchor = marginTop && marginLeft ? s.whToBdSize({width: marginTop || 0, height: marginLeft || 0}) : null
+    let anchor =
+      marginTop && marginLeft
+        ? s.whToBdSize({ width: marginTop || 0, height: marginLeft || 0 })
+        : null
     // width和height
     let width = Object.getUnitNum(style.width)
     let height = Object.getUnitNum(style.height)
     if (!width) width = 16
     if (!height) height = 24
-    let size = s.whToBdSize({width: width, height: height})
+    let size = s.whToBdSize({ width: width, height: height })
     // backgroundPosition
     let imageOffset = null
     if (style.backgroundPosition) {
       let bgWh = s.s.positionToWh(style.backgroundPosition)
-      imageOffset = s.whToBdSize({width: bgWh.width, height: bgWh.height})
+      imageOffset = s.whToBdSize({ width: bgWh.width, height: bgWh.height })
     }
     // backgroundSize
-    let imageSize = s.whToBdSize({width: width, height: height})
+    let imageSize = s.whToBdSize({ width: width, height: height })
     if (style.backgroundSize) {
       let bgWh = s.s.positionToWh(style.backgroundSize)
-      imageOffset = s.whToBdSize({width: bgWh.width || width, height: bgWh.height || height})
+      imageOffset = s.whToBdSize({ width: bgWh.width || width, height: bgWh.height || height })
     }
     // backgroundImage
-    let imageUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII='
+    let imageUrl =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAwCAMAAABHcohdAAAAOVBMVEUAAAAMjv8Njv8NkP8Nj/8MkP8Nkf8gn/8Nj/8Njv8Mj/8Mj/8Mjv+ZmZn////n8/+Nyv8hj+8vkeUvlTkDAAAADHRSTlMA5oyFdlM8CPPZv6h2+xS8AAAAs0lEQVQ4y+2TWw6EIAxFaQUEvDOo+1/sIFEjKDSZb89vD7TpQ12wHLxzPrBVD4yacEJ6rOOGUECmjA+4MVzjEx6YqvedPwwSc4xzbZi9ftri30Rt0JgFjUTchIgKnQVqC5T7BxQpCraeMnAWeYOTENAhJMH3BJ8E1xOcLMgp5CK5J3BuVAe7t7oF7cNqoo9xN6DxWJgGRlo5aWmltZcORz69O5bXBVhWtqrFJ6PUK7zCv8IP6rMmSWrDD8kAAAAASUVORK5CYII='
     if (style.backgroundImage) {
       imageUrl = s.getUrlByBackgroundImage(style.backgroundImage)
     }
 
     // window容器的marginTop和marginLeft
-    let infoWindowAnchor = s.whToBdSize({width: infoStyle.marginLeft || 0, height: infoStyle.marginTop || 0})
+    let infoWindowAnchor = s.whToBdSize({
+      width: infoStyle.marginLeft || 0,
+      height: infoStyle.marginTop || 0
+    })
 
     return new BMap.Icon(imageUrl, size, {
       anchor: anchor,
@@ -658,10 +695,10 @@ var BaiduMap = function (id, params) {
     return null
   }
   /**
-    * 通俗位置转换成百度认识的位置字段
-    * @param {String} position 通俗位置
-    * @return {ControlAnchor} 百度位置字段
-    */
+   * 通俗位置转换成百度认识的位置字段
+   * @param {String} position 通俗位置
+   * @return {ControlAnchor} 百度位置字段
+   */
   s.positionToBdAnchor = function (position) {
     // 位置
     let anchor = null
@@ -684,13 +721,13 @@ var BaiduMap = function (id, params) {
     return anchor
   }
   /**
-    * 显示距离比例控件
-    * @param {Object} options {
-    * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
-    * offset {Object}: {width: Number, height: Number} 
-    * success {Function}: function(ScaleControl)
-    * }
-    */
+   * 显示距离比例控件
+   * @param {Object} options {
+   * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
+   * offset {Object}: {width: Number, height: Number}
+   * success {Function}: function(ScaleControl)
+   * }
+   */
   s.showDistance = function (options = {}) {
     // 位置
     const anchor = s.positionToBdAnchor(options.position)
@@ -706,13 +743,13 @@ var BaiduMap = function (id, params) {
     return scaleControl
   }
   /**
-    * 显示缩放控件
-    * @param {Object} options {
-    * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
-    * offset {Object}: {width: Number, height: Number} 
-    * success {Function}: function(NavigationControl)
-    * }
-    */
+   * 显示缩放控件
+   * @param {Object} options {
+   * position {String}: 'top-left | top-right | bottom-left | bottom-right' 通俗位置
+   * offset {Object}: {width: Number, height: Number}
+   * success {Function}: function(NavigationControl)
+   * }
+   */
   s.showNavigation = function (options = {}) {
     // 位置
     let anchor = s.positionToBdAnchor(options.position)
@@ -750,8 +787,8 @@ var BaiduMap = function (id, params) {
     return navigationControl
   }
   /**
-    * 清除覆盖物
-    */
+   * 清除覆盖物
+   */
   s.clearOverlays = function (overlays) {
     if (overlays) {
       for (let overlay of overlays) {
@@ -763,21 +800,21 @@ var BaiduMap = function (id, params) {
     s.map.clearOverlays()
   }
   /**
-    * 清除覆盖物
-    */
+   * 清除覆盖物
+   */
   s.clearOverlay = function (overlay) {
     if (!overlay) return
     s.map.removeOverlay(overlay)
   }
 
   /**
-    * 创建鼠标绘制管理类,设置当前的绘制模式, 参考http://api.map.baidu.com/library/DrawingManager/1.4/docs/symbols/BMapLib.DrawingManager.html#constructor
-    * @param {CONST} type
-    */
-  // BMAP_DRAWING_MARKER 画点 
-  // BMAP_DRAWING_CIRCLE 画圆 
-  // BMAP_DRAWING_POLYLINE 画线 
-  // BMAP_DRAWING_POLYGON 画多边形 
+   * 创建鼠标绘制管理类,设置当前的绘制模式, 参考http://api.map.baidu.com/library/DrawingManager/1.4/docs/symbols/BMapLib.DrawingManager.html#constructor
+   * @param {CONST} type
+   */
+  // BMAP_DRAWING_MARKER 画点
+  // BMAP_DRAWING_CIRCLE 画圆
+  // BMAP_DRAWING_POLYLINE 画线
+  // BMAP_DRAWING_POLYGON 画多边形
   // BMAP_DRAWING_RECTANGLE 画矩形
   // circlecomplete(overlay) {Circle} 绘制圆完成后，派发的事件接口
   // markercomplete(overlay) {Marker} 绘制点完成后，派发的事件接口
@@ -846,67 +883,94 @@ var BaiduMap = function (id, params) {
       s.drawingManager.close()
     }
   }
-  
+
   /**
-    * 绘制省市区域
-    * @param {String} area 域名名称: 江苏南京市鼓楼区
-    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
-    * @param {Object} callback 回调配置 {success: func(), fail: func()}
-    * @param {Boolean} pureData 只要纯数据, 设置为true时, 则不会绘制到地图上
-    * @return {Polygon}
-    */
+   * 绘制省市区域
+   * @param {String} area 域名名称: 江苏南京市鼓楼区
+   * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+   * @param {Object} callback 回调配置 {success: func(), fail: func()}
+   * @param {Boolean} pureData 只要纯数据, 设置为true时, 则不会绘制到地图上
+   * @return {Polygon}
+   */
   s.drawBoundary = function (area, options, callback = {}, pureData) {
     var boundary = new BMap.Boundary()
     if (!area) {
-      console.warn(`${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale('例如“江苏省南京市建邺区”', 'hint_for_example_address')}`)
-      callback.fail && callback.fail({
-        errMsg: `${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale('例如“江苏省南京市建邺区”', 'hint_for_example_address')}`
-      })
+      console.warn(
+        `${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale(
+          '例如“江苏省南京市建邺区”',
+          'hint_for_example_address'
+        )}`
+      )
+      callback.fail &&
+        callback.fail({
+          errMsg: `${locale('请传入参数', 'hint_pass_in_parameters')}area, ${locale(
+            '例如“江苏省南京市建邺区”',
+            'hint_for_example_address'
+          )}`
+        })
       return
     }
-    boundary.get(area, function (res) { // 获取行政区域
+    boundary.get(area, function (res) {
+      // 获取行政区域
       var count = res.boundaries.length // 行政区域的点有多少个
       if (count === 0) {
-        console.warn(`${locale('请传入正确的参数', 'hint_pass_in_correct_parameters')}area: ${area}不是一个合法的值`)
-        callback.fail && callback.fail({
-          errMsg: `${locale('请传入正确的参数', 'hint_pass_in_correct_parameters')}area: ${area}不是一个合法的值`
-        })
+        console.warn(
+          `${locale(
+            '请传入正确的参数',
+            'hint_pass_in_correct_parameters'
+          )}area: ${area}不是一个合法的值`
+        )
+        callback.fail &&
+          callback.fail({
+            errMsg: `${locale(
+              '请传入正确的参数',
+              'hint_pass_in_correct_parameters'
+            )}area: ${area}不是一个合法的值`
+          })
         return
       }
       var bdPolygons = []
       var bdPolygonsPath = []
       for (var i = 0; i < count; i++) {
-        bdPolygons[i] = new BMap.Polygon(res.boundaries[i], {...(s.params.styleOptions || {}), ...(options || {})})
+        bdPolygons[i] = new BMap.Polygon(res.boundaries[i], {
+          ...(s.params.styleOptions || {}),
+          ...(options || {})
+        })
         if (!pureData) s.map.addOverlay(bdPolygons[i]) // 添加覆盖物
         bdPolygonsPath = bdPolygonsPath.concat(bdPolygons[i].getPath())
       }
       // 获取polygons, 格式: [[lng,lat]]
       let polygons = []
       for (let bdPolygon of bdPolygons) {
-        let polygon = [];
+        let polygon = []
         let bdPoints = bdPolygon.getPath()
         for (let bdPoint of bdPoints) {
-          polygon.push([bdPoint.lng, bdPoint.lat]);
+          polygon.push([bdPoint.lng, bdPoint.lat])
         }
-        polygons.push(polygon);
+        polygons.push(polygon)
       }
       boundary.bdPolygons = bdPolygons
       boundary.bdPolygonsPath = bdPolygonsPath
       boundary.polygons = polygons
-      callback.success && callback.success({...res, bdPolygons, bdPolygonsPath, polygons})
+      callback.success && callback.success({ ...res, bdPolygons, bdPolygonsPath, polygons })
     })
     return boundary
   }
   /**
-    * 绘制多边形
-    * @param {Array} polygon
-    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
-    * @return {Polygon}
-    */
-  s.drawPolygon = function (polygon, options = {}){
+   * 绘制多边形
+   * @param {Array} polygon
+   * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+   * @return {Polygon}
+   */
+  s.drawPolygon = function (polygon, options = {}) {
     let bdPolygon = s.pointsToBdPolygon(polygon, options)
     if (!bdPolygon) {
-      console.warn(`drawPolygon: ${locale('请传入参数', 'hint_pass_in_parameters')}{polygon: {}}${locale('或者', 'or')}{points: []}`)
+      console.warn(
+        `drawPolygon: ${locale('请传入参数', 'hint_pass_in_parameters')}{polygon: {}}${locale(
+          '或者',
+          'or'
+        )}{points: []}`
+      )
       return null
     }
     // 设置多边型的边线颜色，参数为合法的CSS颜色值
@@ -927,12 +991,12 @@ var BaiduMap = function (id, params) {
     return bdPolygon
   }
   /**
-    * 绘制多边形
-    * @param {Array} polygons
-    * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
-    * @return {Array<Polygon>}
-    */
-  s.drawPolygons = function (polygons, options){
+   * 绘制多边形
+   * @param {Array} polygons
+   * @param {PolygonOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b15
+   * @return {Array<Polygon>}
+   */
+  s.drawPolygons = function (polygons, options) {
     let bdPolygons = []
     for (let polygon of polygons) {
       bdPolygons.push(s.drawPolygon(polygon, options))
@@ -941,23 +1005,22 @@ var BaiduMap = function (id, params) {
   }
 
   /**
-    * 绘制标记
-    * @param {Point} point [lng, lat]
-    * @param {String} content 显示内容
-    * @param {LabelOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b10
-    * @return {Label} 标记对象
-    */
-  s.drawLabel = function (point, content, options = {}){ // {point: [lng, lat], options: {}}
+   * 绘制标记
+   * @param {Point} point [lng, lat]
+   * @param {String} content 显示内容
+   * @param {LabelOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b10
+   * @return {Label} 标记对象
+   */
+  s.drawLabel = function (point, content, options = {}) {
+    // {point: [lng, lat], options: {}}
     // 绘制位置
     const bdPoint = s.pointToBdPoint(point)
     if (!bdPoint) return null
-    const label = new BMap.Label(content || '',
-      {
-        offset: s.whToBdSize(options.offset),
-        position: bdPoint,
-        enableMassClear: typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
-      }
-    )
+    const label = new BMap.Label(content || '', {
+      offset: s.whToBdSize(options.offset),
+      position: bdPoint,
+      enableMassClear: typeof options.enableMassClear === 'boolean' ? options.enableMassClear : true // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+    })
     if (options.style) {
       label.setStyle(Object.assign(s.params.labelStyleOptions, options.style))
     } else {
@@ -991,7 +1054,8 @@ var BaiduMap = function (id, params) {
     * }
     * @return {Marker} 标记对象
     */
-  s.drawMarker = function (point, opt = {}) { // {options: {}, info: {}, data: null}
+  s.drawMarker = function (point, opt = {}) {
+    // {options: {}, info: {}, data: null}
     // 绘制位置
     const bdPoint = s.pointToBdPoint(point)
     if (!bdPoint) return null
@@ -999,20 +1063,21 @@ var BaiduMap = function (id, params) {
     if (!opt.info) opt.info = {}
     // 绘制图标
     if (!opt.options) opt.options = {}
-    const marker = new BMap.Marker(bdPoint,
-      {
-        offset: s.whToBdSize(opt.options.offset),
-        icon: s.styleToBdIcon(opt.options.iconStyle, opt.info.style),
-        enableMassClear: typeof opt.options.enableMassClear === 'boolean' ? opt.options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
-        enableDragging: typeof opt.options.enableDragging === 'boolean' ? opt.options.enableDragging : false, // 是否启用拖拽，默认为false
-        enableClicking: typeof opt.options.enableClicking === 'boolean' ? opt.options.enableClicking : true, // 是否响应点击事件。默认为true
-        raiseOnDrag: typeof opt.options.raiseOnDrag === 'boolean' ? opt.options.raiseOnDrag : false, // 拖拽标注时，标注是否开启离开地图表面效果。默认为false
-        draggingCursor: opt.options.draggingCursor || '', // 拖拽标注时的鼠标指针样式。此属性值需遵循CSS的cursor属性规范
-        rotation: opt.options.rotation || 0, // 旋转角度
-        shadow: opt.options.shadow || null, // 阴影图标
-        title: opt.options.title || '', // 鼠标移到marker上的显示内容
-      }
-    )
+    const marker = new BMap.Marker(bdPoint, {
+      offset: s.whToBdSize(opt.options.offset),
+      icon: s.styleToBdIcon(opt.options.iconStyle, opt.info.style),
+      enableMassClear:
+        typeof opt.options.enableMassClear === 'boolean' ? opt.options.enableMassClear : true, // 是否在调用map.clearOverlays清除此覆盖物，默认为true
+      enableDragging:
+        typeof opt.options.enableDragging === 'boolean' ? opt.options.enableDragging : false, // 是否启用拖拽，默认为false
+      enableClicking:
+        typeof opt.options.enableClicking === 'boolean' ? opt.options.enableClicking : true, // 是否响应点击事件。默认为true
+      raiseOnDrag: typeof opt.options.raiseOnDrag === 'boolean' ? opt.options.raiseOnDrag : false, // 拖拽标注时，标注是否开启离开地图表面效果。默认为false
+      draggingCursor: opt.options.draggingCursor || '', // 拖拽标注时的鼠标指针样式。此属性值需遵循CSS的cursor属性规范
+      rotation: opt.options.rotation || 0, // 旋转角度
+      shadow: opt.options.shadow || null, // 阴影图标
+      title: opt.options.title || '' // 鼠标移到marker上的显示内容
+    })
     s.map.addOverlay(marker)
     // 点击显示弹框
     if (opt.onClick) {
@@ -1027,13 +1092,13 @@ var BaiduMap = function (id, params) {
     return marker
   }
   /**
-    * 绘制圆形
-    * @param {Point} point [lng, lat]
-    * @param {Number} radius 半径
-    * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
-    * @return {Circle}
-    */
-  s.drawCircle = function (point, radius, options = {}){
+   * 绘制圆形
+   * @param {Point} point [lng, lat]
+   * @param {Number} radius 半径
+   * @param {CircleOptions} options 参考http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b17
+   * @return {Circle}
+   */
+  s.drawCircle = function (point, radius, options = {}) {
     const circle = s.pointToBdCircle(point, radius, options)
     if (!circle) return null
     s.map.addOverlay(circle)
@@ -1041,26 +1106,44 @@ var BaiduMap = function (id, params) {
     return circle
   }
   // 添加右键菜单
-  s.addContextMenu = function (overlay, options = {}){ // options: {menus: [{text: '', handler: func()}]}
+  s.addContextMenu = function (overlay, options = {}) {
+    // options: {menus: [{text: '', handler: func()}]}
     if (!overlay) {
       console.warn(`addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}overlay`)
-      options.fail && options.fail({
-        errMsg: `addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}overlay`
-      })
+      options.fail &&
+        options.fail({
+          errMsg: `addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}overlay`
+        })
       return
     }
-    if (!options.menus || !Array.isArray(options.menus) || !options.menus[0] || !options.menus[0].text) {
-      console.warn(`addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}{menus: [{text: "", handler: func()}]}`)
-      options.fail && options.fail({
-        errMsg: `addContextMenu: ${locale('请传入参数', 'hint_pass_in_parameters')}{menus: [{text: "", handler: func()}]}`
-      })
+    if (
+      !options.menus ||
+      !Array.isArray(options.menus) ||
+      !options.menus[0] ||
+      !options.menus[0].text
+    ) {
+      console.warn(
+        `addContextMenu: ${locale(
+          '请传入参数',
+          'hint_pass_in_parameters'
+        )}{menus: [{text: "", handler: func()}]}`
+      )
+      options.fail &&
+        options.fail({
+          errMsg: `addContextMenu: ${locale(
+            '请传入参数',
+            'hint_pass_in_parameters'
+          )}{menus: [{text: "", handler: func()}]}`
+        })
       return
     }
     var markerMenu = new BMap.ContextMenu()
     for (let [index, opt] of options.menus.entries()) {
-      markerMenu.addItem(new BMap.MenuItem(opt.text || (locale('菜单', 'menu')), function () {
-        opt.handler(opt, index)
-      }))
+      markerMenu.addItem(
+        new BMap.MenuItem(opt.text || locale('菜单', 'menu'), function () {
+          opt.handler(opt, index)
+        })
+      )
     }
     overlay.addContextMenu(markerMenu)
     return markerMenu
@@ -1068,7 +1151,9 @@ var BaiduMap = function (id, params) {
   // 渲染地图
   s.initMap = function () {
     if (!BMap) {
-      console.error('请先引入百度地图api: <script src="//api.map.baidu.com/api?v=3.0&ak=xxx&s=1"></script>')
+      console.error(
+        '请先引入百度地图api: <script src="//api.map.baidu.com/api?v=3.0&ak=xxx&s=1"></script>'
+      )
       return
     }
     if (!s.map) return
@@ -1089,21 +1174,23 @@ var BaiduMap = function (id, params) {
 }
 
 /**
-  * 动态加载百度地图
-  * @param {Object} params {
-  *   ak: '百度地图ak',
-  *   library: ['draw'], // 百度地图的其它库
-  *   success: () => {},
-  *   fail: ({errMsg: ''}) => {},
-  * }
-  */
-async function scriptLoad (params = {}) {
+ * 动态加载百度地图
+ * @param {Object} params {
+ *   ak: '百度地图ak',
+ *   library: ['draw'], // 百度地图的其它库
+ *   success: () => {},
+ *   fail: ({errMsg: ''}) => {},
+ * }
+ */
+async function scriptLoad(params = {}) {
   return new Promise(async (resolve) => {
     // 加载绘制库
     if (params.library && params.library.indexOf('draw') !== -1) {
-      let drawRes = await Object.loadScript('https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js')
+      let drawRes = await Object.loadScript(
+        'https://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js'
+      )
       if (!drawRes) {
-        if (params.fail) params.fail({errMsg: '加载地图失败'})
+        if (params.fail) params.fail({ errMsg: '加载地图失败' })
         resolve('加载地图失败')
       }
     }
@@ -1111,10 +1198,10 @@ async function scriptLoad (params = {}) {
     resolve(true)
   })
 }
-async function scriptError (params = {}, err) {
+async function scriptError(params = {}, err) {
   return new Promise(async (resolve) => {
     resolve('加载地图失败')
-    if (params.fail) params.fail({errMsg: '加载地图失败', err: err})
+    if (params.fail) params.fail({ errMsg: '加载地图失败', err: err })
     // 加载失败移除dom
     document.getElementById(params.ak).parentNode.removeChild(document.getElementById(params.ak))
   })
@@ -1124,14 +1211,15 @@ BaiduMap.load = function (params = {}) {
   // window.BMap_loadScriptTime = (new Date).getTime();
   // document.write(`<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=${params.ak}&services=&t=20200415105918"></script>`);
   return new Promise(async (resolve) => {
-    if (window.BMap) { // eslint-disable-line
+    // eslint-disable-next-line
+    if (window.BMap) {
       let result = await scriptLoad(params)
       resolve(result)
       return
     }
     if (!params.ak) {
       resolve('请在传入地图的密钥MapUtil.load({ak: ""})')
-      if (params.fail) params.fail({errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})'})
+      if (params.fail) params.fail({ errMsg: '请在传入地图的密钥MapUtil.load({ak: ""})' })
       return
     }
     // 已经加载js库了, 防止重复加载
@@ -1139,7 +1227,7 @@ BaiduMap.load = function (params = {}) {
     if (script) {
       console.log('百度地图已加载, 无需再加载')
     } else {
-      window.BMAP_PROTOCOL = 'https';
+      window.BMAP_PROTOCOL = 'https'
       window.BMap_loadScriptTime = new Date().getTime()
       script = document.createElement('script')
       script.id = params.ak
@@ -1149,15 +1237,23 @@ BaiduMap.load = function (params = {}) {
       document.body.appendChild(script)
       console.log('加载百度地图')
     }
-    script.addEventListener('load', async function () {
-      let result = await scriptLoad(params)
-      resolve(result)
-    }, false)
-    script.addEventListener('error', async function (err) {
-      let result = await scriptError(params, err)
-      resolve(result)
-    }, false)
-  });
+    script.addEventListener(
+      'load',
+      async function () {
+        let result = await scriptLoad(params)
+        resolve(result)
+      },
+      false
+    )
+    script.addEventListener(
+      'error',
+      async function (err) {
+        let result = await scriptError(params, err)
+        resolve(result)
+      },
+      false
+    )
+  })
 }
 
 export default BaiduMap
