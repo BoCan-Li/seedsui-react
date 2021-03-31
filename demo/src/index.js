@@ -49,8 +49,7 @@ function Demo () {
       <InputDate value=""/>
       {/* {count}
       <div onClick={handleCountDown}>开始</div> */}
-      <NumBox max={5} value={value} onChange={handleChange}/>
-      <Notice caption="11"/>
+      <NumBox max={5} min={0} value={value} onChange={handleChange}/>
     </Container>
   </Page>
 }

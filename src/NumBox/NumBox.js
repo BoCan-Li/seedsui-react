@@ -44,23 +44,6 @@ const NumBox = forwardRef(
       return refEl.current
     })
 
-    // max、min、maxLength转为数字
-    if (!isNaN(max)) {
-      max = Number(max)
-    } else {
-      max = 0
-    }
-    if (!isNaN(min)) {
-      min = Number(min)
-    } else {
-      min = 0
-    }
-    if (!isNaN(maxLength)) {
-      maxLength = Number(maxLength)
-    } else {
-      maxLength = 0
-    }
-
     useEffect(() => {
       if (autoFocus) {
         focus()
@@ -105,10 +88,10 @@ const NumBox = forwardRef(
       }
       // 输入时只校验最大值、小数点、最大长度、返回错误
       if (!isNaN(max) && !isNaN(val)) {
-        if (Number(val) > max) val = max
+        if (Number(val) > Number(max)) val = max
       }
       if (!isNaN(min) && !isNaN(val)) {
-        if (Number(val) < min) val = min
+        if (Number(val) < Number(min)) val = min
       }
       return val
     }

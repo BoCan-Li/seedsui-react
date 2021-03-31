@@ -117,10 +117,10 @@ const InputText = forwardRef(
       }
       // 输入时只校验最大值、小数点、最大长度、返回错误
       if (!isNaN(max) && !isNaN(val)) {
-        if (val > max) val = max
+        if (Number(val) > Number(max)) val = max
       }
       if (!isNaN(min) && !isNaN(val)) {
-        if (val < min) val = min
+        if (Number(val) < Number(min)) val = min
       }
       return val
     }
