@@ -10,14 +10,22 @@ import {
 	MapUtil,
   InputDate,
   NumBox,
-  Notice
+  InputLocation
 } from '../../src'
 
 
 let interval = null
 
 function Demo () {
-  const [value, setValue] = useState('10')
+  const [value, setValue] = useState('')
+  const [value1, setValue1] = useState('')
+
+  function hh () {
+    if (interval) window.clearTimeout(interval)
+    interval = setTimeout(() => {
+      console.log('hhh')
+    }, 2000)
+  }
   /*
   const [count, setCount] = useState(10)
 
@@ -46,10 +54,12 @@ function Demo () {
 			<Titlebar caption="标题"/>
 		</Header>
 		<Container>
-      <InputDate value=""/>
+      <input type="button" value="hh" onClick={hh}/>
       {/* {count}
       <div onClick={handleCountDown}>开始</div> */}
-      <NumBox max={5} min={0} value={value} onChange={handleChange}/>
+      {/* <NumBox max={'10.00'} min={0} value={value} onChange={handleChange}/> */}
+      <InputLocation value={value} onChange={(e, val) => setValue(val)} />
+      <InputLocation value={value1} onChange={(e, val) => setValue1(val)} />
     </Container>
   </Page>
 }

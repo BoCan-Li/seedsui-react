@@ -481,7 +481,7 @@ var Bridge = {
    * @param {Object} params
    * params: {
    * type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-   * cache {Number}: 默认60秒缓存防重复定位
+   * cacheTime {Number}: 缓存毫秒数防重复定位
    * }
    * @returns {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
    */
@@ -513,7 +513,7 @@ var Bridge = {
     self.invoke('getLocation', params.type || 'gcj02', (res) => {
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒
-        if (params.cache) DB.setCookie('app_location', JSON.stringify(res), params.cache || 60)
+        if (params.cacheTime) DB.setCookie('app_location', JSON.stringify(res), !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000)
         if (params.success) params.success(res)
       } else {
         res.errMsg = { errMsg: 'getLocation:定位失败,请检查订货365定位权限是否开启' }

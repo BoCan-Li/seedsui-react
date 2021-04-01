@@ -60,12 +60,12 @@ const NumBox = forwardRef(
 
     // 更新禁用状态
     function updateState(val) {
-      if (!isNaN(min) && !isNaN(val) && val <= min) {
+      if (!isNaN(min) && !isNaN(val) && Number(val) <= Number(min)) {
         setMinDisabled(true)
       } else {
         setMinDisabled(false)
       }
-      if (!isNaN(max) && !isNaN(val) && val >= max) {
+      if (!isNaN(max) && !isNaN(val) && Number(val) >= Number(max)) {
         setMaxDisabled(true)
       } else {
         setMaxDisabled(false)
@@ -214,7 +214,7 @@ const NumBox = forwardRef(
           defaultValue={defaultValue}
           value={value}
           min={min}
-          max={max}
+          max={!isNaN(max) ? Number(max) : ''}
           maxLength={maxLength}
           disabled={disabled}
           readOnly={readOnly}
@@ -239,7 +239,7 @@ const NumBox = forwardRef(
       <div
         ref={refEl}
         {...others}
-        disabled={min >= max || disabled}
+        disabled={(!isNaN(min) && !isNaN(max) ? Number(min) >= Number(max) : false) || disabled}
         className={`numbox${others.className ? ' ' + others.className : ''}`}
         onClick={handleClick}
       >

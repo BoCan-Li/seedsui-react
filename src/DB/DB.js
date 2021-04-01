@@ -98,11 +98,11 @@ var DB = (function () {
     clearSession: function () {
       session.clear()
     },
-    setCookie: function (key, value, second) {
+    setCookie: function (key, value, millisecond) {
       var cookieStr = key + '=' + escape(value)
-      if (second) {
+      if (!isNaN(millisecond) && Number(millisecond)) {
         var expires = new Date()
-        expires.setTime(expires.getTime() + second * 1000)
+        expires.setTime(expires.getTime() + Number(millisecond))
         cookieStr += ';expires=' + expires.toGMTString()
       }
       document.cookie = cookieStr

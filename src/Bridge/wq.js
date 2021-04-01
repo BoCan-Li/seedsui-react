@@ -228,7 +228,7 @@ var Bridge = {
    * 获取当前地理位置
    * @param {Object} params
    * @prop {String} type 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-   * @prop {Number} cache 默认60秒缓存防重复定位
+   * @prop {Number} cacheTime 默认60秒缓存防重复定位
    * @return {Object} {latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度'}
    */
   getLocation: function (params = {}) {
@@ -268,7 +268,7 @@ var Bridge = {
             res.longitude = point[0]
             res.latitude = point[1]
           }
-          if (params.cache) DB.setCookie('app_location', JSON.stringify(res), params.cache || 60)
+          if (params.cacheTime) DB.setCookie('app_location', JSON.stringify(res), !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000)
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)

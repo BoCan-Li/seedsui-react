@@ -13,10 +13,17 @@ import MapView from './../MapView'
 import MapChoose from './../MapChoose'
 import Context from '../Context/instance.js'
 
+// 定位超时setTimeout指针
+let getLocationTimeout = null
+// 地图预览数据
+let viewMapData = null
+
 // 函数组件因为没有实例, 所以也没有ref, 必须通过forwardRef回调ref
 const InputLocation = forwardRef(
   (
     {
+      cacheTime = 10000, // 经纬度缓存时效, 默认10秒
+      timeout, // 定位超时
       ak, // 地图预览和选择地点时需要传入, 如果地图已经加载, 则不需要传入ak
       loadingValue,
       failedValue,
@@ -48,7 +55,6 @@ const InputLocation = forwardRef(
     })
     // 地图预览
     const [viewMapShow, setViewMapShow] = useState(false)
-    let [viewMapData, setViewMapData] = useState(null)
 
     const context = useContext(Context) || {}
     const locale =
@@ -75,6 +81,7 @@ const InputLocation = forwardRef(
                 onChangeRef.current({ target: inputTextRef.current }, value)
             } else {
               // 无地址, 则需要地址逆解析
+              status = '-1'
               setStatus('-1') // 定位中...
               const result = await Bridge.getAddress({
                 // 只支持gcj02
@@ -84,18 +91,18 @@ const InputLocation = forwardRef(
               const address = result && result.address ? result.address : ''
               result.value = address
               if (address) {
+                status = '1'
                 setStatus('1')
                 // 回调onChange
                 if (onChangeRef && onChangeRef.current)
                   onChangeRef.current({ target: inputTextRef.current }, result)
                 // 自动定位设置选择地图的数据
-                // eslint-disable-next-line
                 viewMapData = {
-                  point: [value.longitude, value.latitude],
-                  address: address
+                  point: [result.longitude, result.latitude],
+                  address: result.address
                 }
-                setViewMapData(viewMapData)
               } else {
+                status = '0'
                 setStatus('0')
               }
             }
@@ -110,7 +117,7 @@ const InputLocation = forwardRef(
       fetchData()
     }, [])
 
-    const [status, setStatus] = useState('1') // 定位状态, -1.定位中和0.定位失败时隐藏text框, 显示定位中或者定位失败的div, 1定位成功显示文本框
+    let [status, setStatus] = useState('1') // 定位状态, -1.定位中 0.定位失败时隐藏text框, 显示定位中或者定位失败的div, 1定位成功显示文本框
     function handleClick(event, val) {
       var e = event.nativeEvent
       // 触发点击事件
@@ -134,11 +141,10 @@ const InputLocation = forwardRef(
       // 预览
       if (val && (type === 'choose' || onPreviewRef.current)) {
         if (value && value.longitude && value.latitude) {
-          setViewMapData({
+          viewMapData = {
             point: [value.longitude, value.latitude],
-            address: value.address,
-            show: true
-          })
+            address: value.address
+          }
           openPreview()
         } else {
           if (typeof onPreviewRef.current === 'function') {
@@ -154,6 +160,7 @@ const InputLocation = forwardRef(
       if (readOnly === false) {
         if (status === '0') {
           // 非只读状态下, 点击错误面板, 允许手动输入位置
+          status = '1'
           setStatus('1')
         }
         return
@@ -172,22 +179,46 @@ const InputLocation = forwardRef(
       //   return
       // }
       // 定位中...
+      status = '-1'
       setStatus('-1')
+      // 定位超时处理
+      if (!isNaN(timeout)) {
+        if (Number(timeout) < 1000) {
+          console.warn('InputLocation: 超时参数timeout不能小于1000毫秒')
+        } else {
+          if (getLocationTimeout) window.clearTimeout(getLocationTimeout)
+          getLocationTimeout = setTimeout(() => {
+            if (status === '-1') {
+              if (onChangeRef && onChangeRef.current) onChangeRef.current(e, {errMsg: `getLocation:fail${locale('定位超时', 'hint_location_timeout')} Timeout`})
+              status = '0'
+              setStatus('0')
+            }
+          }, timeout)
+        }
+      }
+      // 开始定位
       Bridge.getLocation({
+        cacheTime: cacheTime,
         type: 'gcj02',
         success: async (data) => {
+          // 定位超时后不再执行回调
+          if (status === '0') {
+            console.log('定位超时, 不再执行成功回调')
+            return
+          }
           // 客户端中不需要再getAddress
           if (data.address) {
             // 赋值
             if (onChange) {
               data.value = data.address
               if (onChangeRef && onChangeRef.current) onChangeRef.current(e, data)
+              status = '1'
               setStatus('1')
               // 自动定位设置选择地图的数据
-              setViewMapData({
+              viewMapData = {
                 point: [data.longitude, data.latitude],
                 address: data.address
-              })
+              }
             }
             return
           }
@@ -201,22 +232,28 @@ const InputLocation = forwardRef(
           result.value = address
           if (onChangeRef && onChangeRef.current) onChangeRef.current(e, result)
           if (address) {
+            status = '1'
             setStatus('1')
             // 自动定位设置选择地图的数据
-            setViewMapData({
+            viewMapData = {
               point: [data.longitude, data.latitude],
               address: address
-            })
+            }
           } else {
+            status = '0'
             setStatus('0')
           }
         },
         fail: (res) => {
+          // 定位超时后不再执行回调
+          if (status === '0') {
+            console.log('定位超时, 不再执行失败回调')
+            return
+          }
           // 赋值
           if (onChangeRef && onChangeRef.current) onChangeRef.current(e, res)
+          status = '0'
           setStatus('0')
-          // 提示定位失败
-          // Bridge.showToast(res.errMsg, {mask: false});
         }
       })
     }
@@ -288,7 +325,7 @@ const InputLocation = forwardRef(
           onClick={handleClick}
           onChange={onChange}
           children={statusDOM}
-          value={value && typeof value === 'object' ? value.value : value || ''}
+          value={value && typeof value === 'object' ? value.value || '' : value || ''}
           clear={clear}
           clearReadOnly={clearReadOnly}
           {...others}
@@ -309,16 +346,16 @@ const InputLocation = forwardRef(
               : 'input-location-success ' + inputClassName
           })} // 定位中和定位失败时隐藏text框, 显示定位中或者定位失败的div
         />
-        {type !== 'choose' && viewMapData && (
+        {type !== 'choose' && (
           <MapView
             ak={ak}
             show={viewMapShow}
             header={
-              viewMapData.address ? (
+              viewMapData && viewMapData.address ? (
                 <div className="map-bar border-b">{viewMapData.address}</div>
               ) : null
             }
-            points={[viewMapData.point]}
+            points={viewMapData && viewMapData.point ? [viewMapData.point] : null}
             portal={context.portal || document.getElementById('root') || document.body}
             onHide={closePreview}
           />

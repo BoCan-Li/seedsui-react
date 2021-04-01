@@ -2856,6 +2856,8 @@ function onChange (e, value, selectedMap) {
 ### 属性
 ```javascript
 <InputLocation
+  cacheTime={经纬度缓存时效毫秒数 number, 默认10000}
+  timeout={定位超时毫秒数 number, 默认无}
   ak={地图ak,地图预览和选择地点时需要传入, 如果地图已经加载, 则不需要传入ak}
   value={选中地址经纬度信息 string, 默认无, 出入参一致} // 用于只读时, 点击预览地图{latitude: '纬度', longitude: '经度', address:'地址', value: ''}
   loadingValue={定位中显示文字 string, 默认'定位中...', 基础className'input-text'}

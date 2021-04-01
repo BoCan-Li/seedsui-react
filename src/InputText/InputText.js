@@ -317,8 +317,8 @@ const InputText = forwardRef(
           }`}
           defaultValue={defaultValue}
           value={value}
-          min={min}
-          max={max}
+          min={!isNaN(min) ? Number(min) : ''}
+          max={!isNaN(max) ? Number(max) : ''}
           maxLength={maxLength}
           disabled={disabled}
           readOnly={readOnly}

@@ -91,7 +91,7 @@ var BaiduMap = function (id, params) {
    * @param {Object} params
    * params: {
    *   type {String}: 'wgs84'|'gcj02'坐标类型微信默认使用国际坐标'wgs84',
-   *   cache {Number}: 默认10分钟缓存防重复定位, 单位毫秒
+   *   cacheTime {Number}: 默认60秒缓存防重复定位, 单位毫秒
    *   success {Function}: function ({
    *     latitude: '纬度', longitude: '经度', speed:'速度', accuracy:'位置精度',
    *     province: '省', city: '市', district: '区', street: '街道', address: '详情地址'
@@ -146,7 +146,7 @@ var BaiduMap = function (id, params) {
       {
         enableHighAccuracy: true, // 是否要求浏览器获取最佳效果，同浏览器定位接口参数。默认为false
         timeout: 5000, // 超时事件，单位为毫秒。默认为10秒
-        maximumAge: options.cache || 60000, // 允许返回指定事件内的缓存结果，单位为毫秒。如果为0，则每次请求都获取最新的定位结果。默认为10分钟
+        maximumAge: options.cacheTime || 60000, // 允许返回指定事件内的缓存结果，单位为毫秒。如果为0，则每次请求都获取最新的定位结果。默认为60秒
         SDKLocation: false // 是否开启SDK辅助定位
       }
     )
