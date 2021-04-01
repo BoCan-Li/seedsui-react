@@ -3,25 +3,26 @@ import GeoUtil from './../GeoUtil'
 import Bridge from './../Bridge'
 import locale from './../locale' // 国际化
 
-export default {
-  mapUtil: null,
+export default function () {
+  var s = this
+  s.mapUtil = null
   // 是否中断未完成的绘制
-  abort: false,
+  s.abort = false
   // 标记
-  markers: null,
-  tempMarker: null,
-  marker: null,
+  s.markers = null
+  s.tempMarker = null
+  s.marker = null
   // 标签
-  label: null,
+  s.label = null
   // 地区
-  district: null,
-  districtPolygons: null,
+  s.district = null
+  s.districtPolygons = null
   // 多边形
-  polygon: null,
+  s.polygon = null
   // 圆形
-  circle: null,
+  s.circle = null
   // 初始化地图
-  initMap: function (container, center, callback) {
+  s.initMap = function (container, center, callback) {
     var self = this
     Bridge.showLoading()
     const mapUtil = new MapUtil(container, {
@@ -70,17 +71,17 @@ export default {
       Bridge.hideLoading()
       callback(locale('初始化地图超时, 请检查当前网络是否稳定', 'hint_map_init_timeout'))
     }, 20000)
-  },
+  }
   // 获取中心点
-  getCenterPoint: function (marker) {
+  s.getCenterPoint = function (marker) {
     var self = this
     let bdPoint = self.mapUtil.map.getCenter()
     if (marker) marker.setPosition(bdPoint)
     let point = [bdPoint.lng, bdPoint.lat]
     return GeoUtil.coordtransform(point, 'bd09', 'gcj02')
-  },
+  }
   // 绘制临时标记, 拖拽显示, 停止拖拽隐藏
-  drawTempMarker: function (show) {
+  s.drawTempMarker = function (show) {
     var self = this
     if (!self.tempMarker) {
       self.tempMarker = document.createElement('span')
@@ -92,21 +93,21 @@ export default {
     } else {
       self.hideTempMarker()
     }
-  },
-  showTempMarker: function () {
+  }
+  s.showTempMarker = function () {
     var self = this
     if (self.tempMarker) {
       self.tempMarker.classList.remove('hide')
     }
-  },
-  hideTempMarker: function () {
+  }
+  s.hideTempMarker = function () {
     var self = this
     if (self.tempMarker) {
       self.tempMarker.classList.add('hide')
     }
-  },
+  }
   // 初始化标记, 并逆解析地址
-  initMarker: async function (point, callback) {
+  s.initMarker = async function (point, callback) {
     var self = this
     if (!point) {
       console.error('初始化标记: 定位坐标参数不能为空')
@@ -126,9 +127,9 @@ export default {
     // 地址逆解析
     let result = await self.getAddress(point)
     if (callback) callback(result)
-  },
+  }
   // 绘制坐标点
-  drawMarker: function (point) {
+  s.drawMarker = function (point) {
     var self = this
     if (!point) {
       console.error('绘制标记: 定位坐标参数不能为空')
@@ -164,21 +165,21 @@ export default {
     setTimeout(() => {
       self.mapUtil.centerToPoints(bdPoint)
     }, 500)
-  },
-  hideMarker: function () {
+  }
+  s.hideMarker = function () {
     var self = this
     if (self.marker) {
       self.marker.setOffset(new BMap.Size(10000, 10000))
     }
-  },
-  showMarker: function () {
+  }
+  s.showMarker = function () {
     var self = this
     if (self.marker) {
       self.marker.setOffset(new BMap.Size(0, 0))
     }
-  },
+  }
   // 地址逆解析
-  getAddress: async function (point) {
+  s.getAddress = async function (point) {
     return new Promise(async (resolve) => {
       const result = await Bridge.getAddress({
         // 只支持gcj02
@@ -187,8 +188,8 @@ export default {
       })
       resolve(result)
     })
-  },
-  destroy: function () {
+  }
+  s.destroy = function () {
     var self = this
     console.log('移除标注')
     self.mapUtil = null

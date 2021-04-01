@@ -17,7 +17,7 @@ import Bridge from './../Bridge'
 import Wrapper from './Wrapper'
 import Close from './Close'
 import Location from './Location'
-import helper from './helper'
+import MapInstance from './MapInstance'
 import Context from './../Context/instance.js'
 
 const MapChoose = forwardRef(
@@ -41,6 +41,7 @@ const MapChoose = forwardRef(
     },
     ref
   ) => {
+    let [mapInstance, setMapInstance] = useState(null)
     // 创建ref, useRef每次都会返回相同的引用, 所以用createRef
     const rootRef = useRef(null)
     const wrapperRef = useRef(null)
@@ -75,14 +76,14 @@ const MapChoose = forwardRef(
       })
       // 移除组件时注销
       return () => {
-        helper.destroy()
+        mapInstance.destroy()
       }
     }, []) // eslint-disable-line
 
     // 隐藏时, 移除标注
     // useEffect(() => {
     //   if (show === false) {
-    //     helper.destroy();
+    //     mapInstance.destroy();
     //   }
     // }, [show])
 
@@ -98,14 +99,16 @@ const MapChoose = forwardRef(
         setErrMsg(locale('地图容器不存在', 'hint_map_no_container'))
         return
       }
+      mapInstance = new MapInstance()
+      setMapInstance(mapInstance)
       // 拖拽结束回调
-      helper.onDragEnd = function (res) {
+      mapInstance.onDragEnd = function (res) {
         addr = res && res.address ? res.address : ''
         setAddr(addr)
         setData(res)
       }
       // 初始化地图
-      helper.initMap(wrapperRef.current, center, (result) => {
+      mapInstance.initMap(wrapperRef.current, center, (result) => {
         if (typeof result === 'string') {
           setErrMsg(result)
           return
@@ -125,13 +128,13 @@ const MapChoose = forwardRef(
         success: async (data) => {
           // 客户端中不需要getAddress
           if (data.address) {
-            helper.drawMarker([data.longitude, data.latitude])
+            mapInstance.drawMarker([data.longitude, data.latitude])
             setAddr(addr)
             setData(data)
             return
           }
           // 其它平台, 绘制标记后地址逆向解析, 并回调self.onDragEnd
-          helper.initMarker([data.longitude, data.latitude], (result) => {
+          mapInstance.initMarker([data.longitude, data.latitude], (result) => {
             addr = result && result.address ? result.address : ''
             setAddr(addr)
             setData(result)
@@ -159,14 +162,14 @@ const MapChoose = forwardRef(
       if (point && point.length === 2 && show) {
         if (!address) {
           console.log('初始化标记')
-          helper.initMarker(point, (result) => {
+          mapInstance.initMarker(point, (result) => {
             addr = result && result.address ? result.address : ''
             setAddr(addr)
             setData(result)
           })
         } else {
           console.log('更新标记')
-          helper.drawMarker(point)
+          mapInstance.drawMarker(point)
         }
       }
     }, [point]) // eslint-disable-line
@@ -187,9 +190,9 @@ const MapChoose = forwardRef(
     useEffect(() => {
       if (show) {
         if (errMsg) {
-          helper.abort = true
+          mapInstance.abort = true
         } else {
-          helper.abort = false
+          mapInstance.abort = false
         }
       }
     }, [errMsg])

@@ -3,24 +3,25 @@ import GeoUtil from './../GeoUtil'
 import Bridge from './../Bridge'
 import locale from './../locale' // 国际化
 
-export default {
-  mapUtil: null,
+export default function () {
+  var s = this
+  s.mapUtil = null
   // 是否中断未完成的绘制
-  abort: false,
+  s.abort = false
   // 标记
-  markers: null,
-  marker: null,
+  s.markers = null
+  s.marker = null
   // 标签
-  label: null,
+  s.label = null
   // 地区
-  district: null,
-  districtPolygons: null,
+  s.district = null
+  s.districtPolygons = null
   // 多边形
-  polygon: null,
+  s.polygon = null
   // 圆形
-  circle: null,
+  s.circle = null
   // 初始化地图
-  initMap: function (container, center, callback) {
+  s.initMap = function (container, center, callback) {
     var self = this
     Bridge.showLoading()
     const mapUtil = new MapUtil(container, {
@@ -54,9 +55,10 @@ export default {
       Bridge.hideLoading()
       callback(locale('初始化地图超时, 请检查当前网络是否稳定', 'hint_map_init_timeout'))
     }, 20000)
-  },
+  }
+
   // 标记: 绘制全部标记
-  drawMarkers: function (points) {
+  s.drawMarkers = function (points) {
     var self = this
     if (!points || !points.length) {
       console.error('绘制标记: 定位坐标参数不能为空')
@@ -69,21 +71,14 @@ export default {
       }, 500)
       return
     }
-    if (self.markers && self.markers.length === points.length) {
-      // 更新标记
-      for (let [index, point] of points.entries()) {
-        self.drawMarker(point, self.markers[index])
-      }
-    } else {
-      // 绘制标记
-      if (self.markers) {
-        self.mapUtil.clearOverlays(self.markers)
-      }
-      self.markers = []
-      for (let point of points) {
-        let marker = self.drawMarker(point)
-        self.markers.push(marker)
-      }
+    // 绘制标记
+    if (self.markers) {
+      self.mapUtil.clearOverlays(self.markers)
+    }
+    self.markers = []
+    for (let point of points) {
+      let marker = self.drawMarker(point)
+      self.markers.push(marker)
     }
     setTimeout(() => {
       let bdPoints = []
@@ -94,9 +89,10 @@ export default {
       console.log('绘制标记完成')
     }, 500)
     return self.markers
-  },
+  }
+
   // 标记: 绘制标记, 更新原marker, 则传入marker
-  drawMarker: function (point, marker) {
+  s.drawMarker = function (point, marker) {
     var self = this
     self.marker = marker
     // 国测局转百度坐标
@@ -120,9 +116,10 @@ export default {
       self.marker.setPosition(bdPoint)
     }
     return self.marker
-  },
+  }
+
   // 圆形: 绘制标签
-  drawLabel: function (point, radius) {
+  s.drawLabel = function (point, radius) {
     var self = this
     if (self.abort) return
     if (!self.mapUtil) {
@@ -153,9 +150,10 @@ export default {
         locale(`半径${Math.trunc(radius, 2)}米`, 'radius_of_m', [Math.trunc(radius, 2)])
       )
     }
-  },
+  }
+
   // 绘制圆形
-  drawCircle: function (point, radius) {
+  s.drawCircle = function (point, radius) {
     var self = this
     if (self.abort) return
     if (!point || point.length !== 2) {
@@ -184,9 +182,10 @@ export default {
     }, 300)
     console.log('绘制圆形完成')
     self.drawLabel(point, radius)
-  },
+  }
+
   // 绘制多边形
-  drawPolygon: function (polygon) {
+  s.drawPolygon = function (polygon) {
     var self = this
     if (self.abort) return
     if (!polygon || !polygon.length) return
@@ -205,11 +204,12 @@ export default {
     self.polygon = self.mapUtil.drawPolygon(bdPolygons)
     self.mapUtil.centerToPoints(bdPolygons)
     console.log('绘制多边形完成')
-  },
+  }
+
   /**
    * 地区
    */
-  drawDistrict: function (districtName) {
+  s.drawDistrict = function (districtName) {
     var self = this
     if (self.abort) return
     if (!districtName) return
@@ -236,8 +236,9 @@ export default {
         )
       }
     })
-  },
-  destroy: function () {
+  }
+
+  s.destroy = function () {
     var self = this
     console.log('移除标注')
     self.mapUtil = null

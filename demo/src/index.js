@@ -58,8 +58,10 @@ function Demo () {
       {/* {count}
       <div onClick={handleCountDown}>开始</div> */}
       {/* <NumBox max={'10.00'} min={0} value={value} onChange={handleChange}/> */}
-      <InputLocation value={value} onChange={(e, val) => setValue(val)} />
+      <InputLocation type="choose" value={value} onChange={(e, val) => setValue(val)} />
       <InputLocation value={value1} onChange={(e, val) => setValue1(val)} />
+      <InputLocation value={value1} onChange={(e, val) => setValue1(val)} />
+      <InputLocation type="choose" value={value1} onChange={(e, val) => setValue1(val)} />
     </Container>
   </Page>
 }

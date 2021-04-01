@@ -8,7 +8,7 @@ import Notice from './../Notice'
 import Bridge from './../Bridge'
 import Wrapper from './Wrapper'
 import Close from './Close'
-import helper from './helper'
+import MapInstance from './MapInstance'
 import Context from './../Context/instance.js'
 
 function MapView({
@@ -31,6 +31,7 @@ function MapView({
   header,
   children
 }) {
+  let [mapInstance, setMapInstance] = useState(null)
   // context
   const context = useContext(Context) || {}
   const locale =
@@ -58,14 +59,14 @@ function MapView({
     })
     // 移除组件时注销
     return () => {
-      helper.destroy()
+      mapInstance.destroy()
     }
   }, []) // eslint-disable-line
 
   // 隐藏时, 移除标注
   // useEffect(() => {
   //   if (show === false) {
-  //     helper.destroy();
+  //     mapInstance.destroy();
   //   }
   // }, [show])
 
@@ -81,8 +82,9 @@ function MapView({
       setErrMsg(locale('地图容器不存在', 'hint_map_no_container'))
       return
     }
-
-    helper.initMap(refWrapperEl.current, center, (result) => {
+    mapInstance = new MapInstance()
+    setMapInstance(mapInstance)
+    mapInstance.initMap(refWrapperEl.current, center, (result) => {
       if (typeof result === 'string') {
         setErrMsg(result)
         return
@@ -94,7 +96,8 @@ function MapView({
   useEffect(() => {
     if (points && points.length && show) {
       console.log('绘制标记')
-      helper.drawMarkers(points)
+      console.log(mapInstance)
+      mapInstance.drawMarkers(points)
     }
   }, [points]) // eslint-disable-line
 
@@ -102,7 +105,7 @@ function MapView({
   useEffect(() => {
     if (circle && circle.point && show) {
       console.log('绘制圆形')
-      helper.drawCircle(circle.point, circle.radius)
+      mapInstance.drawCircle(circle.point, circle.radius)
     }
   }, [circle]) // eslint-disable-line
 
@@ -110,7 +113,7 @@ function MapView({
   useEffect(() => {
     if (polygon && show) {
       console.log('绘制多边形')
-      helper.drawPolygon(polygon)
+      mapInstance.drawPolygon(polygon)
     }
   }, [polygon]) // eslint-disable-line
 
@@ -122,7 +125,7 @@ function MapView({
       for (let name in district) {
         districtName.push(district[name].name)
       }
-      helper.drawDistrict(districtName.join(','))
+      mapInstance.drawDistrict(districtName.join(','))
     }
   }, [district]) // eslint-disable-line
 
@@ -137,9 +140,9 @@ function MapView({
   useEffect(() => {
     if (show) {
       if (errMsg) {
-        helper.abort = true
+        mapInstance.abort = true
       } else {
-        helper.abort = false
+        mapInstance.abort = false
       }
     }
   }, [errMsg])
