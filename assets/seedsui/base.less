@@ -127,7 +127,7 @@
 @body-bg:#f5f5f9;
 @body-color:#333;
 
-@sub:#9e9e9e;
+@sub:#808080;
 @placeholder:#b6b6b6;
 
 // 遮罩颜色
@@ -463,76 +463,7 @@ hr:extend(.border-b){
   user-select:none;
 }
 
-// 显示与隐藏
-.hide{
-	display:none;
-}
-.hide-important{
-	display:none!important;
-}
-.hidden{
-	visibility:hidden;
-}
-.hidden-important{
-	visibility:hidden!important;
-}
-.overflow-hidden, .container.overflow-hidden{
-	overflow:hidden;
-}
-.overflow-auto, .container.overflow-auto{
-	overflow:auto;
-}
 
-// 清除浮动
-.clearfix:before, .clearfix:after {
-	display: table;
-	content: " ";
-}
-.clearfix:after {
-	clear: both;
-}
-.clearfix{
-	zoom:1;
-}
-.clear{
-	clear:both;
-}
-
-// 文字换行
-.white-space-nowrap{
-  white-space:nowrap;
-}
-.ellipsis {
-	text-overflow:ellipsis;
-}
-.nowrap:extend(.ellipsis),.nowrap2:extend(.ellipsis),.nowrap3:extend(.ellipsis){
-	overflow:hidden;
-}
-.nowrap{
-	white-space:nowrap;
-}
-.nowrap2,.nowrap3{
-	/* autoprefixer: off */
-	display:-webkit-box;
-	-webkit-box-orient:vertical;
-}
-.nowrap2{
-	-webkit-line-clamp:2;
-}
-.nowrap3{
-	-webkit-line-clamp:3;
-}
-
-// 文字排列
-.text-center{
-	text-align:center;
-}
-.text-right{
-	text-align:right;
-}
-.text-left{
-	text-align:left;
-}
 
 // 去除动画
 .transition-duration-0{
@@ -609,7 +540,7 @@ hr:extend(.border-b){
 //   -webkit-box-pack:center;
 //   -webkit-box-align:center;
 // }
-// 如果不考虑andriod4, 支持flex的话, 则使用flex代替box
+// 如果不考虑android4, 支持flex的话, 则使用flex代替box
 .flex{
   display:flex;
 }
@@ -693,6 +624,92 @@ hr:extend(.border-b){
 .flex-self-bottom{
   align-self:flex-end;
 }
+
+
+
+
+
+// 显示与隐藏
+.hide{
+	display:none;
+}
+.hide-important{
+	display:none!important;
+}
+.hidden{
+	visibility:hidden;
+}
+.hidden-important{
+	visibility:hidden!important;
+}
+.overflow-hidden, .container.overflow-hidden{
+	overflow:hidden;
+}
+.overflow-auto, .container.overflow-auto{
+	overflow:auto;
+}
+
+// 定位
+.position-absolute{
+  position: absolute;
+}
+.position-relative{
+  position: relative;
+}
+
+// 清除浮动
+.clearfix:before, .clearfix:after {
+	display: table;
+	content: " ";
+}
+.clearfix:after {
+	clear: both;
+}
+.clearfix{
+	zoom:1;
+}
+.clear{
+	clear:both;
+}
+
+// 文字换行
+.white-space-nowrap{
+  white-space:nowrap;
+}
+.ellipsis {
+	text-overflow:ellipsis;
+}
+.nowrap:extend(.ellipsis),.nowrap2:extend(.ellipsis),.nowrap3:extend(.ellipsis){
+	overflow:hidden;
+}
+.nowrap{
+	white-space:nowrap;
+}
+.nowrap2,.nowrap3{
+	/* autoprefixer: off */
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+}
+.nowrap2{
+	-webkit-line-clamp:2;
+}
+.nowrap3{
+	-webkit-line-clamp:3;
+}
+
+// 文字排列
+.text-center{
+	text-align:center;
+}
+.text-right{
+	text-align:right;
+}
+.text-left{
+	text-align:left;
+}
+
+
+
 
 
 // 文字图标

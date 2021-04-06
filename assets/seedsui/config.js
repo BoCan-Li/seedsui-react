@@ -45,7 +45,7 @@ Debugger.vconsoleLogger(document.getElementById('vconsoleHandler'));
 if (Device.platform === 'dinghuo' || Device.platform === 'waiqin' || Device.platform === 'wq') {
   var root = document.getElementById('root');
   // 适配差安卓, 解决在app中, 输入法上弹界面错位的问题
-  if (root && Device.os === 'andriod' && Device.osVersion < '5.0') {
+  if (root && Device.os === 'android' && Device.osVersion < '5.0') {
     root.style.position = 'fixed' // 处理客户端中, 输入法上弹收缩后, 界面显示错位的问题
   }
   // ios外勤客户端UIWebview点击慢的问题
