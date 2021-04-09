@@ -359,6 +359,7 @@ var Bridge = {
       platform !== 'wework' &&
       platform !== 'wechatMiniprogram' &&
       platform !== 'weworkMiniprogram' &&
+      platform !== 'weworkBrowser' &&
       platform !== 'waiqin' &&
       platform !== 'dinghuo' &&
       platform !== 'wq'
@@ -381,9 +382,29 @@ var Bridge = {
     var script = document.createElement('script')
     script.type = 'text/javascript'
     script.defer = 'defer'
-    if (platform === 'wechat' || platform === 'wechatMiniprogram') {
-      // 微信
-      script.src = options.wxSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
+    if (
+      platform === 'wechat' ||
+      platform === 'wechatMiniprogram' ||
+      platform === 'wework' ||
+      platform === 'weworkMiniprogram' ||
+      platform === 'weworkBrowser'
+    ) {
+      // 微信平台
+      // 加载微信库
+      if (platform === 'wechat') {
+        script.src = options.wechatLibSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
+      } else if (platform === 'wechatMiniprogram') {
+        script.src = options.wechatMiniprogramLibSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
+      } else if (platform === 'wework') {
+        script.src = options.weworkLibSrc || '//res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js'
+      } else if (platform === 'weworkMiniprogram') {
+        script.src = options.weworkMiniprogramLibSrc || '//res.wx.qq.com/open/js/jweixin-1.6.0.js'
+      } else if (platform === 'weworkBrowser') {
+        script.src =
+          options.weworkBrowserLibSrc || '//res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js'
+      }
+
+      // 加载完成
       script.onload = function () {
         self.initHistory()
         if (callback) callback()
@@ -391,18 +412,6 @@ var Bridge = {
       if (options.fail) {
         script.onerror = function () {
           options.fail({ errMsg: locale('微信js加载失败', 'hint_wx_failed_to_load') })
-        }
-      }
-    } else if (platform === 'wework' || platform === 'weworkMiniprogram') {
-      // 企业微信
-      script.src = options.wxworkSrc || '//res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js'
-      script.onload = function () {
-        self.initHistory()
-        if (callback) callback()
-      }
-      if (options.fail) {
-        script.onerror = function () {
-          options.fail({ errMsg: locale('企业微信js加载失败', 'hint_wxwork_failed_to_load') })
         }
       }
     } else if (platform === 'waiqin') {

@@ -11,7 +11,8 @@ if (
   Device.platform === 'wechat' ||
   Device.platform === 'wework' ||
   Device.platform === 'wechatMiniprogram' ||
-  Device.platform === 'weworkMiniprogram'
+  Device.platform === 'weworkMiniprogram' ||
+  Device.platform === 'weworkBrowser'
 ) {
   Bridge = {
     ...BridgeBase,

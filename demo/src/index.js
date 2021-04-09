@@ -24,9 +24,29 @@ function Demo () {
     console.log(count)
   }
 
-  // useEffect(() => {
-  //   setCount(count - 1)
-  // , [count]})
+  useEffect(() => {
+    Bridge.debug = true
+    Bridge.getLocation({
+      type: 'gcj02',
+      success: (data) => {
+        console.log(data)
+      },
+      fail: (res) => {
+        console.log('定位失败')
+      }
+    })
+    setTimeout(() => {
+      Bridge.getLocation({
+        type: 'gcj02',
+        success: (data) => {
+          console.log('1', data)
+        },
+        fail: (res) => {
+          console.log('定位失败1')
+        }
+      })
+    }, 100);
+  }, [])
 
 
   return <Page>

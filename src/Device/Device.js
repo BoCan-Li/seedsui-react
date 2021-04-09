@@ -39,6 +39,17 @@ var Device = (function () {
   function updatePlatform() {
     if (device === 'pc') {
       platform = 'browser'
+      if (ua.indexOf('wxwork') > -1) {
+        // 企业微信浏览器
+        platform = 'weworkBrowser'
+        platformMatch = ua.match(/wxwork\/([\w.]*)/)
+        if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+      } else if (ua.indexOf('micromessenger') > -1) {
+        // 微信浏览器
+        platform = 'wechatBrowser'
+        platformMatch = ua.match(/micromessenger\/([\w.]*)/)
+        if (platformMatch && platformMatch[1]) platformVersion = platformMatch[1]
+      }
     } else if (ua.indexOf('miniprogram') > -1 && ua.indexOf('micromessenger') > -1) {
       if (ua.indexOf('wxwork') > -1) {
         platform = 'weworkMiniprogram'
