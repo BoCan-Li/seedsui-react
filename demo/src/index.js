@@ -10,48 +10,41 @@ import {
 	MapUtil,
   ImgMark,
   NumBox,
-  InputLocation
+  MenuTiled
 } from '../../src'
 
 
-let interval = null
+const menus = [
+  {id: '1', name: '测试数据1', parentid: '-1'},
+  {id: '2', name: '测试数据2', parentid: '-1'},
+  {id: 'a', name: '测试数据1-a', parentid: '1'},
+  {id: 'b', name: '测试数据1-b', parentid: '1'},
+  {id: 'I', name: '测试数据1-b-I', parentid: 'b'},
+  {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
+];
 
 function Demo () {
+  const [selected, setSelected] = useState([{id: 'b', name: '测试数据1-b', parentid: '1'}])
   const [count, setCount] = useState(10)
+
+  useEffect(() => {
+    console.log(new Date().diff(new Date('2023-04-10')))
+  }, [])
 
   function handleCountDown () {
     setCount(count - 1)
     console.log(count)
   }
 
-  useEffect(() => {
-    Bridge.debug = true
-    Bridge.getLocation({
-      type: 'gcj02',
-      success: (data) => {
-        console.log(data)
-      },
-      fail: (res) => {
-        console.log('定位失败')
-      }
-    })
-    setTimeout(() => {
-      Bridge.getLocation({
-        type: 'gcj02',
-        success: (data) => {
-          console.log('1', data)
-        },
-        fail: (res) => {
-          console.log('定位失败1')
-        }
-      })
-    }, 100);
-  }, [])
-
+  function onClickMenu (e, value, selected, data) {
+    console.log(e, value, selected, data);
+    setSelected(selected)
+  }
 
   return <Page>
 		<Header>
 			<Titlebar caption="标题"/>
+      <MenuTiled multiple list={menus} selected={selected} onChange={onClickMenu}/>
 		</Header>
 		<Container>
       {count}

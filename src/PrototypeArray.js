@@ -155,7 +155,7 @@ function _buildTreeToFlatten (list, parentIdName, nodeIdName) { // 扁平化, �
   return tree
 }
 
-// 取出无父节点的顶层数据, 即[{id: '', name: '', parentid: '-1' 或没有parentid}]
+// 取出无父节点的顶层数据, 即[{id: '', name: '', parentid: '-404' 或没有parentid}]
 window.Array.prototype.getFlattenTreeRoots = function (propertyConfig) {
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
 
@@ -169,7 +169,7 @@ window.Array.prototype.getFlattenTreeRoots = function (propertyConfig) {
   return roots
 }
 
-// 取出扁平数据的顶层id集合, 无parentid, 则修改为'-1'
+// 取出扁平数据的顶层id集合, 无parentid, 则修改为'-404'
 window.Array.prototype.getFlattenTreeRootIds = function (propertyConfig) {
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
 
@@ -178,8 +178,8 @@ window.Array.prototype.getFlattenTreeRootIds = function (propertyConfig) {
   // 取出所有的parentid
   for (let item of list) {
     if (!item[parentIdName || 'parentid']) {
-      item[parentIdName || 'parentid'] = '-1'
-      parentIdMap['-1'] = '1'
+      item[parentIdName || 'parentid'] = '-404'
+      parentIdMap['-404'] = '1'
     }
     parentIdMap[item[parentIdName || 'parentid']] = '1'
   }

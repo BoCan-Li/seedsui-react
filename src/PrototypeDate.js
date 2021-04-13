@@ -354,20 +354,33 @@ window.Date.prototype.prevMinuteSpace = function (argSpace) {
  */
 // 比较Date对象,返回相差天时分秒等信息
 window.Date.prototype.diff = function (date) {
-  var dateStart = this // 开始时间
-  var dateEnd = date // 结束时间
+  if (date instanceof Date === false) {
+    return {
+      days: 0, // 天
+      hours: 0, // 时
+      minutes: 0, // 分
+      seconds: 0, // 秒
+      yearsDiff: 0,
+      monthsDiff: 0,
+      hoursDiff: 0,
+      minutesDiff: 0,
+      secondsDiff: 0
+    }
+  }
+  var startDate = this // 开始时间
+  var endDate = date // 结束时间
 
   var secondMilli = 1000 // 一分钟的毫秒数
   var minuteMilli = 60 * secondMilli // 一分钟的毫秒数
   var hourMilli = 60 * minuteMilli // 一小时的毫秒数
   var dayMilli = 24 * hourMilli // 一天的毫秒数
 
-  var timeDiff = dateEnd.getTime() - dateStart.getTime() // 毫秒差
+  var timeDiff = endDate.getTime() - startDate.getTime() // 毫秒差
 
   // 计算出相差天数
   var days =
     timeDiff / dayMilli >= 0 ? Math.floor(timeDiff / dayMilli) : Math.ceil(timeDiff / dayMilli)
-  
+
   // 计算出剩余小时数
   var dayMilliRemainder = timeDiff % dayMilli
   var hours =
@@ -387,13 +400,13 @@ window.Date.prototype.diff = function (date) {
   // 计算相差小时数
   var hoursAllDiff =
     timeDiff / hourMilli >= 0 ? Math.floor(timeDiff / hourMilli) : Math.ceil(timeDiff / hourMilli)
-  
+
   // 计算相差分钟数
   var minutesDiff =
     timeDiff / minuteMilli >= 0
       ? Math.floor(timeDiff / minuteMilli)
       : Math.ceil(timeDiff / minuteMilli)
-  
+
   // 计算相差秒数
   var secondsDiff =
     timeDiff / secondMilli >= 0
@@ -402,7 +415,7 @@ window.Date.prototype.diff = function (date) {
 
   // 相差总年数
   let yearsDiff = endDate.getFullYear() - startDate.getFullYear()
-  
+
   // 计算相差总月数
   let monthsDiff = endDate.getMonth() - startDate.getMonth()
   monthsDiff = yearsDiff * 12 + monthsDiff

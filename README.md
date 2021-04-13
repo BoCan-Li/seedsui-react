@@ -3767,7 +3767,7 @@ const menus = [
   {id: 'II', name: '测试数据1-b-II', parentid: 'b'}
 ];
 
-const [selected, setSelected] = useState([{id: 'b', name: '测试数据1-b', parentid: '1'}]);
+const [selected, setSelected] = useState([{id: 'b', name: '测试数据1-b', parentid: '1'}])
 
 function onClickMenu (e, value, selected, data) {
   console.log(e, value, selected, data);

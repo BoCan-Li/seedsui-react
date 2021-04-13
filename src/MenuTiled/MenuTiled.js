@@ -145,12 +145,13 @@ const MenuTiled = forwardRef(
         }
       }
     }, [multipleSelected])
-    // 多选, 提取根节点共同的parentid, 为根节点(例如: 全部)的id
+
+    // 多选, 提取根节点共同的parentid, 为根节点(例如: 全部)的id, 默认为'-404'
     function getRootParentId(flattenTree) {
-      let rootParentId = '-1'
+      let rootParentId = '-404'
       let root = flattenTree.getFlattenTreeRoots()
       for (let rootItem of root) {
-        if (rootItem.id && rootItem.id !== '-1') {
+        if (rootItem.id && rootItem.id !== '-404') {
           rootParentId = rootItem.parentid
           break
         }
