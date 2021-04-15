@@ -526,8 +526,8 @@ var Bridge = {
     setTimeout(() => {
       var res = {
         errMsg: 'getLocation:ok',
-        longitude: '118.796624',
-        latitude: '32.059344',
+        longitude: '116.397451',
+        latitude: '39.909187',
         speed: '0.0',
         accuracy: '3.0.0'
       }
@@ -551,11 +551,11 @@ var Bridge = {
     setTimeout(function () {
       if (params.success)
         params.success({
-          longitude: '118.796624',
-          latitude: '32.059344',
+          longitude: '116.397451',
+          latitude: '39.909187',
           speed: '0.0',
           accuracy: '3.0.0',
-          address: '江苏省南京市政府'
+          address: '北京市天安门'
         })
     }, 500)
   },
