@@ -433,7 +433,7 @@ var Bridge = {
       return
     }
     self.locationTask = []
-    console.log('调用定位...')
+    console.log('调用cordova定位...')
     // 调用定位
     // eslint-disable-next-line
     wq.wqlocation.getLocationBackground((res) => {

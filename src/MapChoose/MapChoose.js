@@ -122,7 +122,6 @@ const MapChoose = forwardRef(
 
     // 立即定位
     function locationHandler() {
-      Bridge.debug = true
       Bridge.getLocation({
         type: 'gcj02',
         success: async (data) => {

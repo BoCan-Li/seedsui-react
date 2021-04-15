@@ -509,7 +509,7 @@ var Bridge = {
       return
     }
     self.locationTask = []
-    console.log('调用定位...')
+    console.log('调用订货定位...')
     self.invoke('getLocation', params.type || 'gcj02', (res) => {
       if (res && res.latitude) {
         // 将位置信息存储到cookie中60秒

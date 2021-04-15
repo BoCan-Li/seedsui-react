@@ -422,7 +422,7 @@ var Bridge = {
           return
         }
         self.locationTask = []
-        console.log('调用定位...')
+        console.log('调用浏览器定位...')
         navigator.geolocation.getCurrentPosition(
           (position) => {
             var res = {
@@ -522,12 +522,12 @@ var Bridge = {
       return
     }
     self.locationTask = []
-    console.log('调用定位...')
+    console.log('调用浏览器定位...')
     setTimeout(() => {
       var res = {
         errMsg: 'getLocation:ok',
-        longitude: '118.7347',
-        latitude: '31.98114',
+        longitude: '118.796624',
+        latitude: '32.059344',
         speed: '0.0',
         accuracy: '3.0.0'
       }
@@ -551,11 +551,11 @@ var Bridge = {
     setTimeout(function () {
       if (params.success)
         params.success({
-          longitude: '118.730515',
-          latitude: '31.982473',
+          longitude: '118.796624',
+          latitude: '32.059344',
           speed: '0.0',
           accuracy: '3.0.0',
-          address: '江苏省南京市新城科技园'
+          address: '江苏省南京市政府'
         })
     }, 500)
   },

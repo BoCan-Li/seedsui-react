@@ -172,7 +172,6 @@ const InputLocation = forwardRef(
 
     // 定位, isAutoLocation表示初始化时自动定位
     function location(e) {
-      Bridge.debug = true
       // 如果type为choose为选择定位
       // if (!isAutoLocation && type === 'choose') {
       //   openPreview()

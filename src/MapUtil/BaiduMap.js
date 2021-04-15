@@ -100,7 +100,7 @@ var BaiduMap = function (id, params) {
    * }
    */
   s.getLocation = function (options = {}) {
-    console.log('调用定位...')
+    console.log('调用百度地图定位...')
     var geolocation = new BMap.Geolocation()
     geolocation.getCurrentPosition(
       function (res) {
