@@ -10,7 +10,7 @@ import {
 	MapUtil,
   ImgMark,
   NumBox,
-  MenuTiled
+  InputNumber
 } from '../../src'
 
 function Demo () {
@@ -21,7 +21,10 @@ function Demo () {
 
   function handleCountDown () {
     setCount(count - 1)
-    console.log(count)
+  }
+
+  function handleChange (e, value) {
+    console.log(value)
   }
 
   return <Page>
@@ -30,6 +33,7 @@ function Demo () {
 		</Header>
 		<Container>
       {count}
+      <InputNumber onChange={handleChange}/>
       <div onClick={handleCountDown}>开始</div> 
     </Container>
   </Page>

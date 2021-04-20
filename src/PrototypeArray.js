@@ -160,7 +160,7 @@ window.Array.prototype.getFlattenTreeRoots = function (propertyConfig) {
   var parentIdName = propertyConfig && propertyConfig.parentIdName ? propertyConfig.parentIdName : 'parentid'
 
   var list = this
-  var rootIds = list.getFlattenTreeRootIds()
+  var rootIds = list.getFlattenTreeRootIds(propertyConfig)
   var roots = []
   // 取出顶层数据(没有parentid或者parentid===-1)
   list.forEach(function (item) {
@@ -292,7 +292,10 @@ window.Array.prototype.deepTree = function (propertyConfig) {
 
   // 深度化, 修改trees
   function _buildTreeToDeep (item) {
-    var children = list.getFlattenTreeChildren(item[nodeIdName || 'id'], parentIdName, nodeIdName)
+    var children = list.getFlattenTreeChildren(item[nodeIdName || 'id'], {
+      parentIdName: parentIdName,
+      nodeIdName: nodeIdName
+    })
     if (children && children.length) {
       if (item.children) {
         item.children.push(children)
@@ -306,7 +309,10 @@ window.Array.prototype.deepTree = function (propertyConfig) {
       item.isLeaf = true
     }
   }
-  var trees = list.getFlattenTreeRoots(parentIdName, nodeIdName)
+  var trees = list.getFlattenTreeRoots({
+    parentIdName: parentIdName,
+    nodeIdName: nodeIdName
+  })
   for (var i = 0, tree; tree = trees[i++];) { // eslint-disable-line
     _buildTreeToDeep(tree)
   }
