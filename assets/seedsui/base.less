@@ -245,6 +245,17 @@
 @random9-bg:#ff618f;
 @random10-bg:#21d9a1;
 
+// 头像控件
+@avatar-background-size: cover;
+@avatar-color:@placeholder;
+@avatar-bg:#ddd;
+@avatar-border:0;
+
+// 缩略图控件
+@thumbnail-background-size: contain;
+@thumbnail-bg: white;
+@thumbnail-border: 1px solid #e5e5e5;
+
 // 边框颜色
 @border:#e5e5e5;
 @dpborder:#e5e5e5;
@@ -504,6 +515,9 @@ hr:extend(.border-b){
 // .inline-flex{
 //   display:-webkit-inline-box;
 // }
+// .flex-initial{
+//   -webkit-box-flex: initial;
+// }
 // .flex-0{
 //   -webkit-box-flex:	0.0;
 // }
@@ -546,6 +560,9 @@ hr:extend(.border-b){
 }
 .inline-flex{
   display:inline-flex;
+}
+.flex-initial{
+  flex:initial;
 }
 .flex-0{
   flex:0;
