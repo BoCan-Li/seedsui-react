@@ -44,12 +44,17 @@ var Bridge = {
     })
   },
   // 配置鉴权
-  config: function () {
+  init: function (cb) {
     self = this
     /* eslint-disable */
     wq.config({ auth: false })
     wq.ready(function () {
-      self.addBackPress()
+      // 地址栏中包含isFromApp=则使用isFromApp的返回规则
+      if (Device.getUrlParameter('isFromApp')) {
+        self.addBackPress()
+      }
+      // 初始化完成回调
+      if (typeof cb === 'function') cb()
     })
     /* eslint-enable */
   },
@@ -268,7 +273,12 @@ var Bridge = {
             res.longitude = point[0]
             res.latitude = point[1]
           }
-          if (params.cacheTime) DB.setCookie('app_location', JSON.stringify(res), !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000)
+          if (params.cacheTime)
+            DB.setCookie(
+              'app_location',
+              JSON.stringify(res),
+              !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000
+            )
           if (params.success) params.success(res)
         } else {
           if (params.fail) params.fail(res)

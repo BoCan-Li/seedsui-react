@@ -9,12 +9,17 @@ var Bridge = {
    * 定制功能
    */
   platform: 'waiqin',
-  config: function () {
+  init: function (cb) {
     self = this
     document.addEventListener(
       'deviceready',
       () => {
-        self.addBackPress()
+        // 地址栏中包含isFromApp=则使用isFromApp的返回规则
+        if (Device.getUrlParameter('isFromApp')) {
+          self.addBackPress()
+        }
+        // 初始化完成回调
+        if (typeof cb === 'function') cb()
       },
       false
     )
@@ -55,7 +60,7 @@ var Bridge = {
     if (self.cordovaMonitorBack) self.cordovaMonitorBack()
     else self.back()
   },
-  // 客户端返回绑定
+  // 客户端返回绑定: cordova中必须在无原生头的情况下才工作
   addBackPress: function (callback) {
     self = this
     if (callback) self.cordovaMonitorBack = callback
@@ -453,7 +458,12 @@ var Bridge = {
         // result.street = res.street
         result.fake = res.mokelocation === 'true' || res.mokelocation === true
         // 将位置信息存储到cookie中60秒
-        if (params.cacheTime) DB.setCookie('app_location', JSON.stringify(res), !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000)
+        if (params.cacheTime)
+          DB.setCookie(
+            'app_location',
+            JSON.stringify(res),
+            !isNaN(params.cacheTime) ? Number(params.cacheTime) : 60000
+          )
         if (params.success) params.success(result)
         self.getLocationTask(result)
       } else {

@@ -7,10 +7,13 @@ var Bridge = {
    * 定制功能
    */
   platform: 'dinghuo',
-  config: function () {
+  init: function (cb) {
     var self = this
-    // 返回物理按键绑定
-    self.addBackPress()
+    // 地址栏中包含isFromApp=则使用isFromApp的返回规则
+    if (Device.getUrlParameter('isFromApp')) {
+      self.addBackPress()
+    }
+    // 注册原生点击购物车、返回按键、直播、返回直接事件, 方便webview中调用
     self.registerHandler([
       'getGoodsByApp',
       'getCartGoodsByApp',
@@ -19,6 +22,8 @@ var Bridge = {
       'reloadByApp'
     ])
     self.invoke('config', { auth: false })
+    // 初始化完成回调
+    if (typeof cb === 'function') cb()
   },
   /**
    * 统一处理桥接返回结果

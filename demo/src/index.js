@@ -17,15 +17,10 @@ function Demo() {
   const [count, setCount] = useState(10)
 
   useEffect(() => {
-    var isFromApp = Device.getUrlParameter('isFromApp', window.location.search) || ''
-    let confirmCaption = '您确定要离开此页面吗?'
-    if (isFromApp.indexOf('confirm:') !== -1) {
-      let newConfirmCaption = isFromApp.replace('confirm:', '')
-      if (newConfirmCaption) {
-        confirmCaption = decodeURIComponent(decodeURIComponent(newConfirmCaption))
-      }
+    Bridge.onCustomBack = function () {
+      alert(1)
+      Bridge.closeWindow()
     }
-    console.log(confirmCaption)
   }, [])
 
   function handleCountDown() {
@@ -42,6 +37,7 @@ function Demo() {
         <Titlebar caption="标题" />
       </Header>
       <Container>
+        <a href="https://www.baidu.com/">百度</a>
         {count}
         <InputNumber onChange={handleChange} />
         <div onClick={handleCountDown}>开始</div>

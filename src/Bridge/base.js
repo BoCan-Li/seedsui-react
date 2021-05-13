@@ -237,7 +237,7 @@ var Bridge = {
     var _backLvl = argBackLvl || -1
 
     // 返回类型
-    var isFromApp = Device.getUrlParameter('isFromApp', window.location.search) || ''
+    var isFromApp = Device.getUrlParameter('isFromApp') || ''
     // 如果已经有h5返回监听, 优先执行h5返回监听
     if (window.onHistoryBacks && Object.keys(window.onHistoryBacks).length === 0) {
       window.onHistoryBacks = null
@@ -270,15 +270,12 @@ var Bridge = {
         }
       }
       // 提示后关闭当前页面
-      self.showConfirm(
-        confirmCaption,
-        {
-          success: (e) => {
-            e.hide()
-            self.closeWindow()
-          }
+      self.showConfirm(confirmCaption, {
+        success: (e) => {
+          e.hide()
+          self.closeWindow()
         }
-      )
+      })
     } else if (isFromApp.indexOf('confirm') !== -1) {
       // 默认提示信息
       let confirmCaption = locale('您确定要离开此页面吗?', 'confirm_quit_page')
@@ -290,15 +287,16 @@ var Bridge = {
         }
       }
       // 提示后返回上一页
-      self.showConfirm(
-        confirmCaption,
-        {
-          success: (e) => {
-            e.hide()
-            _history.go(_backLvl)
-          }
+      self.showConfirm(confirmCaption, {
+        success: (e) => {
+          e.hide()
+          _history.go(_backLvl)
         }
-      )
+      })
+    } else if (isFromApp === 'onCustomBack') {
+      if (typeof self.onCustomBack === 'function') {
+        self.onCustomBack()
+      }
     } else {
       // 返加上一页
       _history.go(_backLvl)
@@ -435,10 +433,9 @@ var Bridge = {
       script.src =
         options.wqCordovaSrc || '//res.waiqin365.com/d/common_mobile/component/cordova/cordova.js'
       script.onload = function () {
-        document.addEventListener('deviceready', () => {
-          self.initHistory()
+        self.initHistory()
+        self.init(() => {
           if (callback) callback()
-          self.config()
         })
       }
       if (options.fail) {
@@ -456,7 +453,7 @@ var Bridge = {
       script.onload = function () {
         self.initHistory()
         if (callback) callback()
-        self.config()
+        self.init()
       }
       if (options.fail) {
         script.onerror = function () {
@@ -466,7 +463,7 @@ var Bridge = {
     } else if (platform === 'dinghuo') {
       self.initHistory()
       if (callback) callback()
-      self.config()
+      self.init()
     }
     if (script.src) document.body.appendChild(script)
   },
