@@ -259,21 +259,19 @@ var Bridge = {
       } catch (error) {
         console.log(error)
       }
-    } else if (isFromApp === 'confirm') {
-      // 提示后返回上一页
-      self.showConfirm(
-        self.confirmCaption || locale('您确定要离开此页面吗?', 'confirm_quit_page'),
-        {
-          success: (e) => {
-            e.hide()
-            _history.go(_backLvl)
-          }
+    } else if (isFromApp.indexOf('confirm-close') !== -1) {
+      // 默认提示信息
+      let confirmCaption = locale('您确定要离开此页面吗?', 'confirm_quit_page')
+      // 地址栏动态提示信息
+      if (isFromApp.indexOf('confirm-close:') !== -1) {
+        let newConfirmCaption = isFromApp.replace('confirm-close:', '')
+        if (newConfirmCaption) {
+          confirmCaption = decodeURIComponent(decodeURIComponent(newConfirmCaption))
         }
-      )
-    } else if (isFromApp === 'confirm-close') {
+      }
       // 提示后关闭当前页面
       self.showConfirm(
-        self.confirmCaption || locale('您确定要离开此页面吗?', 'confirm_quit_page'),
+        confirmCaption,
         {
           success: (e) => {
             e.hide()
@@ -281,8 +279,26 @@ var Bridge = {
           }
         }
       )
-    } else if (isFromApp === 'custom') {
-      console.log('自定义')
+    } else if (isFromApp.indexOf('confirm') !== -1) {
+      // 默认提示信息
+      let confirmCaption = locale('您确定要离开此页面吗?', 'confirm_quit_page')
+      // 地址栏动态提示信息
+      if (isFromApp.indexOf('confirm:') !== -1) {
+        let newConfirmCaption = isFromApp.replace('confirm:', '')
+        if (newConfirmCaption) {
+          confirmCaption = decodeURIComponent(decodeURIComponent(newConfirmCaption))
+        }
+      }
+      // 提示后返回上一页
+      self.showConfirm(
+        confirmCaption,
+        {
+          success: (e) => {
+            e.hide()
+            _history.go(_backLvl)
+          }
+        }
+      )
     } else {
       // 返加上一页
       _history.go(_backLvl)
