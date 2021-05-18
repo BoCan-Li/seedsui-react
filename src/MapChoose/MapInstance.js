@@ -52,11 +52,11 @@ export default function () {
         mapUtil.map.addEventListener('dragend', async (e) => {
           self.hideTempMarker()
           if (!self.marker) return
-          // 获取中心点, 并绘制坐标点
+          // 获取中心点, 并绘制坐标点, 获取的point为国测局坐标
           let point = self.getCenterPoint(self.marker)
           // 显示坐标点
           self.showMarker()
-          // 地址逆解析
+          // 地址逆解析, point为国测局坐标
           let result = await self.getAddress(point)
           if (self.onDragEnd) {
             self.onDragEnd(result)
@@ -128,7 +128,7 @@ export default function () {
     let result = await self.getAddress(point)
     if (callback) callback(result)
   }
-  // 绘制坐标点
+  // 绘制坐标点, point为国测局坐标
   s.drawMarker = function (point) {
     var self = this
     if (!point) {
