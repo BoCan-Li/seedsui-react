@@ -2877,14 +2877,14 @@ function onChange (e, value, selectedMap) {
 ```javascript
 import InputLocation from 'seedsui-react/lib/InputLocation';
 
-const [value, setValue] = useState('');
-function changeHandler (e, value) {
+const [value, setValue] = useState('')
+function handleChange (e, value) {
 	console.log(value)
-	setValue(value);
+	setValue(value)
 }
 function handlePreview (e, err) {
   if (typeof err === 'object' && err.errMsg.indexOf('preview:fail') !== -1) {
-    Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false});
+    Bridge.showToast(err.errMsg.replace('preview:fail', ''), {mask: false})
   }
 }
 function handleHide (type) {
@@ -2897,7 +2897,7 @@ function handleHide (type) {
   pre
   value={value}
   placeholder="请点击获取位置信息"
-  onChange={changeHandler}
+  onChange={handleChange}
   onPreviewHide={handleHide}
   preview={handlePreview}
 />
@@ -3600,7 +3600,7 @@ import MapChoose from 'seedsui-react/lib/MapChoose';
 import MapView from 'seedsui-react/lib/MapView';
 const [selected, setSelected] = useState(null);
 const [mapData, setMapData] = useState(null);
-function changeHandler (e, value, selected) {
+function handleChange (e, value, selected) {
   setSelected(selected);
   setMapData({
     point: [selected.longitude, selected.latitude],
@@ -3617,7 +3617,7 @@ function changeHandler (e, value, selected) {
   portal={context.portal || document.getElementById('root') || document.body}
   onHide={() => setMapShow(false)}
 />}
-<InputLocation readOnly={true} value={selected.address} selected={selected} onChange={changeHandler}/>
+<InputLocation readOnly={true} value={selected.address} selected={selected} onChange={handleChange}/>
 ```
 
 ```javascript

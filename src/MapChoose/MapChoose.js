@@ -115,13 +115,13 @@ const MapChoose = forwardRef(
         }
         // 自动定位
         if (!point && autoLocation) {
-          locationHandler()
+          handleLocation()
         }
       })
     }
 
     // 立即定位
-    function locationHandler() {
+    function handleLocation() {
       Bridge.getLocation({
         type: 'gcj02',
         success: async (data) => {
@@ -202,7 +202,7 @@ const MapChoose = forwardRef(
         <Container>
           <Wrapper ref={wrapperRef} />
           {onHide && <Close onClick={onHide} />}
-          <Location onClick={locationHandler} />
+          <Location onClick={handleLocation} />
           {children}
         </Container>
         <Footer className="map-footer">
