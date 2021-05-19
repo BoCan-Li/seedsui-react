@@ -268,7 +268,7 @@ const InputLocation = forwardRef(
       if (typeof onPreviewRef.current === 'function')
         onPreviewRef.current({ target: inputTextRef.current }, value)
     }
-    // 关闭h5预览
+    // 关闭h5预览, [closeType] history: 地址栏返回; 其它: 主动隐藏;
     function closePreview(closeType) {
       if (window.location.href.indexOf(routePath) !== -1) {
         window.history.go(-1)
@@ -279,8 +279,7 @@ const InputLocation = forwardRef(
     }
     // 地图选点
     function handleChoose(e, val, data) {
-      setViewMapShow(false)
-      if (onPreviewHide) onPreviewHide()
+      closePreview('history')
       const address = data && data.address ? data.address : ''
       data.value = address
       data.errMsg = 'getLocation:ok'

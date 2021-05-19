@@ -146,7 +146,7 @@ const MapChoose = forwardRef(
     }
 
     // 提交
-    function submitHandler() {
+    function handleSubmit() {
       if (onChange) {
         if (data && data.point && data.point.length === 2) {
           data.longitude = data.point[0]
@@ -211,7 +211,7 @@ const MapChoose = forwardRef(
             <p className="map-footer-content-sndcaption">{addr}</p>
           </div>
           {addr && (
-            <span className="map-footer-submit" onClick={submitHandler}>
+            <span className="map-footer-submit" onClick={handleSubmit}>
               {locale('确定', 'ok')}
             </span>
           )}

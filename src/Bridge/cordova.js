@@ -42,17 +42,20 @@ var Bridge = {
   },
   // 退出到登陆页面
   logOut: function (msg) {
+    // eslint-disable-next-line
     wq.wqload.wqBackToLogin(
       JSON.stringify({ message: msg || '您的帐号因正在它处登录, 需要您重新登录' })
-    ) // eslint-disable-line
+    )
   },
   // 打开新的窗口
   openWindow: function (params, callback) {
+    // eslint-disable-next-line
     wq.wqload.wqOpenUrl(callback ? callback : null, null, params ? JSON.stringify(params) : null) // eslint-disable-line
   },
   // 关闭当前窗
   closeWindow: function () {
-    wq.wqload.wqClosePage() // eslint-disable-line
+    // eslint-disable-next-line
+    wq.wqload.wqClosePage()
   },
   // 防止返回事件叠加绑定
   cordovaMonitorBack: null,
