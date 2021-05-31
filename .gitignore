@@ -5,7 +5,6 @@
 /node_modules
 /umd
 npm-debug.log*
-
 # misc
 .babelrc
 .DS_Store
