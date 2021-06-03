@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, Fragment, memo, useCallback } from 'react'
+import React, { useRef, useState, useEffect, Fragment, useMemo, memo, useCallback } from 'react'
 import { render } from 'react-dom'
 import {
   Page,
@@ -7,60 +7,78 @@ import {
   Bridge,
   Container,
   MapUtil,
-  InputLocation
+  InputLocation,
+  Photos
 } from '../../src'
 
+
+const useSyncCallback = (callback) => {
+  const [proxyState, setProxyState] = useState({ current: false })
+
+  const Func = useCallback(() => {
+    setProxyState({ current: true })
+  }, [proxyState]) // eslint-disable-line
+
+  useEffect(() => {
+    if (proxyState.current === true) setProxyState({ current: false })
+  }, [proxyState])
+
+  useEffect(() => {
+    proxyState.current && callback()
+  })
+
+  return Func
+}
+
 const Child = memo((props) => {
-  console.log(props);
+  console.log('child1:', props);
 
   return (
     <div>
-      <input type="text" value={props?.value?.value || ''} onChange={props.onChange}/>
+      <input type="text" value={props?.value || ''} onChange={props.onChange}/>
     </div>
   )
 })
 
-const Child2 = memo((props) => {
-  console.log(props);
+const Child2 = (props) => {
+  console.log('child2:', props);
+  let memoValue = useMemo(() => {
+    console.log('渲染')
+    return props?.value || ''
+  }, [props.value])
 
   return (
     <div>
-      <input type="text" value={props.value || ''} onChange={props.onChange}/>
+      {props?.value || ''}
+      <input type="text" value={memoValue} onChange={props.onChange}/>
     </div>
   )
-})
+}
 
 const Child3 = memo((props) => {
-  console.log(props);
+  const renderValue = () => {
+    console.log('child3:渲染')
+    return `child3:${props?.value || ''}`
+  }
 
   return (
     <div>
-      <div>{props?.value?.value || ''}</div>
+      <input type="text" value={props?.value || ''} onChange={props.onChange}/>
+      {renderValue()}
     </div>
   )
 })
 
 function Demo() {
-  const [value, setValue] = useState({})
-  const [value2, setValue2] = useState('')
-  const handleChange = useCallback((e) => {
-    setValue({
-      value: e.target.value
-    })
-  }, [])
-  const handleChange2 = useCallback((e) => {
-    setValue2(e.target.value)
-  }, [])
-
   return (
     <Page>
       <Header>
         <Titlebar caption="标题" />
       </Header>
       <Container>
-        <Child value={value} onChange={handleChange}/>
-        <Child2 value={value2} onChange={handleChange2}/>
-        <Child3 value={value}/>
+        <Photos isBrowser onChoose={(e) => {
+          alert(e.target.className)
+        }}/>
       </Container>
     </Page>
   )
