@@ -158,7 +158,7 @@ const MapChoose = forwardRef(
 
     // 绘制标记点
     useEffect(() => {
-      if (point && point.length === 2 && show) {
+      if (point && point.length === 2 && show && mapInstance) {
         if (!address) {
           console.log('初始化标记')
           mapInstance.initMarker(point, (result) => {
@@ -187,7 +187,7 @@ const MapChoose = forwardRef(
 
     // 中断绘制
     useEffect(() => {
-      if (show) {
+      if (show && mapInstance) {
         if (errMsg) {
           mapInstance.abort = true
         } else {

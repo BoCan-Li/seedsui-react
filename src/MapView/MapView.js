@@ -94,7 +94,7 @@ function MapView({
 
   // 绘制标记点
   useEffect(() => {
-    if (points && points.length && show) {
+    if (points && points.length && show && mapInstance) {
       console.log('绘制标记')
       console.log(mapInstance)
       mapInstance.drawMarkers(points)
