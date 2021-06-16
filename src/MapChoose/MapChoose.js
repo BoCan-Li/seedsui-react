@@ -27,6 +27,7 @@ const MapChoose = forwardRef(
       show = true, // 百度地图不能移除DOM, 再渲染
       portal,
       caption,
+      prevCaption,
       autoLocation,
       onHide,
       onChange,
@@ -76,6 +77,9 @@ const MapChoose = forwardRef(
       })
       // 移除组件时注销
       return () => {
+        // 设置上一页标题
+        handleTitle(prevCaption)
+        // 移除实例化对象
         mapInstance.destroy()
       }
     }, []) // eslint-disable-line
@@ -178,12 +182,14 @@ const MapChoose = forwardRef(
       setAddr(address)
     }, [address]) // eslint-disable-line
 
-    // 标题
+    // 显隐
     useEffect(() => {
-      if (caption && show) {
-        Bridge.setTitle(caption)
+      if (show) {
+        handleTitle(caption)
+      } else {
+        handleTitle(prevCaption)
       }
-    }, [caption])
+    }, [show])
 
     // 中断绘制
     useEffect(() => {
@@ -195,6 +201,18 @@ const MapChoose = forwardRef(
         }
       }
     }, [errMsg])
+
+    // 设置标题
+    function handleTitle (title) {
+      if (!title) return
+      if (typeof title === 'string') {
+        Bridge.setTitle({
+          title: title
+        })
+      } else if (typeof title === 'function') {
+        title()
+      }
+    }
 
     const DOM = (
       <Page ref={rootRef} className={show ? '' : 'hide'}>

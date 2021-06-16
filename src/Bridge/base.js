@@ -472,7 +472,13 @@ var Bridge = {
    * @param {Object} params {title: '自定义标题'}
    */
   setTitle: function (params) {
-    if (params && params.title) document.title = params.title
+    if (params && params.title) {
+      if (typeof params.title === 'string') {
+        document.title = params.title
+      } else if (typeof params.title === 'function') {
+        params.title()
+      }
+    }
   }
   /**
    * 基础功能:end

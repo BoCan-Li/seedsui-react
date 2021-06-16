@@ -225,8 +225,14 @@ var Bridge = {
    */
   setTitle: function (params, callback) {
     var self = this
-    if (params && params.title) document.title = params.title
-    self.invoke('setTitle', params, callback)
+    if (params && params.title) {
+      if (typeof params.title === 'string') {
+        document.title = params.title
+        self.invoke('setTitle', params, callback)
+      } else if (typeof params.title === 'function') {
+        params.title()
+      }
+    }
   },
   // 客户端添加返回绑定
   addBackPress: function (callback) {

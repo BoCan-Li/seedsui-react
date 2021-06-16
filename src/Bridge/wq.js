@@ -203,8 +203,14 @@ var Bridge = {
    * @param {Object} params {title: '自定义标题', visiable: '0' 隐藏  '1' 展示, left: { show: false 隐藏返回按钮 true 显示返回按钮}}
    */
   setTitle: function (params) {
-    if (params && params.title) document.title = params.title
-    wq.setTitle(params) // eslint-disable-line
+    if (params && params.title) {
+      if (typeof params.title === 'string') {
+        document.title = params.title
+        wq.setTitle(params) // eslint-disable-line
+      } else if (typeof params.title === 'function') {
+        params.title()
+      }
+    }
   },
   // 防止返回事件叠加绑定
   monitorBack: null,

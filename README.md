@@ -3531,6 +3531,7 @@ const wrapperWidth = containerWidth * 0.85;
   show={*显隐 bool, 默认true} // 百度地图不能移除DOM, 再渲染
   portal={传送dom object, 默认document.getElementById('root')}
   caption={原生头部标题 string, 默认'暂无数据'}
+  prevCaption={上一页原生头部标题 string, 默认'暂无数据'}
   onHide={点击隐藏按钮 func, 默认无}
   onChange={提交回调 func(e, value, data), 默认无}
   // 其它属性
@@ -3577,7 +3578,8 @@ import MapChoose from 'seedsui-react/lib/MapChoose';
   ak={*百度地图key string, 默认无}
   show={*显隐 bool, 默认true} // 百度地图不能移除DOM, 再渲染
   portal={传送dom object, 默认document.getElementById('root')}
-  caption={原生头部标题 string, 默认'暂无数据'}
+  caption={原生头部标题 string, 默认无}
+  prevCaption={上一页原生头部标题 string, 默认无}
   onHide={点击隐藏按钮 func, 默认无}
   // 其它属性
   center={定位地址 string, 默认'江苏省,南京市'}

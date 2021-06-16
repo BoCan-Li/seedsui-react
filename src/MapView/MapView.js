@@ -16,6 +16,7 @@ function MapView({
   show = true, // 百度地图不能移除DOM, 再渲染
   portal,
   caption,
+  prevCaption,
   onHide,
   // 其它属性
   center = '江苏省,南京市',
@@ -59,6 +60,9 @@ function MapView({
     })
     // 移除组件时注销
     return () => {
+      // 设置上一页标题
+      handleTitle(prevCaption)
+      // 移除实例化对象
       mapInstance.destroy()
     }
   }, []) // eslint-disable-line
@@ -129,12 +133,14 @@ function MapView({
     }
   }, [district]) // eslint-disable-line
 
-  // 标题
+  // 显隐
   useEffect(() => {
-    if (caption && show) {
-      Bridge.setTitle(caption)
+    if (show) {
+      handleTitle(caption)
+    } else {
+      handleTitle(prevCaption)
     }
-  }, [caption])
+  }, [show])
 
   // 中断绘制
   useEffect(() => {
@@ -146,6 +152,18 @@ function MapView({
       }
     }
   }, [errMsg])
+
+  // 设置标题
+  function handleTitle (title) {
+    if (!title) return
+    if (typeof title === 'string') {
+      Bridge.setTitle({
+        title: title
+      })
+    } else if (typeof title === 'function') {
+      title()
+    }
+  }
 
   const DOM = (
     <Page className={show ? '' : 'hide'}>
